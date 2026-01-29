@@ -1,0 +1,18 @@
+{
+  "dart.debugExternalPackageLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.showSkippedTests": false,
+  "dart.analysisExcludedFolders": [
+    "build",
+    ".dart_tool"
+  ],
+  "debug.javascript.autoAttachFilter": "disabled",
+  "dart.vmServiceLogFile": null,
+  "dart.flutterHotReloadOnSave": "always",
+  "dart.flutterHotRestartOnSave": false,
+  "dart.flutterRunLogFile": null,
+  "dart.allowAnalytics": false,
+  "dart.debuggerJustMyCode": true,
+  "debug.allowBreakpointsEverywhere": false
+}
+

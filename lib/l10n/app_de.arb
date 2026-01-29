@@ -1,0 +1,473 @@
+{
+  "@@locale": "de",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "Einstellungen",
+  "language": "Sprache",
+  "system": "System",
+  "voiceGuide": "Sprachführung",
+  "audioNavigator": "Audio-Navigator",
+  "soundEffects": "Soundeffekte",
+  "unitSetting": "Einheiteneinstellung",
+  "kmh": "km/h",
+  "mph": "mph",
+  "themeMode": "Hell/Dunkel-Modus",
+  "light": "Hell",
+  "dark": "Dunkel",
+  "smartwatchSync": "Smartwatch-Synchronisation",
+  "connectSmartwatch": "Mit Smartwatch verbinden",
+  "connect": "Verbinden",
+  "about": "Über",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "Demnächst",
+  "translationComingSoon": "Die Übersetzung wird in einem zukünftigen Update verfügbar sein.",
+  "ok": "OK",
+  "cancel": "Abbrechen",
+  "done": "Fertig",
+  "delete": "Löschen",
+  "save": "Speichern",
+  "edit": "Bearbeiten",
+  "start": "Starten",
+  "editRoutine": "Routine Bearbeiten",
+  "routineEdit": "Routine Bearbeiten",
+  "name": "Name",
+  "unnamedRoutine": "Unbenannte Routine",
+  "difficulty": "Schwierigkeit",
+  "difficultyColon": "Schwierigkeit : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "Einfach",
+  "medium": "Mittel",
+  "hard": "Schwer",
+  "interval": "Intervall",
+  "addInterval": "Intervall Hinzufügen",
+  "noIntervals": "Keine Intervalle",
+  "addIntervalPrompt": "Ein Intervall hinzufügen",
+  "intervalEdit": "Intervall Bearbeiten",
+  "timeMinutes": "Zeit (Minuten)",
+  "duration": "Dauer",
+  "speed": "Geschwindigkeit",
+  "speedKmh": "Geschwindigkeit (km/h)",
+  "incline": "Steigung",
+  "level": "Stufe",
+  "levelColon": "Stufe {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "resistance": "Widerstand",
+  "resistanceLevel": "Widerstand (Stufe)",
+  "resistanceColon": "Widerstand {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "spmSteps": "SPM (Schritte/min)",
+  "saved": "Gespeichert",
+  "deleted": "Gelöscht",
+  "deleteRoutineTitle": "Routine Löschen",
+  "deleteRoutineMessage": "Möchten Sie diese Routine wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "deleteError": "Beim Löschen ist ein Fehler aufgetreten",
+  "nameRequired": "Bitte geben Sie einen Namen ein",
+  "nameMaxLength": "Der Name muss 24 Zeichen oder weniger haben",
+  "minIntervalsRequired": "Mindestens ein Intervall ist erforderlich",
+  "intervalMinDuration": "Die Intervall-Dauer muss mindestens 1 Sekunde betragen",
+  "intervalMaxDuration": "Die Intervall-Dauer darf höchstens 3 Stunden (10800 Sekunden) betragen",
+  "speedRange": "Die Geschwindigkeit muss größer als 0 sein (0.5-25.0 km/h)",
+  "inclineRange": "Die Steigung muss im Bereich 0-15.0 liegen",
+  "rpmRange": "RPM muss im Bereich 30-200 liegen",
+  "resistanceRange": "Der Widerstand muss im Bereich 1-20 liegen",
+  "levelRange": "Die Stufe muss im Bereich 1-20 liegen",
+  "spmRange": "SPM muss im Bereich 50-200 liegen",
+  "noRoutinesSaved": "Keine Routinen gespeichert",
+  "tapToCreate": "Tippen zum Erstellen",
+  "tapButtonToCreate": "Tippen Sie auf die Schaltfläche zum Erstellen",
+  "premiumRoutineSettings": "Premium-Routinen-Einstellungen",
+  "viewMembership": "Mitgliedschaft Anzeigen",
+  "freeLimitTitle": "Das kostenlose Limit beträgt 2 Routinen",
+  "freeLimitMessage": "Sie können mit Mitgliedschaft unbegrenzte Routinen verwenden",
+  "treadmill": "Laufband",
+  "cycle": "Fahrrad",
+  "stairmaster": "Stepper",
+  "selectLanguage": "Sprache Auswählen",
+  "selectTheme": "Thema Auswählen",
+  "selectDifficulty": "Schwierigkeit Auswählen",
+  "pause": "Pause",
+  "resume": "Fortsetzen",
+  "endWorkout": "Training Beenden",
+  "endWorkoutConfirm": "Möchten Sie das Training beenden?",
+  "end": "Beenden",
+  "rotate": "Drehen",
+  "paused": "PAUSIERT",
+  "pausedTitle": "Pausiert",
+  "pausedSubtitle": "Sie können fortfahren oder das Training beenden",
+  "endWorkoutConfirmationMessage": "Wenn Sie jetzt beenden, wird das aktuelle Training beendet und Sie gelangen zum Zusammenfassungsbildschirm.",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "Gesamte Trainingszeit",
+  "totalDistance": "Gesamte Distanz",
+  "averageRpm": "Durchschnittliche RPM",
+  "averageLevel": "Durchschnittliches Level",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "Fortsetzen",
+  "endWorkoutQuestion": "Möchten Sie das Training beenden?",
+  "workoutPaused": "Das Training wurde pausiert",
+  "lvlIncline": "Steigung",
+  "lvlResistance": "Stufe Widerstand",
+  "premium": "Premium",
+  "upgradeNow": "Jetzt Upgraden",
+  "purchase": "Kaufen",
+  "later": "Später",
+  "premiumActivated": "Premium wurde aktiviert",
+  "premiumMembership": "Premium-Mitgliedschaft",
+  "benefitCycleStairmaster": "Fahrrad- und Stepper-Funktion",
+  "benefitVoiceGuide": "Sitzungs-Sprachführungs-Funktion",
+  "benefitUnlimitedRoutines": "Unbegrenzte Routinen-Speicherung",
+  "benefitFutureFeatures": "Unbegrenzter Zugang zu zukünftigen Funktionen",
+  "noAds": "Keine Werbung",
+  "voiceGuideBenefit1": "Sprachführung während des Trainings",
+  "voiceGuideBenefit2": "Automatische Ansagen bei Sitzungswechsel",
+  "voiceGuideBenefit3": "Routine-Fokus ohne Hände",
+  "routineLimitBenefit1": "Unbegrenzte Routinen-Speicherung",
+  "routineLimitBenefit2": "Routinen für mehrere Ziele speichern",
+  "routineLimitBenefit3": "Alle Maschinentypen nutzen (Laufband/Fahrrad/Stepper)",
+  "premium_benefit_1": "Workouts mit <red>Bike & StairMaster</red>",
+  "premium_benefit_2": "<red>Sprachführung</red> während der Session",
+  "premium_benefit_3": "Routinen speichern: <red>unbegrenzt</red>",
+  "premium_benefit_4": "<red>Unbegrenzter Zugriff</red> auf zukünftige Features",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/Monat",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "Premium",
+  "routineTab": "Routine",
+  "settingsTab": "Einstellungen",
+  "myTab": "Ich",
+  "premiumSubheadline": "Schalten Sie Sprachführung, Fahrrad- und Stepper-Workouts und unbegrenzte Routinen frei",
+  "@premiumSubheadline": {
+    "description": "Beschreibung des Premium-Freischaltungsinhalts"
+  },
+  "monthly": "Monatlich",
+  "@monthly": {
+    "description": "Monatlicher Plan-Label"
+  },
+  "yearly": "Jährlich",
+  "@yearly": {
+    "description": "Jährlicher Plan-Label"
+  },
+  "lifetime": "Lebenslang",
+  "@lifetime": {
+    "description": "Lebenslanges Plan-Label"
+  },
+  "perMonth": "/Monat",
+  "@perMonth": {
+    "description": "Pro Monat Suffix"
+  },
+  "perYear": "/Jahr",
+  "@perYear": {
+    "description": "Pro Jahr Suffix"
+  },
+  "oneTime": "Einmalige Zahlung",
+  "@oneTime": {
+    "description": "Einmalige Zahlungs-Suffix"
+  },
+  "savePercent": "Sparen Sie {percent}%",
+  "@savePercent": {
+    "description": "Prozent-Ersparnis-Badge",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "Bester Wert",
+  "@bestValue": {
+    "description": "Bester Wert Badge"
+  },
+  "cancelAnytime": "Jederzeit kündbar",
+  "@cancelAnytime": {
+    "description": "Vertrauenszeile jederzeit kündbar"
+  },
+  "autoRenewableSubscription": "Automatisch erneuerbares Abonnement",
+  "@autoRenewableSubscription": {
+    "description": "Vertrauenszeile automatisch erneuerbares Abonnement"
+  },
+  "terms": "Bedingungen",
+  "@terms": {
+    "description": "Bedingungen Link"
+  },
+  "privacy": "Datenschutz",
+  "@privacy": {
+    "description": "Datenschutz Link"
+  },
+  "restore": "Wiederherstellen",
+  "@restore": {
+    "description": "Käufe wiederherstellen Link"
+  },
+  "close": "Schließen",
+  "premiumFeature": "Premium-Funktion",
+  "usePremiumTest": "Premium Verwenden (Test)",
+  "dateTimeFormat": "{day}.{month}.{year} {hour}:{minute}",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "Routine Prüfen / Starten",
+  "viewRecommendedRoutines": "Empfohlene Routinen ansehen →",
+  "beginner": "Anfänger",
+  "intermediate": "Fortgeschritten",
+  "advanced": "Experte",
+  "recommendedRoutinesTreadmill": "Empfohlene Laufband-Routinen",
+  "recommendedRoutinesCycle": "Empfohlene Fahrrad-Routinen",
+  "recommendedRoutinesStairmaster": "Empfohlene Stepper-Routinen",
+  "alreadySaved": "Bereits gespeichert",
+  "checkRoutine": "Prüfen",
+  "saveRoutine": "Routine Speichern",
+  "routineSaved": "Routine gespeichert",
+  "routineAlreadySaved": "Routine bereits gespeichert",
+  "noTemplatesFound": "Keine Vorlagen gefunden",
+  "templateTreadmillBeginner1Title": "Leichter Start 20",
+  "templateTreadmillBeginner1Subtitle": "3 Min Aufwärmen + 1:1 Intervalle",
+  "templateTreadmillBeginner2Title": "Steigungs-Walk 25",
+  "templateTreadmillBeginner2Subtitle": "Steigungs-Walk in Blöcken",
+  "templateTreadmillIntermediate1Title": "Klassisch 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "Klassische 1:1 Intervalle",
+  "templateTreadmillIntermediate2Title": "Tempo-Leiter 20",
+  "templateTreadmillIntermediate2Subtitle": "Tempo-Leiter (schrittweise schneller)",
+  "templateTreadmillAdvanced1Title": "2:1 Brenner 21",
+  "templateTreadmillAdvanced1Subtitle": "2:1 Intervalle (hart/leicht)",
+  "templateTreadmillAdvanced2Title": "Sprint-Boost 18",
+  "templateTreadmillAdvanced2Subtitle": "20s Sprint-Wiederholungen",
+  "templateCycleBeginner1Title": "Kadenz-Builder 20",
+  "templateCycleBeginner1Subtitle": "4 Min Aufwärmen + Kadenz 1:1",
+  "templateCycleBeginner2Title": "Konstante Fahrt 25",
+  "templateCycleBeginner2Subtitle": "Langer gleichmäßiger Block",
+  "templateCycleIntermediate1Title": "Spin 1:1 24",
+  "templateCycleIntermediate1Subtitle": "Klassische 1:1 Spin-Intervalle",
+  "templateCycleIntermediate2Title": "Bergsimulation 22",
+  "templateCycleIntermediate2Subtitle": "Berg-Wiederholungen",
+  "templateCycleAdvanced1Title": "Power-Intervalle 20",
+  "templateCycleAdvanced1Subtitle": "30s Power-Bursts",
+  "templateCycleAdvanced2Title": "Tabata Mix 16",
+  "templateCycleAdvanced2Subtitle": "Mix 20s/10s",
+  "templateStairmasterBeginner1Title": "Leichte Stufen 20",
+  "templateStairmasterBeginner1Subtitle": "4 Min Aufwärmen + 1:1 Stufen",
+  "templateStairmasterBeginner2Title": "Lang & leicht 25",
+  "templateStairmasterBeginner2Subtitle": "Lange leichte Blöcke",
+  "templateStairmasterIntermediate1Title": "2:1 Anstieg 21",
+  "templateStairmasterIntermediate1Subtitle": "2:1 Anstiegs-Wiederholungen",
+  "templateStairmasterIntermediate2Title": "Stark 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "Starke 1:1 Intervalle",
+  "templateStairmasterAdvanced1Title": "Harte Blöcke 20",
+  "templateStairmasterAdvanced1Subtitle": "2-Minuten harte Blöcke",
+  "templateStairmasterAdvanced2Title": "Sprint-Stufen 18",
+  "templateStairmasterAdvanced2Subtitle": "30s Sprints + 60s Erholung",
+  "saved": "Gespeichert",
+  "historyTab": "Verlauf",
+  "calendarTab": "Kalender",
+  "weightTab": "Gewicht",
+  "bike": "Fahrrad",
+  "thisWeek": "Diese Woche",
+  "trend": "Trend",
+  "timeframe7D": "7T",
+  "timeframe30D": "30T",
+  "timeframe90D": "90T",
+  "timeframeAll": "ALLE",
+  "history": "Verlauf",
+  "seeAll": "Alle anzeigen",
+  "today": "Heute",
+  "yesterday": "Gestern",
+  "noWorkoutsYet": "Noch keine Trainings",
+  "startYourFirstWorkout": "Beginnen Sie Ihr erstes Training, um Ihren Verlauf hier zu sehen",
+  "goToRoutines": "Zu Routinen gehen",
+  "weightRecorded": "Gewicht aufgezeichnet",
+  "workout": "Training",
+  "workouts": "Trainings",
+  "goal": "Ziel",
+  "toGo": "verbleibend",
+  "over": "überschritten",
+  "last": "Letzte",
+  "newLabel": "Neu",
+  "youNeed": "Sie benötigen {amount}, um {goal} zu erreichen",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "Sie benötigen +{amount}, um {goal} zu erreichen",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "Aktuell",
+  "avg": "Ø",
+  "avgRpm": "Ø RPM",
+  "avgLevel": "Ø Stufe",
+  "weightEntryDeleted": "Gewichtseintrag gelöscht",
+  "weightUpdated": "Gewicht aktualisiert",
+  "editWeight": "Gewicht bearbeiten",
+  "recordWeight": "Gewicht aufzeichnen",
+  "quickAdjust": "Schnellanpassung",
+  "goalWeightSet": "Zielgewicht festgelegt",
+  "goalWeightRemoved": "Zielgewicht entfernt",
+  "goalAchieved": "Ziel erreicht!",
+  "goalMatchesCurrentWeight": "Ziel entspricht dem aktuellen Gewicht",
+  "setGoal": "Ziel festlegen",
+  "suggested": "Vorgeschlagen",
+  "removeGoal": "Ziel Entfernen",
+  "addOneMoreRecordToSeeTrend": "Fügen Sie 1 weiteren Eintrag hinzu, um Ihren Trend zu sehen",
+  "noWeightRecorded": "Noch kein Gewicht aufgezeichnet",
+  "startTrackingYourWeight": "Beginnen Sie mit der Gewichtsverfolgung, um den Fortschritt hier zu sehen",
+  "treadmillSession": "Laufband-Session",
+  "bikeSession": "Fahrrad-Session",
+  "stairmasterSession": "Stepper-Session",
+  "treadmillWorkout": "Laufband-Training",
+  "bikeWorkout": "Fahrrad-Training",
+  "stairmasterWorkout": "Stepper-Training",
+  "startAWorkoutToSeeItHere": "Starten Sie ein Training, um es hier zu sehen",
+  "mon": "Mo",
+  "tue": "Di",
+  "wed": "Mi",
+  "thu": "Do",
+  "fri": "Fr",
+  "sat": "Sa",
+  "sun": "So",
+  "sessions": "Sitzungen",
+  "distance": "Distanz",
+  "premiumHeadline": "Gleiche 30 Minuten, andere Ergebnisse",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "Laufen Sie nicht einfach, trainieren Sie fettverbrennend",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "Am Beliebtesten",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "{price} pro Tag",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "Premium-Sprachcoaching-System",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "Vollständige Unterstützung für Alle Cardio-Geräte",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "Unbegrenzte Routinenbibliothek",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "Intelligente Gewichtsverfolgung & Analyse",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "Werbefreies Premium-Erlebnis",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "Alle zukünftigen Premium-Funktionen enthalten",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "Am häufigsten gewählt",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "Kann jederzeit geändert werden",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "Premium starten",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "Jederzeit kündbar und Zugriff bis zum Periodenende",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{Training 1 Tag 🔥} other{Training {count} Tage 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{Ruhe 1 Tag 🛏️} other{Ruhe {count} Tage 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

@@ -1,0 +1,1039 @@
+{
+  "@@locale": "en",
+  "appTitle": "Interval Cardio",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings screen title"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+  "system": "System",
+  "@system": {
+    "description": "System language option"
+  },
+  "voiceGuide": "Voice Guide",
+  "@voiceGuide": {
+    "description": "Voice guide setting label"
+  },
+  "audioNavigator": "Audio Navigator",
+  "@audioNavigator": {
+    "description": "Voice guide subtitle"
+  },
+  "soundEffects": "Sound Effects",
+  "@soundEffects": {
+    "description": "Sound effects setting label"
+  },
+  "unitSetting": "Unit Setting",
+  "@unitSetting": {
+    "description": "Unit setting label"
+  },
+  "kmh": "km/h",
+  "@kmh": {
+    "description": "Kilometers per hour unit"
+  },
+  "mph": "mph",
+  "@mph": {
+    "description": "Miles per hour unit"
+  },
+  "themeMode": "Light/Dark Mode",
+  "@themeMode": {
+    "description": "Theme mode setting label"
+  },
+  "light": "Light",
+  "@light": {
+    "description": "Light theme"
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme"
+  },
+  "smartwatchSync": "Smartwatch Sync",
+  "@smartwatchSync": {
+    "description": "Smartwatch sync setting label"
+  },
+  "connectSmartwatch": "Connect to smartwatch",
+  "@connectSmartwatch": {
+    "description": "Smartwatch sync subtitle"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect button"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About setting label"
+  },
+  "version": "Version {version}",
+  "@version": {
+    "description": "Version text",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+  "translationComingSoon": "Translation will be available in a future update.",
+  "@translationComingSoon": {
+    "description": "Translation coming soon message"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Done button"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button"
+  },
+  "start": "Start",
+  "@start": {
+    "description": "Start button"
+  },
+  "editRoutine": "Edit Routine",
+  "@editRoutine": {
+    "description": "Edit routine button"
+  },
+  "routineEdit": "Routine Edit",
+  "@routineEdit": {
+    "description": "Routine edit screen title"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name field label"
+  },
+  "unnamedRoutine": "Unnamed Routine",
+  "@unnamedRoutine": {
+    "description": "Default routine name"
+  },
+  "difficulty": "Difficulty",
+  "@difficulty": {
+    "description": "Difficulty label"
+  },
+  "difficultyColon": "Difficulty : {difficulty}",
+  "@difficultyColon": {
+    "description": "Difficulty display",
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "Easy",
+  "@easy": {
+    "description": "Easy difficulty"
+  },
+  "medium": "Medium",
+  "@medium": {
+    "description": "Medium difficulty"
+  },
+  "hard": "Hard",
+  "@hard": {
+    "description": "Hard difficulty"
+  },
+  "interval": "Interval",
+  "@interval": {
+    "description": "Interval label"
+  },
+  "addInterval": "Add Interval",
+  "@addInterval": {
+    "description": "Add interval button"
+  },
+  "noIntervals": "No intervals",
+  "@noIntervals": {
+    "description": "No intervals message"
+  },
+  "addIntervalPrompt": "Add an interval",
+  "@addIntervalPrompt": {
+    "description": "Prompt to add interval"
+  },
+  "intervalEdit": "Interval Edit",
+  "@intervalEdit": {
+    "description": "Interval edit screen title"
+  },
+  "timeMinutes": "Time (minutes)",
+  "@timeMinutes": {
+    "description": "Time in minutes label"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration label"
+  },
+  "speed": "Speed",
+  "@speed": {
+    "description": "Speed label"
+  },
+  "speedKmh": "Speed (km/h)",
+  "@speedKmh": {
+    "description": "Speed in km/h label"
+  },
+  "incline": "Incline",
+  "@incline": {
+    "description": "Incline label"
+  },
+  "level": "Level",
+  "@level": {
+    "description": "Level label"
+  },
+  "levelColon": "Level {level}",
+  "@levelColon": {
+    "description": "Level display",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "@rpm": {
+    "description": "RPM label"
+  },
+  "resistance": "Resistance",
+  "@resistance": {
+    "description": "Resistance label"
+  },
+  "resistanceLevel": "Resistance (Level)",
+  "@resistanceLevel": {
+    "description": "Resistance level label"
+  },
+  "resistanceColon": "Resistance {resistance}",
+  "@resistanceColon": {
+    "description": "Resistance display",
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "@spm": {
+    "description": "SPM label"
+  },
+  "spmSteps": "SPM (steps/min)",
+  "@spmSteps": {
+    "description": "SPM steps per minute label"
+  },
+  "saved": "Saved",
+  "@saved": {
+    "description": "Saved message"
+  },
+  "deleted": "Deleted",
+  "@deleted": {
+    "description": "Deleted message"
+  },
+  "deleteRoutineTitle": "Delete Routine",
+  "@deleteRoutineTitle": {
+    "description": "Delete routine dialog title"
+  },
+  "deleteRoutineMessage": "Are you sure you want to delete this routine? This cannot be undone.",
+  "@deleteRoutineMessage": {
+    "description": "Delete routine confirmation message"
+  },
+  "deleteError": "An error occurred while deleting",
+  "@deleteError": {
+    "description": "Delete error message"
+  },
+  "nameRequired": "Please enter a name",
+  "@nameRequired": {
+    "description": "Name required validation"
+  },
+  "nameMaxLength": "Name must be 24 characters or less",
+  "@nameMaxLength": {
+    "description": "Name max length validation"
+  },
+  "minIntervalsRequired": "At least one interval is required",
+  "@minIntervalsRequired": {
+    "description": "Minimum intervals required"
+  },
+  "intervalMinDuration": "Interval duration must be at least 1 second",
+  "@intervalMinDuration": {
+    "description": "Interval minimum duration validation"
+  },
+  "intervalMaxDuration": "Interval duration must be at most 3 hours (10800 seconds)",
+  "@intervalMaxDuration": {
+    "description": "Interval maximum duration validation"
+  },
+  "speedRange": "Speed must be greater than 0 (0.5-25.0 km/h)",
+  "@speedRange": {
+    "description": "Speed range validation"
+  },
+  "inclineRange": "Incline must be in range 0-15.0",
+  "@inclineRange": {
+    "description": "Incline range validation"
+  },
+  "rpmRange": "RPM must be in range 30-200",
+  "@rpmRange": {
+    "description": "RPM range validation"
+  },
+  "resistanceRange": "Resistance must be in range 1-20",
+  "@resistanceRange": {
+    "description": "Resistance range validation"
+  },
+  "levelRange": "Level must be in range 1-20",
+  "@levelRange": {
+    "description": "Level range validation"
+  },
+  "spmRange": "SPM must be in range 50-200",
+  "@spmRange": {
+    "description": "SPM range validation"
+  },
+  "noRoutinesSaved": "No routines saved",
+  "@noRoutinesSaved": {
+    "description": "Empty state message"
+  },
+  "tapToCreate": "Tap to create",
+  "@tapToCreate": {
+    "description": "Tap to create prompt"
+  },
+  "tapButtonToCreate": "Tap the button to create",
+  "@tapButtonToCreate": {
+    "description": "Tap button to create prompt"
+  },
+  "premiumRoutineSettings": "Premium Routine Settings",
+  "@premiumRoutineSettings": {
+    "description": "Premium routine settings label"
+  },
+  "viewMembership": "View Membership",
+  "@viewMembership": {
+    "description": "View membership button"
+  },
+  "freeLimitTitle": "Free limit is 2 routines",
+  "@freeLimitTitle": {
+    "description": "Free limit dialog title"
+  },
+  "freeLimitMessage": "You can use unlimited routines with membership",
+  "@freeLimitMessage": {
+    "description": "Free limit dialog message"
+  },
+  "treadmill": "Treadmill",
+  "@treadmill": {
+    "description": "Treadmill machine type"
+  },
+  "cycle": "Cycle",
+  "@cycle": {
+    "description": "Cycle machine type"
+  },
+  "stairmaster": "Stairmaster",
+  "@stairmaster": {
+    "description": "Stairmaster machine type"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection dialog title"
+  },
+  "selectTheme": "Select Theme",
+  "@selectTheme": {
+    "description": "Theme selection dialog title"
+  },
+  "selectDifficulty": "Select Difficulty",
+  "@selectDifficulty": {
+    "description": "Difficulty selection dialog title"
+  },
+  "pause": "Pause",
+  "@pause": {
+    "description": "Pause button"
+  },
+  "resume": "Resume",
+  "@resume": {
+    "description": "Resume button"
+  },
+  "endWorkout": "End Workout",
+  "@endWorkout": {
+    "description": "End workout dialog title"
+  },
+  "endWorkoutConfirm": "Do you want to end the workout?",
+  "@endWorkoutConfirm": {
+    "description": "End workout confirmation message"
+  },
+  "end": "End",
+  "@end": {
+    "description": "End button"
+  },
+  "rotate": "Rotate",
+  "@rotate": {
+    "description": "Rotate button"
+  },
+  "paused": "PAUSED",
+  "@paused": {
+    "description": "Paused status text"
+  },
+  "pausedTitle": "Paused",
+  "@pausedTitle": {
+    "description": "Pause bottom sheet title"
+  },
+  "pausedSubtitle": "You can continue or end the workout",
+  "@pausedSubtitle": {
+    "description": "Pause bottom sheet subtitle"
+  },
+  "endWorkoutConfirmationMessage": "If you end now, the current workout will finish and you will move to the summary screen.",
+  "@endWorkoutConfirmationMessage": {
+    "description": "End workout confirmation bottom sheet message"
+  },
+  "workoutComplete": "Workout Complete",
+  "@workoutComplete": {
+    "description": "Workout complete title (always English)"
+  },
+  "totalWorkoutTime": "Total Workout Time",
+  "@totalWorkoutTime": {
+    "description": "Total workout time label"
+  },
+  "totalDistance": "Total distance",
+  "@totalDistance": {
+    "description": "Total distance label"
+  },
+  "averageRpm": "Average RPM",
+  "@averageRpm": {
+    "description": "Label for average RPM in Bike workouts"
+  },
+  "averageLevel": "Average Level",
+  "@averageLevel": {
+    "description": "Label for average level in Stairmaster workouts"
+  },
+  "holdToStop": "Hold to Stop",
+  "@holdToStop": {
+    "description": "Hold to stop button text (always English)"
+  },
+  "continueWorkout": "Continue",
+  "@continueWorkout": {
+    "description": "Continue workout button"
+  },
+  "endWorkoutQuestion": "Do you want to end the workout?",
+  "@endWorkoutQuestion": {
+    "description": "End workout question"
+  },
+  "workoutPaused": "Workout has been paused",
+  "@workoutPaused": {
+    "description": "Workout paused message"
+  },
+  "lvlIncline": "Incline",
+  "@lvlIncline": {
+    "description": "Incline label"
+  },
+  "lvlResistance": "Lvl Resistance",
+  "@lvlResistance": {
+    "description": "Level Resistance label"
+  },
+  "premium": "Premium",
+  "@premium": {
+    "description": "Premium label"
+  },
+  "upgradeNow": "Upgrade Now",
+  "@upgradeNow": {
+    "description": "Upgrade now title"
+  },
+  "purchase": "Purchase",
+  "@purchase": {
+    "description": "Purchase button"
+  },
+  "later": "Later",
+  "@later": {
+    "description": "Later button"
+  },
+  "premiumActivated": "Premium has been activated",
+  "@premiumActivated": {
+    "description": "Premium activated message"
+  },
+  "premiumMembership": "Premium Membership",
+  "@premiumMembership": {
+    "description": "Premium membership title"
+  },
+  "benefitCycleStairmaster": "Cycle, Stairmaster feature",
+  "@benefitCycleStairmaster": {
+    "description": "Benefit: Cycle and Stairmaster feature"
+  },
+  "benefitVoiceGuide": "Session voice guide feature",
+  "@benefitVoiceGuide": {
+    "description": "Benefit: Voice guide feature"
+  },
+  "benefitUnlimitedRoutines": "Unlimited routine saves",
+  "@benefitUnlimitedRoutines": {
+    "description": "Benefit: Unlimited routines"
+  },
+  "noAds": "No Ads",
+  "@noAds": {
+    "description": "Benefit: No ads"
+  },
+  "benefitFutureFeatures": "Unlimited access to future features",
+  "@benefitFutureFeatures": {
+    "description": "Benefit: Future features access"
+  },
+  "voiceGuideBenefit1": "Voice guidance during workout",
+  "@voiceGuideBenefit1": {
+    "description": "Voice guide benefit 1"
+  },
+  "voiceGuideBenefit2": "Automatic session transition announcements",
+  "@voiceGuideBenefit2": {
+    "description": "Voice guide benefit 2"
+  },
+  "voiceGuideBenefit3": "Hands-free routine focus",
+  "@voiceGuideBenefit3": {
+    "description": "Voice guide benefit 3"
+  },
+  "routineLimitBenefit1": "Unlimited routine saves",
+  "@routineLimitBenefit1": {
+    "description": "Routine limit benefit 1"
+  },
+  "routineLimitBenefit2": "Save routines for multiple goals",
+  "@routineLimitBenefit2": {
+    "description": "Routine limit benefit 2"
+  },
+  "routineLimitBenefit3": "Use all machine types (treadmill/cycle/stairmaster)",
+  "@routineLimitBenefit3": {
+    "description": "Routine limit benefit 3"
+  },
+  "premium_benefit_1": "<red>Bike & StairMaster</red> workouts",
+  "@premium_benefit_1": {
+    "description": "Premium benefit 1 with red emphasis"
+  },
+  "premium_benefit_2": "Session <red>voice guide</red>",
+  "@premium_benefit_2": {
+    "description": "Premium benefit 2 with red emphasis"
+  },
+  "premium_benefit_3": "<red>Unlimited</red> routine saves",
+  "@premium_benefit_3": {
+    "description": "Premium benefit 3 with red emphasis"
+  },
+  "premium_benefit_4": "<red>Unlimited access</red> to future features",
+  "@premium_benefit_4": {
+    "description": "Premium benefit 4 with red emphasis"
+  },
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "description": "Original price",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/month",
+  "@monthlyPrice": {
+    "description": "Monthly price",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumSubheadline": "Unlock voice guidance, bike & stairmaster workouts, and unlimited routines",
+  "@premiumSubheadline": {
+    "description": "Premium subheadline describing what unlocks"
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly plan label"
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly plan label"
+  },
+  "lifetime": "Lifetime",
+  "@lifetime": {
+    "description": "Lifetime plan label"
+  },
+  "perMonth": "/month",
+  "@perMonth": {
+    "description": "Per month suffix"
+  },
+  "perYear": "/year",
+  "@perYear": {
+    "description": "Per year suffix"
+  },
+  "oneTime": "One time",
+  "@oneTime": {
+    "description": "One time payment suffix"
+  },
+  "savePercent": "Save {percent}%",
+  "@savePercent": {
+    "description": "Save percentage badge",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "Best Value",
+  "@bestValue": {
+    "description": "Best value badge"
+  },
+  "cancelAnytime": "Cancel anytime",
+  "@cancelAnytime": {
+    "description": "Cancel anytime trust line"
+  },
+  "autoRenewableSubscription": "Auto-renewable subscription",
+  "@autoRenewableSubscription": {
+    "description": "Auto-renewable subscription trust line"
+  },
+  "terms": "Terms",
+  "@terms": {
+    "description": "Terms link"
+  },
+  "privacy": "Privacy",
+  "@privacy": {
+    "description": "Privacy link"
+  },
+  "restore": "Restore",
+  "@restore": {
+    "description": "Restore purchases link"
+  },
+  "premiumTab": "Premium",
+  "@premiumTab": {
+    "description": "Premium tab label"
+  },
+  "routineTab": "Routine",
+  "@routineTab": {
+    "description": "Routine tab label"
+  },
+  "settingsTab": "Settings",
+  "@settingsTab": {
+    "description": "Settings tab label"
+  },
+  "myTab": "My",
+  "@myTab": {
+    "description": "My/Profile tab label"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button"
+  },
+  "premiumFeature": "Premium Feature",
+  "@premiumFeature": {
+    "description": "Premium feature label"
+  },
+  "usePremiumTest": "Use Premium (Test)",
+  "@usePremiumTest": {
+    "description": "Use premium test button"
+  },
+  "dateTimeFormat": "{month}/{day}/{year} {hour}:{minute}",
+  "@dateTimeFormat": {
+    "description": "Date time format",
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "Check Routine / Start",
+  "@checkRoutineStart": {
+    "description": "Button text to check routine and start"
+  },
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "advanced": "Advanced",
+  "viewRecommendedRoutines": "View Recommended Routines →",
+  "recommendedRoutinesTreadmill": "Recommended Treadmill Routines",
+  "recommendedRoutinesCycle": "Recommended Bike Routines",
+  "recommendedRoutinesStairmaster": "Recommended Stairmaster Routines",
+  "alreadySaved": "Already saved",
+  "routineSaved": "Routine saved",
+  "checkRoutine": "Check",
+  "saveRoutine": "Save Routine",
+  "routineAlreadySaved": "Routine already saved",
+  "noTemplatesFound": "No templates found",
+  "avg": "Avg",
+  "avgRpm": "Avg RPM",
+  "avgLevel": "Avg level",
+  "templateTreadmillBeginner1Title": "Easy Start 20",
+  "templateTreadmillBeginner1Subtitle": "Easy 1:1 intervals",
+  "templateTreadmillBeginner2Title": "Incline Walk 25",
+  "templateTreadmillBeginner2Subtitle": "Incline walk blocks",
+  "templateTreadmillIntermediate1Title": "Classic 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "Classic 1:1 run intervals",
+  "templateTreadmillIntermediate2Title": "Speed Ladder 20",
+  "templateTreadmillIntermediate2Subtitle": "Step-up speed ladder",
+  "templateTreadmillAdvanced1Title": "2:1 Burner 21",
+  "templateTreadmillAdvanced1Subtitle": "2:1 hard/easy intervals",
+  "templateTreadmillAdvanced2Title": "Sprint Pop 18",
+  "templateTreadmillAdvanced2Subtitle": "20s sprint repeats",
+  "templateCycleBeginner1Title": "Cadence Builder 20",
+  "templateCycleBeginner1Subtitle": "4 min warm-up + 1:1 cadence",
+  "templateCycleBeginner2Title": "Steady Ride 25",
+  "templateCycleBeginner2Subtitle": "Long steady block",
+  "templateCycleIntermediate1Title": "Spin 1:1 24",
+  "templateCycleIntermediate1Subtitle": "Classic 1:1 spin intervals",
+  "templateCycleIntermediate2Title": "Hill Simulation 22",
+  "templateCycleIntermediate2Subtitle": "Climb repeats",
+  "templateCycleAdvanced1Title": "Power Intervals 20",
+  "templateCycleAdvanced1Subtitle": "30s power bursts",
+  "templateCycleAdvanced2Title": "Tabata Mix 16",
+  "templateCycleAdvanced2Subtitle": "20s on / 10s off mix",
+  "templateStairmasterBeginner1Title": "Easy Steps 20",
+  "templateStairmasterBeginner1Subtitle": "4 min warm-up + 1:1 steps",
+  "templateStairmasterBeginner2Title": "Long Easy 25",
+  "templateStairmasterBeginner2Subtitle": "Long easy climb blocks",
+  "templateStairmasterIntermediate1Title": "2:1 Climb 21",
+  "templateStairmasterIntermediate1Subtitle": "2:1 climb repeats",
+  "templateStairmasterIntermediate2Title": "Strong 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "Strong 1:1 intervals",
+  "templateStairmasterAdvanced1Title": "Hard Blocks 20",
+  "templateStairmasterAdvanced1Subtitle": "2-min hard blocks",
+  "templateStairmasterAdvanced2Title": "Sprint Steps 18",
+  "templateStairmasterAdvanced2Subtitle": "30s sprints + 60s recoveries",
+  "historyTab": "History",
+  "@historyTab": {
+    "description": "History tab label in My screen"
+  },
+  "calendarTab": "Calendar",
+  "@calendarTab": {
+    "description": "Calendar tab label in My screen"
+  },
+  "weightTab": "Weight",
+  "@weightTab": {
+    "description": "Weight tab label in My screen"
+  },
+  "bike": "Bike",
+  "@bike": {
+    "description": "Bike machine type"
+  },
+  "thisWeek": "This week",
+  "@thisWeek": {
+    "description": "This week label"
+  },
+  "trend": "Trend",
+  "@trend": {
+    "description": "Trend label"
+  },
+  "timeframe7D": "7D",
+  "@timeframe7D": {
+    "description": "7 days timeframe"
+  },
+  "timeframe30D": "30D",
+  "@timeframe30D": {
+    "description": "30 days timeframe"
+  },
+  "timeframe90D": "90D",
+  "@timeframe90D": {
+    "description": "90 days timeframe"
+  },
+  "timeframeAll": "ALL",
+  "@timeframeAll": {
+    "description": "All timeframe"
+  },
+  "history": "History",
+  "@history": {
+    "description": "History label"
+  },
+  "seeAll": "See all",
+  "@seeAll": {
+    "description": "See all button"
+  },
+  "weightEntryDeleted": "Weight entry deleted",
+  "@weightEntryDeleted": {
+    "description": "Weight entry deleted message"
+  },
+  "weightUpdated": "Weight updated",
+  "@weightUpdated": {
+    "description": "Weight updated message"
+  },
+  "editWeight": "Edit weight",
+  "@editWeight": {
+    "description": "Edit weight title"
+  },
+  "recordWeight": "Record weight",
+  "@recordWeight": {
+    "description": "Record weight title"
+  },
+  "quickAdjust": "Quick adjust",
+  "@quickAdjust": {
+    "description": "Quick adjust label"
+  },
+  "goalWeightSet": "Goal weight set",
+  "@goalWeightSet": {
+    "description": "Goal weight set message"
+  },
+  "goalWeightRemoved": "Goal weight removed",
+  "@goalWeightRemoved": {
+    "description": "Goal weight removed message"
+  },
+  "goalAchieved": "Goal achieved!",
+  "@goalAchieved": {
+    "description": "Goal achieved message"
+  },
+  "goalMatchesCurrentWeight": "Goal matches current weight",
+  "@goalMatchesCurrentWeight": {
+    "description": "Goal matches current weight message"
+  },
+  "setGoal": "Set goal",
+  "@setGoal": {
+    "description": "Set goal title"
+  },
+  "suggested": "Suggested",
+  "@suggested": {
+    "description": "Suggested label"
+  },
+  "removeGoal": "Remove Goal",
+  "@removeGoal": {
+    "description": "Remove goal button"
+  },
+  "addOneMoreRecordToSeeTrend": "Add 1 more record to see your trend",
+  "@addOneMoreRecordToSeeTrend": {
+    "description": "Add one more record to see trend message"
+  },
+  "noWeightRecorded": "No weight recorded yet",
+  "@noWeightRecorded": {
+    "description": "No weight recorded yet message"
+  },
+  "startTrackingYourWeight": "Start tracking your weight to see progress here",
+  "@startTrackingYourWeight": {
+    "description": "Start tracking your weight message"
+  },
+  "treadmillSession": "Treadmill Session",
+  "@treadmillSession": {
+    "description": "Treadmill session label"
+  },
+  "bikeSession": "Bike Session",
+  "@bikeSession": {
+    "description": "Bike session label"
+  },
+  "stairmasterSession": "Stairmaster Session",
+  "@stairmasterSession": {
+    "description": "Stairmaster session label"
+  },
+  "treadmillWorkout": "Treadmill Workout",
+  "@treadmillWorkout": {
+    "description": "Treadmill workout label"
+  },
+  "bikeWorkout": "Bike Workout",
+  "@bikeWorkout": {
+    "description": "Bike workout label"
+  },
+  "stairmasterWorkout": "Stairmaster Workout",
+  "@stairmasterWorkout": {
+    "description": "Stairmaster workout label"
+  },
+  "startAWorkoutToSeeItHere": "Start a workout to see it here",
+  "@startAWorkoutToSeeItHere": {
+    "description": "Start a workout to see it here message"
+  },
+  "mon": "Mon",
+  "@mon": {
+    "description": "Monday abbreviation"
+  },
+  "tue": "Tue",
+  "@tue": {
+    "description": "Tuesday abbreviation"
+  },
+  "wed": "Wed",
+  "@wed": {
+    "description": "Wednesday abbreviation"
+  },
+  "thu": "Thu",
+  "@thu": {
+    "description": "Thursday abbreviation"
+  },
+  "fri": "Fri",
+  "@fri": {
+    "description": "Friday abbreviation"
+  },
+  "sat": "Sat",
+  "@sat": {
+    "description": "Saturday abbreviation"
+  },
+  "sun": "Sun",
+  "@sun": {
+    "description": "Sunday abbreviation"
+  },
+  "sessions": "Sessions",
+  "@sessions": {
+    "description": "Sessions label"
+  },
+  "distance": "Distance",
+  "@distance": {
+    "description": "Distance label"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today label"
+  },
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
+  "noWorkoutsYet": "No workouts yet",
+  "@noWorkoutsYet": {
+    "description": "No workouts yet message"
+  },
+  "startYourFirstWorkout": "Start your first workout to see your history here",
+  "@startYourFirstWorkout": {
+    "description": "Start your first workout message"
+  },
+  "goToRoutines": "Go to Routines",
+  "@goToRoutines": {
+    "description": "Go to Routines button"
+  },
+  "weightRecorded": "Weight recorded",
+  "@weightRecorded": {
+    "description": "Weight recorded message"
+  },
+  "workout": "workout",
+  "@workout": {
+    "description": "Workout singular"
+  },
+  "workouts": "workouts",
+  "@workouts": {
+    "description": "Workouts plural"
+  },
+  "goal": "Goal",
+  "@goal": {
+    "description": "Goal label"
+  },
+  "toGo": "to go",
+  "@toGo": {
+    "description": "To go label"
+  },
+  "over": "over",
+  "@over": {
+    "description": "Over label"
+  },
+  "last": "Last",
+  "@last": {
+    "description": "Last label"
+  },
+  "newLabel": "New",
+  "@newLabel": {
+    "description": "New label"
+  },
+  "youNeed": "You need {amount} to reach {goal}",
+  "@youNeed": {
+    "description": "You need amount to reach goal",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "You need +{amount} to reach {goal}",
+  "@youNeedPlus": {
+    "description": "You need plus amount to reach goal",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "Current",
+  "@current": {
+    "description": "Current label"
+  },
+  "premiumHeadline": "Same 30 minutes, different results",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "Don't just run, exercise the fat-burning way",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "Most Popular",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "{price} per day",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "Premium Voice Coaching System",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "Full Support for All Cardio Equipment",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "Unlimited Routine Library",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "Smart Weight Tracking & Analysis",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "Ad-Free Premium Experience",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "All future premium features included",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "Most chosen",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "Can change anytime",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "Start Premium",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "Cancel anytime and keep access until period ends",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{Workout 1 day 🔥} other{Workout {count} days 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{Rest 1 day 🛏️} other{Rest {count} days 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

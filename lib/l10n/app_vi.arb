@@ -1,0 +1,473 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "Cài đặt",
+  "language": "Ngôn ngữ",
+  "system": "Hệ thống",
+  "voiceGuide": "Hướng dẫn bằng giọng nói",
+  "audioNavigator": "Trình điều hướng âm thanh",
+  "soundEffects": "Hiệu ứng Âm thanh",
+  "unitSetting": "Cài đặt đơn vị",
+  "kmh": "km/h",
+  "mph": "mph",
+  "themeMode": "Chế độ Sáng/Tối",
+  "light": "Sáng",
+  "dark": "Tối",
+  "smartwatchSync": "Đồng bộ Smartwatch",
+  "connectSmartwatch": "Kết nối với smartwatch",
+  "connect": "Kết nối",
+  "about": "Giới thiệu",
+  "version": "Phiên bản {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "Sắp ra mắt",
+  "translationComingSoon": "Bản dịch sẽ có sẵn trong bản cập nhật tương lai.",
+  "ok": "OK",
+  "cancel": "Hủy",
+  "done": "Hoàn thành",
+  "delete": "Xóa",
+  "save": "Lưu",
+  "edit": "Chỉnh sửa",
+  "start": "Bắt đầu",
+  "editRoutine": "Chỉnh sửa Thói quen",
+  "routineEdit": "Chỉnh sửa Thói quen",
+  "name": "Tên",
+  "unnamedRoutine": "Thói quen Không tên",
+  "difficulty": "Độ khó",
+  "difficultyColon": "Độ khó : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "Dễ",
+  "medium": "Trung bình",
+  "hard": "Khó",
+  "interval": "Khoảng thời gian",
+  "addInterval": "Thêm Khoảng thời gian",
+  "noIntervals": "Không có khoảng thời gian",
+  "addIntervalPrompt": "Thêm một khoảng thời gian",
+  "intervalEdit": "Chỉnh sửa Khoảng thời gian",
+  "timeMinutes": "Thời gian (phút)",
+  "duration": "Thời lượng",
+  "speed": "Tốc độ",
+  "speedKmh": "Tốc độ (km/h)",
+  "incline": "Độ dốc",
+  "level": "Cấp độ",
+  "levelColon": "Cấp độ {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "resistance": "Kháng cự",
+  "resistanceLevel": "Kháng cự (Cấp độ)",
+  "resistanceColon": "Kháng cự {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "spmSteps": "SPM (bước/phút)",
+  "saved": "Đã lưu",
+  "deleted": "Đã xóa",
+  "deleteRoutineTitle": "Xóa Thói quen",
+  "deleteRoutineMessage": "Bạn có chắc chắn muốn xóa thói quen này không? Hành động này không thể hoàn tác.",
+  "deleteError": "Đã xảy ra lỗi khi xóa",
+  "nameRequired": "Vui lòng nhập tên",
+  "nameMaxLength": "Tên phải có 24 ký tự trở xuống",
+  "minIntervalsRequired": "Cần ít nhất một khoảng thời gian",
+  "intervalMinDuration": "Thời lượng khoảng thời gian phải ít nhất 1 giây",
+  "intervalMaxDuration": "Thời lượng khoảng thời gian tối đa là 3 giờ (10800 giây)",
+  "speedRange": "Tốc độ phải lớn hơn 0 (0.5-25.0 km/h)",
+  "inclineRange": "Độ dốc phải trong khoảng 0-15.0",
+  "rpmRange": "RPM phải trong khoảng 30-200",
+  "resistanceRange": "Kháng cự phải trong khoảng 1-20",
+  "levelRange": "Cấp độ phải trong khoảng 1-20",
+  "spmRange": "SPM phải trong khoảng 50-200",
+  "noRoutinesSaved": "Không có thói quen đã lưu",
+  "tapToCreate": "Chạm để tạo",
+  "tapButtonToCreate": "Chạm vào nút để tạo",
+  "premiumRoutineSettings": "Cài đặt Thói quen Cao cấp",
+  "viewMembership": "Xem Thành viên",
+  "freeLimitTitle": "Giới hạn miễn phí là 2 thói quen",
+  "freeLimitMessage": "Bạn có thể sử dụng thói quen không giới hạn với thành viên",
+  "treadmill": "Máy chạy bộ",
+  "cycle": "Xe đạp",
+  "stairmaster": "Máy leo cầu thang",
+  "selectLanguage": "Chọn Ngôn ngữ",
+  "selectTheme": "Chọn Chủ đề",
+  "selectDifficulty": "Chọn Độ khó",
+  "pause": "Tạm dừng",
+  "resume": "Tiếp tục",
+  "endWorkout": "Kết thúc Thói quen",
+  "endWorkoutConfirm": "Bạn có muốn kết thúc thói quen không?",
+  "end": "Kết thúc",
+  "rotate": "Xoay",
+  "paused": "ĐÃ TẠM DỪNG",
+  "pausedTitle": "Đã tạm dừng",
+  "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc thói quen",
+  "endWorkoutConfirmationMessage": "Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "Tổng Thời gian Thói quen",
+  "totalDistance": "Tổng khoảng cách",
+  "averageRpm": "RPM Trung Bình",
+  "averageLevel": "Mức Trung Bình",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "Tiếp tục",
+  "endWorkoutQuestion": "Bạn có muốn kết thúc thói quen không?",
+  "workoutPaused": "Thói quen đã được tạm dừng",
+  "lvlIncline": "Độ dốc",
+  "lvlResistance": "Cấp độ Kháng cự",
+  "premium": "Cao cấp",
+  "upgradeNow": "Nâng cấp Ngay",
+  "purchase": "Mua",
+  "later": "Để Sau",
+  "premiumActivated": "Cao cấp đã được kích hoạt",
+  "premiumMembership": "Thành viên Cao cấp",
+  "benefitCycleStairmaster": "Tính năng Xe đạp và Máy leo cầu thang",
+  "benefitVoiceGuide": "Tính năng hướng dẫn bằng giọng nói phiên",
+  "benefitUnlimitedRoutines": "Lưu thói quen không giới hạn",
+  "benefitFutureFeatures": "Truy cập không giới hạn vào tính năng tương lai",
+  "noAds": "Không Có Quảng Cáo",
+  "voiceGuideBenefit1": "Hướng dẫn bằng giọng nói trong khi tập",
+  "voiceGuideBenefit2": "Thông báo tự động chuyển đổi phiên",
+  "voiceGuideBenefit3": "Tập trung vào thói quen không cần dùng tay",
+  "routineLimitBenefit1": "Lưu thói quen không giới hạn",
+  "routineLimitBenefit2": "Lưu thói quen cho nhiều mục tiêu",
+  "routineLimitBenefit3": "Sử dụng tất cả loại máy (máy chạy bộ/xe đạp/máy leo cầu thang)",
+  "premium_benefit_1": "Hỗ trợ <red>xe đạp & StairMaster</red>",
+  "premium_benefit_2": "<red>Hướng dẫn bằng giọng nói</red> trong buổi tập",
+  "premium_benefit_3": "Lưu routine <red>không giới hạn</red>",
+  "premium_benefit_4": "<red>Quyền truy cập không giới hạn</red> tính năng tương lai",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/tháng",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "Cao cấp",
+  "routineTab": "Thói quen",
+  "settingsTab": "Cài đặt",
+  "myTab": "Tôi",
+  "premiumSubheadline": "Mở khóa hướng dẫn bằng giọng nói, bài tập xe đạp và máy leo cầu thang, và thói quen không giới hạn",
+  "@premiumSubheadline": {
+    "description": "Mô tả nội dung mở khóa cao cấp"
+  },
+  "monthly": "Hàng tháng",
+  "@monthly": {
+    "description": "Nhãn gói hàng tháng"
+  },
+  "yearly": "Hàng năm",
+  "@yearly": {
+    "description": "Nhãn gói hàng năm"
+  },
+  "lifetime": "Suốt đời",
+  "@lifetime": {
+    "description": "Nhãn gói suốt đời"
+  },
+  "perMonth": "/tháng",
+  "@perMonth": {
+    "description": "Hậu tố mỗi tháng"
+  },
+  "perYear": "/năm",
+  "@perYear": {
+    "description": "Hậu tố mỗi năm"
+  },
+  "oneTime": "Thanh toán một lần",
+  "@oneTime": {
+    "description": "Hậu tố thanh toán một lần"
+  },
+  "savePercent": "Tiết kiệm {percent}%",
+  "@savePercent": {
+    "description": "Huy hiệu phần trăm tiết kiệm",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "Giá trị tốt nhất",
+  "@bestValue": {
+    "description": "Huy hiệu giá trị tốt nhất"
+  },
+  "cancelAnytime": "Hủy bất cứ lúc nào",
+  "@cancelAnytime": {
+    "description": "Dòng tin cậy hủy bất cứ lúc nào"
+  },
+  "autoRenewableSubscription": "Đăng ký tự động gia hạn",
+  "@autoRenewableSubscription": {
+    "description": "Dòng tin cậy đăng ký tự động gia hạn"
+  },
+  "terms": "Điều khoản",
+  "@terms": {
+    "description": "Liên kết điều khoản"
+  },
+  "privacy": "Quyền riêng tư",
+  "@privacy": {
+    "description": "Liên kết quyền riêng tư"
+  },
+  "restore": "Khôi phục",
+  "@restore": {
+    "description": "Liên kết khôi phục giao dịch mua"
+  },
+  "close": "Đóng",
+  "premiumFeature": "Tính năng Cao cấp",
+  "usePremiumTest": "Sử dụng Cao cấp (Thử nghiệm)",
+  "dateTimeFormat": "{day}/{month}/{year} {hour}:{minute}",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "Kiểm tra Thói quen / Bắt đầu",
+  "viewRecommendedRoutines": "Xem Thói quen Được đề xuất →",
+  "beginner": "Người mới bắt đầu",
+  "intermediate": "Trung cấp",
+  "advanced": "Nâng cao",
+  "recommendedRoutinesTreadmill": "Thói quen Máy chạy bộ Được đề xuất",
+  "recommendedRoutinesCycle": "Thói quen Xe đạp Được đề xuất",
+  "recommendedRoutinesStairmaster": "Thói quen Máy leo cầu thang Được đề xuất",
+  "alreadySaved": "Đã lưu",
+  "checkRoutine": "Kiểm tra",
+  "saveRoutine": "Lưu Thói quen",
+  "routineSaved": "Thói quen đã được lưu",
+  "routineAlreadySaved": "Thói quen đã được lưu",
+  "noTemplatesFound": "Không tìm thấy mẫu",
+  "templateTreadmillBeginner1Title": "Khởi động nhẹ 20",
+  "templateTreadmillBeginner1Subtitle": "Khởi động 3 phút + interval 1:1",
+  "templateTreadmillBeginner2Title": "Đi bộ dốc 25",
+  "templateTreadmillBeginner2Subtitle": "Các khối đi bộ dốc",
+  "templateTreadmillIntermediate1Title": "Cổ điển 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "Interval cổ điển 1:1",
+  "templateTreadmillIntermediate2Title": "Thang tốc độ 20",
+  "templateTreadmillIntermediate2Subtitle": "Thang tốc độ (tăng dần)",
+  "templateTreadmillAdvanced1Title": "Đốt mỡ 2:1 21",
+  "templateTreadmillAdvanced1Subtitle": "Interval 2:1 (nặng/nhẹ)",
+  "templateTreadmillAdvanced2Title": "Bùng nổ sprint 18",
+  "templateTreadmillAdvanced2Subtitle": "Lặp sprint 20 giây",
+  "templateCycleBeginner1Title": "Xây nhịp đạp 20",
+  "templateCycleBeginner1Subtitle": "Khởi động 4 phút + nhịp 1:1",
+  "templateCycleBeginner2Title": "Đạp đều 25",
+  "templateCycleBeginner2Subtitle": "Khối đều dài",
+  "templateCycleIntermediate1Title": "Spin 1:1 24",
+  "templateCycleIntermediate1Subtitle": "Interval spin cổ điển 1:1",
+  "templateCycleIntermediate2Title": "Mô phỏng dốc 22",
+  "templateCycleIntermediate2Subtitle": "Lặp leo dốc",
+  "templateCycleAdvanced1Title": "Interval sức mạnh 20",
+  "templateCycleAdvanced1Subtitle": "Bùng nổ sức mạnh 30 giây",
+  "templateCycleAdvanced2Title": "Tabata mix 16",
+  "templateCycleAdvanced2Subtitle": "Mix 20s/10s",
+  "templateStairmasterBeginner1Title": "Bước nhẹ 20",
+  "templateStairmasterBeginner1Subtitle": "Khởi động 4 phút + bước 1:1",
+  "templateStairmasterBeginner2Title": "Dài nhẹ 25",
+  "templateStairmasterBeginner2Subtitle": "Các khối dài nhẹ",
+  "templateStairmasterIntermediate1Title": "Leo 2:1 21",
+  "templateStairmasterIntermediate1Subtitle": "Lặp leo dốc 2:1",
+  "templateStairmasterIntermediate2Title": "Mạnh 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "Interval mạnh 1:1",
+  "templateStairmasterAdvanced1Title": "Khối nặng 20",
+  "templateStairmasterAdvanced1Subtitle": "Khối nặng 2 phút",
+  "templateStairmasterAdvanced2Title": "Bước sprint 18",
+  "templateStairmasterAdvanced2Subtitle": "Sprint 30s + hồi phục 60s",
+  "saved": "Đã lưu",
+  "historyTab": "Lịch sử",
+  "calendarTab": "Lịch",
+  "weightTab": "Cân nặng",
+  "bike": "Xe đạp",
+  "thisWeek": "Tuần này",
+  "trend": "Xu hướng",
+  "timeframe7D": "7N",
+  "timeframe30D": "30N",
+  "timeframe90D": "90N",
+  "timeframeAll": "TẤT CẢ",
+  "history": "Lịch sử",
+  "seeAll": "Xem tất cả",
+  "today": "Hôm nay",
+  "yesterday": "Hôm qua",
+  "noWorkoutsYet": "Chưa có bài tập nào",
+  "startYourFirstWorkout": "Bắt đầu bài tập đầu tiên của bạn để xem lịch sử ở đây",
+  "goToRoutines": "Đi đến Thói quen",
+  "weightRecorded": "Cân nặng đã được ghi lại",
+  "workout": "bài tập",
+  "workouts": "bài tập",
+  "goal": "Mục tiêu",
+  "toGo": "còn lại",
+  "over": "vượt quá",
+  "last": "Lần trước",
+  "newLabel": "Mới",
+  "youNeed": "Bạn cần {amount} để đạt {goal}",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "Bạn cần +{amount} để đạt {goal}",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "Hiện tại",
+  "avg": "TB",
+  "avgRpm": "TB RPM",
+  "avgLevel": "TB Cấp độ",
+  "weightEntryDeleted": "Mục nhập cân nặng đã bị xóa",
+  "weightUpdated": "Cân nặng đã được cập nhật",
+  "editWeight": "Chỉnh sửa cân nặng",
+  "recordWeight": "Ghi lại cân nặng",
+  "quickAdjust": "Điều chỉnh nhanh",
+  "goalWeightSet": "Mục tiêu cân nặng đã được đặt",
+  "goalWeightRemoved": "Mục tiêu cân nặng đã bị xóa",
+  "goalAchieved": "Đã đạt được mục tiêu!",
+  "goalMatchesCurrentWeight": "Mục tiêu khớp với cân nặng hiện tại",
+  "setGoal": "Đặt mục tiêu",
+  "suggested": "Đề xuất",
+  "removeGoal": "Xóa Mục tiêu",
+  "addOneMoreRecordToSeeTrend": "Thêm 1 bản ghi nữa để xem xu hướng của bạn",
+  "noWeightRecorded": "Chưa có cân nặng được ghi lại",
+  "startTrackingYourWeight": "Bắt đầu theo dõi cân nặng của bạn để xem tiến trình ở đây",
+  "treadmillSession": "Phiên Máy chạy bộ",
+  "bikeSession": "Phiên Xe đạp",
+  "stairmasterSession": "Phiên Máy leo cầu thang",
+  "treadmillWorkout": "Bài tập Máy chạy bộ",
+  "bikeWorkout": "Bài tập Xe đạp",
+  "stairmasterWorkout": "Bài tập Máy leo cầu thang",
+  "startAWorkoutToSeeItHere": "Bắt đầu một bài tập để xem nó ở đây",
+  "mon": "T2",
+  "tue": "T3",
+  "wed": "T4",
+  "thu": "T5",
+  "fri": "T6",
+  "sat": "T7",
+  "sun": "CN",
+  "sessions": "Phiên",
+  "distance": "Khoảng cách",
+  "premiumHeadline": "Cùng 30 phút, kết quả khác nhau",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "Đừng chỉ chạy, hãy tập luyện theo cách đốt cháy chất béo",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "Phổ Biến Nhất",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "{price} mỗi ngày",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "Hệ Thống Huấn Luyện Giọng Nói Premium",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "Hỗ Trợ Đầy Đủ Tất Cả Thiết Bị Cardio",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "Thư Viện Bài Tập Không Giới Hạn",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "Theo Dõi và Phân Tích Cân Nặng Thông Minh",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "Trải Nghiệm Premium Không Quảng Cáo",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "Tất cả các tính năng premium tương lai được bao gồm",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "Được chọn nhiều nhất",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "Có thể thay đổi bất cứ lúc nào",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "Bắt đầu Premium",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "Hủy bất cứ lúc nào và giữ quyền truy cập cho đến khi kết thúc thời kỳ",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{Tập luyện 1 ngày 🔥} other{Tập luyện {count} ngày 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{Ngày nghỉ 1 ngày 🛏️} other{Ngày nghỉ {count} ngày 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

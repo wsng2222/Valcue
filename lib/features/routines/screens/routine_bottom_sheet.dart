@@ -1,0 +1,2359 @@
+import 'dart:convert';
+import 'package:flutter/material.dart' hide Interval;
+import 'package:flutter/cupertino.dart' hide Interval;
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:interval_cardio/utils/responsive.dart';
+import '../models/routine.dart';
+import '../models/interval.dart';
+import '../models/machine_type.dart';
+import '../../../app_settings/app_settings_provider.dart';
+import '../storage/routine_provider.dart';
+import '../../workout/screens/workout_screen.dart';
+import '../../../theme/app_theme.dart';
+import '../../membership/widgets/premium_bottom_sheet.dart';
+import '../../../services/ad_service.dart';
+import '../../../widgets/secondary_outlined_button.dart';
+
+class RoutineBottomSheet {
+  /// Entry function to show routine sheet
+  /// [routine] - existing routine (null if creating new)
+  /// [initialEditing] - start in edit mode
+  /// [isNew] - true if creating new routine
+  /// [machineType] - required if creating new routine
+  static void show(
+    BuildContext context, {
+    Routine? routine,
+    bool initialEditing = false,
+    bool isNew = false,
+    MachineType? machineType,
+  }) {
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+
+    final theme = Theme.of(context);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
+      isDismissible: true,
+      builder: (context) => _RoutineDetailSheetContent(
+        routine: routine,
+        initialEditing: initialEditing,
+        isNew: isNew,
+        machineType:
+            machineType ?? routine?.machineType ?? MachineType.treadmill,
+        settingsProvider: settingsProvider,
+      ),
+    );
+  }
+}
+
+class _RoutineDetailSheetContent extends StatefulWidget {
+  final Routine? routine;
+  final bool initialEditing;
+  final bool isNew;
+  final MachineType machineType;
+  final AppSettingsProvider settingsProvider;
+
+  const _RoutineDetailSheetContent({
+    required this.routine,
+    required this.initialEditing,
+    required this.isNew,
+    required this.machineType,
+    required this.settingsProvider,
+  });
+
+  @override
+  State<_RoutineDetailSheetContent> createState() =>
+      _RoutineDetailSheetContentState();
+}
+
+class _RoutineDetailSheetContentState
+    extends State<_RoutineDetailSheetContent> {
+  late bool _isEditing;
+  late TextEditingController _nameController;
+  late String _difficulty;
+  late List<Interval> _intervals;
+  late MachineType _machineType;
+  bool _isDeleting = false;
+  String? _nameError;
+
+  // Original routine for cancel (deep copy)
+  late Routine? _originalRoutine;
+  // Draft routine (deep copy) for editing
+  Routine? _draftRoutine;
+
+  @override
+  void initState() {
+    super.initState();
+    _isEditing = widget.initialEditing;
+
+    if (widget.routine != null) {
+      // Create deep copy of original routine
+      _originalRoutine = widget.routine!.deepCopy();
+      _draftRoutine = widget.routine!.deepCopy();
+      _nameController = TextEditingController(text: _draftRoutine!.name);
+      _difficulty = _draftRoutine!.difficulty;
+      _intervals = _draftRoutine!.intervals.toList(); // Already deep copied
+      _machineType = _draftRoutine!.machineType;
+
+      // Debug: Log loaded values when opening edit
+      for (int i = 0; i < _intervals.length; i++) {
+        final interval = _intervals[i];
+        print(
+            '[DEBUG LOAD] Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+      }
+
+      // DRIFT GUARD: Log snapshot when opening edit
+      _logIntervalSnapshot('OPEN_EDIT', _intervals);
+    } else {
+      _originalRoutine = null;
+      _draftRoutine = null;
+      // Will be updated in didChangeDependencies with localized text
+      _nameController = TextEditingController();
+      // Default to Korean value, will be updated in didChangeDependencies if needed
+      // But we store Korean values anyway, so this is fine
+      _difficulty = '쉬움';
+      _intervals = [];
+      _machineType = widget.machineType;
+    }
+
+    // Add listener to validate name on change (only in edit mode)
+    if (_isEditing) {
+      _nameController.addListener(_validateName);
+      // Don't call _validateName here as it needs context
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Now we can safely access AppLocalizations
+    // Set default name if empty (for new routines) - always use "Untitled Routine" regardless of language
+    if (_originalRoutine == null && _nameController.text.isEmpty) {
+      _nameController.text = 'Untitled Routine';
+    }
+    // Validate if editing (listener already added in initState)
+    if (_isEditing) {
+      _validateName();
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.removeListener(_validateName);
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _validateName() {
+    if (!_isEditing) return;
+    final trimmed = _nameController.text.trim();
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+    setState(() {
+      if (trimmed.isEmpty) {
+        _nameError = l10n.nameRequired;
+      } else if (trimmed.length > 24) {
+        _nameError = l10n.nameMaxLength;
+      } else {
+        _nameError = null;
+      }
+    });
+  }
+
+  bool get _isNameValid {
+    final trimmed = _nameController.text.trim();
+    return trimmed.isNotEmpty && trimmed.length <= 24;
+  }
+
+  /// Build current routine from state - READ ONLY, NO MUTATIONS
+  /// This is called in build() and must never mutate intervals or any state
+  Routine _buildCurrentRoutine() {
+    // Always use "Untitled Routine" as default name regardless of language
+    String name = _nameController.text.trim().isEmpty
+        ? 'Untitled Routine'
+        : _nameController.text.trim();
+
+    // Enforce storage limit (40 chars for backward compatibility)
+    if (name.length > 40) {
+      name = name.substring(0, 40);
+      assert(() {
+        print('[DEBUG] Routine name truncated to 40 chars: "$name"');
+        return true;
+      }());
+    }
+
+    // Create new Routine with current intervals - intervals are immutable so safe to pass
+    // NO mutations happen here - just reading from _intervals
+    return Routine(
+      id: widget.routine?.id ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      difficulty: _difficulty,
+      intervals:
+          _intervals, // Pass by reference is safe - Interval is immutable
+      machineType: _machineType,
+    );
+  }
+
+  /// DRIFT GUARD: Log interval snapshot for debugging
+  void _logIntervalSnapshot(String stage, List<Interval> intervals) {
+    final snapshot = intervals.map((i) {
+      final json = <String, dynamic>{
+        'id': i.id,
+        'durationSeconds': i.durationSeconds
+      };
+      if (i.speedKmh != null) json['speedKmh'] = i.speedKmh;
+      if (i.grade != null) json['grade'] = i.grade;
+      if (i.rpm != null) json['rpm'] = i.rpm;
+      if (i.resistance != null) json['resistance'] = i.resistance;
+      if (i.level != null) json['level'] = i.level;
+      return json;
+    }).toList();
+    print('[DRIFT_GUARD] $stage: ${json.encode(snapshot)}');
+  }
+
+  String _formatDuration(int totalSeconds) {
+    final hours = totalSeconds ~/ 3600;
+    final minutes = (totalSeconds % 3600) ~/ 60;
+    final seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    }
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  bool _areAllIntervalsValid() {
+    if (_intervals.isEmpty) return false;
+    if (!_isNameValid) return false;
+
+    for (final interval in _intervals) {
+      // Duration must be >= 1 second
+      if (interval.durationSeconds < 1 || interval.durationSeconds > 10800) {
+        return false;
+      }
+
+      switch (_machineType) {
+        case MachineType.treadmill:
+          // Speed must be > 0
+          if (interval.speedKmh == null ||
+              interval.speedKmh! <= 0 ||
+              interval.speedKmh! > 25.0) {
+            return false;
+          }
+          // Grade must be >= 0
+          if (interval.grade == null ||
+              interval.grade! < 0 ||
+              interval.grade! > 15.0) {
+            return false;
+          }
+          break;
+        case MachineType.cycle:
+          if (interval.rpm == null ||
+              interval.rpm! < 30 ||
+              interval.rpm! > 200) {
+            return false;
+          }
+          if (interval.resistance == null ||
+              interval.resistance! < 1 ||
+              interval.resistance! > 20) {
+            return false;
+          }
+          break;
+        case MachineType.stairmaster:
+          if (interval.level == null ||
+              interval.level! < 1 ||
+              interval.level! > 20) {
+            return false;
+          }
+          // SPM validation removed
+          break;
+      }
+    }
+
+    return true;
+  }
+
+  void _toggleEditMode() {
+    if (_isEditing) {
+      // Cancel button pressed - discard draft and revert to original values or close if new
+      if (widget.isNew || _originalRoutine == null) {
+        // New routine - close sheet on cancel
+        Navigator.pop(context);
+        return;
+      } else {
+        // Existing routine - discard draft and revert to original deep copy
+        if (!mounted) return;
+        setState(() {
+          _draftRoutine = _originalRoutine!.deepCopy();
+          _nameController.text = _draftRoutine!.name;
+          _difficulty = _draftRoutine!.difficulty;
+          _intervals = _draftRoutine!.intervals.toList();
+          _machineType = _draftRoutine!.machineType;
+          _isEditing = false;
+          _nameError = null;
+        });
+        _nameController.removeListener(_validateName);
+        // DRIFT GUARD: Log after cancel
+        _logIntervalSnapshot('CANCEL_EDIT', _intervals);
+      }
+    } else {
+      // Enter edit mode - create deep copy draft
+      if (!mounted) return;
+      setState(() {
+        // Use _originalRoutine if available (updated after save), otherwise use widget.routine
+        final sourceRoutine = _originalRoutine ?? widget.routine;
+        if (sourceRoutine != null) {
+          _draftRoutine = sourceRoutine.deepCopy();
+          _intervals = _draftRoutine!.intervals.toList();
+        }
+        _isEditing = true;
+      });
+      _nameController.addListener(_validateName);
+      _validateName();
+      // DRIFT GUARD: Log when entering edit mode
+      if (_originalRoutine != null || widget.routine != null) {
+        _logIntervalSnapshot('ENTER_EDIT', _intervals);
+      }
+    }
+  }
+
+  void _showDifficultyPicker() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => _DifficultyPickerSheet(
+        currentDifficulty: _difficulty,
+        onSelected: (difficulty) {
+          if (!mounted) return;
+          setState(() {
+            _difficulty = difficulty;
+          });
+        },
+      ),
+    );
+  }
+
+  void _addInterval() {
+    setState(() {
+      // Generate unique ID using timestamp + random to avoid duplicates
+      final uniqueId =
+          '${DateTime.now().millisecondsSinceEpoch}_${_intervals.length}_${DateTime.now().microsecondsSinceEpoch}';
+
+      switch (_machineType) {
+        case MachineType.treadmill:
+          _intervals.add(Interval.treadmill(
+            id: uniqueId,
+            durationSeconds: 300, // 5 minutes (valid default >= 1)
+            speedKmh: 5.0, // Valid default > 0
+            grade: 0.0, // Valid default >= 0
+          ));
+          break;
+        case MachineType.cycle:
+          _intervals.add(Interval.cycle(
+            id: uniqueId,
+            durationSeconds: 300, // 5 minutes
+            rpm: 60,
+            resistance: 5,
+          ));
+          break;
+        case MachineType.stairmaster:
+          _intervals.add(Interval.stairmaster(
+            id: uniqueId,
+            durationSeconds: 300, // 5 minutes
+            level: 5,
+          ));
+          break;
+      }
+    });
+    // DRIFT GUARD: Log after adding interval
+    _logIntervalSnapshot('ADD_INTERVAL', _intervals);
+  }
+
+  void _deleteInterval(String intervalId) {
+    setState(() {
+      _intervals.removeWhere((i) => i.id == intervalId);
+    });
+    // DRIFT GUARD: Log after deleting interval
+    _logIntervalSnapshot('DELETE_INTERVAL', _intervals);
+  }
+
+  void _updateIntervalById(String intervalId, Interval updatedInterval) {
+    setState(() {
+      final index = _intervals.indexWhere((i) => i.id == intervalId);
+      if (index >= 0) {
+        _intervals[index] = updatedInterval;
+        // Debug: Log interval update
+        print(
+            '[DEBUG UPDATE] Interval $index updated: duration=${updatedInterval.durationSeconds}s, speedKmh=${updatedInterval.speedKmh}, grade=${updatedInterval.grade}');
+        // DRIFT GUARD: Log after updating interval
+        _logIntervalSnapshot('UPDATE_INTERVAL', _intervals);
+      }
+    });
+  }
+
+  void _showFreeLimitSheet() {
+    final l10n = AppLocalizations.of(context)!;
+
+    PremiumBottomSheet.show(
+      context,
+      title: l10n.premiumMembership,
+      bulletItems: [
+        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
+        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
+        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+      ],
+    );
+  }
+
+  Future<void> _saveRoutine() async {
+    final l10n = AppLocalizations.of(context)!;
+    // Validate name first
+    final trimmedName = _nameController.text.trim();
+    if (trimmedName.isEmpty) {
+      setState(() {
+        _nameError = l10n.nameRequired;
+      });
+      return;
+    }
+    if (trimmedName.length > 24) {
+      setState(() {
+        _nameError = l10n.nameMaxLength;
+      });
+      return;
+    }
+
+    if (_intervals.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.minIntervalsRequired)),
+      );
+      return;
+    }
+
+    // DRIFT GUARD: Create snapshot before save
+    final routineToSave = _buildCurrentRoutine();
+    final beforeJson = json.encode(routineToSave.toJson());
+    print('[DEBUG] Saving routine - JSON snapshot: $beforeJson');
+
+    // Validate all intervals have valid values
+    for (final interval in _intervals) {
+      if (interval.durationSeconds < 1) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.intervalMinDuration)),
+        );
+        return;
+      }
+      if (interval.durationSeconds > 10800) {
+        // 3 hours max
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.intervalMaxDuration)),
+        );
+        return;
+      }
+
+      switch (_machineType) {
+        case MachineType.treadmill:
+          if (interval.speedKmh == null ||
+              interval.speedKmh! <= 0 ||
+              interval.speedKmh! > 25.0) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.speedRange)),
+            );
+            return;
+          }
+          if (interval.grade == null ||
+              interval.grade! < 0 ||
+              interval.grade! > 15.0) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.inclineRange)),
+            );
+            return;
+          }
+          break;
+        case MachineType.cycle:
+          if (interval.rpm == null ||
+              interval.rpm! < 30 ||
+              interval.rpm! > 200) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.rpmRange)),
+            );
+            return;
+          }
+          if (interval.resistance == null ||
+              interval.resistance! < 1 ||
+              interval.resistance! > 20) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.resistanceRange)),
+            );
+            return;
+          }
+          break;
+        case MachineType.stairmaster:
+          if (interval.level == null ||
+              interval.level! < 1 ||
+              interval.level! > 20) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.levelRange)),
+            );
+            return;
+          }
+          // SPM validation removed
+          break;
+      }
+    }
+
+    final provider = Provider.of<RoutineProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+
+    final routine = _buildCurrentRoutine();
+
+    // DRIFT GUARD: Log snapshot before save
+    _logIntervalSnapshot('BEFORE_SAVE', routine.intervals);
+
+    if (widget.isNew || widget.routine == null) {
+      // Check free limit when adding new treadmill routine
+      if (_machineType == MachineType.treadmill &&
+          !settingsProvider.isPremium &&
+          provider.routines
+                  .where((r) => r.machineType == MachineType.treadmill)
+                  .length >=
+              2) {
+        _showFreeLimitSheet();
+        return;
+      }
+      await provider.addRoutine(routine);
+      // Close sheet after creating new routine
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } else {
+      await provider.updateRoutine(routine);
+
+      // DRIFT GUARD: After save, reload and verify
+      await provider.loadRoutines();
+      final savedRoutine =
+          provider.routines.firstWhere((r) => r.id == routine.id);
+      _logIntervalSnapshot('AFTER_SAVE_RELOAD', savedRoutine.intervals);
+
+      // Debug: Log stored values after save
+      for (int i = 0; i < savedRoutine.intervals.length; i++) {
+        final interval = savedRoutine.intervals[i];
+        print(
+            '[DEBUG SAVE] Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+      }
+
+      // Return to view mode after updating existing routine
+      if (mounted) {
+        setState(() {
+          _isEditing = false;
+          _originalRoutine = savedRoutine.deepCopy();
+          _draftRoutine = savedRoutine.deepCopy();
+          _intervals = _draftRoutine!.intervals.toList();
+        });
+      }
+    }
+  }
+
+  void _startWorkout() {
+    final routine = _buildCurrentRoutine();
+
+    // Check if user is premium - premium users don't see ads
+    final isPremium = widget.settingsProvider.isPremium;
+
+    if (isPremium) {
+      // Premium user: close bottom sheet and navigate directly without ads
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WorkoutScreen(routine: routine),
+        ),
+      );
+      return;
+    }
+
+    // Save navigator context before closing bottom sheet
+    final navigatorContext = Navigator.of(context, rootNavigator: true);
+
+    // Show interstitial ad if available, then navigate to workout
+    // Don't close bottom sheet yet - close it when ad is dismissed
+    final adService = AdService();
+    final wasAdShown = adService.showAd(
+      onAdClosed: () {
+        // Close bottom sheet and navigate to workout screen
+        if (mounted) {
+          Navigator.pop(context); // Close bottom sheet
+        }
+        // Use root navigator to push workout screen
+        navigatorContext.push(
+          MaterialPageRoute(
+            builder: (context) => WorkoutScreen(routine: routine),
+          ),
+        );
+      },
+    );
+
+    // If ad wasn't shown, close bottom sheet and navigate immediately
+    if (!wasAdShown) {
+      if (mounted) {
+        Navigator.pop(context); // Close bottom sheet
+      }
+      navigatorContext.push(
+        MaterialPageRoute(
+          builder: (context) => WorkoutScreen(routine: routine),
+        ),
+      );
+    }
+  }
+
+  void _showDeleteConfirmation() {
+    if (_isDeleting || widget.routine == null || widget.routine!.id.isEmpty) {
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final baseTextStyle = theme.textTheme.bodyMedium;
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: DefaultTextStyle.merge(
+          style: baseTextStyle?.copyWith(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface,
+            decoration: TextDecoration.none,
+          ),
+          child: Text(l10n.deleteRoutineTitle),
+        ),
+        message: DefaultTextStyle.merge(
+          style: baseTextStyle?.copyWith(
+            fontSize: 13,
+            color: context.appColors.mutedText,
+            decoration: TextDecoration.none,
+          ),
+          child: Text(l10n.deleteRoutineMessage),
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              _deleteRoutine();
+            },
+            child: DefaultTextStyle.merge(
+              style: baseTextStyle?.copyWith(
+                color: context.appColors.danger,
+                decoration: TextDecoration.none,
+              ),
+              child: Text(l10n.delete),
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Navigator.pop(context),
+          child: DefaultTextStyle.merge(
+            style: baseTextStyle?.copyWith(decoration: TextDecoration.none),
+            child: Text(l10n.cancel),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _deleteRoutine() async {
+    if (_isDeleting || widget.routine == null || widget.routine!.id.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _isDeleting = true;
+    });
+
+    try {
+      final provider = Provider.of<RoutineProvider>(context, listen: false);
+      await provider.deleteRoutine(widget.routine!.id);
+
+      if (!mounted) return;
+
+      // Show feedback
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.deleted),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+
+      // Close bottom sheet
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isDeleting = false;
+      });
+
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.deleteError),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // CRITICAL: build() must be PURE - NO mutations, NO setState, NO side effects
+    // Only read from state and build UI
+    final mediaQuery = MediaQuery.of(context);
+    final maxHeight = mediaQuery.size.height * 0.9;
+    final currentRoutine =
+        _buildCurrentRoutine(); // Read-only, creates new Routine
+    // ALWAYS compute total from current _intervals list (never use cached routine.totalDurationSeconds)
+    final totalDuration =
+        _intervals.fold(0, (sum, interval) => sum + interval.durationSeconds);
+    final totalDurationFormatted = _formatDuration(totalDuration);
+
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+    return Container(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Drag handle
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          // Content
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+              child: Column(
+                children: [
+                  // Routine name header with delete button (fixed height Stack)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Centered title/field with horizontal padding to prevent overlap
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 56),
+                              child: _isEditing
+                                  ? TextField(
+                                      controller: _nameController,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      maxLength: 24,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(24),
+                                      ],
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: _nameError != null
+                                            ? theme.colorScheme.error
+                                            : theme.colorScheme.onSurface,
+                                        letterSpacing: -0.5,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.zero,
+                                        counterText: '',
+                                      ),
+                                    )
+                                  : Text(
+                                      currentRoutine.name,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.onSurface,
+                                        letterSpacing: -0.5,
+                                      ),
+                                    ),
+                            ),
+                            // Delete button pinned to top-right, vertically centered
+                            if (!_isEditing &&
+                                widget.routine != null &&
+                                !widget.isNew)
+                              Positioned(
+                                right: 16,
+                                top: 0,
+                                bottom: 0,
+                                child: _isDeleting
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : CupertinoButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: _showDeleteConfirmation,
+                                        child: Icon(
+                                          CupertinoIcons.trash,
+                                          color: theme.colorScheme.error,
+                                          size: 20,
+                                        ),
+                                        minimumSize: Size(32, 32),
+                                      ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      // Error message below name field
+                      if (_isEditing && _nameError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            _nameError!,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: theme.colorScheme.error,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Very large centered duration
+                  Text(
+                    totalDurationFormatted,
+                    style: TextStyle(
+                      fontSize: 56,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  // Centered difficulty line - editable in edit mode
+                  _isEditing
+                      ? GestureDetector(
+                          onTap: _showDifficultyPicker,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              AppLocalizations.of(context)!.difficultyColon(
+                                  _getLocalizedDifficulty(
+                                      context, _difficulty)),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: theme.colorScheme.onSurface,
+                                letterSpacing: -0.3,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          AppLocalizations.of(context)!.difficultyColon(
+                              _getLocalizedDifficulty(
+                                  context, currentRoutine.difficulty)),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: theme.colorScheme.onSurface,
+                            letterSpacing: -0.3,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                  const SizedBox(height: 24),
+                  // Interval rows
+                  if (_intervals.isEmpty && _isEditing)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.noIntervals,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: appColors.mutedText,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: _addInterval,
+                            icon: const Icon(Icons.add_circle_outline),
+                            color: theme.colorScheme.primary,
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    ..._intervals.map((interval) {
+                      return _buildIntervalRow(
+                        interval,
+                        _machineType,
+                        widget.settingsProvider,
+                      );
+                    }),
+                  // Add interval button (only in edit mode)
+                  if (_isEditing && _intervals.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: _addInterval,
+                            icon: Icon(Icons.add_circle_outline,
+                                color: theme.colorScheme.primary),
+                            label: Text(
+                              AppLocalizations.of(context)!.addInterval,
+                              style:
+                                  TextStyle(color: theme.colorScheme.primary),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+          ),
+          // Bottom fixed action bar
+          Container(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+            ),
+            child: SafeArea(
+              top: false,
+              bottom: true,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SecondaryOutlinedButton(
+                        onPressed: _isEditing
+                            ? _toggleEditMode // Cancel
+                            : _toggleEditMode, // Edit
+                        borderRadius: 999,
+                        // Gray background, no border (dark mode support)
+                        backgroundColor: theme.brightness == Brightness.dark
+                            ? const Color(0xFF3C3C3C)
+                            : const Color(0xFFF0F0F0),
+                        borderColor: Colors.transparent,
+                        child: Text(
+                          _isEditing
+                              ? AppLocalizations.of(context)!.cancel
+                              : AppLocalizations.of(context)!.editRoutine,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                            color: theme.brightness == Brightness.dark
+                                ? theme.colorScheme.onSurface
+                                : const Color(0xFF666666),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (_isEditing && !_areAllIntervalsValid())
+                            ? null // Disable if invalid
+                            : (_isEditing
+                                ? _saveRoutine // Save
+                                : _startWorkout), // Start
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              (_isEditing && !_areAllIntervalsValid())
+                                  ? appColors.surfaceElevated
+                                  : theme.colorScheme.primary,
+                          foregroundColor:
+                              (_isEditing && !_areAllIntervalsValid())
+                                  ? appColors.mutedText
+                                  : theme.colorScheme.onPrimary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          _isEditing
+                              ? AppLocalizations.of(context)!.save
+                              : AppLocalizations.of(context)!.start,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIntervalRow(
+    Interval interval,
+    MachineType machineType,
+    AppSettingsProvider settingsProvider,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: _EditableIntervalRow(
+        key: ValueKey(interval.id), // Stable key based on interval ID
+        interval: interval,
+        machineType: machineType,
+        settingsProvider: settingsProvider,
+        isEditing: _isEditing,
+        onUpdate: (updatedInterval) =>
+            _updateIntervalById(interval.id, updatedInterval),
+        onDelete: _isEditing ? () => _deleteInterval(interval.id) : null,
+      ),
+    );
+  }
+
+  String _getLocalizedDifficulty(
+      BuildContext context, String storedDifficulty) {
+    final l10n = AppLocalizations.of(context)!;
+    final difficultyStorageValues = ['쉬움', '중간', '높음'];
+    final difficultyDisplayValues = [l10n.easy, l10n.medium, l10n.hard];
+
+    final index = difficultyStorageValues.indexOf(storedDifficulty);
+    if (index >= 0 && index < difficultyDisplayValues.length) {
+      return difficultyDisplayValues[index];
+    }
+    // Fallback to stored value if not found
+    return storedDifficulty;
+  }
+}
+
+class _DifficultyPickerSheet extends StatelessWidget {
+  final String currentDifficulty;
+  final Function(String) onSelected;
+
+  const _DifficultyPickerSheet({
+    required this.currentDifficulty,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final difficultyDisplayValues = [l10n.easy, l10n.medium, l10n.hard];
+    final difficultyStorageValues = ['쉬움', '중간', '높음'];
+    var initialIndex = difficultyStorageValues.indexOf(currentDifficulty);
+    if (initialIndex < 0) {
+      // Fallback if stored value doesn't match
+      initialIndex = 0;
+    }
+
+    return Container(
+      height: 350,
+      padding: const EdgeInsets.only(top: 6),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    minimumSize: Size(0, 0),
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.selectDifficulty,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                      decorationColor: Colors.transparent,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    minimumSize: Size(0, 0),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: CupertinoPicker(
+                scrollController: FixedExtentScrollController(
+                  initialItem: initialIndex >= 0 ? initialIndex : 0,
+                ),
+                itemExtent: 40,
+                onSelectedItemChanged: (index) {
+                  // Map display index back to storage value
+                  onSelected(difficultyStorageValues[index]);
+                },
+                children: difficultyDisplayValues.map((difficulty) {
+                  return Center(
+                    child: Text(
+                      difficulty,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EditableIntervalRow extends StatefulWidget {
+  final Interval interval;
+  final MachineType machineType;
+  final AppSettingsProvider settingsProvider;
+  final bool isEditing;
+  final Function(Interval) onUpdate;
+  final VoidCallback? onDelete;
+
+  const _EditableIntervalRow({
+    super.key,
+    required this.interval,
+    required this.machineType,
+    required this.settingsProvider,
+    required this.isEditing,
+    required this.onUpdate,
+    this.onDelete,
+  });
+
+  @override
+  State<_EditableIntervalRow> createState() => _EditableIntervalRowState();
+}
+
+class _EditableIntervalRowState extends State<_EditableIntervalRow> {
+  // State values for pickers
+  late int _durationMinutes;
+  late int _durationSeconds;
+  late double
+      _speedKmh; // Double (preserve 1 decimal) - stores value in user's selected unit (mph or km/h)
+  late double _grade; // Double (preserve 1 decimal)
+  late int _rpm;
+  late int _resistance;
+  late int _level;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeValues();
+  }
+
+  void _initializeValues() {
+    final totalSeconds = widget.interval.durationSeconds;
+    _durationMinutes = totalSeconds ~/ 60;
+    _durationSeconds = totalSeconds % 60;
+
+    // Ensure minimum duration of 1 second
+    if (_durationMinutes == 0 && _durationSeconds == 0) {
+      _durationSeconds = 1;
+    }
+
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        // Initialize from stored km/h and convert to user's selected unit for display/editing
+        final storedSpeedKmh = widget.interval.speedKmh ?? 5.0;
+        if (widget.settingsProvider.measurement == 'mph') {
+          // Convert km/h to mph for user's selected unit
+          _speedKmh = storedSpeedKmh * 0.621371;
+        } else {
+          _speedKmh = storedSpeedKmh;
+        }
+        _grade = widget.interval.grade ?? 0.0;
+        // Ensure speed > 0
+        if (_speedKmh <= 0) {
+          _speedKmh = widget.settingsProvider.measurement == 'mph'
+              ? (5.0 * 0.621371)
+              : 5.0;
+        }
+        break;
+      case MachineType.cycle:
+        _rpm = widget.interval.rpm ?? 60;
+        _resistance = widget.interval.resistance ?? 5;
+        break;
+      case MachineType.stairmaster:
+        _level = widget.interval.level ?? 5;
+        break;
+    }
+
+    // Don't call _updateInterval() here - it triggers parent setState during initState/didUpdateWidget
+    // Only update when user actually changes values via pickers
+  }
+
+  @override
+  void didUpdateWidget(_EditableIntervalRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update values when interval changes externally
+    // Use WidgetsBinding to defer update to avoid setState during build
+    if (oldWidget.interval != widget.interval) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _initializeValues();
+        }
+      });
+    }
+  }
+
+  void _updateInterval() {
+    if (!widget.isEditing) return;
+
+    final totalSeconds = _durationMinutes * 60 + _durationSeconds;
+    // Ensure minimum duration of 1 second
+    if (totalSeconds < 1) return;
+    if (totalSeconds > 10800) return; // Max 3 hours
+
+    // Use copyWith with doubles for speed/grade
+    Interval updatedInterval;
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        // Ensure speed > 0
+        if (_speedKmh <= 0) return;
+        // Convert from user's selected unit to km/h for storage (always store in km/h)
+        final speedKmh = widget.settingsProvider.measurement == 'mph'
+            ? _speedKmh / 0.621371 // Convert mph to km/h
+            : _speedKmh;
+        updatedInterval = widget.interval.copyWith(
+          durationSeconds: totalSeconds,
+          speedKmh: speedKmh.clamp(0.5, 25.0),
+          grade: _grade.clamp(0.0, 15.0),
+        );
+        break;
+      case MachineType.cycle:
+        updatedInterval = widget.interval.copyWith(
+          durationSeconds: totalSeconds,
+          rpm: _rpm.clamp(30, 200),
+          resistance: _resistance.clamp(1, 20),
+        );
+        break;
+      case MachineType.stairmaster:
+        updatedInterval = widget.interval.copyWith(
+          durationSeconds: totalSeconds,
+          level: _level.clamp(1, 20),
+        );
+        break;
+    }
+
+    widget.onUpdate(updatedInterval);
+  }
+
+  String _getPill1Text() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback if localization not available
+      switch (widget.machineType) {
+        case MachineType.treadmill:
+          return widget.settingsProvider
+              .formatSpeed(widget.interval.speedKmh ?? 0.0);
+        case MachineType.cycle:
+          return '${widget.interval.rpm ?? 0} RPM';
+        case MachineType.stairmaster:
+          return 'Level ${widget.interval.level ?? 0}';
+      }
+    }
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        return widget.settingsProvider
+            .formatSpeed(widget.interval.speedKmh ?? 0.0);
+      case MachineType.cycle:
+        return '${widget.interval.rpm ?? 0} ${l10n.rpm}';
+      case MachineType.stairmaster:
+        return 'Level ${widget.interval.level ?? 0}';
+    }
+  }
+
+  String _getPill2Text() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback if localization not available
+      switch (widget.machineType) {
+        case MachineType.treadmill:
+          return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'} Grade';
+        case MachineType.cycle:
+          return 'Level ${widget.interval.resistance ?? 0}';
+        case MachineType.stairmaster:
+          return ''; // SPM removed
+      }
+    }
+    final localizations = l10n;
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}% ${localizations.incline}';
+      case MachineType.cycle:
+        return 'Level ${widget.interval.resistance ?? 0}';
+      case MachineType.stairmaster:
+        return ''; // SPM removed
+    }
+  }
+
+  void _showDurationPicker(BuildContext context) {
+    // CRITICAL: Initialize picker from ACTUAL interval duration (single source of truth)
+    final intervalTotalSeconds = widget.interval.durationSeconds;
+    final initialMinutes = intervalTotalSeconds ~/ 60;
+    final initialSeconds = intervalTotalSeconds % 60;
+    final safeMinutes = initialMinutes;
+    final safeSeconds =
+        (initialMinutes == 0 && initialSeconds == 0) ? 1 : initialSeconds;
+
+    // Local temp values - DO NOT mutate model during scrolling
+    int tempMinutes = safeMinutes;
+    int tempSeconds = safeSeconds;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true, // Allow tap outside to dismiss (cancel)
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Cancel: DO NOT commit changes, just close
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.duration,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Done: Commit temp values to model
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _durationMinutes = tempMinutes;
+                            _durationSeconds = tempSeconds;
+                            // Ensure minimum of 1 second
+                            if (_durationMinutes == 0 &&
+                                _durationSeconds == 0) {
+                              _durationSeconds = 1;
+                            }
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoTimerPicker(
+                  mode: CupertinoTimerPickerMode.ms,
+                  minuteInterval: 1,
+                  secondInterval: 1,
+                  initialTimerDuration: Duration(
+                    minutes: safeMinutes,
+                    seconds: safeSeconds,
+                  ),
+                  onTimerDurationChanged: (Duration duration) {
+                    // Update ONLY temp values during scrolling - DO NOT mutate model
+                    tempMinutes = duration.inMinutes;
+                    tempSeconds = duration.inSeconds % 60;
+                    if (tempMinutes == 0 && tempSeconds == 0) {
+                      tempSeconds = 1;
+                    }
+                    // DO NOT call _updateInterval() here - only update on Done
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showSpeedPicker(BuildContext context) {
+    // Initialize picker from current _speedKmh (which is in user's selected unit)
+    final currentSpeed = _speedKmh;
+
+    // Generate speed values in user's selected unit (0.5 step increments)
+    final List<double> speedValues;
+    if (widget.settingsProvider.measurement == 'mph') {
+      // Generate mph values: 0.5 to 15.5 mph (equivalent to 0.5-25.0 km/h) in 0.5 steps
+      speedValues =
+          List.generate(31, (i) => 0.5 + (i * 0.5)); // 0.5, 1.0, 1.5, ..., 15.5
+    } else {
+      // Generate km/h values: 0.5 to 25.0 km/h in 0.5 steps
+      speedValues =
+          List.generate(50, (i) => 0.5 + (i * 0.5)); // 0.5, 1.0, 1.5, ..., 25.0
+    }
+
+    final initialIndex = speedValues.indexWhere((s) => s >= currentSpeed);
+    final selectedIndex = initialIndex >= 0 ? initialIndex : 0;
+
+    // Local temp value - DO NOT mutate model during scrolling (in user's selected unit)
+    double tempSpeed = currentSpeed;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true, // Allow tap outside to dismiss (cancel)
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Cancel: DO NOT commit changes, just close
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Text(
+                    '${AppLocalizations.of(context)!.speed} ${widget.settingsProvider.measurement == 'mph' ? '(mph)' : '(km/h)'}',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Done: Commit temp value to model (in user's selected unit)
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _speedKmh = tempSpeed;
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoPicker(
+                  scrollController:
+                      FixedExtentScrollController(initialItem: selectedIndex),
+                  itemExtent: 40,
+                  onSelectedItemChanged: (int index) {
+                    // Update ONLY temp value during scrolling - DO NOT mutate model (in user's selected unit)
+                    tempSpeed = speedValues[index];
+                    // DO NOT call _updateInterval() here - only update on Done
+                  },
+                  children: speedValues.map((speed) {
+                    return Center(
+                      child: Text(
+                        speed.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showGradePicker(BuildContext context) {
+    // CRITICAL: Initialize picker from ACTUAL interval grade (single source of truth)
+    final intervalGrade = widget.interval.grade ?? 0.0;
+    // Generate grade values: 0.0 to 15.0 in 0.5 steps
+    final gradeValues =
+        List.generate(31, (i) => i * 0.5); // 0.0, 0.5, 1.0, ..., 15.0
+    final initialIndex = gradeValues.indexWhere((g) => g >= intervalGrade);
+    final selectedIndex = initialIndex >= 0 ? initialIndex : 0;
+
+    // Local temp value - DO NOT mutate model during scrolling
+    double tempGrade = intervalGrade;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true, // Allow tap outside to dismiss (cancel)
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Cancel: DO NOT commit changes, just close
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.incline,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Done: Commit temp value to model
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _grade = tempGrade;
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoPicker(
+                  scrollController:
+                      FixedExtentScrollController(initialItem: selectedIndex),
+                  itemExtent: 40,
+                  onSelectedItemChanged: (int index) {
+                    // Update ONLY temp value during scrolling - DO NOT mutate model
+                    tempGrade = gradeValues[index];
+                    // DO NOT call _updateInterval() here - only update on Done
+                  },
+                  children: gradeValues.map((grade) {
+                    return Center(
+                      child: Text(
+                        grade.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showRpmPicker(BuildContext context) {
+    // CRITICAL: Initialize picker from ACTUAL interval rpm (single source of truth)
+    final intervalRpm = widget.interval.rpm ?? 60;
+    // Generate RPM values in steps of 5: 30, 35, 40, ..., 195, 200
+    final rpms =
+        List.generate(35, (i) => 30 + i * 5); // 30 to 200 in steps of 5
+    // Round to nearest 5-step value
+    final roundedRpm = ((intervalRpm / 5).round() * 5).clamp(30, 200);
+    final initialIndex = rpms.indexWhere((r) => r >= roundedRpm);
+    final selectedIndex = initialIndex >= 0 ? initialIndex : 0;
+
+    // Local temp value - DO NOT mutate model during scrolling
+    int tempRpm = intervalRpm;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.rpm,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _rpm = tempRpm;
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoPicker(
+                  scrollController:
+                      FixedExtentScrollController(initialItem: selectedIndex),
+                  itemExtent: 40,
+                  onSelectedItemChanged: (int index) {
+                    // Update ONLY temp value during scrolling - DO NOT mutate model
+                    tempRpm = rpms[index];
+                  },
+                  children: rpms.map((rpm) {
+                    return Center(
+                      child: Text(
+                        rpm.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showResistancePicker(BuildContext context) {
+    // CRITICAL: Initialize picker from ACTUAL interval resistance (single source of truth)
+    final intervalResistance = widget.interval.resistance ?? 5;
+    final resistances = List.generate(20, (i) => i + 1); // 1 to 20
+    final initialIndex = resistances.indexWhere((r) => r >= intervalResistance);
+    final selectedIndex = initialIndex >= 0 ? initialIndex : 0;
+
+    // Local temp value - DO NOT mutate model during scrolling
+    int tempResistance = intervalResistance;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.resistance,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _resistance = tempResistance;
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoPicker(
+                  scrollController:
+                      FixedExtentScrollController(initialItem: selectedIndex),
+                  itemExtent: 40,
+                  onSelectedItemChanged: (int index) {
+                    // Update ONLY temp value during scrolling - DO NOT mutate model
+                    tempResistance = resistances[index];
+                  },
+                  children: resistances.map((resistance) {
+                    return Center(
+                      child: Text(
+                        resistance.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showLevelPicker(BuildContext context) {
+    // CRITICAL: Initialize picker from ACTUAL interval level (single source of truth)
+    final intervalLevel = widget.interval.level ?? 5;
+    final levels = List.generate(20, (i) => i + 1); // 1 to 20
+    final initialIndex = levels.indexWhere((l) => l >= intervalLevel);
+    final selectedIndex = initialIndex >= 0 ? initialIndex : 0;
+
+    // Local temp value - DO NOT mutate model during scrolling
+    int tempLevel = intervalLevel;
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Container(
+        height: 350,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.level,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _level = tempLevel;
+                            _updateInterval();
+                          });
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoPicker(
+                  scrollController:
+                      FixedExtentScrollController(initialItem: selectedIndex),
+                  itemExtent: 40,
+                  onSelectedItemChanged: (int index) {
+                    // Update ONLY temp value during scrolling - DO NOT mutate model
+                    tempLevel = levels[index];
+                  },
+                  children: levels.map((level) {
+                    return Center(
+                      child: Text(
+                        level.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // _showSpmPicker removed - SPM feature removed
+
+  String _getField1Suffix() {
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        // Return suffix based on user's unit setting
+        return widget.settingsProvider.measurement == 'mph' ? ' mph' : ' km/h';
+      case MachineType.cycle:
+        return ' RPM';
+      case MachineType.stairmaster:
+        return '';
+    }
+  }
+
+  String _getField2Suffix() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback if localization not available
+      switch (widget.machineType) {
+        case MachineType.treadmill:
+          return ' Grade';
+        case MachineType.cycle:
+          return '';
+        case MachineType.stairmaster:
+          return ''; // SPM removed
+      }
+    }
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        // Use localized incline text
+        return '% ${l10n.incline}';
+      case MachineType.cycle:
+        return '';
+      case MachineType.stairmaster:
+        return ''; // SPM removed
+    }
+  }
+
+  String _getField1Prefix() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback if localization not available
+      switch (widget.machineType) {
+        case MachineType.treadmill:
+          return '';
+        case MachineType.cycle:
+          return '';
+        case MachineType.stairmaster:
+          return 'Level ';
+      }
+    }
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        return '';
+      case MachineType.cycle:
+        return '';
+      case MachineType.stairmaster:
+        return 'Level ';
+    }
+  }
+
+  String _getField2Prefix() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback if localization not available
+      switch (widget.machineType) {
+        case MachineType.treadmill:
+          return '';
+        case MachineType.cycle:
+          return 'Level ';
+        case MachineType.stairmaster:
+          return '';
+      }
+    }
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        return '';
+      case MachineType.cycle:
+        return 'Level ';
+      case MachineType.stairmaster:
+        return '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Build chips for VIEW and EDIT modes
+    Widget durationChip;
+    Widget field1Chip;
+    Widget? field2Chip; // Nullable for Stairmaster (SPM removed)
+
+    if (widget.isEditing) {
+      // EDIT mode: tappable chips that open pickers
+      durationChip = GestureDetector(
+        onTap: () => _showDurationPicker(context),
+        child: Container(
+          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
+          padding: ResponsiveUtils.getChipPadding(context),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF3C3C3C)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Center(
+            child: Text(
+              '${_durationMinutes.toString().padLeft(2, '0')}:${_durationSeconds.toString().padLeft(2, '0')}',
+              style: TextStyle(
+                fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      field1Chip = GestureDetector(
+        onTap: () {
+          if (widget.machineType == MachineType.treadmill) {
+            _showSpeedPicker(context);
+          } else if (widget.machineType == MachineType.cycle) {
+            _showRpmPicker(context);
+          } else {
+            _showLevelPicker(context);
+          }
+        },
+        child: Container(
+          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
+          padding: ResponsiveUtils.getChipPadding(context),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF3C3C3C)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_getField1Prefix().isNotEmpty)
+                  Text(
+                    _getField1Prefix(),
+                    style: TextStyle(
+                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                Text(
+                  widget.machineType == MachineType.treadmill
+                      ? _speedKmh.toStringAsFixed(1)
+                      : widget.machineType == MachineType.cycle
+                          ? _rpm.toString()
+                          : _level.toString(),
+                  style: TextStyle(
+                    fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                if (_getField1Suffix().isNotEmpty)
+                  Text(
+                    _getField1Suffix(),
+                    style: TextStyle(
+                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // Field2 chip - only for Treadmill and Cycle (SPM removed for Stairmaster)
+      if (widget.machineType != MachineType.stairmaster) {
+        field2Chip = GestureDetector(
+          onTap: () {
+            if (widget.machineType == MachineType.treadmill) {
+              _showGradePicker(context);
+            } else if (widget.machineType == MachineType.cycle) {
+              _showResistancePicker(context);
+            }
+          },
+          child: Container(
+            constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
+            padding: ResponsiveUtils.getChipPadding(context),
+            decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF3C3C3C)
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_getField2Prefix().isNotEmpty)
+                    Text(
+                      _getField2Prefix(),
+                      style: TextStyle(
+                        fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  Text(
+                    widget.machineType == MachineType.treadmill
+                        ? _grade.toStringAsFixed(1)
+                        : _resistance.toString(),
+                    style: TextStyle(
+                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  if (_getField2Suffix().isNotEmpty)
+                    Text(
+                      _getField2Suffix(),
+                      style: TextStyle(
+                        fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        field2Chip = null; // SPM removed for Stairmaster
+      }
+    } else {
+      // VIEW mode: read-only chips
+      durationChip = Container(
+        constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
+        padding: ResponsiveUtils.getChipPadding(context),
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF3C3C3C)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(
+          child: Text(
+            widget.interval.durationFormatted,
+            style: TextStyle(
+              fontSize: 14 * ResponsiveUtils.getFontScale(context),
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ),
+      );
+
+      field1Chip = Container(
+        constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
+        padding: ResponsiveUtils.getChipPadding(context),
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF3C3C3C)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(
+          child: Text(
+            _getPill1Text(),
+            style: TextStyle(
+              fontSize: 14 * ResponsiveUtils.getFontScale(context),
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ),
+      );
+
+      if (widget.machineType != MachineType.stairmaster) {
+        field2Chip = Container(
+          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
+          padding: ResponsiveUtils.getChipPadding(context),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF3C3C3C)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Center(
+            child: Text(
+              _getPill2Text(),
+              style: TextStyle(
+                fontSize: 14 * ResponsiveUtils.getFontScale(context),
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        );
+      } else {
+        field2Chip = null; // SPM removed for Stairmaster
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Center(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF2C2C2C)
+                      : const Color(0xFFF0F0F0),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.95,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    durationChip,
+                    const SizedBox(width: 4),
+                    field1Chip,
+                    if (field2Chip != null) ...[
+                      const SizedBox(width: 4),
+                      field2Chip,
+                    ],
+                  ],
+                ),
+              ),
+              if (widget.onDelete != null) ...[
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onTap: widget.onDelete,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

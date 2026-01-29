@@ -1,0 +1,473 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "设置",
+  "language": "语言",
+  "system": "系统",
+  "voiceGuide": "语音指南",
+  "audioNavigator": "音频导航器",
+  "soundEffects": "音效",
+  "unitSetting": "单位设置",
+  "kmh": "km/h",
+  "mph": "mph",
+  "themeMode": "浅色/深色模式",
+  "light": "浅色",
+  "dark": "深色",
+  "smartwatchSync": "智能手表同步",
+  "connectSmartwatch": "连接到智能手表",
+  "connect": "连接",
+  "about": "关于",
+  "version": "版本 {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "即将推出",
+  "translationComingSoon": "翻译将在未来的更新中提供。",
+  "ok": "确定",
+  "cancel": "取消",
+  "done": "完成",
+  "delete": "删除",
+  "save": "保存",
+  "edit": "编辑",
+  "start": "开始",
+  "editRoutine": "编辑例行程序",
+  "routineEdit": "编辑例行程序",
+  "name": "名称",
+  "unnamedRoutine": "未命名例行程序",
+  "difficulty": "难度",
+  "difficultyColon": "难度 : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "简单",
+  "medium": "中等",
+  "hard": "困难",
+  "interval": "间隔",
+  "addInterval": "添加间隔",
+  "noIntervals": "没有间隔",
+  "addIntervalPrompt": "添加间隔",
+  "intervalEdit": "编辑间隔",
+  "timeMinutes": "时间（分钟）",
+  "duration": "时间",
+  "speed": "速度",
+  "speedKmh": "速度（km/h）",
+  "incline": "坡度",
+  "level": "级别",
+  "levelColon": "级别 {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "resistance": "阻力",
+  "resistanceLevel": "阻力（级别）",
+  "resistanceColon": "阻力 {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "spmSteps": "SPM（步/分钟）",
+  "saved": "已保存",
+  "deleted": "已删除",
+  "deleteRoutineTitle": "删除例行程序",
+  "deleteRoutineMessage": "您确定要删除此例行程序吗？此操作无法撤销。",
+  "deleteError": "删除时发生错误",
+  "nameRequired": "请输入名称",
+  "nameMaxLength": "名称必须为24个字符或更少",
+  "minIntervalsRequired": "至少需要一个间隔",
+  "intervalMinDuration": "间隔时间必须至少为1秒",
+  "intervalMaxDuration": "间隔时间最多为3小时（10800秒）",
+  "speedRange": "速度必须大于0（0.5-25.0 km/h）",
+  "inclineRange": "坡度必须在0-15.0范围内",
+  "rpmRange": "RPM必须在30-200范围内",
+  "resistanceRange": "阻力必须在1-20范围内",
+  "levelRange": "级别必须在1-20范围内",
+  "spmRange": "SPM必须在50-200范围内",
+  "noRoutinesSaved": "没有保存的例行程序",
+  "tapToCreate": "点击创建",
+  "tapButtonToCreate": "点击按钮创建",
+  "premiumRoutineSettings": "高级例行程序设置",
+  "viewMembership": "查看会员资格",
+  "freeLimitTitle": "免费限制为2个例行程序",
+  "freeLimitMessage": "您可以使用会员资格获得无限例行程序",
+  "treadmill": "跑步机",
+  "cycle": "自行车",
+  "stairmaster": "爬楼机",
+  "selectLanguage": "选择语言",
+  "selectTheme": "选择主题",
+  "selectDifficulty": "选择难度",
+  "pause": "暂停",
+  "resume": "继续",
+  "endWorkout": "结束训练",
+  "endWorkoutConfirm": "您要结束训练吗？",
+  "end": "结束",
+  "rotate": "旋转",
+  "paused": "已暂停",
+  "pausedTitle": "已暂停",
+  "pausedSubtitle": "您可以继续或结束训练",
+  "endWorkoutConfirmationMessage": "如果现在结束，当前训练将完成，您将转到摘要屏幕。",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "总训练时间",
+  "totalDistance": "总距离",
+  "averageRpm": "平均RPM",
+  "averageLevel": "平均等级",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "继续",
+  "endWorkoutQuestion": "您要结束训练吗？",
+  "workoutPaused": "训练已暂停",
+  "lvlIncline": "坡度",
+  "lvlResistance": "级别阻力",
+  "premium": "高级版",
+  "upgradeNow": "立即升级",
+  "purchase": "购买",
+  "later": "稍后",
+  "premiumActivated": "高级版已激活",
+  "premiumMembership": "高级会员",
+  "benefitCycleStairmaster": "自行车、爬楼机功能",
+  "benefitVoiceGuide": "会话语音指南功能",
+  "benefitUnlimitedRoutines": "无限例行程序保存",
+  "benefitFutureFeatures": "无限访问未来功能",
+  "noAds": "无广告",
+  "voiceGuideBenefit1": "训练期间的语音指导",
+  "voiceGuideBenefit2": "自动会话转换提醒",
+  "voiceGuideBenefit3": "免提专注例程",
+  "routineLimitBenefit1": "无限例程保存",
+  "routineLimitBenefit2": "保存多个目标的例程",
+  "routineLimitBenefit3": "使用所有机器类型（跑步机/动感单车/爬楼机）",
+  "premium_benefit_1": "支持<red>动感单车和爬楼机</red>训练",
+  "premium_benefit_2": "训练时<red>语音指导</red>",
+  "premium_benefit_3": "例程保存<red>无限</red>",
+  "premium_benefit_4": "未来功能<red>无限访问</red>",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/月",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "高级版",
+  "routineTab": "例行程序",
+  "settingsTab": "设置",
+  "myTab": "我的",
+  "premiumSubheadline": "解锁语音指导、自行车和爬楼机训练，以及无限例程",
+  "@premiumSubheadline": {
+    "description": "高级版解锁内容描述"
+  },
+  "monthly": "月度",
+  "@monthly": {
+    "description": "月度计划标签"
+  },
+  "yearly": "年度",
+  "@yearly": {
+    "description": "年度计划标签"
+  },
+  "lifetime": "终身",
+  "@lifetime": {
+    "description": "终身计划标签"
+  },
+  "perMonth": "/月",
+  "@perMonth": {
+    "description": "每月后缀"
+  },
+  "perYear": "/年",
+  "@perYear": {
+    "description": "每年后缀"
+  },
+  "oneTime": "一次性支付",
+  "@oneTime": {
+    "description": "一次性支付后缀"
+  },
+  "savePercent": "节省 {percent}%",
+  "@savePercent": {
+    "description": "节省百分比徽章",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "最佳价值",
+  "@bestValue": {
+    "description": "最佳价值徽章"
+  },
+  "cancelAnytime": "随时取消",
+  "@cancelAnytime": {
+    "description": "随时取消信任行"
+  },
+  "autoRenewableSubscription": "自动续订订阅",
+  "@autoRenewableSubscription": {
+    "description": "自动续订订阅信任行"
+  },
+  "terms": "条款",
+  "@terms": {
+    "description": "条款链接"
+  },
+  "privacy": "隐私",
+  "@privacy": {
+    "description": "隐私链接"
+  },
+  "restore": "恢复",
+  "@restore": {
+    "description": "恢复购买链接"
+  },
+  "close": "关闭",
+  "premiumFeature": "高级版功能",
+  "usePremiumTest": "使用高级版（测试）",
+  "dateTimeFormat": "{year}年{month}月{day}日 {hour}时{minute}分",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "检查例行程序 / 开始",
+  "viewRecommendedRoutines": "查看推荐例程 →",
+  "beginner": "初级",
+  "intermediate": "中级",
+  "advanced": "高级",
+  "recommendedRoutinesTreadmill": "推荐跑步机例程",
+  "recommendedRoutinesCycle": "推荐自行车例程",
+  "recommendedRoutinesStairmaster": "推荐爬楼机例程",
+  "alreadySaved": "已保存",
+  "checkRoutine": "检查",
+  "saveRoutine": "保存例程",
+  "routineSaved": "例程已保存",
+  "routineAlreadySaved": "例程已保存",
+  "noTemplatesFound": "未找到模板",
+  "templateTreadmillBeginner1Title": "轻松起步20",
+  "templateTreadmillBeginner1Subtitle": "3分钟热身 + 1:1间歇",
+  "templateTreadmillBeginner2Title": "爬坡快走25",
+  "templateTreadmillBeginner2Subtitle": "坡度快走分段",
+  "templateTreadmillIntermediate1Title": "经典1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "经典1:1间歇",
+  "templateTreadmillIntermediate2Title": "速度阶梯20",
+  "templateTreadmillIntermediate2Subtitle": "速度阶梯（逐步加速）",
+  "templateTreadmillAdvanced1Title": "燃脂2:1 21",
+  "templateTreadmillAdvanced1Subtitle": "2:1间歇（强/弱）",
+  "templateTreadmillAdvanced2Title": "冲刺爆发18",
+  "templateTreadmillAdvanced2Subtitle": "20秒冲刺重复",
+  "templateCycleBeginner1Title": "踏频训练20",
+  "templateCycleBeginner1Subtitle": "4分钟热身 + 1:1踏频",
+  "templateCycleBeginner2Title": "稳定骑行25",
+  "templateCycleBeginner2Subtitle": "长时间稳定区间",
+  "templateCycleIntermediate1Title": "骑行1:1 24",
+  "templateCycleIntermediate1Subtitle": "经典1:1间歇",
+  "templateCycleIntermediate2Title": "爬坡模拟22",
+  "templateCycleIntermediate2Subtitle": "爬坡重复",
+  "templateCycleAdvanced1Title": "力量间歇20",
+  "templateCycleAdvanced1Subtitle": "30秒力量爆发",
+  "templateCycleAdvanced2Title": "Tabata混合16",
+  "templateCycleAdvanced2Subtitle": "20秒/10秒混合",
+  "templateStairmasterBeginner1Title": "轻松台阶20",
+  "templateStairmasterBeginner1Subtitle": "4分钟热身 + 1:1台阶",
+  "templateStairmasterBeginner2Title": "长时间轻松25",
+  "templateStairmasterBeginner2Subtitle": "长时间轻松区块",
+  "templateStairmasterIntermediate1Title": "2:1爬升21",
+  "templateStairmasterIntermediate1Subtitle": "2:1爬升重复",
+  "templateStairmasterIntermediate2Title": "强力1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "强力1:1间歇",
+  "templateStairmasterAdvanced1Title": "高强度区块20",
+  "templateStairmasterAdvanced1Subtitle": "2分钟高强度区块",
+  "templateStairmasterAdvanced2Title": "冲刺台阶18",
+  "templateStairmasterAdvanced2Subtitle": "30秒冲刺 + 60秒恢复",
+  "saved": "已保存",
+  "historyTab": "记录",
+  "calendarTab": "日历",
+  "weightTab": "体重",
+  "bike": "自行车",
+  "thisWeek": "本周",
+  "trend": "趋势",
+  "timeframe7D": "7天",
+  "timeframe30D": "30天",
+  "timeframe90D": "90天",
+  "timeframeAll": "全部",
+  "history": "记录",
+  "seeAll": "查看全部",
+  "today": "今天",
+  "yesterday": "昨天",
+  "noWorkoutsYet": "还没有训练记录",
+  "startYourFirstWorkout": "开始您的第一次训练以在此查看您的记录",
+  "goToRoutines": "前往例程",
+  "weightRecorded": "体重已记录",
+  "workout": "训练",
+  "workouts": "训练",
+  "goal": "目标",
+  "toGo": "剩余",
+  "over": "超过",
+  "last": "上次",
+  "newLabel": "新的",
+  "youNeed": "您需要{amount}才能达到{goal}",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "您需要+{amount}才能达到{goal}",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "当前",
+  "avg": "平均",
+  "avgRpm": "平均 RPM",
+  "avgLevel": "平均等级",
+  "weightEntryDeleted": "体重记录已删除",
+  "weightUpdated": "体重已更新",
+  "editWeight": "编辑体重",
+  "recordWeight": "记录体重",
+  "quickAdjust": "快速调整",
+  "goalWeightSet": "目标体重已设置",
+  "goalWeightRemoved": "目标体重已移除",
+  "goalAchieved": "目标达成！",
+  "goalMatchesCurrentWeight": "目标与当前体重一致",
+  "setGoal": "设置目标",
+  "suggested": "建议",
+  "removeGoal": "移除目标",
+  "addOneMoreRecordToSeeTrend": "再添加1条记录以查看您的趋势",
+  "noWeightRecorded": "尚未记录体重",
+  "startTrackingYourWeight": "开始记录您的体重以在此查看进度",
+  "treadmillSession": "跑步机会话",
+  "bikeSession": "自行车会话",
+  "stairmasterSession": "爬楼机会话",
+  "treadmillWorkout": "跑步机训练",
+  "bikeWorkout": "自行车训练",
+  "stairmasterWorkout": "爬楼机训练",
+  "startAWorkoutToSeeItHere": "开始训练以在此查看",
+  "mon": "周一",
+  "tue": "周二",
+  "wed": "周三",
+  "thu": "周四",
+  "fri": "周五",
+  "sat": "周六",
+  "sun": "周日",
+  "sessions": "会话",
+  "distance": "距离",
+  "premiumHeadline": "同样的30分钟，不同的结果",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "不要只是跑步，以燃脂的方式运动",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "最受欢迎",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "每天{price}元",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "高级语音指导系统",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "全面支持所有有氧器械",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "无限训练库",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "智能体重追踪与分析",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "无广告高级体验",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "包含所有未来高级功能",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "最常选择",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "可随时更改",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "开始高级版",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "随时可取消，在期间结束前仍可使用",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{运动 1 天 🔥} other{运动 {count} 天 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{休息 1 天 🛏️} other{休息 {count} 天 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

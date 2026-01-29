@@ -1,0 +1,473 @@
+{
+  "@@locale": "ar",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "إعدادات",
+  "language": "اللغة",
+  "system": "النظام",
+  "voiceGuide": "الدليل الصوتي",
+  "audioNavigator": "مستكشف الصوت",
+  "soundEffects": "تأثيرات صوتية",
+  "unitSetting": "إعداد الوحدة",
+  "kmh": "كم/ساعة",
+  "mph": "ميل/ساعة",
+  "themeMode": "الوضع الفاتح/الداكن",
+  "light": "فاتح",
+  "dark": "داكن",
+  "smartwatchSync": "مزامنة الساعة الذكية",
+  "connectSmartwatch": "الاتصال بالساعة الذكية",
+  "connect": "اتصال",
+  "about": "حول",
+  "version": "الإصدار {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "قريباً",
+  "translationComingSoon": "ستكون الترجمة متاحة في تحديث مستقبلي.",
+  "ok": "موافق",
+  "cancel": "إلغاء",
+  "done": "تم",
+  "delete": "حذف",
+  "save": "حفظ",
+  "edit": "تعديل",
+  "start": "بدء",
+  "editRoutine": "تعديل الروتين",
+  "routineEdit": "تعديل الروتين",
+  "name": "الاسم",
+  "unnamedRoutine": "روتين بدون اسم",
+  "difficulty": "الصعوبة",
+  "difficultyColon": "الصعوبة : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "سهل",
+  "medium": "متوسط",
+  "hard": "صعب",
+  "interval": "الفترة",
+  "addInterval": "إضافة فترة",
+  "noIntervals": "لا توجد فترات",
+  "addIntervalPrompt": "إضافة فترة",
+  "intervalEdit": "تعديل الفترة",
+  "timeMinutes": "الوقت (بالدقائق)",
+  "duration": "المدة",
+  "speed": "السرعة",
+  "speedKmh": "السرعة (كم/ساعة)",
+  "incline": "الميل",
+  "level": "المستوى",
+  "levelColon": "المستوى {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "دورة/دقيقة",
+  "resistance": "المقاومة",
+  "resistanceLevel": "المقاومة (المستوى)",
+  "resistanceColon": "المقاومة {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "خطوة/دقيقة",
+  "spmSteps": "خطوة/دقيقة (خطوات/دقيقة)",
+  "saved": "تم الحفظ",
+  "deleted": "تم الحذف",
+  "deleteRoutineTitle": "حذف الروتين",
+  "deleteRoutineMessage": "هل أنت متأكد من أنك تريد حذف هذا الروتين؟ لا يمكن التراجع عن هذا الإجراء.",
+  "deleteError": "حدث خطأ أثناء الحذف",
+  "nameRequired": "الرجاء إدخال اسم",
+  "nameMaxLength": "يجب أن يكون الاسم 24 حرفاً أو أقل",
+  "minIntervalsRequired": "مطلوب فترة واحدة على الأقل",
+  "intervalMinDuration": "يجب أن تكون مدة الفترة ثانية واحدة على الأقل",
+  "intervalMaxDuration": "يجب أن تكون مدة الفترة 3 ساعات كحد أقصى (10800 ثانية)",
+  "speedRange": "يجب أن تكون السرعة أكبر من 0 (0.5-25.0 كم/ساعة)",
+  "inclineRange": "يجب أن يكون الميل في النطاق 0-15.0",
+  "rpmRange": "يجب أن تكون دورة/دقيقة في النطاق 30-200",
+  "resistanceRange": "يجب أن تكون المقاومة في النطاق 1-20",
+  "levelRange": "يجب أن يكون المستوى في النطاق 1-20",
+  "spmRange": "يجب أن تكون خطوة/دقيقة في النطاق 50-200",
+  "noRoutinesSaved": "لا توجد روتينات محفوظة",
+  "tapToCreate": "اضغط للإنشاء",
+  "tapButtonToCreate": "اضغط على الزر للإنشاء",
+  "premiumRoutineSettings": "إعدادات الروتين المميز",
+  "viewMembership": "عرض العضوية",
+  "freeLimitTitle": "الحد المجاني هو 2 روتينات",
+  "freeLimitMessage": "يمكنك استخدام روتينات غير محدودة مع العضوية",
+  "treadmill": "جهاز الجري",
+  "cycle": "الدراجة",
+  "stairmaster": "السلم",
+  "selectLanguage": "اختر اللغة",
+  "selectTheme": "اختر المظهر",
+  "selectDifficulty": "اختر الصعوبة",
+  "pause": "إيقاف مؤقت",
+  "resume": "متابعة",
+  "endWorkout": "إنهاء التمرين",
+  "endWorkoutConfirm": "هل تريد إنهاء التمرين؟",
+  "end": "إنهاء",
+  "rotate": "تدوير",
+  "paused": "متوقف مؤقتاً",
+  "pausedTitle": "متوقف مؤقتاً",
+  "pausedSubtitle": "يمكنك المتابعة أو إنهاء التمرين",
+  "endWorkoutConfirmationMessage": "إذا أنهيت الآن، سينتهي التمرين الحالي وستنتقل إلى شاشة الملخص.",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "إجمالي وقت التمرين",
+  "totalDistance": "إجمالي المسافة",
+  "averageRpm": "متوسط RPM",
+  "averageLevel": "المستوى المتوسط",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "متابعة",
+  "endWorkoutQuestion": "هل تريد إنهاء التمرين؟",
+  "workoutPaused": "تم إيقاف التمرين مؤقتاً",
+  "lvlIncline": "الميل",
+  "lvlResistance": "المستوى المقاومة",
+  "premium": "بريميوم",
+  "upgradeNow": "ترقية الآن",
+  "purchase": "شراء",
+  "later": "لاحقاً",
+  "premiumActivated": "تم تفعيل بريميوم",
+  "premiumMembership": "عضوية بريميوم",
+  "benefitCycleStairmaster": "ميزة الدراجة والسلالم",
+  "benefitVoiceGuide": "ميزة دليل الصوت للجلسة",
+  "benefitUnlimitedRoutines": "حفظ روتين غير محدود",
+  "benefitFutureFeatures": "وصول غير محدود للميزات المستقبلية",
+  "noAds": "بدون إعلانات",
+  "voiceGuideBenefit1": "إرشاد صوتي أثناء التمرين",
+  "voiceGuideBenefit2": "إعلانات تلقائية لانتقالات الجلسات",
+  "voiceGuideBenefit3": "التركيز على الروتين بدون استخدام اليدين",
+  "routineLimitBenefit1": "حفظ روتين غير محدود",
+  "routineLimitBenefit2": "حفظ روتين لعدة أهداف",
+  "routineLimitBenefit3": "استخدام جميع أنواع المعدات (الجري/الدراجة/السلالم)",
+  "premium_benefit_1": "تمارين <red>الدراجة وStairMaster</red>",
+  "premium_benefit_2": "<red>إرشاد صوتي</red> أثناء الجلسة",
+  "premium_benefit_3": "حفظ الروتين <red>غير محدود</red>",
+  "premium_benefit_4": "<red>وصول غير محدود</red> إلى الميزات القادمة",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/شهر",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "بريميوم",
+  "routineTab": "الروتين",
+  "settingsTab": "الإعدادات",
+  "myTab": "أنا",
+  "premiumSubheadline": "فتح قفل الإرشاد الصوتي، وتمارين الدراجة والسلالم، والروتينات غير المحدودة",
+  "@premiumSubheadline": {
+    "description": "وصف محتوى فتح قفل بريميوم"
+  },
+  "monthly": "شهري",
+  "@monthly": {
+    "description": "تسمية الخطة الشهرية"
+  },
+  "yearly": "سنوي",
+  "@yearly": {
+    "description": "تسمية الخطة السنوية"
+  },
+  "lifetime": "مدى الحياة",
+  "@lifetime": {
+    "description": "تسمية خطة مدى الحياة"
+  },
+  "perMonth": "/شهر",
+  "@perMonth": {
+    "description": "لاحقة شهري"
+  },
+  "perYear": "/سنة",
+  "@perYear": {
+    "description": "لاحقة سنوي"
+  },
+  "oneTime": "دفع واحد",
+  "@oneTime": {
+    "description": "لاحقة الدفع لمرة واحدة"
+  },
+  "savePercent": "وفر {percent}%",
+  "@savePercent": {
+    "description": "شارة نسبة التوفير",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "أفضل قيمة",
+  "@bestValue": {
+    "description": "شارة أفضل قيمة"
+  },
+  "cancelAnytime": "إلغاء في أي وقت",
+  "@cancelAnytime": {
+    "description": "سطر الثقة إلغاء في أي وقت"
+  },
+  "autoRenewableSubscription": "اشتراك قابل للتجديد تلقائياً",
+  "@autoRenewableSubscription": {
+    "description": "سطر الثقة اشتراك قابل للتجديد تلقائياً"
+  },
+  "terms": "الشروط",
+  "@terms": {
+    "description": "رابط الشروط"
+  },
+  "privacy": "الخصوصية",
+  "@privacy": {
+    "description": "رابط الخصوصية"
+  },
+  "restore": "استعادة",
+  "@restore": {
+    "description": "رابط استعادة المشتريات"
+  },
+  "close": "إغلاق",
+  "premiumFeature": "ميزة بريميوم",
+  "usePremiumTest": "استخدام بريميوم (اختبار)",
+  "dateTimeFormat": "{day}/{month}/{year} {hour}:{minute}",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "التحقق من الروتين / البدء",
+  "viewRecommendedRoutines": "عرض الروتينات الموصى بها →",
+  "beginner": "مبتدئ",
+  "intermediate": "متوسط",
+  "advanced": "متقدم",
+  "recommendedRoutinesTreadmill": "روتينات المشي الموصى بها",
+  "recommendedRoutinesCycle": "روتينات الدراجة الموصى بها",
+  "recommendedRoutinesStairmaster": "روتينات السلم الموصى بها",
+  "alreadySaved": "محفوظ بالفعل",
+  "checkRoutine": "التحقق",
+  "saveRoutine": "حفظ الروتين",
+  "routineSaved": "تم حفظ الروتين",
+  "routineAlreadySaved": "الروتين محفوظ بالفعل",
+  "noTemplatesFound": "لم يتم العثور على قوالب",
+  "templateTreadmillBeginner1Title": "بداية سهلة 20",
+  "templateTreadmillBeginner1Subtitle": "إحماء 3 دقائق + فترات 1:1",
+  "templateTreadmillBeginner2Title": "مشي مائل 25",
+  "templateTreadmillBeginner2Subtitle": "كتل مشي مائل",
+  "templateTreadmillIntermediate1Title": "كلاسيكي 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "فترات كلاسيكية 1:1",
+  "templateTreadmillIntermediate2Title": "سلم السرعة 20",
+  "templateTreadmillIntermediate2Subtitle": "سلم السرعة (تسارع تدريجيًا)",
+  "templateTreadmillAdvanced1Title": "حارق 2:1 21",
+  "templateTreadmillAdvanced1Subtitle": "فترات 2:1 (قوي/خفيف)",
+  "templateTreadmillAdvanced2Title": "اندفاع العدو 18",
+  "templateTreadmillAdvanced2Subtitle": "تكرارات عدو 20 ثانية",
+  "templateCycleBeginner1Title": "بناء الكادنس 20",
+  "templateCycleBeginner1Subtitle": "إحماء 4 دقائق + كادنس 1:1",
+  "templateCycleBeginner2Title": "قيادة ثابتة 25",
+  "templateCycleBeginner2Subtitle": "كتلة ثابتة طويلة",
+  "templateCycleIntermediate1Title": "سبين 1:1 24",
+  "templateCycleIntermediate1Subtitle": "فترات سبين كلاسيكية 1:1",
+  "templateCycleIntermediate2Title": "محاكاة التلال 22",
+  "templateCycleIntermediate2Subtitle": "تكرارات الصعود",
+  "templateCycleAdvanced1Title": "فترات القوة 20",
+  "templateCycleAdvanced1Subtitle": "اندفاعات قوة لمدة 30 ثانية",
+  "templateCycleAdvanced2Title": "تاباتا ميكس 16",
+  "templateCycleAdvanced2Subtitle": "ميكس 20ث/10ث",
+  "templateStairmasterBeginner1Title": "خطوات سهلة 20",
+  "templateStairmasterBeginner1Subtitle": "إحماء 4 دقائق + خطوات 1:1",
+  "templateStairmasterBeginner2Title": "طويل وخفيف 25",
+  "templateStairmasterBeginner2Subtitle": "كتل طويلة وخفيفة",
+  "templateStairmasterIntermediate1Title": "صعود 2:1 21",
+  "templateStairmasterIntermediate1Subtitle": "تكرارات صعود 2:1",
+  "templateStairmasterIntermediate2Title": "قوي 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "فترات قوية 1:1",
+  "templateStairmasterAdvanced1Title": "كتل صعبة 20",
+  "templateStairmasterAdvanced1Subtitle": "كتل صعبة لمدة دقيقتين",
+  "templateStairmasterAdvanced2Title": "خطوات سبرينت 18",
+  "templateStairmasterAdvanced2Subtitle": "سبرينت 30ث + تعافٍ 60ث",
+  "saved": "محفوظ",
+  "historyTab": "السجل",
+  "calendarTab": "التقويم",
+  "weightTab": "الوزن",
+  "bike": "الدراجة",
+  "thisWeek": "هذا الأسبوع",
+  "trend": "الاتجاه",
+  "timeframe7D": "7أ",
+  "timeframe30D": "30أ",
+  "timeframe90D": "90أ",
+  "timeframeAll": "الكل",
+  "history": "السجل",
+  "seeAll": "عرض الكل",
+  "today": "اليوم",
+  "yesterday": "أمس",
+  "noWorkoutsYet": "لا توجد تمارين بعد",
+  "startYourFirstWorkout": "ابدأ تمرينك الأول لرؤية سجلك هنا",
+  "goToRoutines": "الانتقال إلى الروتينات",
+  "weightRecorded": "تم تسجيل الوزن",
+  "workout": "تمرين",
+  "workouts": "تمارين",
+  "goal": "الهدف",
+  "toGo": "متبقي",
+  "over": "تجاوز",
+  "last": "آخر",
+  "newLabel": "جديد",
+  "youNeed": "تحتاج {amount} للوصول إلى {goal}",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "تحتاج +{amount} للوصول إلى {goal}",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "الحالي",
+  "avg": "المتوسط",
+  "avgRpm": "المتوسط RPM",
+  "avgLevel": "المتوسط المستوى",
+  "weightEntryDeleted": "تم حذف إدخال الوزن",
+  "weightUpdated": "تم تحديث الوزن",
+  "editWeight": "تعديل الوزن",
+  "recordWeight": "تسجيل الوزن",
+  "quickAdjust": "تعديل سريع",
+  "goalWeightSet": "تم تعيين الوزن المستهدف",
+  "goalWeightRemoved": "تم إزالة الوزن المستهدف",
+  "goalAchieved": "تم تحقيق الهدف!",
+  "goalMatchesCurrentWeight": "الهدف يطابق الوزن الحالي",
+  "setGoal": "تعيين الهدف",
+  "suggested": "مقترح",
+  "removeGoal": "إزالة الهدف",
+  "addOneMoreRecordToSeeTrend": "أضف سجلًا واحدًا آخر لرؤية اتجاهك",
+  "noWeightRecorded": "لم يتم تسجيل الوزن بعد",
+  "startTrackingYourWeight": "ابدأ في تتبع وزنك لرؤية التقدم هنا",
+  "treadmillSession": "جلسة جهاز الجري",
+  "bikeSession": "جلسة الدراجة",
+  "stairmasterSession": "جلسة السلم",
+  "treadmillWorkout": "تمرين جهاز الجري",
+  "bikeWorkout": "تمرين الدراجة",
+  "stairmasterWorkout": "تمرين السلم",
+  "startAWorkoutToSeeItHere": "ابدأ تمرينًا لرؤيته هنا",
+  "mon": "الاثنين",
+  "tue": "الثلاثاء",
+  "wed": "الأربعاء",
+  "thu": "الخميس",
+  "fri": "الجمعة",
+  "sat": "السبت",
+  "sun": "الأحد",
+  "sessions": "الجلسات",
+  "distance": "المسافة",
+  "premiumHeadline": "نفس 30 دقيقة، نتائج مختلفة",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "لا تجري فقط، تمرن بطريقة حرق الدهون",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "الأكثر شعبية",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "{price} في اليوم",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "نظام التدريب الصوتي المتميز",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "دعم كامل لجميع أجهزة الكارديو",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "مكتبة تمارين غير محدودة",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "تتبع وتحليل ذكي للوزن",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "تجربة متميزة بدون إعلانات",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "جميع ميزات Premium المستقبلية متضمنة",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "الأكثر اختيارًا",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "يمكن التغيير في أي وقت",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "بدء Premium",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "ألغِ في أي وقت واحتفظ بالوصول حتى نهاية الفترة",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{التمرين 1 يوم 🔥} other{التمرين {count} أيام 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{الراحة 1 يوم 🛏️} other{الراحة {count} أيام 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

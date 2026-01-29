@@ -1,0 +1,473 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "Настройки",
+  "language": "Язык",
+  "system": "Система",
+  "voiceGuide": "Голосовое руководство",
+  "audioNavigator": "Аудио навигатор",
+  "soundEffects": "Звуковые эффекты",
+  "unitSetting": "Настройка единиц",
+  "kmh": "км/ч",
+  "mph": "миль/ч",
+  "themeMode": "Светлый/Темный режим",
+  "light": "Светлый",
+  "dark": "Темный",
+  "smartwatchSync": "Синхронизация со смарт-часами",
+  "connectSmartwatch": "Подключиться к смарт-часам",
+  "connect": "Подключить",
+  "about": "О программе",
+  "version": "Версия {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "Скоро",
+  "translationComingSoon": "Перевод будет доступен в будущем обновлении.",
+  "ok": "ОК",
+  "cancel": "Отмена",
+  "done": "Готово",
+  "delete": "Удалить",
+  "save": "Сохранить",
+  "edit": "Редактировать",
+  "start": "Начать",
+  "editRoutine": "Редактировать",
+  "routineEdit": "Редактирование программы",
+  "name": "Название",
+  "unnamedRoutine": "Программа без названия",
+  "difficulty": "Сложность",
+  "difficultyColon": "Сложность : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "Легко",
+  "medium": "Средне",
+  "hard": "Сложно",
+  "interval": "Интервал",
+  "addInterval": "Добавить интервал",
+  "noIntervals": "Нет интервалов",
+  "addIntervalPrompt": "Добавить интервал",
+  "intervalEdit": "Редактирование интервала",
+  "timeMinutes": "Время (минуты)",
+  "duration": "Длительность",
+  "speed": "Скорость",
+  "speedKmh": "Скорость (км/ч)",
+  "incline": "Наклон",
+  "level": "Уровень",
+  "levelColon": "Уровень {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "об/мин",
+  "resistance": "Сопротивление",
+  "resistanceLevel": "Сопротивление (Уровень)",
+  "resistanceColon": "Сопротивление {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "шаг/мин",
+  "spmSteps": "шаг/мин (шагов/мин)",
+  "saved": "Сохранено",
+  "deleted": "Удалено",
+  "deleteRoutineTitle": "Удалить программу",
+  "deleteRoutineMessage": "Вы уверены, что хотите удалить эту программу? Это действие нельзя отменить.",
+  "deleteError": "Произошла ошибка при удалении",
+  "nameRequired": "Пожалуйста, введите название",
+  "nameMaxLength": "Название должно содержать не более 24 символов",
+  "minIntervalsRequired": "Требуется хотя бы один интервал",
+  "intervalMinDuration": "Длительность интервала должна быть не менее 1 секунды",
+  "intervalMaxDuration": "Длительность интервала должна быть не более 3 часов (10800 секунд)",
+  "speedRange": "Скорость должна быть больше 0 (0.5-25.0 км/ч)",
+  "inclineRange": "Наклон должен быть в диапазоне 0-15.0",
+  "rpmRange": "об/мин должен быть в диапазоне 30-200",
+  "resistanceRange": "Сопротивление должно быть в диапазоне 1-20",
+  "levelRange": "Уровень должен быть в диапазоне 1-20",
+  "spmRange": "шаг/мин должен быть в диапазоне 50-200",
+  "noRoutinesSaved": "Нет сохраненных программ",
+  "tapToCreate": "Нажмите, чтобы создать",
+  "tapButtonToCreate": "Нажмите кнопку, чтобы создать",
+  "premiumRoutineSettings": "Настройки премиум-программы",
+  "viewMembership": "Просмотр подписки",
+  "freeLimitTitle": "Бесплатный лимит - 2 программы",
+  "freeLimitMessage": "Вы можете использовать неограниченное количество программ с подпиской",
+  "treadmill": "Беговая дорожка",
+  "cycle": "Велосипед",
+  "stairmaster": "Степпер",
+  "selectLanguage": "Выбрать язык",
+  "selectTheme": "Выбрать тему",
+  "selectDifficulty": "Выбрать сложность",
+  "pause": "Пауза",
+  "resume": "Продолжить",
+  "endWorkout": "Завершить Тренировку",
+  "endWorkoutConfirm": "Вы хотите завершить тренировку?",
+  "end": "Завершить",
+  "rotate": "Повернуть",
+  "paused": "ПАУЗА",
+  "pausedTitle": "Приостановлено",
+  "pausedSubtitle": "Вы можете продолжить или завершить тренировку",
+  "endWorkoutConfirmationMessage": "Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "Общее Время Тренировки",
+  "totalDistance": "Общее расстояние",
+  "averageRpm": "Средний RPM",
+  "averageLevel": "Средний Уровень",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "Продолжить",
+  "endWorkoutQuestion": "Вы хотите завершить тренировку?",
+  "workoutPaused": "Тренировка приостановлена",
+  "lvlIncline": "Наклон",
+  "lvlResistance": "Уровень Сопротивление",
+  "premium": "Премиум",
+  "upgradeNow": "Обновить Сейчас",
+  "purchase": "Купить",
+  "later": "Позже",
+  "premiumActivated": "Премиум был активирован",
+  "premiumMembership": "Премиум Членство",
+  "benefitCycleStairmaster": "Функция Велосипеда и Степпера",
+  "benefitVoiceGuide": "Функция голосового руководства сессии",
+  "benefitUnlimitedRoutines": "Неограниченное сохранение программ",
+  "benefitFutureFeatures": "Неограниченный доступ к будущим функциям",
+  "noAds": "Без Рекламы",
+  "voiceGuideBenefit1": "Голосовое руководство во время тренировки",
+  "voiceGuideBenefit2": "Автоматические объявления о переходе между сессиями",
+  "voiceGuideBenefit3": "Сосредоточение на программе без использования рук",
+  "routineLimitBenefit1": "Неограниченное сохранение программ",
+  "routineLimitBenefit2": "Сохранять программы для нескольких целей",
+  "routineLimitBenefit3": "Использовать все типы тренажеров (беговая дорожка/велосипед/степпер)",
+  "premium_benefit_1": "Тренировки на <red>велотренажёре и StairMaster</red>",
+  "premium_benefit_2": "<red>Голосовой гид</red> в тренировке",
+  "premium_benefit_3": "Сохранение рутин: <red>без ограничений</red>",
+  "premium_benefit_4": "<red>Неограниченный доступ</red> к будущим функциям",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/мес",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "Премиум",
+  "routineTab": "Программа",
+  "settingsTab": "Настройки",
+  "myTab": "Я",
+  "premiumSubheadline": "Разблокируйте голосовое руководство, тренировки на велосипеде и степпере, и неограниченные программы",
+  "@premiumSubheadline": {
+    "description": "Описание содержимого разблокировки премиум"
+  },
+  "monthly": "Ежемесячно",
+  "@monthly": {
+    "description": "Метка ежемесячного плана"
+  },
+  "yearly": "Ежегодно",
+  "@yearly": {
+    "description": "Метка ежегодного плана"
+  },
+  "lifetime": "На всю жизнь",
+  "@lifetime": {
+    "description": "Метка плана на всю жизнь"
+  },
+  "perMonth": "/мес",
+  "@perMonth": {
+    "description": "Суффикс в месяц"
+  },
+  "perYear": "/год",
+  "@perYear": {
+    "description": "Суффикс в год"
+  },
+  "oneTime": "Один раз",
+  "@oneTime": {
+    "description": "Суффикс одноразового платежа"
+  },
+  "savePercent": "Сэкономьте {percent}%",
+  "@savePercent": {
+    "description": "Значок процента экономии",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "Лучшая Цена",
+  "@bestValue": {
+    "description": "Значок лучшей цены"
+  },
+  "cancelAnytime": "Отменить в любое время",
+  "@cancelAnytime": {
+    "description": "Строка доверия отменить в любое время"
+  },
+  "autoRenewableSubscription": "Автоматически возобновляемая подписка",
+  "@autoRenewableSubscription": {
+    "description": "Строка доверия автоматически возобновляемая подписка"
+  },
+  "terms": "Условия",
+  "@terms": {
+    "description": "Ссылка условия"
+  },
+  "privacy": "Конфиденциальность",
+  "@privacy": {
+    "description": "Ссылка конфиденциальность"
+  },
+  "restore": "Восстановить",
+  "@restore": {
+    "description": "Ссылка восстановить покупки"
+  },
+  "close": "Закрыть",
+  "premiumFeature": "Премиум Функция",
+  "usePremiumTest": "Использовать Премиум (Тест)",
+  "dateTimeFormat": "{day}.{month}.{year} {hour}:{minute}",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "Проверить Программу / Начать",
+  "viewRecommendedRoutines": "Посмотреть Рекомендованные →",
+  "beginner": "Начинающий",
+  "intermediate": "Средний",
+  "advanced": "Продвинутый",
+  "recommendedRoutinesTreadmill": "Рекомендуемые Программы Беговой Дорожки",
+  "recommendedRoutinesCycle": "Рекомендуемые Программы Велосипеда",
+  "recommendedRoutinesStairmaster": "Рекомендуемые Программы Степпера",
+  "alreadySaved": "Уже сохранено",
+  "checkRoutine": "Проверить",
+  "saveRoutine": "Сохранить Программу",
+  "routineSaved": "Программа сохранена",
+  "routineAlreadySaved": "Программа уже сохранена",
+  "noTemplatesFound": "Шаблоны не найдены",
+  "templateTreadmillBeginner1Title": "Лёгкий старт 20",
+  "templateTreadmillBeginner1Subtitle": "Разминка 3 мин + интервалы 1:1",
+  "templateTreadmillBeginner2Title": "Ходьба в наклоне 25",
+  "templateTreadmillBeginner2Subtitle": "Блоки ходьбы с наклоном",
+  "templateTreadmillIntermediate1Title": "Классика 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "Классические интервалы 1:1",
+  "templateTreadmillIntermediate2Title": "Лестница скорости 20",
+  "templateTreadmillIntermediate2Subtitle": "Лестница скорости (постепенно быстрее)",
+  "templateTreadmillAdvanced1Title": "Сжигатель 2:1 21",
+  "templateTreadmillAdvanced1Subtitle": "Интервалы 2:1 (жёстко/легко)",
+  "templateTreadmillAdvanced2Title": "Спринт-поп 18",
+  "templateTreadmillAdvanced2Subtitle": "Спринты по 20 секунд",
+  "templateCycleBeginner1Title": "Тренировка каденса 20",
+  "templateCycleBeginner1Subtitle": "Разминка 4 мин + каденс 1:1",
+  "templateCycleBeginner2Title": "Ровная езда 25",
+  "templateCycleBeginner2Subtitle": "Длинный ровный блок",
+  "templateCycleIntermediate1Title": "Спин 1:1 24",
+  "templateCycleIntermediate1Subtitle": "Классические спин-интервалы 1:1",
+  "templateCycleIntermediate2Title": "Имитация подъёма 22",
+  "templateCycleIntermediate2Subtitle": "Повторы в подъём",
+  "templateCycleAdvanced1Title": "Силовые интервалы 20",
+  "templateCycleAdvanced1Subtitle": "30-секундные силовые рывки",
+  "templateCycleAdvanced2Title": "Табата микс 16",
+  "templateCycleAdvanced2Subtitle": "Микс 20с/10с",
+  "templateStairmasterBeginner1Title": "Лёгкие ступени 20",
+  "templateStairmasterBeginner1Subtitle": "Разминка 4 мин + шаги 1:1",
+  "templateStairmasterBeginner2Title": "Долго и легко 25",
+  "templateStairmasterBeginner2Subtitle": "Длинные лёгкие блоки",
+  "templateStairmasterIntermediate1Title": "Подъём 2:1 21",
+  "templateStairmasterIntermediate1Subtitle": "Повторы подъёма 2:1",
+  "templateStairmasterIntermediate2Title": "Сильно 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "Сильные интервалы 1:1",
+  "templateStairmasterAdvanced1Title": "Жёсткие блоки 20",
+  "templateStairmasterAdvanced1Subtitle": "Жёсткие блоки по 2 мин",
+  "templateStairmasterAdvanced2Title": "Спринт-ступени 18",
+  "templateStairmasterAdvanced2Subtitle": "Спринты 30с + отдых 60с",
+  "saved": "Сохранено",
+  "historyTab": "История",
+  "calendarTab": "Календарь",
+  "weightTab": "Вес",
+  "bike": "Велосипед",
+  "thisWeek": "На этой неделе",
+  "trend": "Тренд",
+  "timeframe7D": "7Д",
+  "timeframe30D": "30Д",
+  "timeframe90D": "90Д",
+  "timeframeAll": "ВСЕ",
+  "history": "История",
+  "seeAll": "Показать все",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "noWorkoutsYet": "Пока нет тренировок",
+  "startYourFirstWorkout": "Начните свою первую тренировку, чтобы увидеть историю здесь",
+  "goToRoutines": "Перейти к Программам",
+  "weightRecorded": "Вес записан",
+  "workout": "тренировка",
+  "workouts": "тренировки",
+  "goal": "Цель",
+  "toGo": "осталось",
+  "over": "превышено",
+  "last": "Последний",
+  "newLabel": "Новый",
+  "youNeed": "Вам нужно {amount}, чтобы достичь {goal}",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "Вам нужно +{amount}, чтобы достичь {goal}",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "Текущий",
+  "avg": "Ср.",
+  "avgRpm": "Ср. RPM",
+  "avgLevel": "Ср. Уровень",
+  "weightEntryDeleted": "Запись веса удалена",
+  "weightUpdated": "Вес обновлен",
+  "editWeight": "Редактировать вес",
+  "recordWeight": "Записать вес",
+  "quickAdjust": "Быстрая настройка",
+  "goalWeightSet": "Целевой вес установлен",
+  "goalWeightRemoved": "Целевой вес удален",
+  "goalAchieved": "Цель достигнута!",
+  "goalMatchesCurrentWeight": "Цель соответствует текущему весу",
+  "setGoal": "Установить цель",
+  "suggested": "Рекомендуемое",
+  "removeGoal": "Удалить Цель",
+  "addOneMoreRecordToSeeTrend": "Добавьте еще 1 запись, чтобы увидеть свой тренд",
+  "noWeightRecorded": "Вес еще не записан",
+  "startTrackingYourWeight": "Начните отслеживать свой вес, чтобы увидеть прогресс здесь",
+  "treadmillSession": "Сессия Беговой Дорожки",
+  "bikeSession": "Сессия Велосипеда",
+  "stairmasterSession": "Сессия Степпера",
+  "treadmillWorkout": "Тренировка Беговой Дорожки",
+  "bikeWorkout": "Тренировка Велосипеда",
+  "stairmasterWorkout": "Тренировка Степпера",
+  "startAWorkoutToSeeItHere": "Начните тренировку, чтобы увидеть ее здесь",
+  "mon": "Пн",
+  "tue": "Вт",
+  "wed": "Ср",
+  "thu": "Чт",
+  "fri": "Пт",
+  "sat": "Сб",
+  "sun": "Вс",
+  "sessions": "Сессии",
+  "distance": "Расстояние",
+  "premiumHeadline": "Те же 30 минут, другие результаты",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "Не просто бегайте, тренируйтесь для сжигания жира",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "Самый Популярный",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "{price} в день",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "Премиум-система голосового коучинга",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "Полная поддержка всего кардио-оборудования",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "Безлимитная библиотека тренировок",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "Умное отслеживание и анализ веса",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "Премиум-опыт без рекламы",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "Все будущие премиум-функции включены",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "Самый выбираемый",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "Можно изменить в любое время",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "Начать Premium",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "Отмените в любое время и сохраните доступ до конца периода",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{Тренировка 1 день 🔥} other{Тренировка {count} дней 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{Отдых 1 день 🛏️} other{Отдых {count} дней 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

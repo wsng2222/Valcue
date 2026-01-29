@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "justMyCode": false,
+      "skipFiles": [
+        "<node_internals>/**",
+        "<flutter_internals>/**",
+        "/usr/local/Caskroom/flutter/**",
+        "/usr/local/Caskroom/**",
+        "**/flutter/**",
+        "**/flutter_web_plugins/**",
+        "**/flutter/packages/**",
+        "**/flutter/bin/cache/**",
+        "**/build/**",
+        "**/.dart_tool/**",
+        "**/web_entrypoint.dart",
+        "**/plugin_registry.dart",
+        "**/generated_plugin_registrant.dart",
+        "**/*web_entrypoint*.dart",
+        "**/*plugin_registry*.dart",
+        "**/packages/flutter_web_plugins/**"
+      ],
+      "toolArgs": [
+        "--web-renderer=html"
+      ],
+      "args": []
+    },
+    {
+      "name": "Flutter (iOS)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "ios",
+      "skipFiles": [
+        "<node_internals>/**",
+        "/usr/local/Caskroom/flutter/**",
+        "**/flutter/packages/**",
+        "**/flutter/bin/cache/**",
+        "**/build/**",
+        "**/.dart_tool/**",
+        "**/web_entrypoint.dart",
+        "**/plugin_registry.dart",
+        "**/generated_plugin_registrant.dart"
+      ]
+    },
+    {
+      "name": "Flutter (Android)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "android",
+      "skipFiles": [
+        "<node_internals>/**",
+        "/usr/local/Caskroom/flutter/**",
+        "**/flutter/packages/**",
+        "**/flutter/bin/cache/**",
+        "**/build/**",
+        "**/.dart_tool/**",
+        "**/web_entrypoint.dart",
+        "**/plugin_registry.dart",
+        "**/generated_plugin_registrant.dart"
+      ]
+    }
+  ]
+}
+

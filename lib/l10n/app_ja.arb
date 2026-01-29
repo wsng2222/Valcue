@@ -1,0 +1,473 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "設定",
+  "language": "言語",
+  "system": "システム",
+  "voiceGuide": "音声ガイド",
+  "audioNavigator": "オーディオナビゲーター",
+  "soundEffects": "サウンド効果",
+  "unitSetting": "単位設定",
+  "kmh": "km/h",
+  "mph": "mph",
+  "themeMode": "ライト/ダークモード",
+  "light": "ライト",
+  "dark": "ダーク",
+  "smartwatchSync": "スマートウォッチ同期",
+  "connectSmartwatch": "スマートウォッチに接続",
+  "connect": "接続",
+  "about": "について",
+  "version": "バージョン {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "近日公開",
+  "translationComingSoon": "翻訳は今後のアップデートで利用可能になります。",
+  "ok": "OK",
+  "cancel": "キャンセル",
+  "done": "完了",
+  "delete": "削除",
+  "save": "保存",
+  "edit": "編集",
+  "start": "開始",
+  "editRoutine": "ルーティンを編集",
+  "routineEdit": "ルーティン編集",
+  "name": "名前",
+  "unnamedRoutine": "名前のないルーティン",
+  "difficulty": "難易度",
+  "difficultyColon": "難易度 : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "簡単",
+  "medium": "中程度",
+  "hard": "難しい",
+  "interval": "インターバル",
+  "addInterval": "インターバルを追加",
+  "noIntervals": "インターバルがありません",
+  "addIntervalPrompt": "インターバルを追加してください",
+  "intervalEdit": "インターバル編集",
+  "timeMinutes": "時間（分）",
+  "duration": "時間",
+  "speed": "速度",
+  "speedKmh": "速度（km/h）",
+  "incline": "傾斜",
+  "level": "レベル",
+  "levelColon": "レベル {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "resistance": "抵抗",
+  "resistanceLevel": "抵抗（レベル）",
+  "resistanceColon": "抵抗 {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "spmSteps": "SPM（ステップ/分）",
+  "saved": "保存されました",
+  "deleted": "削除されました",
+  "deleteRoutineTitle": "ルーティンを削除",
+  "deleteRoutineMessage": "このルーティンを削除してもよろしいですか？この操作は元に戻せません。",
+  "deleteError": "削除中にエラーが発生しました",
+  "nameRequired": "名前を入力してください",
+  "nameMaxLength": "名前は24文字以下である必要があります",
+  "minIntervalsRequired": "少なくとも1つのインターバルが必要です",
+  "intervalMinDuration": "インターバルの時間は少なくとも1秒である必要があります",
+  "intervalMaxDuration": "インターバルの時間は最大3時間（10800秒）まで可能です",
+  "speedRange": "速度は0より大きい値である必要があります（0.5-25.0 km/h）",
+  "inclineRange": "傾斜は0-15.0の範囲である必要があります",
+  "rpmRange": "RPMは30-200の範囲である必要があります",
+  "resistanceRange": "抵抗は1-20の範囲である必要があります",
+  "levelRange": "レベルは1-20の範囲である必要があります",
+  "spmRange": "SPMは50-200の範囲である必要があります",
+  "noRoutinesSaved": "保存されたルーティンがありません",
+  "tapToCreate": "タップして作成",
+  "tapButtonToCreate": "ボタンをタップして作成",
+  "premiumRoutineSettings": "プレミアムルーティン設定",
+  "viewMembership": "メンバーシップを表示",
+  "freeLimitTitle": "無料制限は2つのルーティンまで",
+  "freeLimitMessage": "メンバーシップで無制限のルーティンを使用できます",
+  "treadmill": "ランニングマシン",
+  "cycle": "サイクル",
+  "stairmaster": "ステアマスター",
+  "selectLanguage": "言語を選択",
+  "selectTheme": "テーマを選択",
+  "selectDifficulty": "難易度を選択",
+  "pause": "一時停止",
+  "resume": "再開",
+  "endWorkout": "ワークアウト終了",
+  "endWorkoutConfirm": "ワークアウトを終了しますか？",
+  "end": "終了",
+  "rotate": "回転",
+  "paused": "一時停止中",
+  "pausedTitle": "一時停止中",
+  "pausedSubtitle": "続けるか、ワークアウトを終了できます",
+  "endWorkoutConfirmationMessage": "終了すると、現在進行中のワークアウトが終了し、要約画面に移動します。",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "総ワークアウト時間",
+  "totalDistance": "総距離",
+  "averageRpm": "平均RPM",
+  "averageLevel": "平均レベル",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "続ける",
+  "endWorkoutQuestion": "ワークアウトを終了しますか？",
+  "workoutPaused": "ワークアウトが一時停止されました",
+  "lvlIncline": "傾斜",
+  "lvlResistance": "レベル抵抗",
+  "premium": "プレミアム",
+  "upgradeNow": "今すぐアップグレード",
+  "purchase": "購入",
+  "later": "後で",
+  "premiumActivated": "プレミアムが有効になりました",
+  "premiumMembership": "プレミアムメンバーシップ",
+  "benefitCycleStairmaster": "サイクル、ステアマスター機能",
+  "benefitVoiceGuide": "セッション音声ガイド機能",
+  "benefitUnlimitedRoutines": "無制限のルーティン保存",
+  "benefitFutureFeatures": "将来の機能への無制限アクセス",
+  "noAds": "広告なし",
+  "voiceGuideBenefit1": "ワークアウト中の音声ガイド",
+  "voiceGuideBenefit2": "セッション遷移の自動アナウンス",
+  "voiceGuideBenefit3": "ハンズフリーでルーティンに集中",
+  "routineLimitBenefit1": "無制限のルーティン保存",
+  "routineLimitBenefit2": "複数の目標別ルーティン保存",
+  "routineLimitBenefit3": "すべてのマシンタイプを使用（ランニングマシン/バイク/ステアマスター）",
+  "premium_benefit_1": "<red>バイク＆StairMaster</red>対応",
+  "premium_benefit_2": "セッション <red>音声ガイド</red>",
+  "premium_benefit_3": "ルーティン保存数 <red>無制限</red>",
+  "premium_benefit_4": "今後の機能に <red>無制限アクセス</red>",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/月",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTab": "プレミアム",
+  "routineTab": "ルーティン",
+  "settingsTab": "設定",
+  "myTab": "マイ",
+  "premiumSubheadline": "音声ガイド、バイクとステアマスターのワークアウト、無制限のルーティンのロック解除",
+  "@premiumSubheadline": {
+    "description": "プレミアムのロック解除内容の説明"
+  },
+  "monthly": "月額",
+  "@monthly": {
+    "description": "月額プランラベル"
+  },
+  "yearly": "年額",
+  "@yearly": {
+    "description": "年額プランラベル"
+  },
+  "lifetime": "生涯",
+  "@lifetime": {
+    "description": "生涯プランラベル"
+  },
+  "perMonth": "/月",
+  "@perMonth": {
+    "description": "月額接尾辞"
+  },
+  "perYear": "/年",
+  "@perYear": {
+    "description": "年額接尾辞"
+  },
+  "oneTime": "1回限りの支払い",
+  "@oneTime": {
+    "description": "1回限りの支払い接尾辞"
+  },
+  "savePercent": "{percent}% 節約",
+  "@savePercent": {
+    "description": "節約パーセントバッジ",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "ベストバリュー",
+  "@bestValue": {
+    "description": "ベストバリューバッジ"
+  },
+  "cancelAnytime": "いつでもキャンセル可能",
+  "@cancelAnytime": {
+    "description": "いつでもキャンセル可能信頼行"
+  },
+  "autoRenewableSubscription": "自動更新サブスクリプション",
+  "@autoRenewableSubscription": {
+    "description": "自動更新サブスクリプション信頼行"
+  },
+  "terms": "利用規約",
+  "@terms": {
+    "description": "利用規約リンク"
+  },
+  "privacy": "プライバシー",
+  "@privacy": {
+    "description": "プライバシーリンク"
+  },
+  "restore": "復元",
+  "@restore": {
+    "description": "購入復元リンク"
+  },
+  "close": "閉じる",
+  "premiumFeature": "プレミアム機能です",
+  "usePremiumTest": "プレミアムを使用する（テスト）",
+  "dateTimeFormat": "{year}年{month}月{day}日 {hour}時{minute}分",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "ルーティンを確認 / 開始",
+  "viewRecommendedRoutines": "おすすめルーティンを見る →",
+  "beginner": "初級",
+  "intermediate": "中級",
+  "advanced": "上級",
+  "recommendedRoutinesTreadmill": "おすすめランニングマシンルーティン",
+  "recommendedRoutinesCycle": "おすすめバイクルーティン",
+  "recommendedRoutinesStairmaster": "おすすめステアマスタールーティン",
+  "alreadySaved": "既に保存済み",
+  "checkRoutine": "確認",
+  "saveRoutine": "ルーティンを保存",
+  "routineSaved": "ルーティンが保存されました",
+  "routineAlreadySaved": "ルーティンは既に保存されています",
+  "noTemplatesFound": "テンプレートが見つかりません",
+  "templateTreadmillBeginner1Title": "イージースタート20",
+  "templateTreadmillBeginner1Subtitle": "3分ウォームアップ＋1:1インターバル",
+  "templateTreadmillBeginner2Title": "傾斜ウォーク25",
+  "templateTreadmillBeginner2Subtitle": "傾斜ウォークのブロック",
+  "templateTreadmillIntermediate1Title": "クラシック1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "クラシックな1:1インターバル",
+  "templateTreadmillIntermediate2Title": "スピードラダー20",
+  "templateTreadmillIntermediate2Subtitle": "スピードラダー（徐々に加速）",
+  "templateTreadmillAdvanced1Title": "2:1バーナー21",
+  "templateTreadmillAdvanced1Subtitle": "2:1インターバル（きつい/楽）",
+  "templateTreadmillAdvanced2Title": "スプリントポップ18",
+  "templateTreadmillAdvanced2Subtitle": "20秒スプリント反復",
+  "templateCycleBeginner1Title": "ケイデンスビルダー20",
+  "templateCycleBeginner1Subtitle": "4分ウォームアップ＋ケイデンス1:1",
+  "templateCycleBeginner2Title": "ステディライド25",
+  "templateCycleBeginner2Subtitle": "長めの一定ブロック",
+  "templateCycleIntermediate1Title": "スピン1:1 24",
+  "templateCycleIntermediate1Subtitle": "クラシックな1:1スピンインターバル",
+  "templateCycleIntermediate2Title": "ヒルシミュレーション22",
+  "templateCycleIntermediate2Subtitle": "登りの反復",
+  "templateCycleAdvanced1Title": "パワーインターバル20",
+  "templateCycleAdvanced1Subtitle": "30秒パワーバースト",
+  "templateCycleAdvanced2Title": "タバタミックス16",
+  "templateCycleAdvanced2Subtitle": "20秒/10秒ミックス",
+  "templateStairmasterBeginner1Title": "イージーステップ20",
+  "templateStairmasterBeginner1Subtitle": "4分ウォームアップ＋1:1ステップ",
+  "templateStairmasterBeginner2Title": "ロングイージー25",
+  "templateStairmasterBeginner2Subtitle": "長めのイージーブロック",
+  "templateStairmasterIntermediate1Title": "2:1クライム21",
+  "templateStairmasterIntermediate1Subtitle": "2:1クライム反復",
+  "templateStairmasterIntermediate2Title": "ストロング1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "強めの1:1インターバル",
+  "templateStairmasterAdvanced1Title": "ハードブロック20",
+  "templateStairmasterAdvanced1Subtitle": "2分ハードブロック",
+  "templateStairmasterAdvanced2Title": "スプリントステップ18",
+  "templateStairmasterAdvanced2Subtitle": "30秒スプリント＋60秒回復",
+  "saved": "保存済み",
+  "historyTab": "記録",
+  "calendarTab": "カレンダー",
+  "weightTab": "体重",
+  "bike": "サイクル",
+  "thisWeek": "今週",
+  "trend": "傾向",
+  "timeframe7D": "7日",
+  "timeframe30D": "30日",
+  "timeframe90D": "90日",
+  "timeframeAll": "すべて",
+  "history": "記録",
+  "seeAll": "すべて表示",
+  "today": "今日",
+  "yesterday": "昨日",
+  "noWorkoutsYet": "まだワークアウトがありません",
+  "startYourFirstWorkout": "最初のワークアウトを開始して、ここで履歴を確認してください",
+  "goToRoutines": "ルーティンへ移動",
+  "weightRecorded": "体重が記録されました",
+  "workout": "ワークアウト",
+  "workouts": "ワークアウト",
+  "goal": "目標",
+  "toGo": "残り",
+  "over": "超過",
+  "last": "前回",
+  "newLabel": "新しい",
+  "youNeed": "{goal}に到達するには{amount}必要です",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "{goal}に到達するには+{amount}必要です",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "現在",
+  "avg": "平均",
+  "avgRpm": "平均 RPM",
+  "avgLevel": "平均レベル",
+  "weightEntryDeleted": "体重記録が削除されました",
+  "weightUpdated": "体重が更新されました",
+  "editWeight": "体重を編集",
+  "recordWeight": "体重を記録",
+  "quickAdjust": "クイック調整",
+  "goalWeightSet": "目標体重が設定されました",
+  "goalWeightRemoved": "目標体重が削除されました",
+  "goalAchieved": "目標達成！",
+  "goalMatchesCurrentWeight": "目標が現在の体重と一致します",
+  "setGoal": "目標を設定",
+  "suggested": "推奨",
+  "removeGoal": "目標を削除",
+  "addOneMoreRecordToSeeTrend": "傾向を表示するには、もう1つ記録を追加してください",
+  "noWeightRecorded": "まだ体重が記録されていません",
+  "startTrackingYourWeight": "体重を記録して、ここで進捗を確認してください",
+  "treadmillSession": "ランニングマシンセッション",
+  "bikeSession": "サイクルセッション",
+  "stairmasterSession": "ステアマスターセッション",
+  "treadmillWorkout": "ランニングマシン運動",
+  "bikeWorkout": "サイクル運動",
+  "stairmasterWorkout": "ステアマスター運動",
+  "startAWorkoutToSeeItHere": "運動を開始すると、ここに表示されます",
+  "mon": "月",
+  "tue": "火",
+  "wed": "水",
+  "thu": "木",
+  "fri": "金",
+  "sat": "土",
+  "sun": "日",
+  "sessions": "セッション",
+  "distance": "距離",
+  "premiumHeadline": "同じ30分、違う結果",
+  "@premiumHeadline": {
+    "description": "Premium screen strong headline"
+  },
+  "premiumSubheadlineNew": "ただ走るのではなく、脂肪燃焼の方法で運動する",
+  "@premiumSubheadlineNew": {
+    "description": "Premium screen subheadline"
+  },
+  "mostPopular": "最も人気",
+  "@mostPopular": {
+    "description": "Most popular badge"
+  },
+  "dailyPrice": "1日{price}円",
+  "@dailyPrice": {
+    "description": "Daily price display",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "プレミアム音声コーチングシステム",
+  "@benefitVoiceCoaching": {
+    "description": "Premium benefit: voice coaching"
+  },
+  "benefitCycleStairmasterRoutines": "すべての有酸素機器に完全対応",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "Premium benefit: cycle and stairmaster routines"
+  },
+  "benefitUnlimitedRoutinesNew": "無制限ルーティンライブラリ",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "Premium benefit: unlimited routine storage"
+  },
+  "benefitWeightFeature": "スマート体重追跡＆分析",
+  "@benefitWeightFeature": {
+    "description": "Premium benefit: weight feature"
+  },
+  "benefitNoAdsFocus": "広告なしのプレミアム体験",
+  "@benefitNoAdsFocus": {
+    "description": "Premium benefit: no ads"
+  },
+  "benefitFutureFeaturesNew": "今後のプレミアム機能すべて含む",
+  "@benefitFutureFeaturesNew": {
+    "description": "Premium benefit: future features"
+  },
+  "mostChosen": "最も選ばれている",
+  "@mostChosen": {
+    "description": "Supporting line above CTA (when annual selected)"
+  },
+  "canChangeAnytime": "いつでも変更可能",
+  "@canChangeAnytime": {
+    "description": "Supporting line above CTA (when monthly selected)"
+  },
+  "startPremium": "プレミアムを開始",
+  "@startPremium": {
+    "description": "Premium purchase button text"
+  },
+  "cancelAnytimeKeepAccess": "いつでもキャンセル可能で、期間終了までアクセス可能",
+  "@cancelAnytimeKeepAccess": {
+    "description": "Cancellation trust copy"
+  },
+  "workoutDays": "{count, plural, one{トレーニング 1 日 🔥} other{トレーニング {count} 日 🔥}}",
+  "@workoutDays": {
+    "description": "Workout days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{休息 1 日 🛏️} other{休息 {count} 日 🛏️}}",
+  "@restDays": {
+    "description": "Rest days count in calendar statistics",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

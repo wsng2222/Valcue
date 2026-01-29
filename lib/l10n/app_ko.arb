@@ -1,0 +1,473 @@
+{
+  "@@locale": "ko",
+  "appTitle": "Interval Cardio",
+  "settingsTitle": "설정",
+  "language": "언어",
+  "system": "시스템",
+  "voiceGuide": "음성 가이드",
+  "audioNavigator": "오디오 네비게이터",
+  "soundEffects": "사운드 효과",
+  "unitSetting": "단위 설정",
+  "kmh": "km/h",
+  "mph": "mph",
+  "themeMode": "라이트 다크 모드",
+  "light": "라이트",
+  "dark": "다크",
+  "smartwatchSync": "스마트워치 Sync",
+  "connectSmartwatch": "스마트워치와 연결합니다",
+  "connect": "연결",
+  "about": "About",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "준비 중",
+  "translationComingSoon": "번역은 추후 업데이트 예정입니다.",
+  "ok": "확인",
+  "cancel": "취소",
+  "done": "완료",
+  "delete": "삭제",
+  "save": "저장",
+  "edit": "수정",
+  "start": "시작",
+  "editRoutine": "루틴 수정",
+  "routineEdit": "루틴 편집",
+  "name": "이름",
+  "unnamedRoutine": "이름 없는 루틴",
+  "difficulty": "난이도",
+  "difficultyColon": "난이도 : {difficulty}",
+  "@difficultyColon": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+  "easy": "쉬움",
+  "medium": "중간",
+  "hard": "높음",
+  "interval": "인터벌",
+  "addInterval": "인터벌 추가",
+  "noIntervals": "인터벌이 없습니다",
+  "addIntervalPrompt": "인터벌을 추가하세요",
+  "intervalEdit": "인터벌 편집",
+  "timeMinutes": "시간(분)",
+  "duration": "시간",
+  "speed": "속도",
+  "speedKmh": "속도(km/h)",
+  "incline": "경사도",
+  "level": "레벨",
+  "levelColon": "레벨 {level}",
+  "@levelColon": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rpm": "RPM",
+  "resistance": "저항",
+  "resistanceLevel": "저항(레벨)",
+  "resistanceColon": "저항 {resistance}",
+  "@resistanceColon": {
+    "placeholders": {
+      "resistance": {
+        "type": "int"
+      }
+    }
+  },
+  "spm": "SPM",
+  "spmSteps": "SPM(steps/min)",
+  "saved": "저장됨",
+  "deleted": "삭제됨",
+  "deleteRoutineTitle": "루틴 삭제",
+  "deleteRoutineMessage": "이 루틴을 삭제할까요? 삭제하면 되돌릴 수 없어요.",
+  "deleteError": "삭제 중 오류가 발생했습니다",
+  "nameRequired": "이름을 입력해주세요",
+  "nameMaxLength": "이름은 24자 이하여야 합니다",
+  "minIntervalsRequired": "최소 하나의 인터벌이 필요합니다",
+  "intervalMinDuration": "인터벌 시간은 최소 1초 이상이어야 합니다",
+  "intervalMaxDuration": "인터벌 시간은 최대 3시간(10800초)까지 가능합니다",
+  "speedRange": "속도는 0보다 큰 값이어야 합니다 (0.5-25.0 km/h)",
+  "inclineRange": "경사도는 0-15.0 범위여야 합니다",
+  "rpmRange": "RPM은 30-200 범위여야 합니다",
+  "resistanceRange": "저항은 1-20 범위여야 합니다",
+  "levelRange": "레벨은 1-20 범위여야 합니다",
+  "spmRange": "SPM은 50-200 범위여야 합니다",
+  "noRoutinesSaved": "저장된 루틴이 없습니다",
+  "tapToCreate": "화면을 터치해 생성하기",
+  "tapButtonToCreate": "버튼을 터치해 생성하기",
+  "premiumRoutineSettings": "프리미엄 루틴 설정",
+  "viewMembership": "멤버십 보기",
+  "freeLimitTitle": "무료는 루틴 2개까지",
+  "freeLimitMessage": "멤버십으로 무제한 루틴을 사용할 수 있어요",
+  "treadmill": "러닝머신",
+  "cycle": "사이클",
+  "stairmaster": "천국의 계단",
+  "selectLanguage": "언어 선택",
+  "selectTheme": "테마 선택",
+  "selectDifficulty": "난이도 선택",
+  "pause": "일시중지",
+  "resume": "계속하기",
+  "endWorkout": "운동 종료",
+  "endWorkoutConfirm": "운동을 종료하시겠습니까?",
+  "end": "종료",
+  "rotate": "회전",
+  "paused": "일시중지됨",
+  "pausedTitle": "일시정지됨",
+  "pausedSubtitle": "계속하거나 운동을 종료할 수 있어요",
+  "endWorkoutConfirmationMessage": "종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.",
+  "workoutComplete": "Workout Complete",
+  "totalWorkoutTime": "총 운동 시간",
+  "totalDistance": "총 거리",
+  "averageRpm": "평균 RPM",
+  "averageLevel": "평균 레벨",
+  "holdToStop": "Hold to Stop",
+  "continueWorkout": "계속",
+  "endWorkoutQuestion": "운동을 종료할까요?",
+  "workoutPaused": "운동이 일시중지되었습니다",
+  "lvlIncline": "경사도",
+  "lvlResistance": "저항",
+  "premium": "프리미엄",
+  "upgradeNow": "지금 당장 업그레이드 하기",
+  "purchase": "구매하기",
+  "later": "나중에",
+  "premiumActivated": "프리미엄이 활성화되었습니다",
+  "premiumMembership": "프리미엄 멤버십",
+  "benefitCycleStairmaster": "사이클, 천국의 계단 기능",
+  "benefitVoiceGuide": "세션 음성 가이드 기능",
+  "benefitUnlimitedRoutines": "루틴 저장 수 무제한",
+  "benefitFutureFeatures": "추후 기능 무제한 접근 가능",
+  "noAds": "광고 없음",
+  "routineLimitBenefit1": "루틴 저장 수 무제한",
+  "routineLimitBenefit2": "여러 목표별 루틴 저장",
+  "routineLimitBenefit3": "러닝머신/사이클/천국의 계단 루틴 모두 사용",
+  "voiceGuideBenefit1": "운동 중 음성 안내",
+  "voiceGuideBenefit2": "세션 전환 자동 안내",
+  "voiceGuideBenefit3": "핸즈프리로 루틴 집중",
+  "premium_benefit_1": "<red>사이클, 천국의 계단</red> 기능",
+  "premium_benefit_2": "세션 <red>음성 가이드</red> 기능",
+  "premium_benefit_3": "루틴 저장 수 <red>무제한</red>",
+  "premium_benefit_4": "추후 기능 <red>무제한 접근</red> 가능",
+  "originalPrice": "{price}",
+  "@originalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyPrice": "{price}/월",
+  "@monthlyPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumSubheadline": "음성 가이드, 사이클 및 천국의 계단 운동, 무제한 루틴 잠금 해제",
+  "@premiumSubheadline": {
+    "description": "프리미엄 잠금 해제 내용 설명"
+  },
+  "monthly": "월간",
+  "@monthly": {
+    "description": "월간 플랜 레이블"
+  },
+  "yearly": "연간",
+  "@yearly": {
+    "description": "연간 플랜 레이블"
+  },
+  "lifetime": "평생",
+  "@lifetime": {
+    "description": "평생 플랜 레이블"
+  },
+  "perMonth": "/월",
+  "@perMonth": {
+    "description": "월당 접미사"
+  },
+  "perYear": "/년",
+  "@perYear": {
+    "description": "년당 접미사"
+  },
+  "oneTime": "일회성",
+  "@oneTime": {
+    "description": "일회성 결제 접미사"
+  },
+  "savePercent": "{percent}% 절약",
+  "@savePercent": {
+    "description": "절약 퍼센트 배지",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bestValue": "최고의 가치",
+  "@bestValue": {
+    "description": "최고의 가치 배지"
+  },
+  "cancelAnytime": "언제든지 취소 가능",
+  "@cancelAnytime": {
+    "description": "언제든지 취소 가능 신뢰 문구"
+  },
+  "autoRenewableSubscription": "자동 갱신 구독",
+  "@autoRenewableSubscription": {
+    "description": "자동 갱신 구독 신뢰 문구"
+  },
+  "terms": "약관",
+  "@terms": {
+    "description": "약관 링크"
+  },
+  "privacy": "개인정보처리방침",
+  "@privacy": {
+    "description": "개인정보처리방침 링크"
+  },
+  "restore": "복원",
+  "@restore": {
+    "description": "구매 복원 링크"
+  },
+  "premiumTab": "프리미엄",
+  "routineTab": "루틴",
+  "settingsTab": "설정",
+  "myTab": "나",
+  "close": "닫기",
+  "premiumFeature": "프리미엄 기능입니다",
+  "usePremiumTest": "프리미엄 사용하기(테스트)",
+  "dateTimeFormat": "{year}년 {month}월 {day}일 {hour}시 {minute}분",
+  "@dateTimeFormat": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      },
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "checkRoutineStart": "루틴 확인 / 시작",
+  "comingSoon": "준비 중",
+  "beginner": "초급",
+  "intermediate": "중급",
+  "advanced": "고급",
+  "viewRecommendedRoutines": "추천 루틴 보러가기 →",
+  "recommendedRoutinesTreadmill": "러닝머신 추천 루틴",
+  "recommendedRoutinesCycle": "사이클 추천 루틴",
+  "recommendedRoutinesStairmaster": "천국의 계단 추천 루틴",
+  "alreadySaved": "이미 저장되었습니다",
+  "routineSaved": "루틴이 저장되었습니다",
+  "checkRoutine": "확인",
+  "saveRoutine": "루틴 저장",
+  "routineAlreadySaved": "이미 저장된 루틴이야",
+  "noTemplatesFound": "템플릿을 찾을 수 없습니다",
+  "templateTreadmillBeginner1Title": "이지 스타트 20",
+  "templateTreadmillBeginner1Subtitle": "3분 워밍업 + 1:1 인터벌",
+  "templateTreadmillBeginner2Title": "인클라인 워크 25",
+  "templateTreadmillBeginner2Subtitle": "경사 워킹 블록 반복",
+  "templateTreadmillIntermediate1Title": "클래식 1:1 24",
+  "templateTreadmillIntermediate1Subtitle": "1:1 클래식 인터벌",
+  "templateTreadmillIntermediate2Title": "스피드 래더 20",
+  "templateTreadmillIntermediate2Subtitle": "스피드 래더(점점 빨라짐)",
+  "templateTreadmillAdvanced1Title": "2:1 버너 21",
+  "templateTreadmillAdvanced1Subtitle": "2:1 고강도 인터벌",
+  "templateTreadmillAdvanced2Title": "스프린트 팝 18",
+  "templateTreadmillAdvanced2Subtitle": "20초 스프린트 반복",
+  "templateCycleBeginner1Title": "케이던스 빌더 20",
+  "templateCycleBeginner1Subtitle": "4분 워밍업 + 1:1 케이던스",
+  "templateCycleBeginner2Title": "스테디 라이드 25",
+  "templateCycleBeginner2Subtitle": "롱 스테디 라이딩",
+  "templateCycleIntermediate1Title": "스핀 1:1 24",
+  "templateCycleIntermediate1Subtitle": "1:1 스핀 인터벌",
+  "templateCycleIntermediate2Title": "힐 시뮬레이션 22",
+  "templateCycleIntermediate2Subtitle": "힐 반복 블록",
+  "templateCycleAdvanced1Title": "파워 인터벌 20",
+  "templateCycleAdvanced1Subtitle": "30초 파워 버스트",
+  "templateCycleAdvanced2Title": "타바타 믹스 16",
+  "templateCycleAdvanced2Subtitle": "20초/10초 타바타 믹스",
+  "templateStairmasterBeginner1Title": "이지 스텝스 20",
+  "templateStairmasterBeginner1Subtitle": "4분 워밍업 + 1:1 스텝",
+  "templateStairmasterBeginner2Title": "롱 이지 25",
+  "templateStairmasterBeginner2Subtitle": "롱 이지 블록",
+  "templateStairmasterIntermediate1Title": "2:1 클라임 21",
+  "templateStairmasterIntermediate1Subtitle": "2:1 클라임 반복",
+  "templateStairmasterIntermediate2Title": "스트롱 1:1 24",
+  "templateStairmasterIntermediate2Subtitle": "1:1 스트롱 인터벌",
+  "templateStairmasterAdvanced1Title": "하드 블록 20",
+  "templateStairmasterAdvanced1Subtitle": "2분 하드 블록",
+  "templateStairmasterAdvanced2Title": "스프린트 스텝스 18",
+  "templateStairmasterAdvanced2Subtitle": "30초 스프린트 + 60초 회복",
+  "historyTab": "기록",
+  "calendarTab": "캘린더",
+  "weightTab": "체중",
+  "bike": "사이클",
+  "thisWeek": "이번 주",
+  "trend": "추세",
+  "timeframe7D": "7일",
+  "timeframe30D": "30일",
+  "timeframe90D": "90일",
+  "timeframeAll": "전체",
+  "history": "기록",
+  "seeAll": "전체 보기",
+  "weightEntryDeleted": "체중 기록이 삭제되었습니다",
+  "weightUpdated": "체중이 업데이트되었습니다",
+  "editWeight": "체중 수정",
+  "recordWeight": "체중 기록",
+  "quickAdjust": "빠른 조정",
+  "goalWeightSet": "목표 체중이 설정되었습니다",
+  "goalWeightRemoved": "목표 체중이 제거되었습니다",
+  "goalAchieved": "목표 달성!",
+  "goalMatchesCurrentWeight": "목표가 현재 체중과 일치합니다",
+  "setGoal": "목표 설정",
+  "suggested": "추천",
+  "removeGoal": "목표 제거",
+  "addOneMoreRecordToSeeTrend": "추세를 보려면 1개 더 기록하세요",
+  "noWeightRecorded": "아직 체중이 기록되지 않았습니다",
+  "startTrackingYourWeight": "체중을 기록하여 진행 상황을 확인하세요",
+  "treadmillSession": "러닝머신 세션",
+  "bikeSession": "사이클 세션",
+  "stairmasterSession": "천국의 계단 세션",
+  "treadmillWorkout": "러닝머신 운동",
+  "bikeWorkout": "사이클 운동",
+  "stairmasterWorkout": "천국의 계단 운동",
+  "startAWorkoutToSeeItHere": "운동을 시작하면 여기에 표시됩니다",
+  "mon": "월",
+  "tue": "화",
+  "wed": "수",
+  "thu": "목",
+  "fri": "금",
+  "sat": "토",
+  "sun": "일",
+  "sessions": "세션",
+  "distance": "거리",
+  "today": "오늘",
+  "yesterday": "어제",
+  "noWorkoutsYet": "아직 운동 기록이 없습니다",
+  "startYourFirstWorkout": "첫 운동을 시작하여 기록을 확인하세요",
+  "goToRoutines": "루틴으로 이동",
+  "weightRecorded": "체중이 기록되었습니다",
+  "workout": "운동",
+  "workouts": "운동",
+  "goal": "목표",
+  "toGo": "남음",
+  "over": "초과",
+  "last": "이전",
+  "newLabel": "새로운",
+  "youNeed": "{amount}만큼 더 해야 {goal}에 도달합니다",
+  "@youNeed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "youNeedPlus": "+{amount}만큼 더 해야 {goal}에 도달합니다",
+  "@youNeedPlus": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "current": "현재",
+  "avg": "평균",
+  "avgRpm": "평균 RPM",
+  "avgLevel": "평균 레벨",
+  "premiumHeadline": "같은 30분, 결과는 다르게",
+  "@premiumHeadline": {
+    "description": "프리미엄 화면 강한 헤드라인"
+  },
+  "premiumSubheadlineNew": "그냥 뛰지 말고, 살 빠지는 방식으로 운동해",
+  "@premiumSubheadlineNew": {
+    "description": "프리미엄 화면 서브헤드라인"
+  },
+  "mostPopular": "가장 인기",
+  "@mostPopular": {
+    "description": "가장 인기 배지"
+  },
+  "dailyPrice": "하루 {price}원",
+  "@dailyPrice": {
+    "description": "하루 가격 표시",
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "benefitVoiceCoaching": "프리미엄 음성 코칭 시스템",
+  "@benefitVoiceCoaching": {
+    "description": "프리미엄 혜택: 음성 코칭"
+  },
+  "benefitCycleStairmasterRoutines": "모든 유산소 기구 완벽 지원",
+  "@benefitCycleStairmasterRoutines": {
+    "description": "프리미엄 혜택: 사이클 및 천국의 계단 루틴"
+  },
+  "benefitUnlimitedRoutinesNew": "무제한 루틴 라이브러리",
+  "@benefitUnlimitedRoutinesNew": {
+    "description": "프리미엄 혜택: 무제한 루틴 저장"
+  },
+  "benefitWeightFeature": "스마트 체중 추적 & 분석",
+  "@benefitWeightFeature": {
+    "description": "프리미엄 혜택: 체중 기능"
+  },
+  "benefitNoAdsFocus": "광고 없는 프리미엄 경험",
+  "@benefitNoAdsFocus": {
+    "description": "프리미엄 혜택: 광고 없음"
+  },
+  "benefitFutureFeaturesNew": "추후 프리미엄 기능 전체 포함",
+  "@benefitFutureFeaturesNew": {
+    "description": "프리미엄 혜택: 추후 기능"
+  },
+  "mostChosen": "가장 많이 선택됨",
+  "@mostChosen": {
+    "description": "CTA 위 지원 문구 (연간 선택 시)"
+  },
+  "canChangeAnytime": "언제든지 변경 가능",
+  "@canChangeAnytime": {
+    "description": "CTA 위 지원 문구 (월간 선택 시)"
+  },
+  "startPremium": "프리미엄 시작하기",
+  "@startPremium": {
+    "description": "프리미엄 구매 버튼 텍스트"
+  },
+  "cancelAnytimeKeepAccess": "결제 후 바로 해지해도 기간 끝까지 이용 가능",
+  "@cancelAnytimeKeepAccess": {
+    "description": "취소 신뢰 문구"
+  },
+  "workoutDays": "{count, plural, one{운동 1일 🔥} other{운동 {count}일 🔥}}",
+  "@workoutDays": {
+    "description": "캘린더 통계에서 운동 일수",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restDays": "{count, plural, one{휴식 1일 🛏️} other{휴식 {count}일 🛏️}}",
+  "@restDays": {
+    "description": "캘린더 통계에서 휴식 일수",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

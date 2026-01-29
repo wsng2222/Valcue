@@ -1,0 +1,711 @@
+import 'package:flutter/material.dart' hide Interval;
+import 'package:provider/provider.dart';
+import 'package:interval_cardio/l10n/app_localizations.dart';
+import '../models/routine_template.dart';
+import '../models/routine.dart';
+import '../models/interval.dart';
+import '../models/machine_type.dart';
+import '../storage/routine_provider.dart';
+import '../../../app_settings/app_settings_provider.dart';
+import '../../../app_shell/app_shell.dart';
+import '../../../widgets/bidi_safe_text.dart';
+import '../../../theme/app_theme.dart';
+import '../../membership/widgets/premium_bottom_sheet.dart';
+
+class RoutinePreviewSheet {
+  static void show(
+    BuildContext context,
+    RoutineTemplate template,
+    AppSettingsProvider settingsProvider, {
+    bool closeParentOnSave = true,
+  }) {
+    final theme = Theme.of(context);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
+      isDismissible: true,
+      builder: (sheetContext) => _RoutinePreviewSheetContent(
+        template: template,
+        settingsProvider: settingsProvider,
+        parentContext: context,
+        closeParentOnSave: closeParentOnSave,
+      ),
+    );
+  }
+}
+
+class _RoutinePreviewSheetContent extends StatelessWidget {
+  final RoutineTemplate template;
+  final AppSettingsProvider settingsProvider;
+  final BuildContext parentContext;
+  final bool closeParentOnSave;
+
+  const _RoutinePreviewSheetContent({
+    required this.template,
+    required this.settingsProvider,
+    required this.parentContext,
+    required this.closeParentOnSave,
+  });
+
+  String _getLocalizedTitle(AppLocalizations l10n) {
+    try {
+      switch (template.titleKey) {
+        // Treadmill
+        case 'template_treadmill_beginner_1_title':
+          return (l10n as dynamic).templateTreadmillBeginner1Title ??
+              'Easy Start 20';
+        case 'template_treadmill_beginner_2_title':
+          return (l10n as dynamic).templateTreadmillBeginner2Title ??
+              'Incline Walk 25';
+        case 'template_treadmill_intermediate_1_title':
+          return (l10n as dynamic).templateTreadmillIntermediate1Title ??
+              'Classic 1:1 24';
+        case 'template_treadmill_intermediate_2_title':
+          return (l10n as dynamic).templateTreadmillIntermediate2Title ??
+              'Speed Ladder 20';
+        case 'template_treadmill_advanced_1_title':
+          return (l10n as dynamic).templateTreadmillAdvanced1Title ??
+              '2:1 Burner 21';
+        case 'template_treadmill_advanced_2_title':
+          return (l10n as dynamic).templateTreadmillAdvanced2Title ??
+              'Sprint Pop 18';
+        // Cycle
+        case 'template_cycle_beginner_1_title':
+          return (l10n as dynamic).templateCycleBeginner1Title ??
+              'Cadence Builder 20';
+        case 'template_cycle_beginner_2_title':
+          return (l10n as dynamic).templateCycleBeginner2Title ??
+              'Steady Ride 25';
+        case 'template_cycle_intermediate_1_title':
+          return (l10n as dynamic).templateCycleIntermediate1Title ??
+              'Spin 1:1 24';
+        case 'template_cycle_intermediate_2_title':
+          return (l10n as dynamic).templateCycleIntermediate2Title ??
+              'Hill Simulation 22';
+        case 'template_cycle_advanced_1_title':
+          return (l10n as dynamic).templateCycleAdvanced1Title ??
+              'Power Intervals 20';
+        case 'template_cycle_advanced_2_title':
+          return (l10n as dynamic).templateCycleAdvanced2Title ??
+              'Tabata Mix 16';
+        // Stairmaster
+        case 'template_stairmaster_beginner_1_title':
+          return (l10n as dynamic).templateStairmasterBeginner1Title ??
+              'Easy Steps 20';
+        case 'template_stairmaster_beginner_2_title':
+          return (l10n as dynamic).templateStairmasterBeginner2Title ??
+              'Long Easy 25';
+        case 'template_stairmaster_intermediate_1_title':
+          return (l10n as dynamic).templateStairmasterIntermediate1Title ??
+              '2:1 Climb 21';
+        case 'template_stairmaster_intermediate_2_title':
+          return (l10n as dynamic).templateStairmasterIntermediate2Title ??
+              'Strong 1:1 24';
+        case 'template_stairmaster_advanced_1_title':
+          return (l10n as dynamic).templateStairmasterAdvanced1Title ??
+              'Hard Blocks 20';
+        case 'template_stairmaster_advanced_2_title':
+          return (l10n as dynamic).templateStairmasterAdvanced2Title ??
+              'Sprint Steps 18';
+        // Legacy support (backward compatibility)
+        case 'template_treadmill_beginner_title':
+          return (l10n as dynamic).templateTreadmillBeginner1Title ??
+              'Easy Start 20';
+        case 'template_treadmill_intermediate_title':
+          return (l10n as dynamic).templateTreadmillIntermediate1Title ??
+              'Classic 1:1 24';
+        case 'template_treadmill_advanced_title':
+          return (l10n as dynamic).templateTreadmillAdvanced1Title ??
+              '2:1 Burner 21';
+        case 'template_cycle_beginner_title':
+          return (l10n as dynamic).templateCycleBeginner1Title ??
+              'Cadence Builder 20';
+        case 'template_cycle_intermediate_title':
+          return (l10n as dynamic).templateCycleIntermediate1Title ??
+              'Spin 1:1 24';
+        case 'template_cycle_advanced_title':
+          return (l10n as dynamic).templateCycleAdvanced1Title ??
+              'Power Intervals 20';
+        case 'template_stairmaster_beginner_title':
+          return (l10n as dynamic).templateStairmasterBeginner1Title ??
+              'Easy Steps 20';
+        case 'template_stairmaster_intermediate_title':
+          return (l10n as dynamic).templateStairmasterIntermediate1Title ??
+              '2:1 Climb 21';
+        case 'template_stairmaster_advanced_title':
+          return (l10n as dynamic).templateStairmasterAdvanced1Title ??
+              'Hard Blocks 20';
+        default:
+          return 'Untitled Routine';
+      }
+    } catch (e) {
+      return 'Untitled Routine';
+    }
+  }
+
+  String _getLocalizedSubtitle(AppLocalizations l10n) {
+    try {
+      switch (template.subtitleKey) {
+        // Treadmill
+        case 'template_treadmill_beginner_1_subtitle':
+          return (l10n as dynamic).templateTreadmillBeginner1Subtitle ??
+              'Perfect for beginners';
+        case 'template_treadmill_beginner_2_subtitle':
+          return (l10n as dynamic).templateTreadmillBeginner2Subtitle ??
+              'Steady pace maintain';
+        case 'template_treadmill_intermediate_1_subtitle':
+          return (l10n as dynamic).templateTreadmillIntermediate1Subtitle ??
+              'Build endurance';
+        case 'template_treadmill_intermediate_2_subtitle':
+          return (l10n as dynamic).templateTreadmillIntermediate2Subtitle ??
+              'Progressive intensity';
+        case 'template_treadmill_advanced_1_subtitle':
+          return (l10n as dynamic).templateTreadmillAdvanced1Subtitle ??
+              'High intensity workout';
+        case 'template_treadmill_advanced_2_subtitle':
+          return (l10n as dynamic).templateTreadmillAdvanced2Subtitle ??
+              'Maximum burst intensity';
+        // Cycle
+        case 'template_cycle_beginner_1_subtitle':
+          return (l10n as dynamic).templateCycleBeginner1Subtitle ??
+              '4 min warm-up + 1:1 cadence';
+        case 'template_cycle_beginner_2_subtitle':
+          return (l10n as dynamic).templateCycleBeginner2Subtitle ??
+              'Long steady block';
+        case 'template_cycle_intermediate_1_subtitle':
+          return (l10n as dynamic).templateCycleIntermediate1Subtitle ??
+              'Classic 1:1 spin intervals';
+        case 'template_cycle_intermediate_2_subtitle':
+          return (l10n as dynamic).templateCycleIntermediate2Subtitle ??
+              'Climb repeats';
+        case 'template_cycle_advanced_1_subtitle':
+          return (l10n as dynamic).templateCycleAdvanced1Subtitle ??
+              '30s power bursts';
+        case 'template_cycle_advanced_2_subtitle':
+          return (l10n as dynamic).templateCycleAdvanced2Subtitle ??
+              '20s on / 10s off mix';
+        // Stairmaster
+        case 'template_stairmaster_beginner_1_subtitle':
+          return (l10n as dynamic).templateStairmasterBeginner1Subtitle ??
+              '4 min warm-up + 1:1 steps';
+        case 'template_stairmaster_beginner_2_subtitle':
+          return (l10n as dynamic).templateStairmasterBeginner2Subtitle ??
+              'Long easy climb blocks';
+        case 'template_stairmaster_intermediate_1_subtitle':
+          return (l10n as dynamic).templateStairmasterIntermediate1Subtitle ??
+              '2:1 climb repeats';
+        case 'template_stairmaster_intermediate_2_subtitle':
+          return (l10n as dynamic).templateStairmasterIntermediate2Subtitle ??
+              'Strong 1:1 intervals';
+        case 'template_stairmaster_advanced_1_subtitle':
+          return (l10n as dynamic).templateStairmasterAdvanced1Subtitle ??
+              '2-min hard blocks';
+        case 'template_stairmaster_advanced_2_subtitle':
+          return (l10n as dynamic).templateStairmasterAdvanced2Subtitle ??
+              '30s sprints + 60s recoveries';
+        // Legacy support (backward compatibility)
+        case 'template_treadmill_beginner_subtitle':
+          return (l10n as dynamic).templateTreadmillBeginner1Subtitle ??
+              'Perfect for beginners';
+        case 'template_treadmill_intermediate_subtitle':
+          return (l10n as dynamic).templateTreadmillIntermediate1Subtitle ??
+              'Build endurance';
+        case 'template_treadmill_advanced_subtitle':
+          return (l10n as dynamic).templateTreadmillAdvanced1Subtitle ??
+              'High intensity workout';
+        case 'template_cycle_beginner_subtitle':
+          return (l10n as dynamic).templateCycleBeginner1Subtitle ??
+              '4 min warm-up + 1:1 cadence';
+        case 'template_cycle_intermediate_subtitle':
+          return (l10n as dynamic).templateCycleIntermediate1Subtitle ??
+              'Classic 1:1 spin intervals';
+        case 'template_cycle_advanced_subtitle':
+          return (l10n as dynamic).templateCycleAdvanced1Subtitle ??
+              '30s power bursts';
+        case 'template_stairmaster_beginner_subtitle':
+          return (l10n as dynamic).templateStairmasterBeginner1Subtitle ??
+              '4 min warm-up + 1:1 steps';
+        case 'template_stairmaster_intermediate_subtitle':
+          return (l10n as dynamic).templateStairmasterIntermediate1Subtitle ??
+              '2:1 climb repeats';
+        case 'template_stairmaster_advanced_subtitle':
+          return (l10n as dynamic).templateStairmasterAdvanced1Subtitle ??
+              '2-min hard blocks';
+        default:
+          return '';
+      }
+    } catch (e) {
+      return '';
+    }
+  }
+
+  bool _isTemplateSaved(RoutineProvider provider) {
+    return provider.routines.any(
+      (r) => r.source == 'recommended' && r.templateId == template.id,
+    );
+  }
+
+  void _showFreeLimitSheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    PremiumBottomSheet.show(
+      context,
+      title: l10n.premiumMembership,
+      bulletItems: [
+        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
+        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
+        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+      ],
+      onPrimary: () {
+        // Close dialog first
+        Navigator.pop(context);
+        // Close the preview sheet (parent bottom sheet)
+        Navigator.pop(context);
+        // Close the recommended routines screen if applicable
+        if (closeParentOnSave &&
+            parentContext.mounted &&
+            Navigator.of(parentContext).canPop()) {
+          Navigator.pop(parentContext);
+        }
+        // Navigate to Premium tab (index 0) in AppShell after frame completes
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          AppShell.navigateToPremiumTab();
+        });
+      },
+    );
+  }
+
+  Future<void> _saveTemplate(BuildContext context) async {
+    final provider = Provider.of<RoutineProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
+
+    // Check if already saved
+    if (_isTemplateSaved(provider)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              (() {
+                try {
+                  return (l10n as dynamic).routineAlreadySaved ??
+                      'Routine already saved';
+                } catch (e) {
+                  return 'Routine already saved';
+                }
+              })(),
+            ),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.pop(context);
+      }
+      return;
+    }
+
+    // Check free limit when saving treadmill routine
+    if (template.machineType == MachineType.treadmill &&
+        !settingsProvider.isPremium &&
+        provider.routines
+                .where((r) => r.machineType == MachineType.treadmill)
+                .length >=
+            2) {
+      _showFreeLimitSheet(context);
+      return;
+    }
+
+    // Create routine from template
+    // IMPORTANT: Generate stable, unique IDs for each interval
+    // Use routine ID + index to ensure uniqueness and stability
+    final routineId = DateTime.now().millisecondsSinceEpoch.toString();
+    final intervals = template.intervals.asMap().entries.map((entry) {
+      final index = entry.key;
+      final i = entry.value;
+      // Generate stable ID: routineId_index (e.g., "1234567890_0", "1234567890_1")
+      final stableId = '${routineId}_$index';
+
+      if (template.machineType == MachineType.treadmill) {
+        return Interval.treadmill(
+          id: stableId, // Use stable ID based on routine ID and index
+          durationSeconds: i.durationSeconds,
+          speedKmh: i.speedKmh!,
+          grade: i.grade!,
+        );
+      } else if (template.machineType == MachineType.cycle) {
+        return Interval.cycle(
+          id: stableId, // Use stable ID based on routine ID and index
+          durationSeconds: i.durationSeconds,
+          rpm: i.rpm!,
+          resistance: i.resistance!,
+        );
+      } else {
+        return Interval.stairmaster(
+          id: stableId, // Use stable ID based on routine ID and index
+          durationSeconds: i.durationSeconds,
+          level: i.level!,
+        );
+      }
+    }).toList();
+
+    final title = _getLocalizedTitle(l10n);
+
+    final routine = Routine(
+      id: routineId, // Use the same ID that was used for interval IDs
+      name: title,
+      difficulty: template.difficulty.toJson(),
+      intervals: intervals,
+      machineType: template.machineType,
+      source: 'recommended',
+      templateId: template.id,
+    );
+
+    // Save routine
+    await provider.addRoutine(routine);
+
+    if (context.mounted) {
+      // Close the bottom sheet
+      Navigator.pop(context);
+
+      // Close the recommended routines screen
+      if (closeParentOnSave &&
+          parentContext.mounted &&
+          Navigator.of(parentContext).canPop()) {
+        Navigator.pop(parentContext);
+      }
+
+      // Show SnackBar on the root screen
+      // Use rootNavigator to find MaterialApp's ScaffoldMessenger
+      // This ensures it works even when RecommendedRoutinesScreen uses CupertinoPageScaffold
+      if (parentContext.mounted) {
+        // Get root Navigator which contains MaterialApp
+        final rootNavigator = Navigator.of(parentContext, rootNavigator: true);
+        final rootOverlay = rootNavigator.overlay;
+
+        if (rootOverlay != null && rootOverlay.mounted) {
+          // Use root overlay's context to find MaterialApp's ScaffoldMessenger
+          ScaffoldMessenger.of(rootOverlay.context).showSnackBar(
+            SnackBar(
+              content: Text(
+                (() {
+                  try {
+                    return (l10n as dynamic).routineSaved ?? 'Routine saved';
+                  } catch (e) {
+                    return 'Routine saved';
+                  }
+                })(),
+              ),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          // Fallback: try to find ScaffoldMessenger from parentContext
+          // This should traverse up to MaterialApp
+          try {
+            ScaffoldMessenger.of(parentContext).showSnackBar(
+              SnackBar(
+                content: Text(
+                  (() {
+                    try {
+                      return (l10n as dynamic).routineSaved ?? 'Routine saved';
+                    } catch (e) {
+                      return 'Routine saved';
+                    }
+                  })(),
+                ),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          } catch (e) {
+            // Last resort: use AppShell's context
+            final appShellState = AppShell.globalKey.currentState;
+            if (appShellState != null && appShellState.mounted) {
+              ScaffoldMessenger.of(appShellState.context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    (() {
+                      try {
+                        return (l10n as dynamic).routineSaved ??
+                            'Routine saved';
+                      } catch (e) {
+                        return 'Routine saved';
+                      }
+                    })(),
+                  ),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+
+  Widget _buildIntervalRow(
+    BuildContext context,
+    Interval interval,
+    MachineType machineType,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    String? pill1Text;
+    String? pill2Text;
+
+    switch (machineType) {
+      case MachineType.treadmill:
+        if (interval.speedKmh != null && interval.grade != null) {
+          pill1Text = settingsProvider.formatSpeed(interval.speedKmh!);
+          pill2Text = '${interval.grade!.toStringAsFixed(1)}% ${l10n.incline}';
+        }
+        break;
+      case MachineType.cycle:
+        if (interval.rpm != null && interval.resistance != null) {
+          pill1Text = '${interval.rpm} ${l10n.rpm}';
+          pill2Text = 'Level ${interval.resistance!}';
+        }
+        break;
+      case MachineType.stairmaster:
+        if (interval.level != null) {
+          pill1Text = 'Level ${interval.level!}';
+          pill2Text = null;
+        }
+        break;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Center(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF2C2C2C)
+                  : const Color(0xFFF0F0F0),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.95,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Duration chip (always LTR for timers)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF3C3C3C)
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: BidiSafeText(
+                    interval.durationFormatted,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    forceLTR: true, // Timers must always be LTR
+                  ),
+                ),
+                // Pills for parameters (if available)
+                if (pill1Text != null) ...[
+                  const SizedBox(width: 4),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? const Color(0xFF3C3C3C)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: BidiSafeText(
+                      pill1Text,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+                if (pill2Text != null) ...[
+                  const SizedBox(width: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? const Color(0xFF3C3C3C)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: BidiSafeText(
+                      pill2Text,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final maxHeight = mediaQuery.size.height * 0.9;
+    final l10n = AppLocalizations.of(context)!;
+    final provider = Provider.of<RoutineProvider>(context);
+    final isSaved = _isTemplateSaved(provider);
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+
+    return Container(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Drag handle
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          // Content (scrollable)
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    _getLocalizedTitle(l10n),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Subtitle
+                  if (_getLocalizedSubtitle(l10n).isNotEmpty)
+                    Text(
+                      _getLocalizedSubtitle(l10n),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: appColors.mutedText,
+                        letterSpacing: -0.2,
+                      ),
+                    ),
+                  if (_getLocalizedSubtitle(l10n).isNotEmpty)
+                    const SizedBox(height: 16),
+                  // Total duration (always LTR for timers)
+                  BidiSafeText(
+                    template.totalDurationFormatted,
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -1.0,
+                    ),
+                    forceLTR: true, // Timers must always be LTR
+                  ),
+                  const SizedBox(height: 24),
+                  // Interval rows
+                  ...template.intervals.map((interval) {
+                    return _buildIntervalRow(
+                      context,
+                      interval,
+                      template.machineType,
+                    );
+                  }),
+                  // Bottom padding for save button
+                  SizedBox(height: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
+            ),
+          ),
+          // Bottom fixed save button
+          Container(
+            padding: EdgeInsets.fromLTRB(
+              24,
+              16,
+              24,
+              16 + MediaQuery.of(context).padding.bottom,
+            ),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isSaved ? null : () => _saveTemplate(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  disabledBackgroundColor: appColors.surfaceElevated,
+                  disabledForegroundColor: appColors.mutedText,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  (() {
+                    try {
+                      return isSaved
+                          ? (l10n as dynamic).saved ?? 'Saved'
+                          : (l10n as dynamic).saveRoutine ?? 'Save Routine';
+                    } catch (e) {
+                      return isSaved ? 'Saved' : 'Save Routine';
+                    }
+                  })(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
