@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +11,91 @@ import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
 import '../../../onboarding/onboarding_flow.dart';
+
+Color _segmentedSelectedBackground(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+}
+
+SegmentedButtonThemeData _segmentedThemeData(
+  BuildContext context,
+  Color selectedBackground,
+) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  final selectedForeground = isDark ? Colors.white : Colors.black87;
+  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
+
+  return SegmentedButtonThemeData(
+    style: SegmentedButton.styleFrom(
+      selectedBackgroundColor: selectedBackground,
+      selectedForegroundColor: selectedForeground,
+      foregroundColor: theme.colorScheme.onSurface,
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(color: borderColor),
+    ),
+  );
+}
+
+Widget _buildPlatformSegmentedControl({
+  required Key key,
+  required List<String> labels,
+  required int selectedIndex,
+  required ValueChanged<int> onValueChanged,
+  required double height,
+  Color? color,
+  bool shrinkWrap = false,
+}) {
+  if (PlatformInfo.isIOS) {
+    return AdaptiveSegmentedControl(
+      key: key,
+      labels: labels,
+      selectedIndex: selectedIndex,
+      onValueChanged: onValueChanged,
+      height: height,
+      color: color,
+      shrinkWrap: shrinkWrap,
+    );
+  }
+
+  final hasLabels = labels.isNotEmpty;
+  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
+
+  return SizedBox(
+    key: key,
+    width: shrinkWrap ? null : double.infinity,
+    height: height,
+    child: SegmentedButton<int>(
+      segments: [
+        for (var i = 0; i < labels.length; i++)
+          ButtonSegment<int>(value: i, label: Text(labels[i])),
+      ],
+      selected: hasLabels ? {safeIndex} : const <int>{},
+      showSelectedIcon: false,
+      onSelectionChanged: (selection) {
+        if (selection.isEmpty) return;
+        onValueChanged(selection.first);
+      },
+    ),
+  );
+}
+
+Widget _buildPlatformSwitch({
+  required bool value,
+  required ValueChanged<bool> onChanged,
+}) {
+  if (PlatformInfo.isIOS) {
+    return AdaptiveSwitch(
+      value: value,
+      onChanged: onChanged,
+    );
+  }
+
+  return Switch(
+    value: value,
+    onChanged: onChanged,
+  );
+}
 
 // Language helper class
 class LanguageHelper {
@@ -102,10 +190,12 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: isDark ? theme.colorScheme.surface : appColors.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -309,28 +399,56 @@ class UnitSegmentRow extends StatelessWidget {
     List<String>? options,
     List<String>? labels,
   }) {
+    final segmentOptions = options ?? ['kmh', 'mph'];
+    final segmentLabels = labels ??
+        [
+          AppLocalizations.of(context)!.kmh,
+          AppLocalizations.of(context)!.mph,
+        ];
+
+    if (PlatformInfo.isIOS) {
+      final resolvedLabels = segmentLabels.length == segmentOptions.length
+          ? segmentLabels
+          : segmentOptions;
+      final selectedIndex = segmentOptions.indexOf(value);
+      final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
+      final selectedBg = _segmentedSelectedBackground(context);
+      final brightnessKey = Theme.of(context).brightness;
+      return SegmentedButtonTheme(
+        data: _segmentedThemeData(context, selectedBg),
+        child: SizedBox(
+          width: double.infinity,
+          child: _buildPlatformSegmentedControl(
+            key: ValueKey(
+              'unit_segment_${brightnessKey.name}_${resolvedLabels.join('|')}',
+            ),
+            labels: resolvedLabels,
+            selectedIndex: safeIndex,
+            onValueChanged: (index) {
+              if (index < 0 || index >= segmentOptions.length) return;
+              onChanged(segmentOptions[index]);
+            },
+            height: 36,
+            color: selectedBg,
+          ),
+        ),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Use custom options if provided, otherwise default to kmh/mph
-        final segmentOptions = options ?? ['kmh', 'mph'];
-        final segmentLabels = labels ??
-            [
-              AppLocalizations.of(context)!.kmh,
-              AppLocalizations.of(context)!.mph,
-            ];
-
         final segmentWidth = constraints.maxWidth / segmentOptions.length;
         final textDirection = Directionality.of(context);
         final theme = Theme.of(context);
         final appColors = context.appColors;
 
-        // Find selected index
         final selectedIndex = segmentOptions.indexOf(value);
+        final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
         final thumbLeft = textDirection == TextDirection.ltr
-            ? (selectedIndex * segmentWidth)
-            : ((segmentOptions.length - 1 - selectedIndex) * segmentWidth);
+            ? (safeIndex * segmentWidth)
+            : ((segmentOptions.length - 1 - safeIndex) * segmentWidth);
         final thumbRight = textDirection == TextDirection.rtl
-            ? (selectedIndex * segmentWidth)
+            ? (safeIndex * segmentWidth)
             : null;
 
         return Container(
@@ -341,7 +459,6 @@ class UnitSegmentRow extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              // Animated sliding thumb
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
@@ -352,11 +469,9 @@ class UnitSegmentRow extends StatelessWidget {
                 width: segmentWidth,
                 child: Container(
                   decoration: BoxDecoration(
-                    // 라이트 모드: 밝은 색상, 다크 모드: 어두운 색상
                     color: theme.brightness == Brightness.light
-                        ? const Color.fromARGB(255, 255, 255, 255) // 라이트 모드: 흰색
-                        : const Color.fromARGB(
-                            255, 60, 60, 60), // 다크 모드: 어두운 회색
+                        ? const Color.fromARGB(255, 255, 255, 255)
+                        : const Color.fromARGB(255, 60, 60, 60),
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
@@ -368,14 +483,15 @@ class UnitSegmentRow extends StatelessWidget {
                   ),
                 ),
               ),
-              // Buttons
               Row(
                 textDirection: textDirection,
                 children: segmentOptions.asMap().entries.map((entry) {
                   final index = entry.key;
                   final option = entry.value;
-                  final label = segmentLabels[index];
-                  final isSelected = value == option;
+                  final label = index < segmentLabels.length
+                      ? segmentLabels[index]
+                      : option;
+                  final isSelected = safeIndex == index;
 
                   return Expanded(
                     child: GestureDetector(
@@ -463,37 +579,45 @@ class ThemeSegmentRow extends StatelessWidget {
             ],
           ),
         ),
-        // Premium card-like container with segmented control
-        Padding(
-          padding: const EdgeInsets.fromLTRB(72, 0, 16, 8),
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: theme.brightness == Brightness.light
-                  ? Colors.grey.shade50
-                  : const Color(0xFF1C1C1E),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: theme.brightness == Brightness.light
-                    ? Colors.grey.shade200
-                    : Colors.white.withValues(alpha: 0.1),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: theme.colorScheme.shadow.withValues(alpha: 0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+        PlatformInfo.isIOS
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
+                child: _buildSegmentedControl(
+                  context: context,
+                  value: value,
+                  onChanged: onChanged,
                 ),
-              ],
-            ),
-            child: _buildSegmentedControl(
-              context: context,
-              value: value,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
+              )
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 8),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: theme.brightness == Brightness.light
+                        ? Colors.grey.shade50
+                        : const Color(0xFF1C1C1E),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: theme.brightness == Brightness.light
+                          ? Colors.grey.shade200
+                          : Colors.white.withValues(alpha: 0.1),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.colorScheme.shadow.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: _buildSegmentedControl(
+                    context: context,
+                    value: value,
+                    onChanged: onChanged,
+                  ),
+                ),
+              ),
       ],
     );
   }
@@ -503,19 +627,40 @@ class ThemeSegmentRow extends StatelessWidget {
     required String value,
     required Function(String) onChanged,
   }) {
+    if (PlatformInfo.isIOS) {
+      final l10n = AppLocalizations.of(context)!;
+      final displayValue = value == 'system' ? 'light' : value;
+      final selectedIndex = displayValue == 'light' ? 0 : 1;
+      final selectedBg = _segmentedSelectedBackground(context);
+      final brightnessKey = Theme.of(context).brightness;
+      final localeKey = Localizations.localeOf(context).toLanguageTag();
+      return SegmentedButtonTheme(
+        data: _segmentedThemeData(context, selectedBg),
+        child: SizedBox(
+          width: double.infinity,
+          child: _buildPlatformSegmentedControl(
+            key: ValueKey('theme_segment_${brightnessKey.name}_$localeKey'),
+            labels: [l10n.light, l10n.dark],
+            selectedIndex: selectedIndex,
+            onValueChanged: (index) {
+              onChanged(index == 0 ? 'light' : 'dark');
+            },
+            height: 44,
+            color: selectedBg,
+          ),
+        ),
+      );
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    final displayValue = value == 'system' ? 'light' : value;
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Account for 4px gap between segments
         final segmentWidth = (constraints.maxWidth - 4) / 2;
         final textDirection = Directionality.of(context);
         final theme = Theme.of(context);
         final appColors = context.appColors;
-        final l10n = AppLocalizations.of(context)!;
 
-        // Convert 'system' to 'light' for display (system option removed)
-        final displayValue = value == 'system' ? 'light' : value;
-
-        // Calculate thumb position based on selected value
         final isLightSelected = displayValue == 'light';
         final thumbLeft = textDirection == TextDirection.ltr
             ? (isLightSelected ? 0.0 : segmentWidth + 4)
@@ -528,7 +673,6 @@ class ThemeSegmentRow extends StatelessWidget {
           height: 44,
           child: Stack(
             children: [
-              // Animated sliding thumb with premium styling
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOutCubic,
@@ -553,7 +697,6 @@ class ThemeSegmentRow extends StatelessWidget {
                   ),
                 ),
               ),
-              // Buttons with icons
               Row(
                 textDirection: textDirection,
                 children: [
@@ -650,7 +793,39 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  int _aboutTapCount = 0;
+  Timer? _aboutHoldTimer;
+
+  @override
+  void dispose() {
+    _aboutHoldTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startAboutHold() {
+    _aboutHoldTimer?.cancel();
+    _aboutHoldTimer = Timer(const Duration(seconds: 5), () {
+      if (!mounted) return;
+      _aboutHoldTimer?.cancel();
+      _aboutHoldTimer = null;
+      _showOnboardingFromAbout();
+    });
+  }
+
+  void _cancelAboutHold() {
+    _aboutHoldTimer?.cancel();
+    _aboutHoldTimer = null;
+  }
+
+  void _showOnboardingFromAbout() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const OnboardingGate(
+          home: SizedBox.shrink(),
+          forceShowOnboarding: true,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -717,7 +892,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: theme.colorScheme.outlineVariant
+                              .withValues(alpha: 0.25),
+                          indent: 72,
+                        ),
+                      ),
                       // Unit Setting section (with segmented control)
                       SettingsSection(
                         children: [
@@ -743,7 +927,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: theme.colorScheme.outlineVariant
+                              .withValues(alpha: 0.25),
+                          indent: 72,
+                        ),
+                      ),
                       // Voice Guide section
                       SettingsSection(
                         children: [
@@ -753,21 +946,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             title: AppLocalizations.of(context)!.voiceGuide,
                             subtitle:
                                 AppLocalizations.of(context)!.audioNavigator,
-                            trailing: Switch.adaptive(
-                              value: provider.voiceGuideEnabled,
-                              onChanged: (value) {
-                                if (!provider.isPremium) {
-                                  // Revert toggle immediately
-                                  // The switch will revert on its own since value is controlled by voiceGuideEnabled
-                                  // Show premium gate modal
-                                  PremiumGateModal.show(
-                                    context,
-                                    PremiumFeature.voiceGuide,
-                                  );
-                                } else {
+                            onTap: provider.isPremium
+                                ? null
+                                : () {
+                                    PremiumGateModal.show(
+                                      context,
+                                      PremiumFeature.voiceGuide,
+                                    );
+                                  },
+                            trailing: IgnorePointer(
+                              ignoring: !provider.isPremium,
+                              child: _buildPlatformSwitch(
+                                value: provider.voiceGuideEnabled,
+                                onChanged: (value) {
+                                  if (!provider.isPremium) return;
                                   provider.updateVoiceGuide(value);
-                                }
-                              },
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -780,7 +975,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: Icons.music_note,
                             iconColor: Colors.orange,
                             title: AppLocalizations.of(context)!.soundEffects,
-                            trailing: Switch.adaptive(
+                            trailing: _buildPlatformSwitch(
                               value: provider.soundEffectsEnabled,
                               onChanged: (value) {
                                 provider.updateSoundEffects(value);
@@ -812,27 +1007,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: 8),
                       // About section
                       GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _aboutTapCount++;
-                          });
-                          if (_aboutTapCount >= 10) {
-                            _aboutTapCount = 0;
-                            // Navigate to onboarding
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const OnboardingGate(
-                                  home: SizedBox.shrink(),
-                                  forceShowOnboarding: true,
-                                ),
-                              ),
-                            );
+                        onTapDown: (_) => _startAboutHold(),
+                        onTapUp: (_) => _cancelAboutHold(),
+                        onTapCancel: _cancelAboutHold,
+                        onDoubleTap: () {
+                          _cancelAboutHold();
+                          if (provider.isPremium) {
+                            provider.updatePremium(false);
                           }
                         },
                         child: Container(
                           margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surface,
+                            color: theme.brightness == Brightness.dark
+                                ? theme.colorScheme.surface
+                                : context.appColors.surfaceElevated,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: SettingsRow(
@@ -872,7 +1061,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // Find current selected index
     int selectedIndex = languageOptions.indexOf(provider.language);
-    if (selectedIndex == -1) selectedIndex = languageOptions.indexOf('en'); // Default to English
+    if (selectedIndex == -1) {
+      selectedIndex = languageOptions.indexOf('en'); // Default to English
+    }
 
     showModalBottomSheet(
       context: context,
@@ -923,7 +1114,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           });
                         },
                         children: languageOptions.map((langCode) {
-                          final displayName = LanguageHelper.getLanguageDisplayName(langCode);
+                          final displayName =
+                              LanguageHelper.getLanguageDisplayName(langCode);
                           return Center(
                             child: Text(
                               displayName,

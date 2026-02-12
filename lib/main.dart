@@ -1,3 +1,6 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
@@ -16,6 +19,12 @@ import 'services/ad_service.dart';
 import 'services/voice_guide_service.dart';
 import 'onboarding/onboarding_flow.dart';
 
+void _debugLog(String message) {
+  if (kDebugMode) {
+    debugPrint(message);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -24,7 +33,7 @@ void main() async {
   try {
     await platform.invokeMethod('hideSystemUI');
   } catch (e) {
-    debugPrint('Failed to hide system UI via platform channel: $e');
+    _debugLog('Failed to hide system UI via platform channel: $e');
   }
 
   // Flutter-side backup: Hide Android system navigation bar completely
@@ -40,16 +49,16 @@ void main() async {
 
   // Initialize Google Mobile Ads (with error handling)
   try {
-    debugPrint('Initializing Google Mobile Ads...');
+    _debugLog('Initializing Google Mobile Ads...');
     await MobileAds.instance.initialize();
-    debugPrint('Google Mobile Ads initialized successfully');
+    _debugLog('Google Mobile Ads initialized successfully');
     // Preload interstitial ad for workout start
-    debugPrint('Preloading interstitial ad...');
+    _debugLog('Preloading interstitial ad...');
     AdService().loadAd();
   } catch (e) {
     // If ad initialization fails, app should still work
     // Ads are optional for testing
-    debugPrint('Ad initialization failed: $e');
+    _debugLog('Ad initialization failed: $e');
   }
 
   runApp(const MyApp());
@@ -69,48 +78,89 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, settingsProvider, child) {
+          const localizationsDelegates = [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ];
+          const supportedLocales = [
+            Locale('en'),
+            Locale('es'),
+            Locale('fr'),
+            Locale('de'),
+            Locale('it'),
+            Locale('nl'),
+            Locale('da'),
+            Locale('nb'),
+            Locale('ru'),
+            Locale('pt'),
+            Locale('ja'),
+            Locale('zh'),
+            Locale('ko'),
+            Locale('vi'),
+            Locale('ar'),
+            Locale('th'),
+          ];
+          final home = OnboardingGate(
+            home: AppShell(key: AppShell.globalKey),
+          );
+
+          Widget appBuilder({required Widget? child}) {
+            final themeMode = settingsProvider.themeModeEnum;
+            final platformBrightness = MediaQuery.platformBrightnessOf(context);
+            final isDark = themeMode == ThemeMode.dark ||
+                (themeMode == ThemeMode.system &&
+                    platformBrightness == Brightness.dark);
+            final materialTheme =
+                isDark ? AppTheme.darkTheme : AppTheme.lightTheme;
+
+            // IMPORTANT: This builder runs under Localizations, so we can safely
+            // read locale and react to runtime changes.
+            return Theme(
+              data: materialTheme,
+              child: HeroMode(
+                enabled: false,
+                child: ScaffoldMessenger(
+                  child: _VoiceGuideBootstrap(
+                    voiceEnabled: settingsProvider.voiceGuideEnabled,
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          if (PlatformInfo.isIOS) {
+            return AdaptiveApp(
+              title: 'Interval Cardio',
+              themeMode: settingsProvider.themeModeEnum,
+              materialLightTheme: AppTheme.lightTheme,
+              materialDarkTheme: AppTheme.darkTheme,
+              cupertinoLightTheme: const CupertinoThemeData(
+                brightness: Brightness.light,
+              ),
+              cupertinoDarkTheme: const CupertinoThemeData(
+                brightness: Brightness.dark,
+              ),
+              builder: (context, child) => appBuilder(child: child),
+              localizationsDelegates: localizationsDelegates,
+              supportedLocales: supportedLocales,
+              locale: settingsProvider.locale,
+              home: home,
+            );
+          }
+
           return MaterialApp(
             title: 'Interval Cardio',
-            debugShowCheckedModeBanner: false,
+            themeMode: settingsProvider.themeModeEnum,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: settingsProvider.themeModeEnum,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('es'),
-              Locale('fr'),
-              Locale('de'),
-              Locale('it'),
-              Locale('nl'),
-              Locale('da'),
-              Locale('nb'),
-              Locale('ru'),
-              Locale('pt'),
-              Locale('ja'),
-              Locale('zh'),
-              Locale('ko'),
-              Locale('vi'),
-              Locale('ar'),
-              Locale('th'),
-            ],
+            builder: (context, child) => appBuilder(child: child),
+            localizationsDelegates: localizationsDelegates,
+            supportedLocales: supportedLocales,
             locale: settingsProvider.locale,
-            builder: (context, child) {
-              // IMPORTANT: This builder runs under Localizations, so we can safely
-              // read locale and react to runtime changes.
-              return _VoiceGuideBootstrap(
-                voiceEnabled: settingsProvider.voiceGuideEnabled,
-                child: child ?? const SizedBox.shrink(),
-              );
-            },
-            home: OnboardingGate(
-              home: AppShell(key: AppShell.globalKey),
-            ),
+            home: home,
           );
         },
       ),
@@ -134,7 +184,8 @@ class _VoiceGuideBootstrap extends StatefulWidget {
   State<_VoiceGuideBootstrap> createState() => _VoiceGuideBootstrapState();
 }
 
-class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap> with WidgetsBindingObserver {
+class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
+    with WidgetsBindingObserver {
   Locale? _lastLocale;
   bool? _lastEnabled;
 
@@ -163,7 +214,7 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap> with Widgets
       // Also call platform method
       const platform = MethodChannel('com.interval_cardio/system');
       platform.invokeMethod('hideSystemUI').catchError((e) {
-        debugPrint('Failed to hide system UI on resume: $e');
+        _debugLog('Failed to hide system UI on resume: $e');
       });
     }
   }
@@ -211,7 +262,7 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap> with Widgets
   Widget build(BuildContext context) {
     // Force hide navigation bar on every build
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    
+
     // Ensure navigation bar stays hidden every rebuild
     SchedulerBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);

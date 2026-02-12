@@ -1,3 +1,5 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,76 @@ import '../models/weight_entry.dart';
 import '../providers/workout_history_provider.dart';
 import '../providers/weight_tracker_provider.dart';
 import '../../routines/models/machine_type.dart';
+
+Color _weightSegmentSelectedBackground(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+}
+
+SegmentedButtonThemeData _weightSegmentThemeData(
+  BuildContext context,
+  Color selectedBackground,
+) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  final selectedForeground = isDark ? Colors.white : Colors.black87;
+  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
+
+  return SegmentedButtonThemeData(
+    style: SegmentedButton.styleFrom(
+      selectedBackgroundColor: selectedBackground,
+      selectedForegroundColor: selectedForeground,
+      foregroundColor: theme.colorScheme.onSurface,
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(color: borderColor),
+      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    ),
+  );
+}
+
+Widget _buildPlatformSegmentedControl({
+  required Key key,
+  required List<String> labels,
+  required int selectedIndex,
+  required ValueChanged<int> onValueChanged,
+  required double height,
+  bool shrinkWrap = false,
+  Color? color,
+}) {
+  if (PlatformInfo.isIOS) {
+    return AdaptiveSegmentedControl(
+      key: key,
+      labels: labels,
+      selectedIndex: selectedIndex,
+      onValueChanged: onValueChanged,
+      height: height,
+      shrinkWrap: shrinkWrap,
+      color: color,
+    );
+  }
+
+  final hasLabels = labels.isNotEmpty;
+  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
+
+  return SizedBox(
+    key: key,
+    width: shrinkWrap ? null : double.infinity,
+    height: height,
+    child: SegmentedButton<int>(
+      segments: [
+        for (var i = 0; i < labels.length; i++)
+          ButtonSegment<int>(value: i, label: Text(labels[i])),
+      ],
+      selected: hasLabels ? {safeIndex} : const <int>{},
+      showSelectedIcon: false,
+      onSelectionChanged: (selection) {
+        if (selection.isEmpty) return;
+        onValueChanged(selection.first);
+      },
+    ),
+  );
+}
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -357,7 +429,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     }).toList();
 
     return Container(
-      color: isDark ? Colors.black : Colors.grey.shade50,
+      color: isDark ? Colors.black : Colors.white,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -900,12 +972,13 @@ class _CalendarTabState extends State<_CalendarTab> {
     final today = DateTime.now();
     int workoutDays = 0;
     int restDays = 0;
-    
+
     // Only count days up to today if we're viewing the current month
-    final lastDayToCount = (_currentMonth.year == today.year && _currentMonth.month == today.month)
-        ? today.day
-        : daysInMonth;
-    
+    final lastDayToCount =
+        (_currentMonth.year == today.year && _currentMonth.month == today.month)
+            ? today.day
+            : daysInMonth;
+
     for (int day = 1; day <= lastDayToCount; day++) {
       final date = DateTime(_currentMonth.year, _currentMonth.month, day);
       if (provider.hasWorkoutOnDate(date)) {
@@ -1010,8 +1083,7 @@ class _CalendarTabState extends State<_CalendarTab> {
                 children: [
                   // Workout days
                   Text(
-                    AppLocalizations.of(context)!
-                        .workoutDays(workoutDays),
+                    AppLocalizations.of(context)!.workoutDays(workoutDays),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1030,8 +1102,7 @@ class _CalendarTabState extends State<_CalendarTab> {
                   ),
                   // Rest days
                   Text(
-                    AppLocalizations.of(context)!
-                        .restDays(restDays),
+                    AppLocalizations.of(context)!.restDays(restDays),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1457,7 +1528,7 @@ class _WeightTabState extends State<_WeightTab> {
               ),
               // Sticky Record Button
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 1),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border(
@@ -1471,6 +1542,7 @@ class _WeightTabState extends State<_WeightTab> {
                 ),
                 child: SafeArea(
                   top: false,
+                  bottom: false,
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -1504,7 +1576,7 @@ class _WeightTabState extends State<_WeightTab> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1512,14 +1584,16 @@ class _WeightTabState extends State<_WeightTab> {
                     _WeightSummaryCard(
                       onRecordTap: () => _showRecordWeightBottomSheet(context),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 14),
+                    _WeightInsightsRow(),
+                    const SizedBox(height: 18),
                     // Trend Chart (only if 2+ entries - need at least 2 points to draw a line)
                     if (provider.entries.length >= 2) ...[
                       _WeightTrendChart(timeframe: _selectedTimeframe),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 18),
                     ] else if (provider.entries.length == 1) ...[
                       _buildTrendEmptyState(context),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 18),
                     ],
                     // History List
                     if (provider.entries.isNotEmpty)
@@ -1538,7 +1612,7 @@ class _WeightTabState extends State<_WeightTab> {
             ),
             // Sticky Record Button
             Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 border: Border(
@@ -1552,6 +1626,7 @@ class _WeightTabState extends State<_WeightTab> {
               ),
               child: SafeArea(
                 top: false,
+                bottom: false,
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -1686,7 +1761,7 @@ class _WeightTabState extends State<_WeightTab> {
   }
 }
 
-// Weight Summary Card - Unified card with current weight, delta, goal, progress bar
+// Weight Summary Card - Hero card with current weight, delta, goal, progress bar
 class _WeightSummaryCard extends StatelessWidget {
   final VoidCallback? onRecordTap;
 
@@ -1700,6 +1775,7 @@ class _WeightSummaryCard extends StatelessWidget {
         final appColors = theme.extension<AppColors>()!;
         final isDark = theme.brightness == Brightness.dark;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
+        final l10n = AppLocalizations.of(context)!;
 
         final currentWeight = provider.currentWeight;
         final weightChange = provider.getWeightChange();
@@ -1737,11 +1813,25 @@ class _WeightSummaryCard extends StatelessWidget {
         }
         // If only one entry, progress remains null (will show gray bar only)
 
+        String formatEntryDate(DateTime dateTime) {
+          final now = DateTime.now();
+          final today = DateTime(now.year, now.month, now.day);
+          final dateOnly =
+              DateTime(dateTime.year, dateTime.month, dateTime.day);
+          if (dateOnly == today) return l10n.today;
+          if (dateOnly == today.subtract(const Duration(days: 1))) {
+            return l10n.yesterday;
+          }
+          final locale = Localizations.localeOf(context);
+          return DateFormat.yMMMd(locale.toString()).format(dateTime);
+        }
+
         return Container(
           padding: const EdgeInsets.all(24),
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: isDark
                   ? Colors.white.withValues(alpha: 0.1)
@@ -1752,133 +1842,156 @@ class _WeightSummaryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Current Weight (Hero) - Large number
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          currentWeight.formatWeight(isWeightMetric),
-                          style: TextStyle(
-                            fontSize: 56,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                            letterSpacing: -1.5,
-                            height: 1.0,
+                  Text(
+                    l10n.weightTab,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: appColors.mutedText,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Text(
+                currentWeight.formatWeight(isWeightMetric),
+                style: TextStyle(
+                  fontSize: 56,
+                  fontWeight: FontWeight.w800,
+                  color: theme.colorScheme.onSurface,
+                  letterSpacing: -1.6,
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Icon(
+                    Icons.schedule,
+                    size: 14,
+                    color: appColors.mutedText,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    formatEntryDate(currentWeight.dateTime),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: appColors.mutedText,
+                    ),
+                  ),
+                  if (weightChange != null) ...[
+                    const SizedBox(width: 12),
+                    Container(
+                      width: 1,
+                      height: 14,
+                      color: appColors.mutedText.withValues(alpha: 0.3),
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: weightChange < 0
+                            ? Colors.green.withValues(alpha: 0.15)
+                            : theme.colorScheme.primary.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            weightChange < 0
+                                ? Icons.trending_down
+                                : Icons.trending_up,
+                            size: 12,
+                            color: weightChange < 0
+                                ? Colors.green
+                                : theme.colorScheme.primary,
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        // Delta + Goal in one row
-                        Row(
-                          children: [
-                            // Delta indicator
-                            if (weightChange != null) ...[
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    weightChange < 0
-                                        ? Icons.trending_down
-                                        : Icons.trending_up,
-                                    size: 14,
-                                    color: weightChange < 0
-                                        ? Colors.green
-                                        : appColors.mutedText,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric)}',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: weightChange < 0
-                                          ? Colors.green
-                                          : appColors.mutedText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // Always show separator between delta and goal button
-                              const SizedBox(width: 12),
-                              Container(
-                                width: 1,
-                                height: 14,
-                                color:
-                                    appColors.mutedText.withValues(alpha: 0.3),
-                              ),
-                              const SizedBox(width: 12),
-                            ],
-                            // Goal pill
-                            GestureDetector(
-                              onTap: () => _showSetGoalBottomSheet(context),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: goalWeight != null
-                                      ? theme.colorScheme.primary
-                                          .withValues(alpha: 0.1)
-                                      : (isDark
-                                          ? const Color(0xFF2C2C2E)
-                                          : Colors.grey.shade100),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: goalWeight != null
-                                        ? theme.colorScheme.primary
-                                            .withValues(alpha: 0.3)
-                                        : (isDark
-                                            ? Colors.white
-                                                .withValues(alpha: 0.1)
-                                            : Colors.grey.shade300),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      goalWeight != null
-                                          ? Icons.flag
-                                          : Icons.flag_outlined,
-                                      size: 12,
-                                      color: goalWeight != null
-                                          ? theme.colorScheme.primary
-                                          : appColors.mutedText,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      goalWeight != null
-                                          ? WeightEntry(
-                                              dateTime: DateTime.now(),
-                                              weightKg: goalWeight,
-                                            ).formatWeight(isWeightMetric)
-                                          : AppLocalizations.of(context)!
-                                              .setGoal,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: goalWeight != null
-                                            ? theme.colorScheme.primary
-                                            : appColors.mutedText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: weightChange < 0
+                                  ? Colors.green
+                                  : theme.colorScheme.primary,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  GestureDetector(
+                    onTap: () => _showSetGoalBottomSheet(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: goalWeight != null
+                            ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                            : (isDark
+                                ? const Color(0xFF2C2C2E)
+                                : Colors.grey.shade100),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: goalWeight != null
+                              ? theme.colorScheme.primary.withValues(alpha: 0.3)
+                              : (isDark
+                                  ? Colors.white.withValues(alpha: 0.1)
+                                  : Colors.grey.shade300),
+                          width: 1,
                         ),
-                      ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            goalWeight != null
+                                ? Icons.flag
+                                : Icons.flag_outlined,
+                            size: 14,
+                            color: goalWeight != null
+                                ? theme.colorScheme.primary
+                                : appColors.mutedText,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            goalWeight != null
+                                ? WeightEntry(
+                                    dateTime: DateTime.now(),
+                                    weightKg: goalWeight,
+                                  ).formatWeight(isWeightMetric)
+                                : l10n.setGoal,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: goalWeight != null
+                                  ? theme.colorScheme.primary
+                                  : appColors.mutedText,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
               // Goal indicator (only show if goal is set)
               if (goalWeight != null && toGoal != null) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Icon(
@@ -1890,8 +2003,8 @@ class _WeightSummaryCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         toGoal.abs() < 0.1
-                            ? '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${AppLocalizations.of(context)!.goalAchieved}'
-                            : '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${WeightEntry(dateTime: DateTime.now(), weightKg: toGoal.abs()).formatWeight(isWeightMetric)} ${toGoal > 0 ? AppLocalizations.of(context)!.toGo : AppLocalizations.of(context)!.over}',
+                            ? '${l10n.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${l10n.goalAchieved}'
+                            : '${l10n.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${WeightEntry(dateTime: DateTime.now(), weightKg: toGoal.abs()).formatWeight(isWeightMetric)} ${l10n.toGo}',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -1901,8 +2014,7 @@ class _WeightSummaryCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                // Progress bar
+                const SizedBox(height: 10),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
@@ -1953,6 +2065,123 @@ class _WeightSummaryCard extends StatelessWidget {
         isMetric: isWeightMetric,
         currentWeight: provider.currentWeight,
       ),
+    );
+  }
+}
+
+class _WeightInsightsRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<WeightTrackerProvider, AppSettingsProvider>(
+      builder: (context, provider, settingsProvider, child) {
+        final theme = Theme.of(context);
+        final appColors = theme.extension<AppColors>()!;
+        final isDark = theme.brightness == Brightness.dark;
+        final isWeightMetric = settingsProvider.weightUnit == 'kg';
+        final l10n = AppLocalizations.of(context)!;
+
+        String formatDelta(double? kg) {
+          if (kg == null) return '--';
+          final sign = kg > 0 ? '+' : (kg < 0 ? '-' : '');
+          return '$sign${WeightEntry(dateTime: DateTime.now(), weightKg: kg.abs()).formatWeight(isWeightMetric)}';
+        }
+
+        String formatAvg(double? kg) {
+          if (kg == null) return '--';
+          return WeightEntry(dateTime: DateTime.now(), weightKg: kg)
+              .formatWeight(isWeightMetric);
+        }
+
+        final delta7 = provider.getWeightChangeFromDaysAgo(7);
+        final delta30 = provider.getWeightChangeFromDaysAgo(30);
+        final avg7 = provider.getAverageWeight(7);
+
+        Widget buildTile({
+          required String label,
+          required String value,
+          required Color valueColor,
+          required IconData icon,
+        }) {
+          return Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.grey.shade300,
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(icon, size: 14, color: appColors.mutedText),
+                      const SizedBox(width: 6),
+                      Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: appColors.mutedText,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: valueColor,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final delta7Color = delta7 == null
+            ? appColors.mutedText
+            : (delta7 < 0 ? Colors.green : theme.colorScheme.primary);
+        final delta30Color = delta30 == null
+            ? appColors.mutedText
+            : (delta30 < 0 ? Colors.green : theme.colorScheme.primary);
+        final avgColor =
+            avg7 == null ? appColors.mutedText : theme.colorScheme.onSurface;
+
+        return Row(
+          children: [
+            buildTile(
+              label: l10n.timeframe7D,
+              value: formatDelta(delta7),
+              valueColor: delta7Color,
+              icon: Icons.trending_up,
+            ),
+            const SizedBox(width: 10),
+            buildTile(
+              label: l10n.timeframe30D,
+              value: formatDelta(delta30),
+              valueColor: delta30Color,
+              icon: Icons.timeline,
+            ),
+            const SizedBox(width: 10),
+            buildTile(
+              label: l10n.avg,
+              value: formatAvg(avg7),
+              valueColor: avgColor,
+              icon: Icons.equalizer,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -2052,47 +2281,30 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
-                  // Timeframe selector
-                  Row(
-                    children: [
-                      AppLocalizations.of(context)!.timeframe7D,
-                      AppLocalizations.of(context)!.timeframe30D,
-                      AppLocalizations.of(context)!.timeframe90D,
-                      AppLocalizations.of(context)!.timeframeAll,
-                    ].asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final label = entry.value;
-                      final isSelected = _selectedTimeframe == index;
-                      final appColors = theme.extension<AppColors>()!;
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedTimeframe = index;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 4),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? theme.colorScheme.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: isSelected
-                                  ? Colors.white
-                                  : appColors.mutedText,
+                  Flexible(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: PlatformInfo.isIOS
+                          ? ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 240),
+                              child: _TimeframeSelector(
+                                selectedIndex: _selectedTimeframe,
+                                onSelect: (index) {
+                                  setState(() {
+                                    _selectedTimeframe = index;
+                                  });
+                                },
+                              ),
+                            )
+                          : _TimeframeSelector(
+                              selectedIndex: _selectedTimeframe,
+                              onSelect: (index) {
+                                setState(() {
+                                  _selectedTimeframe = index;
+                                });
+                              },
                             ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -2113,6 +2325,75 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           ),
         );
       },
+    );
+  }
+}
+
+class _TimeframeSelector extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+
+  const _TimeframeSelector({
+    required this.selectedIndex,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final labels = [
+      AppLocalizations.of(context)!.timeframe7D,
+      AppLocalizations.of(context)!.timeframe30D,
+      AppLocalizations.of(context)!.timeframe90D,
+      AppLocalizations.of(context)!.timeframeAll,
+    ];
+
+    if (!PlatformInfo.isIOS) {
+      final theme = Theme.of(context);
+      final appColors = theme.extension<AppColors>()!;
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: labels.asMap().entries.map((entry) {
+          final index = entry.key;
+          final label = entry.value;
+          final isSelected = selectedIndex == index;
+          return GestureDetector(
+            onTap: () => onSelect(index),
+            child: Container(
+              margin: const EdgeInsets.only(left: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color:
+                    isSelected ? theme.colorScheme.primary : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? Colors.white : appColors.mutedText,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }
+
+    final selectedBg = _weightSegmentSelectedBackground(context);
+    final brightnessKey = Theme.of(context).brightness;
+
+    return SegmentedButtonTheme(
+      data: _weightSegmentThemeData(context, selectedBg),
+      child: _buildPlatformSegmentedControl(
+        key: ValueKey('weight_timeframe_${brightnessKey.name}'),
+        labels: labels,
+        selectedIndex: selectedIndex,
+        onValueChanged: onSelect,
+        height: 32,
+        shrinkWrap: true,
+        color: selectedBg,
+      ),
     );
   }
 }
@@ -2222,6 +2503,7 @@ class _WeightHistoryList extends StatelessWidget {
       builder: (context, provider, settingsProvider, child) {
         final theme = Theme.of(context);
         final isDark = theme.brightness == Brightness.dark;
+        final appColors = theme.extension<AppColors>()!;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
 
         final entriesToShow =
@@ -2256,7 +2538,15 @@ class _WeightHistoryList extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            ...entriesToShow.map((entry) {
+            ...List.generate(entriesToShow.length, (index) {
+              final entry = entriesToShow[index];
+              final previousEntry = index + 1 < provider.entries.length
+                  ? provider.entries[index + 1]
+                  : null;
+              final delta = previousEntry == null
+                  ? null
+                  : entry.weightKg - previousEntry.weightKg;
+
               String formatDate(DateTime dateTime) {
                 final now = DateTime.now();
                 final today = DateTime(now.year, now.month, now.day);
@@ -2275,14 +2565,25 @@ class _WeightHistoryList extends StatelessWidget {
                 }
               }
 
+              String? formatDelta(double? deltaKg) {
+                if (deltaKg == null) return null;
+                final sign = deltaKg > 0 ? '+' : '';
+                return '$sign${WeightEntry(dateTime: DateTime.now(), weightKg: deltaKg.abs()).formatWeight(isWeightMetric)}';
+              }
+
+              final deltaText = formatDelta(delta);
+              final deltaColor = delta == null
+                  ? appColors.mutedText
+                  : (delta < 0 ? Colors.green : theme.colorScheme.primary);
+
               return Dismissible(
                 key: Key(entry.id),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  margin: const EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: Colors.red,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
@@ -2304,14 +2605,14 @@ class _WeightHistoryList extends StatelessWidget {
                 },
                 child: InkWell(
                   onTap: () => _showEditWeightBottomSheet(context, entry),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(18),
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
+                    margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
+                        horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       border: Border.all(
                         color: isDark
                             ? Colors.white.withValues(alpha: 0.1)
@@ -2320,22 +2621,65 @@ class _WeightHistoryList extends StatelessWidget {
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          entry.formatWeight(isWeightMetric),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              entry.formatWeight(isWeightMetric),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              formatDate(entry.dateTime),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: appColors.mutedText,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          formatDate(entry.dateTime),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: theme.extension<AppColors>()!.mutedText,
+                        const Spacer(),
+                        if (deltaText != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: deltaColor.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  delta != null && delta < 0
+                                      ? Icons.trending_down
+                                      : Icons.trending_up,
+                                  size: 12,
+                                  color: deltaColor,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  deltaText,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: deltaColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                        const SizedBox(width: 6),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 18,
+                          color: appColors.mutedText,
                         ),
                       ],
                     ),
@@ -2410,11 +2754,98 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
 
   Future<void> _selectDate(BuildContext context) async {
     final now = DateTime.now();
-    final pickedDate = await showDatePicker(
+    final initialDate =
+        _selectedDateTime.isAfter(now) ? now : _selectedDateTime;
+    var tempPicked = DateTime(
+      initialDate.year,
+      initialDate.month,
+      initialDate.day,
+    );
+
+    final pickedDate = await showModalBottomSheet<DateTime>(
       context: context,
-      initialDate: _selectedDateTime,
-      firstDate: DateTime(2020),
-      lastDate: now,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+        final l10n = AppLocalizations.of(context)!;
+
+        return SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.only(top: 12, bottom: 16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: theme.extension<AppColors>()!.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          foregroundColor:
+                              theme.extension<AppColors>()!.mutedText,
+                        ),
+                        child: Text(l10n.cancel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, tempPicked),
+                        child: Text(l10n.done),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 260,
+                  child: CupertinoTheme(
+                    data: CupertinoThemeData(
+                      brightness: isDark ? Brightness.dark : Brightness.light,
+                      textTheme: CupertinoTextThemeData(
+                        dateTimePickerTextStyle: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: tempPicked,
+                      minimumDate: DateTime(2020),
+                      maximumDate: now,
+                      onDateTimeChanged: (value) {
+                        tempPicked = DateTime(
+                          value.year,
+                          value.month,
+                          value.day,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
     if (pickedDate != null) {
       setState(() {
@@ -2565,13 +2996,27 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close, size: 24),
-                      color: appColors.mutedText,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () => Navigator.pop(context),
-                    ),
+                    PlatformInfo.isIOS
+                        ? AdaptiveButton.icon(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icons.close,
+                            iconColor: appColors.mutedText,
+                            style: AdaptiveButtonStyle.glass,
+                            size: AdaptiveButtonSize.small,
+                            color: appColors.mutedText,
+                            padding: const EdgeInsets.all(6),
+                            minSize: const Size(32, 32),
+                            borderRadius: BorderRadius.circular(999),
+                            useSmoothRectangleBorder: false,
+                          )
+                        : IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icon(
+                              Icons.close,
+                              size: 24,
+                              color: appColors.mutedText,
+                            ),
+                          ),
                   ],
                 ),
               ),

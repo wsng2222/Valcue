@@ -1,3 +1,4 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
@@ -205,18 +206,73 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final isIOS = PlatformInfo.isIOS;
+    final useSfSymbols = isIOS && PlatformInfo.isIOS26OrHigher();
+    final useNativeBottomBar = isIOS && PlatformInfo.isIOS26OrHigher();
+    final bottomSafePadding = MediaQuery.of(context).padding.bottom;
+    const nativeTabBarHeight = 56.0;
+    final bodyBottomPadding =
+        useNativeBottomBar ? (nativeTabBarHeight + bottomSafePadding) : 0.0;
+
+    dynamic navIcon(String iosSymbol, IconData fallback) {
+      return useSfSymbols ? iosSymbol : fallback;
+    }
+
+    final body = IndexedStack(
+      index: _currentIndex,
+      children: _screens,
+    );
+
+    if (isIOS) {
+      return AdaptiveScaffold(
+        minimizeBehavior: TabBarMinimizeBehavior.never,
+        body: Padding(
+          padding: EdgeInsets.only(bottom: bodyBottomPadding),
+          child: body,
+        ),
+        bottomNavigationBar: AdaptiveBottomNavigationBar(
+          selectedIndex: _currentIndex,
+          onTap: _changeTab,
+          useNativeBottomBar: useNativeBottomBar,
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor:
+              theme.colorScheme.onSurface.withValues(alpha: 0.65),
+          items: [
+            AdaptiveNavigationDestination(
+              icon: navIcon('flame', Icons.local_fire_department_outlined),
+              selectedIcon: navIcon('flame.fill', Icons.local_fire_department),
+              label: l10n.premiumTab,
+            ),
+            AdaptiveNavigationDestination(
+              icon: navIcon('figure.run', Icons.directions_run_outlined),
+              selectedIcon: navIcon('figure.run', Icons.directions_run),
+              label: l10n.routineTab,
+            ),
+            AdaptiveNavigationDestination(
+              icon: navIcon('gearshape', Icons.settings_outlined),
+              selectedIcon: navIcon('gearshape.fill', Icons.settings),
+              label: l10n.settingsTab,
+            ),
+            AdaptiveNavigationDestination(
+              icon: navIcon('person', Icons.person_outline),
+              selectedIcon: navIcon('person.fill', Icons.person),
+              label: l10n.myTab,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: body,
       bottomNavigationBar: SafeArea(
         top: false,
-        bottom: false, // Don't add extra padding - just use bottomMargin
+        bottom: false,
         child: Consumer<AppSettingsProvider>(
           builder: (context, settingsProvider, child) {
-            final l10n = AppLocalizations.of(context)!;
-            final double bottomMargin = 12;
+            const bottomMargin = 12.0;
 
             return LiquidGlassPillNavBar(
               currentIndex: _currentIndex,
@@ -235,7 +291,7 @@ class _AppShellState extends State<AppShell> {
                   icon: Icons.settings,
                   label: l10n.settingsTab,
                 ),
-                LiquidGlassNavItem(
+                const LiquidGlassNavItem(
                   icon: Icons.person,
                   label: '',
                   iconSize: 28.0,
@@ -278,6 +334,7 @@ class _PremiumScreenState extends State<_PremiumScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -297,40 +354,54 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                 // Purchase button
                 Consumer<AppSettingsProvider>(
                   builder: (context, provider, child) {
+                    void onPurchase() {
+                      // TODO: Implement actual purchase flow
+                      // For now, activate premium for testing
+                      provider.updatePremium(true);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              AppLocalizations.of(context)!.premiumActivated),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+
+                    final buttonLabel = Text(
+                      AppLocalizations.of(context)!.startPremium,
+                      style: GoogleFonts.lato(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: -0.3,
+                        color: theme.colorScheme.onPrimary,
+                      ),
+                    );
+
                     return SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // TODO: Implement actual purchase flow
-                          // For now, activate premium for testing
-                          provider.updatePremium(true);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .premiumActivated),
-                              duration: const Duration(seconds: 2),
+                      child: PlatformInfo.isIOS
+                          ? AdaptiveButton.child(
+                              onPressed: onPurchase,
+                              color: theme.colorScheme.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              borderRadius: BorderRadius.circular(14),
+                              child: buttonLabel,
+                            )
+                          : ElevatedButton(
+                              onPressed: onPurchase,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: buttonLabel,
                             ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.startPremium,
-                          style: GoogleFonts.lato(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.italic,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                      ),
                     );
                   },
                 ),
@@ -430,7 +501,7 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                     );
                   },
                 ),
-                SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -611,7 +682,9 @@ class _SupportingLine extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Text(
-            selectedPlan == PlanType.yearly ? l10n.mostChosen : l10n.canChangeAnytime,
+            selectedPlan == PlanType.yearly
+                ? l10n.mostChosen
+                : l10n.canChangeAnytime,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
@@ -780,11 +853,11 @@ class _PlanSelectorState extends State<_PlanSelector> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.red.withValues(alpha: 0.3),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -1026,23 +1099,14 @@ class _BenefitsList extends StatelessWidget {
       ),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cardWidth = (constraints.maxWidth - 12) / 2;
-        const cardHeight = 118.0;
-        return Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            for (final item in benefits)
-              SizedBox(
-                width: cardWidth,
-                height: cardHeight,
-                child: _BenefitCard(item: item),
-              ),
-          ],
-        );
-      },
+    return Column(
+      children: [
+        for (int i = 0; i < benefits.length; i++) ...[
+          _BenefitListItem(item: benefits[i]),
+          if (i < benefits.length - 1)
+            Divider(height: 1, color: Colors.grey.shade300),
+        ],
+      ],
     );
   }
 }
@@ -1057,58 +1121,35 @@ class _BenefitItem {
   });
 }
 
-class _BenefitCard extends StatelessWidget {
+class _BenefitListItem extends StatelessWidget {
   final _BenefitItem item;
 
-  const _BenefitCard({required this.item});
+  const _BenefitListItem({required this.item});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appColors = theme.extension<AppColors>()!;
-    final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? const Color(0xFF1C1C1E) : Colors.grey.shade50;
 
-    return Container(
-      constraints: const BoxConstraints.expand(),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: appColors.border),
-      ),
-      child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.14),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              item.icon,
-              size: 16,
-              color: theme.colorScheme.primary,
-            ),
+          Icon(
+            item.icon,
+            size: 24,
+            color: theme.colorScheme.primary,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(width: 16),
           Expanded(
-            child: Align(
-              alignment: AlignmentDirectional.topStart,
-              child: Text(
-                item.text,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.2,
-                  height: 1.3,
-                ),
+            child: Text(
+              item.text,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: theme.colorScheme.onSurface,
+                letterSpacing: -0.2,
+                height: 1.3,
               ),
             ),
           ),

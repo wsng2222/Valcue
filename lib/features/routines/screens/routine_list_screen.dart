@@ -1,3 +1,4 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
@@ -5,17 +6,95 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/routine.dart';
 import '../models/interval.dart' as interval_model;
 import '../models/machine_type.dart';
+import '../models/difficulty.dart';
 import '../models/routine_template.dart';
 import '../data/routine_templates.dart';
 import '../storage/routine_provider.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
+import '../../../onboarding/onboarding_storage.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import 'routine_bottom_sheet.dart';
 import 'recommended_routines_screen.dart';
 import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
+
+Color _segmentedSelectedBackground(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+}
+
+SegmentedButtonThemeData _segmentedThemeData(
+  BuildContext context,
+  Color selectedBackground,
+) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  final selectedForeground = isDark ? Colors.white : Colors.black87;
+  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
+
+  return SegmentedButtonThemeData(
+    style: SegmentedButton.styleFrom(
+      selectedBackgroundColor: selectedBackground,
+      selectedForegroundColor: selectedForeground,
+      foregroundColor: theme.colorScheme.onSurface,
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(color: borderColor),
+    ),
+  );
+}
+
+Widget _buildPlatformSegmentedControl({
+  required Key key,
+  required List<String> labels,
+  required int selectedIndex,
+  required ValueChanged<int> onValueChanged,
+  required double height,
+  Color? color,
+}) {
+  if (PlatformInfo.isIOS) {
+    return AdaptiveSegmentedControl(
+      key: key,
+      labels: labels,
+      selectedIndex: selectedIndex,
+      onValueChanged: onValueChanged,
+      height: height,
+      color: color,
+    );
+  }
+
+  final hasLabels = labels.isNotEmpty;
+  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
+
+  return SizedBox(
+    key: key,
+    height: height,
+    width: double.infinity,
+    child: SegmentedButton<int>(
+      segments: [
+        for (var i = 0; i < labels.length; i++)
+          ButtonSegment<int>(value: i, label: Text(labels[i])),
+      ],
+      selected: hasLabels ? {safeIndex} : const <int>{},
+      showSelectedIcon: false,
+      onSelectionChanged: (selection) {
+        if (selection.isEmpty) return;
+        onValueChanged(selection.first);
+      },
+    ),
+  );
+}
+
+class _MachineTabItem {
+  final IconData icon;
+  final String label;
+
+  const _MachineTabItem({
+    required this.icon,
+    required this.label,
+  });
+}
 
 class RoutineListScreen extends StatefulWidget {
   const RoutineListScreen({super.key});
@@ -34,10 +113,12 @@ class RoutineListScreen extends StatefulWidget {
 class _RoutineListScreenState extends State<RoutineListScreen> {
   late PageController _pageController;
   int _currentPage = 0;
+  Difficulty? _preferredDifficulty;
 
   @override
   void initState() {
     super.initState();
+    _loadPreferredDifficulty();
     // Check if there's a target machine type to navigate to
     final targetType = RoutineListScreen.targetMachineType;
     int initialPage = 0;
@@ -57,6 +138,27 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     }
     _currentPage = initialPage;
     _pageController = PageController(initialPage: initialPage);
+  }
+
+  Future<void> _loadPreferredDifficulty() async {
+    final level = await OnboardingStorage.getLevel();
+    if (!mounted) return;
+    setState(() {
+      _preferredDifficulty = _mapLevelToDifficulty(
+        level ?? OnboardingLevel.intermediate,
+      );
+    });
+  }
+
+  Difficulty _mapLevelToDifficulty(OnboardingLevel level) {
+    switch (level) {
+      case OnboardingLevel.beginner:
+        return Difficulty.beginner;
+      case OnboardingLevel.intermediate:
+        return Difficulty.intermediate;
+      case OnboardingLevel.advanced:
+        return Difficulty.advanced;
+    }
   }
 
   // Method to navigate to specific machine type page
@@ -89,6 +191,42 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   }
 
   Widget _buildMachineSegmentedControl(BuildContext context) {
+    if (PlatformInfo.isIOS) {
+      final titles = _getMachineTitles(context);
+      final selectedIndex = _currentPage.clamp(0, titles.length - 1);
+      final selectedBg = _segmentedSelectedBackground(context);
+
+      final brightnessKey = Theme.of(context).brightness;
+      final localeKey = Localizations.localeOf(context).toLanguageTag();
+      return SegmentedButtonTheme(
+        data: _segmentedThemeData(context, selectedBg),
+        child: SizedBox(
+          width: double.infinity,
+          child: _buildPlatformSegmentedControl(
+            key: ValueKey('machine_segment_${brightnessKey.name}_$localeKey'),
+            labels: titles,
+            selectedIndex: selectedIndex,
+            onValueChanged: (index) {
+              if (_currentPage == index) return;
+              final currentPage = _pageController.hasClients
+                  ? (_pageController.page ?? _currentPage.toDouble())
+                  : _currentPage.toDouble();
+              final distance = (currentPage - index).abs();
+              final durationMs =
+                  (220 + (120 * distance)).clamp(260, 420).round();
+              _pageController.animateToPage(
+                index,
+                duration: Duration(milliseconds: durationMs),
+                curve: Curves.easeInOutCubic,
+              );
+            },
+            height: 40,
+            color: selectedBg,
+          ),
+        ),
+      );
+    }
+
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final titles = _getMachineTitles(context);
@@ -375,8 +513,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                       _buildRoutinePage(
                         context,
                         routineProvider.routines
-                            .where((r) =>
-                                r.machineType == MachineType.treadmill)
+                            .where(
+                                (r) => r.machineType == MachineType.treadmill)
                             .toList(),
                         settingsProvider,
                         MachineType.treadmill,
@@ -565,12 +703,18 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final templates = RoutineTemplates.getTemplatesByMachine(machineType);
+    final preferredDifficulty = _preferredDifficulty ?? Difficulty.intermediate;
+    final difficultyTemplates = templates
+        .where((template) => template.difficulty == preferredDifficulty)
+        .toList();
     final previewTemplates =
-        templates.isNotEmpty ? templates.take(2).toList() : <RoutineTemplate>[];
+        (difficultyTemplates.isNotEmpty ? difficultyTemplates : templates)
+            .take(2)
+            .toList();
 
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 182, 20, 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -623,7 +767,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
             ),
             if (previewTemplates.isNotEmpty) ...[
-              const SizedBox(height: 32),
+              const SizedBox(height: 184),
               Text(
                 'Quick start',
                 style: TextStyle(
@@ -660,15 +804,17 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final l10n = AppLocalizations.of(context)!;
+    void openPreview() {
+      RoutinePreviewSheet.show(
+        context,
+        template,
+        settingsProvider,
+        closeParentOnSave: false,
+      );
+    }
+
     return GestureDetector(
-      onTap: () {
-        RoutinePreviewSheet.show(
-          context,
-          template,
-          settingsProvider,
-          closeParentOnSave: false,
-        );
-      },
+      onTap: openPreview,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -724,23 +870,37 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                   forceLTR: true,
                 ),
                 const Spacer(),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    'Preview',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.primary,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                ),
+                PlatformInfo.isIOS
+                    ? AdaptiveButton.icon(
+                        onPressed: openPreview,
+                        icon: Icons.chevron_right,
+                        iconColor: appColors.mutedText,
+                        style: AdaptiveButtonStyle.glass,
+                        size: AdaptiveButtonSize.small,
+                        color: appColors.mutedText,
+                        padding: const EdgeInsets.all(6),
+                        minSize: const Size(32, 32),
+                        borderRadius: BorderRadius.circular(999),
+                        useSmoothRectangleBorder: false,
+                      )
+                    : Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          'Preview',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.primary,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ),
               ],
             ),
           ],
@@ -889,10 +1049,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     final shouldShowAddButton =
         machineType == MachineType.treadmill || isPremium;
 
-    // Calculate bottom reserved space for navigation bar
-    // Custom nav bar: 70 (height) + 10 (padding) + safe area bottom + spacing
-    final bottomReserved =
-        70.0 + 10.0 + MediaQuery.of(context).padding.bottom + 1.0;
+    // Reserve just a small safe-area gap at the bottom (AdaptiveScaffold already pads)
+    final bottomReserved = 16.0 + MediaQuery.of(context).padding.bottom;
 
     return CustomScrollView(
       slivers: [
@@ -983,7 +1141,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         _getLocalizedDifficulty(context, routine.difficulty);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 34),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -1070,9 +1228,10 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.checkRoutineStart,
-                style: const TextStyle(
+                style: GoogleFonts.lato(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
                   letterSpacing: -0.3,
                 ),
               ),
@@ -1185,8 +1344,7 @@ class _MetaPill extends StatelessWidget {
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100;
+    final background = isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -1217,14 +1375,4 @@ class _MetaPill extends StatelessWidget {
       ),
     );
   }
-}
-
-class _MachineTabItem {
-  final IconData icon;
-  final String label;
-
-  const _MachineTabItem({
-    required this.icon,
-    required this.label,
-  });
 }
