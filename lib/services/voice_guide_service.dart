@@ -318,14 +318,17 @@ class VoiceGuideService {
       fixedFractionDigits: 1,
     );
     
-    // Build combined text: "Speed X Incline Y%"
+    // Build combined text with a short pause between metrics.
     final lang = _resolveLanguageCode(_locale);
     final speedTemplate = _templates[lang]?['speed'] ?? _templates['en']!['speed'] ?? 'Speed {x}';
     final inclineTemplate = _templates[lang]?['incline'] ?? _templates['en']!['incline'] ?? 'Incline {x}%';
     
     final speedText = speedTemplate.replaceAll('{x}', speedStr);
     final inclineText = inclineTemplate.replaceAll('{x}', inclineStr);
-    final combinedText = '$speedText $inclineText';
+    final combinedText = _joinWithShortPause(
+      first: speedText,
+      second: inclineText,
+    );
     
     await _speakDirect(
       text: combinedText,
@@ -340,11 +343,14 @@ class VoiceGuideService {
     
     final levelText = levelTemplate.replaceAll('{n}', level.toString());
     final rpmText = rpmTemplate.replaceAll('{n}', rpm.toString());
-    final combinedText = '$levelText $rpmText';
+    final combinedText = _joinWithShortPause(
+      first: levelText,
+      second: rpmText,
+    );
     
     await _speakDirect(
       text: combinedText,
-      cacheKeySuffix: 'level_rpm:${level}_${rpm}',
+      cacheKeySuffix: 'level_rpm:${level}_$rpm',
     );
   }
 
@@ -444,6 +450,28 @@ class VoiceGuideService {
       out = out.replaceAll('{$k}', v);
     });
     return out;
+  }
+
+  String _joinWithShortPause({
+    required String first,
+    required String second,
+  }) {
+    final lang = _resolveLanguageCode(_locale);
+    final separator = _shortPauseSeparator(lang);
+    return '$first$separator$second';
+  }
+
+  String _shortPauseSeparator(String lang) {
+    switch (lang) {
+      case 'ja':
+        return '、';
+      case 'zh':
+        return '，';
+      case 'ar':
+        return '، ';
+      default:
+        return ', ';
+    }
   }
 
   String _resolveLanguageCode(Locale locale) {
