@@ -8,7 +8,8 @@ class AnalyticsService {
   static final AnalyticsService instance = AnalyticsService._();
 
   void logEvent(String name, [Map<String, Object?> params = const {}]) {
-    debugPrint('[analytics] $name ${params.isEmpty ? '' : params}');
+    if (kDebugMode) {
+      debugPrint('[analytics] $name ${params.isEmpty ? '' : params}');
+    }
   }
 }
-

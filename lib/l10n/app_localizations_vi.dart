@@ -305,7 +305,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get workoutComplete => 'Workout Complete';
 
   @override
-  String get totalWorkoutTime => 'Tổng Thời gian Thói quen';
+  String get totalWorkoutTime => 'Tổng thời gian';
 
   @override
   String get totalDistance => 'Tổng khoảng cách';
@@ -423,6 +423,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get lifetime => 'Suốt đời';
+
+  @override
+  String get freeTrial7Days => 'Dùng thử miễn phí 7 ngày';
 
   @override
   String get perMonth => '/tháng';

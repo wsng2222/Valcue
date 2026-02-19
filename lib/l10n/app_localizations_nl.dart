@@ -304,7 +304,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get workoutComplete => 'Workout voltooid';
 
   @override
-  String get totalWorkoutTime => 'Totale workouttijd';
+  String get totalWorkoutTime => 'Totale tijd';
 
   @override
   String get totalDistance => 'Totale afstand';
@@ -422,6 +422,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get lifetime => 'Levenslang';
+
+  @override
+  String get freeTrial7Days => '7 dagen gratis proef';
 
   @override
   String get perMonth => '/maand';
@@ -859,7 +862,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get benefitUnlimitedRoutinesNew => 'Onbeperkte Routine-bibliotheek';
 
   @override
-  String get benefitWeightFeature => 'Smart Weight Tracking & Analysis';
+  String get benefitWeightFeature => 'Slimme Gewichtstracking & Analyse';
 
   @override
   String get benefitNoAdsFocus => 'Advertentievrije Premium Ervaring';

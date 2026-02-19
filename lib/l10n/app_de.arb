@@ -122,7 +122,7 @@
   "pausedSubtitle": "Sie können fortfahren oder das Training beenden",
   "endWorkoutConfirmationMessage": "Wenn Sie jetzt beenden, wird das aktuelle Training beendet und Sie gelangen zum Zusammenfassungsbildschirm.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "Gesamte Trainingszeit",
+  "totalWorkoutTime": "Gesamtzeit",
   "totalDistance": "Gesamte Distanz",
   "averageRpm": "Durchschnittliche RPM",
   "averageLevel": "Durchschnittliches Level",
@@ -188,6 +188,10 @@
   "lifetime": "Lebenslang",
   "@lifetime": {
     "description": "Lebenslanges Plan-Label"
+  },
+  "freeTrial7Days": "7 Tage kostenlos testen",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/Monat",
   "@perMonth": {

@@ -124,9 +124,12 @@ class SecondaryOutlinedIconButton extends StatelessWidget {
             splashColor: Colors.black.withValues(alpha: 0.08),
             highlightColor: Colors.black.withValues(alpha: 0.05),
             child: Center(
-              child: DefaultTextStyle(
-                style: TextStyle(color: iconClr),
-                child: icon,
+              child: IconTheme(
+                data: IconThemeData(color: iconClr),
+                child: DefaultTextStyle(
+                  style: TextStyle(color: iconClr),
+                  child: icon,
+                ),
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
@@ -12,7 +13,51 @@ import '../../../widgets/bidi_safe_text.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 
+enum _RoutinePreviewResult {
+  saved,
+  upgrade,
+}
+
 class RoutinePreviewSheet {
+  static OverlayEntry? _toastEntry;
+
+  static void _showSnack(
+    BuildContext context,
+    String message, {
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    // Intentionally disabled per request.
+    return;
+
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    final rootOverlay = rootNavigator.overlay;
+    final overlay = rootOverlay ?? Overlay.of(context, rootOverlay: true);
+    if (overlay == null) {
+      return;
+    }
+
+    _toastEntry?.remove();
+    _toastEntry = null;
+
+    late OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (overlayContext) {
+        return _ToastOverlay(
+          message: message,
+          duration: duration,
+          onDismissed: () {
+            entry.remove();
+            if (_toastEntry == entry) {
+              _toastEntry = null;
+            }
+          },
+        );
+      },
+    );
+    _toastEntry = entry;
+    overlay.insert(entry);
+  }
+
   static void show(
     BuildContext context,
     RoutineTemplate template,
@@ -20,7 +65,7 @@ class RoutinePreviewSheet {
     bool closeParentOnSave = true,
   }) {
     final theme = Theme.of(context);
-    showModalBottomSheet(
+    showModalBottomSheet<_RoutinePreviewResult>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -30,8 +75,159 @@ class RoutinePreviewSheet {
       builder: (sheetContext) => _RoutinePreviewSheetContent(
         template: template,
         settingsProvider: settingsProvider,
-        parentContext: context,
-        closeParentOnSave: closeParentOnSave,
+      ),
+    ).then((result) {
+      if (!context.mounted || result == null) {
+        return;
+      }
+
+      if (result == _RoutinePreviewResult.saved) {
+        final l10n = AppLocalizations.of(context)!;
+        String routineSavedMessage() {
+          try {
+            return (l10n as dynamic).routineSaved ?? 'Routine saved';
+          } catch (e) {
+            return 'Routine saved';
+          }
+        }
+        _showSnack(context, routineSavedMessage());
+      }
+
+      if (closeParentOnSave && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+
+      if (result == _RoutinePreviewResult.upgrade) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          AppShell.navigateToPremiumTab();
+        });
+      }
+    });
+  }
+}
+
+class _ToastOverlay extends StatefulWidget {
+  final String message;
+  final Duration duration;
+  final VoidCallback onDismissed;
+
+  const _ToastOverlay({
+    required this.message,
+    required this.duration,
+    required this.onDismissed,
+  });
+
+  @override
+  State<_ToastOverlay> createState() => _ToastOverlayState();
+}
+
+class _ToastOverlayState extends State<_ToastOverlay> {
+  bool _visible = false;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _visible = true;
+        });
+      }
+    });
+
+    _timer = Timer(widget.duration, () {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _visible = false;
+      });
+      const fadeOut = Duration(milliseconds: 200);
+      Timer(fadeOut, () {
+        if (mounted) {
+          widget.onDismissed();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final snackTheme = theme.snackBarTheme;
+    final media = MediaQuery.of(context);
+    final behavior = snackTheme.behavior ?? SnackBarBehavior.fixed;
+    final isFloating = behavior == SnackBarBehavior.floating;
+    final margin = snackTheme.insetPadding ??
+        const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0);
+    final padding =
+        EdgeInsets.symmetric(
+          horizontal: isFloating ? 16.0 : 24.0,
+          vertical: 14.0,
+        );
+    final width = snackTheme.width;
+    final elevation = snackTheme.elevation ?? 6.0;
+    final backgroundColor =
+        snackTheme.backgroundColor ?? theme.colorScheme.inverseSurface;
+    final textStyle = snackTheme.contentTextStyle ??
+        theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onInverseSurface,
+        );
+    final shape = snackTheme.shape ??
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        );
+
+    final bottomOffset = media.padding.bottom +
+        media.viewInsets.bottom +
+        (isFloating ? margin.bottom : 0);
+    final left = isFloating ? margin.left : 0.0;
+    final right = isFloating ? margin.right : 0.0;
+
+    Widget toast = Material(
+      color: backgroundColor,
+      elevation: elevation,
+      shape: shape,
+      child: Padding(
+        padding: padding,
+        child: Text(
+          widget.message,
+          style: textStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
+    if (isFloating && width != null) {
+      toast = Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(width: width, child: toast),
+      );
+    }
+
+    return Positioned(
+      left: left,
+      right: right,
+      bottom: bottomOffset,
+      child: IgnorePointer(
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          opacity: _visible ? 1.0 : 0.0,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            offset: _visible ? Offset.zero : const Offset(0, 0.05),
+            child: toast,
+          ),
+        ),
       ),
     );
   }
@@ -40,14 +236,10 @@ class RoutinePreviewSheet {
 class _RoutinePreviewSheetContent extends StatelessWidget {
   final RoutineTemplate template;
   final AppSettingsProvider settingsProvider;
-  final BuildContext parentContext;
-  final bool closeParentOnSave;
 
   const _RoutinePreviewSheetContent({
     required this.template,
     required this.settingsProvider,
-    required this.parentContext,
-    required this.closeParentOnSave,
   });
 
   String _getLocalizedTitle(AppLocalizations l10n) {
@@ -260,19 +452,13 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
         (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
       ],
       onPrimary: () {
-        // Close dialog first
+        // Close premium sheet first
         Navigator.pop(context);
-        // Close the preview sheet (parent bottom sheet)
-        Navigator.pop(context);
-        // Close the recommended routines screen if applicable
-        if (closeParentOnSave &&
-            parentContext.mounted &&
-            Navigator.of(parentContext).canPop()) {
-          Navigator.pop(parentContext);
-        }
-        // Navigate to Premium tab (index 0) in AppShell after frame completes
+        // Close preview sheet on next frame to avoid double-pop glitches
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          AppShell.navigateToPremiumTab();
+          if (context.mounted) {
+            Navigator.pop(context, _RoutinePreviewResult.upgrade);
+          }
         });
       },
     );
@@ -282,24 +468,21 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     final provider = Provider.of<RoutineProvider>(context, listen: false);
     final l10n = AppLocalizations.of(context)!;
 
+    String routineAlreadySavedMessage() {
+      try {
+        return (l10n as dynamic).routineAlreadySaved ?? 'Routine already saved';
+      } catch (e) {
+        return 'Routine already saved';
+      }
+    }
+
     // Check if already saved
     if (_isTemplateSaved(provider)) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              (() {
-                try {
-                  return (l10n as dynamic).routineAlreadySaved ??
-                      'Routine already saved';
-                } catch (e) {
-                  return 'Routine already saved';
-                }
-              })(),
-            ),
-            duration: const Duration(seconds: 1),
-            behavior: SnackBarBehavior.floating,
-          ),
+        RoutinePreviewSheet._showSnack(
+          context,
+          routineAlreadySavedMessage(),
+          duration: const Duration(seconds: 1),
         );
         Navigator.pop(context);
       }
@@ -366,84 +549,8 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     await provider.addRoutine(routine);
 
     if (context.mounted) {
-      // Close the bottom sheet
-      Navigator.pop(context);
-
-      // Close the recommended routines screen
-      if (closeParentOnSave &&
-          parentContext.mounted &&
-          Navigator.of(parentContext).canPop()) {
-        Navigator.pop(parentContext);
-      }
-
-      // Show SnackBar on the root screen
-      // Use rootNavigator to find MaterialApp's ScaffoldMessenger
-      // This ensures it works even when RecommendedRoutinesScreen uses CupertinoPageScaffold
-      if (parentContext.mounted) {
-        // Get root Navigator which contains MaterialApp
-        final rootNavigator = Navigator.of(parentContext, rootNavigator: true);
-        final rootOverlay = rootNavigator.overlay;
-
-        if (rootOverlay != null && rootOverlay.mounted) {
-          // Use root overlay's context to find MaterialApp's ScaffoldMessenger
-          ScaffoldMessenger.of(rootOverlay.context).showSnackBar(
-            SnackBar(
-              content: Text(
-                (() {
-                  try {
-                    return (l10n as dynamic).routineSaved ?? 'Routine saved';
-                  } catch (e) {
-                    return 'Routine saved';
-                  }
-                })(),
-              ),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        } else {
-          // Fallback: try to find ScaffoldMessenger from parentContext
-          // This should traverse up to MaterialApp
-          try {
-            ScaffoldMessenger.of(parentContext).showSnackBar(
-              SnackBar(
-                content: Text(
-                  (() {
-                    try {
-                      return (l10n as dynamic).routineSaved ?? 'Routine saved';
-                    } catch (e) {
-                      return 'Routine saved';
-                    }
-                  })(),
-                ),
-                duration: const Duration(seconds: 2),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          } catch (e) {
-            // Last resort: use AppShell's context
-            final appShellState = AppShell.globalKey.currentState;
-            if (appShellState != null && appShellState.mounted) {
-              ScaffoldMessenger.of(appShellState.context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    (() {
-                      try {
-                        return (l10n as dynamic).routineSaved ??
-                            'Routine saved';
-                      } catch (e) {
-                        return 'Routine saved';
-                      }
-                    })(),
-                  ),
-                  duration: const Duration(seconds: 2),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
-          }
-        }
-      }
+      // Close the bottom sheet and return result to parent
+      Navigator.pop(context, _RoutinePreviewResult.saved);
     }
   }
 

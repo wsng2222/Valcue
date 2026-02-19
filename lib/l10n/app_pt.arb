@@ -122,7 +122,7 @@
   "pausedSubtitle": "Você pode continuar ou finalizar o treino",
   "endWorkoutConfirmationMessage": "Se você finalizar agora, o treino atual terminará e você será direcionado para a tela de resumo.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "Tempo Total de Treino",
+  "totalWorkoutTime": "Tempo total",
   "totalDistance": "Distância total",
   "averageRpm": "RPM Médio",
   "averageLevel": "Nível Médio",
@@ -188,6 +188,10 @@
   "lifetime": "Vitalício",
   "@lifetime": {
     "description": "Rótulo do plano vitalício"
+  },
+  "freeTrial7Days": "Teste grátis por 7 dias",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/mês",
   "@perMonth": {

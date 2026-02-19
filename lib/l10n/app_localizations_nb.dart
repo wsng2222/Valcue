@@ -304,7 +304,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get workoutComplete => 'Økt fullført';
 
   @override
-  String get totalWorkoutTime => 'Total treningstid';
+  String get totalWorkoutTime => 'Total tid';
 
   @override
   String get totalDistance => 'Total distanse';
@@ -421,6 +421,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get lifetime => 'Livstid';
+
+  @override
+  String get freeTrial7Days => '7 dagers gratis prøveperiode';
 
   @override
   String get perMonth => '/måned';
@@ -856,7 +859,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get benefitUnlimitedRoutinesNew => 'Ubegrenset Rutine-bibliotek';
 
   @override
-  String get benefitWeightFeature => 'Smart Weight Tracking & Analysis';
+  String get benefitWeightFeature => 'Smart Vektsporing & Analyse';
 
   @override
   String get benefitNoAdsFocus => 'Reklamefri Premium Opplevelse';

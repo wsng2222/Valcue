@@ -1351,6 +1351,7 @@ class _BottomControlBar extends StatelessWidget {
                     onRotate();
                   },
             size: _scaled(44),
+            iconColor: theme.colorScheme.onSurface,
             icon: Icon(
               Icons.rotate_right,
               size: _scaled(20),

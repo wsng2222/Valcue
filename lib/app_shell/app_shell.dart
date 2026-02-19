@@ -120,13 +120,21 @@ class AppShell extends StatefulWidget {
   State<AppShell> createState() => _AppShellState();
 
   // Global key to access AppShell state from anywhere
-  static final GlobalKey<_AppShellState> globalKey =
-      GlobalKey<_AppShellState>();
+  static final GlobalKey<State<AppShell>> globalKey =
+      GlobalKey<State<AppShell>>();
+
+  static _AppShellState? _currentShellState() {
+    final state = globalKey.currentState;
+    if (state is _AppShellState) {
+      return state;
+    }
+    return null;
+  }
 
   // Method to navigate to Premium tab (index 0)
   static void navigateToPremiumTab() {
     // Try to navigate immediately
-    final state = globalKey.currentState;
+    final state = _currentShellState();
     if (state != null) {
       state._changeTab(0);
       return;
@@ -135,7 +143,7 @@ class AppShell extends StatefulWidget {
     // If state is not available, try again after a short delay
     // This handles cases where the widget tree is still building
     Future.delayed(const Duration(milliseconds: 100), () {
-      final retryState = globalKey.currentState;
+      final retryState = _currentShellState();
       if (retryState != null) {
         retryState._changeTab(0);
       }
@@ -144,14 +152,14 @@ class AppShell extends StatefulWidget {
 
   // Method to navigate to Routine tab (index 1)
   static void navigateToRoutineTab() {
-    final state = globalKey.currentState;
+    final state = _currentShellState();
     if (state != null) {
       state._changeTab(1);
       return;
     }
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      final retryState = globalKey.currentState;
+      final retryState = _currentShellState();
       if (retryState != null) {
         retryState._changeTab(1);
       }
@@ -163,26 +171,20 @@ class AppShell extends StatefulWidget {
     // Set the target machine type before navigating
     RoutineListScreen.targetMachineType = machineType;
 
-    final state = globalKey.currentState;
+    final state = _currentShellState();
     if (state != null) {
       state._changeTab(1);
       // If RoutineListScreen is already built, navigate immediately
-      final routineState = RoutineListScreen.globalKey.currentState;
-      if (routineState != null) {
-        routineState.navigateToMachineType(machineType);
-      }
+      RoutineListScreen.navigateToMachineTypeIfReady(machineType);
       return;
     }
 
     // If state is null, set target and navigate when ready
     Future.microtask(() {
-      final retryState = globalKey.currentState;
+      final retryState = _currentShellState();
       if (retryState != null) {
         retryState._changeTab(1);
-        final routineState = RoutineListScreen.globalKey.currentState;
-        if (routineState != null) {
-          routineState.navigateToMachineType(machineType);
-        }
+        RoutineListScreen.navigateToMachineTypeIfReady(machineType);
       }
     });
   }

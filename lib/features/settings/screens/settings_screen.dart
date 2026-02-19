@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
@@ -794,6 +795,15 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   Timer? _aboutHoldTimer;
+  static const List<int> _weekdayOrder = <int>[
+    DateTime.monday,
+    DateTime.tuesday,
+    DateTime.wednesday,
+    DateTime.thursday,
+    DateTime.friday,
+    DateTime.saturday,
+    DateTime.sunday,
+  ];
 
   @override
   void dispose() {
@@ -823,6 +833,297 @@ class _SettingsScreenState extends State<SettingsScreen> {
           home: SizedBox.shrink(),
           forceShowOnboarding: true,
         ),
+      ),
+    );
+  }
+
+  String _localizedReminderText(
+    BuildContext context, {
+    required String en,
+    required String ko,
+    String? ja,
+    String? zh,
+  }) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    switch (languageCode) {
+      case 'ko':
+        return ko;
+      case 'ja':
+        return ja ?? en;
+      case 'zh':
+        return zh ?? en;
+      default:
+        return en;
+    }
+  }
+
+  String _weekdayLabel(BuildContext context, int weekday) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final date = DateTime(2024, 1, weekday);
+    return intl.DateFormat.E(locale).format(date);
+  }
+
+  String _formatReminderTime(BuildContext context, TimeOfDay time) {
+    return MaterialLocalizations.of(context).formatTimeOfDay(
+      time,
+      alwaysUse24HourFormat: false,
+    );
+  }
+
+  String _weekdaySummary(BuildContext context, List<int> weekdays) {
+    if (weekdays.length == 7) {
+      return _localizedReminderText(
+        context,
+        en: 'Every day',
+        ko: '매일',
+        ja: '毎日',
+        zh: '每天',
+      );
+    }
+    return weekdays.map((day) => _weekdayLabel(context, day)).join(', ');
+  }
+
+  String _reminderSubtitle(BuildContext context, AppSettingsProvider provider) {
+    if (!provider.workoutReminderEnabled) {
+      return _localizedReminderText(
+        context,
+        en: 'Off',
+        ko: '꺼짐',
+        ja: 'オフ',
+        zh: '关闭',
+      );
+    }
+
+    return '${_weekdaySummary(context, provider.workoutReminderWeekdays)}  '
+        '${_formatReminderTime(context, provider.workoutReminderTime)}';
+  }
+
+  Future<void> _pickReminderTime(
+    BuildContext context,
+    AppSettingsProvider provider,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    DateTime draft = DateTime(
+      2024,
+      1,
+      1,
+      provider.workoutReminderTime.hour,
+      provider.workoutReminderTime.minute,
+    );
+
+    final picked = await showModalBottomSheet<TimeOfDay>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
+      isScrollControlled: true,
+      enableDrag: false,
+      isDismissible: true,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (modalContext, setModalState) {
+            return SafeArea(
+              top: false,
+              bottom: true,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        _localizedReminderText(
+                          context,
+                          en: 'Select time',
+                          ko: '시간 선택',
+                          ja: '時刻を選択',
+                          zh: '选择时间',
+                        ),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 220,
+                      child: CupertinoTheme(
+                        data: CupertinoTheme.of(modalContext).copyWith(
+                          brightness: theme.brightness,
+                        ),
+                        child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.time,
+                          use24hFormat: false,
+                          initialDateTime: draft,
+                          onDateTimeChanged: (value) {
+                            setModalState(() {
+                              draft = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(sheetContext).pop(
+                              TimeOfDay(
+                                hour: draft.hour,
+                                minute: draft.minute,
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            l10n.done,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    if (picked == null) return;
+    await provider.updateWorkoutReminderTime(picked);
+  }
+
+  Widget _buildWeekdayChips(
+    BuildContext context,
+    AppSettingsProvider provider,
+  ) {
+    final selectedDays = provider.workoutReminderWeekdays.toSet();
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 56),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.brightness == Brightness.dark
+                    ? theme.colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.2)
+                    : theme.colorScheme.surfaceContainerLowest
+                        .withValues(alpha: 0.75),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: List.generate(_weekdayOrder.length * 2 - 1, (index) {
+                  if (index.isOdd) {
+                    return const SizedBox(width: 6);
+                  }
+
+                  final weekday = _weekdayOrder[index ~/ 2];
+                  final isSelected = selectedDays.contains(weekday);
+                  final label = _weekdayLabel(context, weekday);
+
+                  return Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        final updated = Set<int>.from(selectedDays);
+                        if (isSelected) {
+                          if (updated.length == 1) return;
+                          updated.remove(weekday);
+                        } else {
+                          updated.add(weekday);
+                        }
+                        provider.updateWorkoutReminderWeekdays(updated.toList());
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        curve: Curves.easeOutCubic,
+                        height: 42,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: isSelected
+                              ? LinearGradient(
+                                  colors: [
+                                    theme.colorScheme.primary,
+                                    theme.colorScheme.primary.withValues(
+                                      alpha: 0.78,
+                                    ),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : null,
+                          color: isSelected ? null : theme.colorScheme.surface,
+                          border: Border.all(
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.outlineVariant
+                                    .withValues(alpha: 0.55),
+                            width: 1.2,
+                          ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: theme.colorScheme.primary
+                                        .withValues(alpha: 0.28),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight:
+                                isSelected ? FontWeight.w800 : FontWeight.w600,
+                            color: isSelected
+                                ? theme.colorScheme.onPrimary
+                                : theme.colorScheme.onSurface,
+                            letterSpacing: -0.2,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -985,6 +1286,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       const SizedBox(height: 8),
+                      // Workout reminder section
+                      SettingsSection(
+                        children: [
+                          SettingsRow(
+                            icon: Icons.notifications_active_outlined,
+                            iconColor: Colors.redAccent,
+                            title: _localizedReminderText(
+                              context,
+                              en: 'Workout reminder',
+                              ko: '운동 알림',
+                              ja: 'ワークアウト通知',
+                              zh: '训练提醒',
+                            ),
+                            subtitle: _reminderSubtitle(context, provider),
+                            trailing: _buildPlatformSwitch(
+                              value: provider.workoutReminderEnabled,
+                              onChanged: (enabled) async {
+                                final success =
+                                    await provider.updateWorkoutReminderEnabled(
+                                  enabled,
+                                );
+                                if (success) return;
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(this.context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      _localizedReminderText(
+                                        this.context,
+                                        en: 'Notification permission is required.',
+                                        ko: '알림 권한이 필요합니다.',
+                                        ja: '通知権限が必要です。',
+                                        zh: '需要通知权限。',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            showDivider: false,
+                          ),
+                          if (provider.workoutReminderEnabled)
+                            _buildWeekdayChips(context, provider),
+                          if (provider.workoutReminderEnabled)
+                            SettingsRow(
+                              icon: Icons.schedule,
+                              iconColor: Colors.teal,
+                              title: _localizedReminderText(
+                                context,
+                                en: 'Time',
+                                ko: '시간',
+                                ja: '時刻',
+                                zh: '时间',
+                              ),
+                              subtitle: _formatReminderTime(
+                                context,
+                                provider.workoutReminderTime,
+                              ),
+                              trailing: Icon(
+                                Icons.chevron_right,
+                                size: 20,
+                                color: context.appColors.mutedText,
+                              ),
+                              onTap: () => _pickReminderTime(context, provider),
+                              showDivider: false,
+                            ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: theme.colorScheme.outlineVariant
+                              .withValues(alpha: 0.25),
+                          indent: 72,
+                        ),
+                      ),
                       // Language section
                       SettingsSection(
                         children: [

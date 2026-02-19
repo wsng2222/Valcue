@@ -396,7 +396,7 @@
   "@workoutComplete": {
     "description": "Workout complete title (always English)"
   },
-  "totalWorkoutTime": "Total Workout Time",
+  "totalWorkoutTime": "Total Time",
   "@totalWorkoutTime": {
     "description": "Total workout time label"
   },
@@ -553,6 +553,10 @@
   "lifetime": "Lifetime",
   "@lifetime": {
     "description": "Lifetime plan label"
+  },
+  "freeTrial7Days": "7-day free trial",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/month",
   "@perMonth": {
@@ -1036,4 +1040,3 @@
     }
   }
 }
-

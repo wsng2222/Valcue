@@ -22,6 +22,7 @@
   "benefitNoAdsFocus": "Esperienza Premium senza Pubblicità",
   "benefitUnlimitedRoutines": "Salvataggio routine illimitato",
   "benefitUnlimitedRoutinesNew": "Libreria di Routine Illimitata",
+  "benefitWeightFeature": "Monitoraggio e Analisi Intelligenti del Peso",
   "benefitVoiceCoaching": "Sistema di Coaching Vocale Premium",
   "benefitVoiceGuide": "Guida vocale della sessione",
   "bestValue": "Miglior valore",
@@ -117,6 +118,10 @@
   "paused": "IN PAUSA",
   "pausedSubtitle": "Puoi continuare o terminare l’allenamento",
   "pausedTitle": "In pausa",
+  "freeTrial7Days": "Prova gratuita di 7 giorni",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
+  },
   "perMonth": "/mese",
   "perYear": "/anno",
   "premium": "Premium",
@@ -239,7 +244,7 @@
   "toGo": "rimanenti",
   "today": "Oggi",
   "totalDistance": "Distanza totale",
-  "totalWorkoutTime": "Tempo totale di allenamento",
+  "totalWorkoutTime": "Tempo totale",
   "translationComingSoon": "La traduzione sarà disponibile in un aggiornamento futuro.",
   "treadmill": "Tapis roulant",
   "treadmillSession": "Sessione tapis roulant",

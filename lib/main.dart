@@ -17,6 +17,7 @@ import 'theme/app_theme.dart';
 import 'services/sound_service.dart';
 import 'services/ad_service.dart';
 import 'services/voice_guide_service.dart';
+import 'services/workout_reminder_service.dart';
 import 'onboarding/onboarding_flow.dart';
 
 void _debugLog(String message) {
@@ -46,6 +47,7 @@ void main() async {
 
   // Initialize sound service
   await SoundService().init();
+  await WorkoutReminderService.instance.init();
 
   // Initialize Google Mobile Ads (with error handling)
   try {

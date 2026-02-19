@@ -300,7 +300,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get workoutComplete => 'Workout Complete';
 
   @override
-  String get totalWorkoutTime => '총 운동 시간';
+  String get totalWorkoutTime => '총 시간';
 
   @override
   String get totalDistance => '총 거리';
@@ -413,6 +413,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get lifetime => '평생';
+
+  @override
+  String get freeTrial7Days => '7일 무료 트라이얼';
 
   @override
   String get perMonth => '/월';
@@ -788,7 +791,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get goal => '목표';
 
   @override
-  String get toGo => '남음';
+  String get toGo => '남았습니다';
 
   @override
   String get over => '초과';

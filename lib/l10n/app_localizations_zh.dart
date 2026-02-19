@@ -299,7 +299,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get workoutComplete => 'Workout Complete';
 
   @override
-  String get totalWorkoutTime => '总训练时间';
+  String get totalWorkoutTime => '总时间';
 
   @override
   String get totalDistance => '总距离';
@@ -412,6 +412,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lifetime => '终身';
+
+  @override
+  String get freeTrial7Days => '7天免费试用';
 
   @override
   String get perMonth => '/月';

@@ -1,6 +1,12 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+void _debugLog(String message) {
+  if (kDebugMode) {
+    debugPrint(message);
+  }
+}
 
 /// Service for managing interstitial ads (test ads only)
 /// 
@@ -39,28 +45,28 @@ class AdService {
   void loadAd() {
     // Prevent multiple simultaneous loads
     if (_isLoading || _isAdReady) {
-      debugPrint('AdService: Skipping load - isLoading: $_isLoading, isAdReady: $_isAdReady');
+      _debugLog('AdService: Skipping load - isLoading: $_isLoading, isAdReady: $_isAdReady');
       return;
     }
 
     try {
       _isLoading = true;
       _isAdReady = false;
-      debugPrint('AdService: Loading ad with unit ID: $_adUnitId');
+      _debugLog('AdService: Loading ad with unit ID: $_adUnitId');
 
       InterstitialAd.load(
       adUnitId: _adUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
-          debugPrint('AdService: Ad loaded successfully!');
+          _debugLog('AdService: Ad loaded successfully!');
           _interstitialAd = ad;
           _isAdReady = true;
           _isLoading = false;
           // Don't set callbacks here - they will be set in showAd()
         },
         onAdFailedToLoad: (LoadAdError error) {
-          debugPrint('AdService: Ad failed to load: ${error.code} - ${error.message}');
+          _debugLog('AdService: Ad failed to load: ${error.code} - ${error.message}');
           // Ad failed to load - this is expected sometimes
           // Just reset state and allow workout to proceed without ad
           _interstitialAd = null;
@@ -71,7 +77,7 @@ class AdService {
       ),
     );
     } catch (e) {
-      debugPrint('AdService: Exception while loading ad: $e');
+      _debugLog('AdService: Exception while loading ad: $e');
       // If ad loading fails completely, just reset state
       // App should continue to work without ads
       _interstitialAd = null;
@@ -85,10 +91,10 @@ class AdService {
   /// Returns true if ad was shown, false if ad was not ready or failed to show.
   /// The [onAdClosed] callback is called when the ad is dismissed or fails to show.
   bool showAd({VoidCallback? onAdClosed}) {
-    debugPrint('AdService: showAd called - isAdReady: $isAdReady, _interstitialAd: ${_interstitialAd != null}');
+    _debugLog('AdService: showAd called - isAdReady: $isAdReady, _interstitialAd: ${_interstitialAd != null}');
     
     if (!isAdReady || _interstitialAd == null) {
-      debugPrint('AdService: Ad not ready, proceeding without ad');
+      _debugLog('AdService: Ad not ready, proceeding without ad');
       // Ad not ready, call callback immediately to proceed with workout
       onAdClosed?.call();
       return false;
@@ -97,7 +103,7 @@ class AdService {
     try {
       final ad = _interstitialAd;
       if (ad != null) {
-        debugPrint('AdService: Attempting to show ad');
+        _debugLog('AdService: Attempting to show ad');
         
         // Store the callback to ensure it's called
         final callback = onAdClosed;
@@ -105,7 +111,7 @@ class AdService {
         // Set callback for when ad is closed - MUST be set before show()
         ad.fullScreenContentCallback = FullScreenContentCallback(
           onAdDismissedFullScreenContent: (InterstitialAd ad) {
-            debugPrint('AdService: Ad dismissed in showAd - calling onAdClosed');
+            _debugLog('AdService: Ad dismissed in showAd - calling onAdClosed');
             ad.dispose();
             _interstitialAd = null;
             _isAdReady = false;
@@ -117,7 +123,7 @@ class AdService {
             loadAd();
           },
           onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-            debugPrint('AdService: Ad failed to show in showAd: ${error.message} - calling onAdClosed');
+            _debugLog('AdService: Ad failed to show in showAd: ${error.message} - calling onAdClosed');
             ad.dispose();
             _interstitialAd = null;
             _isAdReady = false;
@@ -129,17 +135,17 @@ class AdService {
             loadAd();
           },
           onAdShowedFullScreenContent: (InterstitialAd ad) {
-            debugPrint('AdService: Ad showed in showAd');
+            _debugLog('AdService: Ad showed in showAd');
           },
         );
         
         // Show the ad
         ad.show();
-        debugPrint('AdService: ad.show() called');
+        _debugLog('AdService: ad.show() called');
         return true;
       }
     } catch (e) {
-      debugPrint('AdService: Exception while showing ad: $e');
+      _debugLog('AdService: Exception while showing ad: $e');
       // If anything goes wrong, ensure workout can proceed
       _interstitialAd?.dispose();
       _interstitialAd = null;
@@ -147,7 +153,7 @@ class AdService {
     }
 
     // If we get here, ad wasn't shown - proceed with workout
-    debugPrint('AdService: Ad was not shown, proceeding without ad');
+    _debugLog('AdService: Ad was not shown, proceeding without ad');
     onAdClosed?.call();
     return false;
   }
@@ -160,4 +166,3 @@ class AdService {
     _isLoading = false;
   }
 }
-

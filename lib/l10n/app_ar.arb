@@ -122,7 +122,7 @@
   "pausedSubtitle": "يمكنك المتابعة أو إنهاء التمرين",
   "endWorkoutConfirmationMessage": "إذا أنهيت الآن، سينتهي التمرين الحالي وستنتقل إلى شاشة الملخص.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "إجمالي وقت التمرين",
+  "totalWorkoutTime": "إجمالي الوقت",
   "totalDistance": "إجمالي المسافة",
   "averageRpm": "متوسط RPM",
   "averageLevel": "المستوى المتوسط",
@@ -188,6 +188,10 @@
   "lifetime": "مدى الحياة",
   "@lifetime": {
     "description": "تسمية خطة مدى الحياة"
+  },
+  "freeTrial7Days": "تجربة مجانية لمدة 7 أيام",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/شهر",
   "@perMonth": {

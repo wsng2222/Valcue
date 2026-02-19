@@ -122,7 +122,7 @@
   "pausedSubtitle": "계속하거나 운동을 종료할 수 있어요",
   "endWorkoutConfirmationMessage": "종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "총 운동 시간",
+  "totalWorkoutTime": "총 시간",
   "totalDistance": "총 거리",
   "averageRpm": "평균 RPM",
   "averageLevel": "평균 레벨",
@@ -184,6 +184,10 @@
   "lifetime": "평생",
   "@lifetime": {
     "description": "평생 플랜 레이블"
+  },
+  "freeTrial7Days": "7일 무료 트라이얼",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/월",
   "@perMonth": {
@@ -360,7 +364,7 @@
   "workout": "운동",
   "workouts": "운동",
   "goal": "목표",
-  "toGo": "남음",
+  "toGo": "남았습니다",
   "over": "초과",
   "last": "이전",
   "newLabel": "새로운",
@@ -470,4 +474,3 @@
     }
   }
 }
-

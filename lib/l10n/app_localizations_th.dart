@@ -302,7 +302,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get workoutComplete => 'ออกกำลังกายเสร็จสิ้น';
 
   @override
-  String get totalWorkoutTime => 'เวลารวมในการออกกำลังกาย';
+  String get totalWorkoutTime => 'เวลารวม';
 
   @override
   String get totalDistance => 'ระยะทางรวม';
@@ -419,6 +419,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get lifetime => 'ตลอดชีวิต';
+
+  @override
+  String get freeTrial7Days => 'ทดลองใช้ฟรี 7 วัน';
 
   @override
   String get perMonth => '/เดือน';
@@ -851,7 +854,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get benefitUnlimitedRoutinesNew => 'ไลบรารีรูทีนไม่จำกัด';
 
   @override
-  String get benefitWeightFeature => 'Smart Weight Tracking & Analysis';
+  String get benefitWeightFeature => 'ติดตามและวิเคราะห์น้ำหนักแบบสมาร์ท';
 
   @override
   String get benefitNoAdsFocus => 'ประสบการณ์พรีเมียมไร้โฆษณา';

@@ -304,7 +304,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get workoutComplete => 'Workout Complete';
 
   @override
-  String get totalWorkoutTime => 'Tiempo Total de Entrenamiento';
+  String get totalWorkoutTime => 'Tiempo total';
 
   @override
   String get totalDistance => 'Distancia total';
@@ -422,6 +422,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get lifetime => 'Vitalicio';
+
+  @override
+  String get freeTrial7Days => 'Prueba gratis de 7 días';
 
   @override
   String get perMonth => '/mes';
@@ -681,7 +684,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get timeframe90D => '90D';
 
   @override
-  String get timeframeAll => 'TODO';
+  String get timeframeAll => 'Todo';
 
   @override
   String get history => 'Historial';

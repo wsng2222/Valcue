@@ -122,7 +122,7 @@
   "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc thói quen",
   "endWorkoutConfirmationMessage": "Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "Tổng Thời gian Thói quen",
+  "totalWorkoutTime": "Tổng thời gian",
   "totalDistance": "Tổng khoảng cách",
   "averageRpm": "RPM Trung Bình",
   "averageLevel": "Mức Trung Bình",
@@ -188,6 +188,10 @@
   "lifetime": "Suốt đời",
   "@lifetime": {
     "description": "Nhãn gói suốt đời"
+  },
+  "freeTrial7Days": "Dùng thử miễn phí 7 ngày",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/tháng",
   "@perMonth": {

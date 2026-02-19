@@ -22,6 +22,7 @@
   "benefitNoAdsFocus": "ประสบการณ์พรีเมียมไร้โฆษณา",
   "benefitUnlimitedRoutines": "บันทึกรูทีนได้ไม่จำกัด",
   "benefitUnlimitedRoutinesNew": "ไลบรารีรูทีนไม่จำกัด",
+  "benefitWeightFeature": "ติดตามและวิเคราะห์น้ำหนักแบบสมาร์ท",
   "benefitVoiceCoaching": "ระบบโค้ชเสียงพรีเมียม",
   "benefitVoiceGuide": "ฟีเจอร์ไกด์เสียงของเซสชัน",
   "bestValue": "คุ้มค่าที่สุด",
@@ -119,6 +120,10 @@
   "paused": "หยุดชั่วคราว",
   "pausedSubtitle": "คุณสามารถทำต่อหรือจบการออกกำลังกายได้",
   "pausedTitle": "หยุดชั่วคราว",
+  "freeTrial7Days": "ทดลองใช้ฟรี 7 วัน",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
+  },
   "perMonth": "/เดือน",
   "perYear": "/ปี",
   "premium": "พรีเมียม",
@@ -241,7 +246,7 @@
   "toGo": "ที่เหลือ",
   "today": "วันนี้",
   "totalDistance": "ระยะทางรวม",
-  "totalWorkoutTime": "เวลารวมในการออกกำลังกาย",
+  "totalWorkoutTime": "เวลารวม",
   "translationComingSoon": "จะมีคำแปลในอัปเดตถัดไป",
   "treadmill": "ลู่วิ่ง",
   "treadmillSession": "เซสชันลู่วิ่ง",

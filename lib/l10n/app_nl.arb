@@ -22,6 +22,7 @@
   "benefitNoAdsFocus": "Advertentievrije Premium Ervaring",
   "benefitUnlimitedRoutines": "Onbeperkt routines opslaan",
   "benefitUnlimitedRoutinesNew": "Onbeperkte Routine-bibliotheek",
+  "benefitWeightFeature": "Slimme Gewichtstracking & Analyse",
   "benefitVoiceCoaching": "Premium Spraakcoaching Systeem",
   "benefitVoiceGuide": "Sessiespraakgids-functie",
   "bestValue": "Beste waarde",
@@ -119,6 +120,10 @@
   "paused": "GEPAUZEERD",
   "pausedSubtitle": "Je kunt doorgaan of de workout beëindigen",
   "pausedTitle": "Gepauzeerd",
+  "freeTrial7Days": "7 dagen gratis proef",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
+  },
   "perMonth": "/maand",
   "perYear": "/jaar",
   "premium": "Premium",
@@ -241,7 +246,7 @@
   "toGo": "te gaan",
   "today": "Vandaag",
   "totalDistance": "Totale afstand",
-  "totalWorkoutTime": "Totale workouttijd",
+  "totalWorkoutTime": "Totale tijd",
   "translationComingSoon": "Vertaling wordt beschikbaar in een toekomstige update.",
   "treadmill": "Loopband",
   "treadmillSession": "Loopbandsessie",

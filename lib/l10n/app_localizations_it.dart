@@ -306,7 +306,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get workoutComplete => 'Allenamento completato';
 
   @override
-  String get totalWorkoutTime => 'Tempo totale di allenamento';
+  String get totalWorkoutTime => 'Tempo totale';
 
   @override
   String get totalDistance => 'Distanza totale';
@@ -423,6 +423,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get lifetime => 'Vitalizio';
+
+  @override
+  String get freeTrial7Days => 'Prova gratuita di 7 giorni';
 
   @override
   String get perMonth => '/mese';
@@ -860,7 +863,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get benefitUnlimitedRoutinesNew => 'Libreria di Routine Illimitata';
 
   @override
-  String get benefitWeightFeature => 'Smart Weight Tracking & Analysis';
+  String get benefitWeightFeature =>
+      'Monitoraggio e Analisi Intelligenti del Peso';
 
   @override
   String get benefitNoAdsFocus => 'Esperienza Premium senza Pubblicità';

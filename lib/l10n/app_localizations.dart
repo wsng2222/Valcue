@@ -693,7 +693,7 @@ abstract class AppLocalizations {
   /// Total workout time label
   ///
   /// In en, this message translates to:
-  /// **'Total Workout Time'**
+  /// **'Total Time'**
   String get totalWorkoutTime;
 
   /// Total distance label
@@ -911,6 +911,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lifetime'**
   String get lifetime;
+
+  /// 7-day free trial label
+  ///
+  /// In en, this message translates to:
+  /// **'7-day free trial'**
+  String get freeTrial7Days;
 
   /// Per month suffix
   ///

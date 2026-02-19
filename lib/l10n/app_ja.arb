@@ -122,7 +122,7 @@
   "pausedSubtitle": "続けるか、ワークアウトを終了できます",
   "endWorkoutConfirmationMessage": "終了すると、現在進行中のワークアウトが終了し、要約画面に移動します。",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "総ワークアウト時間",
+  "totalWorkoutTime": "合計時間",
   "totalDistance": "総距離",
   "averageRpm": "平均RPM",
   "averageLevel": "平均レベル",
@@ -188,6 +188,10 @@
   "lifetime": "生涯",
   "@lifetime": {
     "description": "生涯プランラベル"
+  },
+  "freeTrial7Days": "7日間無料トライアル",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/月",
   "@perMonth": {

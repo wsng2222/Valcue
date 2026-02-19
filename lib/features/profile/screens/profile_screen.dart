@@ -2211,6 +2211,72 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
       builder: (context, provider, child) {
         final theme = Theme.of(context);
         final isDark = theme.brightness == Brightness.dark;
+        final appColors = theme.extension<AppColors>()!;
+
+        Widget buildHeader() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.trend,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              Flexible(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: PlatformInfo.isIOS
+                      ? ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 240),
+                          child: _TimeframeSelector(
+                            selectedIndex: _selectedTimeframe,
+                            onSelect: (index) {
+                              setState(() {
+                                _selectedTimeframe = index;
+                              });
+                            },
+                          ),
+                        )
+                      : _TimeframeSelector(
+                          selectedIndex: _selectedTimeframe,
+                          onSelect: (index) {
+                            setState(() {
+                              _selectedTimeframe = index;
+                            });
+                          },
+                        ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        Widget buildTrendCard({required Widget body}) {
+          return Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.grey.shade300,
+                width: 1,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildHeader(),
+                const SizedBox(height: 16),
+                body,
+              ],
+            ),
+          );
+        }
 
         // Filter entries by timeframe
         final now = DateTime.now();
@@ -2219,7 +2285,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           case 0: // 7D
             final cutoff = now.subtract(const Duration(days: 7));
             chartEntries = provider.entries
-                .where((e) => e.dateTime.isAfter(cutoff))
+                .where((e) => !e.dateTime.isBefore(cutoff))
                 .toList()
                 .reversed
                 .toList();
@@ -2227,7 +2293,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           case 1: // 30D
             final cutoff = now.subtract(const Duration(days: 30));
             chartEntries = provider.entries
-                .where((e) => e.dateTime.isAfter(cutoff))
+                .where((e) => !e.dateTime.isBefore(cutoff))
                 .toList()
                 .reversed
                 .toList();
@@ -2235,7 +2301,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           case 2: // 90D
             final cutoff = now.subtract(const Duration(days: 90));
             chartEntries = provider.entries
-                .where((e) => e.dateTime.isAfter(cutoff))
+                .where((e) => !e.dateTime.isBefore(cutoff))
                 .toList()
                 .reversed
                 .toList();
@@ -2246,7 +2312,24 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
             break;
         }
 
-        if (chartEntries.isEmpty) return const SizedBox.shrink();
+        if (chartEntries.length < 2) {
+          return buildTrendCard(
+            body: SizedBox(
+              height: 100,
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context)!.addOneMoreRecordToSeeTrend,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: appColors.mutedText,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
 
         // Find min/max for scaling
         final weights = chartEntries.map((e) => e.weightKg).toList();
@@ -2255,73 +2338,18 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
         final range = maxWeight - minWeight;
         final padding = range > 0 ? range * 0.1 : 1.0;
 
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.1)
-                  : Colors.grey.shade300,
-              width: 1,
+        return buildTrendCard(
+          body: SizedBox(
+            height: 100,
+            child: CustomPaint(
+              painter: _WeightSparklinePainter(
+                entries: chartEntries,
+                minWeight: minWeight - padding,
+                maxWeight: maxWeight + padding,
+                color: theme.colorScheme.primary,
+              ),
+              size: Size.infinite,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.trend,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  Flexible(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: PlatformInfo.isIOS
-                          ? ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 240),
-                              child: _TimeframeSelector(
-                                selectedIndex: _selectedTimeframe,
-                                onSelect: (index) {
-                                  setState(() {
-                                    _selectedTimeframe = index;
-                                  });
-                                },
-                              ),
-                            )
-                          : _TimeframeSelector(
-                              selectedIndex: _selectedTimeframe,
-                              onSelect: (index) {
-                                setState(() {
-                                  _selectedTimeframe = index;
-                                });
-                              },
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 100,
-                child: CustomPaint(
-                  painter: _WeightSparklinePainter(
-                    entries: chartEntries,
-                    minWeight: minWeight - padding,
-                    maxWeight: maxWeight + padding,
-                    color: theme.colorScheme.primary,
-                  ),
-                  size: Size.infinite,
-                ),
-              ),
-            ],
           ),
         );
       },

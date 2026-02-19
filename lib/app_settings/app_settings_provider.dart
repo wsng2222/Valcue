@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'app_settings_model.dart';
 import 'app_settings_store.dart';
 import '../services/sound_service.dart';
+import '../services/workout_reminder_service.dart';
 
 class AppSettingsProvider with ChangeNotifier {
   final AppSettingsStore _store = AppSettingsStore();
@@ -11,8 +12,22 @@ class AppSettingsProvider with ChangeNotifier {
 
   // Supported languages (same as in LanguageHelper)
   static const List<String> _supportedLanguages = [
-    'ko', 'en', 'ja', 'zh', 'es', 'fr', 'de', 'it', 'pt', 'ru',
-    'ar', 'vi', 'th', 'nl', 'nb', 'da',
+    'ko',
+    'en',
+    'ja',
+    'zh',
+    'es',
+    'fr',
+    'de',
+    'it',
+    'pt',
+    'ru',
+    'ar',
+    'vi',
+    'th',
+    'nl',
+    'nb',
+    'da',
   ];
 
   AppSettings get settings => _settings;
@@ -22,9 +37,17 @@ class AppSettingsProvider with ChangeNotifier {
   String get measurement => _settings.measurement;
   String get weightUnit => _settings.weightUnit;
   bool get isPremium => _settings.isPremium;
-  bool get voiceGuideEnabled => _settings.voiceGuideEnabled;
+  bool get voiceGuideEnabled =>
+      _settings.isPremium ? _settings.voiceGuideEnabled : false;
   String get themeMode => _settings.themeMode;
   bool get soundEffectsEnabled => _settings.soundEffectsEnabled;
+  bool get workoutReminderEnabled => _settings.workoutReminderEnabled;
+  List<int> get workoutReminderWeekdays =>
+      List<int>.unmodifiable(_settings.workoutReminderWeekdays);
+  TimeOfDay get workoutReminderTime => TimeOfDay(
+        hour: _settings.workoutReminderHour,
+        minute: _settings.workoutReminderMinute,
+      );
 
   /// Resolve language: use device language if supported, otherwise fallback to English
   String _getResolvedLanguage() {
@@ -34,7 +57,7 @@ class AppSettingsProvider with ChangeNotifier {
     // Get device language
     final deviceLocale = ui.PlatformDispatcher.instance.locale;
     final deviceLang = deviceLocale.languageCode;
-    
+
     // If device language is supported, use it; otherwise fallback to English
     if (_supportedLanguages.contains(deviceLang)) {
       return deviceLang;
@@ -57,6 +80,7 @@ class AppSettingsProvider with ChangeNotifier {
     _settings = await _store.loadSettings();
     // Sync sound service with loaded settings
     SoundService().setEnabled(_settings.soundEffectsEnabled);
+    await _syncWorkoutReminder();
     _isLoading = false;
     notifyListeners();
   }
@@ -64,6 +88,7 @@ class AppSettingsProvider with ChangeNotifier {
   Future<void> updateLanguage(String language) async {
     _settings = _settings.copyWith(language: language);
     await _store.saveSettings(_settings);
+    await _syncWorkoutReminder();
     notifyListeners();
   }
 
@@ -111,6 +136,46 @@ class AppSettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> updateWorkoutReminderEnabled(bool enabled) async {
+    if (enabled) {
+      final granted =
+          await WorkoutReminderService.instance.requestPermissions();
+      if (!granted) {
+        return false;
+      }
+    }
+
+    _settings = _settings.copyWith(workoutReminderEnabled: enabled);
+    await _store.saveSettings(_settings);
+    await _syncWorkoutReminder();
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> updateWorkoutReminderWeekdays(List<int> weekdays) async {
+    final normalized = weekdays
+        .where((day) => day >= DateTime.monday && day <= DateTime.sunday)
+        .toSet()
+        .toList()
+      ..sort();
+    if (normalized.isEmpty) return;
+
+    _settings = _settings.copyWith(workoutReminderWeekdays: normalized);
+    await _store.saveSettings(_settings);
+    await _syncWorkoutReminder();
+    notifyListeners();
+  }
+
+  Future<void> updateWorkoutReminderTime(TimeOfDay time) async {
+    _settings = _settings.copyWith(
+      workoutReminderHour: time.hour,
+      workoutReminderMinute: time.minute,
+    );
+    await _store.saveSettings(_settings);
+    await _syncWorkoutReminder();
+    notifyListeners();
+  }
+
   /// Get ThemeMode enum from stored string value
   /// Only supports 'light' and 'dark' (system option removed)
   ThemeMode get themeModeEnum {
@@ -134,5 +199,14 @@ class AppSettingsProvider with ChangeNotifier {
     }
     return '${speedKmh.toStringAsFixed(1)} km/h';
   }
-}
 
+  Future<void> _syncWorkoutReminder() async {
+    await WorkoutReminderService.instance.syncSchedule(
+      enabled: _settings.workoutReminderEnabled,
+      weekdays: _settings.workoutReminderWeekdays,
+      hour: _settings.workoutReminderHour,
+      minute: _settings.workoutReminderMinute,
+      languageCode: _getResolvedLanguage(),
+    );
+  }
+}

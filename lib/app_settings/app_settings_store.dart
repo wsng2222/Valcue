@@ -13,7 +13,27 @@ class AppSettingsStore {
         return AppSettings.defaultSettings;
       }
       final Map<String, dynamic> json = jsonDecode(jsonString);
-      return AppSettings.fromJson(json);
+      var settings = AppSettings.fromJson(json);
+      var changed = false;
+
+      // Ensure default ON for sound effects when missing in legacy data.
+      if (!json.containsKey('soundEffectsEnabled')) {
+        settings = settings.copyWith(soundEffectsEnabled: true);
+        changed = true;
+      }
+
+      // Enforce premium gate: voice guide cannot be ON without premium.
+      if (!settings.isPremium && settings.voiceGuideEnabled) {
+        settings = settings.copyWith(voiceGuideEnabled: false);
+        changed = true;
+      }
+
+      if (changed) {
+        final updatedJsonString = jsonEncode(settings.toJson());
+        await prefs.setString(_storageKey, updatedJsonString);
+      }
+
+      return settings;
     } catch (e) {
       return AppSettings.defaultSettings;
     }
@@ -25,4 +45,3 @@ class AppSettingsStore {
     await prefs.setString(_storageKey, jsonString);
   }
 }
-

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/routine.dart';
 
 class RoutineStorage {
   static const String _storageKey = 'routines';
+  static bool diagnosticsEnabled = false;
 
   /// Drift Guard: Compute JSON snapshot of intervals
   /// Returns a normalized JSON string for comparison
@@ -83,11 +85,13 @@ class RoutineStorage {
           .map((json) => Routine.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      // Debug: Verify decimal preservation after load
-      for (final routine in routines) {
-        for (int i = 0; i < routine.intervals.length; i++) {
-          final interval = routine.intervals[i];
-          print('[DEBUG LOAD] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+      if (kDebugMode && diagnosticsEnabled) {
+        for (final routine in routines) {
+          for (int i = 0; i < routine.intervals.length; i++) {
+            final interval = routine.intervals[i];
+            print(
+                '[DEBUG LOAD] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+          }
         }
       }
 
@@ -98,53 +102,53 @@ class RoutineStorage {
   }
 
   Future<void> saveRoutines(List<Routine> routines) async {
-    // DRIFT GUARD: Compute snapshot BEFORE save
-    final beforeSnapshot = _computeIntervalJsonSnapshot(routines);
-
     final prefs = await SharedPreferences.getInstance();
     final jsonList = routines.map((r) => r.toJson()).toList();
     final jsonString = json.encode(jsonList);
 
-    // Debug: Verify decimal preservation
-    for (final routine in routines) {
-      for (int i = 0; i < routine.intervals.length; i++) {
-        final interval = routine.intervals[i];
-        print('[DEBUG SAVE] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+    if (kDebugMode && diagnosticsEnabled) {
+      final beforeSnapshot = _computeIntervalJsonSnapshot(routines);
+      for (final routine in routines) {
+        for (int i = 0; i < routine.intervals.length; i++) {
+          final interval = routine.intervals[i];
+          print(
+              '[DEBUG SAVE] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
+        }
       }
-    }
 
-    // Idempotency check: encode -> decode -> encode must produce identical JSON
-    try {
-      final decoded = json.decode(jsonString) as List<dynamic>;
-      final reEncoded = json.encode(decoded);
-      if (jsonString != reEncoded) {
-        print(
-            '[ERROR] Idempotency check FAILED: JSON changed after encode->decode->encode');
-        print('[ERROR] Original: $jsonString');
-        print('[ERROR] Re-encoded: $reEncoded');
-        assert(false, 'JSON idempotency check failed - numbers may drift');
-      } else {
-        print('[DEBUG] Idempotency check PASSED: JSON unchanged');
+      // Idempotency check: encode -> decode -> encode must produce identical JSON
+      try {
+        final decoded = json.decode(jsonString) as List<dynamic>;
+        final reEncoded = json.encode(decoded);
+        if (jsonString != reEncoded) {
+          print(
+              '[ERROR] Idempotency check FAILED: JSON changed after encode->decode->encode');
+          print('[ERROR] Original: $jsonString');
+          print('[ERROR] Re-encoded: $reEncoded');
+          assert(false, 'JSON idempotency check failed - numbers may drift');
+        } else {
+          print('[DEBUG] Idempotency check PASSED: JSON unchanged');
+        }
+      } catch (e) {
+        print('[ERROR] Idempotency check exception: $e');
+        assert(false, 'Idempotency check exception: $e');
       }
-    } catch (e) {
-      print('[ERROR] Idempotency check exception: $e');
-      assert(false, 'Idempotency check exception: $e');
+
+      // DRIFT GUARD: After save, reload and compare
+      final reloadedRoutines = await loadRoutines();
+      final afterSnapshot = _computeIntervalJsonSnapshot(reloadedRoutines);
+
+      if (!_jsonDeepEquals(beforeSnapshot, afterSnapshot)) {
+        print('[ERROR] DRIFT DETECTED: Interval values changed after save/load!');
+        print('[ERROR] Before save: $beforeSnapshot');
+        print('[ERROR] After reload: $afterSnapshot');
+        assert(false, 'Drift detected - interval values changed');
+      } else {
+        print('[DEBUG] Drift guard PASSED: No value changes detected');
+      }
     }
 
     await prefs.setString(_storageKey, jsonString);
-
-    // DRIFT GUARD: After save, reload and compare
-    final reloadedRoutines = await loadRoutines();
-    final afterSnapshot = _computeIntervalJsonSnapshot(reloadedRoutines);
-
-    if (!_jsonDeepEquals(beforeSnapshot, afterSnapshot)) {
-      print('[ERROR] DRIFT DETECTED: Interval values changed after save/load!');
-      print('[ERROR] Before save: $beforeSnapshot');
-      print('[ERROR] After reload: $afterSnapshot');
-      assert(false, 'Drift detected - interval values changed');
-    } else {
-      print('[DEBUG] Drift guard PASSED: No value changes detected');
-    }
   }
 
   Future<void> addRoutine(Routine routine) async {

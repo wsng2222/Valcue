@@ -100,11 +100,18 @@ class RoutineListScreen extends StatefulWidget {
   const RoutineListScreen({super.key});
 
   // Global key to access RoutineListScreen state from anywhere
-  static final GlobalKey<_RoutineListScreenState> globalKey =
-      GlobalKey<_RoutineListScreenState>();
+  static final GlobalKey<State<RoutineListScreen>> globalKey =
+      GlobalKey<State<RoutineListScreen>>();
 
   // Static variable to store the target machine type for navigation
   static MachineType? targetMachineType;
+
+  static void navigateToMachineTypeIfReady(MachineType machineType) {
+    final state = globalKey.currentState;
+    if (state is _RoutineListScreenState) {
+      state.navigateToMachineType(machineType);
+    }
+  }
 
   @override
   State<RoutineListScreen> createState() => _RoutineListScreenState();
@@ -1283,8 +1290,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           ((value - minMetric) / (maxMetric - minMetric)).clamp(0.0, 1.0);
       final eased = Curves.easeInOutCubic.transform(normalized);
       // Higher intensity -> closer to primary (darker), lower -> closer to surface.
-      final mixLow = 0.62;
-      final mixHigh = 0.08;
+      const mixLow = 0.62;
+      const mixHigh = 0.08;
       final mix = (mixLow - (mixLow - mixHigh) * eased).clamp(0.06, 0.7);
       return Color.lerp(baseColor, surfaceColor, mix) ?? baseColor;
     }

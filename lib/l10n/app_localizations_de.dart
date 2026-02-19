@@ -309,7 +309,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get workoutComplete => 'Workout Complete';
 
   @override
-  String get totalWorkoutTime => 'Gesamte Trainingszeit';
+  String get totalWorkoutTime => 'Gesamtzeit';
 
   @override
   String get totalDistance => 'Gesamte Distanz';
@@ -427,6 +427,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get lifetime => 'Lebenslang';
+
+  @override
+  String get freeTrial7Days => '7 Tage kostenlos testen';
 
   @override
   String get perMonth => '/Monat';

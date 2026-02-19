@@ -122,7 +122,7 @@
   "pausedSubtitle": "您可以继续或结束训练",
   "endWorkoutConfirmationMessage": "如果现在结束，当前训练将完成，您将转到摘要屏幕。",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "总训练时间",
+  "totalWorkoutTime": "总时间",
   "totalDistance": "总距离",
   "averageRpm": "平均RPM",
   "averageLevel": "平均等级",
@@ -188,6 +188,10 @@
   "lifetime": "终身",
   "@lifetime": {
     "description": "终身计划标签"
+  },
+  "freeTrial7Days": "7天免费试用",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/月",
   "@perMonth": {

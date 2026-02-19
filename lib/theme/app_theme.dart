@@ -145,7 +145,7 @@ class AppTheme {
     ),
     extensions: const <ThemeExtension<dynamic>>[
       AppColors(
-        surfaceElevated: Color(0xFFF0F0F0),
+        surfaceElevated: Color(0xFFFFFFFF),
         border: Color(0xFFE5E5EA),
         mutedText: Color(0xFF8E8E93),
         danger: Color(0xFFFF3B30),

@@ -60,7 +60,6 @@ class _PremiumBottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
@@ -70,81 +69,88 @@ class _PremiumBottomSheetContent extends StatelessWidget {
           topRight: Radius.circular(30),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Drag handle
-            Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Drag handle
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
+            child: Container(
               width: 40,
               height: 4,
-              margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.2)
-                    : Colors.grey.shade300,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            // Title
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            // Description (optional)
-            if (description != null) ...[
-              const SizedBox(height: 12),
-              Text(
-                description!,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: theme.extension<AppColors>()!.mutedText,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-            const SizedBox(height: 32),
-            // Benefits list
-            ...bulletItems.asMap().entries.map((entry) {
-              final isLast = entry.key == bulletItems.length - 1;
-              return Padding(
-                padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
-                child: _buildBenefitItem(context, entry.value),
-              );
-            }),
-            const SizedBox(height: 32),
-            // Primary CTA Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onPrimary,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  primaryButtonText,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Title
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
-              ),
+                // Description (optional)
+                if (description != null) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    description!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: theme.extension<AppColors>()!.mutedText,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                const SizedBox(height: 32),
+                // Benefits list
+                ...bulletItems.asMap().entries.map((entry) {
+                  final isLast = entry.key == bulletItems.length - 1;
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+                    child: _buildBenefitItem(context, entry.value),
+                  );
+                }),
+                const SizedBox(height: 32),
+                // Primary CTA Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: onPrimary,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      primaryButtonText,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                // Respects system bottom inset and adds minimal padding
+                SizedBox(
+                  height: 12 + BottomSheetUtils.getSystemBottomInset(context),
+                ),
+              ],
             ),
-            // Respects system bottom inset and adds minimal padding
-            SizedBox(height: 12 + BottomSheetUtils.getSystemBottomInset(context)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

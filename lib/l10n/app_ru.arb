@@ -122,7 +122,7 @@
   "pausedSubtitle": "Вы можете продолжить или завершить тренировку",
   "endWorkoutConfirmationMessage": "Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "Общее Время Тренировки",
+  "totalWorkoutTime": "Общее время",
   "totalDistance": "Общее расстояние",
   "averageRpm": "Средний RPM",
   "averageLevel": "Средний Уровень",
@@ -188,6 +188,10 @@
   "lifetime": "На всю жизнь",
   "@lifetime": {
     "description": "Метка плана на всю жизнь"
+  },
+  "freeTrial7Days": "7 дней бесплатного пробного периода",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/мес",
   "@perMonth": {

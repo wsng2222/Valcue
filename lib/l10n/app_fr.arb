@@ -122,7 +122,7 @@
   "pausedSubtitle": "Vous pouvez continuer ou terminer l'entraînement",
   "endWorkoutConfirmationMessage": "Si vous terminez maintenant, l'entraînement en cours se terminera et vous passerez à l'écran de résumé.",
   "workoutComplete": "Workout Complete",
-  "totalWorkoutTime": "Temps Total d'Entraînement",
+  "totalWorkoutTime": "Temps total",
   "totalDistance": "Distance totale",
   "averageRpm": "RPM Moyen",
   "averageLevel": "Niveau Moyen",
@@ -188,6 +188,10 @@
   "lifetime": "Illimité",
   "@lifetime": {
     "description": "Libellé du plan illimité"
+  },
+  "freeTrial7Days": "Essai gratuit de 7 jours",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
   },
   "perMonth": "/mois",
   "@perMonth": {

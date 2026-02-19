@@ -22,6 +22,7 @@
   "benefitNoAdsFocus": "Reklamefri Premium Oplevelse",
   "benefitUnlimitedRoutines": "Ubegrænset lagring af rutiner",
   "benefitUnlimitedRoutinesNew": "Ubegrænset Rutine-bibliotek",
+  "benefitWeightFeature": "Smart Vægtsporing & Analyse",
   "benefitVoiceCoaching": "Premium Stemmecoaching System",
   "benefitVoiceGuide": "Stemmeguide for session",
   "bestValue": "Bedste værdi",
@@ -119,6 +120,10 @@
   "paused": "PAUSET",
   "pausedSubtitle": "Du kan fortsætte eller afslutte træningen",
   "pausedTitle": "Pauset",
+  "freeTrial7Days": "7 dages gratis prøveperiode",
+  "@freeTrial7Days": {
+    "description": "7-day free trial label"
+  },
   "perMonth": "/måned",
   "perYear": "/år",
   "premium": "Premium",
@@ -241,7 +246,7 @@
   "toGo": "tilbage",
   "today": "I dag",
   "totalDistance": "Samlet distance",
-  "totalWorkoutTime": "Samlet træningstid",
+  "totalWorkoutTime": "Samlet tid",
   "translationComingSoon": "Oversættelse bliver tilgængelig i en fremtidig opdatering.",
   "treadmill": "Løbebånd",
   "treadmillSession": "Løbebåndssession",
