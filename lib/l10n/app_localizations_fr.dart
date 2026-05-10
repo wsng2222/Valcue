@@ -304,7 +304,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Si vous terminez maintenant, l\'entraînement en cours se terminera et vous passerez à l\'écran de résumé.';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => 'Entraînement terminé';
 
   @override
   String get totalWorkoutTime => 'Temps total';
@@ -319,7 +319,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get averageLevel => 'Niveau Moyen';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => 'Maintenir pour arrêter';
 
   @override
   String get continueWorkout => 'Continuer';
@@ -918,4 +918,23 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'Rappel d\'entraînement';
+
+  @override
+  String get workoutReminderOff => 'Désactivé';
+
+  @override
+  String get workoutReminderEveryDay => 'Tous les jours';
+
+  @override
+  String get workoutReminderSelectTime => 'Choisir l\'heure';
+
+  @override
+  String get workoutReminderPermissionRequired =>
+      'L\'autorisation de notification est requise.';
+
+  @override
+  String get workoutReminderTimeLabel => 'Heure';
 }

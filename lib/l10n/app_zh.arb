@@ -121,12 +121,12 @@
   "pausedTitle": "已暂停",
   "pausedSubtitle": "您可以继续或结束训练",
   "endWorkoutConfirmationMessage": "如果现在结束，当前训练将完成，您将转到摘要屏幕。",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "锻炼完成",
   "totalWorkoutTime": "总时间",
   "totalDistance": "总距离",
   "averageRpm": "平均RPM",
   "averageLevel": "平均等级",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "长按停止",
   "continueWorkout": "继续",
   "endWorkoutQuestion": "您要结束训练吗？",
   "workoutPaused": "训练已暂停",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "2分钟高强度区块",
   "templateStairmasterAdvanced2Title": "冲刺台阶18",
   "templateStairmasterAdvanced2Subtitle": "30秒冲刺 + 60秒恢复",
-  "saved": "已保存",
   "historyTab": "记录",
   "calendarTab": "日历",
   "weightTab": "体重",
@@ -472,6 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "训练提醒",
+  "workoutReminderOff": "关闭",
+  "workoutReminderEveryDay": "每天",
+  "workoutReminderSelectTime": "选择时间",
+  "workoutReminderPermissionRequired": "需要通知权限。",
+  "workoutReminderTimeLabel": "时间"
 }
-

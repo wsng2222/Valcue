@@ -280,5 +280,11 @@
   "youNeed": "Du trenger {amount} for å nå {goal}",
   "youNeedPlus": "Du trenger +{amount} for å nå {goal}",
   "workoutDays": "{count, plural, one{Trening 1 dag 🔥} other{Trening {count} dager 🔥}}",
-  "restDays": "{count, plural, one{Hvil 1 dag 🛏️} other{Hvil {count} dager 🛏️}}"
+  "restDays": "{count, plural, one{Hvil 1 dag 🛏️} other{Hvil {count} dager 🛏️}}",
+  "workoutReminderTitle": "Treningspåminnelse",
+  "workoutReminderOff": "Av",
+  "workoutReminderEveryDay": "Hver dag",
+  "workoutReminderSelectTime": "Velg tidspunkt",
+  "workoutReminderPermissionRequired": "Varslingstillatelse er påkrevd.",
+  "workoutReminderTimeLabel": "Tidspunkt"
 }

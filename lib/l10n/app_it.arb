@@ -70,7 +70,9 @@
   "goToRoutines": "Vai alle routine",
   "goal": "Obiettivo",
   "goalMatchesCurrentWeight": "L’obiettivo coincide con il peso attuale",
-  "goalWeightRemoved": "Peso obiettivo rimosso",  "goalAchieved": "Obiettivo raggiunto!",  "goalWeightSet": "Peso obiettivo impostato",
+  "goalWeightRemoved": "Peso obiettivo rimosso",
+  "goalAchieved": "Obiettivo raggiunto!",
+  "goalWeightSet": "Peso obiettivo impostato",
   "hard": "Difficile",
   "history": "Cronologia",
   "historyTab": "Cronologia",
@@ -278,5 +280,11 @@
   "youNeed": "Ti mancano {amount} per raggiungere {goal}",
   "youNeedPlus": "Ti mancano +{amount} per raggiungere {goal}",
   "workoutDays": "{count, plural, one{Allenamento 1 giorno 🔥} other{Allenamento {count} giorni 🔥}}",
-  "restDays": "{count, plural, one{Riposo 1 giorno 🛏️} other{Riposo {count} giorni 🛏️}}"
+  "restDays": "{count, plural, one{Riposo 1 giorno 🛏️} other{Riposo {count} giorni 🛏️}}",
+  "workoutReminderTitle": "Promemoria allenamento",
+  "workoutReminderOff": "Disattivato",
+  "workoutReminderEveryDay": "Ogni giorno",
+  "workoutReminderSelectTime": "Seleziona orario",
+  "workoutReminderPermissionRequired": "È necessario il permesso per le notifiche.",
+  "workoutReminderTimeLabel": "Orario"
 }

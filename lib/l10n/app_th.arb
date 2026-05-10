@@ -280,5 +280,11 @@
   "youNeed": "คุณต้องการ {amount} เพื่อถึง {goal}",
   "youNeedPlus": "คุณต้องการ +{amount} เพื่อถึง {goal}",
   "workoutDays": "{count, plural, one{การออกกำลังกาย 1 วัน 🔥} other{การออกกำลังกาย {count} วัน 🔥}}",
-  "restDays": "{count, plural, one{วันพัก 1 วัน 🛏️} other{วันพัก {count} วัน 🛏️}}"
+  "restDays": "{count, plural, one{วันพัก 1 วัน 🛏️} other{วันพัก {count} วัน 🛏️}}",
+  "workoutReminderTitle": "การแจ้งเตือนการออกกำลังกาย",
+  "workoutReminderOff": "ปิด",
+  "workoutReminderEveryDay": "ทุกวัน",
+  "workoutReminderSelectTime": "เลือกเวลา",
+  "workoutReminderPermissionRequired": "ต้องการสิทธิ์การแจ้งเตือน",
+  "workoutReminderTimeLabel": "เวลา"
 }

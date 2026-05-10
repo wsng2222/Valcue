@@ -904,4 +904,23 @@ class AppLocalizationsDa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'Træningspåmindelse';
+
+  @override
+  String get workoutReminderOff => 'Slukket';
+
+  @override
+  String get workoutReminderEveryDay => 'Hver dag';
+
+  @override
+  String get workoutReminderSelectTime => 'Vælg tid';
+
+  @override
+  String get workoutReminderPermissionRequired =>
+      'Notifikationstilladelse kræves.';
+
+  @override
+  String get workoutReminderTimeLabel => 'Tidspunkt';
 }

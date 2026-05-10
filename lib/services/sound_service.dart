@@ -27,16 +27,12 @@ class SoundService {
 
   /// Play the beep sound (with debounce to prevent rapid double plays)
   Future<void> playBeep() async {
-    print('[SoundService] playBeep called - enabled: $_enabled, initialized: $_initialized, audioCache: ${_audioCache != null}');
     if (!_enabled || _audioCache == null) return;
 
     try {
-      print('[SoundService] Playing beep.mp3...');
       // Play the actual beep sound file
       await _audioCache!.play('beep.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.8);
-      print('[SoundService] Beep played successfully');
     } catch (e) {
-      print('[SoundService] Error playing beep: $e');
     }
   }
 

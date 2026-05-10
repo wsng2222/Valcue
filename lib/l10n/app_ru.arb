@@ -121,12 +121,12 @@
   "pausedTitle": "Приостановлено",
   "pausedSubtitle": "Вы можете продолжить или завершить тренировку",
   "endWorkoutConfirmationMessage": "Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "Тренировка завершена",
   "totalWorkoutTime": "Общее время",
   "totalDistance": "Общее расстояние",
   "averageRpm": "Средний RPM",
   "averageLevel": "Средний Уровень",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "Удержите для остановки",
   "continueWorkout": "Продолжить",
   "endWorkoutQuestion": "Вы хотите завершить тренировку?",
   "workoutPaused": "Тренировка приостановлена",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "Жёсткие блоки по 2 мин",
   "templateStairmasterAdvanced2Title": "Спринт-ступени 18",
   "templateStairmasterAdvanced2Subtitle": "Спринты 30с + отдых 60с",
-  "saved": "Сохранено",
   "historyTab": "История",
   "calendarTab": "Календарь",
   "weightTab": "Вес",
@@ -472,6 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "Напоминание о тренировке",
+  "workoutReminderOff": "Выключено",
+  "workoutReminderEveryDay": "Каждый день",
+  "workoutReminderSelectTime": "Выбрать время",
+  "workoutReminderPermissionRequired": "Требуется разрешение на уведомления.",
+  "workoutReminderTimeLabel": "Время"
 }
-

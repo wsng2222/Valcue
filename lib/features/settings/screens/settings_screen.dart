@@ -837,26 +837,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  String _localizedReminderText(
-    BuildContext context, {
-    required String en,
-    required String ko,
-    String? ja,
-    String? zh,
-  }) {
-    final languageCode = Localizations.localeOf(context).languageCode;
-    switch (languageCode) {
-      case 'ko':
-        return ko;
-      case 'ja':
-        return ja ?? en;
-      case 'zh':
-        return zh ?? en;
-      default:
-        return en;
-    }
-  }
-
   String _weekdayLabel(BuildContext context, int weekday) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final date = DateTime(2024, 1, weekday);
@@ -872,26 +852,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   String _weekdaySummary(BuildContext context, List<int> weekdays) {
     if (weekdays.length == 7) {
-      return _localizedReminderText(
-        context,
-        en: 'Every day',
-        ko: '매일',
-        ja: '毎日',
-        zh: '每天',
-      );
+      return AppLocalizations.of(context)!.workoutReminderEveryDay;
     }
     return weekdays.map((day) => _weekdayLabel(context, day)).join(', ');
   }
 
   String _reminderSubtitle(BuildContext context, AppSettingsProvider provider) {
     if (!provider.workoutReminderEnabled) {
-      return _localizedReminderText(
-        context,
-        en: 'Off',
-        ko: '꺼짐',
-        ja: 'オフ',
-        zh: '关闭',
-      );
+      return AppLocalizations.of(context)!.workoutReminderOff;
     }
 
     return '${_weekdaySummary(context, provider.workoutReminderWeekdays)}  '
@@ -938,13 +906,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        _localizedReminderText(
-                          context,
-                          en: 'Select time',
-                          ko: '시간 선택',
-                          ja: '時刻を選択',
-                          zh: '选择时间',
-                        ),
+                        AppLocalizations.of(context)!.workoutReminderSelectTime,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -1292,13 +1254,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           SettingsRow(
                             icon: Icons.notifications_active_outlined,
                             iconColor: Colors.redAccent,
-                            title: _localizedReminderText(
-                              context,
-                              en: 'Workout reminder',
-                              ko: '운동 알림',
-                              ja: 'ワークアウト通知',
-                              zh: '训练提醒',
-                            ),
+                            title: AppLocalizations.of(context)!.workoutReminderTitle,
                             subtitle: _reminderSubtitle(context, provider),
                             trailing: _buildPlatformSwitch(
                               value: provider.workoutReminderEnabled,
@@ -1312,13 +1268,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ScaffoldMessenger.of(this.context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      _localizedReminderText(
-                                        this.context,
-                                        en: 'Notification permission is required.',
-                                        ko: '알림 권한이 필요합니다.',
-                                        ja: '通知権限が必要です。',
-                                        zh: '需要通知权限。',
-                                      ),
+                                      AppLocalizations.of(this.context)!.workoutReminderPermissionRequired,
                                     ),
                                   ),
                                 );
@@ -1332,13 +1282,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             SettingsRow(
                               icon: Icons.schedule,
                               iconColor: Colors.teal,
-                              title: _localizedReminderText(
-                                context,
-                                en: 'Time',
-                                ko: '시간',
-                                ja: '時刻',
-                                zh: '时间',
-                              ),
+                              title: AppLocalizations.of(context)!.workoutReminderTimeLabel,
                               subtitle: _formatReminderTime(
                                 context,
                                 provider.workoutReminderTime,
@@ -1370,8 +1314,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: Icons.language,
                             iconColor: Colors.blue,
                             title: AppLocalizations.of(context)!.language,
-                            subtitle: _getLanguageDisplayName(
-                                context, provider.language),
+                            subtitle: provider.settings.language == null
+                                ? AppLocalizations.of(context)!.system
+                                : _getLanguageDisplayName(
+                                    context, provider.language),
                             trailing: Icon(
                               Icons.chevron_right,
                               size: 20,
@@ -1434,14 +1380,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    // Build language options list (all languages, no system option)
     final languageOptions = LanguageHelper.supportedLanguages;
 
-    // Find current selected index
-    int selectedIndex = languageOptions.indexOf(provider.language);
-    if (selectedIndex == -1) {
-      selectedIndex = languageOptions.indexOf('en'); // Default to English
-    }
+    // Index 0 = System, 1..N = specific languages
+    final isSystem = provider.settings.language == null;
+    int selectedIndex = isSystem
+        ? 0
+        : 1 + languageOptions.indexOf(provider.settings.language!);
+    if (selectedIndex <= 0 && !isSystem) selectedIndex = 1;
 
     showModalBottomSheet(
       context: context,
@@ -1491,19 +1437,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             selectedIndex = index;
                           });
                         },
-                        children: languageOptions.map((langCode) {
-                          final displayName =
-                              LanguageHelper.getLanguageDisplayName(langCode);
-                          return Center(
+                        children: [
+                          Center(
                             child: Text(
-                              displayName,
+                              '📱 ${l10n.system}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                          );
-                        }).toList(),
+                          ),
+                          ...languageOptions.map((langCode) {
+                            final displayName =
+                                LanguageHelper.getLanguageDisplayName(langCode);
+                            return Center(
+                              child: Text(
+                                displayName,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          }),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -1514,9 +1471,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            final selectedLanguage =
-                                languageOptions[selectedIndex];
-                            provider.updateLanguage(selectedLanguage);
+                            if (selectedIndex == 0) {
+                              provider.resetLanguageToSystem();
+                            } else {
+                              provider.updateLanguage(
+                                  languageOptions[selectedIndex - 1]);
+                            }
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

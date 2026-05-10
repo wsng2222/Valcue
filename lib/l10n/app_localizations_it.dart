@@ -907,4 +907,23 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'Promemoria allenamento';
+
+  @override
+  String get workoutReminderOff => 'Disattivato';
+
+  @override
+  String get workoutReminderEveryDay => 'Ogni giorno';
+
+  @override
+  String get workoutReminderSelectTime => 'Seleziona orario';
+
+  @override
+  String get workoutReminderPermissionRequired =>
+      'È necessario il permesso per le notifiche.';
+
+  @override
+  String get workoutReminderTimeLabel => 'Orario';
 }

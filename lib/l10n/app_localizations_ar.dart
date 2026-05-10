@@ -300,7 +300,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'إذا أنهيت الآن، سينتهي التمرين الحالي وستنتقل إلى شاشة الملخص.';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => 'اكتمل التمرين';
 
   @override
   String get totalWorkoutTime => 'إجمالي الوقت';
@@ -315,7 +315,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get averageLevel => 'المستوى المتوسط';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => 'اضغط مطولاً للإيقاف';
 
   @override
   String get continueWorkout => 'متابعة';
@@ -889,4 +889,22 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'تذكير بالتمرين';
+
+  @override
+  String get workoutReminderOff => 'إيقاف';
+
+  @override
+  String get workoutReminderEveryDay => 'كل يوم';
+
+  @override
+  String get workoutReminderSelectTime => 'اختر الوقت';
+
+  @override
+  String get workoutReminderPermissionRequired => 'يلزم منح إذن الإشعارات.';
+
+  @override
+  String get workoutReminderTimeLabel => 'الوقت';
 }

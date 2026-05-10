@@ -297,7 +297,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => '운동 완료';
 
   @override
   String get totalWorkoutTime => '총 시간';
@@ -312,7 +312,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get averageLevel => '평균 레벨';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => '길게 눌러 정지';
 
   @override
   String get continueWorkout => '계속';
@@ -880,4 +880,22 @@ class AppLocalizationsKo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => '운동 알림';
+
+  @override
+  String get workoutReminderOff => '꺼짐';
+
+  @override
+  String get workoutReminderEveryDay => '매일';
+
+  @override
+  String get workoutReminderSelectTime => '시간 선택';
+
+  @override
+  String get workoutReminderPermissionRequired => '알림 권한이 필요합니다.';
+
+  @override
+  String get workoutReminderTimeLabel => '시간';
 }

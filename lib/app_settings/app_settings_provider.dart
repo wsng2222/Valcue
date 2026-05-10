@@ -92,6 +92,27 @@ class AppSettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> resetLanguageToSystem() async {
+    _settings = AppSettings(
+      language: null,
+      measurement: _settings.measurement,
+      weightUnit: _settings.weightUnit,
+      isPremium: _settings.isPremium,
+      voiceGuideEnabled: _settings.voiceGuideEnabled,
+      themeMode: _settings.themeMode,
+      themeModeUserSet: _settings.themeModeUserSet,
+      soundEffectsEnabled: _settings.soundEffectsEnabled,
+      workoutReminderEnabled: _settings.workoutReminderEnabled,
+      workoutReminderWeekdays: List<int>.from(_settings.workoutReminderWeekdays),
+      workoutReminderHour: _settings.workoutReminderHour,
+      workoutReminderMinute: _settings.workoutReminderMinute,
+      workoutReminderMessage: _settings.workoutReminderMessage,
+    );
+    await _store.saveSettings(_settings);
+    await _syncWorkoutReminder();
+    notifyListeners();
+  }
+
   Future<void> updateMeasurement(String measurement) async {
     _settings = _settings.copyWith(measurement: measurement);
     await _store.saveSettings(_settings);

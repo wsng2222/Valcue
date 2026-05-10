@@ -302,7 +302,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => 'Hoàn thành bài tập';
 
   @override
   String get totalWorkoutTime => 'Tổng thời gian';
@@ -317,7 +317,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get averageLevel => 'Mức Trung Bình';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => 'Giữ để dừng';
 
   @override
   String get continueWorkout => 'Tiếp tục';
@@ -904,4 +904,22 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'Nhắc nhở tập luyện';
+
+  @override
+  String get workoutReminderOff => 'Tắt';
+
+  @override
+  String get workoutReminderEveryDay => 'Mỗi ngày';
+
+  @override
+  String get workoutReminderSelectTime => 'Chọn giờ';
+
+  @override
+  String get workoutReminderPermissionRequired => 'Cần quyền thông báo.';
+
+  @override
+  String get workoutReminderTimeLabel => 'Giờ';
 }

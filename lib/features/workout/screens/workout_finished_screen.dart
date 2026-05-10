@@ -490,39 +490,11 @@ class _WorkoutSummaryCard extends StatelessWidget {
                 if (avgRpm == null) {
                   return const SizedBox.shrink();
                 }
-                final locale = Localizations.localeOf(context);
-                String getAverageRpmLabel() {
-                  switch (locale.languageCode) {
-                    case 'ko':
-                      return '평균 RPM';
-                    case 'es':
-                      return 'RPM Promedio';
-                    case 'fr':
-                      return 'RPM Moyen';
-                    case 'de':
-                      return 'Durchschnittliche RPM';
-                    case 'ru':
-                      return 'Средний RPM';
-                    case 'pt':
-                      return 'RPM Médio';
-                    case 'ja':
-                      return '平均RPM';
-                    case 'zh':
-                      return '平均RPM';
-                    case 'vi':
-                      return 'RPM Trung Bình';
-                    case 'ar':
-                      return 'متوسط RPM';
-                    default:
-                      return 'Average RPM';
-                  }
-                }
-
                 return Column(
                   children: [
                     const SizedBox(height: 16),
                     Text(
-                      '${getAverageRpmLabel()}: ${avgRpm.toStringAsFixed(1)}',
+                      '${AppLocalizations.of(context)!.averageRpm}: ${avgRpm.toStringAsFixed(1)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -542,39 +514,11 @@ class _WorkoutSummaryCard extends StatelessWidget {
                 if (avgLevel == null) {
                   return const SizedBox.shrink();
                 }
-                final locale = Localizations.localeOf(context);
-                String getAverageLevelLabel() {
-                  switch (locale.languageCode) {
-                    case 'ko':
-                      return '평균 레벨';
-                    case 'es':
-                      return 'Nivel Promedio';
-                    case 'fr':
-                      return 'Niveau Moyen';
-                    case 'de':
-                      return 'Durchschnittliches Level';
-                    case 'ru':
-                      return 'Средний Уровень';
-                    case 'pt':
-                      return 'Nível Médio';
-                    case 'ja':
-                      return '平均レベル';
-                    case 'zh':
-                      return '平均等级';
-                    case 'vi':
-                      return 'Mức Trung Bình';
-                    case 'ar':
-                      return 'المستوى المتوسط';
-                    default:
-                      return 'Average Level';
-                  }
-                }
-
                 return Column(
                   children: [
                     const SizedBox(height: 16),
                     Text(
-                      '${getAverageLevelLabel()}: ${avgLevel.toStringAsFixed(1)}',
+                      '${AppLocalizations.of(context)!.averageLevel}: ${avgLevel.toStringAsFixed(1)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,

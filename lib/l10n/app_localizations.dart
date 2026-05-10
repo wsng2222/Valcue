@@ -1793,6 +1793,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{Rest 1 day 🛏️} other{Rest {count} days 🛏️}}'**
   String restDays(int count);
+
+  /// No description provided for @workoutReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout reminder'**
+  String get workoutReminderTitle;
+
+  /// No description provided for @workoutReminderOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get workoutReminderOff;
+
+  /// No description provided for @workoutReminderEveryDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get workoutReminderEveryDay;
+
+  /// No description provided for @workoutReminderSelectTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select time'**
+  String get workoutReminderSelectTime;
+
+  /// No description provided for @workoutReminderPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is required.'**
+  String get workoutReminderPermissionRequired;
+
+  /// No description provided for @workoutReminderTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get workoutReminderTimeLabel;
 }
 
 class _AppLocalizationsDelegate

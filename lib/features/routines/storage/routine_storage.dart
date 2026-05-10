@@ -41,7 +41,6 @@ class RoutineStorage {
     try {
       final routines = await RoutineStorage().loadRoutines();
       if (routines.isEmpty) {
-        print('[TEST] No routines to test');
         return true;
       }
 
@@ -59,16 +58,11 @@ class RoutineStorage {
       final isEqual = _jsonDeepEquals(beforeSnapshot, afterSnapshot);
 
       if (!isEqual) {
-        print('[TEST FAILED] Idempotency test failed!');
-        print('[TEST] Before: $beforeSnapshot');
-        print('[TEST] After: $afterSnapshot');
       } else {
-        print('[TEST PASSED] Idempotency test passed');
       }
 
       return isEqual;
     } catch (e) {
-      print('[TEST ERROR] Idempotency test exception: $e');
       return false;
     }
   }
@@ -89,8 +83,6 @@ class RoutineStorage {
         for (final routine in routines) {
           for (int i = 0; i < routine.intervals.length; i++) {
             final interval = routine.intervals[i];
-            print(
-                '[DEBUG LOAD] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
           }
         }
       }
@@ -111,8 +103,6 @@ class RoutineStorage {
       for (final routine in routines) {
         for (int i = 0; i < routine.intervals.length; i++) {
           final interval = routine.intervals[i];
-          print(
-              '[DEBUG SAVE] Routine "${routine.name}" Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
         }
       }
 
@@ -121,16 +111,10 @@ class RoutineStorage {
         final decoded = json.decode(jsonString) as List<dynamic>;
         final reEncoded = json.encode(decoded);
         if (jsonString != reEncoded) {
-          print(
-              '[ERROR] Idempotency check FAILED: JSON changed after encode->decode->encode');
-          print('[ERROR] Original: $jsonString');
-          print('[ERROR] Re-encoded: $reEncoded');
           assert(false, 'JSON idempotency check failed - numbers may drift');
         } else {
-          print('[DEBUG] Idempotency check PASSED: JSON unchanged');
         }
       } catch (e) {
-        print('[ERROR] Idempotency check exception: $e');
         assert(false, 'Idempotency check exception: $e');
       }
 
@@ -139,12 +123,8 @@ class RoutineStorage {
       final afterSnapshot = _computeIntervalJsonSnapshot(reloadedRoutines);
 
       if (!_jsonDeepEquals(beforeSnapshot, afterSnapshot)) {
-        print('[ERROR] DRIFT DETECTED: Interval values changed after save/load!');
-        print('[ERROR] Before save: $beforeSnapshot');
-        print('[ERROR] After reload: $afterSnapshot');
         assert(false, 'Drift detected - interval values changed');
       } else {
-        print('[DEBUG] Drift guard PASSED: No value changes detected');
       }
     }
 

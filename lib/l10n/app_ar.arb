@@ -82,7 +82,7 @@
   },
   "spm": "خطوة/دقيقة",
   "spmSteps": "خطوة/دقيقة (خطوات/دقيقة)",
-  "saved": "تم الحفظ",
+  "saved": "محفوظ",
   "deleted": "تم الحذف",
   "deleteRoutineTitle": "حذف الروتين",
   "deleteRoutineMessage": "هل أنت متأكد من أنك تريد حذف هذا الروتين؟ لا يمكن التراجع عن هذا الإجراء.",
@@ -121,12 +121,12 @@
   "pausedTitle": "متوقف مؤقتاً",
   "pausedSubtitle": "يمكنك المتابعة أو إنهاء التمرين",
   "endWorkoutConfirmationMessage": "إذا أنهيت الآن، سينتهي التمرين الحالي وستنتقل إلى شاشة الملخص.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "اكتمل التمرين",
   "totalWorkoutTime": "إجمالي الوقت",
   "totalDistance": "إجمالي المسافة",
   "averageRpm": "متوسط RPM",
   "averageLevel": "المستوى المتوسط",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "اضغط مطولاً للإيقاف",
   "continueWorkout": "متابعة",
   "endWorkoutQuestion": "هل تريد إنهاء التمرين؟",
   "workoutPaused": "تم إيقاف التمرين مؤقتاً",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "كتل صعبة لمدة دقيقتين",
   "templateStairmasterAdvanced2Title": "خطوات سبرينت 18",
   "templateStairmasterAdvanced2Subtitle": "سبرينت 30ث + تعافٍ 60ث",
-  "saved": "محفوظ",
   "historyTab": "السجل",
   "calendarTab": "التقويم",
   "weightTab": "الوزن",
@@ -472,6 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "تذكير بالتمرين",
+  "workoutReminderOff": "إيقاف",
+  "workoutReminderEveryDay": "كل يوم",
+  "workoutReminderSelectTime": "اختر الوقت",
+  "workoutReminderPermissionRequired": "يلزم منح إذن الإشعارات.",
+  "workoutReminderTimeLabel": "الوقت"
 }
-

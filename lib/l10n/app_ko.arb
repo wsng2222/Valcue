@@ -121,12 +121,12 @@
   "pausedTitle": "일시정지됨",
   "pausedSubtitle": "계속하거나 운동을 종료할 수 있어요",
   "endWorkoutConfirmationMessage": "종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "운동 완료",
   "totalWorkoutTime": "총 시간",
   "totalDistance": "총 거리",
   "averageRpm": "평균 RPM",
   "averageLevel": "평균 레벨",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "길게 눌러 정지",
   "continueWorkout": "계속",
   "endWorkoutQuestion": "운동을 종료할까요?",
   "workoutPaused": "운동이 일시중지되었습니다",
@@ -262,7 +262,6 @@
     }
   },
   "checkRoutineStart": "루틴 확인 / 시작",
-  "comingSoon": "준비 중",
   "beginner": "초급",
   "intermediate": "중급",
   "advanced": "고급",
@@ -472,5 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "운동 알림",
+  "workoutReminderOff": "꺼짐",
+  "workoutReminderEveryDay": "매일",
+  "workoutReminderSelectTime": "시간 선택",
+  "workoutReminderPermissionRequired": "알림 권한이 필요합니다.",
+  "workoutReminderTimeLabel": "시간"
 }

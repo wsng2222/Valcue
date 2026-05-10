@@ -40,16 +40,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     super.initState();
     if (widget.routine != null) {
       // DEBUG: Log routine intervals before copying
-      print(
-          '[EDIT SCREEN INIT] Routine intervals count: ${widget.routine!.intervals.length}');
       if (widget.routine!.intervals.isNotEmpty) {
         final first = widget.routine!.intervals[0];
-        print(
-            '[EDIT SCREEN INIT] First interval: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
         if (widget.routine!.intervals.length > 1) {
           final second = widget.routine!.intervals[1];
-          print(
-              '[EDIT SCREEN INIT] Second interval: duration=${second.durationSeconds}s, rpm=${second.rpm}, resistance=${second.resistance}, level=${second.level}');
         }
       }
 
@@ -87,15 +81,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       );
 
       // DEBUG: Log editing intervals after copying
-      print('[EDIT SCREEN INIT] Editing intervals count: ${_intervals.length}');
       if (_intervals.isNotEmpty) {
         final first = _intervals[0];
-        print(
-            '[EDIT SCREEN INIT] First editing interval: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
         if (_intervals.length > 1) {
           final second = _intervals[1];
-          print(
-              '[EDIT SCREEN INIT] Second editing interval: duration=${second.durationSeconds}s, rpm=${second.rpm}, resistance=${second.resistance}, level=${second.level}');
         }
       }
 
@@ -221,8 +210,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   void _addInterval() {
     setState(() {
       // DEBUG: Log before adding interval
-      print(
-          '[EDIT SCREEN] Adding interval. Current count: ${_intervals.length}');
 
       switch (_machineType) {
         case MachineType.treadmill:
@@ -248,12 +235,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       }
 
       // DEBUG: Log after adding interval
-      print(
-          '[EDIT SCREEN] After adding interval. New count: ${_intervals.length}');
       if (_intervals.isNotEmpty) {
         final first = _intervals[0];
-        print(
-            '[EDIT SCREEN] First interval after add: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
       }
     });
   }
@@ -261,8 +244,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   void _deleteInterval(int index) {
     setState(() {
       // DEBUG: Log before deleting
-      print(
-          '[EDIT SCREEN] Deleting interval at index $index. Current count: ${_intervals.length}');
 
       _intervals.removeAt(index);
 
@@ -274,12 +255,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       }
 
       // DEBUG: Log after deleting
-      print(
-          '[EDIT SCREEN] After deleting interval. New count: ${_intervals.length}');
       if (_intervals.isNotEmpty) {
         final first = _intervals[0];
-        print(
-            '[EDIT SCREEN] First interval after delete: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
       }
     });
   }
@@ -498,22 +475,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   void _updateInterval(int index, Interval updatedInterval) {
     setState(() {
       // DEBUG: Log before updating
-      print('[EDIT SCREEN] Updating interval at index $index');
-      print(
-          '[EDIT SCREEN] Old interval: duration=${_intervals[index].durationSeconds}s, rpm=${_intervals[index].rpm}, resistance=${_intervals[index].resistance}, level=${_intervals[index].level}');
-      print(
-          '[EDIT SCREEN] New interval: duration=${updatedInterval.durationSeconds}s, rpm=${updatedInterval.rpm}, resistance=${updatedInterval.resistance}, level=${updatedInterval.level}');
 
       _intervals[index] = updatedInterval;
       _selectedIntervalIndex = null;
 
       // DEBUG: Log after updating
-      print(
-          '[EDIT SCREEN] After updating interval. Total count: ${_intervals.length}');
       if (_intervals.isNotEmpty) {
         final first = _intervals[0];
-        print(
-            '[EDIT SCREEN] First interval after update: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
       }
     });
   }

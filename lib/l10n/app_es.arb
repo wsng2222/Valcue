@@ -121,12 +121,12 @@
   "pausedTitle": "Pausado",
   "pausedSubtitle": "Puedes continuar o finalizar el entrenamiento",
   "endWorkoutConfirmationMessage": "Si finalizas ahora, el entrenamiento actual terminará y pasarás a la pantalla de resumen.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "Entrenamiento completo",
   "totalWorkoutTime": "Tiempo total",
   "totalDistance": "Distancia total",
   "averageRpm": "RPM Promedio",
   "averageLevel": "Nivel Promedio",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "Mantén para detener",
   "continueWorkout": "Continuar",
   "endWorkoutQuestion": "¿Quieres finalizar el entrenamiento?",
   "workoutPaused": "El entrenamiento ha sido pausado",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "Bloques duros de 2 min",
   "templateStairmasterAdvanced2Title": "Pasos sprint 18",
   "templateStairmasterAdvanced2Subtitle": "Sprints 30 s + recuperación 60 s",
-  "saved": "Guardado",
   "historyTab": "Historial",
   "calendarTab": "Calendario",
   "weightTab": "Peso",
@@ -472,5 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "Recordatorio de entrenamiento",
+  "workoutReminderOff": "Desactivado",
+  "workoutReminderEveryDay": "Cada día",
+  "workoutReminderSelectTime": "Seleccionar hora",
+  "workoutReminderPermissionRequired": "Se requiere permiso de notificación.",
+  "workoutReminderTimeLabel": "Hora"
 }

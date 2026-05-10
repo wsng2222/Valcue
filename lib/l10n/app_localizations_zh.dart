@@ -296,7 +296,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get endWorkoutConfirmationMessage => '如果现在结束，当前训练将完成，您将转到摘要屏幕。';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => '锻炼完成';
 
   @override
   String get totalWorkoutTime => '总时间';
@@ -311,7 +311,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get averageLevel => '平均等级';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => '长按停止';
 
   @override
   String get continueWorkout => '继续';
@@ -879,4 +879,22 @@ class AppLocalizationsZh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => '训练提醒';
+
+  @override
+  String get workoutReminderOff => '关闭';
+
+  @override
+  String get workoutReminderEveryDay => '每天';
+
+  @override
+  String get workoutReminderSelectTime => '选择时间';
+
+  @override
+  String get workoutReminderPermissionRequired => '需要通知权限。';
+
+  @override
+  String get workoutReminderTimeLabel => '时间';
 }

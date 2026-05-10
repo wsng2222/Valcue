@@ -127,13 +127,10 @@ class _RoutineDetailSheetContent extends StatelessWidget {
     final totalDuration = _calculateTotalDuration();
     
     // DEBUG: Log routine intervals in View screen
-    print('[VIEW SCREEN] Routine intervals count: ${routine.intervals.length}');
     if (routine.intervals.isNotEmpty) {
       final first = routine.intervals[0];
-      print('[VIEW SCREEN] First interval: duration=${first.durationSeconds}s, rpm=${first.rpm}, resistance=${first.resistance}, level=${first.level}');
       if (routine.intervals.length > 1) {
         final second = routine.intervals[1];
-        print('[VIEW SCREEN] Second interval: duration=${second.durationSeconds}s, rpm=${second.rpm}, resistance=${second.resistance}, level=${second.level}');
       }
     }
     

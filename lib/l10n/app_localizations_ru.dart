@@ -302,7 +302,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => 'Тренировка завершена';
 
   @override
   String get totalWorkoutTime => 'Общее время';
@@ -317,7 +317,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get averageLevel => 'Средний Уровень';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => 'Удержите для остановки';
 
   @override
   String get continueWorkout => 'Продолжить';
@@ -910,4 +910,23 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'Напоминание о тренировке';
+
+  @override
+  String get workoutReminderOff => 'Выключено';
+
+  @override
+  String get workoutReminderEveryDay => 'Каждый день';
+
+  @override
+  String get workoutReminderSelectTime => 'Выбрать время';
+
+  @override
+  String get workoutReminderPermissionRequired =>
+      'Требуется разрешение на уведомления.';
+
+  @override
+  String get workoutReminderTimeLabel => 'Время';
 }

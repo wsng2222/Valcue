@@ -297,7 +297,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '終了すると、現在進行中のワークアウトが終了し、要約画面に移動します。';
 
   @override
-  String get workoutComplete => 'Workout Complete';
+  String get workoutComplete => 'ワークアウト完了';
 
   @override
   String get totalWorkoutTime => '合計時間';
@@ -312,7 +312,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get averageLevel => '平均レベル';
 
   @override
-  String get holdToStop => 'Hold to Stop';
+  String get holdToStop => '長押しで停止';
 
   @override
   String get continueWorkout => '続ける';
@@ -880,4 +880,22 @@ class AppLocalizationsJa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'ワークアウト通知';
+
+  @override
+  String get workoutReminderOff => 'オフ';
+
+  @override
+  String get workoutReminderEveryDay => '毎日';
+
+  @override
+  String get workoutReminderSelectTime => '時刻を選択';
+
+  @override
+  String get workoutReminderPermissionRequired => '通知権限が必要です。';
+
+  @override
+  String get workoutReminderTimeLabel => '時刻';
 }

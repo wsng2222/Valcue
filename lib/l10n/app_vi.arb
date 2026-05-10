@@ -121,12 +121,12 @@
   "pausedTitle": "Đã tạm dừng",
   "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc thói quen",
   "endWorkoutConfirmationMessage": "Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "Hoàn thành bài tập",
   "totalWorkoutTime": "Tổng thời gian",
   "totalDistance": "Tổng khoảng cách",
   "averageRpm": "RPM Trung Bình",
   "averageLevel": "Mức Trung Bình",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "Giữ để dừng",
   "continueWorkout": "Tiếp tục",
   "endWorkoutQuestion": "Bạn có muốn kết thúc thói quen không?",
   "workoutPaused": "Thói quen đã được tạm dừng",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "Khối nặng 2 phút",
   "templateStairmasterAdvanced2Title": "Bước sprint 18",
   "templateStairmasterAdvanced2Subtitle": "Sprint 30s + hồi phục 60s",
-  "saved": "Đã lưu",
   "historyTab": "Lịch sử",
   "calendarTab": "Lịch",
   "weightTab": "Cân nặng",
@@ -472,6 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "Nhắc nhở tập luyện",
+  "workoutReminderOff": "Tắt",
+  "workoutReminderEveryDay": "Mỗi ngày",
+  "workoutReminderSelectTime": "Chọn giờ",
+  "workoutReminderPermissionRequired": "Cần quyền thông báo.",
+  "workoutReminderTimeLabel": "Giờ"
 }
-

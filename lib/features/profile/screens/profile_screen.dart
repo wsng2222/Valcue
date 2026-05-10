@@ -95,7 +95,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final int _selectedMachineTab = 0; // 0: Treadmill, 1: Bike, 2: Stairmaster
+  int _selectedMachineTab = 0; // 0: Treadmill, 1: Bike, 2: Stairmaster
 
   @override
   void initState() {
@@ -175,7 +175,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                     controller: _tabController,
                     children: [
                       _WorkoutHistoryTab(
-                          selectedMachineTab: _selectedMachineTab),
+                        selectedMachineTab: _selectedMachineTab,
+                        onMachineTabChanged: (i) =>
+                            setState(() => _selectedMachineTab = i),
+                      ),
                       const _CalendarTab(),
                       Stack(
                         children: [
@@ -261,8 +264,12 @@ class _ProfileScreenState extends State<ProfileScreen>
 // Workout History Tab
 class _WorkoutHistoryTab extends StatefulWidget {
   final int selectedMachineTab;
+  final ValueChanged<int> onMachineTabChanged;
 
-  const _WorkoutHistoryTab({required this.selectedMachineTab});
+  const _WorkoutHistoryTab({
+    required this.selectedMachineTab,
+    required this.onMachineTabChanged,
+  });
 
   @override
   State<_WorkoutHistoryTab> createState() => _WorkoutHistoryTabState();
@@ -369,7 +376,10 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () => setState(() => _selectedMachineTab = index),
+      onTap: () {
+        setState(() => _selectedMachineTab = index);
+        widget.onMachineTabChanged(index);
+      },
       child: Container(
         height: 32,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
@@ -456,7 +466,27 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                 ),
                 ...dateSessions.map((session) => Padding(
                       padding: const EdgeInsets.only(bottom: 6),
-                      child: _WorkoutHistoryCard(session: session),
+                      child: Dismissible(
+                        key: Key(session.id),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        onDismissed: (_) {
+                          provider.deleteSession(session.id);
+                        },
+                        child: _WorkoutHistoryCard(session: session),
+                      ),
                     )),
                 const SizedBox(height: 12),
               ],
@@ -1121,8 +1151,6 @@ class _CalendarTabState extends State<_CalendarTab> {
 
   void _showDayWorkouts(
       BuildContext context, WorkoutHistoryProvider provider, DateTime date) {
-    final sessions = provider.getSessionsByDate(date);
-
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -1130,16 +1158,15 @@ class _CalendarTabState extends State<_CalendarTab> {
       isDismissible: true,
       enableDrag: true,
       barrierColor: Colors.black.withValues(alpha: 0.4),
-      builder: (context) => _DayWorkoutsSheet(date: date, sessions: sessions),
+      builder: (context) => _DayWorkoutsSheet(date: date),
     );
   }
 }
 
 class _DayWorkoutsSheet extends StatelessWidget {
   final DateTime date;
-  final List<WorkoutSession> sessions;
 
-  const _DayWorkoutsSheet({required this.date, required this.sessions});
+  const _DayWorkoutsSheet({required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -1150,6 +1177,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
       initialChildSize: 0.45,
       minChildSize: 0.45,
       maxChildSize: 0.92,
+      expand: false,
       snap: true,
       snapSizes: const [0.45, 0.70, 0.92],
       builder: (context, scrollController) {
@@ -1207,20 +1235,47 @@ class _DayWorkoutsSheet extends StatelessWidget {
               ),
               // Content
               Expanded(
-                child: sessions.isEmpty
-                    ? _buildEmptyState(context)
-                    : ListView.builder(
-                        controller: scrollController,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                        itemCount: sessions.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: _DayWorkoutRow(session: sessions[index]),
-                          );
-                        },
-                      ),
+                child: Consumer<WorkoutHistoryProvider>(
+                  builder: (context, provider, child) {
+                    final sessions = provider.getSessionsByDate(date);
+                    if (sessions.isEmpty) {
+                      return _buildEmptyState(context);
+                    }
+                    return ListView.builder(
+                      controller: scrollController,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      itemCount: sessions.length,
+                      itemBuilder: (context, index) {
+                        final session = sessions[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Dismissible(
+                            key: Key(session.id),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                            onDismissed: (_) {
+                              provider.deleteSession(session.id);
+                            },
+                            child: _DayWorkoutRow(session: session),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),

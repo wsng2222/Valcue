@@ -280,5 +280,11 @@
   "youNeed": "Je hebt {amount} nodig om {goal} te bereiken",
   "youNeedPlus": "Je hebt +{amount} nodig om {goal} te bereiken",
   "workoutDays": "{count, plural, one{Training 1 dag 🔥} other{Training {count} dagen 🔥}}",
-  "restDays": "{count, plural, one{Rust 1 dag 🛏️} other{Rust {count} dagen 🛏️}}"
+  "restDays": "{count, plural, one{Rust 1 dag 🛏️} other{Rust {count} dagen 🛏️}}",
+  "workoutReminderTitle": "Workout herinnering",
+  "workoutReminderOff": "Uit",
+  "workoutReminderEveryDay": "Elke dag",
+  "workoutReminderSelectTime": "Tijd kiezen",
+  "workoutReminderPermissionRequired": "Meldingtoestemming is vereist.",
+  "workoutReminderTimeLabel": "Tijd"
 }

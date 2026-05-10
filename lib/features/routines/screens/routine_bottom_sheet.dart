@@ -104,8 +104,6 @@ class _RoutineDetailSheetContentState
       // Debug: Log loaded values when opening edit
       for (int i = 0; i < _intervals.length; i++) {
         final interval = _intervals[i];
-        print(
-            '[DEBUG LOAD] Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
       }
 
       // DRIFT GUARD: Log snapshot when opening edit
@@ -183,7 +181,6 @@ class _RoutineDetailSheetContentState
     if (name.length > 40) {
       name = name.substring(0, 40);
       assert(() {
-        print('[DEBUG] Routine name truncated to 40 chars: "$name"');
         return true;
       }());
     }
@@ -215,7 +212,6 @@ class _RoutineDetailSheetContentState
       if (i.level != null) json['level'] = i.level;
       return json;
     }).toList();
-    print('[DRIFT_GUARD] $stage: ${json.encode(snapshot)}');
   }
 
   String _formatDuration(int totalSeconds) {
@@ -389,8 +385,6 @@ class _RoutineDetailSheetContentState
       if (index >= 0) {
         _intervals[index] = updatedInterval;
         // Debug: Log interval update
-        print(
-            '[DEBUG UPDATE] Interval $index updated: duration=${updatedInterval.durationSeconds}s, speedKmh=${updatedInterval.speedKmh}, grade=${updatedInterval.grade}');
         // DRIFT GUARD: Log after updating interval
         _logIntervalSnapshot('UPDATE_INTERVAL', _intervals);
       }
@@ -438,7 +432,6 @@ class _RoutineDetailSheetContentState
     // DRIFT GUARD: Create snapshot before save
     final routineToSave = _buildCurrentRoutine();
     final beforeJson = json.encode(routineToSave.toJson());
-    print('[DEBUG] Saving routine - JSON snapshot: $beforeJson');
 
     // Validate all intervals have valid values
     for (final interval in _intervals) {
@@ -544,8 +537,6 @@ class _RoutineDetailSheetContentState
       // Debug: Log stored values after save
       for (int i = 0; i < savedRoutine.intervals.length; i++) {
         final interval = savedRoutine.intervals[i];
-        print(
-            '[DEBUG SAVE] Interval $i: duration=${interval.durationSeconds}s, speedKmh=${interval.speedKmh}, grade=${interval.grade}');
       }
 
       // Return to view mode after updating existing routine

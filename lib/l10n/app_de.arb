@@ -121,12 +121,12 @@
   "pausedTitle": "Pausiert",
   "pausedSubtitle": "Sie können fortfahren oder das Training beenden",
   "endWorkoutConfirmationMessage": "Wenn Sie jetzt beenden, wird das aktuelle Training beendet und Sie gelangen zum Zusammenfassungsbildschirm.",
-  "workoutComplete": "Workout Complete",
+  "workoutComplete": "Training abgeschlossen",
   "totalWorkoutTime": "Gesamtzeit",
   "totalDistance": "Gesamte Distanz",
   "averageRpm": "Durchschnittliche RPM",
   "averageLevel": "Durchschnittliches Level",
-  "holdToStop": "Hold to Stop",
+  "holdToStop": "Gedrückt halten zum Stoppen",
   "continueWorkout": "Fortsetzen",
   "endWorkoutQuestion": "Möchten Sie das Training beenden?",
   "workoutPaused": "Das Training wurde pausiert",
@@ -311,7 +311,6 @@
   "templateStairmasterAdvanced1Subtitle": "2-Minuten harte Blöcke",
   "templateStairmasterAdvanced2Title": "Sprint-Stufen 18",
   "templateStairmasterAdvanced2Subtitle": "30s Sprints + 60s Erholung",
-  "saved": "Gespeichert",
   "historyTab": "Verlauf",
   "calendarTab": "Kalender",
   "weightTab": "Gewicht",
@@ -472,6 +471,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "Workout-Erinnerung",
+  "workoutReminderOff": "Aus",
+  "workoutReminderEveryDay": "Jeden Tag",
+  "workoutReminderSelectTime": "Zeit auswählen",
+  "workoutReminderPermissionRequired": "Benachrichtigungsberechtigung erforderlich.",
+  "workoutReminderTimeLabel": "Uhrzeit"
 }
-

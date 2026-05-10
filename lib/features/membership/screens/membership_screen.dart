@@ -61,7 +61,7 @@ class MembershipScreen extends StatelessWidget {
             // Benefits list
             _buildBenefitItem(
               context,
-              _getNoAdsText(context),
+              AppLocalizations.of(context)!.noAds,
             ),
             const SizedBox(height: 16),
             _buildBenefitItem(
@@ -148,35 +148,6 @@ class MembershipScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getNoAdsText(BuildContext context) {
-    // Fallback until localization is generated
-    final locale = Localizations.localeOf(context);
-    switch (locale.languageCode) {
-      case 'ko':
-        return '광고 없음';
-      case 'es':
-        return 'Sin Anuncios';
-      case 'fr':
-        return 'Pas de Publicités';
-      case 'de':
-        return 'Keine Werbung';
-      case 'ja':
-        return '広告なし';
-      case 'zh':
-        return '无广告';
-      case 'pt':
-        return 'Sem Anúncios';
-      case 'ru':
-        return 'Без Рекламы';
-      case 'vi':
-        return 'Không Có Quảng Cáo';
-      case 'ar':
-        return 'بدون إعلانات';
-      default:
-        return 'No Ads';
-    }
   }
 
   Widget _buildBenefitItem(BuildContext context, String text) {

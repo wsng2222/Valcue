@@ -266,8 +266,6 @@ class WorkoutState extends ChangeNotifier {
     _status = WorkoutStatus.resumingCountdown;
     _countdownNumber = 3;
     _countdownTimer?.cancel();
-    // Play beep for initial countdown number 3
-    print('[WorkoutState] startInitialCountdown - playing beep for $_countdownNumber');
     SoundService().playBeep();
     notifyListeners();
 
@@ -275,10 +273,8 @@ class WorkoutState extends ChangeNotifier {
     _countdownTimer =
         Timer.periodic(const Duration(milliseconds: 900), (timer) {
       _countdownNumber--;
-      print('[WorkoutState] Countdown tick - number: $_countdownNumber');
       // Play beep for countdown numbers 3, 2, 1
       if (_countdownNumber >= 1) {
-        print('[WorkoutState] Playing beep for $_countdownNumber');
         SoundService().playBeep();
       }
       notifyListeners();
@@ -296,8 +292,6 @@ class WorkoutState extends ChangeNotifier {
       _status = WorkoutStatus.resumingCountdown;
       _countdownNumber = 3;
       _countdownTimer?.cancel();
-      // Play beep for initial countdown number 3
-      print('[WorkoutState] startResumeCountdown - playing beep for $_countdownNumber');
       SoundService().playBeep();
       notifyListeners();
 
@@ -305,10 +299,8 @@ class WorkoutState extends ChangeNotifier {
       _countdownTimer =
           Timer.periodic(const Duration(milliseconds: 900), (timer) {
         _countdownNumber--;
-        print('[WorkoutState] Resume countdown tick - number: $_countdownNumber');
         // Play beep for countdown numbers 3, 2, 1
         if (_countdownNumber >= 1) {
-          print('[WorkoutState] Playing beep for $_countdownNumber');
           SoundService().playBeep();
         }
         notifyListeners();

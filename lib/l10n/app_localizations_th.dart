@@ -896,4 +896,22 @@ class AppLocalizationsTh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutReminderTitle => 'การแจ้งเตือนการออกกำลังกาย';
+
+  @override
+  String get workoutReminderOff => 'ปิด';
+
+  @override
+  String get workoutReminderEveryDay => 'ทุกวัน';
+
+  @override
+  String get workoutReminderSelectTime => 'เลือกเวลา';
+
+  @override
+  String get workoutReminderPermissionRequired => 'ต้องการสิทธิ์การแจ้งเตือน';
+
+  @override
+  String get workoutReminderTimeLabel => 'เวลา';
 }

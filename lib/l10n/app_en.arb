@@ -1038,5 +1038,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "workoutReminderTitle": "Workout reminder",
+  "workoutReminderOff": "Off",
+  "workoutReminderEveryDay": "Every day",
+  "workoutReminderSelectTime": "Select time",
+  "workoutReminderPermissionRequired": "Notification permission is required.",
+  "workoutReminderTimeLabel": "Time"
 }
