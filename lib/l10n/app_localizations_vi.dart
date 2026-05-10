@@ -286,6 +286,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get end => 'Kết thúc';
 
   @override
+  String get share => 'Chia sẻ';
+
+  @override
   String get rotate => 'Xoay';
 
   @override
@@ -309,6 +312,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get totalDistance => 'Tổng khoảng cách';
+
+  @override
+  String get totalTime => 'Tổng thời gian';
 
   @override
   String get averageRpm => 'RPM Trung Bình';

@@ -60,6 +60,10 @@
   "editRoutine": "Rediger rutine",
   "editWeight": "Rediger vekt",
   "end": "Avslutt",
+  "share": "Del",
+  "@share": {
+    "description": "Share button label"
+  },
   "endWorkout": "Avslutt økt",
   "endWorkoutConfirm": "Vil du avslutte treningen?",
   "endWorkoutConfirmationMessage": "Hvis du avslutter nå, fullføres treningen og du går til oppsummeringen.",
@@ -246,6 +250,10 @@
   "toGo": "igjen",
   "today": "I dag",
   "totalDistance": "Total distanse",
+  "totalTime": "Total tid",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "totalWorkoutTime": "Total tid",
   "translationComingSoon": "Oversettelse blir tilgjengelig i en framtidig oppdatering.",
   "treadmill": "Tredemølle",

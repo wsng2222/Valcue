@@ -116,6 +116,10 @@
   "endWorkout": "Kết thúc Thói quen",
   "endWorkoutConfirm": "Bạn có muốn kết thúc thói quen không?",
   "end": "Kết thúc",
+  "share": "Chia sẻ",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "Xoay",
   "paused": "ĐÃ TẠM DỪNG",
   "pausedTitle": "Đã tạm dừng",
@@ -124,6 +128,10 @@
   "workoutComplete": "Hoàn thành bài tập",
   "totalWorkoutTime": "Tổng thời gian",
   "totalDistance": "Tổng khoảng cách",
+  "totalTime": "Tổng thời gian",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "RPM Trung Bình",
   "averageLevel": "Mức Trung Bình",
   "holdToStop": "Giữ để dừng",

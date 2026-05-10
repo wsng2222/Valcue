@@ -1205,11 +1205,20 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           const SizedBox(height: 14),
           Row(
             children: [
-              _MetaPill(
-                icon: Icons.view_timeline,
-                text: '${routine.intervals.length} ${l10n.interval}',
-              ),
-              const SizedBox(width: 8),
+              if (routine.machineType == MachineType.cycle) ...[
+                _MetaPill(
+                  icon: Icons.view_timeline,
+                  text: '${routine.intervals.length} ${l10n.interval}',
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (routine.machineType == MachineType.treadmill) ...[
+                _MetaPill(
+                  icon: Icons.straighten,
+                  text: _buildTotalDistanceText(routine, settingsProvider),
+                ),
+                const SizedBox(width: 8),
+              ],
               _MetaPill(
                 icon: Icons.timer_outlined,
                 text: routine.totalDurationFormatted,
@@ -1247,6 +1256,20 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         ],
       ),
     );
+  }
+
+  String _buildTotalDistanceText(Routine routine, AppSettingsProvider settings) {
+    double totalKm = 0;
+    for (final interval in routine.intervals) {
+      if (interval.speedKmh != null) {
+        totalKm += interval.speedKmh! * (interval.durationSeconds / 3600.0);
+      }
+    }
+    if (settings.measurement == 'kmh') {
+      return '${totalKm.toStringAsFixed(2)} km';
+    } else {
+      return '${(totalKm / 1.609344).toStringAsFixed(2)} mi';
+    }
   }
 
   Widget _buildIntervalPatternBar(BuildContext context, Routine routine) {

@@ -654,6 +654,12 @@ abstract class AppLocalizations {
   /// **'End'**
   String get end;
 
+  /// Share button label
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
   /// Rotate button
   ///
   /// In en, this message translates to:
@@ -701,6 +707,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total distance'**
   String get totalDistance;
+
+  /// Total time label for share card
+  ///
+  /// In en, this message translates to:
+  /// **'Total Time'**
+  String get totalTime;
 
   /// Label for average RPM in Bike workouts
   ///

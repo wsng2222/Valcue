@@ -285,6 +285,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get end => 'Avslutt';
 
   @override
+  String get share => 'Del';
+
+  @override
   String get rotate => 'Roter';
 
   @override
@@ -308,6 +311,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get totalDistance => 'Total distanse';
+
+  @override
+  String get totalTime => 'Total tid';
 
   @override
   String get averageRpm => 'Gjennomsnittlig RPM';

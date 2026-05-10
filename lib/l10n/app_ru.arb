@@ -116,6 +116,10 @@
   "endWorkout": "Завершить Тренировку",
   "endWorkoutConfirm": "Вы хотите завершить тренировку?",
   "end": "Завершить",
+  "share": "Поделиться",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "Повернуть",
   "paused": "ПАУЗА",
   "pausedTitle": "Приостановлено",
@@ -124,6 +128,10 @@
   "workoutComplete": "Тренировка завершена",
   "totalWorkoutTime": "Общее время",
   "totalDistance": "Общее расстояние",
+  "totalTime": "Общее время",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "Средний RPM",
   "averageLevel": "Средний Уровень",
   "holdToStop": "Удержите для остановки",

@@ -286,6 +286,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get end => 'End';
 
   @override
+  String get share => 'Share';
+
+  @override
   String get rotate => 'Rotate';
 
   @override
@@ -309,6 +312,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get totalDistance => 'Total distance';
+
+  @override
+  String get totalTime => 'Total Time';
 
   @override
   String get averageRpm => 'Average RPM';

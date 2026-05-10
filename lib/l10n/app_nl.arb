@@ -60,6 +60,10 @@
   "editRoutine": "Routine bewerken",
   "editWeight": "Gewicht bewerken",
   "end": "Stoppen",
+  "share": "Delen",
+  "@share": {
+    "description": "Share button label"
+  },
   "endWorkout": "Workout beëindigen",
   "endWorkoutConfirm": "Wil je de workout beëindigen?",
   "endWorkoutConfirmationMessage": "Als je nu stopt, wordt de huidige workout beëindigd en ga je naar het overzichtsscherm.",
@@ -246,6 +250,10 @@
   "toGo": "te gaan",
   "today": "Vandaag",
   "totalDistance": "Totale afstand",
+  "totalTime": "Totale tijd",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "totalWorkoutTime": "Totale tijd",
   "translationComingSoon": "Vertaling wordt beschikbaar in een toekomstige update.",
   "treadmill": "Loopband",

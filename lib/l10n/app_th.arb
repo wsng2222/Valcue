@@ -60,6 +60,10 @@
   "editRoutine": "แก้ไขรูทีน",
   "editWeight": "แก้ไขน้ำหนัก",
   "end": "จบ",
+  "share": "แชร์",
+  "@share": {
+    "description": "Share button label"
+  },
   "endWorkout": "จบการออกกำลังกาย",
   "endWorkoutConfirm": "ต้องการจบการออกกำลังกายหรือไม่?",
   "endWorkoutConfirmationMessage": "หากจบตอนนี้ การออกกำลังกายปัจจุบันจะสิ้นสุด และคุณจะไปยังหน้าสรุปผล",
@@ -246,6 +250,10 @@
   "toGo": "ที่เหลือ",
   "today": "วันนี้",
   "totalDistance": "ระยะทางรวม",
+  "totalTime": "เวลารวม",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "totalWorkoutTime": "เวลารวม",
   "translationComingSoon": "จะมีคำแปลในอัปเดตถัดไป",
   "treadmill": "ลู่วิ่ง",

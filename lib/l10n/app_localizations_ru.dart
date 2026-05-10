@@ -286,6 +286,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get end => 'Завершить';
 
   @override
+  String get share => 'Поделиться';
+
+  @override
   String get rotate => 'Повернуть';
 
   @override
@@ -309,6 +312,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get totalDistance => 'Общее расстояние';
+
+  @override
+  String get totalTime => 'Общее время';
 
   @override
   String get averageRpm => 'Средний RPM';

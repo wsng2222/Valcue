@@ -116,6 +116,10 @@
   "endWorkout": "Training Beenden",
   "endWorkoutConfirm": "Möchten Sie das Training beenden?",
   "end": "Beenden",
+  "share": "Teilen",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "Drehen",
   "paused": "PAUSIERT",
   "pausedTitle": "Pausiert",
@@ -124,6 +128,10 @@
   "workoutComplete": "Training abgeschlossen",
   "totalWorkoutTime": "Gesamtzeit",
   "totalDistance": "Gesamte Distanz",
+  "totalTime": "Gesamtzeit",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "Durchschnittliche RPM",
   "averageLevel": "Durchschnittliches Level",
   "holdToStop": "Gedrückt halten zum Stoppen",

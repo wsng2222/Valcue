@@ -281,6 +281,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get end => '종료';
 
   @override
+  String get share => '공유';
+
+  @override
   String get rotate => '회전';
 
   @override
@@ -304,6 +307,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get totalDistance => '총 거리';
+
+  @override
+  String get totalTime => '총 시간';
 
   @override
   String get averageRpm => '평균 RPM';

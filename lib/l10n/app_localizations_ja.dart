@@ -281,6 +281,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get end => '終了';
 
   @override
+  String get share => '共有';
+
+  @override
   String get rotate => '回転';
 
   @override
@@ -304,6 +307,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get totalDistance => '総距離';
+
+  @override
+  String get totalTime => '合計時間';
 
   @override
   String get averageRpm => '平均RPM';

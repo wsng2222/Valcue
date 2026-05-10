@@ -116,6 +116,10 @@
   "endWorkout": "운동 종료",
   "endWorkoutConfirm": "운동을 종료하시겠습니까?",
   "end": "종료",
+  "share": "공유",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "회전",
   "paused": "일시중지됨",
   "pausedTitle": "일시정지됨",
@@ -124,6 +128,10 @@
   "workoutComplete": "운동 완료",
   "totalWorkoutTime": "총 시간",
   "totalDistance": "총 거리",
+  "totalTime": "총 시간",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "평균 RPM",
   "averageLevel": "평균 레벨",
   "holdToStop": "길게 눌러 정지",

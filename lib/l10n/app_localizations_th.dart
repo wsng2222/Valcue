@@ -283,6 +283,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get end => 'จบ';
 
   @override
+  String get share => 'แชร์';
+
+  @override
   String get rotate => 'หมุน';
 
   @override
@@ -306,6 +309,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get totalDistance => 'ระยะทางรวม';
+
+  @override
+  String get totalTime => 'เวลารวม';
 
   @override
   String get averageRpm => 'RPM เฉลี่ย';

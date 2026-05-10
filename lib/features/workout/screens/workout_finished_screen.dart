@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart' show Share, XFile;
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
@@ -42,6 +46,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
   late AnimationController _confettiController;
   late AnimationController _fadeController;
   bool _hasPlayedAnimation = false;
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   void initState() {
@@ -156,6 +161,77 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     super.dispose();
   }
 
+  Future<void> _shareWorkout(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final overlay = Overlay.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final cardKey = GlobalKey();
+    late OverlayEntry entry;
+
+    final machineTypeLabel = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
+
+    try {
+      entry = OverlayEntry(
+        builder: (_) => Positioned(
+          left: -9999,
+          top: -9999,
+          child: RepaintBoundary(
+            key: cardKey,
+            child: _ShareCard(
+              routine: widget.routine,
+              elapsedSeconds: widget.elapsedSeconds,
+              distanceMeters: widget.distanceMeters,
+              finishTime: widget.finishTime,
+              currentIntervalIndex: widget.currentIntervalIndex,
+              elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
+              machineTypeLabel: machineTypeLabel,
+              totalTimeLabel: l10n.totalTime,
+              distanceLabel: l10n.totalDistance,
+              avgRpmLabel: l10n.averageRpm,
+              avgLevelLabel: l10n.averageLevel,
+            ),
+          ),
+        ),
+      );
+
+      overlay.insert(entry);
+      // 한 프레임 기다려서 paint 완료
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      final renderObject = cardKey.currentContext?.findRenderObject();
+      if (renderObject is! RenderRepaintBoundary) {
+        entry.remove();
+        return;
+      }
+
+      final image = await renderObject.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      entry.remove();
+      if (byteData == null) return;
+
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/workout_result.png');
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+
+      Rect? shareOrigin;
+      final box = _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        shareOrigin = box.localToGlobal(Offset.zero) & box.size;
+      }
+
+      await Share.shareXFiles(
+        [XFile(file.path, mimeType: 'image/png')],
+        sharePositionOrigin: shareOrigin,
+      );
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text('error: $e')));
+    }
+  }
+
   String _formatDateTime(BuildContext context, DateTime dateTime) {
     final l10n = AppLocalizations.of(context)!;
     return l10n.dateTimeFormat(
@@ -187,16 +263,14 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                 child: Column(
                   children: [
                     const Spacer(flex: 2),
-                    // Completion icon (red accent)
                     Icon(
                       Icons.check_circle,
                       size: 64,
                       color: theme.colorScheme.primary,
                     ),
                     const SizedBox(height: 20),
-                    // Title: "Workout Completed" (always English)
                     Text(
-                      'Workout Completed',
+                      AppLocalizations.of(context)!.workoutComplete,
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
@@ -206,20 +280,18 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                       textAlign: TextAlign.center,
                     ),
                     const Spacer(flex: 2),
-                    // Combined time and distance/average card
                     _WorkoutSummaryCard(
                       elapsedSeconds: widget.elapsedSeconds,
-                      distanceMeters:
-                          widget.routine.machineType == MachineType.treadmill
-                              ? widget.distanceMeters
-                              : null,
+                      distanceMeters: widget.routine.machineType ==
+                              MachineType.treadmill
+                          ? widget.distanceMeters
+                          : null,
                       routine: widget.routine,
                       currentIntervalIndex: widget.currentIntervalIndex,
                       elapsedSecondsInCurrentSession:
                           widget.elapsedSecondsInCurrentSession,
                     ),
-                    const SizedBox(height: 24),
-                    // Date/time (secondary text)
+                    const SizedBox(height: 16),
                     Text(
                       _formatDateTime(context, widget.finishTime),
                       style: TextStyle(
@@ -231,6 +303,33 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                       textAlign: TextAlign.center,
                     ),
                     const Spacer(flex: 3),
+                    // Share button
+                    SizedBox(
+                      key: _shareButtonKey,
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () => _shareWorkout(context),
+                        icon: const Icon(Icons.share_outlined, size: 18),
+                        label: Text(
+                          AppLocalizations.of(context)!.share,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          side: BorderSide(
+                            color: theme.colorScheme.outline.withValues(alpha: 0.4),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     // Primary button: End
                     SizedBox(
                       width: double.infinity,
@@ -598,5 +697,288 @@ class _ConfettiPainter extends CustomPainter {
   @override
   bool shouldRepaint(_ConfettiPainter oldDelegate) {
     return oldDelegate.progress != progress;
+  }
+}
+
+class _ShareCard extends StatelessWidget {
+  final Routine routine;
+  final int elapsedSeconds;
+  final double? distanceMeters;
+  final DateTime finishTime;
+  final int currentIntervalIndex;
+  final int elapsedSecondsInCurrentSession;
+  final String machineTypeLabel;
+  final String totalTimeLabel;
+  final String distanceLabel;
+  final String avgRpmLabel;
+  final String avgLevelLabel;
+
+  const _ShareCard({
+    required this.routine,
+    required this.elapsedSeconds,
+    this.distanceMeters,
+    required this.finishTime,
+    required this.currentIntervalIndex,
+    required this.elapsedSecondsInCurrentSession,
+    required this.machineTypeLabel,
+    required this.totalTimeLabel,
+    required this.distanceLabel,
+    required this.avgRpmLabel,
+    required this.avgLevelLabel,
+  });
+
+  String _formatTime(int seconds) {
+    final h = seconds ~/ 3600;
+    final m = (seconds % 3600) ~/ 60;
+    final s = seconds % 60;
+    if (h > 0) {
+      return '$h:${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
+    }
+    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
+  }
+
+  double? _avgRpm() {
+    if (routine.machineType != MachineType.cycle) return null;
+    double w = 0; int t = 0;
+    for (int i = 0; i < currentIntervalIndex; i++) {
+      final iv = routine.intervals[i];
+      if (iv.rpm != null) { w += iv.rpm! * iv.durationSeconds; t += iv.durationSeconds; }
+    }
+    if (currentIntervalIndex < routine.intervals.length) {
+      final iv = routine.intervals[currentIntervalIndex];
+      if (iv.rpm != null && elapsedSecondsInCurrentSession > 0) {
+        w += iv.rpm! * elapsedSecondsInCurrentSession; t += elapsedSecondsInCurrentSession;
+      }
+    }
+    return t == 0 ? null : w / t;
+  }
+
+  double? _avgLevel() {
+    if (routine.machineType != MachineType.stairmaster) return null;
+    double w = 0; int t = 0;
+    for (int i = 0; i < currentIntervalIndex; i++) {
+      final iv = routine.intervals[i];
+      if (iv.level != null) { w += iv.level! * iv.durationSeconds; t += iv.durationSeconds; }
+    }
+    if (currentIntervalIndex < routine.intervals.length) {
+      final iv = routine.intervals[currentIntervalIndex];
+      if (iv.level != null && elapsedSecondsInCurrentSession > 0) {
+        w += iv.level! * elapsedSecondsInCurrentSession; t += elapsedSecondsInCurrentSession;
+      }
+    }
+    return t == 0 ? null : w / t;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const cardW = 360.0;
+    const cardH = 560.0;
+    const accent = Color(0xFFFF3B30);
+    const bg1 = Color(0xFF0D0D12);
+    const bg2 = Color(0xFF1C1C2E);
+
+    final IconData machineIcon = switch (routine.machineType) {
+      MachineType.treadmill => Icons.directions_run,
+      MachineType.cycle => Icons.pedal_bike,
+      MachineType.stairmaster => Icons.stairs,
+    };
+
+    // Secondary metric
+    String? metricLabel;
+    String? metricValue;
+    if (routine.machineType == MachineType.treadmill && distanceMeters != null) {
+      final km = distanceMeters! / 1000;
+      metricLabel = distanceLabel;
+      metricValue = km >= 1 ? '${km.toStringAsFixed(2)} km' : '${distanceMeters!.toStringAsFixed(0)} m';
+    } else if (routine.machineType == MachineType.cycle) {
+      final rpm = _avgRpm();
+      if (rpm != null) { metricLabel = avgRpmLabel; metricValue = rpm.round().toString(); }
+    } else if (routine.machineType == MachineType.stairmaster) {
+      final lvl = _avgLevel();
+      if (lvl != null) { metricLabel = avgLevelLabel; metricValue = lvl.toStringAsFixed(1); }
+    }
+
+    final dateStr =
+        '${finishTime.year}.${finishTime.month.toString().padLeft(2, '0')}.${finishTime.day.toString().padLeft(2, '0')}';
+
+    return SizedBox(
+      width: cardW,
+      height: cardH,
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            width: cardW,
+            height: cardH,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [bg1, bg2],
+              ),
+            ),
+          ),
+          // Decorative large circle top-right
+          Positioned(
+            top: -60,
+            right: -60,
+            child: Container(
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    accent.withValues(alpha: 0.25),
+                    accent.withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Decorative small circle bottom-left
+          Positioned(
+            bottom: -40,
+            left: -40,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    accent.withValues(alpha: 0.12),
+                    accent.withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top row: branding + machine type
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'PacePilot',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          machineTypeLabel.toUpperCase(),
+                          style: const TextStyle(
+                            color: accent,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: accent.withValues(alpha: 0.3)),
+                      ),
+                      child: Icon(machineIcon, color: accent, size: 24),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                // Routine name
+                Text(
+                  routine.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Big time
+                Text(
+                  _formatTime(elapsedSeconds),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 72,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -3,
+                    height: 1,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  totalTimeLabel.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white38,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                if (metricLabel != null && metricValue != null) ...[
+                  const SizedBox(height: 28),
+                  Container(
+                    height: 1,
+                    color: Colors.white10,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    metricValue,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 36,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -1,
+                      height: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    metricLabel,
+                    style: const TextStyle(
+                      color: Colors.white38,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ],
+                const Spacer(),
+                // Bottom: date
+                Text(
+                  dateStr,
+                  style: const TextStyle(
+                    color: Colors.white38,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

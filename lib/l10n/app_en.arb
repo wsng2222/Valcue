@@ -369,6 +369,10 @@
     "description": "End workout confirmation message"
   },
   "end": "End",
+  "share": "Share",
+  "@share": {
+    "description": "Share button label"
+  },
   "@end": {
     "description": "End button"
   },
@@ -401,6 +405,10 @@
     "description": "Total workout time label"
   },
   "totalDistance": "Total distance",
+  "totalTime": "Total Time",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "@totalDistance": {
     "description": "Total distance label"
   },

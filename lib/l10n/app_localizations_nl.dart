@@ -285,6 +285,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get end => 'Stoppen';
 
   @override
+  String get share => 'Delen';
+
+  @override
   String get rotate => 'Draaien';
 
   @override
@@ -308,6 +311,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get totalDistance => 'Totale afstand';
+
+  @override
+  String get totalTime => 'Totale tijd';
 
   @override
   String get averageRpm => 'Gemiddelde RPM';

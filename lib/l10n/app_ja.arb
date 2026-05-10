@@ -116,6 +116,10 @@
   "endWorkout": "ワークアウト終了",
   "endWorkoutConfirm": "ワークアウトを終了しますか？",
   "end": "終了",
+  "share": "共有",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "回転",
   "paused": "一時停止中",
   "pausedTitle": "一時停止中",
@@ -124,6 +128,10 @@
   "workoutComplete": "ワークアウト完了",
   "totalWorkoutTime": "合計時間",
   "totalDistance": "総距離",
+  "totalTime": "合計時間",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "平均RPM",
   "averageLevel": "平均レベル",
   "holdToStop": "長押しで停止",

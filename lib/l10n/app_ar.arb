@@ -116,6 +116,10 @@
   "endWorkout": "إنهاء التمرين",
   "endWorkoutConfirm": "هل تريد إنهاء التمرين؟",
   "end": "إنهاء",
+  "share": "مشاركة",
+  "@share": {
+    "description": "Share button label"
+  },
   "rotate": "تدوير",
   "paused": "متوقف مؤقتاً",
   "pausedTitle": "متوقف مؤقتاً",
@@ -124,6 +128,10 @@
   "workoutComplete": "اكتمل التمرين",
   "totalWorkoutTime": "إجمالي الوقت",
   "totalDistance": "إجمالي المسافة",
+  "totalTime": "الوقت الإجمالي",
+  "@totalTime": {
+    "description": "Total time label for share card"
+  },
   "averageRpm": "متوسط RPM",
   "averageLevel": "المستوى المتوسط",
   "holdToStop": "اضغط مطولاً للإيقاف",

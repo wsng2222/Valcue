@@ -281,6 +281,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get end => '结束';
 
   @override
+  String get share => '分享';
+
+  @override
   String get rotate => '旋转';
 
   @override
@@ -303,6 +306,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get totalDistance => '总距离';
+
+  @override
+  String get totalTime => '总时间';
 
   @override
   String get averageRpm => '平均RPM';
