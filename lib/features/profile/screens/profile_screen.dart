@@ -1583,7 +1583,7 @@ class _WeightTabState extends State<_WeightTab> {
               ),
               // Sticky Record Button
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 1),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border(
@@ -1597,7 +1597,6 @@ class _WeightTabState extends State<_WeightTab> {
                 ),
                 child: SafeArea(
                   top: false,
-                  bottom: false,
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -1631,7 +1630,7 @@ class _WeightTabState extends State<_WeightTab> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1639,16 +1638,14 @@ class _WeightTabState extends State<_WeightTab> {
                     _WeightSummaryCard(
                       onRecordTap: () => _showRecordWeightBottomSheet(context),
                     ),
-                    const SizedBox(height: 14),
-                    _WeightInsightsRow(),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 20),
                     // Trend Chart (only if 2+ entries - need at least 2 points to draw a line)
                     if (provider.entries.length >= 2) ...[
                       _WeightTrendChart(timeframe: _selectedTimeframe),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                     ] else if (provider.entries.length == 1) ...[
                       _buildTrendEmptyState(context),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                     ],
                     // History List
                     if (provider.entries.isNotEmpty)
@@ -1667,7 +1664,7 @@ class _WeightTabState extends State<_WeightTab> {
             ),
             // Sticky Record Button
             Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 border: Border(
@@ -1681,7 +1678,6 @@ class _WeightTabState extends State<_WeightTab> {
               ),
               child: SafeArea(
                 top: false,
-                bottom: false,
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -1816,7 +1812,7 @@ class _WeightTabState extends State<_WeightTab> {
   }
 }
 
-// Weight Summary Card - Hero card with current weight, delta, goal, progress bar
+// Weight Summary Card - Unified card with current weight, delta, goal, progress bar
 class _WeightSummaryCard extends StatelessWidget {
   final VoidCallback? onRecordTap;
 
@@ -1830,7 +1826,6 @@ class _WeightSummaryCard extends StatelessWidget {
         final appColors = theme.extension<AppColors>()!;
         final isDark = theme.brightness == Brightness.dark;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
-        final l10n = AppLocalizations.of(context)!;
 
         final currentWeight = provider.currentWeight;
         final weightChange = provider.getWeightChange();
@@ -1868,25 +1863,11 @@ class _WeightSummaryCard extends StatelessWidget {
         }
         // If only one entry, progress remains null (will show gray bar only)
 
-        String formatEntryDate(DateTime dateTime) {
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
-          final dateOnly =
-              DateTime(dateTime.year, dateTime.month, dateTime.day);
-          if (dateOnly == today) return l10n.today;
-          if (dateOnly == today.subtract(const Duration(days: 1))) {
-            return l10n.yesterday;
-          }
-          final locale = Localizations.localeOf(context);
-          return DateFormat.yMMMd(locale.toString()).format(dateTime);
-        }
-
         return Container(
           padding: const EdgeInsets.all(24),
-          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isDark
                   ? Colors.white.withValues(alpha: 0.1)
@@ -1897,156 +1878,133 @@ class _WeightSummaryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Current Weight (Hero) - Large number
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.weightTab,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: appColors.mutedText,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Text(
-                currentWeight.formatWeight(isWeightMetric),
-                style: TextStyle(
-                  fontSize: 56,
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -1.6,
-                  height: 1.0,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Icon(
-                    Icons.schedule,
-                    size: 14,
-                    color: appColors.mutedText,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    formatEntryDate(currentWeight.dateTime),
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: appColors.mutedText,
-                    ),
-                  ),
-                  if (weightChange != null) ...[
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 1,
-                      height: 14,
-                      color: appColors.mutedText.withValues(alpha: 0.3),
-                    ),
-                    const SizedBox(width: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: weightChange < 0
-                            ? Colors.green.withValues(alpha: 0.15)
-                            : theme.colorScheme.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            weightChange < 0
-                                ? Icons.trending_down
-                                : Icons.trending_up,
-                            size: 12,
-                            color: weightChange < 0
-                                ? Colors.green
-                                : theme.colorScheme.primary,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          currentWeight.formatWeight(isWeightMetric),
+                          style: TextStyle(
+                            fontSize: 56,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
+                            letterSpacing: -1.5,
+                            height: 1.0,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: weightChange < 0
-                                  ? Colors.green
-                                  : theme.colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  GestureDetector(
-                    onTap: () => _showSetGoalBottomSheet(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: goalWeight != null
-                            ? theme.colorScheme.primary.withValues(alpha: 0.1)
-                            : (isDark
-                                ? const Color(0xFF2C2C2E)
-                                : Colors.grey.shade100),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: goalWeight != null
-                              ? theme.colorScheme.primary.withValues(alpha: 0.3)
-                              : (isDark
-                                  ? Colors.white.withValues(alpha: 0.1)
-                                  : Colors.grey.shade300),
-                          width: 1,
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            goalWeight != null
-                                ? Icons.flag
-                                : Icons.flag_outlined,
-                            size: 14,
-                            color: goalWeight != null
-                                ? theme.colorScheme.primary
-                                : appColors.mutedText,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            goalWeight != null
-                                ? WeightEntry(
-                                    dateTime: DateTime.now(),
-                                    weightKg: goalWeight,
-                                  ).formatWeight(isWeightMetric)
-                                : l10n.setGoal,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: goalWeight != null
-                                  ? theme.colorScheme.primary
-                                  : appColors.mutedText,
+                        const SizedBox(height: 8),
+                        // Delta + Goal in one row
+                        Row(
+                          children: [
+                            // Delta indicator
+                            if (weightChange != null) ...[
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    weightChange < 0
+                                        ? Icons.trending_down
+                                        : Icons.trending_up,
+                                    size: 14,
+                                    color: weightChange < 0
+                                        ? Colors.green
+                                        : appColors.mutedText,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric)}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: weightChange < 0
+                                          ? Colors.green
+                                          : appColors.mutedText,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Always show separator between delta and goal button
+                              const SizedBox(width: 12),
+                              Container(
+                                width: 1,
+                                height: 14,
+                                color:
+                                    appColors.mutedText.withValues(alpha: 0.3),
+                              ),
+                              const SizedBox(width: 12),
+                            ],
+                            // Goal pill
+                            GestureDetector(
+                              onTap: () => _showSetGoalBottomSheet(context),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: goalWeight != null
+                                      ? theme.colorScheme.primary
+                                          .withValues(alpha: 0.1)
+                                      : (isDark
+                                          ? const Color(0xFF2C2C2E)
+                                          : Colors.grey.shade100),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: goalWeight != null
+                                        ? theme.colorScheme.primary
+                                            .withValues(alpha: 0.3)
+                                        : (isDark
+                                            ? Colors.white
+                                                .withValues(alpha: 0.1)
+                                            : Colors.grey.shade300),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      goalWeight != null
+                                          ? Icons.flag
+                                          : Icons.flag_outlined,
+                                      size: 12,
+                                      color: goalWeight != null
+                                          ? theme.colorScheme.primary
+                                          : appColors.mutedText,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      goalWeight != null
+                                          ? WeightEntry(
+                                              dateTime: DateTime.now(),
+                                              weightKg: goalWeight,
+                                            ).formatWeight(isWeightMetric)
+                                          : AppLocalizations.of(context)!
+                                              .setGoal,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: goalWeight != null
+                                            ? theme.colorScheme.primary
+                                            : appColors.mutedText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
               // Goal indicator (only show if goal is set)
               if (goalWeight != null && toGoal != null) ...[
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Icon(
@@ -2058,8 +2016,8 @@ class _WeightSummaryCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         toGoal.abs() < 0.1
-                            ? '${l10n.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${l10n.goalAchieved}'
-                            : '${l10n.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${WeightEntry(dateTime: DateTime.now(), weightKg: toGoal.abs()).formatWeight(isWeightMetric)} ${l10n.toGo}',
+                            ? '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${AppLocalizations.of(context)!.goalAchieved}'
+                            : '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${WeightEntry(dateTime: DateTime.now(), weightKg: toGoal.abs()).formatWeight(isWeightMetric)} ${toGoal > 0 ? AppLocalizations.of(context)!.toGo : AppLocalizations.of(context)!.over}',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -2069,7 +2027,8 @@ class _WeightSummaryCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
+                // Progress bar
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
@@ -2120,123 +2079,6 @@ class _WeightSummaryCard extends StatelessWidget {
         isMetric: isWeightMetric,
         currentWeight: provider.currentWeight,
       ),
-    );
-  }
-}
-
-class _WeightInsightsRow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer2<WeightTrackerProvider, AppSettingsProvider>(
-      builder: (context, provider, settingsProvider, child) {
-        final theme = Theme.of(context);
-        final appColors = theme.extension<AppColors>()!;
-        final isDark = theme.brightness == Brightness.dark;
-        final isWeightMetric = settingsProvider.weightUnit == 'kg';
-        final l10n = AppLocalizations.of(context)!;
-
-        String formatDelta(double? kg) {
-          if (kg == null) return '--';
-          final sign = kg > 0 ? '+' : (kg < 0 ? '-' : '');
-          return '$sign${WeightEntry(dateTime: DateTime.now(), weightKg: kg.abs()).formatWeight(isWeightMetric)}';
-        }
-
-        String formatAvg(double? kg) {
-          if (kg == null) return '--';
-          return WeightEntry(dateTime: DateTime.now(), weightKg: kg)
-              .formatWeight(isWeightMetric);
-        }
-
-        final delta7 = provider.getWeightChangeFromDaysAgo(7);
-        final delta30 = provider.getWeightChangeFromDaysAgo(30);
-        final avg7 = provider.getAverageWeight(7);
-
-        Widget buildTile({
-          required String label,
-          required String value,
-          required Color valueColor,
-          required IconData icon,
-        }) {
-          return Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.1)
-                      : Colors.grey.shade300,
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(icon, size: 14, color: appColors.mutedText),
-                      const SizedBox(width: 6),
-                      Text(
-                        label,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: appColors.mutedText,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: valueColor,
-                      letterSpacing: -0.2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        final delta7Color = delta7 == null
-            ? appColors.mutedText
-            : (delta7 < 0 ? Colors.green : theme.colorScheme.primary);
-        final delta30Color = delta30 == null
-            ? appColors.mutedText
-            : (delta30 < 0 ? Colors.green : theme.colorScheme.primary);
-        final avgColor =
-            avg7 == null ? appColors.mutedText : theme.colorScheme.onSurface;
-
-        return Row(
-          children: [
-            buildTile(
-              label: l10n.timeframe7D,
-              value: formatDelta(delta7),
-              valueColor: delta7Color,
-              icon: Icons.trending_up,
-            ),
-            const SizedBox(width: 10),
-            buildTile(
-              label: l10n.timeframe30D,
-              value: formatDelta(delta30),
-              valueColor: delta30Color,
-              icon: Icons.timeline,
-            ),
-            const SizedBox(width: 10),
-            buildTile(
-              label: l10n.avg,
-              value: formatAvg(avg7),
-              valueColor: avgColor,
-              icon: Icons.equalizer,
-            ),
-          ],
-        );
-      },
     );
   }
 }
@@ -2586,7 +2428,6 @@ class _WeightHistoryList extends StatelessWidget {
       builder: (context, provider, settingsProvider, child) {
         final theme = Theme.of(context);
         final isDark = theme.brightness == Brightness.dark;
-        final appColors = theme.extension<AppColors>()!;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
 
         final entriesToShow =
@@ -2621,15 +2462,7 @@ class _WeightHistoryList extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            ...List.generate(entriesToShow.length, (index) {
-              final entry = entriesToShow[index];
-              final previousEntry = index + 1 < provider.entries.length
-                  ? provider.entries[index + 1]
-                  : null;
-              final delta = previousEntry == null
-                  ? null
-                  : entry.weightKg - previousEntry.weightKg;
-
+            ...entriesToShow.map((entry) {
               String formatDate(DateTime dateTime) {
                 final now = DateTime.now();
                 final today = DateTime(now.year, now.month, now.day);
@@ -2648,25 +2481,14 @@ class _WeightHistoryList extends StatelessWidget {
                 }
               }
 
-              String? formatDelta(double? deltaKg) {
-                if (deltaKg == null) return null;
-                final sign = deltaKg > 0 ? '+' : '';
-                return '$sign${WeightEntry(dateTime: DateTime.now(), weightKg: deltaKg.abs()).formatWeight(isWeightMetric)}';
-              }
-
-              final deltaText = formatDelta(delta);
-              final deltaColor = delta == null
-                  ? appColors.mutedText
-                  : (delta < 0 ? Colors.green : theme.colorScheme.primary);
-
               return Dismissible(
                 key: Key(entry.id),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
                     color: Colors.red,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
@@ -2688,14 +2510,14 @@ class _WeightHistoryList extends StatelessWidget {
                 },
                 child: InkWell(
                   onTap: () => _showEditWeightBottomSheet(context, entry),
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(16),
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
+                        horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isDark
                             ? Colors.white.withValues(alpha: 0.1)
@@ -2704,65 +2526,22 @@ class _WeightHistoryList extends StatelessWidget {
                       ),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              entry.formatWeight(isWeightMetric),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              formatDate(entry.dateTime),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: appColors.mutedText,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        if (deltaText != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: deltaColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  delta != null && delta < 0
-                                      ? Icons.trending_down
-                                      : Icons.trending_up,
-                                  size: 12,
-                                  color: deltaColor,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  deltaText,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: deltaColor,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        Text(
+                          entry.formatWeight(isWeightMetric),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface,
                           ),
-                        const SizedBox(width: 6),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 18,
-                          color: appColors.mutedText,
+                        ),
+                        Text(
+                          formatDate(entry.dateTime),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: theme.extension<AppColors>()!.mutedText,
+                          ),
                         ),
                       ],
                     ),

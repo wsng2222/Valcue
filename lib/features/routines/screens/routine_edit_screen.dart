@@ -528,6 +528,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.pop(context),
+                      minimumSize: const Size(0, 0),
                       child: Text(
                         l10n.cancel,
                         style: const TextStyle(
@@ -535,7 +536,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      minimumSize: Size(0, 0),
                     ),
                     Text(
                       l10n.difficulty,
@@ -549,6 +549,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.pop(context),
+                      minimumSize: const Size(0, 0),
                       child: Text(
                         l10n.done,
                         style: const TextStyle(
@@ -557,7 +558,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                           color: CupertinoColors.activeBlue,
                         ),
                       ),
-                      minimumSize: Size(0, 0),
                     ),
                   ],
                 ),

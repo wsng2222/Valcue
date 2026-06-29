@@ -264,7 +264,7 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
   Widget build(BuildContext context) {
     // Force hide navigation bar on every build
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
+    
     // Ensure navigation bar stays hidden every rebuild
     SchedulerBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);

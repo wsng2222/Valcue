@@ -32,9 +32,6 @@ class RoutinePreviewSheet {
     final rootNavigator = Navigator.of(context, rootNavigator: true);
     final rootOverlay = rootNavigator.overlay;
     final overlay = rootOverlay ?? Overlay.of(context, rootOverlay: true);
-    if (overlay == null) {
-      return;
-    }
 
     _toastEntry?.remove();
     _toastEntry = null;

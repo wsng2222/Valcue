@@ -823,12 +823,12 @@ class _RoutineDetailSheetContentState
                                     : CupertinoButton(
                                         padding: EdgeInsets.zero,
                                         onPressed: _showDeleteConfirmation,
+                                        minimumSize: const Size(32, 32),
                                         child: Icon(
                                           CupertinoIcons.trash,
                                           color: theme.colorScheme.error,
                                           size: 20,
                                         ),
-                                        minimumSize: Size(32, 32),
                                       ),
                               ),
                           ],
@@ -1114,13 +1114,13 @@ class _DifficultyPickerSheet extends StatelessWidget {
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: () => Navigator.pop(context),
+                    minimumSize: const Size(0, 0),
                     child: Text(
                       AppLocalizations.of(context)!.cancel,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    minimumSize: Size(0, 0),
                   ),
                   Text(
                     AppLocalizations.of(context)!.selectDifficulty,
@@ -1135,13 +1135,13 @@ class _DifficultyPickerSheet extends StatelessWidget {
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: () => Navigator.pop(context),
+                    minimumSize: const Size(0, 0),
                     child: Text(
                       AppLocalizations.of(context)!.done,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    minimumSize: Size(0, 0),
                   ),
                 ],
               ),

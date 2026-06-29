@@ -507,7 +507,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         ),
         // Bottom buttons
         Padding(
-          padding: EdgeInsetsDirectional.only(
+          padding: const EdgeInsetsDirectional.only(
             bottom: 32,
           ),
           child: Row(

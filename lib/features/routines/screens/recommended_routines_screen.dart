@@ -529,6 +529,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
               onPressed: () {
                 RoutinePreviewSheet.show(context, template, settingsProvider);
               },
+              minimumSize: const Size(0, 0),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -552,7 +553,6 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                   ),
                 ),
               ),
-              minimumSize: Size(0, 0),
             ),
           ],
         ),
