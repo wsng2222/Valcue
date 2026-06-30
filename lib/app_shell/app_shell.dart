@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart' as intl;
 import '../features/routines/screens/routine_list_screen.dart';
 import '../features/routines/models/machine_type.dart';
 import '../features/settings/screens/settings_screen.dart';
@@ -604,6 +605,7 @@ class _PlanSelector extends StatefulWidget {
 class _PlanSelectorState extends State<_PlanSelector> {
   late _PlanSelectionNotifier _notifier;
   late PlanType _selectedPlan;
+  static final _priceFormatter = intl.NumberFormat('#,###');
 
   @override
   void initState() {
@@ -630,9 +632,9 @@ class _PlanSelectorState extends State<_PlanSelector> {
   }
 
   // Pricing constants
-  static const double monthlyPrice = 5700.0; // KRW
-  static const double yearlyPrice = 49000.0; // KRW (8.6 months = ~28% savings)
-  static const double lifetimePrice = 99000.0; // KRW (lifetime)
+  static const double monthlyPrice = 1900.0; // KRW
+  static const double yearlyPrice = 19000.0; // KRW (~17% savings vs monthly)
+  static const double lifetimePrice = 39000.0; // KRW (lifetime)
 
   int get _savingsPercent {
     const monthlyTotal = monthlyPrice * 12;
@@ -644,6 +646,8 @@ class _PlanSelectorState extends State<_PlanSelector> {
     return ((monthlyTotal - lifetimePrice) / monthlyTotal * 100).round();
   }
 
+  String _formatPrice(double price) => _priceFormatter.format(price.round());
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -654,7 +658,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
         // Monthly plan (first option)
         _PlanCard(
           title: l10n.monthly,
-          price: '5,700',
+          price: _formatPrice(monthlyPrice),
           period: l10n.perMonth,
           isSelected: _selectedPlan == PlanType.monthly,
           isPrimary: false,
@@ -669,7 +673,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
           children: [
             _PlanCard(
               title: l10n.yearly,
-              price: '49,000',
+              price: _formatPrice(yearlyPrice),
               period: l10n.perYear,
               isSelected: _selectedPlan == PlanType.yearly,
               savingsPercent: _savingsPercent,
@@ -721,7 +725,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
           children: [
             _PlanCard(
               title: l10n.lifetime,
-              price: '99,000',
+              price: _formatPrice(lifetimePrice),
               period: l10n.oneTime,
               isSelected: _selectedPlan == PlanType.lifetime,
               savingsPercent: _lifetimeSavingsPercent,

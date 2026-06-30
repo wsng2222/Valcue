@@ -362,6 +362,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         child: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
+            bottom: false,
             child: OrientationBuilder(
               builder: (context, orientation) {
                 return Consumer2<WorkoutState, AppSettingsProvider>(
@@ -558,7 +559,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         left: false, // No left padding in landscape
         right: false, // No right padding in landscape
         minimum: const EdgeInsets.only(
-            top: 16, bottom: 16), // Add padding to center vertically
+            top: 12,
+            bottom: 0), // Keep top breathing room without lifting controls
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Get available dimensions after SafeArea
@@ -593,66 +595,73 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             final mainFontSize = (availableHeight * 0.20 * scaleFactor)
                 .clamp(scaled(48.0), scaled(100.0));
 
-            return Column(
+            return Stack(
+              fit: StackFit.expand,
               children: [
-                // Top section: Total routine remaining time and progress bar (full width)
-                _TopRoutineProgressHeader(
-                  totalRemainingTimeFormatted:
-                      state.formatTime(state.totalRemainingSeconds),
-                  progress: state.totalRemainingProgress,
-                  scaleFactor: scaleFactor,
-                ),
-                // Main content: Two columns layout - Centered vertically
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(
-                      scaled(20),
-                      scaled(8),
-                      scaled(48),
-                      scaled(8),
+                Column(
+                  children: [
+                    // Top section: Total routine remaining time and progress bar (full width)
+                    _TopRoutineProgressHeader(
+                      totalRemainingTimeFormatted:
+                          state.formatTime(state.totalRemainingSeconds),
+                      progress: state.totalRemainingProgress,
+                      scaleFactor: scaleFactor,
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Left column: Current speed + chips
-                        Expanded(
-                          flex: 1,
-                          child: _CurrentValueSection(
-                            mainValueText: _getMainValueText(
-                                context, state, settingsProvider),
-                            nextValueText: _getNextValueText(
-                                context, state, settingsProvider),
-                            nextRpmText: _getNextRpmText(context, state),
-                            secondaryValueText:
-                                _getSecondaryValueText(context, state),
-                            mainFontSize: mainFontSize,
-                            currentIntervalIndex: state.currentIntervalIndex,
-                            scaleFactor: scaleFactor,
+                    // Main content: Two columns layout
+                    Expanded(
+                      child: Align(
+                        alignment: const Alignment(0, 0.18),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            scaled(20),
+                            0,
+                            scaled(48),
+                            scaled(56),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: _CurrentValueSection(
+                                  mainValueText: _getMainValueText(
+                                      context, state, settingsProvider),
+                                  nextValueText: _getNextValueText(
+                                      context, state, settingsProvider),
+                                  nextRpmText: _getNextRpmText(context, state),
+                                  secondaryValueText:
+                                      _getSecondaryValueText(context, state),
+                                  mainFontSize: mainFontSize,
+                                  currentIntervalIndex:
+                                      state.currentIntervalIndex,
+                                  scaleFactor: scaleFactor,
+                                ),
+                              ),
+                              SizedBox(width: scaled(24)),
+                              SizedBox(
+                                width: circleSize + scaled(12),
+                                child: _CircularSessionTimer(
+                                  timeText: countdownLabel,
+                                  progress: 1.0 - state.currentIntervalProgress,
+                                  isPaused:
+                                      state.status == WorkoutStatus.paused,
+                                  size: circleSize,
+                                  currentIntervalIndex:
+                                      state.currentIntervalIndex,
+                                  scaleFactor: scaleFactor,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(width: scaled(24)),
-                        // Right column: Circular session timer
-                        SizedBox(
-                          width: circleSize +
-                              scaled(12), // Bring timer closer to center
-                          child: _CircularSessionTimer(
-                            timeText: countdownLabel,
-                            progress: 1.0 - state.currentIntervalProgress,
-                            isPaused: state.status == WorkoutStatus.paused,
-                            size: circleSize,
-                            currentIntervalIndex: state.currentIntervalIndex,
-                            scaleFactor: scaleFactor,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                // Bottom control bar with bottom padding
-                Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    bottom: scaled(1),
-                  ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
                   child: _BottomControlBar(
                     isPaused: state.status == WorkoutStatus.paused,
                     isResumingCountdown:
@@ -1289,8 +1298,8 @@ class _BottomControlBar extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsetsDirectional.only(
-        top: _scaled(16),
-        bottom: _scaled(16),
+        top: _scaled(4),
+        bottom: 0,
         start: _scaled(32),
         end: _scaled(32),
       ),

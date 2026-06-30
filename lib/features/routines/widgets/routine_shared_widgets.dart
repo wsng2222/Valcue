@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
+import 'package:flutter/material.dart' hide Interval;
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
@@ -144,7 +144,8 @@ class IntervalRow extends StatelessWidget {
     switch (machineType) {
       case MachineType.treadmill:
         value1 = settingsProvider.formatSpeed(interval.speedKmh ?? 0.0);
-        value2 = '${interval.grade?.toStringAsFixed(1) ?? '0.0'}% ${l10n.incline}';
+        value2 =
+            '${interval.grade?.toStringAsFixed(1) ?? '0.0'}% ${l10n.incline}';
         break;
       case MachineType.cycle:
         value1 = '${interval.rpm ?? 0} ${l10n.rpm}';
@@ -231,22 +232,10 @@ class IntervalList extends StatelessWidget {
           final interval = entry.value;
 
           if (isEditable && onIntervalDelete != null) {
-            // Swipe-to-delete for editable mode
-            // Use interval.id as key to ensure stable identity across rebuilds
-            return Dismissible(
+            return _IntervalSwipeDelete(
               key: Key('interval_${interval.id}'),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 20),
-                color: CupertinoColors.destructiveRed,
-                child: const Icon(
-                  CupertinoIcons.delete,
-                  color: CupertinoColors.white,
-                ),
-              ),
-              onDismissed: (_) {
-                // Find the current index of this interval by ID to ensure correct deletion
+              itemId: interval.id,
+              onDelete: () {
                 final currentIndex =
                     intervals.indexWhere((i) => i.id == interval.id);
                 if (currentIndex >= 0) {
@@ -303,6 +292,118 @@ class IntervalList extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _IntervalSwipeDelete extends StatefulWidget {
+  final String itemId;
+  final Widget child;
+  final VoidCallback onDelete;
+
+  const _IntervalSwipeDelete({
+    super.key,
+    required this.itemId,
+    required this.child,
+    required this.onDelete,
+  });
+
+  @override
+  State<_IntervalSwipeDelete> createState() => _IntervalSwipeDeleteState();
+}
+
+class _IntervalSwipeDeleteState extends State<_IntervalSwipeDelete> {
+  static const double _triggerOffset = 44;
+  static const double _actionWidth = 76;
+  static final ValueNotifier<String?> _openItemId =
+      ValueNotifier<String?>(null);
+  double _dragOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _openItemId.addListener(_handleOpenItemChanged);
+  }
+
+  @override
+  void dispose() {
+    _openItemId.removeListener(_handleOpenItemChanged);
+    super.dispose();
+  }
+
+  void _handleOpenItemChanged() {
+    if (!mounted) return;
+    if (_openItemId.value != widget.itemId && _dragOffset != 0) {
+      setState(() {
+        _dragOffset = 0;
+      });
+    }
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (_openItemId.value != widget.itemId) {
+      _openItemId.value = widget.itemId;
+    }
+
+    final nextOffset =
+        (_dragOffset + details.delta.dx).clamp(-_actionWidth, 0.0);
+    setState(() {
+      _dragOffset = nextOffset;
+    });
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    final shouldOpen = _dragOffset.abs() > _triggerOffset;
+    setState(() {
+      _dragOffset = shouldOpen ? -_actionWidth : 0;
+    });
+    _openItemId.value = shouldOpen ? widget.itemId : null;
+  }
+
+  void _close() {
+    if (_dragOffset == 0) return;
+    setState(() {
+      _dragOffset = 0;
+    });
+    if (_openItemId.value == widget.itemId) {
+      _openItemId.value = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onHorizontalDragUpdate: _handleDragUpdate,
+      onHorizontalDragEnd: _handleDragEnd,
+      onTap: _close,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                width: _actionWidth,
+                color: CupertinoColors.destructiveRed,
+                alignment: Alignment.center,
+                child: GestureDetector(
+                  onTap: widget.onDelete,
+                  child: const Icon(
+                    CupertinoIcons.delete,
+                    color: CupertinoColors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            transform: Matrix4.translationValues(_dragOffset, 0, 0),
+            child: widget.child,
+          ),
+        ],
+      ),
     );
   }
 }

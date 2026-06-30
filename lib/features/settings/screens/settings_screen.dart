@@ -195,7 +195,7 @@ class SettingsSection extends StatelessWidget {
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       decoration: BoxDecoration(
         color: isDark ? theme.colorScheme.surface : appColors.surfaceElevated,
         borderRadius: BorderRadius.circular(24),
@@ -239,7 +239,7 @@ class SettingsRow extends StatelessWidget {
     final appColors = context.appColors;
 
     final content = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           // Icon with circle background
@@ -338,7 +338,7 @@ class UnitSegmentRow extends StatelessWidget {
       children: [
         // Title row
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               Container(
@@ -370,7 +370,7 @@ class UnitSegmentRow extends StatelessWidget {
         ),
         // Segmented control
         Padding(
-          padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
+          padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
           child: _buildSegmentedControl(
             context: context,
             value: value,
@@ -556,7 +556,7 @@ class ThemeSegmentRow extends StatelessWidget {
       children: [
         // Title row
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               Container(
@@ -588,7 +588,7 @@ class ThemeSegmentRow extends StatelessWidget {
         ),
         PlatformInfo.isIOS
             ? Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 8),
                 child: _buildSegmentedControl(
                   context: context,
                   value: value,
@@ -596,7 +596,7 @@ class ThemeSegmentRow extends StatelessWidget {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 8),
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 6),
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
@@ -1010,7 +1010,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1147,7 +1147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // Unit Setting section (with segmented control)
                       SettingsSection(
                         children: [
@@ -1173,7 +1173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // Voice Guide section
                       SettingsSection(
                         children: [
@@ -1204,7 +1204,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // Sound Effects section
                       SettingsSection(
                         children: [
@@ -1221,7 +1221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // Workout reminder section
                       SettingsSection(
                         children: [
@@ -1274,7 +1274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // Language section
                       SettingsSection(
                         children: [
@@ -1296,7 +1296,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       // About section
                       GestureDetector(
                         onTapDown: (_) => _startAboutHold(),
@@ -1309,7 +1309,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           }
                         },
                         child: Container(
-                          margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                          margin: const EdgeInsets.fromLTRB(20, 6, 20, 0),
                           decoration: BoxDecoration(
                             color: theme.brightness == Brightness.dark
                                 ? theme.colorScheme.surface

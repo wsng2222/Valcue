@@ -446,6 +446,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                       padding: const EdgeInsets.only(bottom: 6),
                       child: _SwipeRevealDelete(
                         key: Key(session.id),
+                        itemId: 'session_${session.id}',
                         onDelete: () {
                           provider.deleteSession(session.id);
                         },
@@ -1228,6 +1229,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 12),
                           child: _SwipeRevealDelete(
                             key: Key(session.id),
+                            itemId: 'calendar_session_${session.id}',
                             onDelete: () {
                               provider.deleteSession(session.id);
                             },
@@ -1310,6 +1312,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
 }
 
 class _SwipeRevealDelete extends StatefulWidget {
+  final String itemId;
   final Widget child;
   final VoidCallback onDelete;
   final double? buttonDiameter;
@@ -1319,6 +1322,7 @@ class _SwipeRevealDelete extends StatefulWidget {
 
   const _SwipeRevealDelete({
     super.key,
+    required this.itemId,
     required this.child,
     required this.onDelete,
     this.buttonDiameter,
@@ -1333,9 +1337,36 @@ class _SwipeRevealDelete extends StatefulWidget {
 
 class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
   static const double _triggerOffset = 44;
+  static final ValueNotifier<String?> _openItemId =
+      ValueNotifier<String?>(null);
   double _dragOffset = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _openItemId.addListener(_handleOpenItemChanged);
+  }
+
+  @override
+  void dispose() {
+    _openItemId.removeListener(_handleOpenItemChanged);
+    super.dispose();
+  }
+
+  void _handleOpenItemChanged() {
+    if (!mounted) return;
+    final openItemId = _openItemId.value;
+    if (openItemId != widget.itemId && _dragOffset != 0) {
+      setState(() {
+        _dragOffset = 0;
+      });
+    }
+  }
+
   void _handleDragUpdate(DragUpdateDetails details, double actionWidth) {
+    if (_openItemId.value != widget.itemId) {
+      _openItemId.value = widget.itemId;
+    }
     final nextOffset =
         (_dragOffset + details.delta.dx).clamp(-actionWidth, 0.0);
     setState(() {
@@ -1348,6 +1379,7 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
     setState(() {
       _dragOffset = shouldOpen ? -actionWidth : 0;
     });
+    _openItemId.value = shouldOpen ? widget.itemId : null;
   }
 
   void _close() {
@@ -1355,6 +1387,9 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
     setState(() {
       _dragOffset = 0;
     });
+    if (_openItemId.value == widget.itemId) {
+      _openItemId.value = null;
+    }
   }
 
   @override
@@ -1380,8 +1415,8 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
           child: Stack(
             children: [
               Positioned(
-                top:
-                    ((availableHeight - buttonDiameter) / 2) + widget.verticalOffset,
+                top: ((availableHeight - buttonDiameter) / 2) +
+                    widget.verticalOffset,
                 right: 2,
                 child: SizedBox(
                   width: actionWidth,
@@ -2597,14 +2632,15 @@ class _WeightHistoryList extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: _SwipeRevealDelete(
-                key: Key(entry.id),
-                buttonDiameter: 44,
-                actionWidth: 60,
-                verticalInset: 0,
-                verticalOffset: -10,
-                onDelete: () {
-                  provider.deleteEntry(entry.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  key: Key(entry.id),
+                  itemId: 'weight_${entry.id}',
+                  buttonDiameter: 44,
+                  actionWidth: 60,
+                  verticalInset: 0,
+                  verticalOffset: -10,
+                  onDelete: () {
+                    provider.deleteEntry(entry.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                             AppLocalizations.of(context)!.weightEntryDeleted),

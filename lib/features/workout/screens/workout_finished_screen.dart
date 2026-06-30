@@ -544,11 +544,8 @@ class _WorkoutSummaryCard extends StatelessWidget {
                         : 'Level ${avgLevel.toStringAsFixed(1)}';
                   })()
                 : null;
-    final summaryParts = <String>[
-      machineTypeLabel,
-      '${routine.intervals.length} ${l10n.sessions}',
-      if (secondaryMetric != null) secondaryMetric,
-    ];
+    final summaryParts =
+        secondaryMetric != null ? <String>[secondaryMetric] : <String>[];
 
     return Container(
       width: double.infinity,
@@ -727,6 +724,113 @@ class _ShareCard extends StatelessWidget {
     return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
+  String _formatDate(DateTime dateTime) {
+    return '${dateTime.year}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.day.toString().padLeft(2, '0')}';
+  }
+
+  String _formatTimeOfDay(DateTime dateTime) {
+    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  String _formatDistance(BuildContext context, double rawDistanceMeters) {
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    final isMetric = settingsProvider.measurement == 'kmh';
+
+    if (isMetric) {
+      if (rawDistanceMeters < 1000) {
+        return '${rawDistanceMeters.toStringAsFixed(0)} m';
+      }
+      return '${(rawDistanceMeters / 1000).toStringAsFixed(2)} km';
+    }
+
+    const metersPerMile = 1609.344;
+    final miles = rawDistanceMeters / metersPerMile;
+    return miles < 0.1
+        ? '${miles.toStringAsFixed(3)} mi'
+        : '${miles.toStringAsFixed(2)} mi';
+  }
+
+  String? _secondaryMetricValue(BuildContext context) {
+    if (routine.machineType == MachineType.treadmill) {
+      final treadmillDistance = distanceMeters;
+      if (treadmillDistance != null) {
+        return _formatDistance(context, treadmillDistance);
+      }
+    }
+    if (routine.machineType == MachineType.cycle) {
+      final rpm = _avgRpm();
+      return rpm?.round().toString();
+    }
+    if (routine.machineType == MachineType.stairmaster) {
+      final level = _avgLevel();
+      return level?.toStringAsFixed(1);
+    }
+    return null;
+  }
+
+  IconData _secondaryMetricIcon() {
+    return switch (routine.machineType) {
+      MachineType.treadmill => Icons.route_outlined,
+      MachineType.cycle => Icons.speed_outlined,
+      MachineType.stairmaster => Icons.stacked_line_chart_outlined,
+    };
+  }
+
+  Widget _buildMetricCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color panelColor,
+    required Color borderColor,
+    required Color titleColor,
+    required Color valueColor,
+    bool emphasize = false,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        decoration: BoxDecoration(
+          color: panelColor,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: borderColor),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 18, color: titleColor),
+            const SizedBox(height: 12),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: valueColor,
+                fontSize: emphasize ? 24 : 20,
+                fontWeight: FontWeight.w800,
+                letterSpacing: emphasize ? -1.1 : -0.7,
+                height: 1.05,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: titleColor,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.1,
+                height: 1.15,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   double? _avgRpm() {
     if (routine.machineType != MachineType.cycle) return null;
     double w = 0;
@@ -773,221 +877,171 @@ class _ShareCard extends StatelessWidget {
   Widget build(BuildContext context) {
     const cardW = 360.0;
     const cardH = 560.0;
-    const accent = Color(0xFFFF3B30);
-    const bg1 = Color(0xFF0D0D12);
-    const bg2 = Color(0xFF1C1C2E);
+    const accent = Color(0xFFFF5A4F);
+    const bg1 = Color(0xFF10111A);
+    const bg2 = Color(0xFF1B1D2A);
+    const stroke = Color(0x22FFFFFF);
+    const panel = Color(0x12FFFFFF);
+    const primaryText = Colors.white;
+    const secondaryText = Color(0x99FFFFFF);
+    const tertiaryText = Color(0x70FFFFFF);
 
-    final IconData machineIcon = switch (routine.machineType) {
-      MachineType.treadmill => Icons.directions_run,
-      MachineType.cycle => Icons.pedal_bike,
-      MachineType.stairmaster => Icons.stairs,
+    final l10n = AppLocalizations.of(context)!;
+    final metricLabel = switch (routine.machineType) {
+      MachineType.treadmill => distanceLabel,
+      MachineType.cycle => avgRpmLabel,
+      MachineType.stairmaster => avgLevelLabel,
     };
-
-    // Secondary metric
-    String? metricLabel;
-    String? metricValue;
-    if (routine.machineType == MachineType.treadmill &&
-        distanceMeters != null) {
-      final km = distanceMeters! / 1000;
-      metricLabel = distanceLabel;
-      metricValue = km >= 1
-          ? '${km.toStringAsFixed(2)} km'
-          : '${distanceMeters!.toStringAsFixed(0)} m';
-    } else if (routine.machineType == MachineType.cycle) {
-      final rpm = _avgRpm();
-      if (rpm != null) {
-        metricLabel = avgRpmLabel;
-        metricValue = rpm.round().toString();
-      }
-    } else if (routine.machineType == MachineType.stairmaster) {
-      final lvl = _avgLevel();
-      if (lvl != null) {
-        metricLabel = avgLevelLabel;
-        metricValue = lvl.toStringAsFixed(1);
-      }
-    }
-
-    final dateStr =
-        '${finishTime.year}.${finishTime.month.toString().padLeft(2, '0')}.${finishTime.day.toString().padLeft(2, '0')}';
+    final metricValue = _secondaryMetricValue(context);
+    final routineTitle =
+        routine.name.trim().isEmpty ? machineTypeLabel : routine.name;
+    final dateStr = _formatDate(finishTime);
+    final timeStr = _formatTimeOfDay(finishTime);
 
     return SizedBox(
       width: cardW,
       height: cardH,
-      child: Stack(
-        children: [
-          // Background gradient
-          Container(
-            width: cardW,
-            height: cardH,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [bg1, bg2],
-              ),
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [bg1, bg2],
           ),
-          // Decorative large circle top-right
-          Positioned(
-            top: -60,
-            right: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    accent.withValues(alpha: 0.25),
-                    accent.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // Decorative small circle bottom-left
-          Positioned(
-            bottom: -40,
-            left: -40,
-            child: Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    accent.withValues(alpha: 0.12),
-                    accent.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top row: branding + machine type
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'PacePilot',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          machineTypeLabel.toUpperCase(),
-                          style: const TextStyle(
-                            color: accent,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: accent.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(14),
-                        border:
-                            Border.all(color: accent.withValues(alpha: 0.3)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'PacePilot',
+                      style: TextStyle(
+                        color: primaryText,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1,
                       ),
-                      child: Icon(machineIcon, color: accent, size: 24),
                     ),
-                  ],
-                ),
-                const Spacer(),
-                // Routine name
-                Text(
-                  routine.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.2,
                   ),
-                ),
-                const SizedBox(height: 8),
-                // Big time
-                Text(
-                  _formatTime(elapsedSeconds),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 72,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -3,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  totalTimeLabel.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white38,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-                if (metricLabel != null && metricValue != null) ...[
-                  const SizedBox(height: 28),
-                  Container(
-                    height: 1,
-                    color: Colors.white10,
-                  ),
-                  const SizedBox(height: 24),
                   Text(
-                    metricValue,
+                    dateStr,
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
+                      color: secondaryText,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      letterSpacing: -1,
-                      height: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    metricLabel,
-                    style: const TextStyle(
-                      color: Colors.white38,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.5,
                     ),
                   ),
                 ],
-                const Spacer(),
-                // Bottom: date
-                Text(
-                  dateStr,
-                  style: const TextStyle(
-                    color: Colors.white38,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.2,
+              ),
+              const SizedBox(height: 22),
+              Text(
+                machineTypeLabel,
+                style: const TextStyle(
+                  color: accent,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                routineTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: secondaryText,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
+                  decoration: BoxDecoration(
+                    color: panel,
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(color: stroke),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'TIME',
+                        style: TextStyle(
+                          color: tertiaryText,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 110,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: BidiSafeText(
+                            _formatTime(elapsedSeconds),
+                            forceLTR: true,
+                            style: const TextStyle(
+                              color: primaryText,
+                              fontSize: 92,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -5,
+                              fontFeatures: [ui.FontFeature.tabularFigures()],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        totalTimeLabel,
+                        style: const TextStyle(
+                          color: secondaryText,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  _buildMetricCard(
+                    icon: _secondaryMetricIcon(),
+                    label: metricLabel,
+                    value: metricValue ?? '-',
+                    panelColor: panel,
+                    borderColor: stroke,
+                    titleColor: tertiaryText,
+                    valueColor: primaryText,
+                    emphasize: true,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildMetricCard(
+                    icon: Icons.schedule_outlined,
+                    label: l10n.workoutComplete,
+                    value: timeStr,
+                    panelColor: panel,
+                    borderColor: stroke,
+                    titleColor: tertiaryText,
+                    valueColor: primaryText,
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

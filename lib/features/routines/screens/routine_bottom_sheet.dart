@@ -2358,6 +2358,19 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       }
     }
 
+    final chipRow = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        durationChip,
+        const SizedBox(width: 6),
+        field1Chip,
+        if (field2Chip != null) ...[
+          const SizedBox(width: 6),
+          field2Chip,
+        ],
+      ],
+    );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
@@ -2375,21 +2388,17 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
         child: Row(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    durationChip,
-                    const SizedBox(width: 6),
-                    field1Chip,
-                    if (field2Chip != null) ...[
-                      const SizedBox(width: 6),
-                      field2Chip,
-                    ],
-                  ],
-                ),
-              ),
+              child: widget.onDelete != null
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: chipRow,
+                    )
+                  : Center(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: chipRow,
+                      ),
+                    ),
             ),
             if (widget.onDelete != null) ...[
               const SizedBox(width: 10),
