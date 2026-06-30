@@ -236,6 +236,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
 
     final theme = Theme.of(context);
     final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     final titles = _getMachineTitles(context);
     final items = [
       _MachineTabItem(icon: Icons.directions_run, label: titles[0]),
@@ -255,14 +256,18 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           padding: const EdgeInsets.all(outerPadding),
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
+            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
             borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: appColors.border),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : appColors.border,
+            ),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.shadow.withValues(alpha: 0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -285,8 +290,21 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                     width: segmentWidth,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
+                        color: isDark ? const Color(0xFF2C2C2E) : const Color(0xFFECECEC),
                         borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.04)
+                              : Colors.black.withValues(alpha: 0.04),
+                          width: 1.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -298,12 +316,12 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                       final t = Curves.easeOutCubic.transform(rawT);
                       final iconColor = Color.lerp(
                         appColors.mutedText,
-                        theme.colorScheme.onPrimary,
+                        theme.colorScheme.primary,
                         t,
                       );
                       final textColor = Color.lerp(
-                        theme.colorScheme.onSurface,
-                        theme.colorScheme.onPrimary,
+                        theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        theme.colorScheme.primary,
                         t,
                       );
                       final fontWeight = FontWeight.lerp(
