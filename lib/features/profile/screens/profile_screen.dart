@@ -306,60 +306,47 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Prevent overflow in long languages (e.g. Japanese) by capping each chip
-        // to ~1/3 of the available width and letting text scale down if needed.
-        final maxChipWidth = (constraints.maxWidth - 16) / 3; // 8px gaps * 2
-
-        return Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.08)
-                  : appColors.border,
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
+        ),
+        boxShadow: AppShadows.elevatedSoft,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildPillChip(
+              0,
+              AppLocalizations.of(context)!.treadmill,
+              context,
+              machineTypes[0],
             ),
-            boxShadow: AppShadows.elevatedSoft,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxChipWidth),
-                child: _buildPillChip(
-                  0,
-                  AppLocalizations.of(context)!.treadmill,
-                  context,
-                  machineTypes[0],
-                ),
-              ),
-              const SizedBox(width: 8),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxChipWidth),
-                child: _buildPillChip(
-                  1,
-                  AppLocalizations.of(context)!.bike,
-                  context,
-                  machineTypes[1],
-                ),
-              ),
-              const SizedBox(width: 8),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxChipWidth),
-                child: _buildPillChip(
-                  2,
-                  AppLocalizations.of(context)!.stairmaster,
-                  context,
-                  machineTypes[2],
-                ),
-              ),
-            ],
+          const SizedBox(width: 8),
+          Expanded(
+            child: _buildPillChip(
+              1,
+              AppLocalizations.of(context)!.bike,
+              context,
+              machineTypes[1],
+            ),
           ),
-        );
-      },
+          const SizedBox(width: 8),
+          Expanded(
+            child: _buildPillChip(
+              2,
+              AppLocalizations.of(context)!.stairmaster,
+              context,
+              machineTypes[2],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -375,7 +362,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
       },
       child: Container(
         height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         decoration: BoxDecoration(
           color: isSelected ? theme.colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(999),
@@ -457,23 +444,9 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                 ),
                 ...dateSessions.map((session) => Padding(
                       padding: const EdgeInsets.only(bottom: 6),
-                      child: Dismissible(
+                      child: _SwipeRevealDelete(
                         key: Key(session.id),
-                        direction: DismissDirection.endToStart,
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.delete_outline,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
-                        onDismissed: (_) {
+                        onDelete: () {
                           provider.deleteSession(session.id);
                         },
                         child: _WorkoutHistoryCard(session: session),
@@ -1253,23 +1226,9 @@ class _DayWorkoutsSheet extends StatelessWidget {
                         final session = sessions[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: Dismissible(
+                          child: _SwipeRevealDelete(
                             key: Key(session.id),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Icon(
-                                Icons.delete_outline,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                            onDismissed: (_) {
+                            onDelete: () {
                               provider.deleteSession(session.id);
                             },
                             child: _DayWorkoutRow(session: session),
@@ -1346,6 +1305,128 @@ class _DayWorkoutsSheet extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SwipeRevealDelete extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onDelete;
+  final double? buttonDiameter;
+  final double? actionWidth;
+  final double? verticalInset;
+  final double verticalOffset;
+
+  const _SwipeRevealDelete({
+    super.key,
+    required this.child,
+    required this.onDelete,
+    this.buttonDiameter,
+    this.actionWidth,
+    this.verticalInset,
+    this.verticalOffset = 0,
+  });
+
+  @override
+  State<_SwipeRevealDelete> createState() => _SwipeRevealDeleteState();
+}
+
+class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
+  static const double _triggerOffset = 44;
+  double _dragOffset = 0;
+
+  void _handleDragUpdate(DragUpdateDetails details, double actionWidth) {
+    final nextOffset =
+        (_dragOffset + details.delta.dx).clamp(-actionWidth, 0.0);
+    setState(() {
+      _dragOffset = nextOffset;
+    });
+  }
+
+  void _handleDragEnd(DragEndDetails details, double actionWidth) {
+    final shouldOpen = _dragOffset.abs() > _triggerOffset;
+    setState(() {
+      _dragOffset = shouldOpen ? -actionWidth : 0;
+    });
+  }
+
+  void _close() {
+    if (_dragOffset == 0) return;
+    setState(() {
+      _dragOffset = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableHeight =
+            constraints.maxHeight.isFinite ? constraints.maxHeight : 80.0;
+        final verticalInset = widget.verticalInset ?? 8.0;
+        final buttonDiameter = widget.buttonDiameter ??
+            (availableHeight - (verticalInset * 2)).clamp(46.0, 60.0);
+        final actionWidth = widget.actionWidth ?? (buttonDiameter + 20);
+
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onHorizontalDragUpdate: (details) =>
+              _handleDragUpdate(details, actionWidth),
+          onHorizontalDragEnd: (details) =>
+              _handleDragEnd(details, actionWidth),
+          onTap: _close,
+          child: Stack(
+            children: [
+              Positioned(
+                top:
+                    ((availableHeight - buttonDiameter) / 2) + widget.verticalOffset,
+                right: 2,
+                child: SizedBox(
+                  width: actionWidth,
+                  height: buttonDiameter,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: buttonDiameter,
+                      height: buttonDiameter,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: widget.onDelete,
+                          child: Center(
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Colors.white,
+                              size: buttonDiameter * 0.42,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                transform: Matrix4.translationValues(
+                  _dragOffset.clamp(-actionWidth, 0.0),
+                  0,
+                  0,
+                ),
+                child: widget.child,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -1598,8 +1679,10 @@ class _WeightTabState extends State<_WeightTab> {
                     ),
                   ),
                 ),
-                child: SafeArea(
-                  top: false,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom > 0 ? 6 : 0,
+                  ),
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -1679,8 +1762,10 @@ class _WeightTabState extends State<_WeightTab> {
                   ),
                 ),
               ),
-              child: SafeArea(
-                top: false,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom > 0 ? 6 : 0,
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -2160,13 +2245,14 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Colors.grey.shade300,
+                    : appColors.border,
                 width: 1,
               ),
+              boxShadow: AppShadows.elevatedSoft,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2216,23 +2302,33 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
         if (chartEntries.length < 2) {
           return buildTrendCard(
             body: SizedBox(
-              height: 100,
+              height: 130,
               child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.addOneMoreRecordToSeeTrend,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: appColors.mutedText,
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.show_chart_rounded,
+                      size: 34,
+                      color: appColors.mutedText.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      AppLocalizations.of(context)!.addOneMoreRecordToSeeTrend,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: appColors.mutedText,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           );
         }
 
-        // Find min/max for scaling
         final weights = chartEntries.map((e) => e.weightKg).toList();
         final minWeight = weights.reduce((a, b) => a < b ? a : b);
         final maxWeight = weights.reduce((a, b) => a > b ? a : b);
@@ -2240,17 +2336,30 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
         final padding = range > 0 ? range * 0.1 : 1.0;
 
         return buildTrendCard(
-          body: SizedBox(
-            height: 100,
-            child: CustomPaint(
-              painter: _WeightSparklinePainter(
-                entries: chartEntries,
-                minWeight: minWeight - padding,
-                maxWeight: maxWeight + padding,
-                color: theme.colorScheme.primary,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 130,
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.03)
+                      : Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: CustomPaint(
+                  painter: _WeightSparklinePainter(
+                    entries: chartEntries,
+                    minWeight: minWeight - padding,
+                    maxWeight: maxWeight + padding,
+                    color: theme.colorScheme.primary,
+                  ),
+                  size: Size.infinite,
+                ),
               ),
-              size: Size.infinite,
-            ),
+            ],
           ),
         );
       },
@@ -2485,70 +2594,61 @@ class _WeightHistoryList extends StatelessWidget {
                 }
               }
 
-              return Dismissible(
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _SwipeRevealDelete(
                 key: Key(entry.id),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20),
-                  child: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                onDismissed: (direction) {
+                buttonDiameter: 44,
+                actionWidth: 60,
+                verticalInset: 0,
+                verticalOffset: -10,
+                onDelete: () {
                   provider.deleteEntry(entry.id);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          AppLocalizations.of(context)!.weightEntryDeleted),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-                child: InkWell(
-                  onTap: () => _showEditWeightBottomSheet(context, entry),
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                      borderRadius: BorderRadius.circular(22),
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.1)
-                            : theme.extension<AppColors>()!.border,
-                        width: 1,
+                      SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.weightEntryDeleted),
+                        duration: const Duration(seconds: 2),
                       ),
-                      boxShadow: AppShadows.elevatedSoft,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          entry.formatWeight(isWeightMetric),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
+                    );
+                  },
+                  child: InkWell(
+                    onTap: () => _showEditWeightBottomSheet(context, entry),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.1)
+                              : theme.extension<AppColors>()!.border,
+                          width: 1,
                         ),
-                        Text(
-                          formatDate(entry.dateTime),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: theme.extension<AppColors>()!.mutedText,
+                        boxShadow: AppShadows.elevatedSoft,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            entry.formatWeight(isWeightMetric),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            formatDate(entry.dateTime),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.extension<AppColors>()!.mutedText,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

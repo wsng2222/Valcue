@@ -1202,6 +1202,11 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                   text: _buildTotalDistanceText(routine, settingsProvider),
                 ),
                 const SizedBox(width: 8),
+                _MetaPill(
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
+                ),
+                const SizedBox(width: 8),
               ],
             ],
           ),

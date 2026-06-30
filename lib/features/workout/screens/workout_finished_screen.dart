@@ -187,7 +187,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
               distanceMeters: widget.distanceMeters,
               finishTime: widget.finishTime,
               currentIntervalIndex: widget.currentIntervalIndex,
-              elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
+              elapsedSecondsInCurrentSession:
+                  widget.elapsedSecondsInCurrentSession,
               machineTypeLabel: machineTypeLabel,
               totalTimeLabel: l10n.totalTime,
               distanceLabel: l10n.totalDistance,
@@ -218,7 +219,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
       await file.writeAsBytes(byteData.buffer.asUint8List());
 
       Rect? shareOrigin;
-      final box = _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
+      final box =
+          _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null) {
         shareOrigin = box.localToGlobal(Offset.zero) & box.size;
       }
@@ -232,20 +234,15 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     }
   }
 
-  String _formatDateTime(BuildContext context, DateTime dateTime) {
-    final l10n = AppLocalizations.of(context)!;
-    return l10n.dateTimeFormat(
-      dateTime.year,
-      dateTime.month,
-      dateTime.day,
-      dateTime.hour,
-      dateTime.minute,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final machineTypeLabel = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -259,50 +256,55 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
             FadeTransition(
               opacity: _fadeController,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 32, 24, 32),
+                padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Spacer(flex: 2),
+                    const Spacer(),
                     Icon(
                       Icons.check_circle,
-                      size: 64,
+                      size: 60,
                       color: theme.colorScheme.primary,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     Text(
-                      AppLocalizations.of(context)!.workoutComplete,
+                      l10n.workoutComplete,
                       style: TextStyle(
                         fontSize: 32,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         color: theme.colorScheme.onSurface,
-                        letterSpacing: -0.8,
+                        letterSpacing: -1.0,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const Spacer(flex: 2),
+                    const SizedBox(height: 12),
+                    Text(
+                      widget.routine.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: theme.extension<AppColors>()!.mutedText,
+                        letterSpacing: -0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     _WorkoutSummaryCard(
                       elapsedSeconds: widget.elapsedSeconds,
-                      distanceMeters: widget.routine.machineType ==
-                              MachineType.treadmill
-                          ? widget.distanceMeters
-                          : null,
+                      distanceMeters:
+                          widget.routine.machineType == MachineType.treadmill
+                              ? widget.distanceMeters
+                              : null,
+                      finishTime: widget.finishTime,
                       routine: widget.routine,
+                      machineTypeLabel: machineTypeLabel,
                       currentIntervalIndex: widget.currentIntervalIndex,
                       elapsedSecondsInCurrentSession:
                           widget.elapsedSecondsInCurrentSession,
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      _formatDateTime(context, widget.finishTime),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: theme.extension<AppColors>()!.mutedText,
-                        letterSpacing: -0.2,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Spacer(flex: 3),
+                    const Spacer(),
                     // Share button
                     SizedBox(
                       key: _shareButtonKey,
@@ -319,17 +321,18 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(18),
                           ),
                           side: BorderSide(
-                            color: theme.colorScheme.outline.withValues(alpha: 0.4),
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.38),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
                     // Primary button: End
                     SizedBox(
                       width: double.infinity,
@@ -370,9 +373,9 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(18),
                           ),
                           elevation: 0,
                         ),
@@ -401,14 +404,18 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
 class _WorkoutSummaryCard extends StatelessWidget {
   final int elapsedSeconds;
   final double? distanceMeters;
+  final DateTime finishTime;
   final Routine routine;
+  final String machineTypeLabel;
   final int currentIntervalIndex;
   final int elapsedSecondsInCurrentSession;
 
   const _WorkoutSummaryCard({
     required this.elapsedSeconds,
     this.distanceMeters,
+    required this.finishTime,
     required this.routine,
+    required this.machineTypeLabel,
     required this.currentIntervalIndex,
     required this.elapsedSecondsInCurrentSession,
   });
@@ -520,13 +527,35 @@ class _WorkoutSummaryCard extends StatelessWidget {
     final cardColor = isDark
         ? const Color(0xFF1C1C1E) // Dark surface
         : const ui.Color.fromARGB(245, 245, 245, 245);
+    final secondaryMetric = distanceMeters != null && distanceMeters! > 0
+        ? _formatDistance(context, distanceMeters!)
+        : routine.machineType == MachineType.cycle
+            ? (() {
+                final avgRpm = _calculateAverageRpm();
+                return avgRpm == null
+                    ? null
+                    : '${avgRpm.toStringAsFixed(1)} RPM';
+              })()
+            : routine.machineType == MachineType.stairmaster
+                ? (() {
+                    final avgLevel = _calculateAverageLevel();
+                    return avgLevel == null
+                        ? null
+                        : 'Level ${avgLevel.toStringAsFixed(1)}';
+                  })()
+                : null;
+    final summaryParts = <String>[
+      machineTypeLabel,
+      '${routine.intervals.length} ${l10n.sessions}',
+      if (secondaryMetric != null) secondaryMetric,
+    ];
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
       decoration: BoxDecoration(
         color: cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(28),
         border: isDark
             ? Border.all(
                 color: Colors.white.withValues(alpha: 0.1),
@@ -543,93 +572,54 @@ class _WorkoutSummaryCard extends StatelessWidget {
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top: Total time label (small)
           Text(
             l10n.totalWorkoutTime,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: appColors.mutedText,
               letterSpacing: -0.2,
             ),
           ),
-          const SizedBox(height: 8), // Small gap: label -> big time
-          // Center: Big time text
+          const SizedBox(height: 10),
           BidiSafeText(
             _formatTime(elapsedSeconds),
+            textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.w700,
+              fontSize: 56,
+              fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
-              letterSpacing: -1.0,
+              letterSpacing: -1.4,
               fontFeatures: const [
                 ui.FontFeature.tabularFigures()
               ], // Monospaced digits
             ),
             forceLTR: true, // Timers must always be LTR
           ),
-          // Below time: Total distance (Treadmill) or Average RPM/Level (Bike/Stairmaster)
-          if (distanceMeters != null && distanceMeters! > 0) ...[
-            const SizedBox(height: 16), // Medium gap: big time -> distance
-            Text(
-              '${(l10n as dynamic).totalDistance ?? 'Total distance'} ${_formatDistance(context, distanceMeters!)}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: appColors.mutedText,
-                letterSpacing: -0.2,
-              ),
+          Text(
+            summaryParts.join(' · '),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: appColors.mutedText,
+              letterSpacing: -0.1,
             ),
-          ] else if (routine.machineType == MachineType.cycle) ...[
-            // Bike: Show Average RPM
-            Builder(
-              builder: (context) {
-                final avgRpm = _calculateAverageRpm();
-                if (avgRpm == null) {
-                  return const SizedBox.shrink();
-                }
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      '${AppLocalizations.of(context)!.averageRpm}: ${avgRpm.toStringAsFixed(1)}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: appColors.mutedText,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                  ],
-                );
-              },
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '${finishTime.year}.${finishTime.month.toString().padLeft(2, '0')}.${finishTime.day.toString().padLeft(2, '0')} · ${finishTime.hour.toString().padLeft(2, '0')}:${finishTime.minute.toString().padLeft(2, '0')}',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: appColors.mutedText,
+              letterSpacing: -0.1,
             ),
-          ] else if (routine.machineType == MachineType.stairmaster) ...[
-            // Stairmaster: Show Average Level
-            Builder(
-              builder: (context) {
-                final avgLevel = _calculateAverageLevel();
-                if (avgLevel == null) {
-                  return const SizedBox.shrink();
-                }
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      '${AppLocalizations.of(context)!.averageLevel}: ${avgLevel.toStringAsFixed(1)}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: appColors.mutedText,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+          ),
         ],
       ),
     );
@@ -739,15 +729,20 @@ class _ShareCard extends StatelessWidget {
 
   double? _avgRpm() {
     if (routine.machineType != MachineType.cycle) return null;
-    double w = 0; int t = 0;
+    double w = 0;
+    int t = 0;
     for (int i = 0; i < currentIntervalIndex; i++) {
       final iv = routine.intervals[i];
-      if (iv.rpm != null) { w += iv.rpm! * iv.durationSeconds; t += iv.durationSeconds; }
+      if (iv.rpm != null) {
+        w += iv.rpm! * iv.durationSeconds;
+        t += iv.durationSeconds;
+      }
     }
     if (currentIntervalIndex < routine.intervals.length) {
       final iv = routine.intervals[currentIntervalIndex];
       if (iv.rpm != null && elapsedSecondsInCurrentSession > 0) {
-        w += iv.rpm! * elapsedSecondsInCurrentSession; t += elapsedSecondsInCurrentSession;
+        w += iv.rpm! * elapsedSecondsInCurrentSession;
+        t += elapsedSecondsInCurrentSession;
       }
     }
     return t == 0 ? null : w / t;
@@ -755,15 +750,20 @@ class _ShareCard extends StatelessWidget {
 
   double? _avgLevel() {
     if (routine.machineType != MachineType.stairmaster) return null;
-    double w = 0; int t = 0;
+    double w = 0;
+    int t = 0;
     for (int i = 0; i < currentIntervalIndex; i++) {
       final iv = routine.intervals[i];
-      if (iv.level != null) { w += iv.level! * iv.durationSeconds; t += iv.durationSeconds; }
+      if (iv.level != null) {
+        w += iv.level! * iv.durationSeconds;
+        t += iv.durationSeconds;
+      }
     }
     if (currentIntervalIndex < routine.intervals.length) {
       final iv = routine.intervals[currentIntervalIndex];
       if (iv.level != null && elapsedSecondsInCurrentSession > 0) {
-        w += iv.level! * elapsedSecondsInCurrentSession; t += elapsedSecondsInCurrentSession;
+        w += iv.level! * elapsedSecondsInCurrentSession;
+        t += elapsedSecondsInCurrentSession;
       }
     }
     return t == 0 ? null : w / t;
@@ -786,16 +786,25 @@ class _ShareCard extends StatelessWidget {
     // Secondary metric
     String? metricLabel;
     String? metricValue;
-    if (routine.machineType == MachineType.treadmill && distanceMeters != null) {
+    if (routine.machineType == MachineType.treadmill &&
+        distanceMeters != null) {
       final km = distanceMeters! / 1000;
       metricLabel = distanceLabel;
-      metricValue = km >= 1 ? '${km.toStringAsFixed(2)} km' : '${distanceMeters!.toStringAsFixed(0)} m';
+      metricValue = km >= 1
+          ? '${km.toStringAsFixed(2)} km'
+          : '${distanceMeters!.toStringAsFixed(0)} m';
     } else if (routine.machineType == MachineType.cycle) {
       final rpm = _avgRpm();
-      if (rpm != null) { metricLabel = avgRpmLabel; metricValue = rpm.round().toString(); }
+      if (rpm != null) {
+        metricLabel = avgRpmLabel;
+        metricValue = rpm.round().toString();
+      }
     } else if (routine.machineType == MachineType.stairmaster) {
       final lvl = _avgLevel();
-      if (lvl != null) { metricLabel = avgLevelLabel; metricValue = lvl.toStringAsFixed(1); }
+      if (lvl != null) {
+        metricLabel = avgLevelLabel;
+        metricValue = lvl.toStringAsFixed(1);
+      }
     }
 
     final dateStr =
@@ -894,7 +903,8 @@ class _ShareCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: accent.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: accent.withValues(alpha: 0.3)),
+                        border:
+                            Border.all(color: accent.withValues(alpha: 0.3)),
                       ),
                       child: Icon(machineIcon, color: accent, size: 24),
                     ),
