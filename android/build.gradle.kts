@@ -12,6 +12,18 @@ val newBuildDir: Directory =
 rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {
+    configurations.configureEach {
+        resolutionStrategy {
+            // Legacy audioplayers depends on androidx.core with a dynamic "+"
+            // version, which can pull in releases that this Flutter/AGP stack
+            // cannot compile against. Pin it to a known-compatible version.
+            force(
+                "androidx.core:core:1.13.1",
+                "androidx.core:core-ktx:1.13.1",
+            )
+        }
+    }
+
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }

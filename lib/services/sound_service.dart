@@ -31,8 +31,11 @@ class SoundService {
 
     try {
       // Play the actual beep sound file
-      await _audioCache!.play('beep.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.8);
+      await _audioCache!
+          .play('beep.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.8);
     } catch (e) {
+      // Sound effects should fail silently during runtime.
+      return;
     }
   }
 

@@ -204,14 +204,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     }
   }
 
-  Future<bool> _onWillPop() async {
-    if (_controller.currentPage > 0) {
-      await _goTo(_controller.currentPage - 1);
-      return false;
-    }
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     final pages = [
@@ -227,8 +219,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
     final lastIndex = pages.length - 1;
 
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: _controller.currentPage == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _controller.currentPage <= 0) return;
+        _goTo(_controller.currentPage - 1);
+      },
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, _) {
@@ -255,11 +251,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                         controller: _pageController,
                         physics: const NeverScrollableScrollPhysics(),
                         onPageChanged: (idx) {
+                          setState(() {
+                            if (idx == 1) {
+                              _intervalExplainerStep = 0;
+                            }
+                          });
                           _controller.setPage(idx);
-                          // Reset internal steps when entering page 1 (interval explainer).
-                          if (idx == 1) {
-                            setState(() => _intervalExplainerStep = 0);
-                          }
                           AnalyticsService.instance.logEvent(
                             'onboarding_page_viewed',
                             {'pageIndex': idx},
@@ -285,7 +282,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 // Screen 2 has internal steps (tap-through) before moving on.
                 if (pageIndex == 1 && _intervalExplainerStep < 7) {
                   setState(() {
-                    _intervalExplainerStep = (_intervalExplainerStep + 1).clamp(0, 7);
+                    _intervalExplainerStep =
+                        (_intervalExplainerStep + 1).clamp(0, 7);
                   });
                   return;
                 }
@@ -324,7 +322,7 @@ class _ProgressHeader extends StatelessWidget {
             fontSize: 13,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.2,
-            color: theme.colorScheme.onSurface.withOpacity(0.45),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
           ),
         ),
         const SizedBox(height: 8),
@@ -393,4 +391,3 @@ class _PageTransition extends StatelessWidget {
     );
   }
 }
-

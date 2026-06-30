@@ -1562,99 +1562,92 @@ class _DayWorkoutRow extends StatelessWidget {
     final avgSpeed = formatAverageSpeed();
     final metric = formatMetric();
 
-    return InkWell(
-      onTap: () {
-        // TODO: Navigate to workout detail screen
-        // Don't close the sheet, just navigate
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color:
-                isDark ? Colors.white.withValues(alpha: 0.1) : appColors.border,
-            width: 1,
-          ),
-          boxShadow: AppShadows.elevatedSoft,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.1) : appColors.border,
+          width: 1,
         ),
-        child: Row(
-          children: [
-            // Leading icon
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                _getMachineIcon(session.machineType),
-                size: 20,
-                color: theme.colorScheme.primary,
-              ),
+        boxShadow: AppShadows.elevatedSoft,
+      ),
+      child: Row(
+        children: [
+          // Leading icon
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
             ),
-            const SizedBox(width: 12),
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    friendlyName,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
-                    ),
+            child: Icon(
+              _getMachineIcon(session.machineType),
+              size: 20,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Content
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  friendlyName,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
                   ),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
+                ),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      formatDuration(session.durationSeconds),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: appColors.mutedText,
+                      ),
+                    ),
+                    if (metric != null) ...[
                       Text(
-                        formatDuration(session.durationSeconds),
+                        '•',
+                        style: TextStyle(color: appColors.mutedText),
+                      ),
+                      Text(
+                        metric,
                         style: TextStyle(
                           fontSize: 14,
                           color: appColors.mutedText,
                         ),
                       ),
-                      if (metric != null) ...[
-                        Text(
-                          '•',
-                          style: TextStyle(color: appColors.mutedText),
-                        ),
-                        Text(
-                          metric,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: appColors.mutedText,
-                          ),
-                        ),
-                      ],
-                      if (avgSpeed != null) ...[
-                        Text(
-                          '•',
-                          style: TextStyle(color: appColors.mutedText),
-                        ),
-                        Text(
-                          avgSpeed,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: appColors.mutedText,
-                          ),
-                        ),
-                      ],
                     ],
-                  ),
-                ],
-              ),
+                    if (avgSpeed != null) ...[
+                      Text(
+                        '•',
+                        style: TextStyle(color: appColors.mutedText),
+                      ),
+                      Text(
+                        avgSpeed,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: appColors.mutedText,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

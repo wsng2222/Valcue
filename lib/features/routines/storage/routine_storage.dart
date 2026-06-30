@@ -58,8 +58,7 @@ class RoutineStorage {
       final isEqual = _jsonDeepEquals(beforeSnapshot, afterSnapshot);
 
       if (!isEqual) {
-      } else {
-      }
+      } else {}
 
       return isEqual;
     } catch (e) {
@@ -79,14 +78,6 @@ class RoutineStorage {
           .map((json) => Routine.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      if (kDebugMode && diagnosticsEnabled) {
-        for (final routine in routines) {
-          for (int i = 0; i < routine.intervals.length; i++) {
-            final interval = routine.intervals[i];
-          }
-        }
-      }
-
       return routines;
     } catch (e) {
       return [];
@@ -100,11 +91,6 @@ class RoutineStorage {
 
     if (kDebugMode && diagnosticsEnabled) {
       final beforeSnapshot = _computeIntervalJsonSnapshot(routines);
-      for (final routine in routines) {
-        for (int i = 0; i < routine.intervals.length; i++) {
-          final interval = routine.intervals[i];
-        }
-      }
 
       // Idempotency check: encode -> decode -> encode must produce identical JSON
       try {
@@ -112,7 +98,6 @@ class RoutineStorage {
         final reEncoded = json.encode(decoded);
         if (jsonString != reEncoded) {
           assert(false, 'JSON idempotency check failed - numbers may drift');
-        } else {
         }
       } catch (e) {
         assert(false, 'Idempotency check exception: $e');
@@ -124,7 +109,6 @@ class RoutineStorage {
 
       if (!_jsonDeepEquals(beforeSnapshot, afterSnapshot)) {
         assert(false, 'Drift detected - interval values changed');
-      } else {
       }
     }
 

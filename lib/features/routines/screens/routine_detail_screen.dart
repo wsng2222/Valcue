@@ -12,7 +12,8 @@ import '../../../services/ad_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 
 class RoutineDetailSheet {
-  static void show(BuildContext context, Routine routine, AppSettingsProvider settingsProvider) {
+  static void show(BuildContext context, Routine routine,
+      AppSettingsProvider settingsProvider) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -38,12 +39,14 @@ class _RoutineDetailSheetContent extends StatelessWidget {
   });
 
   int _calculateTotalDuration() {
-    return routine.intervals.fold(0, (sum, interval) => sum + interval.durationSeconds);
+    return routine.intervals
+        .fold(0, (sum, interval) => sum + interval.durationSeconds);
   }
 
   void _showOverflowMenu(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final routineProvider = Provider.of<RoutineProvider>(context, listen: false);
+    final routineProvider =
+        Provider.of<RoutineProvider>(context, listen: false);
 
     showCupertinoModalPopup(
       context: context,
@@ -70,7 +73,7 @@ class _RoutineDetailSheetContent extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final baseTextStyle = theme.textTheme.bodyMedium;
-    
+
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
@@ -125,15 +128,7 @@ class _RoutineDetailSheetContent extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final maxHeight = mediaQuery.size.height * 0.9;
     final totalDuration = _calculateTotalDuration();
-    
-    // DEBUG: Log routine intervals in View screen
-    if (routine.intervals.isNotEmpty) {
-      final first = routine.intervals[0];
-      if (routine.intervals.length > 1) {
-        final second = routine.intervals[1];
-      }
-    }
-    
+
     return Container(
       constraints: BoxConstraints(maxHeight: maxHeight),
       decoration: BoxDecoration(
@@ -201,7 +196,8 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RoutineEditScreen(routine: routine),
+                            builder: (context) =>
+                                RoutineEditScreen(routine: routine),
                           ),
                         );
                       },
@@ -224,24 +220,26 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                       onPressed: () {
                         // Check if user is premium - premium users don't see ads
                         final isPremium = settingsProvider.isPremium;
-                        
+
                         if (isPremium) {
                           // Premium user: close bottom sheet and navigate directly without ads
-                        Navigator.pop(context);
+                          Navigator.pop(context);
                           if (context.mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WorkoutScreen(routine: routine),
-                          ),
-                        );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    WorkoutScreen(routine: routine),
+                              ),
+                            );
                           }
                           return;
                         }
-                        
+
                         // Save navigator context before closing bottom sheet
-                        final navigatorContext = Navigator.of(context, rootNavigator: true);
-                        
+                        final navigatorContext =
+                            Navigator.of(context, rootNavigator: true);
+
                         // Show interstitial ad if available, then navigate to workout
                         // Don't close bottom sheet yet - close it when ad is dismissed
                         final adService = AdService();
@@ -254,12 +252,13 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                             // Use root navigator to push workout screen
                             navigatorContext.push(
                               MaterialPageRoute(
-                                builder: (context) => WorkoutScreen(routine: routine),
+                                builder: (context) =>
+                                    WorkoutScreen(routine: routine),
                               ),
                             );
                           },
                         );
-                        
+
                         // If ad wasn't shown, close bottom sheet and navigate immediately
                         if (!wasAdShown) {
                           if (context.mounted) {
@@ -267,7 +266,8 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                           }
                           navigatorContext.push(
                             MaterialPageRoute(
-                              builder: (context) => WorkoutScreen(routine: routine),
+                              builder: (context) =>
+                                  WorkoutScreen(routine: routine),
                             ),
                           );
                         }

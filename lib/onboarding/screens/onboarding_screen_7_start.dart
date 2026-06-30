@@ -65,7 +65,7 @@ class _Content extends StatelessWidget {
                   height: 1.45, // Increased from 1.35
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.2,
-                  color: theme.colorScheme.onSurface.withOpacity(0.55),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                 ),
               ),
               TextSpan(
@@ -85,7 +85,7 @@ class _Content extends StatelessWidget {
                   height: 1.45, // Increased from 1.35
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.2,
-                  color: theme.colorScheme.onSurface.withOpacity(0.55),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                 ),
               ),
             ],
@@ -96,4 +96,3 @@ class _Content extends StatelessWidget {
     );
   }
 }
-

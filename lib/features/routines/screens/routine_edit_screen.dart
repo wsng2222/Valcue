@@ -39,14 +39,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   void initState() {
     super.initState();
     if (widget.routine != null) {
-      // DEBUG: Log routine intervals before copying
-      if (widget.routine!.intervals.isNotEmpty) {
-        final first = widget.routine!.intervals[0];
-        if (widget.routine!.intervals.length > 1) {
-          final second = widget.routine!.intervals[1];
-        }
-      }
-
       _nameController = TextEditingController(text: widget.routine!.name);
       _difficulty = widget.routine!.difficulty;
       _machineType = widget.routine!.machineType;
@@ -79,14 +71,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           }
         }),
       );
-
-      // DEBUG: Log editing intervals after copying
-      if (_intervals.isNotEmpty) {
-        final first = _intervals[0];
-        if (_intervals.length > 1) {
-          final second = _intervals[1];
-        }
-      }
 
       // Store original values for comparison (also deep copy)
       _originalName = widget.routine!.name;
@@ -233,18 +217,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           ));
           break;
       }
-
-      // DEBUG: Log after adding interval
-      if (_intervals.isNotEmpty) {
-        final first = _intervals[0];
-      }
     });
   }
 
   void _deleteInterval(int index) {
     setState(() {
-      // DEBUG: Log before deleting
-
       _intervals.removeAt(index);
 
       if (_selectedIntervalIndex == index) {
@@ -252,11 +229,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       } else if (_selectedIntervalIndex != null &&
           _selectedIntervalIndex! > index) {
         _selectedIntervalIndex = _selectedIntervalIndex! - 1;
-      }
-
-      // DEBUG: Log after deleting
-      if (_intervals.isNotEmpty) {
-        final first = _intervals[0];
       }
     });
   }
@@ -288,7 +260,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -314,7 +287,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               ),
               if (_machineType == MachineType.treadmill) ...[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -339,7 +313,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -365,7 +340,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 ),
               ] else if (_machineType == MachineType.cycle) ...[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -390,7 +366,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -413,7 +390,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 ),
               ] else if (_machineType == MachineType.stairmaster) ...[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -474,15 +452,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   void _updateInterval(int index, Interval updatedInterval) {
     setState(() {
-      // DEBUG: Log before updating
-
       _intervals[index] = updatedInterval;
       _selectedIntervalIndex = null;
-
-      // DEBUG: Log after updating
-      if (_intervals.isNotEmpty) {
-        final first = _intervals[0];
-      }
     });
   }
 

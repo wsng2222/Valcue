@@ -57,7 +57,8 @@ class _HistoryListMock extends StatelessWidget {
             subtitle: items[i].subtitle,
             icon: icons[i],
           ),
-          if (i != items.length - 1) const SizedBox(height: 10), // Reduced from 12
+          if (i != items.length - 1)
+            const SizedBox(height: 10), // Reduced from 12
         ],
       ],
     );
@@ -81,7 +82,8 @@ class _HistoryCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12), // Reduced from (14, 14)
+      padding: const EdgeInsets.symmetric(
+          horizontal: 14, vertical: 12), // Reduced from (14, 14)
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
         borderRadius: BorderRadius.circular(OnboardingTheme.radiusMedium),
@@ -97,7 +99,9 @@ class _HistoryCard extends StatelessWidget {
             width: 40, // Reduced from 44 for more compact feel
             height: 40, // Reduced from 44
             decoration: BoxDecoration(
-              color: isDark ? OnboardingTheme.darkSelectedPink : OnboardingTheme.selectedPink,
+              color: isDark
+                  ? OnboardingTheme.darkSelectedPink
+                  : OnboardingTheme.selectedPink,
               borderRadius: BorderRadius.circular(OnboardingTheme.radiusSmall),
             ),
             child: Icon(
@@ -127,7 +131,7 @@ class _HistoryCard extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w600, // Reduced from w700
                     letterSpacing: -0.2,
-                    color: theme.colorScheme.onSurface.withOpacity(0.50),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.50),
                   ),
                 ),
               ],

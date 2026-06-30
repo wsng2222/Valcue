@@ -50,7 +50,8 @@ class _PlanMockCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(OnboardingTheme.radiusLarge),
         boxShadow: [OnboardingTheme.mediumShadow],
         border: Border.all(
-          color: isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0),
+          color:
+              isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0),
           width: 0.5,
         ),
       ),
@@ -63,7 +64,7 @@ class _PlanMockCard extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.2,
-              color: theme.colorScheme.onSurface.withOpacity(0.50),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.50),
             ),
           ),
           const SizedBox(height: 6),
@@ -158,9 +159,11 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: isAccent 
-          ? (isDark ? OnboardingTheme.darkSelectedPink : OnboardingTheme.selectedPink)
-          : (isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0)),
+        color: isAccent
+            ? (isDark
+                ? OnboardingTheme.darkSelectedPink
+                : OnboardingTheme.selectedPink)
+            : (isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0)),
         borderRadius: BorderRadius.circular(OnboardingTheme.radiusPill),
         border: isAccent
             ? Border.all(
@@ -175,10 +178,11 @@ class _Pill extends StatelessWidget {
           fontSize: 12,
           fontWeight: FontWeight.w800,
           letterSpacing: -0.2,
-          color: isAccent ? OnboardingTheme.primaryRed : theme.colorScheme.onSurface.withOpacity(0.80),
+          color: isAccent
+              ? OnboardingTheme.primaryRed
+              : theme.colorScheme.onSurface.withValues(alpha: 0.80),
         ),
       ),
     );
   }
 }
-

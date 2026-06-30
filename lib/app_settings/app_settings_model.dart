@@ -93,12 +93,14 @@ class AppSettings {
     if (!themeModeUserSet && themeMode == 'light') {
       themeMode = 'system';
     }
-    final parsedWeekdays = (json['workoutReminderWeekdays'] as List<dynamic>?)
-            ?.map((e) => (e as num).toInt())
-            .where((day) => day >= 1 && day <= 7)
-            .toSet()
-            .toList() ??
-        const <int>[1, 2, 3, 4, 5];
+    final parsedWeekdays = List<int>.of(
+      (json['workoutReminderWeekdays'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .where((day) => day >= 1 && day <= 7)
+              .toSet()
+              .toList() ??
+          const <int>[1, 2, 3, 4, 5],
+    );
     parsedWeekdays.sort();
 
     return AppSettings(

@@ -263,8 +263,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       enableDrag: false, // Cannot drag to dismiss
       backgroundColor: Colors.transparent,
       barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false, // Prevent back button dismissal
+      builder: (context) => PopScope(
+        canPop: false,
         child: _PauseBottomSheet(
           onResume: () {
             // Close bottom sheet immediately
@@ -315,8 +315,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       enableDrag: false, // Cannot drag to dismiss
       backgroundColor: Colors.transparent,
       barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false, // Prevent back button dismissal
+      builder: (context) => PopScope(
+        canPop: false,
         child: _EndWorkoutConfirmationBottomSheet(
           onCancel: () {
             // Cancel: close bottom sheet and reopen pause sheet
@@ -355,8 +355,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // Prevent accidental back navigation
+    return PopScope(
+      canPop: false,
       child: ChangeNotifierProvider.value(
         value: _workoutState,
         child: Scaffold(

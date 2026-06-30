@@ -23,10 +23,6 @@ class Routine {
     // Enforce storage limit (40 chars) - truncate if longer
     if (name.length > 40) {
       name = name.substring(0, 40);
-      assert(() {
-        print('[DEBUG] Routine name truncated in constructor: "$name"');
-        return true;
-      }());
     }
   }
 
@@ -64,10 +60,6 @@ class Routine {
     // Enforce storage limit (40 chars) - truncate if longer (backward compatibility)
     if (name.length > 40) {
       name = name.substring(0, 40);
-      assert(() {
-        print('[DEBUG] Routine name truncated from JSON: "$name"');
-        return true;
-      }());
     }
 
     return Routine(
