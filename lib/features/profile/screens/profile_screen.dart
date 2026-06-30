@@ -306,7 +306,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
             children: [
               // Machine type pill chips
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: _buildMachineTypePills(context, provider, machineTypes),
               ),
               // Content area
@@ -517,7 +517,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     return Container(
       color: isDark ? Colors.black : Colors.white,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         children: [
           // This week summary card
           _buildWeekSummaryCard(context, thisWeekSessions, machineType),
