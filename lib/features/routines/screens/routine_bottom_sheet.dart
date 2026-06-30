@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
@@ -15,6 +14,7 @@ import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../services/ad_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
+import '../../../utils/app_shadows.dart';
 
 class RoutineBottomSheet {
   /// Entry function to show routine sheet
@@ -100,11 +100,6 @@ class _RoutineDetailSheetContentState
       _difficulty = _draftRoutine!.difficulty;
       _intervals = _draftRoutine!.intervals.toList(); // Already deep copied
       _machineType = _draftRoutine!.machineType;
-
-      // Debug: Log loaded values when opening edit
-      for (int i = 0; i < _intervals.length; i++) {
-        final interval = _intervals[i];
-      }
 
       // DRIFT GUARD: Log snapshot when opening edit
       _logIntervalSnapshot('OPEN_EDIT', _intervals);
@@ -200,18 +195,7 @@ class _RoutineDetailSheetContentState
 
   /// DRIFT GUARD: Log interval snapshot for debugging
   void _logIntervalSnapshot(String stage, List<Interval> intervals) {
-    final snapshot = intervals.map((i) {
-      final json = <String, dynamic>{
-        'id': i.id,
-        'durationSeconds': i.durationSeconds
-      };
-      if (i.speedKmh != null) json['speedKmh'] = i.speedKmh;
-      if (i.grade != null) json['grade'] = i.grade;
-      if (i.rpm != null) json['rpm'] = i.rpm;
-      if (i.resistance != null) json['resistance'] = i.resistance;
-      if (i.level != null) json['level'] = i.level;
-      return json;
-    }).toList();
+    if (stage.isEmpty && intervals.isEmpty) return;
   }
 
   String _formatDuration(int totalSeconds) {
@@ -429,10 +413,6 @@ class _RoutineDetailSheetContentState
       return;
     }
 
-    // DRIFT GUARD: Create snapshot before save
-    final routineToSave = _buildCurrentRoutine();
-    final beforeJson = json.encode(routineToSave.toJson());
-
     // Validate all intervals have valid values
     for (final interval in _intervals) {
       if (interval.durationSeconds < 1) {
@@ -533,11 +513,6 @@ class _RoutineDetailSheetContentState
       final savedRoutine =
           provider.routines.firstWhere((r) => r.id == routine.id);
       _logIntervalSnapshot('AFTER_SAVE_RELOAD', savedRoutine.intervals);
-
-      // Debug: Log stored values after save
-      for (int i = 0; i < savedRoutine.intervals.length; i++) {
-        final interval = savedRoutine.intervals[i];
-      }
 
       // Return to view mode after updating existing routine
       if (mounted) {
@@ -725,13 +700,12 @@ class _RoutineDetailSheetContentState
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.12),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        border: Border.all(
+          color: theme.brightness == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.08)
+              : appColors.border,
+        ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -759,7 +733,7 @@ class _RoutineDetailSheetContentState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 40,
+                        height: 52,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -768,27 +742,61 @@ class _RoutineDetailSheetContentState
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 56),
                               child: _isEditing
-                                  ? TextField(
-                                      controller: _nameController,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      maxLength: 24,
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(24),
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Center(
+                                            child: SizedBox(
+                                              width: 260,
+                                              child: TextField(
+                                                controller: _nameController,
+                                                textAlign: TextAlign.center,
+                                                maxLines: 1,
+                                                maxLength: 24,
+                                                inputFormatters: [
+                                                  LengthLimitingTextInputFormatter(
+                                                      24),
+                                                ],
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: _nameError != null
+                                                      ? theme.colorScheme.error
+                                                      : theme.colorScheme
+                                                          .onSurface,
+                                                  letterSpacing: -0.5,
+                                                ),
+                                                decoration:
+                                                    const InputDecoration(
+                                                  border: InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  counterText: '',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 180,
+                                          child: Container(
+                                            height: 1.25,
+                                            margin: const EdgeInsets.only(
+                                              bottom: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: _nameError != null
+                                                  ? theme.colorScheme.error
+                                                  : theme.colorScheme.onSurface
+                                                      .withValues(alpha: 0.22),
+                                              borderRadius:
+                                                  BorderRadius.circular(999),
+                                            ),
+                                          ),
+                                        ),
                                       ],
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: _nameError != null
-                                            ? theme.colorScheme.error
-                                            : theme.colorScheme.onSurface,
-                                        letterSpacing: -0.5,
-                                      ),
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.zero,
-                                        counterText: '',
-                                      ),
                                     )
                                   : Text(
                                       currentRoutine.name,
@@ -867,32 +875,59 @@ class _RoutineDetailSheetContentState
                       ? GestureDetector(
                           onTap: _showDifficultyPicker,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: appColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: theme.brightness == Brightness.dark
+                                    ? Colors.white.withValues(alpha: 0.08)
+                                    : appColors.border,
+                              ),
+                            ),
                             child: Text(
                               AppLocalizations.of(context)!.difficultyColon(
                                   _getLocalizedDifficulty(
                                       context, _difficulty)),
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
                                 color: theme.colorScheme.onSurface,
-                                letterSpacing: -0.3,
+                                letterSpacing: -0.2,
                               ),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         )
-                      : Text(
-                          AppLocalizations.of(context)!.difficultyColon(
-                              _getLocalizedDifficulty(
-                                  context, currentRoutine.difficulty)),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: theme.colorScheme.onSurface,
-                            letterSpacing: -0.3,
+                      : Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
                           ),
-                          textAlign: TextAlign.center,
+                          decoration: BoxDecoration(
+                            color: appColors.surfaceElevated,
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: theme.brightness == Brightness.dark
+                                  ? Colors.white.withValues(alpha: 0.08)
+                                  : appColors.border,
+                            ),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.difficultyColon(
+                                _getLocalizedDifficulty(
+                                    context, currentRoutine.difficulty)),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
+                              letterSpacing: -0.2,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                   const SizedBox(height: 24),
                   // Interval rows
@@ -957,6 +992,13 @@ class _RoutineDetailSheetContentState
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
+              border: Border(
+                top: BorderSide(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : appColors.border,
+                ),
+              ),
             ),
             child: SafeArea(
               top: false,
@@ -971,11 +1013,10 @@ class _RoutineDetailSheetContentState
                             ? _toggleEditMode // Cancel
                             : _toggleEditMode, // Edit
                         borderRadius: 999,
-                        // Gray background, no border (dark mode support)
-                        backgroundColor: theme.brightness == Brightness.dark
-                            ? const Color(0xFF3C3C3C)
-                            : const Color(0xFFF0F0F0),
-                        borderColor: Colors.transparent,
+                        backgroundColor: appColors.surfaceElevated,
+                        borderColor: theme.brightness == Brightness.dark
+                            ? Colors.white.withValues(alpha: 0.08)
+                            : appColors.border,
                         child: Text(
                           _isEditing
                               ? AppLocalizations.of(context)!.cancel
@@ -1008,7 +1049,7 @@ class _RoutineDetailSheetContentState
                               (_isEditing && !_areAllIntervalsValid())
                                   ? appColors.mutedText
                                   : theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(999),
                           ),
@@ -1093,18 +1134,31 @@ class _DifficultyPickerSheet extends StatelessWidget {
 
     return Container(
       height: 350,
-      padding: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: SafeArea(
         top: false,
         child: Column(
           children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
             Container(
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -2074,6 +2128,9 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     // Build chips for VIEW and EDIT modes
     Widget durationChip;
     Widget field1Chip;
@@ -2084,7 +2141,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       durationChip = GestureDetector(
         onTap: () => _showDurationPicker(context),
         child: Container(
-          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
+          constraints: BoxConstraints(
+              minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
           padding: ResponsiveUtils.getChipPadding(context),
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
@@ -2116,7 +2174,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
           }
         },
         child: Container(
-          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
+          constraints: BoxConstraints(
+              minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
           padding: ResponsiveUtils.getChipPadding(context),
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
@@ -2176,7 +2235,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
             }
           },
           child: Container(
-            constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
+            constraints: BoxConstraints(
+                minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
             padding: ResponsiveUtils.getChipPadding(context),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark
@@ -2228,7 +2288,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
     } else {
       // VIEW mode: read-only chips
       durationChip = Container(
-        constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
+        constraints: BoxConstraints(
+            minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
         padding: ResponsiveUtils.getChipPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.dark
@@ -2249,7 +2310,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       );
 
       field1Chip = Container(
-        constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
+        constraints: BoxConstraints(
+            minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
         padding: ResponsiveUtils.getChipPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.dark
@@ -2271,7 +2333,8 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
 
       if (widget.machineType != MachineType.stairmaster) {
         field2Chip = Container(
-          constraints: BoxConstraints(minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
+          constraints: BoxConstraints(
+              minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
           padding: ResponsiveUtils.getChipPadding(context),
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
@@ -2296,53 +2359,61 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const Color(0xFF2C2C2C)
-                      : const Color(0xFFF0F0F0),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.95,
-                ),
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: appColors.surfaceElevated,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : appColors.border,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     durationChip,
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 6),
                     field1Chip,
                     if (field2Chip != null) ...[
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       field2Chip,
                     ],
                   ],
                 ),
               ),
-              if (widget.onDelete != null) ...[
-                const SizedBox(width: 12),
-                GestureDetector(
-                  onTap: widget.onDelete,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    child: Icon(
-                      Icons.delete_outline,
-                      color: Theme.of(context).colorScheme.error,
-                      size: 24,
-                    ),
+            ),
+            if (widget.onDelete != null) ...[
+              const SizedBox(width: 10),
+              Container(
+                width: 1,
+                height: 28,
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : appColors.border,
+              ),
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: widget.onDelete,
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: theme.colorScheme.error,
+                    size: 22,
                   ),
                 ),
-              ],
+              ),
             ],
-          ),
+          ],
         ),
       ),
     );

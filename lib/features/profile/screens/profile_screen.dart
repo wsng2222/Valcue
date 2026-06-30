@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
+import '../../../utils/app_shadows.dart';
+import '../../../widgets/unified_screen_header.dart';
 import '../models/workout_session.dart';
 import '../models/weight_entry.dart';
 import '../providers/workout_history_provider.dart';
@@ -125,34 +127,9 @@ class _ProfileScreenState extends State<ProfileScreen>
             // Header - same style as Settings screen
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      size: 32,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    AppLocalizations.of(context)!.myTab,
-                    style: GoogleFonts.lato(
-                      fontSize: 34,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -1.0,
-                    ),
-                  ),
-                ],
+              child: UnifiedScreenHeader(
+                icon: Icons.person,
+                title: AppLocalizations.of(context)!.myTab,
               ),
             ),
             // Tabs: Workout History, Calendar, Weight
@@ -325,45 +302,62 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
 
   Widget _buildMachineTypePills(BuildContext context,
       WorkoutHistoryProvider provider, List<MachineType> machineTypes) {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Prevent overflow in long languages (e.g. Japanese) by capping each chip
         // to ~1/3 of the available width and letting text scale down if needed.
         final maxChipWidth = (constraints.maxWidth - 16) / 3; // 8px gaps * 2
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxChipWidth),
-              child: _buildPillChip(
-                0,
-                AppLocalizations.of(context)!.treadmill,
-                context,
-                machineTypes[0],
-              ),
+        return Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : appColors.border,
             ),
-            const SizedBox(width: 8),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxChipWidth),
-              child: _buildPillChip(
-                1,
-                AppLocalizations.of(context)!.bike,
-                context,
-                machineTypes[1],
+            boxShadow: AppShadows.elevatedSoft,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxChipWidth),
+                child: _buildPillChip(
+                  0,
+                  AppLocalizations.of(context)!.treadmill,
+                  context,
+                  machineTypes[0],
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxChipWidth),
-              child: _buildPillChip(
-                2,
-                AppLocalizations.of(context)!.stairmaster,
-                context,
-                machineTypes[2],
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxChipWidth),
+                child: _buildPillChip(
+                  1,
+                  AppLocalizations.of(context)!.bike,
+                  context,
+                  machineTypes[1],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxChipWidth),
+                child: _buildPillChip(
+                  2,
+                  AppLocalizations.of(context)!.stairmaster,
+                  context,
+                  machineTypes[2],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -373,7 +367,6 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
       int index, String label, BuildContext context, MachineType machineType) {
     final theme = Theme.of(context);
     final isSelected = _selectedMachineTab == index;
-    final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () {
@@ -381,13 +374,11 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
         widget.onMachineTabChanged(index);
       },
       child: Container(
-        height: 32,
+        height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         decoration: BoxDecoration(
-          color: isSelected
-              ? theme.colorScheme.primary
-              : (isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100),
-          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? theme.colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
         ),
         alignment: Alignment.center,
         child: FittedBox(
@@ -398,7 +389,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 13.5,
               fontWeight: FontWeight.w600,
               color: isSelected ? Colors.white : theme.colorScheme.onSurface,
             ),
@@ -552,13 +543,14 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: isDark
               ? Colors.white.withValues(alpha: 0.1)
-              : Colors.grey.shade300,
+              : context.appColors.border,
           width: 1,
         ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -826,13 +818,13 @@ class _WorkoutHistoryCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : Colors.grey.shade300,
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.1) : appColors.border,
           width: 1,
         ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Row(
         children: [
@@ -1102,10 +1094,14 @@ class _CalendarTabState extends State<_CalendarTab> {
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.dark
-                    ? const Color(0xFF2C2C2C)
-                    : const Color(0xFFE8E8E8),
-                borderRadius: BorderRadius.circular(20),
+                color: appColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : appColors.border,
+                ),
+                boxShadow: AppShadows.elevatedSoft,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -1172,6 +1168,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final appColors = theme.extension<AppColors>()!;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.45,
@@ -1184,7 +1181,13 @@ class _DayWorkoutsSheet extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : theme.extension<AppColors>()!.border,
+            ),
+            boxShadow: AppShadows.elevatedSoft,
           ),
           child: Column(
             children: [
@@ -1209,7 +1212,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
                     bottom: BorderSide(
                       color: isDark
                           ? Colors.white.withValues(alpha: 0.1)
-                          : Colors.grey.shade200,
+                          : appColors.border,
                       width: 1,
                     ),
                   ),
@@ -1327,9 +1330,9 @@ class _DayWorkoutsSheet extends StatelessWidget {
                 backgroundColor: theme.colorScheme.primary,
                 foregroundColor: theme.colorScheme.onPrimary,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(999),
                 ),
               ),
               child: Text(
@@ -1453,13 +1456,13 @@ class _DayWorkoutRow extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.1)
-                : Colors.grey.shade300,
+            color:
+                isDark ? Colors.white.withValues(alpha: 0.1) : appColors.border,
             width: 1,
           ),
+          boxShadow: AppShadows.elevatedSoft,
         ),
         child: Row(
           children: [
@@ -1605,9 +1608,9 @@ class _WeightTabState extends State<_WeightTab> {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor:
                             Theme.of(context).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(999),
                         ),
                       ),
                       child: Row(
@@ -1685,9 +1688,9 @@ class _WeightTabState extends State<_WeightTab> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(999),
                       ),
                     ),
                     child: Row(
@@ -1754,13 +1757,13 @@ class _WeightTabState extends State<_WeightTab> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.1)
-                : Colors.grey.shade300,
+            color:
+                isDark ? Colors.white.withValues(alpha: 0.1) : appColors.border,
             width: 1,
           ),
+          boxShadow: AppShadows.elevatedSoft,
         ),
         child: Column(
           children: [
@@ -1867,13 +1870,14 @@ class _WeightSummaryCard extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: isDark
                   ? Colors.white.withValues(alpha: 0.1)
-                  : Colors.grey.shade300,
+                  : appColors.border,
               width: 1,
             ),
+            boxShadow: AppShadows.elevatedSoft,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1950,7 +1954,7 @@ class _WeightSummaryCard extends StatelessWidget {
                                       : (isDark
                                           ? const Color(0xFF2C2C2E)
                                           : Colors.grey.shade100),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(999),
                                   border: Border.all(
                                     color: goalWeight != null
                                         ? theme.colorScheme.primary
@@ -2030,10 +2034,10 @@ class _WeightSummaryCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 // Progress bar
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(999),
                   child: LinearProgressIndicator(
                     value: progress, // null if only one entry (shows gray only)
-                    minHeight: 6,
+                    minHeight: 8,
                     backgroundColor: isDark
                         ? Colors.white.withValues(alpha: 0.1)
                         : Colors.grey.shade200,
@@ -2517,13 +2521,14 @@ class _WeightHistoryList extends StatelessWidget {
                         horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(22),
                       border: Border.all(
                         color: isDark
                             ? Colors.white.withValues(alpha: 0.1)
-                            : Colors.grey.shade300,
+                            : theme.extension<AppColors>()!.border,
                         width: 1,
                       ),
+                      boxShadow: AppShadows.elevatedSoft,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2640,8 +2645,14 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
+                top: Radius.circular(30),
               ),
+              border: Border.all(
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : theme.extension<AppColors>()!.border,
+              ),
+              boxShadow: AppShadows.elevatedSoft,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -2826,7 +2837,13 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
         return Container(
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : appColors.border,
+            ),
+            boxShadow: AppShadows.elevatedSoft,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -2930,10 +2947,13 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF2C2C2E)
-                                  : Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(20),
+                              color: appColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.08)
+                                    : appColors.border,
+                              ),
                             ),
                             child: Text(
                               isMetric ? 'kg' : 'lbs',
@@ -2967,14 +2987,12 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 14),
                           decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF2C2C2E)
-                                : Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(20),
+                            color: appColors.surfaceElevated,
+                            borderRadius: BorderRadius.circular(22),
                             border: Border.all(
                               color: isDark
-                                  ? Colors.white.withValues(alpha: 0.05)
-                                  : Colors.grey.shade200,
+                                  ? Colors.white.withValues(alpha: 0.08)
+                                  : appColors.border,
                               width: 1,
                             ),
                           ),
@@ -3120,7 +3138,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
                             : appColors.mutedText,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(999),
                         ),
                         elevation: 0,
                       ),
@@ -3344,7 +3362,13 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
         return Container(
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : appColors.border,
+            ),
+            boxShadow: AppShadows.elevatedSoft,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -3432,10 +3456,13 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF2C2C2E)
-                                  : Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(20),
+                              color: appColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.08)
+                                    : appColors.border,
+                              ),
                             ),
                             child: Text(
                               isMetric ? 'kg' : 'lbs',
@@ -3594,7 +3621,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
                                 : appColors.mutedText,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                             elevation: 0,
                           ),

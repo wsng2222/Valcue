@@ -6,11 +6,13 @@ import '../models/routine_template.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
+import '../models/difficulty.dart';
 import '../storage/routine_provider.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import '../../../theme/app_theme.dart';
+import '../../../utils/app_shadows.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 
 enum _RoutinePreviewResult {
@@ -19,40 +21,12 @@ enum _RoutinePreviewResult {
 }
 
 class RoutinePreviewSheet {
-  static OverlayEntry? _toastEntry;
-
   static void _showSnack(
     BuildContext context,
     String message, {
     Duration duration = const Duration(seconds: 2),
   }) {
     // Intentionally disabled per request.
-    return;
-
-    final rootNavigator = Navigator.of(context, rootNavigator: true);
-    final rootOverlay = rootNavigator.overlay;
-    final overlay = rootOverlay ?? Overlay.of(context, rootOverlay: true);
-
-    _toastEntry?.remove();
-    _toastEntry = null;
-
-    late OverlayEntry entry;
-    entry = OverlayEntry(
-      builder: (overlayContext) {
-        return _ToastOverlay(
-          message: message,
-          duration: duration,
-          onDismissed: () {
-            entry.remove();
-            if (_toastEntry == entry) {
-              _toastEntry = null;
-            }
-          },
-        );
-      },
-    );
-    _toastEntry = entry;
-    overlay.insert(entry);
   }
 
   static void show(
@@ -87,6 +61,7 @@ class RoutinePreviewSheet {
             return 'Routine saved';
           }
         }
+
         _showSnack(context, routineSavedMessage());
       }
 
@@ -164,11 +139,10 @@ class _ToastOverlayState extends State<_ToastOverlay> {
     final isFloating = behavior == SnackBarBehavior.floating;
     final margin = snackTheme.insetPadding ??
         const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0);
-    final padding =
-        EdgeInsets.symmetric(
-          horizontal: isFloating ? 16.0 : 24.0,
-          vertical: 14.0,
-        );
+    final padding = EdgeInsets.symmetric(
+      horizontal: isFloating ? 16.0 : 24.0,
+      vertical: 14.0,
+    );
     final width = snackTheme.width;
     final elevation = snackTheme.elevation ?? 6.0;
     final backgroundColor =
@@ -431,6 +405,39 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     }
   }
 
+  String _getDifficultyText(AppLocalizations l10n, Difficulty difficulty) {
+    try {
+      switch (difficulty) {
+        case Difficulty.beginner:
+          return (l10n as dynamic).beginner ?? 'Beginner';
+        case Difficulty.intermediate:
+          return (l10n as dynamic).intermediate ?? 'Intermediate';
+        case Difficulty.advanced:
+          return (l10n as dynamic).advanced ?? 'Advanced';
+      }
+    } catch (e) {
+      switch (difficulty) {
+        case Difficulty.beginner:
+          return 'Beginner';
+        case Difficulty.intermediate:
+          return 'Intermediate';
+        case Difficulty.advanced:
+          return 'Advanced';
+      }
+    }
+  }
+
+  IconData _getMachineIcon(MachineType machineType) {
+    switch (machineType) {
+      case MachineType.treadmill:
+        return Icons.directions_run;
+      case MachineType.cycle:
+        return Icons.pedal_bike;
+      case MachineType.stairmaster:
+        return Icons.stairs_rounded;
+    }
+  }
+
   bool _isTemplateSaved(RoutineProvider provider) {
     return provider.routines.any(
       (r) => r.source == 'recommended' && r.templateId == template.id,
@@ -558,6 +565,8 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     String? pill1Text;
     String? pill2Text;
 
@@ -583,89 +592,80 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Center(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: appColors.surfaceElevated,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : appColors.border,
+          ),
+        ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF2C2C2C)
-                  : const Color(0xFFF0F0F0),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.95,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Duration chip (always LTR for timers)
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: BidiSafeText(
+                  interval.durationFormatted,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  forceLTR: true,
+                ),
+              ),
+              if (pill1Text != null) ...[
+                const SizedBox(width: 6),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? const Color(0xFF3C3C3C)
-                        : Colors.white,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: BidiSafeText(
-                    interval.durationFormatted,
+                    pill1Text,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       color: theme.colorScheme.onSurface,
                     ),
-                    forceLTR: true, // Timers must always be LTR
                   ),
                 ),
-                // Pills for parameters (if available)
-                if (pill1Text != null) ...[
-                  const SizedBox(width: 4),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? const Color(0xFF3C3C3C)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: BidiSafeText(
-                      pill1Text,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ],
-                if (pill2Text != null) ...[
-                  const SizedBox(width: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? const Color(0xFF3C3C3C)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: BidiSafeText(
-                      pill2Text,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ],
               ],
-            ),
+              if (pill2Text != null) ...[
+                const SizedBox(width: 6),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: BidiSafeText(
+                    pill2Text,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),
@@ -687,9 +687,15 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
+        border: Border.all(
+          color: theme.brightness == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.08)
+              : appColors.border,
+        ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -713,14 +719,45 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _getMachineIcon(template.machineType),
+                          size: 16,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _getDifficultyText(l10n, template.difficulty),
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.primary,
+                            letterSpacing: -0.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   // Title
                   Text(
                     _getLocalizedTitle(l10n),
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
                       color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.5,
+                      letterSpacing: -0.7,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -729,7 +766,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                     Text(
                       _getLocalizedSubtitle(l10n),
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: appColors.mutedText,
                         letterSpacing: -0.2,
@@ -741,10 +778,10 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                   BidiSafeText(
                     template.totalDurationFormatted,
                     style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w800,
                       color: theme.colorScheme.onSurface,
-                      letterSpacing: -1.0,
+                      letterSpacing: -1.2,
                     ),
                     forceLTR: true, // Timers must always be LTR
                   ),
@@ -773,6 +810,13 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
+              border: Border(
+                top: BorderSide(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : appColors.border,
+                ),
+              ),
             ),
             child: SizedBox(
               width: double.infinity,
@@ -783,7 +827,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                   foregroundColor: theme.colorScheme.onPrimary,
                   disabledBackgroundColor: appColors.surfaceElevated,
                   disabledForegroundColor: appColors.mutedText,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                   ),

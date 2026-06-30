@@ -11,6 +11,7 @@ import '../app_settings/app_settings_provider.dart';
 import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
+import '../widgets/unified_screen_header.dart';
 
 // Extension to provide fallback for new localization keys until code generation runs
 extension AppLocalizationsExtension on AppLocalizations {
@@ -535,41 +536,11 @@ class _PremiumHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final accent = theme.colorScheme.primary;
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
-      child: Column(
-        children: [
-          const SizedBox(height: 40),
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.10),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.local_fire_department,
-              size: 32,
-              color: accent,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            l10n.premiumTab,
-            style: GoogleFonts.lato(
-              fontSize: 34,
-              fontWeight: FontWeight.w900,
-              fontStyle: FontStyle.italic,
-              color: theme.colorScheme.onSurface,
-              letterSpacing: -1.0,
-            ),
-          ),
-        ],
-      ),
+    return UnifiedScreenHeader(
+      icon: Icons.local_fire_department,
+      title: l10n.premiumTab,
     );
   }
 }

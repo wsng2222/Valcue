@@ -1184,8 +1184,15 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             children: [
               if (routine.machineType == MachineType.cycle) ...[
                 _MetaPill(
-                  icon: Icons.view_timeline,
-                  text: '${routine.intervals.length} ${l10n.interval}',
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (routine.machineType == MachineType.stairmaster) ...[
+                _MetaPill(
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
                 ),
                 const SizedBox(width: 8),
               ],
@@ -1196,10 +1203,6 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                 ),
                 const SizedBox(width: 8),
               ],
-              _MetaPill(
-                icon: Icons.timer_outlined,
-                text: routine.totalDurationFormatted,
-              ),
             ],
           ),
           const SizedBox(height: 20),

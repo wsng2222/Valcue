@@ -12,6 +12,7 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
+import '../../../utils/app_shadows.dart';
 
 class RecommendedRoutinesScreen extends StatefulWidget {
   final MachineType machineType;
@@ -96,6 +97,17 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
         case Difficulty.advanced:
           return 'Advanced';
       }
+    }
+  }
+
+  IconData _getMachineIcon() {
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        return Icons.directions_run;
+      case MachineType.cycle:
+        return Icons.pedal_bike;
+      case MachineType.stairmaster:
+        return Icons.stairs_rounded;
     }
   }
 
@@ -399,9 +411,9 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                       ),
                     )
                   : ListView(
-                      padding: const EdgeInsets.all(16),
-                      children: _buildSections(context, grouped, difficultyOrder,
-                          provider, settingsProvider, l10n),
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+                      children: _buildSections(context, grouped,
+                          difficultyOrder, provider, settingsProvider, l10n),
                     ),
             ),
           ),
@@ -465,94 +477,139 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
   ) {
     final theme = Theme.of(context);
     final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
+        ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
+        padding: const EdgeInsets.all(18),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _getLocalizedTitle(l10n, template.titleKey),
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.3,
-                      decoration: TextDecoration.none,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    _getMachineIcon(),
+                    size: 22,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _getLocalizedTitle(l10n, template.titleKey),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                          letterSpacing: -0.4,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        _getLocalizedSubtitle(l10n, template.subtitleKey),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: 14,
+                          color: appColors.mutedText,
+                          letterSpacing: -0.2,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: appColors.surfaceElevated,
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : appColors.border,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _getLocalizedSubtitle(l10n, template.subtitleKey),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontSize: 14,
-                      color: appColors.mutedText,
-                      letterSpacing: -0.2,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  BidiSafeText(
+                  child: BidiSafeText(
                     template.totalDurationFormatted,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontSize: 14,
                       color: theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       decoration: TextDecoration.none,
                     ),
-                    forceLTR: true, // Timers must always be LTR
-                  ),
-                ],
-              ),
-            ),
-            // Check routine button
-            const SizedBox(width: 16),
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                RoutinePreviewSheet.show(context, template, settingsProvider);
-              },
-              minimumSize: const Size(0, 0),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  (() {
-                    try {
-                      return (l10n as dynamic).checkRoutine ?? 'Check Routine';
-                    } catch (e) {
-                      return 'Check Routine';
-                    }
-                  })(),
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onPrimary,
-                    decoration: TextDecoration.none,
+                    forceLTR: true,
                   ),
                 ),
-              ),
+                const Spacer(),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    RoutinePreviewSheet.show(
+                        context, template, settingsProvider);
+                  },
+                  minimumSize: const Size(0, 0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      borderRadius: BorderRadius.circular(999),
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.18),
+                          blurRadius: 16,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      (() {
+                        try {
+                          return (l10n as dynamic).checkRoutine ??
+                              'Check Routine';
+                        } catch (e) {
+                          return 'Check Routine';
+                        }
+                      })(),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onPrimary,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

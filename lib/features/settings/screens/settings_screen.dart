@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
 import '../../../onboarding/onboarding_flow.dart';
+import '../../../utils/app_shadows.dart';
+import '../../../widgets/unified_screen_header.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -194,10 +195,15 @@ class SettingsSection extends StatelessWidget {
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
         color: isDark ? theme.colorScheme.surface : appColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
+        ),
+        boxShadow: AppShadows.elevatedSoft,
       ),
       child: Column(
         children: children,
@@ -242,7 +248,7 @@ class SettingsRow extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
               icon,
@@ -288,7 +294,7 @@ class SettingsRow extends StatelessWidget {
         onTap != null
             ? InkWell(
                 onTap: onTap,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(24),
                 child: content,
               )
             : content,
@@ -340,7 +346,7 @@ class UnitSegmentRow extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: iconColor.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   icon,
@@ -558,7 +564,7 @@ class ThemeSegmentRow extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: iconColor.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   icon,
@@ -896,15 +902,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(24),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(30)),
+                  border: Border.all(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : context.appColors.border,
                   ),
+                  boxShadow: AppShadows.elevatedSoft,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color:
+                            context.appColors.mutedText.withValues(alpha: 0.24),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
                       child: Text(
                         AppLocalizations.of(context)!.workoutReminderSelectTime,
                         style: TextStyle(
@@ -949,9 +970,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 18),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                             elevation: 0,
                           ),
@@ -985,6 +1006,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   ) {
     final selectedDays = provider.workoutReminderWeekdays.toSet();
     final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
@@ -996,12 +1019,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.dark
-                    ? theme.colorScheme.surfaceContainerHighest
-                        .withValues(alpha: 0.2)
-                    : theme.colorScheme.surfaceContainerLowest
-                        .withValues(alpha: 0.75),
-                borderRadius: BorderRadius.circular(16),
+                color: appColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : appColors.border,
+                ),
               ),
               child: Row(
                 children: List.generate(_weekdayOrder.length * 2 - 1, (index) {
@@ -1024,7 +1048,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         } else {
                           updated.add(weekday);
                         }
-                        provider.updateWorkoutReminderWeekdays(updated.toList());
+                        provider
+                            .updateWorkoutReminderWeekdays(updated.toList());
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 180),
@@ -1032,20 +1057,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         height: 42,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: isSelected
-                              ? LinearGradient(
-                                  colors: [
-                                    theme.colorScheme.primary,
-                                    theme.colorScheme.primary.withValues(
-                                      alpha: 0.78,
-                                    ),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                )
-                              : null,
-                          color: isSelected ? null : theme.colorScheme.surface,
+                          borderRadius: BorderRadius.circular(14),
+                          color: isSelected
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.surface,
                           border: Border.all(
                             color: isSelected
                                 ? theme.colorScheme.primary
@@ -1057,9 +1072,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ? [
                                   BoxShadow(
                                     color: theme.colorScheme.primary
-                                        .withValues(alpha: 0.28),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 3),
+                                        .withValues(alpha: 0.18),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 6),
                                   ),
                                 ]
                               : null,
@@ -1106,37 +1121,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 40),
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary
-                                .withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.settings,
-                            size: 32,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          AppLocalizations.of(context)!.settingsTitle,
-                          style: GoogleFonts.lato(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.italic,
-                            color: theme.colorScheme.onSurface,
-                            letterSpacing: -1.0,
-                          ),
-                        ),
-                      ],
+                    child: UnifiedScreenHeader(
+                      icon: Icons.settings,
+                      title: AppLocalizations.of(context)!.settingsTitle,
                     ),
                   ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
                 ),
                 // Settings sections
                 SliverToBoxAdapter(
@@ -1155,16 +1147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: theme.colorScheme.outlineVariant
-                              .withValues(alpha: 0.25),
-                          indent: 72,
-                        ),
-                      ),
+                      const SizedBox(height: 8),
                       // Unit Setting section (with segmented control)
                       SettingsSection(
                         children: [
@@ -1190,16 +1173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: theme.colorScheme.outlineVariant
-                              .withValues(alpha: 0.25),
-                          indent: 72,
-                        ),
-                      ),
+                      const SizedBox(height: 8),
                       // Voice Guide section
                       SettingsSection(
                         children: [
@@ -1254,7 +1228,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           SettingsRow(
                             icon: Icons.notifications_active_outlined,
                             iconColor: Colors.redAccent,
-                            title: AppLocalizations.of(context)!.workoutReminderTitle,
+                            title: AppLocalizations.of(context)!
+                                .workoutReminderTitle,
                             subtitle: _reminderSubtitle(context, provider),
                             trailing: _buildPlatformSwitch(
                               value: provider.workoutReminderEnabled,
@@ -1268,7 +1243,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ScaffoldMessenger.of(this.context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      AppLocalizations.of(this.context)!.workoutReminderPermissionRequired,
+                                      AppLocalizations.of(this.context)!
+                                          .workoutReminderPermissionRequired,
                                     ),
                                   ),
                                 );
@@ -1282,7 +1258,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             SettingsRow(
                               icon: Icons.schedule,
                               iconColor: Colors.teal,
-                              title: AppLocalizations.of(context)!.workoutReminderTimeLabel,
+                              title: AppLocalizations.of(context)!
+                                  .workoutReminderTimeLabel,
                               subtitle: _formatReminderTime(
                                 context,
                                 provider.workoutReminderTime,
@@ -1297,16 +1274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: theme.colorScheme.outlineVariant
-                              .withValues(alpha: 0.25),
-                          indent: 72,
-                        ),
-                      ),
+                      const SizedBox(height: 8),
                       // Language section
                       SettingsSection(
                         children: [
@@ -1341,12 +1309,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           }
                         },
                         child: Container(
-                          margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                          margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                           decoration: BoxDecoration(
                             color: theme.brightness == Brightness.dark
                                 ? theme.colorScheme.surface
                                 : context.appColors.surfaceElevated,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: theme.brightness == Brightness.dark
+                                  ? Colors.white.withValues(alpha: 0.08)
+                                  : context.appColors.border,
+                            ),
+                            boxShadow: AppShadows.elevatedSoft,
                           ),
                           child: SettingsRow(
                             icon: Icons.info_outline,
@@ -1384,9 +1358,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // Index 0 = System, 1..N = specific languages
     final isSystem = provider.settings.language == null;
-    int selectedIndex = isSystem
-        ? 0
-        : 1 + languageOptions.indexOf(provider.settings.language!);
+    int selectedIndex =
+        isSystem ? 0 : 1 + languageOptions.indexOf(provider.settings.language!);
     if (selectedIndex <= 0 && !isSystem) selectedIndex = 1;
 
     showModalBottomSheet(
@@ -1405,16 +1378,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(24),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(30)),
+                  border: Border.all(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : context.appColors.border,
                   ),
+                  boxShadow: AppShadows.elevatedSoft,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color:
+                            context.appColors.mutedText.withValues(alpha: 0.24),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
                     // Fixed header
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
                       child: Text(
                         l10n.selectLanguage,
                         style: TextStyle(
@@ -1482,9 +1470,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 18),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                             elevation: 0,
                           ),

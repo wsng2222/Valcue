@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -40,7 +39,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   int? _lastSpokenCountdownSecond;
   int _lastSpokenCountdownIntervalIndex = -1;
   bool _suppressIntervalGuidanceOnResume = false;
-  bool _isSpeakingIntervalInfo = false;  // Prevent countdown during interval speech
+  bool _isSpeakingIntervalInfo =
+      false; // Prevent countdown during interval speech
 
   @override
   void initState() {
@@ -138,7 +138,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     final idx = _workoutState.currentIntervalIndex;
     if (_lastSpokenIntervalIndex == idx) return;
     _lastSpokenIntervalIndex = idx;
-    
+
     // Reset countdown counter when new interval starts
     _lastSpokenCountdownIntervalIndex = -1;
     _lastSpokenCountdownSecond = null;
@@ -164,7 +164,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
           // Speak speed and incline together in one sentence
           _isSpeakingIntervalInfo = true;
-          VoiceGuideService.instance.speakSpeedAndIncline(speed, incline).then((_) {
+          VoiceGuideService.instance
+              .speakSpeedAndIncline(speed, incline)
+              .then((_) {
             Future.delayed(const Duration(milliseconds: 300), () {
               _isSpeakingIntervalInfo = false;
             });
@@ -178,7 +180,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
           // Speak level and RPM together in one sentence
           _isSpeakingIntervalInfo = true;
-          VoiceGuideService.instance.speakLevelAndRpm(resistance, rpm).then((_) {
+          VoiceGuideService.instance
+              .speakLevelAndRpm(resistance, rpm)
+              .then((_) {
             Future.delayed(const Duration(milliseconds: 300), () {
               _isSpeakingIntervalInfo = false;
             });
@@ -397,35 +401,24 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         SafeArea(
           bottom: false,
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(24, 64, 24, 20),
+            padding: const EdgeInsetsDirectional.fromSTEB(24, 56, 24, 16),
             child: Column(
               children: [
-                // Label for total remaining time
-                Text(
-                  'Total remaining',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).extension<AppColors>()!.mutedText,
-                    letterSpacing: 0.2,
-                  ),
-                ),
-                const SizedBox(height: 4),
                 // Total remaining time text (above bar) with tabular digits
                 BidiSafeText(
                   state.formatTime(state.totalRemainingSeconds),
                   style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: -0.5,
+                    letterSpacing: -0.8,
                     fontFeatures: const [
                       ui.FontFeature.tabularFigures()
                     ], // Tabular/monospaced digits
                   ),
                   forceLTR: true, // Timers must always be LTR
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 // Total routine remaining progress bar
                 _TopPillProgressBar(progress: state.totalRemainingProgress),
               ],
@@ -444,7 +437,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 FlashingMetricText(
                   text: _getMainValueText(context, state, settingsProvider),
                   style: TextStyle(
-                    fontSize: 72,
+                    fontSize: 76,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.onSurface,
                     letterSpacing: -2.0,
@@ -453,10 +446,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   flashColor: Theme.of(context).colorScheme.primary,
                   triggerKey: state.currentIntervalIndex,
                 ),
-                const SizedBox(height: 12),
-                // Next session value and secondary value as chips
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                const SizedBox(height: 16),
+                // Next session value and secondary value as stacked chips
+                Column(
                   children: [
                     if (_getNextValueText(context, state, settingsProvider)
                         .isNotEmpty)
@@ -467,7 +459,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     if (_getNextValueText(context, state, settingsProvider)
                             .isNotEmpty &&
                         _getNextRpmText(context, state).isNotEmpty)
-                      const SizedBox(width: 8),
+                      const SizedBox(height: 8),
                     if (_getNextRpmText(context, state).isNotEmpty)
                       _InfoChip(
                         text: _getNextRpmText(context, state),
@@ -476,7 +468,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                             .isNotEmpty &&
                         _getNextRpmText(context, state).isEmpty &&
                         _getSecondaryValueText(context, state).isNotEmpty)
-                      const SizedBox(width: 8),
+                      const SizedBox(height: 8),
                     if (_getNextValueText(context, state, settingsProvider)
                             .isNotEmpty &&
                         _getNextRpmText(context, state).isEmpty &&
@@ -492,7 +484,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 36),
                 // Circular timer for current session
                 _CircularTimerBadge(
                   timeText: countdownLabel,
@@ -563,9 +555,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             MediaQuery.of(context).textScaler.scale(1.0).clamp(1.0, 1.15)),
       ),
       child: SafeArea(
-        left: false,  // No left padding in landscape
+        left: false, // No left padding in landscape
         right: false, // No right padding in landscape
-        minimum: const EdgeInsets.only(top: 16, bottom: 16), // Add padding to center vertically
+        minimum: const EdgeInsets.only(
+            top: 16, bottom: 16), // Add padding to center vertically
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Get available dimensions after SafeArea
@@ -664,7 +657,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     isPaused: state.status == WorkoutStatus.paused,
                     isResumingCountdown:
                         state.status == WorkoutStatus.resumingCountdown,
-                    onPauseResume: state.status == WorkoutStatus.resumingCountdown
+                    onPauseResume: state.status ==
+                            WorkoutStatus.resumingCountdown
                         ? () {}
                         : (state.status == WorkoutStatus.paused
                             ? () {
@@ -1226,8 +1220,11 @@ class _PremiumInfoChip extends StatelessWidget {
         : Colors.grey.shade50;
 
     return Container(
-      height: _scaled(42),
-      padding: EdgeInsets.symmetric(horizontal: _scaled(16), vertical: 0),
+      constraints: BoxConstraints(minHeight: _scaled(42)),
+      padding: EdgeInsets.symmetric(
+        horizontal: _scaled(16),
+        vertical: _scaled(10),
+      ),
       decoration: BoxDecoration(
         color: chipColor,
         borderRadius:
@@ -1382,22 +1379,22 @@ class _InfoChip extends StatelessWidget {
         : Colors.grey.shade100;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
       decoration: BoxDecoration(
         color: chipColor,
-        borderRadius: BorderRadius.circular(8),
-        border: isDark
-            ? Border.all(
-                color: Colors.white.withValues(alpha: 0.1),
-                width: 1,
-              )
-            : null,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.black.withValues(alpha: 0.06),
+          width: 1,
+        ),
       ),
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
           color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
           letterSpacing: -0.2,
         ),
@@ -1492,34 +1489,22 @@ class _TopRoutineProgressHeader extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Label for total remaining time (compact style)
-              Text(
-                'Total remaining',
-                style: TextStyle(
-                  fontSize: _scaled(11),
-                  fontWeight: FontWeight.w500,
-                  color: theme.extension<AppColors>()!.mutedText,
-                  letterSpacing: 0.2,
-                  height: 1.0, // Compact line height
-                ),
-              ),
-              SizedBox(height: _scaled(4)), // Reduced spacing
               // Total remaining time text (compact) with tabular digits
               BidiSafeText(
                 totalRemainingTimeFormatted,
                 style: TextStyle(
-                  fontSize: _scaled(28), // Slightly smaller
-                  fontWeight: FontWeight.w600,
+                  fontSize: _scaled(28),
+                  fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.5,
-                  height: 1.0, // Compact line height
+                  letterSpacing: -0.7,
+                  height: 1.0,
                   fontFeatures: const [
                     ui.FontFeature.tabularFigures()
                   ], // Tabular/monospaced digits
                 ),
                 forceLTR: true, // Timers must always be LTR
               ),
-              SizedBox(height: _scaled(8)), // Reduced spacing
+              SizedBox(height: _scaled(10)),
               // Total routine remaining progress bar (thinner)
               Padding(
                 padding:
@@ -1636,11 +1621,9 @@ class _CurrentValueSectionState extends State<_CurrentValueSection>
           },
         ),
         SizedBox(height: widget._scaled(20)),
-        // Next session value and secondary value as premium chips (wrap if needed)
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: widget._scaled(8),
-          runSpacing: widget._scaled(8),
+        // Next session value and secondary value as stacked premium chips
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.nextValueText.isNotEmpty)
               _PremiumInfoChip(
@@ -1649,11 +1632,17 @@ class _CurrentValueSectionState extends State<_CurrentValueSection>
                 scaleFactor: widget.scaleFactor,
               ),
             if (widget.nextRpmText.isNotEmpty)
+              SizedBox(height: widget._scaled(8)),
+            if (widget.nextRpmText.isNotEmpty)
               _PremiumInfoChip(
                 icon: Icons.speed,
                 text: widget.nextRpmText,
                 scaleFactor: widget.scaleFactor,
               ),
+            if (widget.nextValueText.isNotEmpty &&
+                widget.nextRpmText.isEmpty &&
+                widget.secondaryValueText.isNotEmpty)
+              SizedBox(height: widget._scaled(8)),
             if (widget.nextValueText.isNotEmpty &&
                 widget.nextRpmText.isEmpty &&
                 widget.secondaryValueText.isNotEmpty)
