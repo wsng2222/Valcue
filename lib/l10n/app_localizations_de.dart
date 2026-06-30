@@ -508,7 +508,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get advanced => 'Experte';
 
   @override
-  String get viewRecommendedRoutines => 'Empfohlene Routinen ansehen →';
+  String get viewRecommendedRoutines => 'Empfohlen →';
 
   @override
   String get recommendedRoutinesTreadmill => 'Empfohlene Laufband-Routinen';

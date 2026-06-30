@@ -270,7 +270,7 @@
     }
   },
   "checkRoutineStart": "ルーティンを確認 / 開始",
-  "viewRecommendedRoutines": "おすすめルーティンを見る →",
+  "viewRecommendedRoutines": "おすすめ →",
   "beginner": "初級",
   "intermediate": "中級",
   "advanced": "上級",

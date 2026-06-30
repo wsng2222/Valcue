@@ -227,7 +227,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                 curve: Curves.easeInOutCubic,
               );
             },
-            height: 40,
+            height: 44,
             color: selectedBg,
           ),
         ),
@@ -335,26 +335,26 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                             );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 11),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   item.icon,
-                                  size: 16,
+                                  size: 17,
                                   color: iconColor,
                                 ),
-                                const SizedBox(width: 6),
+                                const SizedBox(width: 7),
                                 Flexible(
                                   child: Text(
                                     item.label,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: 13.5,
                                       fontWeight: fontWeight,
                                       color: textColor,
-                                      letterSpacing: -0.2,
+                                      letterSpacing: -0.25,
                                     ),
                                   ),
                                 ),
@@ -421,14 +421,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   Widget _buildRecommendedButton(
       BuildContext context, MachineType machineType) {
     final l10n = AppLocalizations.of(context)!;
-    final buttonText = (() {
-      try {
-        return (l10n as dynamic).viewRecommendedRoutines ??
-            'View Recommended Routines →';
-      } catch (e) {
-        return 'View Recommended Routines →';
-      }
-    })();
+    final buttonText = l10n.viewRecommendedRoutines;
     return Center(
       child: TextButton(
         onPressed: () => _navigateToRecommendedRoutines(context, machineType),
@@ -442,9 +435,10 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           buttonText,
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
             fontStyle: FontStyle.normal,
+            letterSpacing: -0.3,
           ),
         ),
       ),
@@ -487,21 +481,41 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.routineTab,
-                        style: GoogleFonts.lato(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
-                          fontStyle: FontStyle.italic,
-                          color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.8,
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.10,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.directions_run,
+                              size: 22,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            l10n.routineTab,
+                            style: GoogleFonts.lato(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              color: theme.colorScheme.onSurface,
+                              letterSpacing: -0.9,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 18),
                       _buildMachineSegmentedControl(context),
                     ],
                   ),
@@ -525,7 +539,6 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                             .toList(),
                         settingsProvider,
                         MachineType.treadmill,
-                        _getMachineTitles(context)[0],
                       ),
                       // Page 1: 사이클 (premium gated)
                       _buildMachinePage(
@@ -534,7 +547,6 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                         settingsProvider.isPremium,
                         routineProvider,
                         settingsProvider,
-                        _getMachineTitles(context)[1],
                       ),
                       // Page 2: 천국의 계단 (premium gated)
                       _buildMachinePage(
@@ -543,7 +555,6 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                         settingsProvider.isPremium,
                         routineProvider,
                         settingsProvider,
-                        _getMachineTitles(context)[2],
                       ),
                     ],
                   ),
@@ -561,26 +572,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     List<Routine> routines,
     AppSettingsProvider settingsProvider,
     MachineType machineType,
-    String machineTitle,
   ) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 6, 20, 6),
-          child: Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Text(
-              machineTitle,
-              style: GoogleFonts.lato(
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                color: Theme.of(context).colorScheme.onSurface,
-                letterSpacing: -0.6,
-              ),
-            ),
-          ),
-        ),
         Expanded(
           child: routines.isEmpty
               ? _buildEmptyState(context, machineType, settingsProvider)
@@ -597,26 +591,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     bool isPremium,
     RoutineProvider routineProvider,
     AppSettingsProvider settingsProvider,
-    String machineTitle,
   ) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 6, 20, 6),
-          child: Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Text(
-              machineTitle,
-              style: GoogleFonts.lato(
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                color: Theme.of(context).colorScheme.onSurface,
-                letterSpacing: -0.6,
-              ),
-            ),
-          ),
-        ),
         Expanded(
           child: !isPremium
               ? _buildLockedScreen(context)
@@ -721,7 +698,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
 
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 182, 20, 30),
+        padding: const EdgeInsets.fromLTRB(20, 156, 20, 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -774,7 +751,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
             ),
             if (previewTemplates.isNotEmpty) ...[
-              const SizedBox(height: 184),
+              const SizedBox(height: 160),
               Text(
                 'Quick start',
                 style: TextStyle(
@@ -1063,7 +1040,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       slivers: [
         // Routine cards
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -1080,13 +1057,13 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(top: 32),
+                padding: const EdgeInsets.only(top: 24),
                 child: Center(
                   child: GestureDetector(
                     onTap: () => _handleAddRoutine(context, machineType),
                     child: Container(
-                      width: 72,
-                      height: 72,
+                      width: 70,
+                      height: 70,
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onSurface,
                         shape: BoxShape.circle,
@@ -1104,7 +1081,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                       child: Icon(
                         Icons.add,
                         color: Theme.of(context).colorScheme.surface,
-                        size: 38,
+                        size: 36,
                       ),
                     ),
                   ),
@@ -1117,7 +1094,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
-                top: 60,
+                top: 42,
                 bottom: bottomReserved,
               ),
               child: _buildRecommendedButton(context, machineType),
@@ -1148,16 +1125,16 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         _getLocalizedDifficulty(context, routine.difficulty);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 34),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            color: theme.colorScheme.shadow.withValues(alpha: 0.14),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
             spreadRadius: 0,
           ),
         ],
@@ -1174,7 +1151,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 21,
                     fontWeight: FontWeight.w700,
                     color: theme.colorScheme.onSurface,
                     letterSpacing: -0.4,
@@ -1188,21 +1165,21 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           // Big duration text (always LTR for timers)
           BidiSafeText(
             routine.totalDurationFormatted,
             style: TextStyle(
-              fontSize: 44,
+              fontSize: 46,
               fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
               letterSpacing: -1.0,
             ),
             forceLTR: true, // Timers must always be LTR
           ),
-          const SizedBox(height: 12),
-          _buildIntervalPatternBar(context, routine),
           const SizedBox(height: 14),
+          _buildIntervalPatternBar(context, routine),
+          const SizedBox(height: 16),
           Row(
             children: [
               if (routine.machineType == MachineType.cycle) ...[
@@ -1225,7 +1202,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           // Full-width pill button
           SizedBox(
             width: double.infinity,
@@ -1236,7 +1213,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: theme.colorScheme.primary,
                 foregroundColor: theme.colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(vertical: 18),
+                padding: const EdgeInsets.symmetric(vertical: 19),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
@@ -1245,7 +1222,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               child: Text(
                 AppLocalizations.of(context)!.checkRoutineStart,
                 style: GoogleFonts.lato(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.w900,
                   fontStyle: FontStyle.italic,
                   letterSpacing: -0.3,
@@ -1258,7 +1235,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     );
   }
 
-  String _buildTotalDistanceText(Routine routine, AppSettingsProvider settings) {
+  String _buildTotalDistanceText(
+      Routine routine, AppSettingsProvider settings) {
     double totalKm = 0;
     for (final interval in routine.intervals) {
       if (interval.speedKmh != null) {
@@ -1327,7 +1305,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                 .clamp(1, 100)
                 .round(),
             child: Container(
-              height: 8,
+              height: 10,
               decoration: BoxDecoration(
                 color: segmentColor(i),
                 borderRadius: BorderRadius.horizontal(
@@ -1339,7 +1317,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
             ),
           ),
-          if (i < routine.intervals.length - 1) const SizedBox(width: 2),
+          if (i < routine.intervals.length - 1) const SizedBox(width: 3),
         ],
       ],
     );
@@ -1377,7 +1355,7 @@ class _MetaPill extends StatelessWidget {
     final background = isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(999),
@@ -1388,14 +1366,14 @@ class _MetaPill extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 14,
+            size: 15,
             color: appColors.mutedText,
           ),
           const SizedBox(width: 6),
           Text(
             text,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.5,
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.onSurface,
               letterSpacing: -0.2,

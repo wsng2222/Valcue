@@ -503,7 +503,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get advanced => 'Geavanceerd';
 
   @override
-  String get viewRecommendedRoutines => 'Aanbevolen routines bekijken →';
+  String get viewRecommendedRoutines => 'Aanbevolen →';
 
   @override
   String get recommendedRoutinesTreadmill => 'Aanbevolen loopbandroutines';

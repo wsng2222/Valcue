@@ -503,7 +503,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get advanced => 'Avanceret';
 
   @override
-  String get viewRecommendedRoutines => 'Se anbefalede rutiner →';
+  String get viewRecommendedRoutines => 'Anbefalet →';
 
   @override
   String get recommendedRoutinesTreadmill => 'Anbefalede løbebåndsrutiner';

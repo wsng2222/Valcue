@@ -505,7 +505,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get advanced => 'Avançado';
 
   @override
-  String get viewRecommendedRoutines => 'Ver Rotinas Recomendadas →';
+  String get viewRecommendedRoutines => 'Recomendadas →';
 
   @override
   String get recommendedRoutinesTreadmill => 'Rotinas de Esteira Recomendadas';

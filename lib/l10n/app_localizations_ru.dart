@@ -508,7 +508,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get advanced => 'Продвинутый';
 
   @override
-  String get viewRecommendedRoutines => 'Посмотреть Рекомендованные →';
+  String get viewRecommendedRoutines => 'Рекомендованные →';
 
   @override
   String get recommendedRoutinesTreadmill =>

@@ -504,7 +504,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get advanced => 'Nâng cao';
 
   @override
-  String get viewRecommendedRoutines => 'Xem Thói quen Được đề xuất →';
+  String get viewRecommendedRoutines => 'Đề xuất →';
 
   @override
   String get recommendedRoutinesTreadmill =>

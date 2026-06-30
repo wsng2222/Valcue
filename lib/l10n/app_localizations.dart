@@ -1065,7 +1065,7 @@ abstract class AppLocalizations {
   /// No description provided for @viewRecommendedRoutines.
   ///
   /// In en, this message translates to:
-  /// **'View Recommended Routines →'**
+  /// **'Recommended →'**
   String get viewRecommendedRoutines;
 
   /// No description provided for @recommendedRoutinesTreadmill.

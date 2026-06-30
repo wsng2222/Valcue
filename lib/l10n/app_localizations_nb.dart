@@ -502,7 +502,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get advanced => 'Avansert';
 
   @override
-  String get viewRecommendedRoutines => 'Se anbefalte rutiner →';
+  String get viewRecommendedRoutines => 'Anbefalt →';
 
   @override
   String get recommendedRoutinesTreadmill => 'Anbefalte tredemølle-rutiner';

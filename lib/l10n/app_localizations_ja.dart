@@ -494,7 +494,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get advanced => '上級';
 
   @override
-  String get viewRecommendedRoutines => 'おすすめルーティンを見る →';
+  String get viewRecommendedRoutines => 'おすすめ →';
 
   @override
   String get recommendedRoutinesTreadmill => 'おすすめランニングマシンルーティン';

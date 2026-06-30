@@ -494,7 +494,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get advanced => '고급';
 
   @override
-  String get viewRecommendedRoutines => '추천 루틴 보러가기 →';
+  String get viewRecommendedRoutines => '추천 루틴 →';
 
   @override
   String get recommendedRoutinesTreadmill => '러닝머신 추천 루틴';

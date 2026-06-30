@@ -270,7 +270,7 @@
     }
   },
   "checkRoutineStart": "检查例行程序 / 开始",
-  "viewRecommendedRoutines": "查看推荐例程 →",
+  "viewRecommendedRoutines": "推荐 →",
   "beginner": "初级",
   "intermediate": "中级",
   "advanced": "高级",

@@ -500,7 +500,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get advanced => 'ขั้นสูง';
 
   @override
-  String get viewRecommendedRoutines => 'ดูรูทีนแนะนำ →';
+  String get viewRecommendedRoutines => 'แนะนำ →';
 
   @override
   String get recommendedRoutinesTreadmill => 'รูทีนลู่วิ่งแนะนำ';

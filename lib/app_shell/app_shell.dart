@@ -10,6 +10,7 @@ import '../features/profile/screens/profile_screen.dart';
 import '../app_settings/app_settings_provider.dart';
 import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
+import '../utils/app_shadows.dart';
 
 // Extension to provide fallback for new localization keys until code generation runs
 extension AppLocalizationsExtension on AppLocalizations {
@@ -339,31 +340,25 @@ class _PremiumScreenState extends State<_PremiumScreen> {
         bottom: false,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: Column(
               children: [
-                const SizedBox(height: 24),
                 const _PremiumHeroCard(),
-                const SizedBox(height: 28),
-                // Plan selector
+                const SizedBox(height: 24),
                 _PlanSelector(selectionNotifier: _selectionNotifier),
-                const SizedBox(height: 32),
-                // Benefits list
+                const SizedBox(height: 24),
                 const _BenefitsList(),
-                const SizedBox(height: 32),
-                // Supporting line above CTA (will be updated by _PlanSelector)
+                const SizedBox(height: 28),
                 _SupportingLine(selectionNotifier: _selectionNotifier),
-                // Purchase button
                 Consumer<AppSettingsProvider>(
                   builder: (context, provider, child) {
                     void onPurchase() {
-                      // TODO: Implement actual purchase flow
-                      // For now, activate premium for testing
                       provider.updatePremium(true);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                              AppLocalizations.of(context)!.premiumActivated),
+                            AppLocalizations.of(context)!.premiumActivated,
+                          ),
                           duration: const Duration(seconds: 2),
                         ),
                       );
@@ -372,46 +367,70 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                     final buttonLabel = Text(
                       AppLocalizations.of(context)!.startPremium,
                       style: GoogleFonts.lato(
-                        fontSize: 18,
+                        fontSize: 19,
                         fontWeight: FontWeight.w900,
                         fontStyle: FontStyle.italic,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.4,
                         color: theme.colorScheme.onPrimary,
                       ),
                     );
 
-                    return SizedBox(
-                      width: double.infinity,
-                      child: PlatformInfo.isIOS
-                          ? AdaptiveButton.child(
-                              onPressed: onPurchase,
-                              color: theme.colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              borderRadius: BorderRadius.circular(14),
-                              child: buttonLabel,
-                            )
-                          : ElevatedButton(
-                              onPressed: onPurchase,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.primary,
-                                foregroundColor: theme.colorScheme.onPrimary,
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.28,
+                            ),
+                            blurRadius: 24,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: PlatformInfo.isIOS
+                            ? AdaptiveButton.child(
+                                onPressed: onPurchase,
+                                color: theme.colorScheme.primary,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(18),
+                                child: buttonLabel,
+                              )
+                            : ElevatedButton(
+                                onPressed: onPurchase,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.colorScheme.primary,
+                                  foregroundColor: theme.colorScheme.onPrimary,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  elevation: 0,
                                 ),
-                                elevation: 0,
+                                child: buttonLabel,
                               ),
-                              child: buttonLabel,
-                            ),
+                      ),
                     );
                   },
                 ),
-                const SizedBox(height: 16),
-                // Trust lines
+                const SizedBox(height: 18),
                 Builder(
                   builder: (context) {
                     final l10n = AppLocalizations.of(context)!;
+                    final isDark = theme.brightness == Brightness.dark;
+                    final secondaryText = isDark
+                        ? Colors.white.withValues(alpha: 0.72)
+                        : theme.extension<AppColors>()!.mutedText;
+                    final tertiaryText = isDark
+                        ? Colors.white.withValues(alpha: 0.42)
+                        : theme.extension<AppColors>()!.mutedText.withValues(
+                              alpha: 0.85,
+                            );
                     return Column(
                       children: [
                         Text(
@@ -419,8 +438,8 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: theme.extension<AppColors>()!.mutedText,
+                            fontWeight: FontWeight.w500,
+                            color: secondaryText,
                             letterSpacing: -0.1,
                           ),
                         ),
@@ -430,23 +449,21 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: theme.extension<AppColors>()!.mutedText,
+                            fontWeight: FontWeight.w500,
+                            color: secondaryText,
                             letterSpacing: -0.1,
+                            height: 1.35,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Text(
                           l10n.autoRenewableSubscription,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            color: theme
-                                .extension<AppColors>()!
-                                .mutedText
-                                .withValues(alpha: 0.7),
-                            letterSpacing: -0.1,
+                            fontWeight: FontWeight.w500,
+                            color: tertiaryText,
+                            letterSpacing: -0.05,
                           ),
                         ),
                       ],
@@ -454,43 +471,43 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Footer links
                 Builder(
                   builder: (context) {
                     final l10n = AppLocalizations.of(context)!;
+                    final isDark = theme.brightness == Brightness.dark;
+                    final separatorColor = isDark
+                        ? Colors.white.withValues(alpha: 0.32)
+                        : theme.extension<AppColors>()!.mutedText.withValues(
+                              alpha: 0.6,
+                            );
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _FooterLink(
                           text: l10n.terms,
-                          onTap: () {
-                            // TODO: Navigate to Terms
-                          },
+                          onTap: () {},
                         ),
                         Text(
                           ' • ',
                           style: TextStyle(
                             fontSize: 13,
-                            color: theme.extension<AppColors>()!.mutedText,
+                            color: separatorColor,
                           ),
                         ),
                         _FooterLink(
                           text: l10n.privacy,
-                          onTap: () {
-                            // TODO: Navigate to Privacy
-                          },
+                          onTap: () {},
                         ),
                         Text(
                           ' • ',
                           style: TextStyle(
                             fontSize: 13,
-                            color: theme.extension<AppColors>()!.mutedText,
+                            color: separatorColor,
                           ),
                         ),
                         _FooterLink(
                           text: l10n.restore,
                           onTap: () {
-                            // TODO: Implement restore purchases
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(l10n.restore),
@@ -519,146 +536,36 @@ class _PremiumHeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
     final accent = theme.colorScheme.primary;
+    final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            accent.withValues(alpha: 0.18),
-            theme.colorScheme.surface,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: accent.withValues(alpha: 0.25)),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.16),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.local_fire_department,
-                  size: 22,
-                  color: accent,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                'Premium',
-                style: GoogleFonts.lato(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.6,
-                ),
-              ),
-            ],
+          const SizedBox(height: 40),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.10),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.local_fire_department,
+              size: 32,
+              color: accent,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text(
-            l10n.premiumHeadline,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+            l10n.premiumTab,
+            style: GoogleFonts.lato(
+              fontSize: 34,
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic,
               color: theme.colorScheme.onSurface,
-              letterSpacing: -0.4,
-              height: 1.3,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.premiumSubheadlineNew,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: theme.extension<AppColors>()!.mutedText,
-              letterSpacing: -0.2,
-              height: 1.4,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              _PremiumFeaturePill(
-                icon: Icons.record_voice_over,
-                text: l10n.benefitVoiceCoaching,
-              ),
-              _PremiumFeaturePill(
-                icon: Icons.fitness_center,
-                text: l10n.benefitCycleStairmasterRoutines,
-              ),
-              _PremiumFeaturePill(
-                icon: Icons.bookmark_added,
-                text: l10n.benefitUnlimitedRoutinesNew,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PremiumFeaturePill extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const _PremiumFeaturePill({
-    required this.icon,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = theme.extension<AppColors>()!;
-    final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? const Color(0xFF2C2C2E) : Colors.white.withValues(alpha: 0.7);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: appColors.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 14,
-            color: theme.colorScheme.primary,
-          ),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -0.2,
-              ),
+              letterSpacing: -1.0,
             ),
           ),
         ],
@@ -675,8 +582,10 @@ class _SupportingLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final appColors = theme.extension<AppColors>()!;
 
     return ValueListenableBuilder<PlanType>(
       valueListenable: selectionNotifier,
@@ -689,8 +598,10 @@ class _SupportingLine extends StatelessWidget {
                 : l10n.canChangeAnytime,
             style: TextStyle(
               fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w600,
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.72)
+                  : appColors.mutedText,
               letterSpacing: -0.1,
             ),
             textAlign: TextAlign.center,
@@ -780,7 +691,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
             _notifier.value = PlanType.monthly;
           },
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         // Yearly plan (second option with Most Popular badge)
         Stack(
           clipBehavior: Clip.none,
@@ -791,7 +702,6 @@ class _PlanSelectorState extends State<_PlanSelector> {
               period: l10n.perYear,
               isSelected: _selectedPlan == PlanType.yearly,
               savingsPercent: _savingsPercent,
-              badgeText: '가장 인기',
               isPrimary: true,
               onTap: () {
                 _notifier.value = PlanType.yearly;
@@ -800,19 +710,23 @@ class _PlanSelectorState extends State<_PlanSelector> {
             // "Most Popular" badge
             if (_selectedPlan == PlanType.yearly)
               Positioned(
-                top: -8,
-                right: 16,
+                top: 14,
+                right: 14,
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.16),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.24),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.12),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
@@ -821,7 +735,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onPrimary,
+                      color: theme.colorScheme.primary,
                       letterSpacing: 0.2,
                     ),
                   ),
@@ -829,7 +743,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
               ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         // Lifetime plan (third option with Best Value badge)
         Stack(
           clipBehavior: Clip.none,
@@ -840,7 +754,6 @@ class _PlanSelectorState extends State<_PlanSelector> {
               period: l10n.oneTime,
               isSelected: _selectedPlan == PlanType.lifetime,
               savingsPercent: _lifetimeSavingsPercent,
-              badgeText: '최고 가치',
               isPrimary: true,
               onTap: () {
                 _notifier.value = PlanType.lifetime;
@@ -849,28 +762,32 @@ class _PlanSelectorState extends State<_PlanSelector> {
             // "Best Value" badge
             if (_selectedPlan == PlanType.lifetime)
               Positioned(
-                top: -8,
-                right: 16,
+                top: 14,
+                right: 14,
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.16),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.24),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.12),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
                   child: Text(
                     l10n.bestValue,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: theme.colorScheme.primary,
                       letterSpacing: 0.2,
                     ),
                   ),
@@ -890,7 +807,6 @@ class _PlanCard extends StatelessWidget {
   final String period;
   final bool isSelected;
   final int? savingsPercent;
-  final String? badgeText;
   final bool isPrimary;
   final VoidCallback onTap;
 
@@ -900,7 +816,6 @@ class _PlanCard extends StatelessWidget {
     required this.period,
     required this.isSelected,
     this.savingsPercent,
-    this.badgeText,
     this.isPrimary = false,
     required this.onTap,
   });
@@ -910,14 +825,10 @@ class _PlanCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final appColors = theme.extension<AppColors>()!;
-
-    // Card background color
-    final cardColor = isDark
-        ? const Color(0xFF1C1C1E) // Dark surface
-        : Colors.grey.shade50;
-
-    // Primary cards are slightly larger
     final cardPadding = isPrimary ? 24.0 : 20.0;
+    final baseColor = isDark
+        ? (isSelected ? const Color(0xFF181B21) : const Color(0xFF101216))
+        : Colors.white;
 
     return GestureDetector(
       onTap: onTap,
@@ -925,32 +836,29 @@ class _PlanCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(cardPadding),
         decoration: BoxDecoration(
-          color: isSelected
-              ? (isDark ? const Color(0xFF2C2C2E) : Colors.white)
-              : cardColor,
-          borderRadius: BorderRadius.circular(16),
+          color: baseColor,
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected
-                ? theme.colorScheme.primary
+                ? theme.colorScheme.primary.withValues(alpha: 0.9)
                 : (isDark
                     ? Colors.white.withValues(alpha: 0.08)
-                    : Colors.grey.shade300),
-            width: isSelected ? 2.5 : 1,
+                    : appColors.border),
+            width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                    blurRadius: 12,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    blurRadius: 22,
                     spreadRadius: 0,
-                    offset: const Offset(0, 4),
+                    offset: const Offset(0, 8),
                   ),
                 ]
-              : null,
+              : AppShadows.elevatedSoft,
         ),
         child: Row(
           children: [
-            // Radio button / Check icon
             Container(
               width: 24,
               height: 24,
@@ -959,8 +867,8 @@ class _PlanCard extends StatelessWidget {
                 border: Border.all(
                   color: isSelected
                       ? theme.colorScheme.primary
-                      : appColors.mutedText,
-                  width: 2,
+                      : Colors.white.withValues(alpha: 0.28),
+                  width: 1.8,
                 ),
                 color:
                     isSelected ? theme.colorScheme.primary : Colors.transparent,
@@ -974,7 +882,6 @@ class _PlanCard extends StatelessWidget {
                   : null,
             ),
             const SizedBox(width: 16),
-            // Plan details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -987,7 +894,7 @@ class _PlanCard extends StatelessWidget {
                           fontSize: isPrimary ? 18 : 17,
                           fontWeight: FontWeight.w700,
                           color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.45,
                         ),
                       ),
                       if (savingsPercent != null) ...[
@@ -1003,7 +910,7 @@ class _PlanCard extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.primary
                                     .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
                                 l10n.savePercent(savingsPercent!),
@@ -1011,7 +918,7 @@ class _PlanCard extends StatelessWidget {
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   color: theme.colorScheme.primary,
-                                  letterSpacing: -0.1,
+                                  letterSpacing: -0.15,
                                 ),
                               ),
                             );
@@ -1020,7 +927,7 @@ class _PlanCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
@@ -1028,20 +935,22 @@ class _PlanCard extends StatelessWidget {
                       Text(
                         price,
                         style: GoogleFonts.lato(
-                          fontSize: 28,
+                          fontSize: 32,
                           fontWeight: FontWeight.w900,
                           fontStyle: FontStyle.italic,
                           color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.8,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       Text(
                         'KRW',
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.mutedText,
+                          fontWeight: FontWeight.w600,
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.52)
+                              : appColors.mutedText,
                           letterSpacing: -0.2,
                         ),
                       ),
@@ -1050,8 +959,10 @@ class _PlanCard extends StatelessWidget {
                         period,
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.mutedText,
+                          fontWeight: FontWeight.w600,
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.52)
+                              : appColors.mutedText,
                           letterSpacing: -0.2,
                         ),
                       ),
@@ -1074,6 +985,9 @@ class _BenefitsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final appColors = theme.extension<AppColors>()!;
     final benefits = [
       _BenefitItem(
         icon: Icons.record_voice_over,
@@ -1103,11 +1017,33 @@ class _BenefitsList extends StatelessWidget {
 
     return Column(
       children: [
-        for (int i = 0; i < benefits.length; i++) ...[
-          _BenefitListItem(item: benefits[i]),
-          if (i < benefits.length - 1)
-            Divider(height: 1, color: Colors.grey.shade300),
-        ],
+        Container(
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF111317) : Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : appColors.border,
+            ),
+            boxShadow: AppShadows.elevatedSoft,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          child: Column(
+            children: [
+              for (int i = 0; i < benefits.length; i++) ...[
+                _BenefitListItem(item: benefits[i]),
+                if (i < benefits.length - 1)
+                  Divider(
+                    height: 1,
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : appColors.border,
+                  ),
+              ],
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1131,27 +1067,38 @@ class _BenefitListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            item.icon,
-            size: 24,
-            color: theme.colorScheme.primary,
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: isDark
+                  ? const Color(0x19FF453A)
+                  : theme.colorScheme.primary.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              item.icon,
+              size: 18,
+              color: const Color(0xFFFF5A52),
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
               item.text,
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
-                letterSpacing: -0.2,
-                height: 1.3,
+                letterSpacing: -0.3,
+                height: 1.35,
               ),
             ),
           ),
@@ -1174,6 +1121,8 @@ class _FooterLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final appColors = theme.extension<AppColors>()!;
 
     return GestureDetector(
       onTap: onTap,
@@ -1181,9 +1130,11 @@ class _FooterLink extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.w400,
-          color: theme.colorScheme.primary,
-          letterSpacing: -0.1,
+          fontWeight: FontWeight.w600,
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.6)
+              : appColors.mutedText,
+          letterSpacing: -0.05,
         ),
       ),
     );

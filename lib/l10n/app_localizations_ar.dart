@@ -500,7 +500,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get advanced => 'متقدم';
 
   @override
-  String get viewRecommendedRoutines => 'عرض الروتينات الموصى بها →';
+  String get viewRecommendedRoutines => 'موصى به →';
 
   @override
   String get recommendedRoutinesTreadmill => 'روتينات المشي الموصى بها';

@@ -493,7 +493,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get advanced => '高级';
 
   @override
-  String get viewRecommendedRoutines => '查看推荐例程 →';
+  String get viewRecommendedRoutines => '推荐 →';
 
   @override
   String get recommendedRoutinesTreadmill => '推荐跑步机例程';
