@@ -306,7 +306,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
             children: [
               // Machine type pill chips
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: _buildMachineTypePills(context, provider, machineTypes),
               ),
               // Content area
