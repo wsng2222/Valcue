@@ -17,6 +17,32 @@ import '../providers/workout_history_provider.dart';
 import '../providers/weight_tracker_provider.dart';
 import '../../routines/models/machine_type.dart';
 
+Color _segmentedSelectedBackground(BuildContext context) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  return isDark
+      ? theme.colorScheme.primary.withValues(alpha: 0.25)
+      : theme.colorScheme.primary.withValues(alpha: 0.12);
+}
+
+SegmentedButtonThemeData _segmentedThemeData(
+    BuildContext context, Color selectedBackground) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  final selectedForeground = isDark ? Colors.white : Colors.black87;
+  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
+
+  return SegmentedButtonThemeData(
+    style: SegmentedButton.styleFrom(
+      selectedBackgroundColor: selectedBackground,
+      selectedForegroundColor: selectedForeground,
+      foregroundColor: theme.colorScheme.onSurface,
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(color: borderColor),
+    ),
+  );
+}
+
 Color _weightSegmentSelectedBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
   return isDark ? const Color(0xFF2C2C2E) : Colors.white;
@@ -302,115 +328,144 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
 
   Widget _buildMachineTypePills(BuildContext context,
       WorkoutHistoryProvider provider, List<MachineType> machineTypes) {
+    if (PlatformInfo.isIOS) {
+      final titles = [
+        AppLocalizations.of(context)!.treadmill,
+        AppLocalizations.of(context)!.bike,
+        AppLocalizations.of(context)!.stairmaster,
+      ];
+      final selectedIndex = _selectedMachineTab.clamp(0, titles.length - 1);
+      final selectedBg = _segmentedSelectedBackground(context);
+      final brightnessKey = Theme.of(context).brightness;
+      final localeKey = Localizations.localeOf(context).toLanguageTag();
+
+      return SegmentedButtonTheme(
+        data: _segmentedThemeData(context, selectedBg),
+        child: SizedBox(
+          width: double.infinity,
+          child: _buildPlatformSegmentedControl(
+            key: ValueKey('profile_machine_segment_${brightnessKey.name}_$localeKey'),
+            labels: titles,
+            selectedIndex: selectedIndex,
+            onValueChanged: (index) {
+              setState(() => _selectedMachineTab = index);
+              widget.onMachineTabChanged(index);
+            },
+            height: 44,
+            color: selectedBg,
+          ),
+        ),
+      );
+    }
+
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
+    final titles = [
+      AppLocalizations.of(context)!.treadmill,
+      AppLocalizations.of(context)!.bike,
+      AppLocalizations.of(context)!.stairmaster,
+    ];
+    final items = [
+      _MachineTabItem(icon: Icons.directions_run, label: titles[0]),
+      _MachineTabItem(icon: Icons.pedal_bike, label: titles[1]),
+      _MachineTabItem(icon: Icons.stairs, label: titles[2]),
+    ];
 
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color:
-              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildPillChip(
-              0,
-              AppLocalizations.of(context)!.treadmill,
-              context,
-              machineTypes[0],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _buildPillChip(
-              1,
-              AppLocalizations.of(context)!.bike,
-              context,
-              machineTypes[1],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _buildPillChip(
-              2,
-              AppLocalizations.of(context)!.stairmaster,
-              context,
-              machineTypes[2],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const outerPadding = 4.0;
+        final innerWidth = (constraints.maxWidth - (outerPadding * 2))
+            .clamp(0.0, double.infinity)
+            .toDouble();
+        final segmentWidth = innerWidth / items.length;
 
-  Widget _buildPillChip(
-      int index, String label, BuildContext context, MachineType machineType) {
-    final theme = Theme.of(context);
-    final isSelected = _selectedMachineTab == index;
-    final isDark = theme.brightness == Brightness.dark;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() => _selectedMachineTab = index);
-        widget.onMachineTabChanged(index);
-      },
-      child: Container(
-        height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? (isDark ? const Color(0xFF2C2C2E) : const Color(0xFFECECEC))
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(999),
-          border: isSelected
-              ? Border.all(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.04)
-                      : Colors.black.withValues(alpha: 0.04),
-                  width: 1.0,
-                )
-              : null,
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+        return Container(
+          padding: const EdgeInsets.all(outerPadding),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: appColors.border),
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.shadow.withValues(alpha: 0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeInOutCubic,
+                left: segmentWidth * _selectedMachineTab,
+                top: 0,
+                bottom: 0,
+                width: segmentWidth,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(999),
                   ),
-                ]
-              : null,
-        ),
-        alignment: Alignment.center,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-            ),
+                ),
+              ),
+              Row(
+                children: List.generate(items.length, (index) {
+                  final item = items[index];
+                  final isSelected = _selectedMachineTab == index;
+                  final iconColor = isSelected
+                      ? theme.colorScheme.onPrimary
+                      : appColors.mutedText;
+                  final textColor = isSelected
+                      ? theme.colorScheme.onPrimary
+                      : theme.colorScheme.onSurface;
+                  final fontWeight = isSelected
+                      ? FontWeight.w700
+                      : FontWeight.w600;
+
+                  return Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() => _selectedMachineTab = index);
+                        widget.onMachineTabChanged(index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              item.icon,
+                              size: 17,
+                              color: iconColor,
+                            ),
+                            const SizedBox(width: 7),
+                            Flexible(
+                              child: Text(
+                                item.label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13.5,
+                                  fontWeight: fontWeight,
+                                  color: textColor,
+                                  letterSpacing: -0.25,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -3802,4 +3857,14 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
       },
     );
   }
+}
+
+class _MachineTabItem {
+  final IconData icon;
+  final String label;
+
+  const _MachineTabItem({
+    required this.icon,
+    required this.label,
+  });
 }
