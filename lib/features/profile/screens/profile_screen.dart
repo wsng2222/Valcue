@@ -18,11 +18,8 @@ import '../providers/weight_tracker_provider.dart';
 import '../../routines/models/machine_type.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
-  final theme = Theme.of(context);
-  final isDark = theme.brightness == Brightness.dark;
-  return isDark
-      ? theme.colorScheme.primary.withValues(alpha: 0.25)
-      : theme.colorScheme.primary.withValues(alpha: 0.12);
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
 }
 
 SegmentedButtonThemeData _segmentedThemeData(
@@ -384,7 +381,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
           padding: const EdgeInsets.all(outerPadding),
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+            color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
               color: isDark
@@ -410,7 +407,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                 width: segmentWidth,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF2C2C2E) : const Color(0xFFECECEC),
+                    color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(
                       color: isDark

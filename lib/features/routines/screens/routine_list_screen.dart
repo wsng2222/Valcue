@@ -256,7 +256,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           padding: const EdgeInsets.all(outerPadding),
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+            color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
               color: isDark
@@ -290,7 +290,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                     width: segmentWidth,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF2C2C2E) : const Color(0xFFECECEC),
+                        color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: isDark
