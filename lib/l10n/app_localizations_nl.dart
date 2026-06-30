@@ -358,10 +358,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get premiumMembership => 'Premium lidmaatschap';
 
   @override
-  String get benefitCycleStairmaster => 'Fiets-, Stairmaster-functie';
+  String get benefitCycleStairmaster => 'Routines voor fiets en StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'Sessiespraakgids-functie';
+  String get benefitVoiceGuide => 'Gesproken begeleiding per sessie';
 
   @override
   String get benefitUnlimitedRoutines => 'Onbeperkt routines opslaan';
@@ -370,41 +370,41 @@ class AppLocalizationsNl extends AppLocalizations {
   String get noAds => 'Geen advertenties';
 
   @override
-  String get benefitFutureFeatures =>
-      'Onbeperkte toegang tot toekomstige functies';
+  String get benefitFutureFeatures => 'Alle toekomstige functies inbegrepen';
 
   @override
-  String get voiceGuideBenefit1 => 'Spraakbegeleiding tijdens workout';
+  String get voiceGuideBenefit1 => 'In-app gesproken coaching';
 
   @override
   String get voiceGuideBenefit2 =>
-      'Automatische aankondigingen bij sessiewissel';
+      'Automatische melding bij wisseling van sessie';
 
   @override
-  String get voiceGuideBenefit3 => 'Handsfree focus op je routine';
+  String get voiceGuideBenefit3 => 'Handsfree focussen op je training';
 
   @override
   String get routineLimitBenefit1 => 'Onbeperkt routines opslaan';
 
   @override
-  String get routineLimitBenefit2 => 'Routines opslaan voor meerdere doelen';
+  String get routineLimitBenefit2 => 'Gepersonaliseerde routines per doel';
 
   @override
   String get routineLimitBenefit3 =>
-      'Gebruik alle typen apparaten (loopband/fiets/stairmaster)';
+      'Ondersteuning voor loopband, fiets en StairMaster';
 
   @override
-  String get premium_benefit_1 => '<red>Fiets & StairMaster</red>-workouts';
+  String get premium_benefit_1 =>
+      'Ondersteuning voor <red>fiets & StairMaster</red>';
 
   @override
-  String get premium_benefit_2 => 'Sessie <red>spraakgids</red>';
+  String get premium_benefit_2 => '<red>Gesproken gids</red> per sessie';
 
   @override
-  String get premium_benefit_3 => '<red>Onbeperkt</red> routines opslaan';
+  String get premium_benefit_3 => 'Routines opslaan <red>zonder limiet</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>Onbeperkte toegang</red> tot toekomstige functies';
+      'Toekomstige functies <red>levenslang inbegrepen</red>';
 
   @override
   String originalPrice(String price) {
@@ -542,120 +542,134 @@ class AppLocalizationsNl extends AppLocalizations {
   String get avgLevel => 'Gem. niveau';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Makkelijke start 20';
+  String get templateTreadmillBeginner1Title => 'Loopband Beginner 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => 'Makkelijke 1:1 intervallen';
+  String get templateTreadmillBeginner1Subtitle =>
+      '1:1 wandelen en hardlopen na 3 min warming-up';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Hellingwandeling 25';
+  String get templateTreadmillBeginner2Title => 'Loopband Beginner 2 (Helling)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'Hellingwandeling blokken';
+  String get templateTreadmillBeginner2Subtitle =>
+      'Hellingwandelen met lage gewrichtsbelasting';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Klassiek 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Loopband Gevorderd 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'Klassieke 1:1 hardloopintervallen';
+      '1:1 hardloopinterval voor vetverbranding';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Snelheidsladder 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Loopband Gevorderd 2 (Snelheid)';
 
   @override
   String get templateTreadmillIntermediate2Subtitle =>
-      'Stap-voor-stap snelheidsladder';
+      'Piramide snelheidstraining run';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1 Burner 21';
+  String get templateTreadmillAdvanced1Title => 'Loopband Expert 1';
 
   @override
   String get templateTreadmillAdvanced1Subtitle =>
-      '2:1 zwaar/makkelijk intervallen';
+      'Cardio-blast interval met hoge intensiteit';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Sprint Pop 18';
+  String get templateTreadmillAdvanced2Title => 'Loopband Expert 2 (Sprint)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20 s sprint herhalingen';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'Korte sprintherhalingen met hoge intensiteit';
 
   @override
-  String get templateCycleBeginner1Title => 'Cadansbouwer 20';
+  String get templateCycleBeginner1Title => 'Fiets Beginner 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4 min warming-up + 1:1 cadans';
+  String get templateCycleBeginner1Subtitle =>
+      'Pedaaltraining door RPM aan te passen';
 
   @override
-  String get templateCycleBeginner2Title => 'Stabiele rit 25';
+  String get templateCycleBeginner2Title => 'Fiets Beginner 2 (Constant)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Lang stabiel blok';
+  String get templateCycleBeginner2Subtitle =>
+      'Duurtraining bij constante weerstand';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spin 1:1 24';
+  String get templateCycleIntermediate1Title => 'Fiets Gevorderd 1';
 
   @override
   String get templateCycleIntermediate1Subtitle =>
-      'Klassieke 1:1 spinintervallen';
+      '1 min hoog tempo / 1 min herstel spin';
 
   @override
-  String get templateCycleIntermediate2Title => 'Heuvelsimulatie 22';
+  String get templateCycleIntermediate2Title => 'Fiets Gevorderd 2 (Heuvel)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Klimherhalingen';
+  String get templateCycleIntermediate2Subtitle =>
+      'Heuvelopwaarts fietsen bij hoge weerstand';
 
   @override
-  String get templateCycleAdvanced1Title => 'Krachtintervallen 20';
+  String get templateCycleAdvanced1Title => 'Fiets Expert 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30 s powerbursts';
+  String get templateCycleAdvanced1Subtitle =>
+      '30s krachtintervallen bij hoge weerstand';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata-mix 16';
+  String get templateCycleAdvanced2Title => 'Fiets Expert 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20 s aan / 10 s uit mix';
+  String get templateCycleAdvanced2Subtitle =>
+      '20s/10s Tabata-circuit voor vetverbranding';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Makkelijke stappen 20';
+  String get templateStairmasterBeginner1Title => 'Stairmaster Beginner 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      '4 min warming-up + 1:1 stappen';
+      'Veilig traplopen op aanpassingssnelheid';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Lang makkelijk 25';
+  String get templateStairmasterBeginner2Title =>
+      'Stairmaster Beginner 2 (Constant)';
 
   @override
   String get templateStairmasterBeginner2Subtitle =>
-      'Lange makkelijke klimblokken';
+      'Aerobe trapsimulatie op constant tempo';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1 Klim 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Stairmaster Gevorderd 1 (Klim)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => '2:1 klimherhalingen';
+  String get templateStairmasterIntermediate1Subtitle =>
+      '2 min klim / 1 min herstel bilspieren';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Sterk 1:1 24';
+  String get templateStairmasterIntermediate2Title => 'Stairmaster Gevorderd 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
-      'Sterke 1:1 intervallen';
+      'Intervallen met afwisselend snel/langzaam tempo';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Zware blokken 20';
+  String get templateStairmasterAdvanced1Title => 'Stairmaster Expert 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2-min zware blokken';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'Intensieve 2-minuten bloktraining';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Sprint Steps 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Stairmaster Expert 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      '30 s sprints + 60 s herstel';
+      '30s snelle klim / 60s herstel';
 
   @override
   String get historyTab => 'Geschiedenis';
@@ -673,7 +687,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get thisWeek => 'Deze week';
 
   @override
-  String get trend => 'Trend';
+  String get trend => 'Gewichtsverloop';
 
   @override
   String get timeframe7D => '7D';
@@ -706,13 +720,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get recordWeight => 'Gewicht registreren';
 
   @override
-  String get quickAdjust => 'Snel aanpassen';
+  String get quickAdjust => 'Snelle aanpassing';
 
   @override
   String get goalWeightSet => 'Doelgewicht ingesteld';
 
   @override
-  String get goalWeightRemoved => 'Doelgewicht verwijderd';
+  String get goalWeightRemoved => 'Doelgewicht uitgeschakeld';
 
   @override
   String get goalAchieved => 'Doel bereikt!';
@@ -727,18 +741,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get suggested => 'Aanbevolen';
 
   @override
-  String get removeGoal => 'Doel verwijderen';
+  String get removeGoal => 'Doel uitschakelen';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Voeg nog 1 meting toe om je trend te zien';
+      'Voeg nog een meting toe om het verloop te zien';
 
   @override
   String get noWeightRecorded => 'Nog geen gewicht geregistreerd';
 
   @override
   String get startTrackingYourWeight =>
-      'Begin je gewicht bij te houden om hier voortgang te zien';
+      'Registreer je gewicht om hier het verloop te zien';
 
   @override
   String get treadmillSession => 'Loopbandsessie';

@@ -23,7 +23,8 @@ class TaggedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spans = _parseTaggedText(text, style);
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final spans = _parseTaggedText(text, style, primaryColor);
     
     return RichText(
       textAlign: textAlign ?? TextAlign.start,
@@ -42,7 +43,7 @@ class TaggedText extends StatelessWidget {
   /// - Multiple <red> segments
   /// - Malformed tags (no closing tag) - renders as plain text
   /// - Nested tags (not supported, will render incorrectly but won't crash)
-  static List<TextSpan> _parseTaggedText(String text, TextStyle? baseStyle) {
+  static List<TextSpan> _parseTaggedText(String text, TextStyle? baseStyle, Color highlightColor) {
     final spans = <TextSpan>[];
     int currentIndex = 0;
     const openTag = '<red>';
@@ -91,7 +92,7 @@ class TaggedText extends StatelessWidget {
       spans.add(TextSpan(
         text: content,
         style: (baseStyle ?? const TextStyle()).copyWith(
-          color: Colors.red,
+          color: highlightColor,
           fontWeight: FontWeight.w600,
         ),
       ));

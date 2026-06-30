@@ -358,10 +358,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get premiumMembership => 'Premium-medlemskap';
 
   @override
-  String get benefitCycleStairmaster => 'Sykkel- og Stairmaster-funksjon';
+  String get benefitCycleStairmaster => 'Rutiner for sykkel og StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'Stemmeguide for økt';
+  String get benefitVoiceGuide => 'Stemmeguide for hver økt';
 
   @override
   String get benefitUnlimitedRoutines => 'Ubegrenset lagring av rutiner';
@@ -370,40 +370,39 @@ class AppLocalizationsNb extends AppLocalizations {
   String get noAds => 'Ingen annonser';
 
   @override
-  String get benefitFutureFeatures =>
-      'Ubegrenset tilgang til framtidige funksjoner';
+  String get benefitFutureFeatures => 'Alle fremtidige funksjoner inkludert';
 
   @override
-  String get voiceGuideBenefit1 => 'Stemmeveiledning under trening';
+  String get voiceGuideBenefit1 => 'Lydbasert trenerveiledning';
 
   @override
-  String get voiceGuideBenefit2 => 'Automatiske annonseringer ved øktbytte';
+  String get voiceGuideBenefit2 => 'Automatisk beskjed ved skifte av økt';
 
   @override
-  String get voiceGuideBenefit3 => 'Handsfree fokus på rutinen';
+  String get voiceGuideBenefit3 => 'Fokuser håndfritt på treningen';
 
   @override
   String get routineLimitBenefit1 => 'Ubegrenset lagring av rutiner';
 
   @override
-  String get routineLimitBenefit2 => 'Lagre rutiner for flere mål';
+  String get routineLimitBenefit2 => 'Målrettede rutiner til dine mål';
 
   @override
   String get routineLimitBenefit3 =>
-      'Bruk alle maskintyper (tredemølle/sykkel/stairmaster)';
+      'Full støtte for tredemølle, sykkel og StairMaster';
 
   @override
-  String get premium_benefit_1 => '<red>Sykkel & StairMaster</red>-økter';
+  String get premium_benefit_1 => 'Støtte for <red>sykkel & StairMaster</red>';
 
   @override
-  String get premium_benefit_2 => 'Økt <red>stemmeguide</red>';
+  String get premium_benefit_2 => '<red>Stemmeguide</red> under treningen';
 
   @override
-  String get premium_benefit_3 => '<red>Ubegrenset</red> rutine-lagring';
+  String get premium_benefit_3 => 'Gem rutiner <red>uten grenser</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>Ubegrenset tilgang</red> til framtidige funksjoner';
+      'Alle fremtidige funksjoner <red>inkludert på livstid</red>';
 
   @override
   String originalPrice(String price) {
@@ -541,119 +540,137 @@ class AppLocalizationsNb extends AppLocalizations {
   String get avgLevel => 'Snittnivå';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Enkel start 20';
+  String get templateTreadmillBeginner1Title => 'Nybegynner Tredemølle 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => 'Lette 1:1 intervaller';
+  String get templateTreadmillBeginner1Subtitle =>
+      '1:1 gange og løping etter 3 min oppvarming';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Stigning-gange 25';
+  String get templateTreadmillBeginner2Title =>
+      'Nybegynner Tredemølle 2 (Stigning)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'Stigning-gange blokker';
+  String get templateTreadmillBeginner2Subtitle =>
+      'Stigningsgang med lav leddbelastning';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Klassisk 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Viderekommen Tredemølle 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'Klassiske 1:1 løpeintervaller';
+      '1:1 løpeintervall for fettforbrenning';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Fartsstige 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Viderekommen Tredemølle 2 (Fart)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => 'Trinnvis fartsstige';
+  String get templateTreadmillIntermediate2Subtitle =>
+      'Pyramide fartstrening løping';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1 Burner 21';
+  String get templateTreadmillAdvanced1Title => 'Avansert Tredemølle 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => '2:1 hard/lett intervaller';
+  String get templateTreadmillAdvanced1Subtitle =>
+      'Høyintensiv kondisjonsøkt-intervall';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Sprint Pop 18';
+  String get templateTreadmillAdvanced2Title =>
+      'Avansert Tredemølle 2 (Sprint)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20 s sprintrepetisjoner';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'Korte sprintrepetisjoner med høy intensitet';
 
   @override
-  String get templateCycleBeginner1Title => 'Kadensbygger 20';
+  String get templateCycleBeginner1Title => 'Nybegynner Sykkel 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4 min oppvarming + 1:1 kadens';
+  String get templateCycleBeginner1Subtitle =>
+      'Pedaltreningsintroduksjon ved å justere RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'Jevn tur 25';
+  String get templateCycleBeginner2Title => 'Nybegynner Sykkel 2 (Stabil)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Lang jevn blokk';
+  String get templateCycleBeginner2Subtitle =>
+      'Utholdenhetstrening ved konstant motstand';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spinn 1:1 24';
+  String get templateCycleIntermediate1Title => 'Viderekommen Sykkel 1';
 
   @override
   String get templateCycleIntermediate1Subtitle =>
-      'Klassiske 1:1 spinnintervaller';
+      '1 min høyt tempo / 1 min restitusjon spinn';
 
   @override
-  String get templateCycleIntermediate2Title => 'Bakkesimulering 22';
+  String get templateCycleIntermediate2Title => 'Viderekommen Sykkel 2 (Bakke)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Klatrerepetisjoner';
+  String get templateCycleIntermediate2Subtitle =>
+      'Bakkeklatring ved høy motstand';
 
   @override
-  String get templateCycleAdvanced1Title => 'Kraftintervaller 20';
+  String get templateCycleAdvanced1Title => 'Avansert Sykkel 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30 s kraftøkter';
+  String get templateCycleAdvanced1Subtitle =>
+      '30s styrkeintervaller ved høy motstand';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata-miks 16';
+  String get templateCycleAdvanced2Title => 'Avansert Sykkel 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20 s på / 10 s av-miks';
+  String get templateCycleAdvanced2Subtitle =>
+      '20s/10s Tabata-sirkel for fettforbrenning';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Enkle trinn 20';
+  String get templateStairmasterBeginner1Title => 'Nybegynner Stairmaster 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      '4 min oppvarming + 1:1 trinn';
+      'Sikker trappegang i tilpasningstempo';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Lang lett 25';
+  String get templateStairmasterBeginner2Title =>
+      'Nybegynner Stairmaster 2 (Stabil)';
 
   @override
   String get templateStairmasterBeginner2Subtitle =>
-      'Lange lette klatreblokker';
+      'Aerob trappesimulering i konstant tempo';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1 Klatring 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Viderekommen Stairmaster 1 (Klatring)';
 
   @override
   String get templateStairmasterIntermediate1Subtitle =>
-      '2:1 klatrerepetisjoner';
+      '2 min klatring / 1 min restitusjon av setemuskler';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Sterk 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'Viderekommen Stairmaster 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
-      'Sterke 1:1 intervaller';
+      'Intervaller med vekselvis raskt/langsomt tempo';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Harde blokker 20';
+  String get templateStairmasterAdvanced1Title => 'Avansert Stairmaster 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2-min harde blokker';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'Intensiv 2-minutters blokktrening';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Sprint Steps 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Avansert Stairmaster 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      '30 s spurter + 60 s hvile';
+      '30s rask klatring / 60s restitusjon';
 
   @override
   String get historyTab => 'Historikk';
@@ -671,7 +688,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get thisWeek => 'Denne uken';
 
   @override
-  String get trend => 'Trend';
+  String get trend => 'Vektutvikling';
 
   @override
   String get timeframe7D => '7D';
@@ -710,7 +727,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get goalWeightSet => 'Målvekt satt';
 
   @override
-  String get goalWeightRemoved => 'Målvekt fjernet';
+  String get goalWeightRemoved => 'Målkvekt er deaktiveret';
 
   @override
   String get goalAchieved => 'Mål oppnådd!';
@@ -725,18 +742,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get suggested => 'Foreslått';
 
   @override
-  String get removeGoal => 'Fjern mål';
+  String get removeGoal => 'Deaktiver mål';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Legg til 1 måling til for å se trenden din';
+      'Legg til en måling til for å se utviklingen';
 
   @override
   String get noWeightRecorded => 'Ingen vekt registrert ennå';
 
   @override
   String get startTrackingYourWeight =>
-      'Begynn å registrere vekten din for å se fremgang her';
+      'Registrer vekten din for å se utviklingen her';
 
   @override
   String get treadmillSession => 'Tredemølleøkt';

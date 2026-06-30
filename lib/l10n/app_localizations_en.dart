@@ -542,115 +542,136 @@ class AppLocalizationsEn extends AppLocalizations {
   String get avgLevel => 'Avg level';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Easy Start 20';
+  String get templateTreadmillBeginner1Title => 'Beginner Treadmill 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => 'Easy 1:1 intervals';
+  String get templateTreadmillBeginner1Subtitle =>
+      '1:1 walk and run after 3 min warm-up';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Incline Walk 25';
+  String get templateTreadmillBeginner2Title =>
+      'Beginner Treadmill 2 (Incline)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'Incline walk blocks';
+  String get templateTreadmillBeginner2Subtitle =>
+      'Incline walking with low joint impact';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Classic 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Intermediate Treadmill 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'Classic 1:1 run intervals';
+      '1:1 running interval for fat burning';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Speed Ladder 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Intermediate Treadmill 2 (Speed)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => 'Step-up speed ladder';
+  String get templateTreadmillIntermediate2Subtitle =>
+      'Pyramid speed building run';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1 Burner 21';
+  String get templateTreadmillAdvanced1Title => 'Advanced Treadmill 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => '2:1 hard/easy intervals';
+  String get templateTreadmillAdvanced1Subtitle =>
+      'High-intensity cardio blast interval';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Sprint Pop 18';
+  String get templateTreadmillAdvanced2Title => 'Advanced Treadmill 2 (Sprint)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20s sprint repeats';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'Short high-intensity sprint repeats';
 
   @override
-  String get templateCycleBeginner1Title => 'Cadence Builder 20';
+  String get templateCycleBeginner1Title => 'Beginner Cycle 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4 min warm-up + 1:1 cadence';
+  String get templateCycleBeginner1Subtitle =>
+      'Pedaling intro by adjusting RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'Steady Ride 25';
+  String get templateCycleBeginner2Title => 'Beginner Cycle 2 (Steady)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Long steady block';
+  String get templateCycleBeginner2Subtitle =>
+      'Constant resistance endurance ride';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spin 1:1 24';
+  String get templateCycleIntermediate1Title => 'Intermediate Cycle 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => 'Classic 1:1 spin intervals';
+  String get templateCycleIntermediate1Subtitle =>
+      '1 min high speed / 1 min recovery spin';
 
   @override
-  String get templateCycleIntermediate2Title => 'Hill Simulation 22';
+  String get templateCycleIntermediate2Title => 'Intermediate Cycle 2 (Hill)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Climb repeats';
+  String get templateCycleIntermediate2Subtitle =>
+      'High resistance lower body hill climb';
 
   @override
-  String get templateCycleAdvanced1Title => 'Power Intervals 20';
+  String get templateCycleAdvanced1Title => 'Advanced Cycle 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30s power bursts';
+  String get templateCycleAdvanced1Subtitle =>
+      '30s high resistance power intervals';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata Mix 16';
+  String get templateCycleAdvanced2Title => 'Advanced Cycle 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20s on / 10s off mix';
+  String get templateCycleAdvanced2Subtitle =>
+      '20s/10s Tabata circuit for fat burning';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Easy Steps 20';
+  String get templateStairmasterBeginner1Title => 'Beginner Stairmaster 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      '4 min warm-up + 1:1 steps';
+      'Safe adaptation pace stair walking';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Long Easy 25';
+  String get templateStairmasterBeginner2Title =>
+      'Beginner Stairmaster 2 (Steady)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'Long easy climb blocks';
+  String get templateStairmasterBeginner2Subtitle =>
+      'Steady tempo aerobic stair climbing';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1 Climb 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Intermediate Stairmaster 1 (Climb)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => '2:1 climb repeats';
+  String get templateStairmasterIntermediate1Subtitle =>
+      '2 min climb / 1 min recovery glute sculpt';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Strong 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'Intermediate Stairmaster 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => 'Strong 1:1 intervals';
+  String get templateStairmasterIntermediate2Subtitle =>
+      'Alternating fast and slow tempo intervals';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Hard Blocks 20';
+  String get templateStairmasterAdvanced1Title => 'Advanced Stairmaster 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2-min hard blocks';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'High-intensity 2 min block training';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Sprint Steps 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Advanced Stairmaster 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      '30s sprints + 60s recoveries';
+      '30s high speed climb / 60s recovery intervals';
 
   @override
   String get historyTab => 'History';

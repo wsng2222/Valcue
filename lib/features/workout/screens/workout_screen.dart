@@ -1171,7 +1171,9 @@ class _SecondaryButton extends StatelessWidget {
     final bgColor = isDark
         ? const Color(0xFF2C2C2E).withValues(alpha: 0.5)
         : Colors.grey.shade50;
-    const borderColor = Color(0xFFD0D0D0);
+    final borderColor = isDark
+        ? Colors.white.withValues(alpha: 0.15)
+        : const Color(0xFFD0D0D0);
 
     return Opacity(
       opacity: onPressed == null ? 0.5 : 1.0,

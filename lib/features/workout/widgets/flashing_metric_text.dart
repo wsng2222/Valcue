@@ -85,13 +85,20 @@ class _FlashingMetricTextState extends State<FlashingMetricText>
 
   Color _getColor(double animationValue) {
     // animationValue goes from 0.0 to 1.0
-    // For 3 flashes, we need 6 segments: black->red->black->red->black->red->black
+    // For 3 flashes, we need 6 segments: default->flash->default->flash->default->flash->default
     final segment = (animationValue * 6).floor();
 
-    // Even segments (0, 2, 4): black (default)
-    // Odd segments (1, 3, 5): red (flash)
-    // Instant color change, no fading
-    return segment % 2 == 0 ? widget.defaultColor : widget.flashColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    Color defColor = widget.defaultColor;
+    if (defColor == Colors.black) {
+      defColor = isDark ? Colors.white : Colors.black;
+    }
+    Color flColor = widget.flashColor;
+    if (flColor == Colors.red) {
+      flColor = Theme.of(context).colorScheme.primary;
+    }
+
+    return segment % 2 == 0 ? defColor : flColor;
   }
 
   double _getScale(double animationValue) {

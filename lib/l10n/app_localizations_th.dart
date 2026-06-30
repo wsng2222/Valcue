@@ -356,52 +356,52 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumMembership => 'สมาชิกพรีเมียม';
 
   @override
-  String get benefitCycleStairmaster => 'ฟีเจอร์จักรยานและ Stairmaster';
+  String get benefitCycleStairmaster => 'รูทีนจักรยานและ StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'ฟีเจอร์ไกด์เสียงของเซสชัน';
+  String get benefitVoiceGuide => 'ระบบไกด์เสียงแจ้งเตือนทุกเซสชัน';
 
   @override
-  String get benefitUnlimitedRoutines => 'บันทึกรูทีนได้ไม่จำกัด';
+  String get benefitUnlimitedRoutines => 'บันทึกรูทีนออกกำลังกายได้ไม่จำกัด';
 
   @override
   String get noAds => 'ไม่มีโฆษณา';
 
   @override
-  String get benefitFutureFeatures => 'เข้าถึงฟีเจอร์ใหม่ในอนาคตได้ไม่จำกัด';
+  String get benefitFutureFeatures => 'เข้าถึงทุกฟีเจอร์พรีเมียมใหม่ในอนาคต';
 
   @override
-  String get voiceGuideBenefit1 => 'ไกด์เสียงระหว่างออกกำลังกาย';
+  String get voiceGuideBenefit1 => 'โค้ชเสียงนำทางระหว่างออกกำลังกาย';
 
   @override
-  String get voiceGuideBenefit2 => 'ประกาศเปลี่ยนเซสชันอัตโนมัติ';
+  String get voiceGuideBenefit2 => 'แจ้งเตือนอัตโนมัติเมื่อสลับช่วงเวลาเซสชัน';
 
   @override
-  String get voiceGuideBenefit3 => 'โฟกัสรูทีนแบบไม่ต้องใช้มือ';
+  String get voiceGuideBenefit3 =>
+      'ออกกำลังกายอย่างมีสมาธิโดยไม่ต้องจับโทรศัพท์';
 
   @override
-  String get routineLimitBenefit1 => 'บันทึกรูทีนได้ไม่จำกัด';
+  String get routineLimitBenefit1 => 'บันทึกรูทีนออกกำลังกายได้ไม่จำกัด';
 
   @override
-  String get routineLimitBenefit2 => 'บันทึกรูทีนสำหรับหลายเป้าหมาย';
+  String get routineLimitBenefit2 => 'บันทึกรูทีนแยกตามเป้าหมายสุขภาพ';
 
   @override
   String get routineLimitBenefit3 =>
-      'ใช้เครื่องทุกประเภท (ลู่วิ่ง/จักรยาน/Stairmaster)';
+      'รองรับทั้งลู่วิ่ง จักรยาน และ StairMaster อย่างสมบูรณ์';
 
   @override
-  String get premium_benefit_1 =>
-      'ออกกำลังกาย <red>จักรยาน & StairMaster</red>';
+  String get premium_benefit_1 => 'รองรับ <red>จักรยาน & StairMaster</red>';
 
   @override
-  String get premium_benefit_2 => '<red>ไกด์เสียง</red>ของเซสชัน';
+  String get premium_benefit_2 => '<red>โค้ชเสียงนำทาง</red> ทุกช่วงเซสชัน';
 
   @override
-  String get premium_benefit_3 => 'บันทึกรูทีนได้ <red>ไม่จำกัด</red>';
+  String get premium_benefit_3 => 'บันทึกรูทีนได้ <red>ไม่จำกัดจำนวน</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>เข้าถึงได้ไม่จำกัด</red>สำหรับฟีเจอร์ในอนาคต';
+      'รวมฟีเจอร์ใหม่ในอนาคตทั้งหมด <red>ฟรีตลอดชีพ</red>';
 
   @override
   String originalPrice(String price) {
@@ -539,117 +539,137 @@ class AppLocalizationsTh extends AppLocalizations {
   String get avgLevel => 'ระดับเฉลี่ย';
 
   @override
-  String get templateTreadmillBeginner1Title => 'เริ่มง่าย 20';
+  String get templateTreadmillBeginner1Title => 'ลู่วิ่งไฟฟ้า เริ่มต้น 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => 'อินเทอร์วัล 1:1 แบบง่าย';
+  String get templateTreadmillBeginner1Subtitle =>
+      'เดินสลับวิ่งแบบ 1:1 หลังอบอุ่นร่างกาย 3 นาที';
 
   @override
-  String get templateTreadmillBeginner2Title => 'เดินชัน 25';
+  String get templateTreadmillBeginner2Title =>
+      'ลู่วิ่งไฟฟ้า เริ่มต้น 2 (ทางชัน)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'บล็อกเดินชัน';
+  String get templateTreadmillBeginner2Subtitle =>
+      'เดินบนทางชันเพื่อลดแรงกระแทกข้อต่อ';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'คลาสสิก 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'ลู่วิ่งไฟฟ้า ปานกลาง 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'อินเทอร์วัลวิ่ง 1:1 คลาสสิก';
+      'วิ่งสลับเดินแบบ 1:1 เพื่อเร่งการเผาผลาญไขมัน';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'บันไดความเร็ว 20';
+  String get templateTreadmillIntermediate2Title =>
+      'ลู่วิ่งไฟฟ้า ปานกลาง 2 (ความเร็ว)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => 'ไล่ระดับความเร็ว';
+  String get templateTreadmillIntermediate2Subtitle =>
+      'วิ่งไล่ระดับความเร็วเพิ่มขึ้นทีละขั้น';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1 Burner 21';
+  String get templateTreadmillAdvanced1Title => 'ลู่วิ่งไฟฟ้า ขั้นสูง 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => 'อินเทอร์วัล 2:1 หนัก/เบา';
+  String get templateTreadmillAdvanced1Subtitle =>
+      'คาร์ดิโอขั้นสูงเน้นความหนักสลับเบา';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Sprint Pop 18';
+  String get templateTreadmillAdvanced2Title =>
+      'ลู่วิ่งไฟฟ้า ขั้นสูง 2 (สปรินต์)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => 'ทำซ้ำสปรินต์ 20 วิ';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'วิ่งเร่งความเร็วสปรินต์ระยะสั้นอย่างหนัก';
 
   @override
-  String get templateCycleBeginner1Title => 'สร้างเคเดนซ์ 20';
+  String get templateCycleBeginner1Title => 'จักรยาน เริ่มต้น 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => 'วอร์มอัป 4 นาที + เคเดนซ์ 1:1';
+  String get templateCycleBeginner1Subtitle =>
+      'เรียนรู้การปั่นจักรยานโดยการปรับรอบปั่น (RPM)';
 
   @override
-  String get templateCycleBeginner2Title => 'ปั่นคงที่ 25';
+  String get templateCycleBeginner2Title => 'จักรยาน เริ่มต้น 2 (คงที่)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'บล็อกคงที่ยาว';
+  String get templateCycleBeginner2Subtitle =>
+      'ปั่นจักรยานเพื่อความทนทานในแรงต้านคงที่';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spin 1:1 24';
+  String get templateCycleIntermediate1Title => 'จักรยาน ปานกลาง 1';
 
   @override
   String get templateCycleIntermediate1Subtitle =>
-      'อินเทอร์วัลปั่น 1:1 คลาสสิก';
+      'ปั่นเร็ว 1 นาที / ผ่อนปั่นสบาย 1 นาที';
 
   @override
-  String get templateCycleIntermediate2Title => 'จำลองขึ้นเขา 22';
+  String get templateCycleIntermediate2Title => 'จักรยาน ปานกลาง 2 (ทางชัน)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'ทำซ้ำขึ้นเขา';
+  String get templateCycleIntermediate2Subtitle =>
+      'จำลองขึ้นเนินโดยใช้แรงต้านสูงเพื่อสร้างพลังขา';
 
   @override
-  String get templateCycleAdvanced1Title => 'อินเทอร์วัลพลัง 20';
+  String get templateCycleAdvanced1Title => 'จักรยาน ขั้นสูง 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => 'พุ่งพลัง 30 วินาที';
+  String get templateCycleAdvanced1Subtitle =>
+      'ปั่นเร่งความแรงต้านสูงเป็นเวลา 30 วินาที';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata Mix 16';
+  String get templateCycleAdvanced2Title => 'จักรยาน ขั้นสูง 2 (ทาบาตะ)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => 'ผสม 20 วิ on / 10 วิ off';
+  String get templateCycleAdvanced2Subtitle =>
+      'ออกกำลังแบบทาบาตะ 20 วิ/10 วิ เพื่อลดไขมัน';
 
   @override
-  String get templateStairmasterBeginner1Title => 'ก้าวง่าย 20';
+  String get templateStairmasterBeginner1Title => 'เครื่องก้าวบันได เริ่มต้น 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'วอร์มอัป 4 นาที + ก้าว 1:1';
+      'เดินก้าวบันไดช้าๆ เพื่อปรับจังหวะการเดินให้ชิน';
 
   @override
-  String get templateStairmasterBeginner2Title => 'ยาวแบบง่าย 25';
+  String get templateStairmasterBeginner2Title =>
+      'เครื่องก้าวบันได เริ่มต้น 2 (คงที่)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'บล็อกไต่ระดับเบายาว';
+  String get templateStairmasterBeginner2Subtitle =>
+      'ก้าวขึ้นบันไดแบบสม่ำเสมอเน้นการออกกำลังกายแบบคาร์ดิโอ';
 
   @override
-  String get templateStairmasterIntermediate1Title => 'ไต่ระดับ 2:1 21';
+  String get templateStairmasterIntermediate1Title =>
+      'เครื่องก้าวบันได ปานกลาง 1 (ขึ้นเขา)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => 'ทำซ้ำไต่ระดับ 2:1';
+  String get templateStairmasterIntermediate1Subtitle =>
+      'ปืน 2 นาที / ผ่อนก้าว 1 นาที เพื่อเน้นสลายก้น';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'แข็งแรง 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'เครื่องก้าวบันได ปานกลาง 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
-      'อินเทอร์วัล 1:1 แข็งแรง';
+      'ฝึกความอดทนหัวใจด้วยการเดินก้าวสลับช้าเร็ว';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'บล็อกหนัก 20';
+  String get templateStairmasterAdvanced1Title => 'เครื่องก้าวบันได ขั้นสูง 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => 'บล็อกหนัก 2 นาที';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'ฝึกก้าวบันไดแบบเข้มข้นจัดเซสชันรอบละ 2 นาที';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Sprint Steps 18';
+  String get templateStairmasterAdvanced2Title =>
+      'เครื่องก้าวบันได ขั้นสูง 2 (สปรินต์)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      'สปรินต์ 30 วิ + ฟื้นตัว 60 วิ';
+      'ก้าวบันไดเร็ว 30 วินาที / ผ่อน 60 วินาที';
 
   @override
   String get historyTab => 'ประวัติ';
@@ -667,7 +687,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get thisWeek => 'สัปดาห์นี้';
 
   @override
-  String get trend => 'แนวโน้ม';
+  String get trend => 'กราฟน้ำหนัก';
 
   @override
   String get timeframe7D => '7 วัน';
@@ -700,13 +720,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recordWeight => 'บันทึกน้ำหนัก';
 
   @override
-  String get quickAdjust => 'ปรับด่วน';
+  String get quickAdjust => 'ปรับอย่างรวดเร็ว';
 
   @override
   String get goalWeightSet => 'ตั้งเป้าหมายน้ำหนักแล้ว';
 
   @override
-  String get goalWeightRemoved => 'ลบเป้าหมายน้ำหนักแล้ว';
+  String get goalWeightRemoved => 'ยกเลิกเป้าหมายน้ำหนักแล้ว';
 
   @override
   String get goalAchieved => 'บรรลุเป้าหมาย!';
@@ -721,18 +741,18 @@ class AppLocalizationsTh extends AppLocalizations {
   String get suggested => 'แนะนำ';
 
   @override
-  String get removeGoal => 'ลบเป้าหมาย';
+  String get removeGoal => 'ยกเลิกเป้าหมาย';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'เพิ่มอีก 1 รายการเพื่อดูแนวโน้มของคุณ';
+      'บันทึกน้ำหนักเพิ่มอีก 1 ครั้งเพื่อดูแนวโน้ม';
 
   @override
-  String get noWeightRecorded => 'ยังไม่มีการบันทึกน้ำหนัก';
+  String get noWeightRecorded => 'ยังไม่ได้บันทึกน้ำหนัก';
 
   @override
   String get startTrackingYourWeight =>
-      'เริ่มบันทึกน้ำหนักเพื่อดูความคืบหน้าที่นี่';
+      'บันทึกน้ำหนักเพื่อเริ่มต้นติดตามความคืบหน้าได้ที่นี่';
 
   @override
   String get treadmillSession => 'เซสชันลู่วิ่ง';

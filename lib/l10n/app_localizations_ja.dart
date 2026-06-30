@@ -354,49 +354,49 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumMembership => 'プレミアムメンバーシップ';
 
   @override
-  String get benefitCycleStairmaster => 'サイクル、ステアマスター機能';
+  String get benefitCycleStairmaster => 'バイク・クライマー（階段登り）ルーティン';
 
   @override
-  String get benefitVoiceGuide => 'セッション音声ガイド機能';
+  String get benefitVoiceGuide => 'セッションごとの音声ガイド案内';
 
   @override
-  String get benefitUnlimitedRoutines => '無制限のルーティン保存';
+  String get benefitUnlimitedRoutines => 'ルーティンの保存件数無制限';
 
   @override
   String get noAds => '広告なし';
 
   @override
-  String get benefitFutureFeatures => '将来の機能への無制限アクセス';
+  String get benefitFutureFeatures => '将来追加されるすべての機能を含む';
 
   @override
-  String get voiceGuideBenefit1 => 'ワークアウト中の音声ガイド';
+  String get voiceGuideBenefit1 => '運動中の音声コーチング案内';
 
   @override
-  String get voiceGuideBenefit2 => 'セッション遷移の自動アナウンス';
+  String get voiceGuideBenefit2 => 'セッション切り替え時の自動案内';
 
   @override
-  String get voiceGuideBenefit3 => 'ハンズフリーでルーティンに集中';
+  String get voiceGuideBenefit3 => '画面を見ずに運動に集中';
 
   @override
-  String get routineLimitBenefit1 => '無制限のルーティン保存';
+  String get routineLimitBenefit1 => 'ルーティンの保存件数無制限';
 
   @override
-  String get routineLimitBenefit2 => '複数の目標別ルーティン保存';
+  String get routineLimitBenefit2 => '目標に合わせたカスタムルーティンの保存';
 
   @override
-  String get routineLimitBenefit3 => 'すべてのマシンタイプを使用（ランニングマシン/バイク/ステアマスター）';
+  String get routineLimitBenefit3 => 'ランニングマシン/バイク/クライマーを完全サポート';
 
   @override
-  String get premium_benefit_1 => '<red>バイク＆StairMaster</red>対応';
+  String get premium_benefit_1 => '<red>バイク、クライマー</red>に対応';
 
   @override
-  String get premium_benefit_2 => 'セッション <red>音声ガイド</red>';
+  String get premium_benefit_2 => 'セッションごとの<red>音声ガイド</red>提供';
 
   @override
-  String get premium_benefit_3 => 'ルーティン保存数 <red>無制限</red>';
+  String get premium_benefit_3 => 'ルーティン保存件数<red>無制限</red>';
 
   @override
-  String get premium_benefit_4 => '今後の機能に <red>無制限アクセス</red>';
+  String get premium_benefit_4 => '将来追加される機能も<red>永続的に含む</red>';
 
   @override
   String originalPrice(String price) {
@@ -533,112 +533,112 @@ class AppLocalizationsJa extends AppLocalizations {
   String get avgLevel => '平均レベル';
 
   @override
-  String get templateTreadmillBeginner1Title => 'イージースタート20';
+  String get templateTreadmillBeginner1Title => '初級ランニングマシン 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => '3分ウォームアップ＋1:1インターバル';
+  String get templateTreadmillBeginner1Subtitle => '3分ウォームアップ後 1:1歩行・走行';
 
   @override
-  String get templateTreadmillBeginner2Title => '傾斜ウォーク25';
+  String get templateTreadmillBeginner2Title => '初級ランニングマシン 2 (傾斜)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => '傾斜ウォークのブロック';
+  String get templateTreadmillBeginner2Subtitle => '関節への負担が少ない傾斜歩行';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'クラシック1:1 24';
+  String get templateTreadmillIntermediate1Title => '中級ランニングマシン 1';
 
   @override
-  String get templateTreadmillIntermediate1Subtitle => 'クラシックな1:1インターバル';
+  String get templateTreadmillIntermediate1Subtitle => '脂肪燃焼を促す 1:1走行インターバル';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'スピードラダー20';
+  String get templateTreadmillIntermediate2Title => '中級ランニングマシン 2 (スピード)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => 'スピードラダー（徐々に加速）';
+  String get templateTreadmillIntermediate2Subtitle => '段階的に速度を上げるビルドアップ走行';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1バーナー21';
+  String get templateTreadmillAdvanced1Title => '上級ランニングマシン 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => '2:1インターバル（きつい/楽）';
+  String get templateTreadmillAdvanced1Subtitle => '心肺機能を高める高強度インターバル';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'スプリントポップ18';
+  String get templateTreadmillAdvanced2Title => '上級ランニングマシン 2 (スプリント)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20秒スプリント反復';
+  String get templateTreadmillAdvanced2Subtitle => '短時間高強度のスプリント反復コース';
 
   @override
-  String get templateCycleBeginner1Title => 'ケイデンスビルダー20';
+  String get templateCycleBeginner1Title => '初級バイク 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4分ウォームアップ＋ケイデンス1:1';
+  String get templateCycleBeginner1Subtitle => 'RPM調整によるペダリング入門';
 
   @override
-  String get templateCycleBeginner2Title => 'ステディライド25';
+  String get templateCycleBeginner2Title => '初級バイク 2 (持続走行)';
 
   @override
-  String get templateCycleBeginner2Subtitle => '長めの一定ブロック';
+  String get templateCycleBeginner2Subtitle => '一定負荷による持久力向上ロード';
 
   @override
-  String get templateCycleIntermediate1Title => 'スピン1:1 24';
+  String get templateCycleIntermediate1Title => '中級バイク 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => 'クラシックな1:1スピンインターバル';
+  String get templateCycleIntermediate1Subtitle => '1分高速回転 / 1分回復のスピンコース';
 
   @override
-  String get templateCycleIntermediate2Title => 'ヒルシミュレーション22';
+  String get templateCycleIntermediate2Title => '中級バイク 2 (ヒルクライム)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => '登りの反復';
+  String get templateCycleIntermediate2Subtitle => '高負荷での下半身強化ヒルクライム';
 
   @override
-  String get templateCycleAdvanced1Title => 'パワーインターバル20';
+  String get templateCycleAdvanced1Title => '上級バイク 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30秒パワーバースト';
+  String get templateCycleAdvanced1Subtitle => '30秒高負荷パワーインターバル';
 
   @override
-  String get templateCycleAdvanced2Title => 'タバタミックス16';
+  String get templateCycleAdvanced2Title => '上級バイク 2 (タバタ)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20秒/10秒ミックス';
+  String get templateCycleAdvanced2Subtitle => '脂肪燃焼のための20秒/10秒タバタサーキット';
 
   @override
-  String get templateStairmasterBeginner1Title => 'イージーステップ20';
+  String get templateStairmasterBeginner1Title => '初級ステアクライマー 1';
 
   @override
-  String get templateStairmasterBeginner1Subtitle => '4分ウォームアップ＋1:1ステップ';
+  String get templateStairmasterBeginner1Subtitle => '安全なペースでの階段歩行';
 
   @override
-  String get templateStairmasterBeginner2Title => 'ロングイージー25';
+  String get templateStairmasterBeginner2Title => '初級ステアクライマー 2 (持続)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => '長めのイージーブロック';
+  String get templateStairmasterBeginner2Subtitle => '一定テンポの有酸素階段登り';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1クライム21';
+  String get templateStairmasterIntermediate1Title => '中級ステアクライマー 1 (クライム)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => '2:1クライム反復';
+  String get templateStairmasterIntermediate1Subtitle => '2分登り / 1分回復のヒップアップ';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'ストロング1:1 24';
+  String get templateStairmasterIntermediate2Title => '中級ステアクライマー 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => '強めの1:1インターバル';
+  String get templateStairmasterIntermediate2Subtitle => '高速・低速テンポの交互インターバル';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'ハードブロック20';
+  String get templateStairmasterAdvanced1Title => '上級ステアクライマー 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2分ハードブロック';
+  String get templateStairmasterAdvanced1Subtitle => '高強度2分ブロックトレーニング';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'スプリントステップ18';
+  String get templateStairmasterAdvanced2Title => '上級ステアクライマー 2 (スプリント)';
 
   @override
-  String get templateStairmasterAdvanced2Subtitle => '30秒スプリント＋60秒回復';
+  String get templateStairmasterAdvanced2Subtitle => '30秒高速登り / 60秒回復インターバル';
 
   @override
   String get historyTab => '記録';
@@ -656,7 +656,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get thisWeek => '今週';
 
   @override
-  String get trend => '傾向';
+  String get trend => '体重推移';
 
   @override
   String get timeframe7D => '7日';
@@ -695,7 +695,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get goalWeightSet => '目標体重が設定されました';
 
   @override
-  String get goalWeightRemoved => '目標体重が削除されました';
+  String get goalWeightRemoved => '目標体重の設定を解除しました';
 
   @override
   String get goalAchieved => '目標達成！';
@@ -710,16 +710,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get suggested => '推奨';
 
   @override
-  String get removeGoal => '目標を削除';
+  String get removeGoal => '目標を解除';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '傾向を表示するには、もう1つ記録を追加してください';
+  String get addOneMoreRecordToSeeTrend => '推移を見るには、体重をもう1件記録してください';
 
   @override
   String get noWeightRecorded => 'まだ体重が記録されていません';
 
   @override
-  String get startTrackingYourWeight => '体重を記録して、ここで進捗を確認してください';
+  String get startTrackingYourWeight => '体重を記録して変化の推移を確認しましょう';
 
   @override
   String get treadmillSession => 'ランニングマシンセッション';

@@ -637,19 +637,34 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
     final totalDuration = _calculateTotalDuration();
+    final isDark = theme.brightness == Brightness.dark;
 
-    return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGroupedBackground,
-      navigationBar: CupertinoNavigationBar(
-        leading: CupertinoNavigationBarBackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-        middle: Text(AppLocalizations.of(context)!.routineEdit),
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+        brightness: theme.brightness,
+        primaryColor: theme.colorScheme.primary,
+        barBackgroundColor: theme.colorScheme.surface,
+        scaffoldBackgroundColor: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
       ),
-      child: SafeArea(
-        bottom: true,
-        child: Column(
-          children: [
+      child: CupertinoPageScaffold(
+        backgroundColor: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
+        navigationBar: CupertinoNavigationBar(
+          leading: CupertinoNavigationBarBackButton(
+            onPressed: () => Navigator.pop(context),
+          ),
+          middle: Text(AppLocalizations.of(context)!.routineEdit),
+          backgroundColor: theme.colorScheme.surface,
+          border: Border(
+            bottom: BorderSide(
+              color: theme.dividerColor,
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          bottom: true,
+          child: Column(
+            children: [
             // Header
             RoutineHeader(
               title: _nameController.text.isEmpty
@@ -752,7 +767,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             Container(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
               decoration: BoxDecoration(
-                color: CupertinoColors.systemGroupedBackground,
+                color: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
                 border: Border(
                   top: BorderSide(
                     color: theme.dividerColor,
@@ -769,8 +784,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                         (_isNameValid && _intervals.isNotEmpty && _hasChanges)
                             ? _saveRoutine
                             : null,
-                    color: CupertinoColors.systemRed,
-                    disabledColor: CupertinoColors.systemGrey,
+                    color: theme.colorScheme.primary,
+                    disabledColor: isDark ? const Color(0xFF2C2C2E) : CupertinoColors.systemGrey,
                     borderRadius: BorderRadius.circular(12),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     child: Text(
@@ -778,7 +793,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: theme.colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -788,6 +803,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

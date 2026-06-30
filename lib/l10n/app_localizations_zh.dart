@@ -353,49 +353,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumMembership => '高级会员';
 
   @override
-  String get benefitCycleStairmaster => '自行车、爬楼机功能';
+  String get benefitCycleStairmaster => '动感单车及爬楼机运动';
 
   @override
-  String get benefitVoiceGuide => '会话语音指南功能';
+  String get benefitVoiceGuide => '分段语音指导引导';
 
   @override
-  String get benefitUnlimitedRoutines => '无限例行程序保存';
+  String get benefitUnlimitedRoutines => '例程保存数量无限制';
 
   @override
   String get noAds => '无广告';
 
   @override
-  String get benefitFutureFeatures => '无限访问未来功能';
+  String get benefitFutureFeatures => '包含未来增加的所有功能';
 
   @override
-  String get voiceGuideBenefit1 => '训练期间的语音指导';
+  String get voiceGuideBenefit1 => '运动中的语音教练指导';
 
   @override
-  String get voiceGuideBenefit2 => '自动会话转换提醒';
+  String get voiceGuideBenefit2 => '转换阶段时的自动提示';
 
   @override
-  String get voiceGuideBenefit3 => '免提专注例程';
+  String get voiceGuideBenefit3 => '无需看屏幕，专注运动本身';
 
   @override
-  String get routineLimitBenefit1 => '无限例程保存';
+  String get routineLimitBenefit1 => '例程保存数量无限制';
 
   @override
-  String get routineLimitBenefit2 => '保存多个目标的例程';
+  String get routineLimitBenefit2 => '保存针对不同目标的定制例程';
 
   @override
-  String get routineLimitBenefit3 => '使用所有机器类型（跑步机/动感单车/爬楼机）';
+  String get routineLimitBenefit3 => '跑步机/动感单车/爬楼机完美支持';
 
   @override
   String get premium_benefit_1 => '支持<red>动感单车和爬楼机</red>训练';
 
   @override
-  String get premium_benefit_2 => '训练时<red>语音指导</red>';
+  String get premium_benefit_2 => '运动时的<red>分段语音指导</red>';
 
   @override
-  String get premium_benefit_3 => '例程保存<red>无限</red>';
+  String get premium_benefit_3 => '任意保存的例程数<red>无限制</red>';
 
   @override
-  String get premium_benefit_4 => '未来功能<red>无限访问</red>';
+  String get premium_benefit_4 => '包含未来所有高级功能<red>永久免费使用</red>';
 
   @override
   String originalPrice(String price) {
@@ -532,112 +532,112 @@ class AppLocalizationsZh extends AppLocalizations {
   String get avgLevel => '平均等级';
 
   @override
-  String get templateTreadmillBeginner1Title => '轻松起步20';
+  String get templateTreadmillBeginner1Title => '初级跑步机 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => '3分钟热身 + 1:1间歇';
+  String get templateTreadmillBeginner1Subtitle => '3分钟热身后 1:1步行与跑步';
 
   @override
-  String get templateTreadmillBeginner2Title => '爬坡快走25';
+  String get templateTreadmillBeginner2Title => '初级跑步机 2 (坡度)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => '坡度快走分段';
+  String get templateTreadmillBeginner2Subtitle => '低关节冲击的坡度行走';
 
   @override
-  String get templateTreadmillIntermediate1Title => '经典1:1 24';
+  String get templateTreadmillIntermediate1Title => '中级跑步机 1';
 
   @override
-  String get templateTreadmillIntermediate1Subtitle => '经典1:1间歇';
+  String get templateTreadmillIntermediate1Subtitle => '助力脂肪燃烧的 1:1跑步极限间歇';
 
   @override
-  String get templateTreadmillIntermediate2Title => '速度阶梯20';
+  String get templateTreadmillIntermediate2Title => '中级跑步机 2 (速度)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => '速度阶梯（逐步加速）';
+  String get templateTreadmillIntermediate2Subtitle => '金字塔式速度提升跑';
 
   @override
-  String get templateTreadmillAdvanced1Title => '燃脂2:1 21';
+  String get templateTreadmillAdvanced1Title => '高级跑步机 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => '2:1间歇（强/弱）';
+  String get templateTreadmillAdvanced1Subtitle => '最大化心肺耐力的高强度间歇';
 
   @override
-  String get templateTreadmillAdvanced2Title => '冲刺爆发18';
+  String get templateTreadmillAdvanced2Title => '高级跑步机 2 (冲刺)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20秒冲刺重复';
+  String get templateTreadmillAdvanced2Subtitle => '短时间高强度的冲刺重复训练';
 
   @override
-  String get templateCycleBeginner1Title => '踏频训练20';
+  String get templateCycleBeginner1Title => '初级动感单车 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4分钟热身 + 1:1踏频';
+  String get templateCycleBeginner1Subtitle => '通过调整RPM的踏频入门';
 
   @override
-  String get templateCycleBeginner2Title => '稳定骑行25';
+  String get templateCycleBeginner2Title => '初级动感单车 2 (匀速)';
 
   @override
-  String get templateCycleBeginner2Subtitle => '长时间稳定区间';
+  String get templateCycleBeginner2Subtitle => '恒定阻力的耐力骑行';
 
   @override
-  String get templateCycleIntermediate1Title => '骑行1:1 24';
+  String get templateCycleIntermediate1Title => '中级动感单车 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => '经典1:1间歇';
+  String get templateCycleIntermediate1Subtitle => '1分钟高速 / 1分钟恢复的动感骑行';
 
   @override
-  String get templateCycleIntermediate2Title => '爬坡模拟22';
+  String get templateCycleIntermediate2Title => '中级动感单车 2 (山地)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => '爬坡重复';
+  String get templateCycleIntermediate2Subtitle => '高阻力下肢肌肉力量训练';
 
   @override
-  String get templateCycleAdvanced1Title => '力量间歇20';
+  String get templateCycleAdvanced1Title => '高级动感单车 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30秒力量爆发';
+  String get templateCycleAdvanced1Subtitle => '30秒高阻力爆发力间歇';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata混合16';
+  String get templateCycleAdvanced2Title => '高级动感单车 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20秒/10秒混合';
+  String get templateCycleAdvanced2Subtitle => '脂肪燃脂的20秒/10秒Tabata循环';
 
   @override
-  String get templateStairmasterBeginner1Title => '轻松台阶20';
+  String get templateStairmasterBeginner1Title => '初级爬楼机 1';
 
   @override
-  String get templateStairmasterBeginner1Subtitle => '4分钟热身 + 1:1台阶';
+  String get templateStairmasterBeginner1Subtitle => '安全配速下的爬楼步法适应';
 
   @override
-  String get templateStairmasterBeginner2Title => '长时间轻松25';
+  String get templateStairmasterBeginner2Title => '初级爬楼机 2 (匀速)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => '长时间轻松区块';
+  String get templateStairmasterBeginner2Subtitle => '恒定节奏的有氧爬楼训练';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1爬升21';
+  String get templateStairmasterIntermediate1Title => '中级爬楼机 1 (登山)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => '2:1爬升重复';
+  String get templateStairmasterIntermediate1Subtitle => '2分钟登山 / 1分钟恢复以塑造臀肌';
 
   @override
-  String get templateStairmasterIntermediate2Title => '强力1:1 24';
+  String get templateStairmasterIntermediate2Title => '中级爬楼机 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => '强力1:1间歇';
+  String get templateStairmasterIntermediate2Subtitle => '快慢节奏交替的心肺间歇训练';
 
   @override
-  String get templateStairmasterAdvanced1Title => '高强度区块20';
+  String get templateStairmasterAdvanced1Title => '高级爬楼机 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2分钟高强度区块';
+  String get templateStairmasterAdvanced1Subtitle => '高强度的2分钟区块进阶训练';
 
   @override
-  String get templateStairmasterAdvanced2Title => '冲刺台阶18';
+  String get templateStairmasterAdvanced2Title => '高级爬楼机 2 (冲刺)';
 
   @override
-  String get templateStairmasterAdvanced2Subtitle => '30秒冲刺 + 60秒恢复';
+  String get templateStairmasterAdvanced2Subtitle => '30秒高速爬楼 / 60秒恢复间歇';
 
   @override
   String get historyTab => '记录';
@@ -655,7 +655,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get thisWeek => '本周';
 
   @override
-  String get trend => '趋势';
+  String get trend => '体重趋势';
 
   @override
   String get timeframe7D => '7天';
@@ -694,7 +694,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get goalWeightSet => '目标体重已设置';
 
   @override
-  String get goalWeightRemoved => '目标体重已移除';
+  String get goalWeightRemoved => '目标体重已清除';
 
   @override
   String get goalAchieved => '目标达成！';
@@ -709,16 +709,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get suggested => '建议';
 
   @override
-  String get removeGoal => '移除目标';
+  String get removeGoal => '清除目标';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '再添加1条记录以查看您的趋势';
+  String get addOneMoreRecordToSeeTrend => '再记录一次体重即可查看趋势变化';
 
   @override
-  String get noWeightRecorded => '尚未记录体重';
+  String get noWeightRecorded => '尚未记录任何体重';
 
   @override
-  String get startTrackingYourWeight => '开始记录您的体重以在此查看进度';
+  String get startTrackingYourWeight => '记录体重以追踪并查看您的变化趋势';
 
   @override
   String get treadmillSession => '跑步机会话';

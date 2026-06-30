@@ -359,53 +359,50 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumMembership => 'Assinatura Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Funcionalidade de Bicicleta e Escada';
+  String get benefitCycleStairmaster => 'Rotinas de bike e StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'Funcionalidade de guia de voz de sessão';
+  String get benefitVoiceGuide => 'Guia de voz para cada sessão';
 
   @override
-  String get benefitUnlimitedRoutines => 'Salvamento de rotinas ilimitado';
+  String get benefitUnlimitedRoutines => 'Salvamento ilimitado de rotinas';
 
   @override
   String get noAds => 'Sem Anúncios';
 
   @override
-  String get benefitFutureFeatures =>
-      'Acesso ilimitado a funcionalidades futuras';
+  String get benefitFutureFeatures => 'Acesso a todos os recursos futuros';
 
   @override
-  String get voiceGuideBenefit1 => 'Orientação por voz durante o treino';
+  String get voiceGuideBenefit1 => 'Treino guiado por voz';
 
   @override
-  String get voiceGuideBenefit2 =>
-      'Anúncios automáticos de transição de sessão';
+  String get voiceGuideBenefit2 => 'Anúncio automático de mudança de sessão';
 
   @override
-  String get voiceGuideBenefit3 => 'Foco na rotina sem usar as mãos';
+  String get voiceGuideBenefit3 => 'Foco no treino com as mãos livres';
 
   @override
-  String get routineLimitBenefit1 => 'Salvamento de rotinas ilimitado';
+  String get routineLimitBenefit1 => 'Salvamento ilimitado de rotinas';
 
   @override
-  String get routineLimitBenefit2 => 'Salvar rotinas para múltiplos objetivos';
+  String get routineLimitBenefit2 => 'Rotinas personalizadas por objetivo';
 
   @override
-  String get routineLimitBenefit3 =>
-      'Usar todos os tipos de equipamento (esteira/bicicleta/escada)';
+  String get routineLimitBenefit3 => 'Suporte para esteira, bike e StairMaster';
 
   @override
-  String get premium_benefit_1 => 'Treinos de <red>bike e StairMaster</red>';
+  String get premium_benefit_1 => 'Suporte para <red>bike e StairMaster</red>';
 
   @override
-  String get premium_benefit_2 => '<red>Guia por voz</red> na sessão';
+  String get premium_benefit_2 => '<red>Guia de voz</red> nas sessões';
 
   @override
-  String get premium_benefit_3 => 'Salvar rotinas: <red>ilimitado</red>';
+  String get premium_benefit_3 => 'Salvar rotinas <red>ilimitado</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>Acesso ilimitado</red> a recursos futuros';
+      'Recursos futuros <red>incluídos de por vida</red>';
 
   @override
   String originalPrice(String price) {
@@ -544,123 +541,136 @@ class AppLocalizationsPt extends AppLocalizations {
   String get avgLevel => 'Méd. Nível';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Início fácil 20';
+  String get templateTreadmillBeginner1Title => 'Esteira Iniciante 1';
 
   @override
   String get templateTreadmillBeginner1Subtitle =>
-      'Aquecimento 3 min + intervalos 1:1';
+      '1:1 caminhada e corrida após 3 min de aquecimento';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Caminhada inclinada 25';
+  String get templateTreadmillBeginner2Title =>
+      'Esteira Iniciante 2 (Inclinação)';
 
   @override
   String get templateTreadmillBeginner2Subtitle =>
-      'Blocos de caminhada inclinada';
+      'Caminhada inclinada com baixo impacto articular';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Clássico 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Esteira Intermediário 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'Intervalos clássicos 1:1';
+      'Intervalo de corrida 1:1 para queima de gordura';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Escada de velocidade 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Esteira Intermediário 2 (Velocidade)';
 
   @override
   String get templateTreadmillIntermediate2Subtitle =>
-      'Escada de velocidade (aumenta aos poucos)';
+      'Corrida piramidal com velocidade crescente';
 
   @override
-  String get templateTreadmillAdvanced1Title => 'Queimador 2:1 21';
+  String get templateTreadmillAdvanced1Title => 'Esteira Avançado 1';
 
   @override
   String get templateTreadmillAdvanced1Subtitle =>
-      'Intervalos 2:1 (forte/leve)';
+      'Intervalo cardio de alta intensidade';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Explosão sprint 18';
+  String get templateTreadmillAdvanced2Title => 'Esteira Avançado 2 (Sprint)';
 
   @override
   String get templateTreadmillAdvanced2Subtitle =>
-      'Repetições de sprint de 20 s';
+      'Repetições curtas de sprint de alta intensidade';
 
   @override
-  String get templateCycleBeginner1Title => 'Construtor de cadência 20';
+  String get templateCycleBeginner1Title => 'Bike Iniciante 1';
 
   @override
   String get templateCycleBeginner1Subtitle =>
-      'Aquecimento 4 min + cadência 1:1';
+      'Iniciação ao pedal ajustando RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'Pedalada constante 25';
+  String get templateCycleBeginner2Title => 'Bike Iniciante 2 (Constante)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Bloco longo e constante';
+  String get templateCycleBeginner2Subtitle =>
+      'Treino de resistência a carga fixa';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spin 1:1 24';
+  String get templateCycleIntermediate1Title => 'Bike Intermediário 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => 'Intervalos clássicos 1:1';
+  String get templateCycleIntermediate1Subtitle =>
+      '1 min alta velocidade / 1 min recuperação spin';
 
   @override
-  String get templateCycleIntermediate2Title => 'Simulação de subida 22';
+  String get templateCycleIntermediate2Title => 'Bike Intermediário 2 (Colina)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Repetições de subida';
+  String get templateCycleIntermediate2Subtitle =>
+      'Subida de colinas a alta resistência';
 
   @override
-  String get templateCycleAdvanced1Title => 'Intervalos de potência 20';
+  String get templateCycleAdvanced1Title => 'Bike Avançado 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => 'Explosões de potência de 30 s';
+  String get templateCycleAdvanced1Subtitle =>
+      'Intervalos de força de 30s a alta resistência';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata mix 16';
+  String get templateCycleAdvanced2Title => 'Bike Avançado 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => 'Mix 20s/10s';
+  String get templateCycleAdvanced2Subtitle =>
+      'Circuito Tabata de 20s/10s para queima de gordura';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Passos fáceis 20';
+  String get templateStairmasterBeginner1Title => 'Stairmaster Iniciante 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'Aquecimento 4 min + passos 1:1';
+      'Caminhada segura de adaptação ao simulador';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Longo fácil 25';
+  String get templateStairmasterBeginner2Title =>
+      'Stairmaster Iniciante 2 (Constante)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'Blocos longos e leves';
+  String get templateStairmasterBeginner2Subtitle =>
+      'Subida aeróbica em ritmo constante';
 
   @override
-  String get templateStairmasterIntermediate1Title => 'Subida 2:1 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Stairmaster Intermediário 1 (Subida)';
 
   @override
   String get templateStairmasterIntermediate1Subtitle =>
-      'Repetições de subida 2:1';
+      '2 min subida / 1 min recuperação de glúteos';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Forte 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'Stairmaster Intermediário 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
-      'Intervalos fortes 1:1';
+      'Intervalos alternando ritmo rápido e lento';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Blocos duros 20';
+  String get templateStairmasterAdvanced1Title => 'Stairmaster Avançado 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => 'Blocos duros de 2 min';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'Treino intenso em blocos de 2 min';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Passos sprint 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Stairmaster Avançado 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      'Sprints 30s + recuperação 60s';
+      '30s subida rápida / 60s recuperação';
 
   @override
   String get historyTab => 'Histórico';
@@ -678,7 +688,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thisWeek => 'Esta semana';
 
   @override
-  String get trend => 'Tendência';
+  String get trend => 'Evolução do peso';
 
   @override
   String get timeframe7D => '7D';
@@ -717,7 +727,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get goalWeightSet => 'Peso objetivo definido';
 
   @override
-  String get goalWeightRemoved => 'Peso objetivo removido';
+  String get goalWeightRemoved => 'Peso objetivo desativado';
 
   @override
   String get goalAchieved => 'Objetivo alcançado!';
@@ -732,18 +742,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get suggested => 'Sugerido';
 
   @override
-  String get removeGoal => 'Remover Objetivo';
+  String get removeGoal => 'Desativar objetivo';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Adicione mais 1 registro para ver sua tendência';
+      'Adicione mais um registro para ver a evolução';
 
   @override
   String get noWeightRecorded => 'Ainda não há peso registrado';
 
   @override
   String get startTrackingYourWeight =>
-      'Comece a registrar seu peso para ver o progresso aqui';
+      'Registre seu peso para acompanhar a evolução aqui';
 
   @override
   String get treadmillSession => 'Sessão de Esteira';

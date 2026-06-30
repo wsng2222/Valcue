@@ -258,16 +258,16 @@ class _NavItem extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Selected: use app primary (red)
+    // Selected: use app primary
     // Unselected: near-black/white with 0.85 alpha
     final iconColor = isSelected
-        ? Colors.red
+        ? theme.colorScheme.primary
         : (isDark
             ? Colors.white.withValues(alpha: 0.85)
             : Colors.black.withValues(alpha: 0.85));
 
     final textColor = isSelected
-        ? Colors.red
+        ? theme.colorScheme.primary
         : (isDark
             ? Colors.white.withValues(alpha: 0.85)
             : Colors.black.withValues(alpha: 0.85));
@@ -343,16 +343,16 @@ class _CircularNavItem extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Selected: use app primary (red)
+    // Selected: use app primary
     // Unselected: near-black/white with 0.85 alpha
     final iconColor = isSelected
-        ? Colors.red
+        ? theme.colorScheme.primary
         : (isDark
             ? Colors.white.withValues(alpha: 0.85)
             : Colors.black.withValues(alpha: 0.85));
 
     final textColor = isSelected
-        ? Colors.red
+        ? theme.colorScheme.primary
         : (isDark
             ? Colors.white.withValues(alpha: 0.85)
             : Colors.black.withValues(alpha: 0.85));

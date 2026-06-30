@@ -1143,217 +1143,217 @@ abstract class AppLocalizations {
   /// No description provided for @templateTreadmillBeginner1Title.
   ///
   /// In en, this message translates to:
-  /// **'Easy Start 20'**
+  /// **'Beginner Treadmill 1'**
   String get templateTreadmillBeginner1Title;
 
   /// No description provided for @templateTreadmillBeginner1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Easy 1:1 intervals'**
+  /// **'1:1 walk and run after 3 min warm-up'**
   String get templateTreadmillBeginner1Subtitle;
 
   /// No description provided for @templateTreadmillBeginner2Title.
   ///
   /// In en, this message translates to:
-  /// **'Incline Walk 25'**
+  /// **'Beginner Treadmill 2 (Incline)'**
   String get templateTreadmillBeginner2Title;
 
   /// No description provided for @templateTreadmillBeginner2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Incline walk blocks'**
+  /// **'Incline walking with low joint impact'**
   String get templateTreadmillBeginner2Subtitle;
 
   /// No description provided for @templateTreadmillIntermediate1Title.
   ///
   /// In en, this message translates to:
-  /// **'Classic 1:1 24'**
+  /// **'Intermediate Treadmill 1'**
   String get templateTreadmillIntermediate1Title;
 
   /// No description provided for @templateTreadmillIntermediate1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Classic 1:1 run intervals'**
+  /// **'1:1 running interval for fat burning'**
   String get templateTreadmillIntermediate1Subtitle;
 
   /// No description provided for @templateTreadmillIntermediate2Title.
   ///
   /// In en, this message translates to:
-  /// **'Speed Ladder 20'**
+  /// **'Intermediate Treadmill 2 (Speed)'**
   String get templateTreadmillIntermediate2Title;
 
   /// No description provided for @templateTreadmillIntermediate2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Step-up speed ladder'**
+  /// **'Pyramid speed building run'**
   String get templateTreadmillIntermediate2Subtitle;
 
   /// No description provided for @templateTreadmillAdvanced1Title.
   ///
   /// In en, this message translates to:
-  /// **'2:1 Burner 21'**
+  /// **'Advanced Treadmill 1'**
   String get templateTreadmillAdvanced1Title;
 
   /// No description provided for @templateTreadmillAdvanced1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'2:1 hard/easy intervals'**
+  /// **'High-intensity cardio blast interval'**
   String get templateTreadmillAdvanced1Subtitle;
 
   /// No description provided for @templateTreadmillAdvanced2Title.
   ///
   /// In en, this message translates to:
-  /// **'Sprint Pop 18'**
+  /// **'Advanced Treadmill 2 (Sprint)'**
   String get templateTreadmillAdvanced2Title;
 
   /// No description provided for @templateTreadmillAdvanced2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'20s sprint repeats'**
+  /// **'Short high-intensity sprint repeats'**
   String get templateTreadmillAdvanced2Subtitle;
 
   /// No description provided for @templateCycleBeginner1Title.
   ///
   /// In en, this message translates to:
-  /// **'Cadence Builder 20'**
+  /// **'Beginner Cycle 1'**
   String get templateCycleBeginner1Title;
 
   /// No description provided for @templateCycleBeginner1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'4 min warm-up + 1:1 cadence'**
+  /// **'Pedaling intro by adjusting RPM'**
   String get templateCycleBeginner1Subtitle;
 
   /// No description provided for @templateCycleBeginner2Title.
   ///
   /// In en, this message translates to:
-  /// **'Steady Ride 25'**
+  /// **'Beginner Cycle 2 (Steady)'**
   String get templateCycleBeginner2Title;
 
   /// No description provided for @templateCycleBeginner2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Long steady block'**
+  /// **'Constant resistance endurance ride'**
   String get templateCycleBeginner2Subtitle;
 
   /// No description provided for @templateCycleIntermediate1Title.
   ///
   /// In en, this message translates to:
-  /// **'Spin 1:1 24'**
+  /// **'Intermediate Cycle 1'**
   String get templateCycleIntermediate1Title;
 
   /// No description provided for @templateCycleIntermediate1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Classic 1:1 spin intervals'**
+  /// **'1 min high speed / 1 min recovery spin'**
   String get templateCycleIntermediate1Subtitle;
 
   /// No description provided for @templateCycleIntermediate2Title.
   ///
   /// In en, this message translates to:
-  /// **'Hill Simulation 22'**
+  /// **'Intermediate Cycle 2 (Hill)'**
   String get templateCycleIntermediate2Title;
 
   /// No description provided for @templateCycleIntermediate2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Climb repeats'**
+  /// **'High resistance lower body hill climb'**
   String get templateCycleIntermediate2Subtitle;
 
   /// No description provided for @templateCycleAdvanced1Title.
   ///
   /// In en, this message translates to:
-  /// **'Power Intervals 20'**
+  /// **'Advanced Cycle 1'**
   String get templateCycleAdvanced1Title;
 
   /// No description provided for @templateCycleAdvanced1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'30s power bursts'**
+  /// **'30s high resistance power intervals'**
   String get templateCycleAdvanced1Subtitle;
 
   /// No description provided for @templateCycleAdvanced2Title.
   ///
   /// In en, this message translates to:
-  /// **'Tabata Mix 16'**
+  /// **'Advanced Cycle 2 (Tabata)'**
   String get templateCycleAdvanced2Title;
 
   /// No description provided for @templateCycleAdvanced2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'20s on / 10s off mix'**
+  /// **'20s/10s Tabata circuit for fat burning'**
   String get templateCycleAdvanced2Subtitle;
 
   /// No description provided for @templateStairmasterBeginner1Title.
   ///
   /// In en, this message translates to:
-  /// **'Easy Steps 20'**
+  /// **'Beginner Stairmaster 1'**
   String get templateStairmasterBeginner1Title;
 
   /// No description provided for @templateStairmasterBeginner1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'4 min warm-up + 1:1 steps'**
+  /// **'Safe adaptation pace stair walking'**
   String get templateStairmasterBeginner1Subtitle;
 
   /// No description provided for @templateStairmasterBeginner2Title.
   ///
   /// In en, this message translates to:
-  /// **'Long Easy 25'**
+  /// **'Beginner Stairmaster 2 (Steady)'**
   String get templateStairmasterBeginner2Title;
 
   /// No description provided for @templateStairmasterBeginner2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Long easy climb blocks'**
+  /// **'Steady tempo aerobic stair climbing'**
   String get templateStairmasterBeginner2Subtitle;
 
   /// No description provided for @templateStairmasterIntermediate1Title.
   ///
   /// In en, this message translates to:
-  /// **'2:1 Climb 21'**
+  /// **'Intermediate Stairmaster 1 (Climb)'**
   String get templateStairmasterIntermediate1Title;
 
   /// No description provided for @templateStairmasterIntermediate1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'2:1 climb repeats'**
+  /// **'2 min climb / 1 min recovery glute sculpt'**
   String get templateStairmasterIntermediate1Subtitle;
 
   /// No description provided for @templateStairmasterIntermediate2Title.
   ///
   /// In en, this message translates to:
-  /// **'Strong 1:1 24'**
+  /// **'Intermediate Stairmaster 2'**
   String get templateStairmasterIntermediate2Title;
 
   /// No description provided for @templateStairmasterIntermediate2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Strong 1:1 intervals'**
+  /// **'Alternating fast and slow tempo intervals'**
   String get templateStairmasterIntermediate2Subtitle;
 
   /// No description provided for @templateStairmasterAdvanced1Title.
   ///
   /// In en, this message translates to:
-  /// **'Hard Blocks 20'**
+  /// **'Advanced Stairmaster 1'**
   String get templateStairmasterAdvanced1Title;
 
   /// No description provided for @templateStairmasterAdvanced1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'2-min hard blocks'**
+  /// **'High-intensity 2 min block training'**
   String get templateStairmasterAdvanced1Subtitle;
 
   /// No description provided for @templateStairmasterAdvanced2Title.
   ///
   /// In en, this message translates to:
-  /// **'Sprint Steps 18'**
+  /// **'Advanced Stairmaster 2 (Sprint)'**
   String get templateStairmasterAdvanced2Title;
 
   /// No description provided for @templateStairmasterAdvanced2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'30s sprints + 60s recoveries'**
+  /// **'30s high speed climb / 60s recovery intervals'**
   String get templateStairmasterAdvanced2Subtitle;
 
   /// History tab label in My screen

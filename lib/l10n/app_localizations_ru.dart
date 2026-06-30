@@ -359,10 +359,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumMembership => 'Премиум Членство';
 
   @override
-  String get benefitCycleStairmaster => 'Функция Велосипеда и Степпера';
+  String get benefitCycleStairmaster =>
+      'Тренировки на велотренажере и степпере';
 
   @override
-  String get benefitVoiceGuide => 'Функция голосового руководства сессии';
+  String get benefitVoiceGuide => 'Голосовой гид во время тренировки';
 
   @override
   String get benefitUnlimitedRoutines => 'Неограниченное сохранение программ';
@@ -371,44 +372,42 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noAds => 'Без Рекламы';
 
   @override
-  String get benefitFutureFeatures =>
-      'Неограниченный доступ к будущим функциям';
+  String get benefitFutureFeatures => 'Доступ ко всем будущим функциям';
 
   @override
-  String get voiceGuideBenefit1 => 'Голосовое руководство во время тренировки';
+  String get voiceGuideBenefit1 => 'Голосовой помощник во время бега';
 
   @override
-  String get voiceGuideBenefit2 =>
-      'Автоматические объявления о переходе между сессиями';
+  String get voiceGuideBenefit2 => 'Автоматическое оповещение о смене сессии';
 
   @override
-  String get voiceGuideBenefit3 =>
-      'Сосредоточение на программе без использования рук';
+  String get voiceGuideBenefit3 => 'Фокусируйтесь на тренировке без рук';
 
   @override
   String get routineLimitBenefit1 => 'Неограниченное сохранение программ';
 
   @override
-  String get routineLimitBenefit2 => 'Сохранять программы для нескольких целей';
+  String get routineLimitBenefit2 => 'Программы под различные фитнес-цели';
 
   @override
   String get routineLimitBenefit3 =>
-      'Использовать все типы тренажеров (беговая дорожка/велосипед/степпер)';
+      'Полная поддержка беговых дорожек, велосипедов и степперов';
 
   @override
   String get premium_benefit_1 =>
-      'Тренировки на <red>велотренажёре и StairMaster</red>';
+      'Поддержка <red>велосипеда и StairMaster</red>';
 
   @override
-  String get premium_benefit_2 => '<red>Голосовой гид</red> в тренировке';
+  String get premium_benefit_2 =>
+      '<red>Голосовой гид</red> во время тренировок';
 
   @override
   String get premium_benefit_3 =>
-      'Сохранение рутин: <red>без ограничений</red>';
+      'Сохранение программ <red>без ограничений</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>Неограниченный доступ</red> к будущим функциям';
+      'Все новые функции <red>включены навсегда</red>';
 
   @override
   String originalPrice(String price) {
@@ -549,119 +548,137 @@ class AppLocalizationsRu extends AppLocalizations {
   String get avgLevel => 'Ср. Уровень';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Лёгкий старт 20';
+  String get templateTreadmillBeginner1Title => 'Беговая дорожка Начальный 1';
 
   @override
   String get templateTreadmillBeginner1Subtitle =>
-      'Разминка 3 мин + интервалы 1:1';
+      '1:1 ходьба и бег после 3 мин разминки';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Ходьба в наклоне 25';
+  String get templateTreadmillBeginner2Title =>
+      'Беговая дорожка Начальный 2 (Наклон)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'Блоки ходьбы с наклоном';
+  String get templateTreadmillBeginner2Subtitle =>
+      'Ходьба под наклоном с низкой нагрузкой на суставы';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Классика 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Беговая дорожка Средний 1';
 
   @override
   String get templateTreadmillIntermediate1Subtitle =>
-      'Классические интервалы 1:1';
+      'Беговой интервал 1:1 для сжигания жира';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Лестница скорости 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Беговая дорожка Средний 2 (Скорость)';
 
   @override
   String get templateTreadmillIntermediate2Subtitle =>
-      'Лестница скорости (постепенно быстрее)';
+      'Интервальный бег с постепенным ускорением';
 
   @override
-  String get templateTreadmillAdvanced1Title => 'Сжигатель 2:1 21';
+  String get templateTreadmillAdvanced1Title => 'Беговая дорожка Продвинутый 1';
 
   @override
   String get templateTreadmillAdvanced1Subtitle =>
-      'Интервалы 2:1 (жёстко/легко)';
+      'Высокоинтенсивный кардио-интервал';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Спринт-поп 18';
+  String get templateTreadmillAdvanced2Title =>
+      'Беговая дорожка Продвинутый 2 (Спринт)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => 'Спринты по 20 секунд';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'Короткие спринты высокой интенсивности';
 
   @override
-  String get templateCycleBeginner1Title => 'Тренировка каденса 20';
+  String get templateCycleBeginner1Title => 'Велосипед Начальный 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => 'Разминка 4 мин + каденс 1:1';
+  String get templateCycleBeginner1Subtitle =>
+      'Вводная тренировка с регулировкой RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'Ровная езда 25';
+  String get templateCycleBeginner2Title =>
+      'Велосипед Начальный 2 (Постоянный)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Длинный ровный блок';
+  String get templateCycleBeginner2Subtitle =>
+      'Развитие выносливости при фиксированном сопротивлении';
 
   @override
-  String get templateCycleIntermediate1Title => 'Спин 1:1 24';
+  String get templateCycleIntermediate1Title => 'Велосипед Средний 1';
 
   @override
   String get templateCycleIntermediate1Subtitle =>
-      'Классические спин-интервалы 1:1';
+      '1 мин высокая скорость / 1 мин восстановление';
 
   @override
-  String get templateCycleIntermediate2Title => 'Имитация подъёма 22';
+  String get templateCycleIntermediate2Title => 'Велосипед Средний 2 (Холм)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Повторы в подъём';
+  String get templateCycleIntermediate2Subtitle =>
+      'Подъем в гору при высоком сопротивлении';
 
   @override
-  String get templateCycleAdvanced1Title => 'Силовые интервалы 20';
+  String get templateCycleAdvanced1Title => 'Велосипед Продвинутый 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30-секундные силовые рывки';
+  String get templateCycleAdvanced1Subtitle =>
+      'Силовые интервалы 30 сек при высоком сопротивлении';
 
   @override
-  String get templateCycleAdvanced2Title => 'Табата микс 16';
+  String get templateCycleAdvanced2Title => 'Велосипед Продвинутый 2 (Табата)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => 'Микс 20с/10с';
+  String get templateCycleAdvanced2Subtitle =>
+      'Табата-тренинг 20/10 сек для сжигания жира';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Лёгкие ступени 20';
+  String get templateStairmasterBeginner1Title => 'Степпер Начальный 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'Разминка 4 мин + шаги 1:1';
+      'Безопасное привыкание к темпу ходьбы по ступеням';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Долго и легко 25';
+  String get templateStairmasterBeginner2Title =>
+      'Степпер Начальный 2 (Постоянный)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'Длинные лёгкие блоки';
+  String get templateStairmasterBeginner2Subtitle =>
+      'Аэробный подъем в постоянном темпе';
 
   @override
-  String get templateStairmasterIntermediate1Title => 'Подъём 2:1 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Степпер Средний 1 (Подъем)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => 'Повторы подъёма 2:1';
+  String get templateStairmasterIntermediate1Subtitle =>
+      '2 мин подъем / 1 мин восстановление ягодиц';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Сильно 1:1 24';
+  String get templateStairmasterIntermediate2Title => 'Степпер Средний 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
-      'Сильные интервалы 1:1';
+      'Чередование быстрого и медленного темпа';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Жёсткие блоки 20';
+  String get templateStairmasterAdvanced1Title => 'Степпер Продвинутый 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => 'Жёсткие блоки по 2 мин';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'Интенсивная 2-минутная тренировка по блокам';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Спринт-ступени 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Степпер Продвинутый 2 (Спринт)';
 
   @override
-  String get templateStairmasterAdvanced2Subtitle => 'Спринты 30с + отдых 60с';
+  String get templateStairmasterAdvanced2Subtitle =>
+      '30 сек быстрый подъем / 60 сек восстановление';
 
   @override
   String get historyTab => 'История';
@@ -679,7 +696,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get thisWeek => 'На этой неделе';
 
   @override
-  String get trend => 'Тренд';
+  String get trend => 'Динамика веса';
 
   @override
   String get timeframe7D => '7Д';
@@ -712,13 +729,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recordWeight => 'Записать вес';
 
   @override
-  String get quickAdjust => 'Быстрая настройка';
+  String get quickAdjust => 'Быстрое изменение';
 
   @override
   String get goalWeightSet => 'Целевой вес установлен';
 
   @override
-  String get goalWeightRemoved => 'Целевой вес удален';
+  String get goalWeightRemoved => 'Целевой вес отключен';
 
   @override
   String get goalAchieved => 'Цель достигнута!';
@@ -733,18 +750,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get suggested => 'Рекомендуемое';
 
   @override
-  String get removeGoal => 'Удалить Цель';
+  String get removeGoal => 'Отключить цель';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Добавьте еще 1 запись, чтобы увидеть свой тренд';
+      'Добавьте еще одну запись, чтобы увидеть график';
 
   @override
   String get noWeightRecorded => 'Вес еще не записан';
 
   @override
   String get startTrackingYourWeight =>
-      'Начните отслеживать свой вес, чтобы увидеть прогресс здесь';
+      'Записывайте вес, чтобы отслеживать изменения здесь';
 
   @override
   String get treadmillSession => 'Сессия Беговой Дорожки';

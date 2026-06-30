@@ -39,7 +39,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => '라이트 다크 모드';
+  String get themeMode => '화면 모드 설정';
 
   @override
   String get light => '라이트';
@@ -51,7 +51,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get smartwatchSync => '스마트워치 Sync';
 
   @override
-  String get connectSmartwatch => '스마트워치와 연결합니다';
+  String get connectSmartwatch => '스마트워치 연결하기';
 
   @override
   String get connect => '연결';
@@ -339,7 +339,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premium => '프리미엄';
 
   @override
-  String get upgradeNow => '지금 당장 업그레이드 하기';
+  String get upgradeNow => '지금 업그레이드하기';
 
   @override
   String get purchase => '구매하기';
@@ -354,49 +354,49 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumMembership => '프리미엄 멤버십';
 
   @override
-  String get benefitCycleStairmaster => '사이클, 천국의 계단 기능';
+  String get benefitCycleStairmaster => '사이클 및 천국의 계단 루틴';
 
   @override
-  String get benefitVoiceGuide => '세션 음성 가이드 기능';
+  String get benefitVoiceGuide => '세션별 음성 가이드 안내';
 
   @override
-  String get benefitUnlimitedRoutines => '루틴 저장 수 무제한';
+  String get benefitUnlimitedRoutines => '루틴 저장 개수 무제한';
 
   @override
   String get noAds => '광고 없음';
 
   @override
-  String get benefitFutureFeatures => '추후 기능 무제한 접근 가능';
+  String get benefitFutureFeatures => '향후 추가되는 모든 기능 포함';
 
   @override
-  String get voiceGuideBenefit1 => '운동 중 음성 안내';
+  String get voiceGuideBenefit1 => '운동 중 음성 코칭 안내';
 
   @override
-  String get voiceGuideBenefit2 => '세션 전환 자동 안내';
+  String get voiceGuideBenefit2 => '세션 전환 시 자동 안내';
 
   @override
-  String get voiceGuideBenefit3 => '핸즈프리로 루틴 집중';
+  String get voiceGuideBenefit3 => '화면을 보지 않고 운동에 집중';
 
   @override
-  String get routineLimitBenefit1 => '루틴 저장 수 무제한';
+  String get routineLimitBenefit1 => '루틴 저장 개수 무제한';
 
   @override
-  String get routineLimitBenefit2 => '여러 목표별 루틴 저장';
+  String get routineLimitBenefit2 => '목표별 맞춤 루틴 저장';
 
   @override
-  String get routineLimitBenefit3 => '러닝머신/사이클/천국의 계단 루틴 모두 사용';
+  String get routineLimitBenefit3 => '러닝머신/사이클/천국의 계단 완벽 지원';
 
   @override
-  String get premium_benefit_1 => '<red>사이클, 천국의 계단</red> 기능';
+  String get premium_benefit_1 => '<red>사이클, 천국의 계단</red> 지원';
 
   @override
-  String get premium_benefit_2 => '세션 <red>음성 가이드</red> 기능';
+  String get premium_benefit_2 => '세션별 <red>음성 가이드</red> 제공';
 
   @override
-  String get premium_benefit_3 => '루틴 저장 수 <red>무제한</red>';
+  String get premium_benefit_3 => '루틴 저장 개수 <red>무제한</red>';
 
   @override
-  String get premium_benefit_4 => '추후 기능 <red>무제한 접근</red> 가능';
+  String get premium_benefit_4 => '향후 추가되는 모든 기능 <red>평생 포함</red>';
 
   @override
   String originalPrice(String price) {
@@ -518,7 +518,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get saveRoutine => '루틴 저장';
 
   @override
-  String get routineAlreadySaved => '이미 저장된 루틴이야';
+  String get routineAlreadySaved => '이미 저장된 루틴입니다';
 
   @override
   String get noTemplatesFound => '템플릿을 찾을 수 없습니다';
@@ -533,112 +533,115 @@ class AppLocalizationsKo extends AppLocalizations {
   String get avgLevel => '평균 레벨';
 
   @override
-  String get templateTreadmillBeginner1Title => '이지 스타트 20';
+  String get templateTreadmillBeginner1Title => '초급 러닝머신 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => '3분 워밍업 + 1:1 인터벌';
+  String get templateTreadmillBeginner1Subtitle => '3분 워밍업 후 1:1 걷고 달리기';
 
   @override
-  String get templateTreadmillBeginner2Title => '인클라인 워크 25';
+  String get templateTreadmillBeginner2Title => '초급 러닝머신 2 (경사)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => '경사 워킹 블록 반복';
+  String get templateTreadmillBeginner2Subtitle => '무릎 부담이 적은 경사 걷기';
 
   @override
-  String get templateTreadmillIntermediate1Title => '클래식 1:1 24';
+  String get templateTreadmillIntermediate1Title => '중급 러닝머신 1';
 
   @override
-  String get templateTreadmillIntermediate1Subtitle => '1:1 클래식 인터벌';
+  String get templateTreadmillIntermediate1Subtitle => '지방 연소를 돕는 1:1 러닝 인터벌';
 
   @override
-  String get templateTreadmillIntermediate2Title => '스피드 래더 20';
+  String get templateTreadmillIntermediate2Title => '중급 러닝머신 2 (스피드)';
 
   @override
-  String get templateTreadmillIntermediate2Subtitle => '스피드 래더(점점 빨라짐)';
+  String get templateTreadmillIntermediate2Subtitle => '단계별로 속도가 빨라지는 러닝';
 
   @override
-  String get templateTreadmillAdvanced1Title => '2:1 버너 21';
+  String get templateTreadmillAdvanced1Title => '고급 러닝머신 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => '2:1 고강도 인터벌';
+  String get templateTreadmillAdvanced1Subtitle => '심폐 기능 극대화를 위한 고강도 인터벌';
 
   @override
-  String get templateTreadmillAdvanced2Title => '스프린트 팝 18';
+  String get templateTreadmillAdvanced2Title => '고급 러닝머신 2 (스프린트)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => '20초 스프린트 반복';
+  String get templateTreadmillAdvanced2Subtitle => '짧고 굵은 전력 질주 반복 코스';
 
   @override
-  String get templateCycleBeginner1Title => '케이던스 빌더 20';
+  String get templateCycleBeginner1Title => '초급 사이클 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => '4분 워밍업 + 1:1 케이던스';
+  String get templateCycleBeginner1Subtitle => 'RPM 조절로 다리를 푸는 페달링 입문';
 
   @override
-  String get templateCycleBeginner2Title => '스테디 라이드 25';
+  String get templateCycleBeginner2Title => '초급 사이클 2 (지속주)';
 
   @override
-  String get templateCycleBeginner2Subtitle => '롱 스테디 라이딩';
+  String get templateCycleBeginner2Subtitle => '고정 강도로 일정하게 타는 지구력 향상 코스';
 
   @override
-  String get templateCycleIntermediate1Title => '스핀 1:1 24';
+  String get templateCycleIntermediate1Title => '중급 사이클 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => '1:1 스핀 인터벌';
+  String get templateCycleIntermediate1Subtitle => '1분 고속 회전 / 1분 회복 스피닝 코스';
 
   @override
-  String get templateCycleIntermediate2Title => '힐 시뮬레이션 22';
+  String get templateCycleIntermediate2Title => '중급 사이클 2 (언덕)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => '힐 반복 블록';
+  String get templateCycleIntermediate2Subtitle => '높은 페달 저항을 버티는 하체 단련 코스';
 
   @override
-  String get templateCycleAdvanced1Title => '파워 인터벌 20';
+  String get templateCycleAdvanced1Title => '고급 사이클 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => '30초 파워 버스트';
+  String get templateCycleAdvanced1Subtitle => '30초 고저항 파워 인터벌';
 
   @override
-  String get templateCycleAdvanced2Title => '타바타 믹스 16';
+  String get templateCycleAdvanced2Title => '고급 사이클 2 (타바타)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => '20초/10초 타바타 믹스';
+  String get templateCycleAdvanced2Subtitle => '체지방 연소를 위한 20초/10초 타바타 서킷';
 
   @override
-  String get templateStairmasterBeginner1Title => '이지 스텝스 20';
+  String get templateStairmasterBeginner1Title => '초급 계단 1';
 
   @override
-  String get templateStairmasterBeginner1Subtitle => '4분 워밍업 + 1:1 스텝';
+  String get templateStairmasterBeginner1Subtitle => '느린 속도로 안전하게 적응하는 계단 걷기';
 
   @override
-  String get templateStairmasterBeginner2Title => '롱 이지 25';
+  String get templateStairmasterBeginner2Title => '초급 계단 2 (지속주)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => '롱 이지 블록';
+  String get templateStairmasterBeginner2Subtitle => '일정한 템포로 길게 오르는 유산소 입문';
 
   @override
-  String get templateStairmasterIntermediate1Title => '2:1 클라임 21';
+  String get templateStairmasterIntermediate1Title => '중급 계단 1 (언덕)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => '2:1 클라임 반복';
+  String get templateStairmasterIntermediate1Subtitle =>
+      '2분 오르기 / 1분 회복으로 둔근 자극 극대화';
 
   @override
-  String get templateStairmasterIntermediate2Title => '스트롱 1:1 24';
+  String get templateStairmasterIntermediate2Title => '중급 계단 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => '1:1 스트롱 인터벌';
+  String get templateStairmasterIntermediate2Subtitle =>
+      '빠른 템포와 느린 템포를 번갈아 밟는 인터벌';
 
   @override
-  String get templateStairmasterAdvanced1Title => '하드 블록 20';
+  String get templateStairmasterAdvanced1Title => '고급 계단 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => '2분 하드 블록';
+  String get templateStairmasterAdvanced1Subtitle => '강도가 높은 2분 집중 트레이닝';
 
   @override
-  String get templateStairmasterAdvanced2Title => '스프린트 스텝스 18';
+  String get templateStairmasterAdvanced2Title => '고급 계단 2 (스프린트)';
 
   @override
-  String get templateStairmasterAdvanced2Subtitle => '30초 스프린트 + 60초 회복';
+  String get templateStairmasterAdvanced2Subtitle =>
+      '30초 고속 오르기 / 60초 긴 회복 인터벌';
 
   @override
   String get historyTab => '기록';
@@ -656,7 +659,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get thisWeek => '이번 주';
 
   @override
-  String get trend => '추세';
+  String get trend => '체중 추이';
 
   @override
   String get timeframe7D => '7일';
@@ -689,13 +692,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recordWeight => '체중 기록';
 
   @override
-  String get quickAdjust => '빠른 조정';
+  String get quickAdjust => '빠른 조절';
 
   @override
   String get goalWeightSet => '목표 체중이 설정되었습니다';
 
   @override
-  String get goalWeightRemoved => '목표 체중이 제거되었습니다';
+  String get goalWeightRemoved => '목표 체중이 해제되었습니다';
 
   @override
   String get goalAchieved => '목표 달성!';
@@ -710,16 +713,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get suggested => '추천';
 
   @override
-  String get removeGoal => '목표 제거';
+  String get removeGoal => '목표 해제';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '추세를 보려면 1개 더 기록하세요';
+  String get addOneMoreRecordToSeeTrend => '추이를 보려면 기록을 1개 더 추가하세요';
 
   @override
-  String get noWeightRecorded => '아직 체중이 기록되지 않았습니다';
+  String get noWeightRecorded => '아직 기록된 체중이 없습니다';
 
   @override
-  String get startTrackingYourWeight => '체중을 기록하여 진행 상황을 확인하세요';
+  String get startTrackingYourWeight => '체중을 기록하고 변화 추이를 확인해 보세요';
 
   @override
   String get treadmillSession => '러닝머신 세션';
@@ -825,7 +828,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumHeadline => '같은 30분, 결과는 다르게';
 
   @override
-  String get premiumSubheadlineNew => '그냥 뛰지 말고, 살 빠지는 방식으로 운동해';
+  String get premiumSubheadlineNew => '그냥 뛰지 말고, 효과적으로 체지방을 태워보세요';
 
   @override
   String get mostPopular => '가장 인기';

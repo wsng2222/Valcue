@@ -57,6 +57,9 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
       _holdProgress = 0.0;
     });
 
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -65,9 +68,9 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
         top: false,
         bottom: false,
         child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
             ),
@@ -78,10 +81,8 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
             children: [
               Text(
                 AppLocalizations.of(context)!.endWorkoutQuestion,
-                style: const TextStyle(
-                  fontSize: 20,
+                style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
               ),
               const SizedBox(height: 32),
@@ -95,14 +96,12 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(999),
                         ),
-                        side: BorderSide(color: Colors.grey.shade300),
+                        side: BorderSide(color: theme.dividerColor),
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.continueWorkout,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
                         ),
                       ),
                     ),
@@ -115,8 +114,8 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
                         widget.onStopConfirmed();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(999),
@@ -149,6 +148,7 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTapDown: (_) => _startHold(),
       onTapUp: (_) => _cancelHold(),
@@ -156,7 +156,7 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
-          color: Colors.red,
+          color: theme.colorScheme.primary,
           borderRadius: BorderRadius.circular(999),
         ),
         child: Stack(
@@ -170,18 +170,18 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
                     value: _holdProgress,
                     backgroundColor: Colors.transparent,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.white.withValues(alpha: 0.3),
+                      theme.colorScheme.onPrimary.withValues(alpha: 0.3),
                     ),
                     minHeight: double.infinity,
                   ),
                 ),
               ),
-            const Text(
-              'Hold to Stop',
+            Text(
+              AppLocalizations.of(context)!.holdToStop,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: theme.colorScheme.onPrimary,
                 letterSpacing: -0.3,
               ),
             ),

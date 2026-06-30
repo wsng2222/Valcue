@@ -359,53 +359,52 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumMembership => 'Thành viên Cao cấp';
 
   @override
-  String get benefitCycleStairmaster => 'Tính năng Xe đạp và Máy leo cầu thang';
+  String get benefitCycleStairmaster => 'Bài tập đạp xe & leo cầu thang';
 
   @override
-  String get benefitVoiceGuide => 'Tính năng hướng dẫn bằng giọng nói phiên';
+  String get benefitVoiceGuide => 'Hướng dẫn giọng nói theo từng phần';
 
   @override
-  String get benefitUnlimitedRoutines => 'Lưu thói quen không giới hạn';
+  String get benefitUnlimitedRoutines => 'Lưu trữ bài tập không giới hạn';
 
   @override
   String get noAds => 'Không Có Quảng Cáo';
 
   @override
-  String get benefitFutureFeatures =>
-      'Truy cập không giới hạn vào tính năng tương lai';
+  String get benefitFutureFeatures => 'Bao gồm tất cả tính năng tương lai';
 
   @override
-  String get voiceGuideBenefit1 => 'Hướng dẫn bằng giọng nói trong khi tập';
+  String get voiceGuideBenefit1 => 'Hướng dẫn bằng giọng nói khi tập';
 
   @override
-  String get voiceGuideBenefit2 => 'Thông báo tự động chuyển đổi phiên';
+  String get voiceGuideBenefit2 => 'Thông báo tự động khi chuyển phần';
 
   @override
-  String get voiceGuideBenefit3 => 'Tập trung vào thói quen không cần dùng tay';
+  String get voiceGuideBenefit3 => 'Tập trung hoàn toàn mà không cần chạm máy';
 
   @override
-  String get routineLimitBenefit1 => 'Lưu thói quen không giới hạn';
+  String get routineLimitBenefit1 => 'Lưu trữ bài tập không giới hạn';
 
   @override
-  String get routineLimitBenefit2 => 'Lưu thói quen cho nhiều mục tiêu';
+  String get routineLimitBenefit2 => 'Lưu bài tập tùy chỉnh theo mục tiêu';
 
   @override
   String get routineLimitBenefit3 =>
-      'Sử dụng tất cả loại máy (máy chạy bộ/xe đạp/máy leo cầu thang)';
+      'Hỗ trợ đầy đủ máy chạy bộ/xe đạp/máy leo cầu thang';
 
   @override
   String get premium_benefit_1 => 'Hỗ trợ <red>xe đạp & StairMaster</red>';
 
   @override
   String get premium_benefit_2 =>
-      '<red>Hướng dẫn bằng giọng nói</red> trong buổi tập';
+      '<red>Hướng dẫn giọng nói</red> trong lúc tập';
 
   @override
-  String get premium_benefit_3 => 'Lưu routine <red>không giới hạn</red>';
+  String get premium_benefit_3 => 'Lưu bài tập <red>không giới hạn</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>Quyền truy cập không giới hạn</red> tính năng tương lai';
+      'Cập nhật tính năng tương lai <red>trọn đời</red>';
 
   @override
   String originalPrice(String price) {
@@ -545,116 +544,136 @@ class AppLocalizationsVi extends AppLocalizations {
   String get avgLevel => 'TB Cấp độ';
 
   @override
-  String get templateTreadmillBeginner1Title => 'Khởi động nhẹ 20';
+  String get templateTreadmillBeginner1Title => 'Máy Chạy Bộ Sơ Cấp 1';
 
   @override
   String get templateTreadmillBeginner1Subtitle =>
-      'Khởi động 3 phút + interval 1:1';
+      '1:1 đi bộ và chạy sau 3 phút khởi động';
 
   @override
-  String get templateTreadmillBeginner2Title => 'Đi bộ dốc 25';
+  String get templateTreadmillBeginner2Title => 'Máy Chạy Bộ Sơ Cấp 2 (Độ Dốc)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'Các khối đi bộ dốc';
+  String get templateTreadmillBeginner2Subtitle =>
+      'Đi bộ leo dốc giảm chấn thương khớp gối';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'Cổ điển 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'Máy Chạy Bộ Trung Cấp 1';
 
   @override
-  String get templateTreadmillIntermediate1Subtitle => 'Interval cổ điển 1:1';
+  String get templateTreadmillIntermediate1Subtitle =>
+      'Interval chạy 1:1 giúp đẩy nhanh đốt mỡ';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'Thang tốc độ 20';
+  String get templateTreadmillIntermediate2Title =>
+      'Máy Chạy Bộ Trung Cấp 2 (Tốc Độ)';
 
   @override
   String get templateTreadmillIntermediate2Subtitle =>
-      'Thang tốc độ (tăng dần)';
+      'Chạy tăng tốc dần theo dạng kim tự tháp';
 
   @override
-  String get templateTreadmillAdvanced1Title => 'Đốt mỡ 2:1 21';
+  String get templateTreadmillAdvanced1Title => 'Máy Chạy Bộ Cao Cấp 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => 'Interval 2:1 (nặng/nhẹ)';
+  String get templateTreadmillAdvanced1Subtitle =>
+      'Đẩy giới hạn tim mạch với cường độ cao';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Bùng nổ sprint 18';
+  String get templateTreadmillAdvanced2Title =>
+      'Máy Chạy Bộ Cao Cấp 2 (Sprint)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => 'Lặp sprint 20 giây';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'Lặp lại các quãng nước rút ngắn cường độ cao';
 
   @override
-  String get templateCycleBeginner1Title => 'Xây nhịp đạp 20';
+  String get templateCycleBeginner1Title => 'Xe Đạp Sơ Cấp 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => 'Khởi động 4 phút + nhịp 1:1';
+  String get templateCycleBeginner1Subtitle =>
+      'Làm quen nhịp đạp bằng cách điều chỉnh RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'Đạp đều 25';
+  String get templateCycleBeginner2Title => 'Xe Đạp Sơ Cấp 2 (Ổn Định)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'Khối đều dài';
+  String get templateCycleBeginner2Subtitle =>
+      'Đạp bền tăng sức bền ở mức kháng lực cố định';
 
   @override
-  String get templateCycleIntermediate1Title => 'Spin 1:1 24';
+  String get templateCycleIntermediate1Title => 'Xe Đạp Trung Cấp 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => 'Interval spin cổ điển 1:1';
+  String get templateCycleIntermediate1Subtitle =>
+      '1 phút đạp nhanh / 1 phút đạp nhẹ phục hồi';
 
   @override
-  String get templateCycleIntermediate2Title => 'Mô phỏng dốc 22';
+  String get templateCycleIntermediate2Title => 'Xe Đạp Trung Cấp 2 (Leo Dốc)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'Lặp leo dốc';
+  String get templateCycleIntermediate2Subtitle =>
+      'Đạp leo dốc với lực cản cao rèn luyện cơ đùi';
 
   @override
-  String get templateCycleAdvanced1Title => 'Interval sức mạnh 20';
+  String get templateCycleAdvanced1Title => 'Xe Đạp Cao Cấp 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => 'Bùng nổ sức mạnh 30 giây';
+  String get templateCycleAdvanced1Subtitle =>
+      'Interval đạp bùng nổ 30 giây ở mức cản cao';
 
   @override
-  String get templateCycleAdvanced2Title => 'Tabata mix 16';
+  String get templateCycleAdvanced2Title => 'Xe Đạp Cao Cấp 2 (Tabata)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => 'Mix 20s/10s';
+  String get templateCycleAdvanced2Subtitle =>
+      'Vòng lặp Tabata 20 giây/10 giây giúp săn chắc';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Bước nhẹ 20';
+  String get templateStairmasterBeginner1Title => 'Máy Leo Thang Sơ Cấp 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'Khởi động 4 phút + bước 1:1';
+      'Đi bộ chậm làm quen nhịp leo thang an toàn';
 
   @override
-  String get templateStairmasterBeginner2Title => 'Dài nhẹ 25';
+  String get templateStairmasterBeginner2Title =>
+      'Máy Leo Thang Sơ Cấp 2 (Ổn Định)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'Các khối dài nhẹ';
+  String get templateStairmasterBeginner2Subtitle =>
+      'Leo thang nhịp nhàng liên tục rèn luyện sức bền';
 
   @override
-  String get templateStairmasterIntermediate1Title => 'Leo 2:1 21';
+  String get templateStairmasterIntermediate1Title =>
+      'Máy Leo Thang Trung Cấp 1 (Leo Dốc)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => 'Lặp leo dốc 2:1';
+  String get templateStairmasterIntermediate1Subtitle =>
+      'Leo 2 phút / 1 phút phục hồi săn chắc cơ mông';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'Mạnh 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'Máy Leo Thang Trung Cấp 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => 'Interval mạnh 1:1';
+  String get templateStairmasterIntermediate2Subtitle =>
+      'Interval nhịp tim luân phiên nhanh và chậm';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Khối nặng 20';
+  String get templateStairmasterAdvanced1Title => 'Máy Leo Thang Cao Cấp 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => 'Khối nặng 2 phút';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'Bài tập phân đoạn 2 phút cường độ cao';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'Bước sprint 18';
+  String get templateStairmasterAdvanced2Title =>
+      'Máy Leo Thang Cao Cấp 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
-      'Sprint 30s + hồi phục 60s';
+      'Leo thang nhanh 30 giây / 60 giây phục hồi';
 
   @override
   String get historyTab => 'Lịch sử';
@@ -672,7 +691,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get thisWeek => 'Tuần này';
 
   @override
-  String get trend => 'Xu hướng';
+  String get trend => 'Biến động cân nặng';
 
   @override
   String get timeframe7D => '7N';
@@ -711,7 +730,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get goalWeightSet => 'Mục tiêu cân nặng đã được đặt';
 
   @override
-  String get goalWeightRemoved => 'Mục tiêu cân nặng đã bị xóa';
+  String get goalWeightRemoved => 'Đã hủy bỏ mục tiêu cân nặng';
 
   @override
   String get goalAchieved => 'Đã đạt được mục tiêu!';
@@ -726,18 +745,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get suggested => 'Đề xuất';
 
   @override
-  String get removeGoal => 'Xóa Mục tiêu';
+  String get removeGoal => 'Hủy bỏ mục tiêu';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Thêm 1 bản ghi nữa để xem xu hướng của bạn';
+      'Thêm một ghi chép nữa để xem biểu đồ biến động';
 
   @override
-  String get noWeightRecorded => 'Chưa có cân nặng được ghi lại';
+  String get noWeightRecorded => 'Chưa có dữ liệu cân nặng';
 
   @override
   String get startTrackingYourWeight =>
-      'Bắt đầu theo dõi cân nặng của bạn để xem tiến trình ở đây';
+      'Ghi lại cân nặng để bắt đầu theo dõi tiến trình tại đây';
 
   @override
   String get treadmillSession => 'Phiên Máy chạy bộ';

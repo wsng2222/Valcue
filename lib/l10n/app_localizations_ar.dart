@@ -357,51 +357,50 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumMembership => 'عضوية بريميوم';
 
   @override
-  String get benefitCycleStairmaster => 'ميزة الدراجة والسلالم';
+  String get benefitCycleStairmaster => 'تمارين الدراجة وجهاز صعود الدرج';
 
   @override
-  String get benefitVoiceGuide => 'ميزة دليل الصوت للجلسة';
+  String get benefitVoiceGuide => 'التوجيه الصوتي لكل جزء من التمرين';
 
   @override
-  String get benefitUnlimitedRoutines => 'حفظ روتين غير محدود';
+  String get benefitUnlimitedRoutines => 'حفظ غير محدود لتمارينك';
 
   @override
   String get noAds => 'بدون إعلانات';
 
   @override
-  String get benefitFutureFeatures => 'وصول غير محدود للميزات المستقبلية';
+  String get benefitFutureFeatures => 'يشمل جميع الميزات المستقبلية';
 
   @override
-  String get voiceGuideBenefit1 => 'إرشاد صوتي أثناء التمرين';
+  String get voiceGuideBenefit1 => 'تدريب توجيهي صوتي أثناء التمرين';
 
   @override
-  String get voiceGuideBenefit2 => 'إعلانات تلقائية لانتقالات الجلسات';
+  String get voiceGuideBenefit2 => 'تنبيه تلقائي عند تغيير مراحل التمرين';
 
   @override
-  String get voiceGuideBenefit3 => 'التركيز على الروتين بدون استخدام اليدين';
+  String get voiceGuideBenefit3 => 'تركيز كامل دون الحاجة لحمل الهاتف';
 
   @override
-  String get routineLimitBenefit1 => 'حفظ روتين غير محدود';
+  String get routineLimitBenefit1 => 'حفظ غير محدود لتمارينك';
 
   @override
-  String get routineLimitBenefit2 => 'حفظ روتين لعدة أهداف';
+  String get routineLimitBenefit2 => 'تمارين مخصصة لمختلف أهدافك';
 
   @override
-  String get routineLimitBenefit3 =>
-      'استخدام جميع أنواع المعدات (الجري/الدراجة/السلالم)';
+  String get routineLimitBenefit3 => 'دعم كامل لأجهزة الجري، الدراجة، والدرج';
 
   @override
-  String get premium_benefit_1 => 'تمارين <red>الدراجة وStairMaster</red>';
+  String get premium_benefit_1 => 'دعم تمارين <red>الدراجة وجهاز الدرج</red>';
 
   @override
-  String get premium_benefit_2 => '<red>إرشاد صوتي</red> أثناء الجلسة';
+  String get premium_benefit_2 => '<red>توجيه صوتي</red> لكل جزء من التمرين';
 
   @override
-  String get premium_benefit_3 => 'حفظ الروتين <red>غير محدود</red>';
+  String get premium_benefit_3 => 'عدد التمارين المحفوظة <red>غير محدود</red>';
 
   @override
   String get premium_benefit_4 =>
-      '<red>وصول غير محدود</red> إلى الميزات القادمة';
+      'يشمل الميزات المستقبلية <red>مدى الحياة</red>';
 
   @override
   String originalPrice(String price) {
@@ -539,114 +538,135 @@ class AppLocalizationsAr extends AppLocalizations {
   String get avgLevel => 'المتوسط المستوى';
 
   @override
-  String get templateTreadmillBeginner1Title => 'بداية سهلة 20';
+  String get templateTreadmillBeginner1Title => 'جهاز الجري للمبتدئين 1';
 
   @override
-  String get templateTreadmillBeginner1Subtitle => 'إحماء 3 دقائق + فترات 1:1';
+  String get templateTreadmillBeginner1Subtitle =>
+      'مشى وجري 1:1 بعد 3 دقائق إحماء';
 
   @override
-  String get templateTreadmillBeginner2Title => 'مشي مائل 25';
+  String get templateTreadmillBeginner2Title =>
+      'جهاز الجري للمبتدئين 2 (الميل)';
 
   @override
-  String get templateTreadmillBeginner2Subtitle => 'كتل مشي مائل';
+  String get templateTreadmillBeginner2Subtitle =>
+      'المشي المائل مع ضغط منخفض على المفاصل';
 
   @override
-  String get templateTreadmillIntermediate1Title => 'كلاسيكي 1:1 24';
+  String get templateTreadmillIntermediate1Title => 'جهاز الجري المتوسط 1';
 
   @override
-  String get templateTreadmillIntermediate1Subtitle => 'فترات كلاسيكية 1:1';
+  String get templateTreadmillIntermediate1Subtitle =>
+      'جري بفترات 1:1 لحرق الدهون';
 
   @override
-  String get templateTreadmillIntermediate2Title => 'سلم السرعة 20';
+  String get templateTreadmillIntermediate2Title =>
+      'جهاز الجري المتوسط 2 (السرعة)';
 
   @override
   String get templateTreadmillIntermediate2Subtitle =>
-      'سلم السرعة (تسارع تدريجيًا)';
+      'تمرين الجري الهرمي لزيادة السرعة';
 
   @override
-  String get templateTreadmillAdvanced1Title => 'حارق 2:1 21';
+  String get templateTreadmillAdvanced1Title => 'جهاز الجري المتقدم 1';
 
   @override
-  String get templateTreadmillAdvanced1Subtitle => 'فترات 2:1 (قوي/خفيف)';
+  String get templateTreadmillAdvanced1Subtitle =>
+      'فترة تمارين كارديو عالية الكثافة';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'اندفاع العدو 18';
+  String get templateTreadmillAdvanced2Title => 'جهاز الجري المتقدم 2 (سبرينت)';
 
   @override
-  String get templateTreadmillAdvanced2Subtitle => 'تكرارات عدو 20 ثانية';
+  String get templateTreadmillAdvanced2Subtitle =>
+      'فترات ركض سريعة وقصيرة عالية الكثافة';
 
   @override
-  String get templateCycleBeginner1Title => 'بناء الكادنس 20';
+  String get templateCycleBeginner1Title => 'الدراجة للمبتدئين 1';
 
   @override
-  String get templateCycleBeginner1Subtitle => 'إحماء 4 دقائق + كادنس 1:1';
+  String get templateCycleBeginner1Subtitle =>
+      'مقدمة عن التبديل عن طريق ضبط الـ RPM';
 
   @override
-  String get templateCycleBeginner2Title => 'قيادة ثابتة 25';
+  String get templateCycleBeginner2Title => 'الدراجة للمبتدئين 2 (مستمر)';
 
   @override
-  String get templateCycleBeginner2Subtitle => 'كتلة ثابتة طويلة';
+  String get templateCycleBeginner2Subtitle => 'تمرين التحمل مع مقاومة ثابتة';
 
   @override
-  String get templateCycleIntermediate1Title => 'سبين 1:1 24';
+  String get templateCycleIntermediate1Title => 'الدراجة المتوسط 1';
 
   @override
-  String get templateCycleIntermediate1Subtitle => 'فترات سبين كلاسيكية 1:1';
+  String get templateCycleIntermediate1Subtitle =>
+      'دقيقة سرعة عالية / دقيقة تمرين خفيف للاستشفاء';
 
   @override
-  String get templateCycleIntermediate2Title => 'محاكاة التلال 22';
+  String get templateCycleIntermediate2Title => 'الدراجة المتوسط 2 (التلة)';
 
   @override
-  String get templateCycleIntermediate2Subtitle => 'تكرارات الصعود';
+  String get templateCycleIntermediate2Subtitle =>
+      'صعود التلال بمقاومة عالية لتقوية عضلات الساق';
 
   @override
-  String get templateCycleAdvanced1Title => 'فترات القوة 20';
+  String get templateCycleAdvanced1Title => 'الدراجة المتقدم 1';
 
   @override
-  String get templateCycleAdvanced1Subtitle => 'اندفاعات قوة لمدة 30 ثانية';
+  String get templateCycleAdvanced1Subtitle =>
+      'فترات تبديل قوية لمدة 30 ثانية بمقاومة عالية';
 
   @override
-  String get templateCycleAdvanced2Title => 'تاباتا ميكس 16';
+  String get templateCycleAdvanced2Title => 'الدراجة المتقدم 2 (تاباتا)';
 
   @override
-  String get templateCycleAdvanced2Subtitle => 'ميكس 20ث/10ث';
+  String get templateCycleAdvanced2Subtitle =>
+      'تمرين تاباتا 20 ثانية / 10 ثوان لحرق الدهون';
 
   @override
-  String get templateStairmasterBeginner1Title => 'خطوات سهلة 20';
+  String get templateStairmasterBeginner1Title => 'جهاز صعود الدرج للمبتدئين 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'إحماء 4 دقائق + خطوات 1:1';
+      'خطوات بطيئة للتعود على الدرج بأمان';
 
   @override
-  String get templateStairmasterBeginner2Title => 'طويل وخفيف 25';
+  String get templateStairmasterBeginner2Title =>
+      'جهاز صعود الدرج للمبتدئين 2 (مستمر)';
 
   @override
-  String get templateStairmasterBeginner2Subtitle => 'كتل طويلة وخفيفة';
+  String get templateStairmasterBeginner2Subtitle =>
+      'صعود الدرج الهوائي بوتيرة ثابتة';
 
   @override
-  String get templateStairmasterIntermediate1Title => 'صعود 2:1 21';
+  String get templateStairmasterIntermediate1Title =>
+      'جهاز صعود الدرج المتوسط 1 (الصعود)';
 
   @override
-  String get templateStairmasterIntermediate1Subtitle => 'تكرارات صعود 2:1';
+  String get templateStairmasterIntermediate1Subtitle =>
+      'دقيقتان صعود / دقيقة استشفاء لعضلات الألوية';
 
   @override
-  String get templateStairmasterIntermediate2Title => 'قوي 1:1 24';
+  String get templateStairmasterIntermediate2Title =>
+      'جهاز صعود الدرج المتوسط 2';
 
   @override
-  String get templateStairmasterIntermediate2Subtitle => 'فترات قوية 1:1';
+  String get templateStairmasterIntermediate2Subtitle =>
+      'فترات تمرين مع تبديل الوتيرة سريعة/بطيئة';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'كتل صعبة 20';
+  String get templateStairmasterAdvanced1Title => 'جهاز صعود الدرج المتقدم 1';
 
   @override
-  String get templateStairmasterAdvanced1Subtitle => 'كتل صعبة لمدة دقيقتين';
+  String get templateStairmasterAdvanced1Subtitle =>
+      'تمرين مكثف بفترات مدتها دقيقتان';
 
   @override
-  String get templateStairmasterAdvanced2Title => 'خطوات سبرينت 18';
+  String get templateStairmasterAdvanced2Title =>
+      'جهاز صعود الدرج المتقدم 2 (سبرينت)';
 
   @override
-  String get templateStairmasterAdvanced2Subtitle => 'سبرينت 30ث + تعافٍ 60ث';
+  String get templateStairmasterAdvanced2Subtitle =>
+      '30 ثانية صعود سريع / 60 ثانية استشفاء';
 
   @override
   String get historyTab => 'السجل';
@@ -664,7 +684,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get thisWeek => 'هذا الأسبوع';
 
   @override
-  String get trend => 'الاتجاه';
+  String get trend => 'مخطط الوزن';
 
   @override
   String get timeframe7D => '7أ';
@@ -703,7 +723,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goalWeightSet => 'تم تعيين الوزن المستهدف';
 
   @override
-  String get goalWeightRemoved => 'تم إزالة الوزن المستهدف';
+  String get goalWeightRemoved => 'تم إلغاء الوزن المستهدف';
 
   @override
   String get goalAchieved => 'تم تحقيق الهدف!';
@@ -718,16 +738,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get suggested => 'مقترح';
 
   @override
-  String get removeGoal => 'إزالة الهدف';
+  String get removeGoal => 'إلغاء الهدف';
 
   @override
-  String get addOneMoreRecordToSeeTrend => 'أضف سجلًا واحدًا آخر لرؤية اتجاهك';
+  String get addOneMoreRecordToSeeTrend =>
+      'أضف سجل وزن إضافي لرؤية مخطط التغيرات';
 
   @override
-  String get noWeightRecorded => 'لم يتم تسجيل الوزن بعد';
+  String get noWeightRecorded => 'لم يتم تسجيل أي وزن بعد';
 
   @override
-  String get startTrackingYourWeight => 'ابدأ في تتبع وزنك لرؤية التقدم هنا';
+  String get startTrackingYourWeight => 'سجل وزنك للبدء في تتبع التغيرات هنا';
 
   @override
   String get treadmillSession => 'جلسة جهاز الجري';
