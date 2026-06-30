@@ -309,13 +309,19 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
           color:
               isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
         ),
-        boxShadow: AppShadows.elevatedSoft,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -354,6 +360,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
       int index, String label, BuildContext context, MachineType machineType) {
     final theme = Theme.of(context);
     final isSelected = _selectedMachineTab == index;
+    final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () {
@@ -364,8 +371,27 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary : Colors.transparent,
+          color: isSelected
+              ? (isDark ? const Color(0xFF2C2C2E) : const Color(0xFFECECEC))
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(999),
+          border: isSelected
+              ? Border.all(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.04)
+                      : Colors.black.withValues(alpha: 0.04),
+                  width: 1.0,
+                )
+              : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
         alignment: Alignment.center,
         child: FittedBox(
@@ -377,8 +403,10 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
             softWrap: false,
             style: TextStyle(
               fontSize: 13.5,
-              fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ),
