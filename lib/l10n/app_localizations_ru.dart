@@ -358,13 +358,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Вело- и степ-тренировки';
+  String get benefitCycleStairmaster =>
+      'Тренировки на велотренажере и степпере';
 
   @override
-  String get benefitVoiceGuide => 'Голосовой гид';
+  String get benefitVoiceGuide => 'Голосовой гид во время тренировки';
 
   @override
-  String get benefitUnlimitedRoutines => 'Безлимитные программы';
+  String get benefitUnlimitedRoutines => 'Неограниченное сохранение программ';
 
   @override
   String get noAds => 'Без Рекламы';
@@ -874,22 +875,23 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Голосовой коуч';
+  String get benefitVoiceCoaching => 'Премиум-система голосового коучинга';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'Вело- и степ-тренировки';
+  String get benefitCycleStairmasterRoutines =>
+      'Полная поддержка всего кардио-оборудования';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Безлимитные программы';
+  String get benefitUnlimitedRoutinesNew => 'Безлимитная библиотека тренировок';
 
   @override
-  String get benefitWeightFeature => 'Учёт веса';
+  String get benefitWeightFeature => 'Умное отслеживание и анализ веса';
 
   @override
-  String get benefitNoAdsFocus => 'Без рекламы';
+  String get benefitNoAdsFocus => 'Премиум-опыт без рекламы';
 
   @override
-  String get benefitFutureFeaturesNew => 'Будущие функции включены';
+  String get benefitFutureFeaturesNew => 'Все будущие премиум-функции включены';
 
   @override
   String get mostChosen => 'Топ-выбор';

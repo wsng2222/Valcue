@@ -354,13 +354,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumMembership => '프리미엄';
 
   @override
-  String get benefitCycleStairmaster => '사이클·계단 운동';
+  String get benefitCycleStairmaster => '사이클 및 천국의 계단 루틴';
 
   @override
-  String get benefitVoiceGuide => '음성 가이드';
+  String get benefitVoiceGuide => '세션별 음성 가이드 안내';
 
   @override
-  String get benefitUnlimitedRoutines => '루틴 무제한';
+  String get benefitUnlimitedRoutines => '루틴 저장 개수 무제한';
 
   @override
   String get noAds => '광고 없음';
@@ -482,7 +482,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => '미리보고 시작';
+  String get checkRoutineStart => '루틴 확인 / 시작';
 
   @override
   String get beginner => '초급';
@@ -839,22 +839,22 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => '음성 코칭';
+  String get benefitVoiceCoaching => '프리미엄 음성 코칭 시스템';
 
   @override
-  String get benefitCycleStairmasterRoutines => '사이클·계단 운동';
+  String get benefitCycleStairmasterRoutines => '모든 유산소 기구 완벽 지원';
 
   @override
-  String get benefitUnlimitedRoutinesNew => '루틴 무제한';
+  String get benefitUnlimitedRoutinesNew => '무제한 루틴 라이브러리';
 
   @override
-  String get benefitWeightFeature => '체중 기록';
+  String get benefitWeightFeature => '스마트 체중 추적 & 분석';
 
   @override
-  String get benefitNoAdsFocus => '광고 없음';
+  String get benefitNoAdsFocus => '광고 없는 프리미엄 경험';
 
   @override
-  String get benefitFutureFeaturesNew => '앞으로 나올 기능 포함';
+  String get benefitFutureFeaturesNew => '추후 프리미엄 기능 전체 포함';
 
   @override
   String get mostChosen => '가장 인기';

@@ -146,9 +146,9 @@
   "later": "後で",
   "premiumActivated": "プレミアムが有効になりました",
   "premiumMembership": "Premium",
-  "benefitCycleStairmaster": "バイク・階段ワークアウト",
-  "benefitVoiceGuide": "音声ガイド",
-  "benefitUnlimitedRoutines": "ルーティン無制限",
+  "benefitCycleStairmaster": "バイク・クライマー（階段登り）ルーティン",
+  "benefitVoiceGuide": "セッションごとの音声ガイド案内",
+  "benefitUnlimitedRoutines": "ルーティンの保存件数無制限",
   "benefitFutureFeatures": "将来追加されるすべての機能を含む",
   "noAds": "広告なし",
   "voiceGuideBenefit1": "運動中の音声コーチング案内",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "音声コーチ",
+  "benefitVoiceCoaching": "プレミアム音声コーチングシステム",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "バイク・階段ワークアウト",
+  "benefitCycleStairmasterRoutines": "すべての有酸素機器に完全対応",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "ルーティン無制限",
+  "benefitUnlimitedRoutinesNew": "無制限ルーティンライブラリ",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "体重管理",
+  "benefitWeightFeature": "スマート体重追跡＆分析",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "広告なし",
+  "benefitNoAdsFocus": "広告なしのプレミアム体験",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "今後の機能も込み",
+  "benefitFutureFeaturesNew": "今後のプレミアム機能すべて含む",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

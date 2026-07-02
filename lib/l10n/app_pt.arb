@@ -146,9 +146,9 @@
   "later": "Mais Tarde",
   "premiumActivated": "Premium foi ativado",
   "premiumMembership": "Premium",
-  "benefitCycleStairmaster": "Treinos de bicicleta e escadas",
-  "benefitVoiceGuide": "Guia por voz",
-  "benefitUnlimitedRoutines": "Rotinas ilimitadas",
+  "benefitCycleStairmaster": "Rotinas de bike e StairMaster",
+  "benefitVoiceGuide": "Guia de voz para cada sessão",
+  "benefitUnlimitedRoutines": "Salvamento ilimitado de rotinas",
   "benefitFutureFeatures": "Acesso a todos os recursos futuros",
   "noAds": "Sem Anúncios",
   "voiceGuideBenefit1": "Treino guiado por voz",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Coaching por voz",
+  "benefitVoiceCoaching": "Sistema de Coaching por Voz Premium",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Treinos de bicicleta e escadas",
+  "benefitCycleStairmasterRoutines": "Suporte Completo para Todos os Equipamentos Cardio",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Rotinas ilimitadas",
+  "benefitUnlimitedRoutinesNew": "Biblioteca de Rotinas Ilimitada",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Registo de peso",
+  "benefitWeightFeature": "Rastreamento e Análise Inteligente de Peso",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Sem anúncios",
+  "benefitNoAdsFocus": "Experiência Premium sem Anúncios",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Futuras funcionalidades incluídas",
+  "benefitFutureFeaturesNew": "Todos os recursos premium futuros incluídos",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

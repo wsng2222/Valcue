@@ -567,6 +567,9 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
+    final layeredSurfaceColor =
+        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
+    final chipSurfaceColor = isDark ? const Color(0xFF3C3C3C) : Colors.white;
     String? pill1Text;
     String? pill2Text;
 
@@ -597,7 +600,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: appColors.surfaceElevated,
+          color: layeredSurfaceColor,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
             color: isDark
@@ -615,7 +618,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
+                    color: chipSurfaceColor,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: BidiSafeText(
@@ -631,10 +634,10 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                 if (pill1Text != null) ...[
                   const SizedBox(width: 6),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
+                      color: chipSurfaceColor,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: BidiSafeText(
@@ -650,10 +653,10 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                 if (pill2Text != null) ...[
                   const SizedBox(width: 6),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
+                      color: chipSurfaceColor,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: BidiSafeText(

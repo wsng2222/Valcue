@@ -358,13 +358,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Bài tập xe đạp và cầu thang';
+  String get benefitCycleStairmaster => 'Bài tập đạp xe & leo cầu thang';
 
   @override
-  String get benefitVoiceGuide => 'Hướng dẫn giọng nói';
+  String get benefitVoiceGuide => 'Hướng dẫn giọng nói theo từng phần';
 
   @override
-  String get benefitUnlimitedRoutines => 'Bài tập không giới hạn';
+  String get benefitUnlimitedRoutines => 'Lưu trữ bài tập không giới hạn';
 
   @override
   String get noAds => 'Không Có Quảng Cáo';
@@ -870,22 +870,25 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Huấn luyện giọng nói';
+  String get benefitVoiceCoaching => 'Hệ Thống Huấn Luyện Giọng Nói Premium';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'Bài tập xe đạp và cầu thang';
+  String get benefitCycleStairmasterRoutines =>
+      'Hỗ Trợ Đầy Đủ Tất Cả Thiết Bị Cardio';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Bài tập không giới hạn';
+  String get benefitUnlimitedRoutinesNew => 'Thư Viện Bài Tập Không Giới Hạn';
 
   @override
-  String get benefitWeightFeature => 'Theo dõi cân nặng';
+  String get benefitWeightFeature =>
+      'Theo Dõi và Phân Tích Cân Nặng Thông Minh';
 
   @override
-  String get benefitNoAdsFocus => 'Không quảng cáo';
+  String get benefitNoAdsFocus => 'Trải Nghiệm Premium Không Quảng Cáo';
 
   @override
-  String get benefitFutureFeaturesNew => 'Bao gồm tính năng sắp tới';
+  String get benefitFutureFeaturesNew =>
+      'Tất cả các tính năng premium tương lai được bao gồm';
 
   @override
   String get mostChosen => 'Được chọn nhiều';

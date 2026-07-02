@@ -146,9 +146,9 @@
   "later": "Để Sau",
   "premiumActivated": "Cao cấp đã được kích hoạt",
   "premiumMembership": "Premium",
-  "benefitCycleStairmaster": "Bài tập xe đạp và cầu thang",
-  "benefitVoiceGuide": "Hướng dẫn giọng nói",
-  "benefitUnlimitedRoutines": "Bài tập không giới hạn",
+  "benefitCycleStairmaster": "Bài tập đạp xe & leo cầu thang",
+  "benefitVoiceGuide": "Hướng dẫn giọng nói theo từng phần",
+  "benefitUnlimitedRoutines": "Lưu trữ bài tập không giới hạn",
   "benefitFutureFeatures": "Bao gồm tất cả tính năng tương lai",
   "noAds": "Không Có Quảng Cáo",
   "voiceGuideBenefit1": "Hướng dẫn bằng giọng nói khi tập",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Huấn luyện giọng nói",
+  "benefitVoiceCoaching": "Hệ Thống Huấn Luyện Giọng Nói Premium",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Bài tập xe đạp và cầu thang",
+  "benefitCycleStairmasterRoutines": "Hỗ Trợ Đầy Đủ Tất Cả Thiết Bị Cardio",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Bài tập không giới hạn",
+  "benefitUnlimitedRoutinesNew": "Thư Viện Bài Tập Không Giới Hạn",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Theo dõi cân nặng",
+  "benefitWeightFeature": "Theo Dõi và Phân Tích Cân Nặng Thông Minh",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Không quảng cáo",
+  "benefitNoAdsFocus": "Trải Nghiệm Premium Không Quảng Cáo",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Bao gồm tính năng sắp tới",
+  "benefitFutureFeaturesNew": "Tất cả các tính năng premium tương lai được bao gồm",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

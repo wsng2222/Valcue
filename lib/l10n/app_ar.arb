@@ -146,9 +146,9 @@
   "later": "لاحقاً",
   "premiumActivated": "تم تفعيل بريميوم",
   "premiumMembership": "بريميوم",
-  "benefitCycleStairmaster": "تمارين الدراجة والدرج",
-  "benefitVoiceGuide": "إرشاد صوتي",
-  "benefitUnlimitedRoutines": "روتينات بلا حد",
+  "benefitCycleStairmaster": "تمارين الدراجة وجهاز صعود الدرج",
+  "benefitVoiceGuide": "التوجيه الصوتي لكل جزء من التمرين",
+  "benefitUnlimitedRoutines": "حفظ غير محدود لتمارينك",
   "benefitFutureFeatures": "يشمل جميع الميزات المستقبلية",
   "noAds": "بدون إعلانات",
   "voiceGuideBenefit1": "تدريب توجيهي صوتي أثناء التمرين",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "تدريب صوتي",
+  "benefitVoiceCoaching": "نظام التدريب الصوتي المتميز",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "تمارين الدراجة والدرج",
+  "benefitCycleStairmasterRoutines": "دعم كامل لجميع أجهزة الكارديو",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "روتينات بلا حد",
+  "benefitUnlimitedRoutinesNew": "مكتبة تمارين غير محدودة",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "تتبع الوزن",
+  "benefitWeightFeature": "تتبع وتحليل ذكي للوزن",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "بدون إعلانات",
+  "benefitNoAdsFocus": "تجربة متميزة بدون إعلانات",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "الميزات القادمة متضمنة",
+  "benefitFutureFeaturesNew": "جميع ميزات Premium المستقبلية متضمنة",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

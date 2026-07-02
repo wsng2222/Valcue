@@ -358,13 +358,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Cykel- og trappetræning';
+  String get benefitCycleStairmaster => 'Rutiner til cykel og StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'Stemmeguide';
+  String get benefitVoiceGuide => 'Stemmeguide til hver session';
 
   @override
-  String get benefitUnlimitedRoutines => 'Ubegrænsede rutiner';
+  String get benefitUnlimitedRoutines => 'Ubegrænset lagring af rutiner';
 
   @override
   String get noAds => 'Ingen annoncer';
@@ -870,22 +870,24 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Stemmecoaching';
+  String get benefitVoiceCoaching => 'Premium Stemmecoaching System';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'Cykel- og trappetræning';
+  String get benefitCycleStairmasterRoutines =>
+      'Fuld Support til Alt Cardio-udstyr';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Ubegrænsede rutiner';
+  String get benefitUnlimitedRoutinesNew => 'Ubegrænset Rutine-bibliotek';
 
   @override
-  String get benefitWeightFeature => 'Vægtsporing';
+  String get benefitWeightFeature => 'Smart Vægtsporing & Analyse';
 
   @override
-  String get benefitNoAdsFocus => 'Ingen reklamer';
+  String get benefitNoAdsFocus => 'Reklamefri Premium Oplevelse';
 
   @override
-  String get benefitFutureFeaturesNew => 'Kommende funktioner inkl.';
+  String get benefitFutureFeaturesNew =>
+      'Alle fremtidige premiumfunktioner inkluderet';
 
   @override
   String get mostChosen => 'Topvalg';

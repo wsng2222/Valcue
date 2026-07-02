@@ -19,6 +19,41 @@ Color _segmentedSelectedBackground(BuildContext context) {
   return isDark ? const Color(0xFF2C2C2E) : Colors.white;
 }
 
+bool _useFlatAndroidLightStyle(BuildContext context) {
+  return !PlatformInfo.isIOS &&
+      Theme.of(context).brightness == Brightness.light;
+}
+
+Color _segmentedTrackBackground(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7);
+}
+
+List<BoxShadow>? _settingsCardShadow(BuildContext context) {
+  if (_useFlatAndroidLightStyle(context)) {
+    return null;
+  }
+  return AppShadows.elevatedSoft;
+}
+
+List<BoxShadow>? _segmentedThumbShadow(
+  BuildContext context, {
+  required double alpha,
+  required double blurRadius,
+  required Offset offset,
+}) {
+  if (_useFlatAndroidLightStyle(context)) {
+    return null;
+  }
+  return [
+    BoxShadow(
+      color: Theme.of(context).colorScheme.shadow.withValues(alpha: alpha),
+      blurRadius: blurRadius,
+      offset: offset,
+    ),
+  ];
+}
+
 SegmentedButtonThemeData _segmentedThemeData(
   BuildContext context,
   Color selectedBackground,
@@ -203,7 +238,7 @@ class SettingsSection extends StatelessWidget {
           color:
               isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
         ),
-        boxShadow: AppShadows.elevatedSoft,
+        boxShadow: _settingsCardShadow(context),
       ),
       child: Column(
         children: children,
@@ -448,6 +483,7 @@ class UnitSegmentRow extends StatelessWidget {
         final textDirection = Directionality.of(context);
         final theme = Theme.of(context);
         final appColors = context.appColors;
+        final trackBackground = _segmentedTrackBackground(context);
 
         final selectedIndex = segmentOptions.indexOf(value);
         final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
@@ -461,8 +497,11 @@ class UnitSegmentRow extends StatelessWidget {
         return Container(
           height: 36,
           decoration: BoxDecoration(
-            color: appColors.surfaceElevated,
+            color: trackBackground,
             borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
+            ),
           ),
           child: Stack(
             children: [
@@ -476,17 +515,14 @@ class UnitSegmentRow extends StatelessWidget {
                 width: segmentWidth,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: theme.brightness == Brightness.light
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(255, 60, 60, 60),
+                    color: _segmentedSelectedBackground(context),
                     borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.colorScheme.shadow.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: _segmentedThumbShadow(
+                      context,
+                      alpha: 0.1,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
                   ),
                 ),
               ),
@@ -600,23 +636,21 @@ class ThemeSegmentRow extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: theme.brightness == Brightness.light
-                        ? Colors.grey.shade50
-                        : const Color(0xFF1C1C1E),
+                    color: _segmentedTrackBackground(context),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: theme.brightness == Brightness.light
-                          ? Colors.grey.shade200
+                          ? theme.colorScheme.outlineVariant
+                              .withValues(alpha: 0.35)
                           : Colors.white.withValues(alpha: 0.1),
                       width: 1,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.colorScheme.shadow.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: _segmentedThumbShadow(
+                      context,
+                      alpha: 0.05,
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
                   ),
                   child: _buildSegmentedControl(
                     context: context,
@@ -690,17 +724,14 @@ class ThemeSegmentRow extends StatelessWidget {
                 width: segmentWidth,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: theme.brightness == Brightness.light
-                        ? Colors.white
-                        : const Color(0xFF2C2C2E),
+                    color: _segmentedSelectedBackground(context),
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.colorScheme.shadow.withValues(alpha: 0.15),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: _segmentedThumbShadow(
+                      context,
+                      alpha: 0.15,
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
                   ),
                 ),
               ),
@@ -1320,7 +1351,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? Colors.white.withValues(alpha: 0.08)
                                   : context.appColors.border,
                             ),
-                            boxShadow: AppShadows.elevatedSoft,
+                            boxShadow: _settingsCardShadow(context),
                           ),
                           child: SettingsRow(
                             icon: Icons.info_outline,

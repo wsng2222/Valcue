@@ -354,13 +354,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'バイク・階段ワークアウト';
+  String get benefitCycleStairmaster => 'バイク・クライマー（階段登り）ルーティン';
 
   @override
-  String get benefitVoiceGuide => '音声ガイド';
+  String get benefitVoiceGuide => 'セッションごとの音声ガイド案内';
 
   @override
-  String get benefitUnlimitedRoutines => 'ルーティン無制限';
+  String get benefitUnlimitedRoutines => 'ルーティンの保存件数無制限';
 
   @override
   String get noAds => '広告なし';
@@ -836,22 +836,22 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => '音声コーチ';
+  String get benefitVoiceCoaching => 'プレミアム音声コーチングシステム';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'バイク・階段ワークアウト';
+  String get benefitCycleStairmasterRoutines => 'すべての有酸素機器に完全対応';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'ルーティン無制限';
+  String get benefitUnlimitedRoutinesNew => '無制限ルーティンライブラリ';
 
   @override
-  String get benefitWeightFeature => '体重管理';
+  String get benefitWeightFeature => 'スマート体重追跡＆分析';
 
   @override
-  String get benefitNoAdsFocus => '広告なし';
+  String get benefitNoAdsFocus => '広告なしのプレミアム体験';
 
   @override
-  String get benefitFutureFeaturesNew => '今後の機能も込み';
+  String get benefitFutureFeaturesNew => '今後のプレミアム機能すべて含む';
 
   @override
   String get mostChosen => '一番人気';

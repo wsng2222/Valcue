@@ -357,13 +357,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumMembership => 'بريميوم';
 
   @override
-  String get benefitCycleStairmaster => 'تمارين الدراجة والدرج';
+  String get benefitCycleStairmaster => 'تمارين الدراجة وجهاز صعود الدرج';
 
   @override
-  String get benefitVoiceGuide => 'إرشاد صوتي';
+  String get benefitVoiceGuide => 'التوجيه الصوتي لكل جزء من التمرين';
 
   @override
-  String get benefitUnlimitedRoutines => 'روتينات بلا حد';
+  String get benefitUnlimitedRoutines => 'حفظ غير محدود لتمارينك';
 
   @override
   String get noAds => 'بدون إعلانات';
@@ -864,22 +864,22 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'تدريب صوتي';
+  String get benefitVoiceCoaching => 'نظام التدريب الصوتي المتميز';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'تمارين الدراجة والدرج';
+  String get benefitCycleStairmasterRoutines => 'دعم كامل لجميع أجهزة الكارديو';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'روتينات بلا حد';
+  String get benefitUnlimitedRoutinesNew => 'مكتبة تمارين غير محدودة';
 
   @override
-  String get benefitWeightFeature => 'تتبع الوزن';
+  String get benefitWeightFeature => 'تتبع وتحليل ذكي للوزن';
 
   @override
-  String get benefitNoAdsFocus => 'بدون إعلانات';
+  String get benefitNoAdsFocus => 'تجربة متميزة بدون إعلانات';
 
   @override
-  String get benefitFutureFeaturesNew => 'الميزات القادمة متضمنة';
+  String get benefitFutureFeaturesNew => 'جميع ميزات Premium المستقبلية متضمنة';
 
   @override
   String get mostChosen => 'الأكثر اختيارًا';

@@ -356,13 +356,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumMembership => 'พรีเมียม';
 
   @override
-  String get benefitCycleStairmaster => 'รูทีนจักรยานและบันได';
+  String get benefitCycleStairmaster => 'รูทีนจักรยานและ StairMaster';
 
   @override
-  String get benefitVoiceGuide => 'ไกด์เสียง';
+  String get benefitVoiceGuide => 'ระบบไกด์เสียงแจ้งเตือนทุกเซสชัน';
 
   @override
-  String get benefitUnlimitedRoutines => 'รูทีนไม่จำกัด';
+  String get benefitUnlimitedRoutines => 'บันทึกรูทีนออกกำลังกายได้ไม่จำกัด';
 
   @override
   String get noAds => 'ไม่มีโฆษณา';
@@ -868,22 +868,23 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'โค้ชเสียง';
+  String get benefitVoiceCoaching => 'ระบบโค้ชเสียงพรีเมียม';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'รูทีนจักรยานและบันได';
+  String get benefitCycleStairmasterRoutines =>
+      'สนับสนุนอุปกรณ์คาร์ดิโอทั้งหมด';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'รูทีนไม่จำกัด';
+  String get benefitUnlimitedRoutinesNew => 'ไลบรารีรูทีนไม่จำกัด';
 
   @override
-  String get benefitWeightFeature => 'ติดตามน้ำหนัก';
+  String get benefitWeightFeature => 'ติดตามและวิเคราะห์น้ำหนักแบบสมาร์ท';
 
   @override
-  String get benefitNoAdsFocus => 'ไม่มีโฆษณา';
+  String get benefitNoAdsFocus => 'ประสบการณ์พรีเมียมไร้โฆษณา';
 
   @override
-  String get benefitFutureFeaturesNew => 'รวมฟีเจอร์ใหม่';
+  String get benefitFutureFeaturesNew => 'รวมฟีเจอร์พรีเมียมในอนาคตทั้งหมด';
 
   @override
   String get mostChosen => 'ยอดนิยม';

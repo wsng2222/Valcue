@@ -801,19 +801,19 @@ abstract class AppLocalizations {
   /// Benefit: Cycle and Stairmaster feature
   ///
   /// In en, this message translates to:
-  /// **'Bike & stair workouts'**
+  /// **'Cycle, Stairmaster feature'**
   String get benefitCycleStairmaster;
 
   /// Benefit: Voice guide feature
   ///
   /// In en, this message translates to:
-  /// **'Voice guides'**
+  /// **'Session voice guide feature'**
   String get benefitVoiceGuide;
 
   /// Benefit: Unlimited routines
   ///
   /// In en, this message translates to:
-  /// **'Unlimited routines'**
+  /// **'Unlimited routine saves'**
   String get benefitUnlimitedRoutines;
 
   /// Benefit: No ads
@@ -1737,37 +1737,37 @@ abstract class AppLocalizations {
   /// Premium benefit: voice coaching
   ///
   /// In en, this message translates to:
-  /// **'Voice coaching'**
+  /// **'Premium Voice Coaching System'**
   String get benefitVoiceCoaching;
 
   /// Premium benefit: cycle and stairmaster routines
   ///
   /// In en, this message translates to:
-  /// **'Bike & stair workouts'**
+  /// **'Full Support for All Cardio Equipment'**
   String get benefitCycleStairmasterRoutines;
 
   /// Premium benefit: unlimited routine storage
   ///
   /// In en, this message translates to:
-  /// **'Unlimited routines'**
+  /// **'Unlimited Routine Library'**
   String get benefitUnlimitedRoutinesNew;
 
   /// Premium benefit: weight feature
   ///
   /// In en, this message translates to:
-  /// **'Weight tracking'**
+  /// **'Smart Weight Tracking & Analysis'**
   String get benefitWeightFeature;
 
   /// Premium benefit: no ads
   ///
   /// In en, this message translates to:
-  /// **'No ads'**
+  /// **'Ad-Free Premium Experience'**
   String get benefitNoAdsFocus;
 
   /// Premium benefit: future features
   ///
   /// In en, this message translates to:
-  /// **'Future features included'**
+  /// **'All future premium features included'**
   String get benefitFutureFeaturesNew;
 
   /// Supporting line above CTA (when annual selected)

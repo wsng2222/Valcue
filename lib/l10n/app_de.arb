@@ -146,9 +146,9 @@
   "later": "Später",
   "premiumActivated": "Premium wurde aktiviert",
   "premiumMembership": "Premium",
-  "benefitCycleStairmaster": "Rad- & Stepper-Workouts",
-  "benefitVoiceGuide": "Sprachansagen",
-  "benefitUnlimitedRoutines": "Unbegrenzte Routinen",
+  "benefitCycleStairmaster": "Routinen für Fahrrad und StairMaster",
+  "benefitVoiceGuide": "Sprachanleitung für jede Session",
+  "benefitUnlimitedRoutines": "Unbegrenztes Speichern von Routinen",
   "benefitFutureFeatures": "Alle zukünftigen Funktionen inklusive",
   "noAds": "Keine Werbung",
   "voiceGuideBenefit1": "Sprachgeführtes Training",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Sprachcoaching",
+  "benefitVoiceCoaching": "Premium-Sprachcoaching-System",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Rad- & Stepper-Workouts",
+  "benefitCycleStairmasterRoutines": "Vollständige Unterstützung für Alle Cardio-Geräte",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Unbegrenzte Routinen",
+  "benefitUnlimitedRoutinesNew": "Unbegrenzte Routinenbibliothek",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Gewichtstracking",
+  "benefitWeightFeature": "Intelligente Gewichtsverfolgung & Analyse",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Ohne Werbung",
+  "benefitNoAdsFocus": "Werbefreies Premium-Erlebnis",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Künftige Premium-Features inkl.",
+  "benefitFutureFeaturesNew": "Alle zukünftigen Premium-Funktionen enthalten",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

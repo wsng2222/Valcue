@@ -468,15 +468,15 @@
   "@premiumMembership": {
     "description": "Premium membership title"
   },
-  "benefitCycleStairmaster": "Bike & stair workouts",
+  "benefitCycleStairmaster": "Cycle, Stairmaster feature",
   "@benefitCycleStairmaster": {
     "description": "Benefit: Cycle and Stairmaster feature"
   },
-  "benefitVoiceGuide": "Voice guides",
+  "benefitVoiceGuide": "Session voice guide feature",
   "@benefitVoiceGuide": {
     "description": "Benefit: Voice guide feature"
   },
-  "benefitUnlimitedRoutines": "Unlimited routines",
+  "benefitUnlimitedRoutines": "Unlimited routine saves",
   "@benefitUnlimitedRoutines": {
     "description": "Benefit: Unlimited routines"
   },
@@ -989,27 +989,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Voice coaching",
+  "benefitVoiceCoaching": "Premium Voice Coaching System",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Bike & stair workouts",
+  "benefitCycleStairmasterRoutines": "Full Support for All Cardio Equipment",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Unlimited routines",
+  "benefitUnlimitedRoutinesNew": "Unlimited Routine Library",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Weight tracking",
+  "benefitWeightFeature": "Smart Weight Tracking & Analysis",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "No ads",
+  "benefitNoAdsFocus": "Ad-Free Premium Experience",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Future features included",
+  "benefitFutureFeaturesNew": "All future premium features included",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

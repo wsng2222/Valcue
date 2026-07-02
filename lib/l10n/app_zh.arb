@@ -146,9 +146,9 @@
   "later": "稍后",
   "premiumActivated": "高级版已激活",
   "premiumMembership": "高级版",
-  "benefitCycleStairmaster": "单车与爬楼训练",
-  "benefitVoiceGuide": "语音指导",
-  "benefitUnlimitedRoutines": "训练不限量",
+  "benefitCycleStairmaster": "动感单车及爬楼机运动",
+  "benefitVoiceGuide": "分段语音指导引导",
+  "benefitUnlimitedRoutines": "例程保存数量无限制",
   "benefitFutureFeatures": "包含未来增加的所有功能",
   "noAds": "无广告",
   "voiceGuideBenefit1": "运动中的语音教练指导",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "语音教练",
+  "benefitVoiceCoaching": "高级语音指导系统",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "单车与爬楼训练",
+  "benefitCycleStairmasterRoutines": "全面支持所有有氧器械",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "训练不限量",
+  "benefitUnlimitedRoutinesNew": "无限训练库",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "体重追踪",
+  "benefitWeightFeature": "智能体重追踪与分析",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "无广告",
+  "benefitNoAdsFocus": "无广告高级体验",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "未来功能全包含",
+  "benefitFutureFeaturesNew": "包含所有未来高级功能",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

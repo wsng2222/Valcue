@@ -146,9 +146,9 @@
   "later": "Позже",
   "premiumActivated": "Премиум был активирован",
   "premiumMembership": "Premium",
-  "benefitCycleStairmaster": "Вело- и степ-тренировки",
-  "benefitVoiceGuide": "Голосовой гид",
-  "benefitUnlimitedRoutines": "Безлимитные программы",
+  "benefitCycleStairmaster": "Тренировки на велотренажере и степпере",
+  "benefitVoiceGuide": "Голосовой гид во время тренировки",
+  "benefitUnlimitedRoutines": "Неограниченное сохранение программ",
   "benefitFutureFeatures": "Доступ ко всем будущим функциям",
   "noAds": "Без Рекламы",
   "voiceGuideBenefit1": "Голосовой помощник во время бега",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Голосовой коуч",
+  "benefitVoiceCoaching": "Премиум-система голосового коучинга",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Вело- и степ-тренировки",
+  "benefitCycleStairmasterRoutines": "Полная поддержка всего кардио-оборудования",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Безлимитные программы",
+  "benefitUnlimitedRoutinesNew": "Безлимитная библиотека тренировок",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Учёт веса",
+  "benefitWeightFeature": "Умное отслеживание и анализ веса",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Без рекламы",
+  "benefitNoAdsFocus": "Премиум-опыт без рекламы",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Будущие функции включены",
+  "benefitFutureFeaturesNew": "Все будущие премиум-функции включены",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },

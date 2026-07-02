@@ -353,13 +353,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumMembership => '高级版';
 
   @override
-  String get benefitCycleStairmaster => '单车与爬楼训练';
+  String get benefitCycleStairmaster => '动感单车及爬楼机运动';
 
   @override
-  String get benefitVoiceGuide => '语音指导';
+  String get benefitVoiceGuide => '分段语音指导引导';
 
   @override
-  String get benefitUnlimitedRoutines => '训练不限量';
+  String get benefitUnlimitedRoutines => '例程保存数量无限制';
 
   @override
   String get noAds => '无广告';
@@ -835,22 +835,22 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => '语音教练';
+  String get benefitVoiceCoaching => '高级语音指导系统';
 
   @override
-  String get benefitCycleStairmasterRoutines => '单车与爬楼训练';
+  String get benefitCycleStairmasterRoutines => '全面支持所有有氧器械';
 
   @override
-  String get benefitUnlimitedRoutinesNew => '训练不限量';
+  String get benefitUnlimitedRoutinesNew => '无限训练库';
 
   @override
-  String get benefitWeightFeature => '体重追踪';
+  String get benefitWeightFeature => '智能体重追踪与分析';
 
   @override
-  String get benefitNoAdsFocus => '无广告';
+  String get benefitNoAdsFocus => '无广告高级体验';
 
   @override
-  String get benefitFutureFeaturesNew => '未来功能全包含';
+  String get benefitFutureFeaturesNew => '包含所有未来高级功能';
 
   @override
   String get mostChosen => '最常选';

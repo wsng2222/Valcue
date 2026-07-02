@@ -692,6 +692,9 @@ class _RoutineDetailSheetContentState
 
     final theme = Theme.of(context);
     final appColors = context.appColors;
+    final layeredSurfaceColor = theme.brightness == Brightness.dark
+        ? appColors.surfaceElevated
+        : const Color(0xFFF2F2F7);
     return Container(
       constraints: BoxConstraints(maxHeight: maxHeight),
       decoration: BoxDecoration(
@@ -880,7 +883,7 @@ class _RoutineDetailSheetContentState
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: appColors.surfaceElevated,
+                              color: layeredSurfaceColor,
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(
                                 color: theme.brightness == Brightness.dark
@@ -908,7 +911,7 @@ class _RoutineDetailSheetContentState
                             vertical: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: appColors.surfaceElevated,
+                            color: layeredSurfaceColor,
                             borderRadius: BorderRadius.circular(999),
                             border: Border.all(
                               color: theme.brightness == Brightness.dark
@@ -1397,17 +1400,16 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       // Fallback if localization not available
       switch (widget.machineType) {
         case MachineType.treadmill:
-          return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'} Grade';
+          return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}%';
         case MachineType.cycle:
           return 'Level ${widget.interval.resistance ?? 0}';
         case MachineType.stairmaster:
           return ''; // SPM removed
       }
     }
-    final localizations = l10n;
     switch (widget.machineType) {
       case MachineType.treadmill:
-        return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}% ${localizations.incline}';
+        return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}%';
       case MachineType.cycle:
         return 'Level ${widget.interval.resistance ?? 0}';
       case MachineType.stairmaster:
@@ -2062,7 +2064,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       // Fallback if localization not available
       switch (widget.machineType) {
         case MachineType.treadmill:
-          return ' Grade';
+          return '%';
         case MachineType.cycle:
           return '';
         case MachineType.stairmaster:
@@ -2071,13 +2073,28 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
     }
     switch (widget.machineType) {
       case MachineType.treadmill:
-        // Use localized incline text
-        return '% ${l10n.incline}';
+        return '%';
       case MachineType.cycle:
         return '';
       case MachineType.stairmaster:
         return ''; // SPM removed
     }
+  }
+
+  String _getEditableField1Text() {
+    final value = widget.machineType == MachineType.treadmill
+        ? _speedKmh.toStringAsFixed(1)
+        : widget.machineType == MachineType.cycle
+            ? _rpm.toString()
+            : _level.toString();
+    return '${_getField1Prefix()}$value${_getField1Suffix()}';
+  }
+
+  String _getEditableField2Text() {
+    final value = widget.machineType == MachineType.treadmill
+        ? _grade.toStringAsFixed(1)
+        : _resistance.toString();
+    return '${_getField2Prefix()}$value${_getField2Suffix()}';
   }
 
   String _getField1Prefix() {
@@ -2131,6 +2148,51 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final isDark = theme.brightness == Brightness.dark;
+    final layeredSurfaceColor =
+        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
+    final chipSurfaceColor = isDark ? const Color(0xFF3C3C3C) : Colors.white;
+    final chipTextStyle = TextStyle(
+      fontSize: 14 * ResponsiveUtils.getFontScale(context),
+      fontWeight: FontWeight.w500,
+      color: theme.colorScheme.onSurface,
+    );
+
+    Widget buildChipLabel(String text) {
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          text,
+          maxLines: 1,
+          softWrap: false,
+          style: chipTextStyle,
+        ),
+      );
+    }
+
+    Widget buildChipContainer({
+      required Widget child,
+      VoidCallback? onTap,
+    }) {
+      final chip = Container(
+        width: double.infinity,
+        padding: ResponsiveUtils.getChipPadding(context),
+        decoration: BoxDecoration(
+          color: chipSurfaceColor,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(child: child),
+      );
+
+      if (onTap == null) {
+        return chip;
+      }
+
+      return GestureDetector(
+        onTap: onTap,
+        child: chip,
+      );
+    }
+
     // Build chips for VIEW and EDIT modes
     Widget durationChip;
     Widget field1Chip;
@@ -2138,32 +2200,14 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
 
     if (widget.isEditing) {
       // EDIT mode: tappable chips that open pickers
-      durationChip = GestureDetector(
+      durationChip = buildChipContainer(
         onTap: () => _showDurationPicker(context),
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
-          padding: ResponsiveUtils.getChipPadding(context),
-          decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF3C3C3C)
-                : Colors.white,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Center(
-            child: Text(
-              '${_durationMinutes.toString().padLeft(2, '0')}:${_durationSeconds.toString().padLeft(2, '0')}',
-              style: TextStyle(
-                fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ),
+        child: buildChipLabel(
+          '${_durationMinutes.toString().padLeft(2, '0')}:${_durationSeconds.toString().padLeft(2, '0')}',
         ),
       );
 
-      field1Chip = GestureDetector(
+      field1Chip = buildChipContainer(
         onTap: () {
           if (widget.machineType == MachineType.treadmill) {
             _showSpeedPicker(context);
@@ -2173,60 +2217,12 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
             _showLevelPicker(context);
           }
         },
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
-          padding: ResponsiveUtils.getChipPadding(context),
-          decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF3C3C3C)
-                : Colors.white,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_getField1Prefix().isNotEmpty)
-                  Text(
-                    _getField1Prefix(),
-                    style: TextStyle(
-                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                Text(
-                  widget.machineType == MachineType.treadmill
-                      ? _speedKmh.toStringAsFixed(1)
-                      : widget.machineType == MachineType.cycle
-                          ? _rpm.toString()
-                          : _level.toString(),
-                  style: TextStyle(
-                    fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                if (_getField1Suffix().isNotEmpty)
-                  Text(
-                    _getField1Suffix(),
-                    style: TextStyle(
-                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
+        child: buildChipLabel(_getEditableField1Text()),
       );
 
       // Field2 chip - only for Treadmill and Cycle (SPM removed for Stairmaster)
       if (widget.machineType != MachineType.stairmaster) {
-        field2Chip = GestureDetector(
+        field2Chip = buildChipContainer(
           onTap: () {
             if (widget.machineType == MachineType.treadmill) {
               _showGradePicker(context);
@@ -2234,124 +2230,24 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
               _showResistancePicker(context);
             }
           },
-          child: Container(
-            constraints: BoxConstraints(
-                minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
-            padding: ResponsiveUtils.getChipPadding(context),
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF3C3C3C)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_getField2Prefix().isNotEmpty)
-                    Text(
-                      _getField2Prefix(),
-                      style: TextStyle(
-                        fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  Text(
-                    widget.machineType == MachineType.treadmill
-                        ? _grade.toStringAsFixed(1)
-                        : _resistance.toString(),
-                    style: TextStyle(
-                      fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  if (_getField2Suffix().isNotEmpty)
-                    Text(
-                      _getField2Suffix(),
-                      style: TextStyle(
-                        fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
+          child: buildChipLabel(_getEditableField2Text()),
         );
       } else {
         field2Chip = null; // SPM removed for Stairmaster
       }
     } else {
       // VIEW mode: read-only chips
-      durationChip = Container(
-        constraints: BoxConstraints(
-            minWidth: ResponsiveUtils.getChipDurationMinWidth(context)),
-        padding: ResponsiveUtils.getChipPadding(context),
-        decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF3C3C3C)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Center(
-          child: Text(
-            widget.interval.durationFormatted,
-            style: TextStyle(
-              fontSize: 14 * ResponsiveUtils.getFontScale(context),
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-        ),
+      durationChip = buildChipContainer(
+        child: buildChipLabel(widget.interval.durationFormatted),
       );
 
-      field1Chip = Container(
-        constraints: BoxConstraints(
-            minWidth: ResponsiveUtils.getChipField1MinWidth(context)),
-        padding: ResponsiveUtils.getChipPadding(context),
-        decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF3C3C3C)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Center(
-          child: Text(
-            _getPill1Text(),
-            style: TextStyle(
-              fontSize: 14 * ResponsiveUtils.getFontScale(context),
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-        ),
+      field1Chip = buildChipContainer(
+        child: buildChipLabel(_getPill1Text()),
       );
 
       if (widget.machineType != MachineType.stairmaster) {
-        field2Chip = Container(
-          constraints: BoxConstraints(
-              minWidth: ResponsiveUtils.getChipField2MinWidth(context)),
-          padding: ResponsiveUtils.getChipPadding(context),
-          decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF3C3C3C)
-                : Colors.white,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Center(
-            child: Text(
-              _getPill2Text(),
-              style: TextStyle(
-                fontSize: 14 * ResponsiveUtils.getFontScale(context),
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ),
+        field2Chip = buildChipContainer(
+          child: buildChipLabel(_getPill2Text()),
         );
       } else {
         field2Chip = null; // SPM removed for Stairmaster
@@ -2359,14 +2255,13 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
     }
 
     final chipRow = Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        durationChip,
+        Expanded(flex: field2Chip != null ? 30 : 36, child: durationChip),
         const SizedBox(width: 6),
-        field1Chip,
+        Expanded(flex: 35, child: field1Chip),
         if (field2Chip != null) ...[
           const SizedBox(width: 6),
-          field2Chip,
+          Expanded(flex: 35, child: field2Chip),
         ],
       ],
     );
@@ -2377,7 +2272,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
         width: double.infinity,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: appColors.surfaceElevated,
+          color: layeredSurfaceColor,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
             color: isDark
@@ -2388,17 +2283,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
         child: Row(
           children: [
             Expanded(
-              child: widget.onDelete != null
-                  ? SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: chipRow,
-                    )
-                  : Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: chipRow,
-                      ),
-                    ),
+              child: chipRow,
             ),
             if (widget.onDelete != null) ...[
               const SizedBox(width: 10),
