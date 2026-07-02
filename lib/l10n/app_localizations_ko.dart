@@ -127,6 +127,24 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addInterval => '인터벌 추가';
 
   @override
+  String get quickTools => '빠른 작업';
+
+  @override
+  String get addDefault => '기본 추가';
+
+  @override
+  String get duplicateLast => '마지막 복제';
+
+  @override
+  String get repeatPattern => '패턴 반복';
+
+  @override
+  String get patternLength => '패턴 길이';
+
+  @override
+  String get repeatCount => '추가 횟수';
+
+  @override
   String get noIntervals => '인터벌이 없습니다';
 
   @override

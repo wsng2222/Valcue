@@ -128,6 +128,24 @@ class AppLocalizationsDa extends AppLocalizations {
   String get addInterval => 'Tilføj interval';
 
   @override
+  String get quickTools => 'Hurtige værktøjer';
+
+  @override
+  String get addDefault => 'Tilføj standard';
+
+  @override
+  String get duplicateLast => 'Kopiér sidste';
+
+  @override
+  String get repeatPattern => 'Gentag mønster';
+
+  @override
+  String get patternLength => 'Mønsterlængde';
+
+  @override
+  String get repeatCount => 'Antal kopier';
+
+  @override
   String get noIntervals => 'Ingen intervaller';
 
   @override

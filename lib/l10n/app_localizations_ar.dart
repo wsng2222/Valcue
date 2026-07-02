@@ -127,6 +127,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addInterval => 'إضافة فترة';
 
   @override
+  String get quickTools => 'أدوات سريعة';
+
+  @override
+  String get addDefault => 'إضافة أساسية';
+
+  @override
+  String get duplicateLast => 'نسخ الأخير';
+
+  @override
+  String get repeatPattern => 'تكرار النمط';
+
+  @override
+  String get patternLength => 'طول النمط';
+
+  @override
+  String get repeatCount => 'عدد التكرار';
+
+  @override
   String get noIntervals => 'لا توجد فترات';
 
   @override

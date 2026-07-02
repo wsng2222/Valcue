@@ -162,6 +162,30 @@
   "@addInterval": {
     "description": "Add interval button"
   },
+  "quickTools": "Quick Tools",
+  "@quickTools": {
+    "description": "Quick routine editing actions label"
+  },
+  "addDefault": "Add Default",
+  "@addDefault": {
+    "description": "Add a default interval"
+  },
+  "duplicateLast": "Copy Last",
+  "@duplicateLast": {
+    "description": "Duplicate the last interval"
+  },
+  "repeatPattern": "Repeat Pattern",
+  "@repeatPattern": {
+    "description": "Repeat the last interval pattern"
+  },
+  "patternLength": "Pattern Size",
+  "@patternLength": {
+    "description": "Pattern length picker label"
+  },
+  "repeatCount": "Copies",
+  "@repeatCount": {
+    "description": "Repeat count picker label"
+  },
   "noIntervals": "No intervals",
   "@noIntervals": {
     "description": "No intervals message"

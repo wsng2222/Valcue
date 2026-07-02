@@ -128,6 +128,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addInterval => 'Добавить интервал';
 
   @override
+  String get quickTools => 'Быстрые действия';
+
+  @override
+  String get addDefault => 'Добавить базовый';
+
+  @override
+  String get duplicateLast => 'Копировать последний';
+
+  @override
+  String get repeatPattern => 'Повторить шаблон';
+
+  @override
+  String get patternLength => 'Длина шаблона';
+
+  @override
+  String get repeatCount => 'Повторы';
+
+  @override
   String get noIntervals => 'Нет интервалов';
 
   @override

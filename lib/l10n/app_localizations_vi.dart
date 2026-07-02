@@ -128,6 +128,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get addInterval => 'Thêm Khoảng thời gian';
 
   @override
+  String get quickTools => 'Tác vụ nhanh';
+
+  @override
+  String get addDefault => 'Thêm mặc định';
+
+  @override
+  String get duplicateLast => 'Sao chép cuối';
+
+  @override
+  String get repeatPattern => 'Lặp mẫu';
+
+  @override
+  String get patternLength => 'Độ dài mẫu';
+
+  @override
+  String get repeatCount => 'Số lần lặp';
+
+  @override
   String get noIntervals => 'Không có khoảng thời gian';
 
   @override

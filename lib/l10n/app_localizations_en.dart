@@ -128,6 +128,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addInterval => 'Add Interval';
 
   @override
+  String get quickTools => 'Quick Tools';
+
+  @override
+  String get addDefault => 'Add Default';
+
+  @override
+  String get duplicateLast => 'Copy Last';
+
+  @override
+  String get repeatPattern => 'Repeat Pattern';
+
+  @override
+  String get patternLength => 'Pattern Size';
+
+  @override
+  String get repeatCount => 'Copies';
+
+  @override
   String get noIntervals => 'No intervals';
 
   @override

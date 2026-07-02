@@ -128,6 +128,24 @@ class AppLocalizationsNb extends AppLocalizations {
   String get addInterval => 'Legg til intervall';
 
   @override
+  String get quickTools => 'Hurtigverktøy';
+
+  @override
+  String get addDefault => 'Legg til standard';
+
+  @override
+  String get duplicateLast => 'Kopier siste';
+
+  @override
+  String get repeatPattern => 'Gjenta mønster';
+
+  @override
+  String get patternLength => 'Mønsterlengde';
+
+  @override
+  String get repeatCount => 'Antall kopier';
+
+  @override
   String get noIntervals => 'Ingen intervaller';
 
   @override

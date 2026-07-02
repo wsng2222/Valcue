@@ -354,6 +354,42 @@ abstract class AppLocalizations {
   /// **'Add Interval'**
   String get addInterval;
 
+  /// Quick routine editing actions label
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Tools'**
+  String get quickTools;
+
+  /// Add a default interval
+  ///
+  /// In en, this message translates to:
+  /// **'Add Default'**
+  String get addDefault;
+
+  /// Duplicate the last interval
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Last'**
+  String get duplicateLast;
+
+  /// Repeat the last interval pattern
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat Pattern'**
+  String get repeatPattern;
+
+  /// Pattern length picker label
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern Size'**
+  String get patternLength;
+
+  /// Repeat count picker label
+  ///
+  /// In en, this message translates to:
+  /// **'Copies'**
+  String get repeatCount;
+
   /// No intervals message
   ///
   /// In en, this message translates to:

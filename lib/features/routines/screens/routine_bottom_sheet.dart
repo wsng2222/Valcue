@@ -319,40 +319,256 @@ class _RoutineDetailSheetContentState
     );
   }
 
+  String _generateIntervalId([int seed = 0]) {
+    return '${DateTime.now().millisecondsSinceEpoch}_${_intervals.length}_${seed}_${DateTime.now().microsecondsSinceEpoch}';
+  }
+
+  Interval _buildDefaultInterval({String? id}) {
+    switch (_machineType) {
+      case MachineType.treadmill:
+        return Interval.treadmill(
+          id: id,
+          durationSeconds: 300,
+          speedKmh: 5.0,
+          grade: 0.0,
+        );
+      case MachineType.cycle:
+        return Interval.cycle(
+          id: id,
+          durationSeconds: 300,
+          rpm: 60,
+          resistance: 5,
+        );
+      case MachineType.stairmaster:
+        return Interval.stairmaster(
+          id: id,
+          durationSeconds: 300,
+          level: 5,
+        );
+    }
+  }
+
+  Interval _cloneIntervalWithNewId(Interval interval, {int seed = 0}) {
+    return interval.copyWith(id: _generateIntervalId(seed));
+  }
+
   void _addInterval() {
     setState(() {
-      // Generate unique ID using timestamp + random to avoid duplicates
-      final uniqueId =
-          '${DateTime.now().millisecondsSinceEpoch}_${_intervals.length}_${DateTime.now().microsecondsSinceEpoch}';
-
-      switch (_machineType) {
-        case MachineType.treadmill:
-          _intervals.add(Interval.treadmill(
-            id: uniqueId,
-            durationSeconds: 300, // 5 minutes (valid default >= 1)
-            speedKmh: 5.0, // Valid default > 0
-            grade: 0.0, // Valid default >= 0
-          ));
-          break;
-        case MachineType.cycle:
-          _intervals.add(Interval.cycle(
-            id: uniqueId,
-            durationSeconds: 300, // 5 minutes
-            rpm: 60,
-            resistance: 5,
-          ));
-          break;
-        case MachineType.stairmaster:
-          _intervals.add(Interval.stairmaster(
-            id: uniqueId,
-            durationSeconds: 300, // 5 minutes
-            level: 5,
-          ));
-          break;
-      }
+      _intervals.add(_buildDefaultInterval(id: _generateIntervalId()));
     });
     // DRIFT GUARD: Log after adding interval
     _logIntervalSnapshot('ADD_INTERVAL', _intervals);
+  }
+
+  void _duplicateLastInterval() {
+    setState(() {
+      final source =
+          _intervals.isEmpty ? _buildDefaultInterval() : _intervals.last;
+      _intervals.add(_cloneIntervalWithNewId(source));
+    });
+    _logIntervalSnapshot('DUPLICATE_LAST_INTERVAL', _intervals);
+  }
+
+  void _duplicateIntervalBelow(String intervalId) {
+    setState(() {
+      final index =
+          _intervals.indexWhere((interval) => interval.id == intervalId);
+      if (index < 0) return;
+      final clone = _cloneIntervalWithNewId(_intervals[index], seed: index + 1);
+      _intervals.insert(index + 1, clone);
+    });
+    _logIntervalSnapshot('DUPLICATE_INTERVAL_BELOW', _intervals);
+  }
+
+  void _repeatTailPattern({
+    required int patternLength,
+    required int repeatCount,
+  }) {
+    if (_intervals.isEmpty || patternLength < 1 || repeatCount < 1) {
+      return;
+    }
+
+    final safePatternLength = patternLength.clamp(1, _intervals.length);
+    final pattern = List<Interval>.from(
+      _intervals.sublist(_intervals.length - safePatternLength),
+    );
+
+    setState(() {
+      for (int copyIndex = 0; copyIndex < repeatCount; copyIndex++) {
+        for (int itemIndex = 0; itemIndex < pattern.length; itemIndex++) {
+          final seed = (copyIndex * 100) + itemIndex;
+          _intervals.add(
+            _cloneIntervalWithNewId(pattern[itemIndex], seed: seed),
+          );
+        }
+      }
+    });
+
+    _logIntervalSnapshot('REPEAT_TAIL_PATTERN', _intervals);
+  }
+
+  void _showRepeatPatternPicker() {
+    if (_intervals.isEmpty) {
+      _addInterval();
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    final maxPatternLength = _intervals.length.clamp(1, 6);
+    final patternLengths =
+        List<int>.generate(maxPatternLength, (index) => index + 1);
+    final repeatCounts = List<int>.generate(10, (index) => index + 1);
+
+    int tempPatternLength = patternLengths.length >= 2 ? 2 : 1;
+    int tempRepeatCount = 3;
+    final initialPatternIndex = patternLengths.indexOf(tempPatternLength);
+    final initialRepeatIndex = repeatCounts.indexOf(tempRepeatCount);
+
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Container(
+        height: 320,
+        padding: const EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text(
+                      l10n.cancel,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    l10n.repeatPattern,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  CupertinoButton(
+                    child: Text(
+                      l10n.done,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _repeatTailPattern(
+                        patternLength: tempPatternLength,
+                        repeatCount: tempRepeatCount,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.patternLength,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        l10n.repeatCount,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                          initialItem: initialPatternIndex >= 0
+                              ? initialPatternIndex
+                              : 0,
+                        ),
+                        itemExtent: 40,
+                        onSelectedItemChanged: (index) {
+                          tempPatternLength = patternLengths[index];
+                        },
+                        children: patternLengths.map((length) {
+                          return Center(
+                            child: Text(
+                              length.toString(),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Expanded(
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                          initialItem:
+                              initialRepeatIndex >= 0 ? initialRepeatIndex : 0,
+                        ),
+                        itemExtent: 40,
+                        onSelectedItemChanged: (index) {
+                          tempRepeatCount = repeatCounts[index];
+                        },
+                        children: repeatCounts.map((count) {
+                          return Center(
+                            child: Text(
+                              count.toString(),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _deleteInterval(String intervalId) {
@@ -933,6 +1149,10 @@ class _RoutineDetailSheetContentState
                           ),
                         ),
                   const SizedBox(height: 24),
+                  if (_isEditing) ...[
+                    _buildQuickToolsCard(),
+                    const SizedBox(height: 16),
+                  ],
                   // Interval rows
                   if (_intervals.isEmpty && _isEditing)
                     Padding(
@@ -1095,7 +1315,109 @@ class _RoutineDetailSheetContentState
         isEditing: _isEditing,
         onUpdate: (updatedInterval) =>
             _updateIntervalById(interval.id, updatedInterval),
+        onDuplicate:
+            _isEditing ? () => _duplicateIntervalBelow(interval.id) : null,
         onDelete: _isEditing ? () => _deleteInterval(interval.id) : null,
+      ),
+    );
+  }
+
+  Widget _buildQuickActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final isDark = theme.brightness == Brightness.dark;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF3C3C3C) : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : appColors.border,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: theme.colorScheme.primary),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickToolsCard() {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+    final l10n = AppLocalizations.of(context)!;
+    final isDark = theme.brightness == Brightness.dark;
+    final layeredSurfaceColor =
+        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: layeredSurfaceColor,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color:
+              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.quickTools,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.82),
+              letterSpacing: -0.2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildQuickActionButton(
+                icon: Icons.add_circle_outline,
+                label: l10n.addDefault,
+                onTap: _addInterval,
+              ),
+              _buildQuickActionButton(
+                icon: Icons.content_copy_outlined,
+                label: l10n.duplicateLast,
+                onTap: _duplicateLastInterval,
+              ),
+              _buildQuickActionButton(
+                icon: Icons.repeat,
+                label: l10n.repeatPattern,
+                onTap: _showRepeatPatternPicker,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -1239,6 +1561,7 @@ class _EditableIntervalRow extends StatefulWidget {
   final AppSettingsProvider settingsProvider;
   final bool isEditing;
   final Function(Interval) onUpdate;
+  final VoidCallback? onDuplicate;
   final VoidCallback? onDelete;
 
   const _EditableIntervalRow({
@@ -1248,6 +1571,7 @@ class _EditableIntervalRow extends StatefulWidget {
     required this.settingsProvider,
     required this.isEditing,
     required this.onUpdate,
+    this.onDuplicate,
     this.onDelete,
   });
 
@@ -2285,7 +2609,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
             Expanded(
               child: chipRow,
             ),
-            if (widget.onDelete != null) ...[
+            if (widget.onDuplicate != null || widget.onDelete != null) ...[
               const SizedBox(width: 10),
               Container(
                 width: 1,
@@ -2294,18 +2618,31 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
                     ? Colors.white.withValues(alpha: 0.08)
                     : appColors.border,
               ),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: widget.onDelete,
-                child: Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: Icon(
-                    Icons.delete_outline,
-                    color: theme.colorScheme.error,
-                    size: 22,
+              const SizedBox(width: 2),
+              if (widget.onDuplicate != null)
+                GestureDetector(
+                  onTap: widget.onDuplicate,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.content_copy_outlined,
+                      color: theme.colorScheme.primary,
+                      size: 20,
+                    ),
                   ),
                 ),
-              ),
+              if (widget.onDelete != null)
+                GestureDetector(
+                  onTap: widget.onDelete,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.delete_outline,
+                      color: theme.colorScheme.error,
+                      size: 22,
+                    ),
+                  ),
+                ),
             ],
           ],
         ),

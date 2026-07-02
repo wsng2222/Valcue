@@ -128,6 +128,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get addInterval => 'Intervall Hinzufügen';
 
   @override
+  String get quickTools => 'Schnellaktionen';
+
+  @override
+  String get addDefault => 'Standard hinzu';
+
+  @override
+  String get duplicateLast => 'Letzte kopieren';
+
+  @override
+  String get repeatPattern => 'Muster wiederholen';
+
+  @override
+  String get patternLength => 'Musterlänge';
+
+  @override
+  String get repeatCount => 'Wiederholungen';
+
+  @override
   String get noIntervals => 'Keine Intervalle';
 
   @override

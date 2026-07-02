@@ -127,6 +127,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get addInterval => 'เพิ่มอินเทอร์วัล';
 
   @override
+  String get quickTools => 'เครื่องมือด่วน';
+
+  @override
+  String get addDefault => 'เพิ่มค่าเริ่มต้น';
+
+  @override
+  String get duplicateLast => 'คัดลอกอันล่าสุด';
+
+  @override
+  String get repeatPattern => 'ทำซ้ำแพทเทิร์น';
+
+  @override
+  String get patternLength => 'ความยาวแพทเทิร์น';
+
+  @override
+  String get repeatCount => 'จำนวนรอบ';
+
+  @override
   String get noIntervals => 'ไม่มีอินเทอร์วัล';
 
   @override

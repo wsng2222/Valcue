@@ -128,6 +128,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addInterval => 'Adicionar Intervalo';
 
   @override
+  String get quickTools => 'Ações rápidas';
+
+  @override
+  String get addDefault => 'Adicionar base';
+
+  @override
+  String get duplicateLast => 'Duplicar última';
+
+  @override
+  String get repeatPattern => 'Repetir padrão';
+
+  @override
+  String get patternLength => 'Tamanho do padrão';
+
+  @override
+  String get repeatCount => 'Repetições';
+
+  @override
   String get noIntervals => 'Sem intervalos';
 
   @override

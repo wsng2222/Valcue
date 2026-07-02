@@ -128,6 +128,24 @@ class AppLocalizationsNl extends AppLocalizations {
   String get addInterval => 'Interval toevoegen';
 
   @override
+  String get quickTools => 'Snelle acties';
+
+  @override
+  String get addDefault => 'Standaard toe';
+
+  @override
+  String get duplicateLast => 'Laatste kopiëren';
+
+  @override
+  String get repeatPattern => 'Patroon herhalen';
+
+  @override
+  String get patternLength => 'Patroonlengte';
+
+  @override
+  String get repeatCount => 'Herhalingen';
+
+  @override
   String get noIntervals => 'Geen intervallen';
 
   @override

@@ -127,6 +127,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addInterval => '添加间隔';
 
   @override
+  String get quickTools => '快捷操作';
+
+  @override
+  String get addDefault => '添加默认';
+
+  @override
+  String get duplicateLast => '复制最后';
+
+  @override
+  String get repeatPattern => '重复模式';
+
+  @override
+  String get patternLength => '模式长度';
+
+  @override
+  String get repeatCount => '重复次数';
+
+  @override
   String get noIntervals => '没有间隔';
 
   @override

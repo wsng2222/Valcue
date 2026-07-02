@@ -127,6 +127,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addInterval => 'インターバルを追加';
 
   @override
+  String get quickTools => 'クイック操作';
+
+  @override
+  String get addDefault => '基本追加';
+
+  @override
+  String get duplicateLast => '最後を複製';
+
+  @override
+  String get repeatPattern => 'パターン反復';
+
+  @override
+  String get patternLength => 'パターン長';
+
+  @override
+  String get repeatCount => '追加回数';
+
+  @override
   String get noIntervals => 'インターバルがありません';
 
   @override

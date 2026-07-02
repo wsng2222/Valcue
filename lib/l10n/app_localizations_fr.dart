@@ -128,6 +128,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addInterval => 'Ajouter un Intervalle';
 
   @override
+  String get quickTools => 'Actions rapides';
+
+  @override
+  String get addDefault => 'Ajouter base';
+
+  @override
+  String get duplicateLast => 'Copier la dernière';
+
+  @override
+  String get repeatPattern => 'Répéter le motif';
+
+  @override
+  String get patternLength => 'Longueur du motif';
+
+  @override
+  String get repeatCount => 'Répétitions';
+
+  @override
   String get noIntervals => 'Aucun intervalle';
 
   @override
