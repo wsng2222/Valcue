@@ -30,7 +30,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get soundEffects => '사운드 효과';
 
   @override
-  String get unitSetting => '단위 설정';
+  String get unitSetting => '단위';
 
   @override
   String get kmh => 'km/h';
@@ -39,7 +39,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => '화면 모드 설정';
+  String get themeMode => '화면 모드';
 
   @override
   String get light => '라이트';
@@ -239,13 +239,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumRoutineSettings => '프리미엄 루틴 설정';
 
   @override
-  String get viewMembership => '멤버십 보기';
+  String get viewMembership => '프리미엄 보기';
 
   @override
-  String get freeLimitTitle => '무료는 루틴 2개까지';
+  String get freeLimitTitle => '무료 루틴 2개';
 
   @override
-  String get freeLimitMessage => '멤버십으로 무제한 루틴을 사용할 수 있어요';
+  String get freeLimitMessage => '프리미엄으로 루틴을 무제한 사용하세요';
 
   @override
   String get treadmill => '러닝머신';
@@ -257,7 +257,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get stairmaster => '천국의 계단';
 
   @override
-  String get selectLanguage => '언어 선택';
+  String get selectLanguage => '언어';
 
   @override
   String get selectTheme => '테마 선택';
@@ -351,16 +351,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumActivated => '프리미엄이 활성화되었습니다';
 
   @override
-  String get premiumMembership => '프리미엄 멤버십';
+  String get premiumMembership => '프리미엄';
 
   @override
-  String get benefitCycleStairmaster => '사이클 및 천국의 계단 루틴';
+  String get benefitCycleStairmaster => '사이클·계단 운동';
 
   @override
-  String get benefitVoiceGuide => '세션별 음성 가이드 안내';
+  String get benefitVoiceGuide => '음성 가이드';
 
   @override
-  String get benefitUnlimitedRoutines => '루틴 저장 개수 무제한';
+  String get benefitUnlimitedRoutines => '루틴 무제한';
 
   @override
   String get noAds => '광고 없음';
@@ -444,7 +444,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cancelAnytime => '언제든지 취소 가능';
 
   @override
-  String get autoRenewableSubscription => '자동 갱신 구독';
+  String get autoRenewableSubscription => '자동 갱신';
 
   @override
   String get terms => '약관';
@@ -471,10 +471,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get close => '닫기';
 
   @override
-  String get premiumFeature => '프리미엄 기능입니다';
+  String get premiumFeature => '프리미엄 전용';
 
   @override
-  String get usePremiumTest => '프리미엄 사용하기(테스트)';
+  String get usePremiumTest => '프리미엄 테스트';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -482,7 +482,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => '루틴 확인 / 시작';
+  String get checkRoutineStart => '미리보고 시작';
 
   @override
   String get beginner => '초급';
@@ -494,16 +494,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get advanced => '고급';
 
   @override
-  String get viewRecommendedRoutines => '추천 루틴 →';
+  String get viewRecommendedRoutines => '추천 →';
 
   @override
-  String get recommendedRoutinesTreadmill => '러닝머신 추천 루틴';
+  String get recommendedRoutinesTreadmill => '추천 러닝';
 
   @override
-  String get recommendedRoutinesCycle => '사이클 추천 루틴';
+  String get recommendedRoutinesCycle => '추천 사이클';
 
   @override
-  String get recommendedRoutinesStairmaster => '천국의 계단 추천 루틴';
+  String get recommendedRoutinesStairmaster => '추천 계단';
 
   @override
   String get alreadySaved => '이미 저장되었습니다';
@@ -512,7 +512,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get routineSaved => '루틴이 저장되었습니다';
 
   @override
-  String get checkRoutine => '확인';
+  String get checkRoutine => '미리보기';
 
   @override
   String get saveRoutine => '루틴 저장';
@@ -692,7 +692,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recordWeight => '체중 기록';
 
   @override
-  String get quickAdjust => '빠른 조절';
+  String get quickAdjust => '빠른 수정';
 
   @override
   String get goalWeightSet => '목표 체중이 설정되었습니다';
@@ -713,16 +713,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get suggested => '추천';
 
   @override
-  String get removeGoal => '목표 해제';
+  String get removeGoal => '목표 삭제';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '추이를 보려면 기록을 1개 더 추가하세요';
+  String get addOneMoreRecordToSeeTrend => '기록 1개만 더 추가하면 추이를 볼 수 있어요';
 
   @override
   String get noWeightRecorded => '아직 기록된 체중이 없습니다';
 
   @override
-  String get startTrackingYourWeight => '체중을 기록하고 변화 추이를 확인해 보세요';
+  String get startTrackingYourWeight => '체중을 기록해 변화를 확인하세요';
 
   @override
   String get treadmillSession => '러닝머신 세션';
@@ -743,7 +743,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get stairmasterWorkout => '천국의 계단 운동';
 
   @override
-  String get startAWorkoutToSeeItHere => '운동을 시작하면 여기에 표시됩니다';
+  String get startAWorkoutToSeeItHere => '운동 기록이 여기에 표시돼요';
 
   @override
   String get mon => '월';
@@ -839,34 +839,34 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => '프리미엄 음성 코칭 시스템';
+  String get benefitVoiceCoaching => '음성 코칭';
 
   @override
-  String get benefitCycleStairmasterRoutines => '모든 유산소 기구 완벽 지원';
+  String get benefitCycleStairmasterRoutines => '사이클·계단 운동';
 
   @override
-  String get benefitUnlimitedRoutinesNew => '무제한 루틴 라이브러리';
+  String get benefitUnlimitedRoutinesNew => '루틴 무제한';
 
   @override
-  String get benefitWeightFeature => '스마트 체중 추적 & 분석';
+  String get benefitWeightFeature => '체중 기록';
 
   @override
-  String get benefitNoAdsFocus => '광고 없는 프리미엄 경험';
+  String get benefitNoAdsFocus => '광고 없음';
 
   @override
-  String get benefitFutureFeaturesNew => '추후 프리미엄 기능 전체 포함';
+  String get benefitFutureFeaturesNew => '앞으로 나올 기능 포함';
 
   @override
-  String get mostChosen => '가장 많이 선택됨';
+  String get mostChosen => '가장 인기';
 
   @override
-  String get canChangeAnytime => '언제든지 변경 가능';
+  String get canChangeAnytime => '언제든 변경';
 
   @override
-  String get startPremium => '프리미엄 시작하기';
+  String get startPremium => '프리미엄 시작';
 
   @override
-  String get cancelAnytimeKeepAccess => '결제 후 바로 해지해도 기간 끝까지 이용 가능';
+  String get cancelAnytimeKeepAccess => '언제든 해지, 기간 끝까지 이용';
 
   @override
   String workoutDays(int count) {

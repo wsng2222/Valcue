@@ -28,7 +28,7 @@
   "@soundEffects": {
     "description": "Sound effects setting label"
   },
-  "unitSetting": "Unit Setting",
+  "unitSetting": "Units",
   "@unitSetting": {
     "description": "Unit setting label"
   },
@@ -40,7 +40,7 @@
   "@mph": {
     "description": "Miles per hour unit"
   },
-  "themeMode": "Light/Dark Mode",
+  "themeMode": "Appearance",
   "@themeMode": {
     "description": "Theme mode setting label"
   },
@@ -316,15 +316,15 @@
   "@premiumRoutineSettings": {
     "description": "Premium routine settings label"
   },
-  "viewMembership": "View Membership",
+  "viewMembership": "See Premium",
   "@viewMembership": {
     "description": "View membership button"
   },
-  "freeLimitTitle": "Free limit is 2 routines",
+  "freeLimitTitle": "2 free routines",
   "@freeLimitTitle": {
     "description": "Free limit dialog title"
   },
-  "freeLimitMessage": "You can use unlimited routines with membership",
+  "freeLimitMessage": "Go Premium for unlimited routines",
   "@freeLimitMessage": {
     "description": "Free limit dialog message"
   },
@@ -340,7 +340,7 @@
   "@stairmaster": {
     "description": "Stairmaster machine type"
   },
-  "selectLanguage": "Select Language",
+  "selectLanguage": "Languages",
   "@selectLanguage": {
     "description": "Language selection dialog title"
   },
@@ -464,19 +464,19 @@
   "@premiumActivated": {
     "description": "Premium activated message"
   },
-  "premiumMembership": "Premium Membership",
+  "premiumMembership": "Premium",
   "@premiumMembership": {
     "description": "Premium membership title"
   },
-  "benefitCycleStairmaster": "Cycle, Stairmaster feature",
+  "benefitCycleStairmaster": "Bike & stair workouts",
   "@benefitCycleStairmaster": {
     "description": "Benefit: Cycle and Stairmaster feature"
   },
-  "benefitVoiceGuide": "Session voice guide feature",
+  "benefitVoiceGuide": "Voice guides",
   "@benefitVoiceGuide": {
     "description": "Benefit: Voice guide feature"
   },
-  "benefitUnlimitedRoutines": "Unlimited routine saves",
+  "benefitUnlimitedRoutines": "Unlimited routines",
   "@benefitUnlimitedRoutines": {
     "description": "Benefit: Unlimited routines"
   },
@@ -595,7 +595,7 @@
   "@cancelAnytime": {
     "description": "Cancel anytime trust line"
   },
-  "autoRenewableSubscription": "Auto-renewable subscription",
+  "autoRenewableSubscription": "Auto-renews",
   "@autoRenewableSubscription": {
     "description": "Auto-renewable subscription trust line"
   },
@@ -631,11 +631,11 @@
   "@close": {
     "description": "Close button"
   },
-  "premiumFeature": "Premium Feature",
+  "premiumFeature": "Premium only",
   "@premiumFeature": {
     "description": "Premium feature label"
   },
-  "usePremiumTest": "Use Premium (Test)",
+  "usePremiumTest": "Test Premium",
   "@usePremiumTest": {
     "description": "Use premium test button"
   },
@@ -660,20 +660,20 @@
       }
     }
   },
-  "checkRoutineStart": "Check Routine / Start",
+  "checkRoutineStart": "Preview & Start",
   "@checkRoutineStart": {
     "description": "Button text to check routine and start"
   },
   "beginner": "Beginner",
   "intermediate": "Intermediate",
   "advanced": "Advanced",
-  "viewRecommendedRoutines": "Recommended →",
-  "recommendedRoutinesTreadmill": "Recommended Treadmill Routines",
-  "recommendedRoutinesCycle": "Recommended Bike Routines",
-  "recommendedRoutinesStairmaster": "Recommended Stairmaster Routines",
+  "viewRecommendedRoutines": "Picks →",
+  "recommendedRoutinesTreadmill": "Treadmill picks",
+  "recommendedRoutinesCycle": "Bike picks",
+  "recommendedRoutinesStairmaster": "Stairmaster picks",
   "alreadySaved": "Already saved",
   "routineSaved": "Routine saved",
-  "checkRoutine": "Check",
+  "checkRoutine": "Preview",
   "saveRoutine": "Save Routine",
   "routineAlreadySaved": "Routine already saved",
   "noTemplatesFound": "No templates found",
@@ -776,11 +776,11 @@
   "@editWeight": {
     "description": "Edit weight title"
   },
-  "recordWeight": "Record weight",
+  "recordWeight": "Log weight",
   "@recordWeight": {
     "description": "Record weight title"
   },
-  "quickAdjust": "Quick adjust",
+  "quickAdjust": "Quick edit",
   "@quickAdjust": {
     "description": "Quick adjust label"
   },
@@ -800,7 +800,7 @@
   "@goalMatchesCurrentWeight": {
     "description": "Goal matches current weight message"
   },
-  "setGoal": "Set goal",
+  "setGoal": "Set target",
   "@setGoal": {
     "description": "Set goal title"
   },
@@ -808,11 +808,11 @@
   "@suggested": {
     "description": "Suggested label"
   },
-  "removeGoal": "Remove Goal",
+  "removeGoal": "Clear target",
   "@removeGoal": {
     "description": "Remove goal button"
   },
-  "addOneMoreRecordToSeeTrend": "Add 1 more record to see your trend",
+  "addOneMoreRecordToSeeTrend": "Add 1 more weigh-in to see trends",
   "@addOneMoreRecordToSeeTrend": {
     "description": "Add one more record to see trend message"
   },
@@ -820,7 +820,7 @@
   "@noWeightRecorded": {
     "description": "No weight recorded yet message"
   },
-  "startTrackingYourWeight": "Start tracking your weight to see progress here",
+  "startTrackingYourWeight": "Log weight to track progress",
   "@startTrackingYourWeight": {
     "description": "Start tracking your weight message"
   },
@@ -848,7 +848,7 @@
   "@stairmasterWorkout": {
     "description": "Stairmaster workout label"
   },
-  "startAWorkoutToSeeItHere": "Start a workout to see it here",
+  "startAWorkoutToSeeItHere": "Your workouts will appear here",
   "@startAWorkoutToSeeItHere": {
     "description": "Start a workout to see it here message"
   },
@@ -989,43 +989,43 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Premium Voice Coaching System",
+  "benefitVoiceCoaching": "Voice coaching",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Full Support for All Cardio Equipment",
+  "benefitCycleStairmasterRoutines": "Bike & stair workouts",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Unlimited Routine Library",
+  "benefitUnlimitedRoutinesNew": "Unlimited routines",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Smart Weight Tracking & Analysis",
+  "benefitWeightFeature": "Weight tracking",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Ad-Free Premium Experience",
+  "benefitNoAdsFocus": "No ads",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "All future premium features included",
+  "benefitFutureFeaturesNew": "Future features included",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },
-  "mostChosen": "Most chosen",
+  "mostChosen": "Top pick",
   "@mostChosen": {
     "description": "Supporting line above CTA (when annual selected)"
   },
-  "canChangeAnytime": "Can change anytime",
+  "canChangeAnytime": "Change anytime",
   "@canChangeAnytime": {
     "description": "Supporting line above CTA (when monthly selected)"
   },
-  "startPremium": "Start Premium",
+  "startPremium": "Go Premium",
   "@startPremium": {
     "description": "Premium purchase button text"
   },
-  "cancelAnytimeKeepAccess": "Cancel anytime and keep access until period ends",
+  "cancelAnytimeKeepAccess": "Cancel anytime, keep access",
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
@@ -1047,7 +1047,7 @@
       }
     }
   },
-  "workoutReminderTitle": "Workout reminder",
+  "workoutReminderTitle": "Reminders",
   "workoutReminderOff": "Off",
   "workoutReminderEveryDay": "Every day",
   "workoutReminderSelectTime": "Select time",

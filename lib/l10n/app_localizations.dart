@@ -171,7 +171,7 @@ abstract class AppLocalizations {
   /// Unit setting label
   ///
   /// In en, this message translates to:
-  /// **'Unit Setting'**
+  /// **'Units'**
   String get unitSetting;
 
   /// Kilometers per hour unit
@@ -189,7 +189,7 @@ abstract class AppLocalizations {
   /// Theme mode setting label
   ///
   /// In en, this message translates to:
-  /// **'Light/Dark Mode'**
+  /// **'Appearance'**
   String get themeMode;
 
   /// Light theme
@@ -573,19 +573,19 @@ abstract class AppLocalizations {
   /// View membership button
   ///
   /// In en, this message translates to:
-  /// **'View Membership'**
+  /// **'See Premium'**
   String get viewMembership;
 
   /// Free limit dialog title
   ///
   /// In en, this message translates to:
-  /// **'Free limit is 2 routines'**
+  /// **'2 free routines'**
   String get freeLimitTitle;
 
   /// Free limit dialog message
   ///
   /// In en, this message translates to:
-  /// **'You can use unlimited routines with membership'**
+  /// **'Go Premium for unlimited routines'**
   String get freeLimitMessage;
 
   /// Treadmill machine type
@@ -609,7 +609,7 @@ abstract class AppLocalizations {
   /// Language selection dialog title
   ///
   /// In en, this message translates to:
-  /// **'Select Language'**
+  /// **'Languages'**
   String get selectLanguage;
 
   /// Theme selection dialog title
@@ -795,25 +795,25 @@ abstract class AppLocalizations {
   /// Premium membership title
   ///
   /// In en, this message translates to:
-  /// **'Premium Membership'**
+  /// **'Premium'**
   String get premiumMembership;
 
   /// Benefit: Cycle and Stairmaster feature
   ///
   /// In en, this message translates to:
-  /// **'Cycle, Stairmaster feature'**
+  /// **'Bike & stair workouts'**
   String get benefitCycleStairmaster;
 
   /// Benefit: Voice guide feature
   ///
   /// In en, this message translates to:
-  /// **'Session voice guide feature'**
+  /// **'Voice guides'**
   String get benefitVoiceGuide;
 
   /// Benefit: Unlimited routines
   ///
   /// In en, this message translates to:
-  /// **'Unlimited routine saves'**
+  /// **'Unlimited routines'**
   String get benefitUnlimitedRoutines;
 
   /// Benefit: No ads
@@ -969,7 +969,7 @@ abstract class AppLocalizations {
   /// Auto-renewable subscription trust line
   ///
   /// In en, this message translates to:
-  /// **'Auto-renewable subscription'**
+  /// **'Auto-renews'**
   String get autoRenewableSubscription;
 
   /// Terms link
@@ -1023,13 +1023,13 @@ abstract class AppLocalizations {
   /// Premium feature label
   ///
   /// In en, this message translates to:
-  /// **'Premium Feature'**
+  /// **'Premium only'**
   String get premiumFeature;
 
   /// Use premium test button
   ///
   /// In en, this message translates to:
-  /// **'Use Premium (Test)'**
+  /// **'Test Premium'**
   String get usePremiumTest;
 
   /// Date time format
@@ -1041,7 +1041,7 @@ abstract class AppLocalizations {
   /// Button text to check routine and start
   ///
   /// In en, this message translates to:
-  /// **'Check Routine / Start'**
+  /// **'Preview & Start'**
   String get checkRoutineStart;
 
   /// No description provided for @beginner.
@@ -1065,25 +1065,25 @@ abstract class AppLocalizations {
   /// No description provided for @viewRecommendedRoutines.
   ///
   /// In en, this message translates to:
-  /// **'Recommended →'**
+  /// **'Picks →'**
   String get viewRecommendedRoutines;
 
   /// No description provided for @recommendedRoutinesTreadmill.
   ///
   /// In en, this message translates to:
-  /// **'Recommended Treadmill Routines'**
+  /// **'Treadmill picks'**
   String get recommendedRoutinesTreadmill;
 
   /// No description provided for @recommendedRoutinesCycle.
   ///
   /// In en, this message translates to:
-  /// **'Recommended Bike Routines'**
+  /// **'Bike picks'**
   String get recommendedRoutinesCycle;
 
   /// No description provided for @recommendedRoutinesStairmaster.
   ///
   /// In en, this message translates to:
-  /// **'Recommended Stairmaster Routines'**
+  /// **'Stairmaster picks'**
   String get recommendedRoutinesStairmaster;
 
   /// No description provided for @alreadySaved.
@@ -1101,7 +1101,7 @@ abstract class AppLocalizations {
   /// No description provided for @checkRoutine.
   ///
   /// In en, this message translates to:
-  /// **'Check'**
+  /// **'Preview'**
   String get checkRoutine;
 
   /// No description provided for @saveRoutine.
@@ -1449,13 +1449,13 @@ abstract class AppLocalizations {
   /// Record weight title
   ///
   /// In en, this message translates to:
-  /// **'Record weight'**
+  /// **'Log weight'**
   String get recordWeight;
 
   /// Quick adjust label
   ///
   /// In en, this message translates to:
-  /// **'Quick adjust'**
+  /// **'Quick edit'**
   String get quickAdjust;
 
   /// Goal weight set message
@@ -1485,7 +1485,7 @@ abstract class AppLocalizations {
   /// Set goal title
   ///
   /// In en, this message translates to:
-  /// **'Set goal'**
+  /// **'Set target'**
   String get setGoal;
 
   /// Suggested label
@@ -1497,13 +1497,13 @@ abstract class AppLocalizations {
   /// Remove goal button
   ///
   /// In en, this message translates to:
-  /// **'Remove Goal'**
+  /// **'Clear target'**
   String get removeGoal;
 
   /// Add one more record to see trend message
   ///
   /// In en, this message translates to:
-  /// **'Add 1 more record to see your trend'**
+  /// **'Add 1 more weigh-in to see trends'**
   String get addOneMoreRecordToSeeTrend;
 
   /// No weight recorded yet message
@@ -1515,7 +1515,7 @@ abstract class AppLocalizations {
   /// Start tracking your weight message
   ///
   /// In en, this message translates to:
-  /// **'Start tracking your weight to see progress here'**
+  /// **'Log weight to track progress'**
   String get startTrackingYourWeight;
 
   /// Treadmill session label
@@ -1557,7 +1557,7 @@ abstract class AppLocalizations {
   /// Start a workout to see it here message
   ///
   /// In en, this message translates to:
-  /// **'Start a workout to see it here'**
+  /// **'Your workouts will appear here'**
   String get startAWorkoutToSeeItHere;
 
   /// Monday abbreviation
@@ -1737,61 +1737,61 @@ abstract class AppLocalizations {
   /// Premium benefit: voice coaching
   ///
   /// In en, this message translates to:
-  /// **'Premium Voice Coaching System'**
+  /// **'Voice coaching'**
   String get benefitVoiceCoaching;
 
   /// Premium benefit: cycle and stairmaster routines
   ///
   /// In en, this message translates to:
-  /// **'Full Support for All Cardio Equipment'**
+  /// **'Bike & stair workouts'**
   String get benefitCycleStairmasterRoutines;
 
   /// Premium benefit: unlimited routine storage
   ///
   /// In en, this message translates to:
-  /// **'Unlimited Routine Library'**
+  /// **'Unlimited routines'**
   String get benefitUnlimitedRoutinesNew;
 
   /// Premium benefit: weight feature
   ///
   /// In en, this message translates to:
-  /// **'Smart Weight Tracking & Analysis'**
+  /// **'Weight tracking'**
   String get benefitWeightFeature;
 
   /// Premium benefit: no ads
   ///
   /// In en, this message translates to:
-  /// **'Ad-Free Premium Experience'**
+  /// **'No ads'**
   String get benefitNoAdsFocus;
 
   /// Premium benefit: future features
   ///
   /// In en, this message translates to:
-  /// **'All future premium features included'**
+  /// **'Future features included'**
   String get benefitFutureFeaturesNew;
 
   /// Supporting line above CTA (when annual selected)
   ///
   /// In en, this message translates to:
-  /// **'Most chosen'**
+  /// **'Top pick'**
   String get mostChosen;
 
   /// Supporting line above CTA (when monthly selected)
   ///
   /// In en, this message translates to:
-  /// **'Can change anytime'**
+  /// **'Change anytime'**
   String get canChangeAnytime;
 
   /// Premium purchase button text
   ///
   /// In en, this message translates to:
-  /// **'Start Premium'**
+  /// **'Go Premium'**
   String get startPremium;
 
   /// Cancellation trust copy
   ///
   /// In en, this message translates to:
-  /// **'Cancel anytime and keep access until period ends'**
+  /// **'Cancel anytime, keep access'**
   String get cancelAnytimeKeepAccess;
 
   /// Workout days count in calendar statistics
@@ -1809,7 +1809,7 @@ abstract class AppLocalizations {
   /// No description provided for @workoutReminderTitle.
   ///
   /// In en, this message translates to:
-  /// **'Workout reminder'**
+  /// **'Reminders'**
   String get workoutReminderTitle;
 
   /// No description provided for @workoutReminderOff.

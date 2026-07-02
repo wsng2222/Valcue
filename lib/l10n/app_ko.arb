@@ -7,10 +7,10 @@
   "voiceGuide": "음성 가이드",
   "audioNavigator": "오디오 네비게이터",
   "soundEffects": "사운드 효과",
-  "unitSetting": "단위 설정",
+  "unitSetting": "단위",
   "kmh": "km/h",
   "mph": "mph",
-  "themeMode": "화면 모드 설정",
+  "themeMode": "화면 모드",
   "light": "라이트",
   "dark": "다크",
   "smartwatchSync": "스마트워치 Sync",
@@ -102,13 +102,13 @@
   "tapToCreate": "화면을 터치해 생성하기",
   "tapButtonToCreate": "버튼을 터치해 생성하기",
   "premiumRoutineSettings": "프리미엄 루틴 설정",
-  "viewMembership": "멤버십 보기",
-  "freeLimitTitle": "무료는 루틴 2개까지",
-  "freeLimitMessage": "멤버십으로 무제한 루틴을 사용할 수 있어요",
+  "viewMembership": "프리미엄 보기",
+  "freeLimitTitle": "무료 루틴 2개",
+  "freeLimitMessage": "프리미엄으로 루틴을 무제한 사용하세요",
   "treadmill": "러닝머신",
   "cycle": "사이클",
   "stairmaster": "천국의 계단",
-  "selectLanguage": "언어 선택",
+  "selectLanguage": "언어",
   "selectTheme": "테마 선택",
   "selectDifficulty": "난이도 선택",
   "pause": "일시중지",
@@ -145,10 +145,10 @@
   "purchase": "구매하기",
   "later": "나중에",
   "premiumActivated": "프리미엄이 활성화되었습니다",
-  "premiumMembership": "프리미엄 멤버십",
-  "benefitCycleStairmaster": "사이클 및 천국의 계단 루틴",
-  "benefitVoiceGuide": "세션별 음성 가이드 안내",
-  "benefitUnlimitedRoutines": "루틴 저장 개수 무제한",
+  "premiumMembership": "프리미엄",
+  "benefitCycleStairmaster": "사이클·계단 운동",
+  "benefitVoiceGuide": "음성 가이드",
+  "benefitUnlimitedRoutines": "루틴 무제한",
   "benefitFutureFeatures": "향후 추가되는 모든 기능 포함",
   "noAds": "광고 없음",
   "routineLimitBenefit1": "루틴 저장 개수 무제한",
@@ -226,7 +226,7 @@
   "@cancelAnytime": {
     "description": "언제든지 취소 가능 신뢰 문구"
   },
-  "autoRenewableSubscription": "자동 갱신 구독",
+  "autoRenewableSubscription": "자동 갱신",
   "@autoRenewableSubscription": {
     "description": "자동 갱신 구독 신뢰 문구"
   },
@@ -247,8 +247,8 @@
   "settingsTab": "설정",
   "myTab": "나",
   "close": "닫기",
-  "premiumFeature": "프리미엄 기능입니다",
-  "usePremiumTest": "프리미엄 사용하기(테스트)",
+  "premiumFeature": "프리미엄 전용",
+  "usePremiumTest": "프리미엄 테스트",
   "dateTimeFormat": "{year}년 {month}월 {day}일 {hour}시 {minute}분",
   "@dateTimeFormat": {
     "placeholders": {
@@ -269,17 +269,17 @@
       }
     }
   },
-  "checkRoutineStart": "루틴 확인 / 시작",
+  "checkRoutineStart": "미리보고 시작",
   "beginner": "초급",
   "intermediate": "중급",
   "advanced": "고급",
-  "viewRecommendedRoutines": "추천 루틴 →",
-  "recommendedRoutinesTreadmill": "러닝머신 추천 루틴",
-  "recommendedRoutinesCycle": "사이클 추천 루틴",
-  "recommendedRoutinesStairmaster": "천국의 계단 추천 루틴",
+  "viewRecommendedRoutines": "추천 →",
+  "recommendedRoutinesTreadmill": "추천 러닝",
+  "recommendedRoutinesCycle": "추천 사이클",
+  "recommendedRoutinesStairmaster": "추천 계단",
   "alreadySaved": "이미 저장되었습니다",
   "routineSaved": "루틴이 저장되었습니다",
-  "checkRoutine": "확인",
+  "checkRoutine": "미리보기",
   "saveRoutine": "루틴 저장",
   "routineAlreadySaved": "이미 저장된 루틴입니다",
   "noTemplatesFound": "템플릿을 찾을 수 없습니다",
@@ -335,24 +335,24 @@
   "weightUpdated": "체중이 업데이트되었습니다",
   "editWeight": "체중 수정",
   "recordWeight": "체중 기록",
-  "quickAdjust": "빠른 조절",
+  "quickAdjust": "빠른 수정",
   "goalWeightSet": "목표 체중이 설정되었습니다",
   "goalWeightRemoved": "목표 체중이 해제되었습니다",
   "goalAchieved": "목표 달성!",
   "goalMatchesCurrentWeight": "목표가 현재 체중과 일치합니다",
   "setGoal": "목표 설정",
   "suggested": "추천",
-  "removeGoal": "목표 해제",
-  "addOneMoreRecordToSeeTrend": "추이를 보려면 기록을 1개 더 추가하세요",
+  "removeGoal": "목표 삭제",
+  "addOneMoreRecordToSeeTrend": "기록 1개만 더 추가하면 추이를 볼 수 있어요",
   "noWeightRecorded": "아직 기록된 체중이 없습니다",
-  "startTrackingYourWeight": "체중을 기록하고 변화 추이를 확인해 보세요",
+  "startTrackingYourWeight": "체중을 기록해 변화를 확인하세요",
   "treadmillSession": "러닝머신 세션",
   "bikeSession": "사이클 세션",
   "stairmasterSession": "천국의 계단 세션",
   "treadmillWorkout": "러닝머신 운동",
   "bikeWorkout": "사이클 운동",
   "stairmasterWorkout": "천국의 계단 운동",
-  "startAWorkoutToSeeItHere": "운동을 시작하면 여기에 표시됩니다",
+  "startAWorkoutToSeeItHere": "운동 기록이 여기에 표시돼요",
   "mon": "월",
   "tue": "화",
   "wed": "수",
@@ -422,43 +422,43 @@
       }
     }
   },
-  "benefitVoiceCoaching": "프리미엄 음성 코칭 시스템",
+  "benefitVoiceCoaching": "음성 코칭",
   "@benefitVoiceCoaching": {
     "description": "프리미엄 혜택: 음성 코칭"
   },
-  "benefitCycleStairmasterRoutines": "모든 유산소 기구 완벽 지원",
+  "benefitCycleStairmasterRoutines": "사이클·계단 운동",
   "@benefitCycleStairmasterRoutines": {
     "description": "프리미엄 혜택: 사이클 및 천국의 계단 루틴"
   },
-  "benefitUnlimitedRoutinesNew": "무제한 루틴 라이브러리",
+  "benefitUnlimitedRoutinesNew": "루틴 무제한",
   "@benefitUnlimitedRoutinesNew": {
     "description": "프리미엄 혜택: 무제한 루틴 저장"
   },
-  "benefitWeightFeature": "스마트 체중 추적 & 분석",
+  "benefitWeightFeature": "체중 기록",
   "@benefitWeightFeature": {
     "description": "프리미엄 혜택: 체중 기능"
   },
-  "benefitNoAdsFocus": "광고 없는 프리미엄 경험",
+  "benefitNoAdsFocus": "광고 없음",
   "@benefitNoAdsFocus": {
     "description": "프리미엄 혜택: 광고 없음"
   },
-  "benefitFutureFeaturesNew": "추후 프리미엄 기능 전체 포함",
+  "benefitFutureFeaturesNew": "앞으로 나올 기능 포함",
   "@benefitFutureFeaturesNew": {
     "description": "프리미엄 혜택: 추후 기능"
   },
-  "mostChosen": "가장 많이 선택됨",
+  "mostChosen": "가장 인기",
   "@mostChosen": {
     "description": "CTA 위 지원 문구 (연간 선택 시)"
   },
-  "canChangeAnytime": "언제든지 변경 가능",
+  "canChangeAnytime": "언제든 변경",
   "@canChangeAnytime": {
     "description": "CTA 위 지원 문구 (월간 선택 시)"
   },
-  "startPremium": "프리미엄 시작하기",
+  "startPremium": "프리미엄 시작",
   "@startPremium": {
     "description": "프리미엄 구매 버튼 텍스트"
   },
-  "cancelAnytimeKeepAccess": "결제 후 바로 해지해도 기간 끝까지 이용 가능",
+  "cancelAnytimeKeepAccess": "언제든 해지, 기간 끝까지 이용",
   "@cancelAnytimeKeepAccess": {
     "description": "취소 신뢰 문구"
   },

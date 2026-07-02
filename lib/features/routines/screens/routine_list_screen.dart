@@ -685,6 +685,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             ),
             child: Text(
               AppLocalizations.of(context)!.viewMembership,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.lato(
                 fontSize: 16,
                 fontWeight: FontWeight.w900,
@@ -1247,6 +1249,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.checkRoutineStart,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.lato(
                   fontSize: 17,
                   fontWeight: FontWeight.w900,

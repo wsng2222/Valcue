@@ -246,6 +246,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                 ),
                 child: Text(
                   AppLocalizations.of(context)!.viewMembership,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.lato(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,

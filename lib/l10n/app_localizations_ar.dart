@@ -30,7 +30,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get soundEffects => 'تأثيرات صوتية';
 
   @override
-  String get unitSetting => 'إعداد الوحدة';
+  String get unitSetting => 'الوحدات';
 
   @override
   String get kmh => 'كم/ساعة';
@@ -39,7 +39,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mph => 'ميل/ساعة';
 
   @override
-  String get themeMode => 'الوضع الفاتح/الداكن';
+  String get themeMode => 'المظهر';
 
   @override
   String get light => 'فاتح';
@@ -242,13 +242,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumRoutineSettings => 'إعدادات الروتين المميز';
 
   @override
-  String get viewMembership => 'عرض العضوية';
+  String get viewMembership => 'عرض بريميوم';
 
   @override
-  String get freeLimitTitle => 'الحد المجاني هو 2 روتينات';
+  String get freeLimitTitle => 'روتينان مجانًا';
 
   @override
-  String get freeLimitMessage => 'يمكنك استخدام روتينات غير محدودة مع العضوية';
+  String get freeLimitMessage => 'احصل على روتينات بلا حد مع بريميوم';
 
   @override
   String get treadmill => 'جهاز الجري';
@@ -260,7 +260,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get stairmaster => 'السلم';
 
   @override
-  String get selectLanguage => 'اختر اللغة';
+  String get selectLanguage => 'اللغات';
 
   @override
   String get selectTheme => 'اختر المظهر';
@@ -354,16 +354,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumActivated => 'تم تفعيل بريميوم';
 
   @override
-  String get premiumMembership => 'عضوية بريميوم';
+  String get premiumMembership => 'بريميوم';
 
   @override
-  String get benefitCycleStairmaster => 'تمارين الدراجة وجهاز صعود الدرج';
+  String get benefitCycleStairmaster => 'تمارين الدراجة والدرج';
 
   @override
-  String get benefitVoiceGuide => 'التوجيه الصوتي لكل جزء من التمرين';
+  String get benefitVoiceGuide => 'إرشاد صوتي';
 
   @override
-  String get benefitUnlimitedRoutines => 'حفظ غير محدود لتمارينك';
+  String get benefitUnlimitedRoutines => 'روتينات بلا حد';
 
   @override
   String get noAds => 'بدون إعلانات';
@@ -449,7 +449,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cancelAnytime => 'إلغاء في أي وقت';
 
   @override
-  String get autoRenewableSubscription => 'اشتراك قابل للتجديد تلقائياً';
+  String get autoRenewableSubscription => 'يتجدد تلقائيًا';
 
   @override
   String get terms => 'الشروط';
@@ -476,10 +476,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get close => 'إغلاق';
 
   @override
-  String get premiumFeature => 'ميزة بريميوم';
+  String get premiumFeature => 'بريميوم فقط';
 
   @override
-  String get usePremiumTest => 'استخدام بريميوم (اختبار)';
+  String get usePremiumTest => 'تجربة بريميوم';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -487,7 +487,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'التحقق من الروتين / البدء';
+  String get checkRoutineStart => 'معاينة وبدء';
 
   @override
   String get beginner => 'مبتدئ';
@@ -499,16 +499,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get advanced => 'متقدم';
 
   @override
-  String get viewRecommendedRoutines => 'موصى به →';
+  String get viewRecommendedRoutines => 'مقترحات →';
 
   @override
-  String get recommendedRoutinesTreadmill => 'روتينات المشي الموصى بها';
+  String get recommendedRoutinesTreadmill => 'مقترحات جهاز الجري';
 
   @override
-  String get recommendedRoutinesCycle => 'روتينات الدراجة الموصى بها';
+  String get recommendedRoutinesCycle => 'مقترحات الدراجة';
 
   @override
-  String get recommendedRoutinesStairmaster => 'روتينات السلم الموصى بها';
+  String get recommendedRoutinesStairmaster => 'مقترحات الدرج';
 
   @override
   String get alreadySaved => 'محفوظ بالفعل';
@@ -517,7 +517,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get routineSaved => 'تم حفظ الروتين';
 
   @override
-  String get checkRoutine => 'التحقق';
+  String get checkRoutine => 'معاينة';
 
   @override
   String get saveRoutine => 'حفظ الروتين';
@@ -714,10 +714,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editWeight => 'تعديل الوزن';
 
   @override
-  String get recordWeight => 'تسجيل الوزن';
+  String get recordWeight => 'سجّل الوزن';
 
   @override
-  String get quickAdjust => 'تعديل سريع';
+  String get quickAdjust => 'ضبط سريع';
 
   @override
   String get goalWeightSet => 'تم تعيين الوزن المستهدف';
@@ -732,23 +732,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goalMatchesCurrentWeight => 'الهدف يطابق الوزن الحالي';
 
   @override
-  String get setGoal => 'تعيين الهدف';
+  String get setGoal => 'حدّد الهدف';
 
   @override
   String get suggested => 'مقترح';
 
   @override
-  String get removeGoal => 'إلغاء الهدف';
+  String get removeGoal => 'امسح الهدف';
 
   @override
-  String get addOneMoreRecordToSeeTrend =>
-      'أضف سجل وزن إضافي لرؤية مخطط التغيرات';
+  String get addOneMoreRecordToSeeTrend => 'أضف قياسًا آخر لرؤية الاتجاه';
 
   @override
   String get noWeightRecorded => 'لم يتم تسجيل أي وزن بعد';
 
   @override
-  String get startTrackingYourWeight => 'سجل وزنك للبدء في تتبع التغيرات هنا';
+  String get startTrackingYourWeight => 'سجّل وزنك لتتبع تقدمك';
 
   @override
   String get treadmillSession => 'جلسة جهاز الجري';
@@ -769,7 +768,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get stairmasterWorkout => 'تمرين السلم';
 
   @override
-  String get startAWorkoutToSeeItHere => 'ابدأ تمرينًا لرؤيته هنا';
+  String get startAWorkoutToSeeItHere => 'ستظهر تمارينك هنا';
 
   @override
   String get mon => 'الاثنين';
@@ -865,35 +864,34 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'نظام التدريب الصوتي المتميز';
+  String get benefitVoiceCoaching => 'تدريب صوتي';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'دعم كامل لجميع أجهزة الكارديو';
+  String get benefitCycleStairmasterRoutines => 'تمارين الدراجة والدرج';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'مكتبة تمارين غير محدودة';
+  String get benefitUnlimitedRoutinesNew => 'روتينات بلا حد';
 
   @override
-  String get benefitWeightFeature => 'تتبع وتحليل ذكي للوزن';
+  String get benefitWeightFeature => 'تتبع الوزن';
 
   @override
-  String get benefitNoAdsFocus => 'تجربة متميزة بدون إعلانات';
+  String get benefitNoAdsFocus => 'بدون إعلانات';
 
   @override
-  String get benefitFutureFeaturesNew => 'جميع ميزات Premium المستقبلية متضمنة';
+  String get benefitFutureFeaturesNew => 'الميزات القادمة متضمنة';
 
   @override
   String get mostChosen => 'الأكثر اختيارًا';
 
   @override
-  String get canChangeAnytime => 'يمكن التغيير في أي وقت';
+  String get canChangeAnytime => 'غيّر متى شئت';
 
   @override
-  String get startPremium => 'بدء Premium';
+  String get startPremium => 'ابدأ بريميوم';
 
   @override
-  String get cancelAnytimeKeepAccess =>
-      'ألغِ في أي وقت واحتفظ بالوصول حتى نهاية الفترة';
+  String get cancelAnytimeKeepAccess => 'ألغِ متى شئت واحتفظ بالوصول';
 
   @override
   String workoutDays(int count) {
@@ -918,7 +916,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'تذكير بالتمرين';
+  String get workoutReminderTitle => 'التذكيرات';
 
   @override
   String get workoutReminderOff => 'إيقاف';

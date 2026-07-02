@@ -368,6 +368,8 @@ class _PremiumScreenState extends State<_PremiumScreen> {
 
                     final buttonLabel = Text(
                       AppLocalizations.of(context)!.startPremium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.lato(
                         fontSize: 19,
                         fontWeight: FontWeight.w900,
@@ -863,13 +865,17 @@ class _PlanCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: isPrimary ? 18 : 17,
-                          fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.45,
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: isPrimary ? 18 : 17,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
+                            letterSpacing: -0.45,
+                          ),
                         ),
                       ),
                       if (savingsPercent != null) ...[
@@ -889,6 +895,8 @@ class _PlanCard extends StatelessWidget {
                               ),
                               child: Text(
                                 l10n.savePercent(savingsPercent!),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,

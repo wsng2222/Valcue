@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get soundEffects => 'サウンド効果';
 
   @override
-  String get unitSetting => '単位設定';
+  String get unitSetting => '単位';
 
   @override
   String get kmh => 'km/h';
@@ -39,7 +39,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => 'ライト/ダークモード';
+  String get themeMode => '表示';
 
   @override
   String get light => 'ライト';
@@ -239,13 +239,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumRoutineSettings => 'プレミアムルーティン設定';
 
   @override
-  String get viewMembership => 'メンバーシップを表示';
+  String get viewMembership => 'Premiumを見る';
 
   @override
-  String get freeLimitTitle => '無料制限は2つのルーティンまで';
+  String get freeLimitTitle => '無料は2件まで';
 
   @override
-  String get freeLimitMessage => 'メンバーシップで無制限のルーティンを使用できます';
+  String get freeLimitMessage => 'Premiumでルーティン使い放題';
 
   @override
   String get treadmill => 'ランニングマシン';
@@ -257,7 +257,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get stairmaster => 'ステアマスター';
 
   @override
-  String get selectLanguage => '言語を選択';
+  String get selectLanguage => '言語';
 
   @override
   String get selectTheme => 'テーマを選択';
@@ -351,16 +351,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumActivated => 'プレミアムが有効になりました';
 
   @override
-  String get premiumMembership => 'プレミアムメンバーシップ';
+  String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'バイク・クライマー（階段登り）ルーティン';
+  String get benefitCycleStairmaster => 'バイク・階段ワークアウト';
 
   @override
-  String get benefitVoiceGuide => 'セッションごとの音声ガイド案内';
+  String get benefitVoiceGuide => '音声ガイド';
 
   @override
-  String get benefitUnlimitedRoutines => 'ルーティンの保存件数無制限';
+  String get benefitUnlimitedRoutines => 'ルーティン無制限';
 
   @override
   String get noAds => '広告なし';
@@ -444,7 +444,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cancelAnytime => 'いつでもキャンセル可能';
 
   @override
-  String get autoRenewableSubscription => '自動更新サブスクリプション';
+  String get autoRenewableSubscription => '自動更新';
 
   @override
   String get terms => '利用規約';
@@ -471,10 +471,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get close => '閉じる';
 
   @override
-  String get premiumFeature => 'プレミアム機能です';
+  String get premiumFeature => 'Premium限定';
 
   @override
-  String get usePremiumTest => 'プレミアムを使用する（テスト）';
+  String get usePremiumTest => 'Premiumを試す';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -482,7 +482,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'ルーティンを確認 / 開始';
+  String get checkRoutineStart => '確認して開始';
 
   @override
   String get beginner => '初級';
@@ -497,13 +497,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get viewRecommendedRoutines => 'おすすめ →';
 
   @override
-  String get recommendedRoutinesTreadmill => 'おすすめランニングマシンルーティン';
+  String get recommendedRoutinesTreadmill => 'おすすめランニング';
 
   @override
-  String get recommendedRoutinesCycle => 'おすすめバイクルーティン';
+  String get recommendedRoutinesCycle => 'おすすめバイク';
 
   @override
-  String get recommendedRoutinesStairmaster => 'おすすめステアマスタールーティン';
+  String get recommendedRoutinesStairmaster => 'おすすめ階段';
 
   @override
   String get alreadySaved => '既に保存済み';
@@ -512,7 +512,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get routineSaved => 'ルーティンが保存されました';
 
   @override
-  String get checkRoutine => '確認';
+  String get checkRoutine => '見る';
 
   @override
   String get saveRoutine => 'ルーティンを保存';
@@ -704,22 +704,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get goalMatchesCurrentWeight => '目標が現在の体重と一致します';
 
   @override
-  String get setGoal => '目標を設定';
+  String get setGoal => '目標設定';
 
   @override
   String get suggested => '推奨';
 
   @override
-  String get removeGoal => '目標を解除';
+  String get removeGoal => '目標解除';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '推移を見るには、体重をもう1件記録してください';
+  String get addOneMoreRecordToSeeTrend => 'あと1件で推移が見られます';
 
   @override
   String get noWeightRecorded => 'まだ体重が記録されていません';
 
   @override
-  String get startTrackingYourWeight => '体重を記録して変化の推移を確認しましょう';
+  String get startTrackingYourWeight => '体重を記録して変化を追跡';
 
   @override
   String get treadmillSession => 'ランニングマシンセッション';
@@ -740,7 +740,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get stairmasterWorkout => 'ステアマスター運動';
 
   @override
-  String get startAWorkoutToSeeItHere => '運動を開始すると、ここに表示されます';
+  String get startAWorkoutToSeeItHere => '運動履歴はここに表示されます';
 
   @override
   String get mon => '月';
@@ -836,34 +836,34 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'プレミアム音声コーチングシステム';
+  String get benefitVoiceCoaching => '音声コーチ';
 
   @override
-  String get benefitCycleStairmasterRoutines => 'すべての有酸素機器に完全対応';
+  String get benefitCycleStairmasterRoutines => 'バイク・階段ワークアウト';
 
   @override
-  String get benefitUnlimitedRoutinesNew => '無制限ルーティンライブラリ';
+  String get benefitUnlimitedRoutinesNew => 'ルーティン無制限';
 
   @override
-  String get benefitWeightFeature => 'スマート体重追跡＆分析';
+  String get benefitWeightFeature => '体重管理';
 
   @override
-  String get benefitNoAdsFocus => '広告なしのプレミアム体験';
+  String get benefitNoAdsFocus => '広告なし';
 
   @override
-  String get benefitFutureFeaturesNew => '今後のプレミアム機能すべて含む';
+  String get benefitFutureFeaturesNew => '今後の機能も込み';
 
   @override
-  String get mostChosen => '最も選ばれている';
+  String get mostChosen => '一番人気';
 
   @override
-  String get canChangeAnytime => 'いつでも変更可能';
+  String get canChangeAnytime => 'いつでも変更可';
 
   @override
-  String get startPremium => 'プレミアムを開始';
+  String get startPremium => 'Premiumを始める';
 
   @override
-  String get cancelAnytimeKeepAccess => 'いつでもキャンセル可能で、期間終了までアクセス可能';
+  String get cancelAnytimeKeepAccess => 'いつでも解約可、期間中は利用可';
 
   @override
   String workoutDays(int count) {
@@ -888,7 +888,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'ワークアウト通知';
+  String get workoutReminderTitle => '通知';
 
   @override
   String get workoutReminderOff => 'オフ';

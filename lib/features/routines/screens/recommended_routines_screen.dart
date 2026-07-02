@@ -600,6 +600,8 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                           return 'Check Routine';
                         }
                       })(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelLarge?.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,

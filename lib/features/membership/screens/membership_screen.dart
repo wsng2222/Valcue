@@ -98,6 +98,8 @@ class MembershipScreen extends StatelessWidget {
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.later,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -133,6 +135,8 @@ class MembershipScreen extends StatelessWidget {
                         ),
                         child: Text(
                           l10n.usePremiumTest,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

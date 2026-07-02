@@ -30,7 +30,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get soundEffects => 'Звуковые эффекты';
 
   @override
-  String get unitSetting => 'Настройка единиц';
+  String get unitSetting => 'Единицы';
 
   @override
   String get kmh => 'км/ч';
@@ -39,7 +39,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mph => 'миль/ч';
 
   @override
-  String get themeMode => 'Светлый/Темный режим';
+  String get themeMode => 'Оформление';
 
   @override
   String get light => 'Светлый';
@@ -243,14 +243,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumRoutineSettings => 'Настройки премиум-программы';
 
   @override
-  String get viewMembership => 'Просмотр подписки';
+  String get viewMembership => 'Открыть Premium';
 
   @override
-  String get freeLimitTitle => 'Бесплатный лимит - 2 программы';
+  String get freeLimitTitle => '2 бесплатные программы';
 
   @override
-  String get freeLimitMessage =>
-      'Вы можете использовать неограниченное количество программ с подпиской';
+  String get freeLimitMessage => 'С Premium доступно неограниченно';
 
   @override
   String get treadmill => 'Беговая дорожка';
@@ -262,7 +261,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get stairmaster => 'Степпер';
 
   @override
-  String get selectLanguage => 'Выбрать язык';
+  String get selectLanguage => 'Языки';
 
   @override
   String get selectTheme => 'Выбрать тему';
@@ -356,17 +355,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumActivated => 'Премиум был активирован';
 
   @override
-  String get premiumMembership => 'Премиум Членство';
+  String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster =>
-      'Тренировки на велотренажере и степпере';
+  String get benefitCycleStairmaster => 'Вело- и степ-тренировки';
 
   @override
-  String get benefitVoiceGuide => 'Голосовой гид во время тренировки';
+  String get benefitVoiceGuide => 'Голосовой гид';
 
   @override
-  String get benefitUnlimitedRoutines => 'Неограниченное сохранение программ';
+  String get benefitUnlimitedRoutines => 'Безлимитные программы';
 
   @override
   String get noAds => 'Без Рекламы';
@@ -456,8 +454,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cancelAnytime => 'Отменить в любое время';
 
   @override
-  String get autoRenewableSubscription =>
-      'Автоматически возобновляемая подписка';
+  String get autoRenewableSubscription => 'Автопродление';
 
   @override
   String get terms => 'Условия';
@@ -484,10 +481,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get close => 'Закрыть';
 
   @override
-  String get premiumFeature => 'Премиум Функция';
+  String get premiumFeature => 'Только Premium';
 
   @override
-  String get usePremiumTest => 'Использовать Премиум (Тест)';
+  String get usePremiumTest => 'Тест Premium';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -495,7 +492,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'Проверить Программу / Начать';
+  String get checkRoutineStart => 'Просмотр и старт';
 
   @override
   String get beginner => 'Начинающий';
@@ -507,18 +504,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get advanced => 'Продвинутый';
 
   @override
-  String get viewRecommendedRoutines => 'Рекомендованные →';
+  String get viewRecommendedRoutines => 'Подборки →';
 
   @override
-  String get recommendedRoutinesTreadmill =>
-      'Рекомендуемые Программы Беговой Дорожки';
+  String get recommendedRoutinesTreadmill => 'Подборки для дорожки';
 
   @override
-  String get recommendedRoutinesCycle => 'Рекомендуемые Программы Велосипеда';
+  String get recommendedRoutinesCycle => 'Подборки для вело';
 
   @override
-  String get recommendedRoutinesStairmaster =>
-      'Рекомендуемые Программы Степпера';
+  String get recommendedRoutinesStairmaster => 'Подборки для степпера';
 
   @override
   String get alreadySaved => 'Уже сохранено';
@@ -527,7 +522,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get routineSaved => 'Программа сохранена';
 
   @override
-  String get checkRoutine => 'Проверить';
+  String get checkRoutine => 'Просмотр';
 
   @override
   String get saveRoutine => 'Сохранить Программу';
@@ -729,7 +724,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recordWeight => 'Записать вес';
 
   @override
-  String get quickAdjust => 'Быстрое изменение';
+  String get quickAdjust => 'Быстрая правка';
 
   @override
   String get goalWeightSet => 'Целевой вес установлен';
@@ -750,18 +745,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get suggested => 'Рекомендуемое';
 
   @override
-  String get removeGoal => 'Отключить цель';
+  String get removeGoal => 'Сбросить цель';
 
   @override
-  String get addOneMoreRecordToSeeTrend =>
-      'Добавьте еще одну запись, чтобы увидеть график';
+  String get addOneMoreRecordToSeeTrend => 'Добавьте ещё 1 запись для тренда';
 
   @override
   String get noWeightRecorded => 'Вес еще не записан';
 
   @override
   String get startTrackingYourWeight =>
-      'Записывайте вес, чтобы отслеживать изменения здесь';
+      'Записывайте вес, чтобы видеть прогресс';
 
   @override
   String get treadmillSession => 'Сессия Беговой Дорожки';
@@ -782,8 +776,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get stairmasterWorkout => 'Тренировка Степпера';
 
   @override
-  String get startAWorkoutToSeeItHere =>
-      'Начните тренировку, чтобы увидеть ее здесь';
+  String get startAWorkoutToSeeItHere => 'Ваши тренировки появятся здесь';
 
   @override
   String get mon => 'Пн';
@@ -881,36 +874,35 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Премиум-система голосового коучинга';
+  String get benefitVoiceCoaching => 'Голосовой коуч';
 
   @override
-  String get benefitCycleStairmasterRoutines =>
-      'Полная поддержка всего кардио-оборудования';
+  String get benefitCycleStairmasterRoutines => 'Вело- и степ-тренировки';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Безлимитная библиотека тренировок';
+  String get benefitUnlimitedRoutinesNew => 'Безлимитные программы';
 
   @override
-  String get benefitWeightFeature => 'Умное отслеживание и анализ веса';
+  String get benefitWeightFeature => 'Учёт веса';
 
   @override
-  String get benefitNoAdsFocus => 'Премиум-опыт без рекламы';
+  String get benefitNoAdsFocus => 'Без рекламы';
 
   @override
-  String get benefitFutureFeaturesNew => 'Все будущие премиум-функции включены';
+  String get benefitFutureFeaturesNew => 'Будущие функции включены';
 
   @override
-  String get mostChosen => 'Самый выбираемый';
+  String get mostChosen => 'Топ-выбор';
 
   @override
-  String get canChangeAnytime => 'Можно изменить в любое время';
+  String get canChangeAnytime => 'Меняйте когда угодно';
 
   @override
-  String get startPremium => 'Начать Premium';
+  String get startPremium => 'Подключить Premium';
 
   @override
   String get cancelAnytimeKeepAccess =>
-      'Отмените в любое время и сохраните доступ до конца периода';
+      'Отменяйте когда угодно, доступ сохранится';
 
   @override
   String workoutDays(int count) {
@@ -935,7 +927,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'Напоминание о тренировке';
+  String get workoutReminderTitle => 'Напоминания';
 
   @override
   String get workoutReminderOff => 'Выключено';

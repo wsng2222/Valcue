@@ -7,10 +7,10 @@
   "voiceGuide": "音声ガイド",
   "audioNavigator": "オーディオナビゲーター",
   "soundEffects": "サウンド効果",
-  "unitSetting": "単位設定",
+  "unitSetting": "単位",
   "kmh": "km/h",
   "mph": "mph",
-  "themeMode": "ライト/ダークモード",
+  "themeMode": "表示",
   "light": "ライト",
   "dark": "ダーク",
   "smartwatchSync": "スマートウォッチ同期",
@@ -102,13 +102,13 @@
   "tapToCreate": "タップして作成",
   "tapButtonToCreate": "ボタンをタップして作成",
   "premiumRoutineSettings": "プレミアムルーティン設定",
-  "viewMembership": "メンバーシップを表示",
-  "freeLimitTitle": "無料制限は2つのルーティンまで",
-  "freeLimitMessage": "メンバーシップで無制限のルーティンを使用できます",
+  "viewMembership": "Premiumを見る",
+  "freeLimitTitle": "無料は2件まで",
+  "freeLimitMessage": "Premiumでルーティン使い放題",
   "treadmill": "ランニングマシン",
   "cycle": "サイクル",
   "stairmaster": "ステアマスター",
-  "selectLanguage": "言語を選択",
+  "selectLanguage": "言語",
   "selectTheme": "テーマを選択",
   "selectDifficulty": "難易度を選択",
   "pause": "一時停止",
@@ -145,10 +145,10 @@
   "purchase": "購入",
   "later": "後で",
   "premiumActivated": "プレミアムが有効になりました",
-  "premiumMembership": "プレミアムメンバーシップ",
-  "benefitCycleStairmaster": "バイク・クライマー（階段登り）ルーティン",
-  "benefitVoiceGuide": "セッションごとの音声ガイド案内",
-  "benefitUnlimitedRoutines": "ルーティンの保存件数無制限",
+  "premiumMembership": "Premium",
+  "benefitCycleStairmaster": "バイク・階段ワークアウト",
+  "benefitVoiceGuide": "音声ガイド",
+  "benefitUnlimitedRoutines": "ルーティン無制限",
   "benefitFutureFeatures": "将来追加されるすべての機能を含む",
   "noAds": "広告なし",
   "voiceGuideBenefit1": "運動中の音声コーチング案内",
@@ -230,7 +230,7 @@
   "@cancelAnytime": {
     "description": "いつでもキャンセル可能信頼行"
   },
-  "autoRenewableSubscription": "自動更新サブスクリプション",
+  "autoRenewableSubscription": "自動更新",
   "@autoRenewableSubscription": {
     "description": "自動更新サブスクリプション信頼行"
   },
@@ -247,8 +247,8 @@
     "description": "購入復元リンク"
   },
   "close": "閉じる",
-  "premiumFeature": "プレミアム機能です",
-  "usePremiumTest": "プレミアムを使用する（テスト）",
+  "premiumFeature": "Premium限定",
+  "usePremiumTest": "Premiumを試す",
   "dateTimeFormat": "{year}年{month}月{day}日 {hour}時{minute}分",
   "@dateTimeFormat": {
     "placeholders": {
@@ -269,16 +269,16 @@
       }
     }
   },
-  "checkRoutineStart": "ルーティンを確認 / 開始",
+  "checkRoutineStart": "確認して開始",
   "viewRecommendedRoutines": "おすすめ →",
   "beginner": "初級",
   "intermediate": "中級",
   "advanced": "上級",
-  "recommendedRoutinesTreadmill": "おすすめランニングマシンルーティン",
-  "recommendedRoutinesCycle": "おすすめバイクルーティン",
-  "recommendedRoutinesStairmaster": "おすすめステアマスタールーティン",
+  "recommendedRoutinesTreadmill": "おすすめランニング",
+  "recommendedRoutinesCycle": "おすすめバイク",
+  "recommendedRoutinesStairmaster": "おすすめ階段",
   "alreadySaved": "既に保存済み",
-  "checkRoutine": "確認",
+  "checkRoutine": "見る",
   "saveRoutine": "ルーティンを保存",
   "routineSaved": "ルーティンが保存されました",
   "routineAlreadySaved": "ルーティンは既に保存されています",
@@ -379,19 +379,19 @@
   "goalWeightRemoved": "目標体重の設定を解除しました",
   "goalAchieved": "目標達成！",
   "goalMatchesCurrentWeight": "目標が現在の体重と一致します",
-  "setGoal": "目標を設定",
+  "setGoal": "目標設定",
   "suggested": "推奨",
-  "removeGoal": "目標を解除",
-  "addOneMoreRecordToSeeTrend": "推移を見るには、体重をもう1件記録してください",
+  "removeGoal": "目標解除",
+  "addOneMoreRecordToSeeTrend": "あと1件で推移が見られます",
   "noWeightRecorded": "まだ体重が記録されていません",
-  "startTrackingYourWeight": "体重を記録して変化の推移を確認しましょう",
+  "startTrackingYourWeight": "体重を記録して変化を追跡",
   "treadmillSession": "ランニングマシンセッション",
   "bikeSession": "サイクルセッション",
   "stairmasterSession": "ステアマスターセッション",
   "treadmillWorkout": "ランニングマシン運動",
   "bikeWorkout": "サイクル運動",
   "stairmasterWorkout": "ステアマスター運動",
-  "startAWorkoutToSeeItHere": "運動を開始すると、ここに表示されます",
+  "startAWorkoutToSeeItHere": "運動履歴はここに表示されます",
   "mon": "月",
   "tue": "火",
   "wed": "水",
@@ -422,43 +422,43 @@
       }
     }
   },
-  "benefitVoiceCoaching": "プレミアム音声コーチングシステム",
+  "benefitVoiceCoaching": "音声コーチ",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "すべての有酸素機器に完全対応",
+  "benefitCycleStairmasterRoutines": "バイク・階段ワークアウト",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "無制限ルーティンライブラリ",
+  "benefitUnlimitedRoutinesNew": "ルーティン無制限",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "スマート体重追跡＆分析",
+  "benefitWeightFeature": "体重管理",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "広告なしのプレミアム体験",
+  "benefitNoAdsFocus": "広告なし",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "今後のプレミアム機能すべて含む",
+  "benefitFutureFeaturesNew": "今後の機能も込み",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },
-  "mostChosen": "最も選ばれている",
+  "mostChosen": "一番人気",
   "@mostChosen": {
     "description": "Supporting line above CTA (when annual selected)"
   },
-  "canChangeAnytime": "いつでも変更可能",
+  "canChangeAnytime": "いつでも変更可",
   "@canChangeAnytime": {
     "description": "Supporting line above CTA (when monthly selected)"
   },
-  "startPremium": "プレミアムを開始",
+  "startPremium": "Premiumを始める",
   "@startPremium": {
     "description": "Premium purchase button text"
   },
-  "cancelAnytimeKeepAccess": "いつでもキャンセル可能で、期間終了までアクセス可能",
+  "cancelAnytimeKeepAccess": "いつでも解約可、期間中は利用可",
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
@@ -480,7 +480,7 @@
       }
     }
   },
-  "workoutReminderTitle": "ワークアウト通知",
+  "workoutReminderTitle": "通知",
   "workoutReminderOff": "オフ",
   "workoutReminderEveryDay": "毎日",
   "workoutReminderSelectTime": "時刻を選択",

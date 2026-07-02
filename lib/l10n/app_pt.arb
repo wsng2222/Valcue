@@ -7,10 +7,10 @@
   "voiceGuide": "Guia de Voz",
   "audioNavigator": "Navegador de Áudio",
   "soundEffects": "Efeitos Sonoros",
-  "unitSetting": "Configuração de Unidades",
+  "unitSetting": "Unidades",
   "kmh": "km/h",
   "mph": "mph",
-  "themeMode": "Modo Claro/Escuro",
+  "themeMode": "Aspeto",
   "light": "Claro",
   "dark": "Escuro",
   "smartwatchSync": "Sincronização de Smartwatch",
@@ -102,13 +102,13 @@
   "tapToCreate": "Toque para criar",
   "tapButtonToCreate": "Toque no botão para criar",
   "premiumRoutineSettings": "Configurações de Rotina Premium",
-  "viewMembership": "Ver Assinatura",
-  "freeLimitTitle": "O limite gratuito é de 2 rotinas",
-  "freeLimitMessage": "Você pode usar rotinas ilimitadas com assinatura",
+  "viewMembership": "Ver Premium",
+  "freeLimitTitle": "2 rotinas grátis",
+  "freeLimitMessage": "Passe a Premium para rotinas ilimitadas",
   "treadmill": "Esteira",
   "cycle": "Bicicleta",
   "stairmaster": "Escada",
-  "selectLanguage": "Selecionar Idioma",
+  "selectLanguage": "Idiomas",
   "selectTheme": "Selecionar Tema",
   "selectDifficulty": "Selecionar Dificuldade",
   "pause": "Pausar",
@@ -145,10 +145,10 @@
   "purchase": "Comprar",
   "later": "Mais Tarde",
   "premiumActivated": "Premium foi ativado",
-  "premiumMembership": "Assinatura Premium",
-  "benefitCycleStairmaster": "Rotinas de bike e StairMaster",
-  "benefitVoiceGuide": "Guia de voz para cada sessão",
-  "benefitUnlimitedRoutines": "Salvamento ilimitado de rotinas",
+  "premiumMembership": "Premium",
+  "benefitCycleStairmaster": "Treinos de bicicleta e escadas",
+  "benefitVoiceGuide": "Guia por voz",
+  "benefitUnlimitedRoutines": "Rotinas ilimitadas",
   "benefitFutureFeatures": "Acesso a todos os recursos futuros",
   "noAds": "Sem Anúncios",
   "voiceGuideBenefit1": "Treino guiado por voz",
@@ -230,7 +230,7 @@
   "@cancelAnytime": {
     "description": "Linha de confiança cancelar a qualquer momento"
   },
-  "autoRenewableSubscription": "Assinatura renovável automaticamente",
+  "autoRenewableSubscription": "Renovação automática",
   "@autoRenewableSubscription": {
     "description": "Linha de confiança assinatura renovável automaticamente"
   },
@@ -247,8 +247,8 @@
     "description": "Link de restaurar compras"
   },
   "close": "Fechar",
-  "premiumFeature": "Funcionalidade Premium",
-  "usePremiumTest": "Usar Premium (Teste)",
+  "premiumFeature": "Só Premium",
+  "usePremiumTest": "Testar Premium",
   "dateTimeFormat": "{day}/{month}/{year} {hour}:{minute}",
   "@dateTimeFormat": {
     "placeholders": {
@@ -269,16 +269,16 @@
       }
     }
   },
-  "checkRoutineStart": "Verificar Rotina / Iniciar",
-  "viewRecommendedRoutines": "Recomendadas →",
+  "checkRoutineStart": "Prévia e iniciar",
+  "viewRecommendedRoutines": "Sugestões →",
   "beginner": "Iniciante",
   "intermediate": "Intermediário",
   "advanced": "Avançado",
-  "recommendedRoutinesTreadmill": "Rotinas de Esteira Recomendadas",
-  "recommendedRoutinesCycle": "Rotinas de Bicicleta Recomendadas",
-  "recommendedRoutinesStairmaster": "Rotinas de Escada Recomendadas",
+  "recommendedRoutinesTreadmill": "Sugestões de passadeira",
+  "recommendedRoutinesCycle": "Sugestões de bicicleta",
+  "recommendedRoutinesStairmaster": "Sugestões de escadas",
   "alreadySaved": "Já salvo",
-  "checkRoutine": "Verificar",
+  "checkRoutine": "Prévia",
   "saveRoutine": "Salvar Rotina",
   "routineSaved": "Rotina salva",
   "routineAlreadySaved": "Rotina já salva",
@@ -379,19 +379,19 @@
   "goalWeightRemoved": "Peso objetivo desativado",
   "goalAchieved": "Objetivo alcançado!",
   "goalMatchesCurrentWeight": "O objetivo corresponde ao peso atual",
-  "setGoal": "Definir objetivo",
+  "setGoal": "Definir meta",
   "suggested": "Sugerido",
-  "removeGoal": "Desativar objetivo",
-  "addOneMoreRecordToSeeTrend": "Adicione mais um registro para ver a evolução",
+  "removeGoal": "Remover meta",
+  "addOneMoreRecordToSeeTrend": "Adicione mais 1 registo para ver a tendência",
   "noWeightRecorded": "Ainda não há peso registrado",
-  "startTrackingYourWeight": "Registre seu peso para acompanhar a evolução aqui",
+  "startTrackingYourWeight": "Registe o peso para acompanhar o progresso",
   "treadmillSession": "Sessão de Esteira",
   "bikeSession": "Sessão de Bicicleta",
   "stairmasterSession": "Sessão de Escada",
   "treadmillWorkout": "Treino de Esteira",
   "bikeWorkout": "Treino de Bicicleta",
   "stairmasterWorkout": "Treino de Escada",
-  "startAWorkoutToSeeItHere": "Inicie um treino para vê-lo aqui",
+  "startAWorkoutToSeeItHere": "Os seus treinos aparecem aqui",
   "mon": "Seg",
   "tue": "Ter",
   "wed": "Qua",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "Sistema de Coaching por Voz Premium",
+  "benefitVoiceCoaching": "Coaching por voz",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "Suporte Completo para Todos os Equipamentos Cardio",
+  "benefitCycleStairmasterRoutines": "Treinos de bicicleta e escadas",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "Biblioteca de Rotinas Ilimitada",
+  "benefitUnlimitedRoutinesNew": "Rotinas ilimitadas",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "Rastreamento e Análise Inteligente de Peso",
+  "benefitWeightFeature": "Registo de peso",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "Experiência Premium sem Anúncios",
+  "benefitNoAdsFocus": "Sem anúncios",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "Todos os recursos premium futuros incluídos",
+  "benefitFutureFeaturesNew": "Futuras funcionalidades incluídas",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },
@@ -450,15 +450,15 @@
   "@mostChosen": {
     "description": "Supporting line above CTA (when annual selected)"
   },
-  "canChangeAnytime": "Pode ser alterado a qualquer momento",
+  "canChangeAnytime": "Altere quando quiser",
   "@canChangeAnytime": {
     "description": "Supporting line above CTA (when monthly selected)"
   },
-  "startPremium": "Começar Premium",
+  "startPremium": "Passar a Premium",
   "@startPremium": {
     "description": "Premium purchase button text"
   },
-  "cancelAnytimeKeepAccess": "Cancele a qualquer momento e mantenha o acesso até o final do período",
+  "cancelAnytimeKeepAccess": "Cancele quando quiser e mantenha o acesso",
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
@@ -480,7 +480,7 @@
       }
     }
   },
-  "workoutReminderTitle": "Lembrete de treino",
+  "workoutReminderTitle": "Lembretes",
   "workoutReminderOff": "Desligado",
   "workoutReminderEveryDay": "Todo dia",
   "workoutReminderSelectTime": "Selecionar horário",

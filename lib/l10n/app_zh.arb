@@ -7,10 +7,10 @@
   "voiceGuide": "语音指南",
   "audioNavigator": "音频导航器",
   "soundEffects": "音效",
-  "unitSetting": "单位设置",
+  "unitSetting": "单位",
   "kmh": "km/h",
   "mph": "mph",
-  "themeMode": "浅色/深色模式",
+  "themeMode": "外观",
   "light": "浅色",
   "dark": "深色",
   "smartwatchSync": "智能手表同步",
@@ -102,9 +102,9 @@
   "tapToCreate": "点击创建",
   "tapButtonToCreate": "点击按钮创建",
   "premiumRoutineSettings": "高级例行程序设置",
-  "viewMembership": "查看会员资格",
-  "freeLimitTitle": "免费限制为2个例行程序",
-  "freeLimitMessage": "您可以使用会员资格获得无限例行程序",
+  "viewMembership": "查看高级版",
+  "freeLimitTitle": "免费仅 2 个训练",
+  "freeLimitMessage": "升级高级版即可不限量使用",
   "treadmill": "跑步机",
   "cycle": "自行车",
   "stairmaster": "爬楼机",
@@ -145,10 +145,10 @@
   "purchase": "购买",
   "later": "稍后",
   "premiumActivated": "高级版已激活",
-  "premiumMembership": "高级会员",
-  "benefitCycleStairmaster": "动感单车及爬楼机运动",
-  "benefitVoiceGuide": "分段语音指导引导",
-  "benefitUnlimitedRoutines": "例程保存数量无限制",
+  "premiumMembership": "高级版",
+  "benefitCycleStairmaster": "单车与爬楼训练",
+  "benefitVoiceGuide": "语音指导",
+  "benefitUnlimitedRoutines": "训练不限量",
   "benefitFutureFeatures": "包含未来增加的所有功能",
   "noAds": "无广告",
   "voiceGuideBenefit1": "运动中的语音教练指导",
@@ -230,7 +230,7 @@
   "@cancelAnytime": {
     "description": "随时取消信任行"
   },
-  "autoRenewableSubscription": "自动续订订阅",
+  "autoRenewableSubscription": "自动续订",
   "@autoRenewableSubscription": {
     "description": "自动续订订阅信任行"
   },
@@ -247,8 +247,8 @@
     "description": "恢复购买链接"
   },
   "close": "关闭",
-  "premiumFeature": "高级版功能",
-  "usePremiumTest": "使用高级版（测试）",
+  "premiumFeature": "高级版专属",
+  "usePremiumTest": "试用高级版",
   "dateTimeFormat": "{year}年{month}月{day}日 {hour}时{minute}分",
   "@dateTimeFormat": {
     "placeholders": {
@@ -269,16 +269,16 @@
       }
     }
   },
-  "checkRoutineStart": "检查例行程序 / 开始",
+  "checkRoutineStart": "预览并开始",
   "viewRecommendedRoutines": "推荐 →",
   "beginner": "初级",
   "intermediate": "中级",
   "advanced": "高级",
-  "recommendedRoutinesTreadmill": "推荐跑步机例程",
-  "recommendedRoutinesCycle": "推荐自行车例程",
-  "recommendedRoutinesStairmaster": "推荐爬楼机例程",
+  "recommendedRoutinesTreadmill": "跑步机推荐",
+  "recommendedRoutinesCycle": "单车推荐",
+  "recommendedRoutinesStairmaster": "爬楼机推荐",
   "alreadySaved": "已保存",
-  "checkRoutine": "检查",
+  "checkRoutine": "预览",
   "saveRoutine": "保存例程",
   "routineSaved": "例程已保存",
   "routineAlreadySaved": "例程已保存",
@@ -379,19 +379,19 @@
   "goalWeightRemoved": "目标体重已清除",
   "goalAchieved": "目标达成！",
   "goalMatchesCurrentWeight": "目标与当前体重一致",
-  "setGoal": "设置目标",
+  "setGoal": "设定目标",
   "suggested": "建议",
   "removeGoal": "清除目标",
-  "addOneMoreRecordToSeeTrend": "再记录一次体重即可查看趋势变化",
+  "addOneMoreRecordToSeeTrend": "再记录 1 次即可查看趋势",
   "noWeightRecorded": "尚未记录任何体重",
-  "startTrackingYourWeight": "记录体重以追踪并查看您的变化趋势",
+  "startTrackingYourWeight": "记录体重以追踪进度",
   "treadmillSession": "跑步机会话",
   "bikeSession": "自行车会话",
   "stairmasterSession": "爬楼机会话",
   "treadmillWorkout": "跑步机训练",
   "bikeWorkout": "自行车训练",
   "stairmasterWorkout": "爬楼机训练",
-  "startAWorkoutToSeeItHere": "开始训练以在此查看",
+  "startAWorkoutToSeeItHere": "你的训练会显示在这里",
   "mon": "周一",
   "tue": "周二",
   "wed": "周三",
@@ -422,43 +422,43 @@
       }
     }
   },
-  "benefitVoiceCoaching": "高级语音指导系统",
+  "benefitVoiceCoaching": "语音教练",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "全面支持所有有氧器械",
+  "benefitCycleStairmasterRoutines": "单车与爬楼训练",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "无限训练库",
+  "benefitUnlimitedRoutinesNew": "训练不限量",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "智能体重追踪与分析",
+  "benefitWeightFeature": "体重追踪",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "无广告高级体验",
+  "benefitNoAdsFocus": "无广告",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "包含所有未来高级功能",
+  "benefitFutureFeaturesNew": "未来功能全包含",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },
-  "mostChosen": "最常选择",
+  "mostChosen": "最常选",
   "@mostChosen": {
     "description": "Supporting line above CTA (when annual selected)"
   },
-  "canChangeAnytime": "可随时更改",
+  "canChangeAnytime": "随时可改",
   "@canChangeAnytime": {
     "description": "Supporting line above CTA (when monthly selected)"
   },
-  "startPremium": "开始高级版",
+  "startPremium": "升级高级版",
   "@startPremium": {
     "description": "Premium purchase button text"
   },
-  "cancelAnytimeKeepAccess": "随时可取消，在期间结束前仍可使用",
+  "cancelAnytimeKeepAccess": "随时取消，仍可用到期",
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
@@ -480,7 +480,7 @@
       }
     }
   },
-  "workoutReminderTitle": "训练提醒",
+  "workoutReminderTitle": "提醒",
   "workoutReminderOff": "关闭",
   "workoutReminderEveryDay": "每天",
   "workoutReminderSelectTime": "选择时间",

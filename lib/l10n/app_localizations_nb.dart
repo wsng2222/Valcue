@@ -30,7 +30,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get soundEffects => 'Lydeffekter';
 
   @override
-  String get unitSetting => 'Enhetsinnstilling';
+  String get unitSetting => 'Enheter';
 
   @override
   String get kmh => 'km/t';
@@ -39,7 +39,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => 'Lys/mørk-modus';
+  String get themeMode => 'Utseende';
 
   @override
   String get light => 'Lys';
@@ -242,14 +242,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get premiumRoutineSettings => 'Premium rutineinnstillinger';
 
   @override
-  String get viewMembership => 'Se medlemskap';
+  String get viewMembership => 'Se Premium';
 
   @override
-  String get freeLimitTitle => 'Gratisgrensen er 2 rutiner';
+  String get freeLimitTitle => '2 gratis rutiner';
 
   @override
-  String get freeLimitMessage =>
-      'Med medlemskap kan du bruke ubegrenset med rutiner';
+  String get freeLimitMessage => 'Få ubegrensede rutiner med Premium';
 
   @override
   String get treadmill => 'Tredemølle';
@@ -261,7 +260,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get stairmaster => 'Stairmaster';
 
   @override
-  String get selectLanguage => 'Velg språk';
+  String get selectLanguage => 'Språk';
 
   @override
   String get selectTheme => 'Velg tema';
@@ -355,16 +354,16 @@ class AppLocalizationsNb extends AppLocalizations {
   String get premiumActivated => 'Premium er aktivert';
 
   @override
-  String get premiumMembership => 'Premium-medlemskap';
+  String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Rutiner for sykkel og StairMaster';
+  String get benefitCycleStairmaster => 'Sykkel- og trappeøkter';
 
   @override
-  String get benefitVoiceGuide => 'Stemmeguide for hver økt';
+  String get benefitVoiceGuide => 'Stemmeguide';
 
   @override
-  String get benefitUnlimitedRoutines => 'Ubegrenset lagring av rutiner';
+  String get benefitUnlimitedRoutines => 'Ubegrensede rutiner';
 
   @override
   String get noAds => 'Ingen annonser';
@@ -451,7 +450,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get cancelAnytime => 'Avslutt når som helst';
 
   @override
-  String get autoRenewableSubscription => 'Automatisk fornybart abonnement';
+  String get autoRenewableSubscription => 'Fornyes automatisk';
 
   @override
   String get terms => 'Vilkår';
@@ -478,10 +477,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get close => 'Lukk';
 
   @override
-  String get premiumFeature => 'Premiumfunksjon';
+  String get premiumFeature => 'Kun Premium';
 
   @override
-  String get usePremiumTest => 'Bruk Premium (test)';
+  String get usePremiumTest => 'Test Premium';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -489,7 +488,7 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'Sjekk rutine / Start';
+  String get checkRoutineStart => 'Se og start';
 
   @override
   String get beginner => 'Nybegynner';
@@ -501,16 +500,16 @@ class AppLocalizationsNb extends AppLocalizations {
   String get advanced => 'Avansert';
 
   @override
-  String get viewRecommendedRoutines => 'Anbefalt →';
+  String get viewRecommendedRoutines => 'Forslag →';
 
   @override
-  String get recommendedRoutinesTreadmill => 'Anbefalte tredemølle-rutiner';
+  String get recommendedRoutinesTreadmill => 'Tredemølle-forslag';
 
   @override
-  String get recommendedRoutinesCycle => 'Anbefalte sykkelrutiner';
+  String get recommendedRoutinesCycle => 'Sykkel-forslag';
 
   @override
-  String get recommendedRoutinesStairmaster => 'Anbefalte stairmaster-rutiner';
+  String get recommendedRoutinesStairmaster => 'Stairmaster-forslag';
 
   @override
   String get alreadySaved => 'Allerede lagret';
@@ -519,7 +518,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get routineSaved => 'Rutine lagret';
 
   @override
-  String get checkRoutine => 'Sjekk';
+  String get checkRoutine => 'Se';
 
   @override
   String get saveRoutine => 'Lagre rutine';
@@ -718,7 +717,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get editWeight => 'Rediger vekt';
 
   @override
-  String get recordWeight => 'Registrer vekt';
+  String get recordWeight => 'Logg vekt';
 
   @override
   String get quickAdjust => 'Hurtigjustering';
@@ -742,18 +741,17 @@ class AppLocalizationsNb extends AppLocalizations {
   String get suggested => 'Foreslått';
 
   @override
-  String get removeGoal => 'Deaktiver mål';
+  String get removeGoal => 'Fjern mål';
 
   @override
   String get addOneMoreRecordToSeeTrend =>
-      'Legg til en måling til for å se utviklingen';
+      'Legg til 1 måling til for å se utviklingen';
 
   @override
   String get noWeightRecorded => 'Ingen vekt registrert ennå';
 
   @override
-  String get startTrackingYourWeight =>
-      'Registrer vekten din for å se utviklingen her';
+  String get startTrackingYourWeight => 'Logg vekt for å følge framgangen';
 
   @override
   String get treadmillSession => 'Tredemølleøkt';
@@ -774,7 +772,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get stairmasterWorkout => 'Stairmaster-trening';
 
   @override
-  String get startAWorkoutToSeeItHere => 'Start en økt for å se den her';
+  String get startAWorkoutToSeeItHere => 'Øktene dine vises her';
 
   @override
   String get mon => 'man';
@@ -872,37 +870,34 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Premium Stemmecoaching System';
+  String get benefitVoiceCoaching => 'Stemmecoaching';
 
   @override
-  String get benefitCycleStairmasterRoutines =>
-      'Full Støtte for Alt Cardio-utstyr';
+  String get benefitCycleStairmasterRoutines => 'Sykkel- og trappeøkter';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Ubegrenset Rutine-bibliotek';
+  String get benefitUnlimitedRoutinesNew => 'Ubegrensede rutiner';
 
   @override
-  String get benefitWeightFeature => 'Smart Vektsporing & Analyse';
+  String get benefitWeightFeature => 'Vektsporing';
 
   @override
-  String get benefitNoAdsFocus => 'Reklamefri Premium Opplevelse';
+  String get benefitNoAdsFocus => 'Ingen reklame';
 
   @override
-  String get benefitFutureFeaturesNew =>
-      'Alle framtidige premiumfunksjoner inkludert';
+  String get benefitFutureFeaturesNew => 'Kommende funksjoner inkludert';
 
   @override
-  String get mostChosen => 'Mest valgt';
+  String get mostChosen => 'Toppvalg';
 
   @override
-  String get canChangeAnytime => 'Kan endres når som helst';
+  String get canChangeAnytime => 'Bytt når som helst';
 
   @override
-  String get startPremium => 'Start Premium';
+  String get startPremium => 'Få Premium';
 
   @override
-  String get cancelAnytimeKeepAccess =>
-      'Avslutt når som helst og behold tilgang til perioden ut';
+  String get cancelAnytimeKeepAccess => 'Avslutt når som helst, behold tilgang';
 
   @override
   String workoutDays(int count) {
@@ -927,7 +922,7 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'Treningspåminnelse';
+  String get workoutReminderTitle => 'Påminnelser';
 
   @override
   String get workoutReminderOff => 'Av';

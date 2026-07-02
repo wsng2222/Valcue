@@ -30,7 +30,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get soundEffects => 'Hiệu ứng Âm thanh';
 
   @override
-  String get unitSetting => 'Cài đặt đơn vị';
+  String get unitSetting => 'Đơn vị';
 
   @override
   String get kmh => 'km/h';
@@ -39,7 +39,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => 'Chế độ Sáng/Tối';
+  String get themeMode => 'Giao diện';
 
   @override
   String get light => 'Sáng';
@@ -243,14 +243,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumRoutineSettings => 'Cài đặt Thói quen Cao cấp';
 
   @override
-  String get viewMembership => 'Xem Thành viên';
+  String get viewMembership => 'Xem Premium';
 
   @override
-  String get freeLimitTitle => 'Giới hạn miễn phí là 2 thói quen';
+  String get freeLimitTitle => 'Miễn phí 2 bài';
 
   @override
-  String get freeLimitMessage =>
-      'Bạn có thể sử dụng thói quen không giới hạn với thành viên';
+  String get freeLimitMessage => 'Nâng cấp Premium để dùng không giới hạn';
 
   @override
   String get treadmill => 'Máy chạy bộ';
@@ -262,7 +261,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get stairmaster => 'Máy leo cầu thang';
 
   @override
-  String get selectLanguage => 'Chọn Ngôn ngữ';
+  String get selectLanguage => 'Ngôn ngữ';
 
   @override
   String get selectTheme => 'Chọn Chủ đề';
@@ -356,16 +355,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumActivated => 'Cao cấp đã được kích hoạt';
 
   @override
-  String get premiumMembership => 'Thành viên Cao cấp';
+  String get premiumMembership => 'Premium';
 
   @override
-  String get benefitCycleStairmaster => 'Bài tập đạp xe & leo cầu thang';
+  String get benefitCycleStairmaster => 'Bài tập xe đạp và cầu thang';
 
   @override
-  String get benefitVoiceGuide => 'Hướng dẫn giọng nói theo từng phần';
+  String get benefitVoiceGuide => 'Hướng dẫn giọng nói';
 
   @override
-  String get benefitUnlimitedRoutines => 'Lưu trữ bài tập không giới hạn';
+  String get benefitUnlimitedRoutines => 'Bài tập không giới hạn';
 
   @override
   String get noAds => 'Không Có Quảng Cáo';
@@ -453,7 +452,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cancelAnytime => 'Hủy bất cứ lúc nào';
 
   @override
-  String get autoRenewableSubscription => 'Đăng ký tự động gia hạn';
+  String get autoRenewableSubscription => 'Tự gia hạn';
 
   @override
   String get terms => 'Điều khoản';
@@ -480,10 +479,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get close => 'Đóng';
 
   @override
-  String get premiumFeature => 'Tính năng Cao cấp';
+  String get premiumFeature => 'Chỉ dành cho Premium';
 
   @override
-  String get usePremiumTest => 'Sử dụng Cao cấp (Thử nghiệm)';
+  String get usePremiumTest => 'Dùng thử Premium';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -491,7 +490,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'Kiểm tra Thói quen / Bắt đầu';
+  String get checkRoutineStart => 'Xem và bắt đầu';
 
   @override
   String get beginner => 'Người mới bắt đầu';
@@ -506,15 +505,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get viewRecommendedRoutines => 'Đề xuất →';
 
   @override
-  String get recommendedRoutinesTreadmill =>
-      'Thói quen Máy chạy bộ Được đề xuất';
+  String get recommendedRoutinesTreadmill => 'Gợi ý máy chạy';
 
   @override
-  String get recommendedRoutinesCycle => 'Thói quen Xe đạp Được đề xuất';
+  String get recommendedRoutinesCycle => 'Gợi ý xe đạp';
 
   @override
-  String get recommendedRoutinesStairmaster =>
-      'Thói quen Máy leo cầu thang Được đề xuất';
+  String get recommendedRoutinesStairmaster => 'Gợi ý cầu thang';
 
   @override
   String get alreadySaved => 'Đã lưu';
@@ -523,7 +520,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get routineSaved => 'Thói quen đã được lưu';
 
   @override
-  String get checkRoutine => 'Kiểm tra';
+  String get checkRoutine => 'Xem';
 
   @override
   String get saveRoutine => 'Lưu Thói quen';
@@ -745,18 +742,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get suggested => 'Đề xuất';
 
   @override
-  String get removeGoal => 'Hủy bỏ mục tiêu';
+  String get removeGoal => 'Xóa mục tiêu';
 
   @override
-  String get addOneMoreRecordToSeeTrend =>
-      'Thêm một ghi chép nữa để xem biểu đồ biến động';
+  String get addOneMoreRecordToSeeTrend => 'Thêm 1 lần ghi nữa để xem xu hướng';
 
   @override
   String get noWeightRecorded => 'Chưa có dữ liệu cân nặng';
 
   @override
-  String get startTrackingYourWeight =>
-      'Ghi lại cân nặng để bắt đầu theo dõi tiến trình tại đây';
+  String get startTrackingYourWeight => 'Ghi cân nặng để theo dõi tiến độ';
 
   @override
   String get treadmillSession => 'Phiên Máy chạy bộ';
@@ -777,7 +772,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get stairmasterWorkout => 'Bài tập Máy leo cầu thang';
 
   @override
-  String get startAWorkoutToSeeItHere => 'Bắt đầu một bài tập để xem nó ở đây';
+  String get startAWorkoutToSeeItHere => 'Bài tập của bạn sẽ hiện ở đây';
 
   @override
   String get mon => 'T2';
@@ -875,38 +870,35 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'Hệ Thống Huấn Luyện Giọng Nói Premium';
+  String get benefitVoiceCoaching => 'Huấn luyện giọng nói';
 
   @override
-  String get benefitCycleStairmasterRoutines =>
-      'Hỗ Trợ Đầy Đủ Tất Cả Thiết Bị Cardio';
+  String get benefitCycleStairmasterRoutines => 'Bài tập xe đạp và cầu thang';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'Thư Viện Bài Tập Không Giới Hạn';
+  String get benefitUnlimitedRoutinesNew => 'Bài tập không giới hạn';
 
   @override
-  String get benefitWeightFeature =>
-      'Theo Dõi và Phân Tích Cân Nặng Thông Minh';
+  String get benefitWeightFeature => 'Theo dõi cân nặng';
 
   @override
-  String get benefitNoAdsFocus => 'Trải Nghiệm Premium Không Quảng Cáo';
+  String get benefitNoAdsFocus => 'Không quảng cáo';
 
   @override
-  String get benefitFutureFeaturesNew =>
-      'Tất cả các tính năng premium tương lai được bao gồm';
+  String get benefitFutureFeaturesNew => 'Bao gồm tính năng sắp tới';
 
   @override
-  String get mostChosen => 'Được chọn nhiều nhất';
+  String get mostChosen => 'Được chọn nhiều';
 
   @override
-  String get canChangeAnytime => 'Có thể thay đổi bất cứ lúc nào';
+  String get canChangeAnytime => 'Đổi bất cứ lúc nào';
 
   @override
-  String get startPremium => 'Bắt đầu Premium';
+  String get startPremium => 'Lên Premium';
 
   @override
   String get cancelAnytimeKeepAccess =>
-      'Hủy bất cứ lúc nào và giữ quyền truy cập cho đến khi kết thúc thời kỳ';
+      'Hủy bất cứ lúc nào, vẫn dùng đến hết kỳ';
 
   @override
   String workoutDays(int count) {
@@ -931,7 +923,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'Nhắc nhở tập luyện';
+  String get workoutReminderTitle => 'Nhắc nhở';
 
   @override
   String get workoutReminderOff => 'Tắt';

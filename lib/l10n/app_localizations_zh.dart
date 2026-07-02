@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get soundEffects => '音效';
 
   @override
-  String get unitSetting => '单位设置';
+  String get unitSetting => '单位';
 
   @override
   String get kmh => 'km/h';
@@ -39,7 +39,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => '浅色/深色模式';
+  String get themeMode => '外观';
 
   @override
   String get light => '浅色';
@@ -239,13 +239,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumRoutineSettings => '高级例行程序设置';
 
   @override
-  String get viewMembership => '查看会员资格';
+  String get viewMembership => '查看高级版';
 
   @override
-  String get freeLimitTitle => '免费限制为2个例行程序';
+  String get freeLimitTitle => '免费仅 2 个训练';
 
   @override
-  String get freeLimitMessage => '您可以使用会员资格获得无限例行程序';
+  String get freeLimitMessage => '升级高级版即可不限量使用';
 
   @override
   String get treadmill => '跑步机';
@@ -350,16 +350,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumActivated => '高级版已激活';
 
   @override
-  String get premiumMembership => '高级会员';
+  String get premiumMembership => '高级版';
 
   @override
-  String get benefitCycleStairmaster => '动感单车及爬楼机运动';
+  String get benefitCycleStairmaster => '单车与爬楼训练';
 
   @override
-  String get benefitVoiceGuide => '分段语音指导引导';
+  String get benefitVoiceGuide => '语音指导';
 
   @override
-  String get benefitUnlimitedRoutines => '例程保存数量无限制';
+  String get benefitUnlimitedRoutines => '训练不限量';
 
   @override
   String get noAds => '无广告';
@@ -443,7 +443,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancelAnytime => '随时取消';
 
   @override
-  String get autoRenewableSubscription => '自动续订订阅';
+  String get autoRenewableSubscription => '自动续订';
 
   @override
   String get terms => '条款';
@@ -470,10 +470,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get close => '关闭';
 
   @override
-  String get premiumFeature => '高级版功能';
+  String get premiumFeature => '高级版专属';
 
   @override
-  String get usePremiumTest => '使用高级版（测试）';
+  String get usePremiumTest => '试用高级版';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -481,7 +481,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => '检查例行程序 / 开始';
+  String get checkRoutineStart => '预览并开始';
 
   @override
   String get beginner => '初级';
@@ -496,13 +496,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get viewRecommendedRoutines => '推荐 →';
 
   @override
-  String get recommendedRoutinesTreadmill => '推荐跑步机例程';
+  String get recommendedRoutinesTreadmill => '跑步机推荐';
 
   @override
-  String get recommendedRoutinesCycle => '推荐自行车例程';
+  String get recommendedRoutinesCycle => '单车推荐';
 
   @override
-  String get recommendedRoutinesStairmaster => '推荐爬楼机例程';
+  String get recommendedRoutinesStairmaster => '爬楼机推荐';
 
   @override
   String get alreadySaved => '已保存';
@@ -511,7 +511,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get routineSaved => '例程已保存';
 
   @override
-  String get checkRoutine => '检查';
+  String get checkRoutine => '预览';
 
   @override
   String get saveRoutine => '保存例程';
@@ -703,7 +703,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get goalMatchesCurrentWeight => '目标与当前体重一致';
 
   @override
-  String get setGoal => '设置目标';
+  String get setGoal => '设定目标';
 
   @override
   String get suggested => '建议';
@@ -712,13 +712,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get removeGoal => '清除目标';
 
   @override
-  String get addOneMoreRecordToSeeTrend => '再记录一次体重即可查看趋势变化';
+  String get addOneMoreRecordToSeeTrend => '再记录 1 次即可查看趋势';
 
   @override
   String get noWeightRecorded => '尚未记录任何体重';
 
   @override
-  String get startTrackingYourWeight => '记录体重以追踪并查看您的变化趋势';
+  String get startTrackingYourWeight => '记录体重以追踪进度';
 
   @override
   String get treadmillSession => '跑步机会话';
@@ -739,7 +739,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stairmasterWorkout => '爬楼机训练';
 
   @override
-  String get startAWorkoutToSeeItHere => '开始训练以在此查看';
+  String get startAWorkoutToSeeItHere => '你的训练会显示在这里';
 
   @override
   String get mon => '周一';
@@ -835,34 +835,34 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => '高级语音指导系统';
+  String get benefitVoiceCoaching => '语音教练';
 
   @override
-  String get benefitCycleStairmasterRoutines => '全面支持所有有氧器械';
+  String get benefitCycleStairmasterRoutines => '单车与爬楼训练';
 
   @override
-  String get benefitUnlimitedRoutinesNew => '无限训练库';
+  String get benefitUnlimitedRoutinesNew => '训练不限量';
 
   @override
-  String get benefitWeightFeature => '智能体重追踪与分析';
+  String get benefitWeightFeature => '体重追踪';
 
   @override
-  String get benefitNoAdsFocus => '无广告高级体验';
+  String get benefitNoAdsFocus => '无广告';
 
   @override
-  String get benefitFutureFeaturesNew => '包含所有未来高级功能';
+  String get benefitFutureFeaturesNew => '未来功能全包含';
 
   @override
-  String get mostChosen => '最常选择';
+  String get mostChosen => '最常选';
 
   @override
-  String get canChangeAnytime => '可随时更改';
+  String get canChangeAnytime => '随时可改';
 
   @override
-  String get startPremium => '开始高级版';
+  String get startPremium => '升级高级版';
 
   @override
-  String get cancelAnytimeKeepAccess => '随时可取消，在期间结束前仍可使用';
+  String get cancelAnytimeKeepAccess => '随时取消，仍可用到期';
 
   @override
   String workoutDays(int count) {
@@ -887,7 +887,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => '训练提醒';
+  String get workoutReminderTitle => '提醒';
 
   @override
   String get workoutReminderOff => '关闭';

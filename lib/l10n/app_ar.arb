@@ -7,10 +7,10 @@
   "voiceGuide": "الدليل الصوتي",
   "audioNavigator": "مستكشف الصوت",
   "soundEffects": "تأثيرات صوتية",
-  "unitSetting": "إعداد الوحدة",
+  "unitSetting": "الوحدات",
   "kmh": "كم/ساعة",
   "mph": "ميل/ساعة",
-  "themeMode": "الوضع الفاتح/الداكن",
+  "themeMode": "المظهر",
   "light": "فاتح",
   "dark": "داكن",
   "smartwatchSync": "مزامنة الساعة الذكية",
@@ -102,13 +102,13 @@
   "tapToCreate": "اضغط للإنشاء",
   "tapButtonToCreate": "اضغط على الزر للإنشاء",
   "premiumRoutineSettings": "إعدادات الروتين المميز",
-  "viewMembership": "عرض العضوية",
-  "freeLimitTitle": "الحد المجاني هو 2 روتينات",
-  "freeLimitMessage": "يمكنك استخدام روتينات غير محدودة مع العضوية",
+  "viewMembership": "عرض بريميوم",
+  "freeLimitTitle": "روتينان مجانًا",
+  "freeLimitMessage": "احصل على روتينات بلا حد مع بريميوم",
   "treadmill": "جهاز الجري",
   "cycle": "الدراجة",
   "stairmaster": "السلم",
-  "selectLanguage": "اختر اللغة",
+  "selectLanguage": "اللغات",
   "selectTheme": "اختر المظهر",
   "selectDifficulty": "اختر الصعوبة",
   "pause": "إيقاف مؤقت",
@@ -145,10 +145,10 @@
   "purchase": "شراء",
   "later": "لاحقاً",
   "premiumActivated": "تم تفعيل بريميوم",
-  "premiumMembership": "عضوية بريميوم",
-  "benefitCycleStairmaster": "تمارين الدراجة وجهاز صعود الدرج",
-  "benefitVoiceGuide": "التوجيه الصوتي لكل جزء من التمرين",
-  "benefitUnlimitedRoutines": "حفظ غير محدود لتمارينك",
+  "premiumMembership": "بريميوم",
+  "benefitCycleStairmaster": "تمارين الدراجة والدرج",
+  "benefitVoiceGuide": "إرشاد صوتي",
+  "benefitUnlimitedRoutines": "روتينات بلا حد",
   "benefitFutureFeatures": "يشمل جميع الميزات المستقبلية",
   "noAds": "بدون إعلانات",
   "voiceGuideBenefit1": "تدريب توجيهي صوتي أثناء التمرين",
@@ -230,7 +230,7 @@
   "@cancelAnytime": {
     "description": "سطر الثقة إلغاء في أي وقت"
   },
-  "autoRenewableSubscription": "اشتراك قابل للتجديد تلقائياً",
+  "autoRenewableSubscription": "يتجدد تلقائيًا",
   "@autoRenewableSubscription": {
     "description": "سطر الثقة اشتراك قابل للتجديد تلقائياً"
   },
@@ -247,8 +247,8 @@
     "description": "رابط استعادة المشتريات"
   },
   "close": "إغلاق",
-  "premiumFeature": "ميزة بريميوم",
-  "usePremiumTest": "استخدام بريميوم (اختبار)",
+  "premiumFeature": "بريميوم فقط",
+  "usePremiumTest": "تجربة بريميوم",
   "dateTimeFormat": "{day}/{month}/{year} {hour}:{minute}",
   "@dateTimeFormat": {
     "placeholders": {
@@ -269,16 +269,16 @@
       }
     }
   },
-  "checkRoutineStart": "التحقق من الروتين / البدء",
-  "viewRecommendedRoutines": "موصى به →",
+  "checkRoutineStart": "معاينة وبدء",
+  "viewRecommendedRoutines": "مقترحات →",
   "beginner": "مبتدئ",
   "intermediate": "متوسط",
   "advanced": "متقدم",
-  "recommendedRoutinesTreadmill": "روتينات المشي الموصى بها",
-  "recommendedRoutinesCycle": "روتينات الدراجة الموصى بها",
-  "recommendedRoutinesStairmaster": "روتينات السلم الموصى بها",
+  "recommendedRoutinesTreadmill": "مقترحات جهاز الجري",
+  "recommendedRoutinesCycle": "مقترحات الدراجة",
+  "recommendedRoutinesStairmaster": "مقترحات الدرج",
   "alreadySaved": "محفوظ بالفعل",
-  "checkRoutine": "التحقق",
+  "checkRoutine": "معاينة",
   "saveRoutine": "حفظ الروتين",
   "routineSaved": "تم حفظ الروتين",
   "routineAlreadySaved": "الروتين محفوظ بالفعل",
@@ -373,25 +373,25 @@
   "weightEntryDeleted": "تم حذف إدخال الوزن",
   "weightUpdated": "تم تحديث الوزن",
   "editWeight": "تعديل الوزن",
-  "recordWeight": "تسجيل الوزن",
-  "quickAdjust": "تعديل سريع",
+  "recordWeight": "سجّل الوزن",
+  "quickAdjust": "ضبط سريع",
   "goalWeightSet": "تم تعيين الوزن المستهدف",
   "goalWeightRemoved": "تم إلغاء الوزن المستهدف",
   "goalAchieved": "تم تحقيق الهدف!",
   "goalMatchesCurrentWeight": "الهدف يطابق الوزن الحالي",
-  "setGoal": "تعيين الهدف",
+  "setGoal": "حدّد الهدف",
   "suggested": "مقترح",
-  "removeGoal": "إلغاء الهدف",
-  "addOneMoreRecordToSeeTrend": "أضف سجل وزن إضافي لرؤية مخطط التغيرات",
+  "removeGoal": "امسح الهدف",
+  "addOneMoreRecordToSeeTrend": "أضف قياسًا آخر لرؤية الاتجاه",
   "noWeightRecorded": "لم يتم تسجيل أي وزن بعد",
-  "startTrackingYourWeight": "سجل وزنك للبدء في تتبع التغيرات هنا",
+  "startTrackingYourWeight": "سجّل وزنك لتتبع تقدمك",
   "treadmillSession": "جلسة جهاز الجري",
   "bikeSession": "جلسة الدراجة",
   "stairmasterSession": "جلسة السلم",
   "treadmillWorkout": "تمرين جهاز الجري",
   "bikeWorkout": "تمرين الدراجة",
   "stairmasterWorkout": "تمرين السلم",
-  "startAWorkoutToSeeItHere": "ابدأ تمرينًا لرؤيته هنا",
+  "startAWorkoutToSeeItHere": "ستظهر تمارينك هنا",
   "mon": "الاثنين",
   "tue": "الثلاثاء",
   "wed": "الأربعاء",
@@ -422,27 +422,27 @@
       }
     }
   },
-  "benefitVoiceCoaching": "نظام التدريب الصوتي المتميز",
+  "benefitVoiceCoaching": "تدريب صوتي",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },
-  "benefitCycleStairmasterRoutines": "دعم كامل لجميع أجهزة الكارديو",
+  "benefitCycleStairmasterRoutines": "تمارين الدراجة والدرج",
   "@benefitCycleStairmasterRoutines": {
     "description": "Premium benefit: cycle and stairmaster routines"
   },
-  "benefitUnlimitedRoutinesNew": "مكتبة تمارين غير محدودة",
+  "benefitUnlimitedRoutinesNew": "روتينات بلا حد",
   "@benefitUnlimitedRoutinesNew": {
     "description": "Premium benefit: unlimited routine storage"
   },
-  "benefitWeightFeature": "تتبع وتحليل ذكي للوزن",
+  "benefitWeightFeature": "تتبع الوزن",
   "@benefitWeightFeature": {
     "description": "Premium benefit: weight feature"
   },
-  "benefitNoAdsFocus": "تجربة متميزة بدون إعلانات",
+  "benefitNoAdsFocus": "بدون إعلانات",
   "@benefitNoAdsFocus": {
     "description": "Premium benefit: no ads"
   },
-  "benefitFutureFeaturesNew": "جميع ميزات Premium المستقبلية متضمنة",
+  "benefitFutureFeaturesNew": "الميزات القادمة متضمنة",
   "@benefitFutureFeaturesNew": {
     "description": "Premium benefit: future features"
   },
@@ -450,15 +450,15 @@
   "@mostChosen": {
     "description": "Supporting line above CTA (when annual selected)"
   },
-  "canChangeAnytime": "يمكن التغيير في أي وقت",
+  "canChangeAnytime": "غيّر متى شئت",
   "@canChangeAnytime": {
     "description": "Supporting line above CTA (when monthly selected)"
   },
-  "startPremium": "بدء Premium",
+  "startPremium": "ابدأ بريميوم",
   "@startPremium": {
     "description": "Premium purchase button text"
   },
-  "cancelAnytimeKeepAccess": "ألغِ في أي وقت واحتفظ بالوصول حتى نهاية الفترة",
+  "cancelAnytimeKeepAccess": "ألغِ متى شئت واحتفظ بالوصول",
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
@@ -480,7 +480,7 @@
       }
     }
   },
-  "workoutReminderTitle": "تذكير بالتمرين",
+  "workoutReminderTitle": "التذكيرات",
   "workoutReminderOff": "إيقاف",
   "workoutReminderEveryDay": "كل يوم",
   "workoutReminderSelectTime": "اختر الوقت",

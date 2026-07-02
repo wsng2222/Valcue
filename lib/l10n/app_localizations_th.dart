@@ -30,7 +30,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get soundEffects => 'เอฟเฟกต์เสียง';
 
   @override
-  String get unitSetting => 'การตั้งค่าหน่วย';
+  String get unitSetting => 'หน่วย';
 
   @override
   String get kmh => 'กม./ชม.';
@@ -39,7 +39,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get mph => 'mph';
 
   @override
-  String get themeMode => 'โหมดสว่าง/มืด';
+  String get themeMode => 'ธีม';
 
   @override
   String get light => 'โหมดสว่าง';
@@ -241,13 +241,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumRoutineSettings => 'การตั้งค่ารูทีนพรีเมียม';
 
   @override
-  String get viewMembership => 'ดูสมาชิก';
+  String get viewMembership => 'ดูพรีเมียม';
 
   @override
-  String get freeLimitTitle => 'ขีดจำกัดฟรีคือ 2 รูทีน';
+  String get freeLimitTitle => 'ฟรี 2 รูทีน';
 
   @override
-  String get freeLimitMessage => 'สมาชิกช่วยให้ใช้รูทีนได้ไม่จำกัด';
+  String get freeLimitMessage => 'อัปเกรดพรีเมียมเพื่อใช้รูทีนไม่จำกัด';
 
   @override
   String get treadmill => 'ลู่วิ่ง';
@@ -259,7 +259,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get stairmaster => 'Stairmaster';
 
   @override
-  String get selectLanguage => 'เลือกภาษา';
+  String get selectLanguage => 'ภาษา';
 
   @override
   String get selectTheme => 'เลือกธีม';
@@ -353,16 +353,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumActivated => 'เปิดใช้งานพรีเมียมแล้ว';
 
   @override
-  String get premiumMembership => 'สมาชิกพรีเมียม';
+  String get premiumMembership => 'พรีเมียม';
 
   @override
-  String get benefitCycleStairmaster => 'รูทีนจักรยานและ StairMaster';
+  String get benefitCycleStairmaster => 'รูทีนจักรยานและบันได';
 
   @override
-  String get benefitVoiceGuide => 'ระบบไกด์เสียงแจ้งเตือนทุกเซสชัน';
+  String get benefitVoiceGuide => 'ไกด์เสียง';
 
   @override
-  String get benefitUnlimitedRoutines => 'บันทึกรูทีนออกกำลังกายได้ไม่จำกัด';
+  String get benefitUnlimitedRoutines => 'รูทีนไม่จำกัด';
 
   @override
   String get noAds => 'ไม่มีโฆษณา';
@@ -450,7 +450,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cancelAnytime => 'ยกเลิกได้ทุกเมื่อ';
 
   @override
-  String get autoRenewableSubscription => 'การสมัครสมาชิกต่ออายุอัตโนมัติ';
+  String get autoRenewableSubscription => 'ต่ออายุอัตโนมัติ';
 
   @override
   String get terms => 'เงื่อนไข';
@@ -477,10 +477,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get close => 'ปิด';
 
   @override
-  String get premiumFeature => 'ฟีเจอร์พรีเมียม';
+  String get premiumFeature => 'เฉพาะพรีเมียม';
 
   @override
-  String get usePremiumTest => 'ใช้พรีเมียม (ทดสอบ)';
+  String get usePremiumTest => 'ทดลองพรีเมียม';
 
   @override
   String dateTimeFormat(int year, int month, int day, int hour, int minute) {
@@ -488,7 +488,7 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get checkRoutineStart => 'ตรวจสอบรูทีน / เริ่ม';
+  String get checkRoutineStart => 'ดูก่อนเริ่ม';
 
   @override
   String get beginner => 'ระดับเริ่มต้น';
@@ -503,13 +503,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get viewRecommendedRoutines => 'แนะนำ →';
 
   @override
-  String get recommendedRoutinesTreadmill => 'รูทีนลู่วิ่งแนะนำ';
+  String get recommendedRoutinesTreadmill => 'แนะนำลู่วิ่ง';
 
   @override
-  String get recommendedRoutinesCycle => 'รูทีนจักรยานแนะนำ';
+  String get recommendedRoutinesCycle => 'แนะนำจักรยาน';
 
   @override
-  String get recommendedRoutinesStairmaster => 'รูทีน Stairmaster แนะนำ';
+  String get recommendedRoutinesStairmaster => 'แนะนำบันได';
 
   @override
   String get alreadySaved => 'บันทึกแล้ว';
@@ -518,7 +518,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get routineSaved => 'บันทึกรูทีนแล้ว';
 
   @override
-  String get checkRoutine => 'ตรวจสอบ';
+  String get checkRoutine => 'ดู';
 
   @override
   String get saveRoutine => 'บันทึกรูทีน';
@@ -720,7 +720,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recordWeight => 'บันทึกน้ำหนัก';
 
   @override
-  String get quickAdjust => 'ปรับอย่างรวดเร็ว';
+  String get quickAdjust => 'ปรับเร็ว';
 
   @override
   String get goalWeightSet => 'ตั้งเป้าหมายน้ำหนักแล้ว';
@@ -744,15 +744,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get removeGoal => 'ยกเลิกเป้าหมาย';
 
   @override
-  String get addOneMoreRecordToSeeTrend =>
-      'บันทึกน้ำหนักเพิ่มอีก 1 ครั้งเพื่อดูแนวโน้ม';
+  String get addOneMoreRecordToSeeTrend => 'เพิ่มอีก 1 รายการเพื่อดูแนวโน้ม';
 
   @override
   String get noWeightRecorded => 'ยังไม่ได้บันทึกน้ำหนัก';
 
   @override
-  String get startTrackingYourWeight =>
-      'บันทึกน้ำหนักเพื่อเริ่มต้นติดตามความคืบหน้าได้ที่นี่';
+  String get startTrackingYourWeight => 'บันทึกน้ำหนักเพื่อติดตามความคืบหน้า';
 
   @override
   String get treadmillSession => 'เซสชันลู่วิ่ง';
@@ -773,7 +771,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get stairmasterWorkout => 'ออกกำลังกาย Stairmaster';
 
   @override
-  String get startAWorkoutToSeeItHere => 'เริ่มออกกำลังกายเพื่อให้แสดงที่นี่';
+  String get startAWorkoutToSeeItHere => 'ประวัติการออกกำลังจะแสดงที่นี่';
 
   @override
   String get mon => 'จ.';
@@ -870,26 +868,25 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get benefitVoiceCoaching => 'ระบบโค้ชเสียงพรีเมียม';
+  String get benefitVoiceCoaching => 'โค้ชเสียง';
 
   @override
-  String get benefitCycleStairmasterRoutines =>
-      'สนับสนุนอุปกรณ์คาร์ดิโอทั้งหมด';
+  String get benefitCycleStairmasterRoutines => 'รูทีนจักรยานและบันได';
 
   @override
-  String get benefitUnlimitedRoutinesNew => 'ไลบรารีรูทีนไม่จำกัด';
+  String get benefitUnlimitedRoutinesNew => 'รูทีนไม่จำกัด';
 
   @override
-  String get benefitWeightFeature => 'ติดตามและวิเคราะห์น้ำหนักแบบสมาร์ท';
+  String get benefitWeightFeature => 'ติดตามน้ำหนัก';
 
   @override
-  String get benefitNoAdsFocus => 'ประสบการณ์พรีเมียมไร้โฆษณา';
+  String get benefitNoAdsFocus => 'ไม่มีโฆษณา';
 
   @override
-  String get benefitFutureFeaturesNew => 'รวมฟีเจอร์พรีเมียมในอนาคตทั้งหมด';
+  String get benefitFutureFeaturesNew => 'รวมฟีเจอร์ใหม่';
 
   @override
-  String get mostChosen => 'เลือกมากที่สุด';
+  String get mostChosen => 'ยอดนิยม';
 
   @override
   String get canChangeAnytime => 'เปลี่ยนได้ทุกเมื่อ';
@@ -898,8 +895,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get startPremium => 'เริ่มพรีเมียม';
 
   @override
-  String get cancelAnytimeKeepAccess =>
-      'ยกเลิกได้ทุกเมื่อและใช้งานได้จนจบระยะเวลา';
+  String get cancelAnytimeKeepAccess => 'ยกเลิกได้ทุกเมื่อ แต่ยังใช้ได้ต่อ';
 
   @override
   String workoutDays(int count) {
@@ -924,7 +920,7 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get workoutReminderTitle => 'การแจ้งเตือนการออกกำลังกาย';
+  String get workoutReminderTitle => 'เตือนออกกำลัง';
 
   @override
   String get workoutReminderOff => 'ปิด';
