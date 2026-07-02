@@ -74,6 +74,9 @@ class _RoutineDetailSheetContent extends StatefulWidget {
 
 class _RoutineDetailSheetContentState
     extends State<_RoutineDetailSheetContent> {
+  static const Duration _intervalRemoveAnimationDuration =
+      Duration(milliseconds: 240);
+
   late bool _isEditing;
   late TextEditingController _nameController;
   late String _difficulty;
@@ -81,6 +84,8 @@ class _RoutineDetailSheetContentState
   late MachineType _machineType;
   bool _isDeleting = false;
   String? _nameError;
+  final Set<String> _enteringIntervalIds = <String>{};
+  final Set<String> _removingIntervalIds = <String>{};
 
   // Original routine for cancel (deep copy)
   late Routine? _originalRoutine;
@@ -276,6 +281,8 @@ class _RoutineDetailSheetContentState
           _difficulty = _draftRoutine!.difficulty;
           _intervals = _draftRoutine!.intervals.toList();
           _machineType = _draftRoutine!.machineType;
+          _enteringIntervalIds.clear();
+          _removingIntervalIds.clear();
           _isEditing = false;
           _nameError = null;
         });
@@ -293,6 +300,8 @@ class _RoutineDetailSheetContentState
           _draftRoutine = sourceRoutine.deepCopy();
           _intervals = _draftRoutine!.intervals.toList();
         }
+        _enteringIntervalIds.clear();
+        _removingIntervalIds.clear();
         _isEditing = true;
       });
       _nameController.addListener(_validateName);
@@ -352,32 +361,64 @@ class _RoutineDetailSheetContentState
     return interval.copyWith(id: _generateIntervalId(seed));
   }
 
-  void _addInterval() {
+  void _insertIntervalsWithAnimation(
+    List<Interval> intervalsToInsert, {
+    int? atIndex,
+    required String logStage,
+  }) {
+    if (intervalsToInsert.isEmpty) {
+      return;
+    }
+
+    final intervalIds =
+        intervalsToInsert.map((interval) => interval.id).toSet();
+
     setState(() {
-      _intervals.add(_buildDefaultInterval(id: _generateIntervalId()));
+      if (atIndex == null) {
+        _intervals.addAll(intervalsToInsert);
+      } else {
+        _intervals.insertAll(atIndex, intervalsToInsert);
+      }
+      _enteringIntervalIds.addAll(intervalIds);
     });
-    // DRIFT GUARD: Log after adding interval
-    _logIntervalSnapshot('ADD_INTERVAL', _intervals);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _enteringIntervalIds.removeAll(intervalIds);
+      });
+    });
+
+    _logIntervalSnapshot(logStage, _intervals);
+  }
+
+  void _addInterval() {
+    _insertIntervalsWithAnimation(
+      [_buildDefaultInterval(id: _generateIntervalId())],
+      logStage: 'ADD_INTERVAL',
+    );
   }
 
   void _duplicateLastInterval() {
-    setState(() {
-      final source =
-          _intervals.isEmpty ? _buildDefaultInterval() : _intervals.last;
-      _intervals.add(_cloneIntervalWithNewId(source));
-    });
-    _logIntervalSnapshot('DUPLICATE_LAST_INTERVAL', _intervals);
+    final source =
+        _intervals.isEmpty ? _buildDefaultInterval() : _intervals.last;
+    _insertIntervalsWithAnimation(
+      [_cloneIntervalWithNewId(source)],
+      logStage: 'DUPLICATE_LAST_INTERVAL',
+    );
   }
 
   void _duplicateIntervalBelow(String intervalId) {
-    setState(() {
-      final index =
-          _intervals.indexWhere((interval) => interval.id == intervalId);
-      if (index < 0) return;
-      final clone = _cloneIntervalWithNewId(_intervals[index], seed: index + 1);
-      _intervals.insert(index + 1, clone);
-    });
-    _logIntervalSnapshot('DUPLICATE_INTERVAL_BELOW', _intervals);
+    final index =
+        _intervals.indexWhere((interval) => interval.id == intervalId);
+    if (index < 0) return;
+
+    final clone = _cloneIntervalWithNewId(_intervals[index], seed: index + 1);
+    _insertIntervalsWithAnimation(
+      [clone],
+      atIndex: index + 1,
+      logStage: 'DUPLICATE_INTERVAL_BELOW',
+    );
   }
 
   void _repeatTailPattern({
@@ -393,18 +434,20 @@ class _RoutineDetailSheetContentState
       _intervals.sublist(_intervals.length - safePatternLength),
     );
 
-    setState(() {
-      for (int copyIndex = 0; copyIndex < repeatCount; copyIndex++) {
-        for (int itemIndex = 0; itemIndex < pattern.length; itemIndex++) {
-          final seed = (copyIndex * 100) + itemIndex;
-          _intervals.add(
-            _cloneIntervalWithNewId(pattern[itemIndex], seed: seed),
-          );
-        }
+    final clones = <Interval>[];
+    for (int copyIndex = 0; copyIndex < repeatCount; copyIndex++) {
+      for (int itemIndex = 0; itemIndex < pattern.length; itemIndex++) {
+        final seed = (copyIndex * 100) + itemIndex;
+        clones.add(
+          _cloneIntervalWithNewId(pattern[itemIndex], seed: seed),
+        );
       }
-    });
+    }
 
-    _logIntervalSnapshot('REPEAT_TAIL_PATTERN', _intervals);
+    _insertIntervalsWithAnimation(
+      clones,
+      logStage: 'REPEAT_TAIL_PATTERN',
+    );
   }
 
   void _showRepeatPatternPicker() {
@@ -571,8 +614,24 @@ class _RoutineDetailSheetContentState
     );
   }
 
-  void _deleteInterval(String intervalId) {
+  Future<void> _deleteInterval(String intervalId) async {
+    if (_removingIntervalIds.contains(intervalId)) {
+      return;
+    }
+
     setState(() {
+      _enteringIntervalIds.remove(intervalId);
+      _removingIntervalIds.add(intervalId);
+    });
+
+    await Future<void>.delayed(_intervalRemoveAnimationDuration);
+
+    if (!mounted || !_removingIntervalIds.contains(intervalId)) {
+      return;
+    }
+
+    setState(() {
+      _removingIntervalIds.remove(intervalId);
       _intervals.removeWhere((i) => i.id == intervalId);
     });
     // DRIFT GUARD: Log after deleting interval
@@ -1149,7 +1208,7 @@ class _RoutineDetailSheetContentState
                           ),
                         ),
                   const SizedBox(height: 24),
-                  if (_isEditing) ...[
+                  if (_isEditing && _intervals.isNotEmpty) ...[
                     _buildQuickToolsCard(),
                     const SizedBox(height: 16),
                   ],
@@ -1305,20 +1364,19 @@ class _RoutineDetailSheetContentState
     MachineType machineType,
     AppSettingsProvider settingsProvider,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: _EditableIntervalRow(
-        key: ValueKey(interval.id), // Stable key based on interval ID
-        interval: interval,
-        machineType: machineType,
-        settingsProvider: settingsProvider,
-        isEditing: _isEditing,
-        onUpdate: (updatedInterval) =>
-            _updateIntervalById(interval.id, updatedInterval),
-        onDuplicate:
-            _isEditing ? () => _duplicateIntervalBelow(interval.id) : null,
-        onDelete: _isEditing ? () => _deleteInterval(interval.id) : null,
-      ),
+    return _EditableIntervalRow(
+      key: ValueKey(interval.id), // Stable key based on interval ID
+      interval: interval,
+      machineType: machineType,
+      settingsProvider: settingsProvider,
+      isEditing: _isEditing,
+      isEntering: _enteringIntervalIds.contains(interval.id),
+      isRemoving: _removingIntervalIds.contains(interval.id),
+      onUpdate: (updatedInterval) =>
+          _updateIntervalById(interval.id, updatedInterval),
+      onDuplicate:
+          _isEditing ? () => _duplicateIntervalBelow(interval.id) : null,
+      onDelete: _isEditing ? () => _deleteInterval(interval.id) : null,
     );
   }
 
@@ -1400,11 +1458,6 @@ class _RoutineDetailSheetContentState
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildQuickActionButton(
-                icon: Icons.add_circle_outline,
-                label: l10n.addDefault,
-                onTap: _addInterval,
-              ),
               _buildQuickActionButton(
                 icon: Icons.content_copy_outlined,
                 label: l10n.duplicateLast,
@@ -1556,10 +1609,14 @@ class _DifficultyPickerSheet extends StatelessWidget {
 }
 
 class _EditableIntervalRow extends StatefulWidget {
+  static const Duration removalAnimationDuration = Duration(milliseconds: 240);
+
   final Interval interval;
   final MachineType machineType;
   final AppSettingsProvider settingsProvider;
   final bool isEditing;
+  final bool isEntering;
+  final bool isRemoving;
   final Function(Interval) onUpdate;
   final VoidCallback? onDuplicate;
   final VoidCallback? onDelete;
@@ -1570,6 +1627,8 @@ class _EditableIntervalRow extends StatefulWidget {
     required this.machineType,
     required this.settingsProvider,
     required this.isEditing,
+    this.isEntering = false,
+    this.isRemoving = false,
     required this.onUpdate,
     this.onDuplicate,
     this.onDelete,
@@ -1579,7 +1638,8 @@ class _EditableIntervalRow extends StatefulWidget {
   State<_EditableIntervalRow> createState() => _EditableIntervalRowState();
 }
 
-class _EditableIntervalRowState extends State<_EditableIntervalRow> {
+class _EditableIntervalRowState extends State<_EditableIntervalRow>
+    with SingleTickerProviderStateMixin {
   // State values for pickers
   late int _durationMinutes;
   late int _durationSeconds;
@@ -1589,10 +1649,36 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
   late int _rpm;
   late int _resistance;
   late int _level;
+  late final AnimationController _visibilityController;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _sizeAnimation;
+  late final Animation<Offset> _slideAnimation;
+
+  bool get _isVisible => !widget.isEntering && !widget.isRemoving;
 
   @override
   void initState() {
     super.initState();
+    _visibilityController = AnimationController(
+      vsync: this,
+      duration: _EditableIntervalRow.removalAnimationDuration,
+      value: _isVisible ? 1 : 0,
+    );
+    final curved = CurvedAnimation(
+      parent: _visibilityController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInOutCubic,
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _visibilityController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInOutCubic,
+    );
+    _sizeAnimation = curved;
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0.06, 0),
+      end: Offset.zero,
+    ).animate(curved);
     _initializeValues();
   }
 
@@ -1649,6 +1735,21 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
         }
       });
     }
+
+    final wasVisible = !oldWidget.isEntering && !oldWidget.isRemoving;
+    if (wasVisible != _isVisible) {
+      if (_isVisible) {
+        _visibilityController.forward();
+      } else {
+        _visibilityController.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _visibilityController.dispose();
+    super.dispose();
   }
 
   void _updateInterval() {
@@ -2590,7 +2691,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
       ],
     );
 
-    return Padding(
+    final rowContent = Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         width: double.infinity,
@@ -2645,6 +2746,21 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow> {
                 ),
             ],
           ],
+        ),
+      ),
+    );
+
+    return IgnorePointer(
+      ignoring: widget.isRemoving || widget.isEntering,
+      child: SizeTransition(
+        sizeFactor: _sizeAnimation,
+        axisAlignment: -1,
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: rowContent,
+          ),
         ),
       ),
     );
