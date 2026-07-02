@@ -166,6 +166,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               labelColor: theme.colorScheme.primary,
               unselectedLabelColor: theme.extension<AppColors>()!.mutedText,
               indicatorColor: theme.colorScheme.primary,
+              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+              splashFactory: NoSplash.splashFactory,
             ),
             // Tab content
             Expanded(
@@ -343,7 +345,8 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
         child: SizedBox(
           width: double.infinity,
           child: _buildPlatformSegmentedControl(
-            key: ValueKey('profile_machine_segment_${brightnessKey.name}_$localeKey'),
+            key: ValueKey(
+                'profile_machine_segment_${brightnessKey.name}_$localeKey'),
             labels: titles,
             selectedIndex: selectedIndex,
             onValueChanged: (index) {
@@ -437,9 +440,8 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                   final textColor = isSelected
                       ? theme.colorScheme.primary
                       : theme.colorScheme.onSurface.withValues(alpha: 0.5);
-                  final fontWeight = isSelected
-                      ? FontWeight.w700
-                      : FontWeight.w600;
+                  final fontWeight =
+                      isSelected ? FontWeight.w700 : FontWeight.w600;
 
                   return Expanded(
                     child: GestureDetector(
@@ -705,15 +707,6 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              AppLocalizations.of(context)!.startYourFirstWorkout,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: appColors.mutedText,
               ),
             ),
             const SizedBox(height: 32),

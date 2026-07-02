@@ -560,7 +560,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         right: false, // No right padding in landscape
         minimum: const EdgeInsets.only(
             top: 12,
-            bottom: 0), // Keep top breathing room without lifting controls
+            bottom: 16), // Keep top breathing room and ensure bottom space on devices with 0 bottom padding (like Android)
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Get available dimensions after SafeArea
@@ -1058,12 +1058,24 @@ class _ProgressRingPainter extends CustomPainter {
   final Color backgroundColor;
   final Color progressColor;
 
+  final Paint _backgroundPaint;
+  final Paint _progressPaint;
+
   _ProgressRingPainter({
     required this.strokeWidth,
     required this.progress,
     required this.backgroundColor,
     required this.progressColor,
-  });
+  })  : _backgroundPaint = Paint()
+          ..color = backgroundColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round,
+        _progressPaint = Paint()
+          ..color = progressColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1071,22 +1083,10 @@ class _ProgressRingPainter extends CustomPainter {
     final radius = (size.width - strokeWidth) / 2;
 
     // Draw background ring (full circle)
-    final backgroundPaint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawCircle(center, radius, backgroundPaint);
+    canvas.drawCircle(center, radius, _backgroundPaint);
 
     // Draw progress arc (clockwise from top)
     if (progress > 0) {
-      final progressPaint = Paint()
-        ..color = progressColor
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.round;
-
       // Start from top (-90 degrees) and draw clockwise
       // Progress arc: sweepAngle = progress * 360 degrees (2π radians)
       // Positive sweepAngle = clockwise direction in Flutter
@@ -1098,7 +1098,7 @@ class _ProgressRingPainter extends CustomPainter {
         startAngle,
         sweepAngle, // Positive = clockwise, negative = counterclockwise
         false, // Don't use center
-        progressPaint,
+        _progressPaint,
       );
     }
   }

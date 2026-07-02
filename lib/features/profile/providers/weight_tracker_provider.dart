@@ -28,18 +28,33 @@ class WeightTrackerProvider with ChangeNotifier {
   }
 
   Future<void> addEntry(WeightEntry entry) async {
-    await _storage.addEntry(entry);
-    await loadData();
+    _entries = [entry, ..._entries]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    notifyListeners();
+    _storage.addEntry(entry).catchError((e) {
+      loadData();
+    });
   }
 
   Future<void> deleteEntry(String id) async {
-    await _storage.deleteEntry(id);
-    await loadData();
+    _entries = _entries.where((e) => e.id != id).toList();
+    notifyListeners();
+    _storage.deleteEntry(id).catchError((e) {
+      loadData();
+    });
   }
 
   Future<void> updateEntry(String id, WeightEntry entry) async {
-    await _storage.updateEntry(id, entry);
-    await loadData();
+    final index = _entries.indexWhere((e) => e.id == id);
+    if (index != -1) {
+      final updated = [..._entries];
+      updated[index] = entry;
+      updated.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+      _entries = updated;
+      notifyListeners();
+    }
+    _storage.updateEntry(id, entry).catchError((e) {
+      loadData();
+    });
   }
 
   Future<void> setGoalWeight(double? weightKg) async {

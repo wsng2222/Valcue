@@ -117,7 +117,12 @@ class WorkoutReminderService {
       tz.setLocalLocation(tz.getLocation(timezoneName));
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('[WorkoutReminderService] Failed to set timezone: $e');
+        debugPrint('[WorkoutReminderService] Failed to set timezone: $e. Falling back to UTC.');
+      }
+      try {
+        tz.setLocalLocation(tz.getLocation('UTC'));
+      } catch (_) {
+        // Fail-safe: if UTC is somehow missing, it will default to UTC in timezone package or throw
       }
     }
 

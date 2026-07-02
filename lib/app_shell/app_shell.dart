@@ -652,7 +652,6 @@ class _PlanSelectorState extends State<_PlanSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -669,7 +668,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
           },
         ),
         const SizedBox(height: 14),
-        // Yearly plan (second option with Most Popular badge)
+        // Yearly plan (second option)
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -684,44 +683,10 @@ class _PlanSelectorState extends State<_PlanSelector> {
                 _notifier.value = PlanType.yearly;
               },
             ),
-            // "Most Popular" badge
-            if (_selectedPlan == PlanType.yearly)
-              Positioned(
-                top: 14,
-                right: 14,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.24),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            theme.colorScheme.primary.withValues(alpha: 0.12),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    l10n.mostPopular,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.primary,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
         const SizedBox(height: 14),
-        // Lifetime plan (third option with Best Value badge)
+        // Lifetime plan (third option)
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -736,40 +701,6 @@ class _PlanSelectorState extends State<_PlanSelector> {
                 _notifier.value = PlanType.lifetime;
               },
             ),
-            // "Best Value" badge
-            if (_selectedPlan == PlanType.lifetime)
-              Positioned(
-                top: 14,
-                right: 14,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.24),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            theme.colorScheme.primary.withValues(alpha: 0.12),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    l10n.bestValue,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.primary,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ],

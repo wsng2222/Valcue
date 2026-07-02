@@ -10,7 +10,7 @@ class ResponsiveUtils {
 
   /// Get screen size category
   static ScreenSize getScreenSize(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     if (width < smallPhone) {
       return ScreenSize.extraSmall;
     } else if (width < normalPhone) {
@@ -26,7 +26,7 @@ class ResponsiveUtils {
 
   /// Get font scale factor based on screen width
   static double getFontScale(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     if (width < smallPhone) return 0.9;
     if (width < normalPhone) return 0.95;
     if (width < largePhone) return 1.0;
@@ -36,7 +36,7 @@ class ResponsiveUtils {
 
   /// Get spacing scale factor
   static double getSpacingScale(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     if (width < smallPhone) return 0.85;
     if (width < normalPhone) return 0.9;
     if (width < largePhone) return 1.0;
@@ -119,7 +119,7 @@ class ResponsiveUtils {
 
   /// Horizontal padding for screens
   static double getHorizontalPadding(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     if (width < smallPhone) return 12;
     if (width < normalPhone) return 16;
     if (width < largePhone) return 20;
@@ -129,7 +129,7 @@ class ResponsiveUtils {
 
   /// Vertical padding for screens
   static double getVerticalPadding(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     if (width < smallPhone) return 12;
     if (width < normalPhone) return 14;
     if (width < largePhone) return 16;

@@ -23,9 +23,11 @@ class MetricChipGroup extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: Row(
-        mainAxisAlignment: mainAxisAlignment,
-        crossAxisAlignment: crossAxisAlignment,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: spacing,
+        runSpacing: 6.0,
         children: items
             .map(
               (item) => Chip(

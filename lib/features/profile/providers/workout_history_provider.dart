@@ -24,13 +24,19 @@ class WorkoutHistoryProvider with ChangeNotifier {
   }
 
   Future<void> addSession(WorkoutSession session) async {
-    await _storage.addSession(session);
-    await loadSessions();
+    _sessions = [session, ..._sessions]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    notifyListeners();
+    _storage.addSession(session).catchError((e) {
+      loadSessions();
+    });
   }
 
   Future<void> deleteSession(String id) async {
-    await _storage.deleteSession(id);
-    await loadSessions();
+    _sessions = _sessions.where((s) => s.id != id).toList();
+    notifyListeners();
+    _storage.deleteSession(id).catchError((e) {
+      loadSessions();
+    });
   }
 
   List<WorkoutSession> getSessionsByMachineType(MachineType machineType) {

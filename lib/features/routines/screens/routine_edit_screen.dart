@@ -466,7 +466,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,

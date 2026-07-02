@@ -1511,7 +1511,7 @@ class _DifficultyPickerSheet extends StatelessWidget {
     }
 
     return Container(
-      height: 350,
+      height: 260,
       padding: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -1859,7 +1859,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -1977,7 +1977,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -2082,7 +2082,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -2189,7 +2189,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true,
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -2287,7 +2287,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true,
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -2385,7 +2385,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
       context: context,
       barrierDismissible: true,
       builder: (context) => Container(
-        height: 350,
+        height: 260,
         padding: const EdgeInsets.only(top: 6),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,

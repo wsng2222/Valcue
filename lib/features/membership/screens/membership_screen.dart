@@ -164,12 +164,14 @@ class MembershipScreen extends StatelessWidget {
           size: 24,
         ),
         const SizedBox(width: 12),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: theme.colorScheme.onSurface,
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: theme.colorScheme.onSurface,
+            ),
           ),
         ),
       ],

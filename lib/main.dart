@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
@@ -195,6 +194,20 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _hideSystemUI();
+  }
+
+  void _hideSystemUI() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
+    const platform = MethodChannel('com.interval_cardio/system');
+    platform.invokeMethod('hideSystemUI').catchError((e) {
+      _debugLog('Failed to hide system UI: $e');
+    });
   }
 
   @override
@@ -206,18 +219,7 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // Re-hide navigation bar when app resumes
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          systemNavigationBarIconBrightness: Brightness.light,
-        ),
-      );
-      // Also call platform method
-      const platform = MethodChannel('com.interval_cardio/system');
-      platform.invokeMethod('hideSystemUI').catchError((e) {
-        _debugLog('Failed to hide system UI on resume: $e');
-      });
+      _hideSystemUI();
     }
   }
 
@@ -262,18 +264,6 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
 
   @override
   Widget build(BuildContext context) {
-    // Force hide navigation bar on every build
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    
-    // Ensure navigation bar stays hidden every rebuild
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          systemNavigationBarIconBrightness: Brightness.light,
-        ),
-      );
-    });
     return widget.child;
   }
 }

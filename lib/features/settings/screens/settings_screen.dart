@@ -624,7 +624,7 @@ class ThemeSegmentRow extends StatelessWidget {
         ),
         PlatformInfo.isIOS
             ? Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 8),
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
                 child: _buildSegmentedControl(
                   context: context,
                   value: value,
@@ -632,7 +632,7 @@ class ThemeSegmentRow extends StatelessWidget {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 6),
+                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
@@ -1212,8 +1212,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: Icons.volume_up,
                             iconColor: Colors.green,
                             title: AppLocalizations.of(context)!.voiceGuide,
-                            subtitle:
-                                AppLocalizations.of(context)!.audioNavigator,
                             onTap: provider.isPremium
                                 ? null
                                 : () {
