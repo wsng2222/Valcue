@@ -627,8 +627,8 @@ class _PlanSelectorState extends State<_PlanSelector> {
 
   // Pricing constants
   static const double monthlyPrice = 1900.0; // KRW
-  static const double yearlyPrice = 19000.0; // KRW (~17% savings vs monthly)
-  static const double lifetimePrice = 39000.0; // KRW (lifetime)
+  static const double yearlyPrice = 5900.0; // KRW
+  static const double lifetimePrice = 19900.0; // KRW
 
   int get _savingsPercent {
     const monthlyTotal = monthlyPrice * 12;
