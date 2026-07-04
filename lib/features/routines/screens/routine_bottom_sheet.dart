@@ -924,15 +924,6 @@ class _RoutineDetailSheetContentState
 
       if (!mounted) return;
 
-      // Show feedback
-      final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.deleted),
-          duration: const Duration(seconds: 1),
-        ),
-      );
-
       // Close bottom sheet
       Navigator.pop(context);
     } catch (e) {
@@ -2214,13 +2205,47 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
-                  Text(
-                    AppLocalizations.of(context)!.rpm,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      decoration: TextDecoration.none,
+                  Expanded(
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.rpm,
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(28, 28),
+                            onPressed: () => _showRpmInfoSheet(context),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.06),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                CupertinoIcons.info,
+                                size: 14,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   CupertinoButton(
@@ -2270,6 +2295,116 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
           ),
         ),
       ),
+    );
+  }
+
+  void _showRpmInfoSheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+
+    showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'RPM info',
+      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.28),
+      transitionDuration: const Duration(milliseconds: 180),
+      pageBuilder: (dialogContext, _, __) => SafeArea(
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 340),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: theme.brightness == Brightness.dark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : appColors.border,
+              ),
+              boxShadow: AppShadows.elevatedSoft,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        CupertinoIcons.info,
+                        size: 18,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'RPM',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onSurface,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  l10n.rpmInfoDescription,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: 1.5,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.78),
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: CupertinoButton(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
+                    minimumSize: Size.zero,
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    child: Text(
+                      l10n.done,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
+            child: child,
+          ),
+        );
+      },
     );
   }
 

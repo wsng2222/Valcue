@@ -117,12 +117,6 @@ class MembershipScreen extends StatelessWidget {
                         onPressed: () {
                           provider.updatePremium(true);
                           Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(l10n.premiumActivated),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,

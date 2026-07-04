@@ -2726,13 +2726,6 @@ class _WeightHistoryList extends StatelessWidget {
                   verticalOffset: -10,
                   onDelete: () {
                     provider.deleteEntry(entry.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.weightEntryDeleted),
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
                   },
                   child: InkWell(
                     onTap: () => _showEditWeightBottomSheet(context, entry),
@@ -2979,24 +2972,12 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
             weightKg: weightKg,
           ),
         );
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.weightUpdated),
-            duration: const Duration(seconds: 2),
-          ),
-        );
       } else {
         // Add new entry
         provider.addEntry(WeightEntry(
           dateTime: _selectedDateTime,
           weightKg: weightKg,
         ));
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.weightRecorded),
-            duration: const Duration(seconds: 2),
-          ),
-        );
       }
 
       Navigator.pop(context);
@@ -3499,12 +3480,6 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
         HapticFeedback.mediumImpact();
         provider.setGoalWeight(weightKg);
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.goalWeightSet),
-            duration: const Duration(seconds: 2),
-          ),
-        );
       }
     } else {
       provider.setGoalWeight(null);
@@ -3517,12 +3492,6 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
     HapticFeedback.mediumImpact();
     provider.setGoalWeight(null);
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.goalWeightRemoved),
-        duration: const Duration(seconds: 2),
-      ),
-    );
   }
 
   String? _getGoalHelperText(bool isMetric) {

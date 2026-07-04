@@ -356,14 +356,6 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                   builder: (context, provider, child) {
                     void onPurchase() {
                       provider.updatePremium(true);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context)!.premiumActivated,
-                          ),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
                     }
 
                     final buttonLabel = Text(

@@ -19,20 +19,12 @@ Color _segmentedSelectedBackground(BuildContext context) {
   return isDark ? const Color(0xFF2C2C2E) : Colors.white;
 }
 
-bool _useFlatAndroidLightStyle(BuildContext context) {
-  return !PlatformInfo.isIOS &&
-      Theme.of(context).brightness == Brightness.light;
-}
-
 Color _segmentedTrackBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
   return isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7);
 }
 
 List<BoxShadow>? _settingsCardShadow(BuildContext context) {
-  if (_useFlatAndroidLightStyle(context)) {
-    return null;
-  }
   return AppShadows.elevatedSoft;
 }
 
@@ -42,9 +34,6 @@ List<BoxShadow>? _segmentedThumbShadow(
   required double blurRadius,
   required Offset offset,
 }) {
-  if (_useFlatAndroidLightStyle(context)) {
-    return null;
-  }
   return [
     BoxShadow(
       color: Theme.of(context).colorScheme.shadow.withValues(alpha: alpha),
@@ -118,19 +107,14 @@ Widget _buildPlatformSegmentedControl({
 }
 
 Widget _buildPlatformSwitch({
+  required BuildContext context,
   required bool value,
   required ValueChanged<bool> onChanged,
 }) {
-  if (PlatformInfo.isIOS) {
-    return AdaptiveSwitch(
-      value: value,
-      onChanged: onChanged,
-    );
-  }
-
-  return Switch(
+  return CupertinoSwitch(
     value: value,
     onChanged: onChanged,
+    activeTrackColor: CupertinoTheme.of(context).primaryColor,
   );
 }
 
@@ -448,14 +432,14 @@ class UnitSegmentRow extends StatelessWidget {
           AppLocalizations.of(context)!.mph,
         ];
 
+    final resolvedLabels = segmentLabels.length == segmentOptions.length
+        ? segmentLabels
+        : segmentOptions;
+    final selectedIndex = segmentOptions.indexOf(value);
+    final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
+    final selectedBg = _segmentedSelectedBackground(context);
+    final brightnessKey = Theme.of(context).brightness;
     if (PlatformInfo.isIOS) {
-      final resolvedLabels = segmentLabels.length == segmentOptions.length
-          ? segmentLabels
-          : segmentOptions;
-      final selectedIndex = segmentOptions.indexOf(value);
-      final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
-      final selectedBg = _segmentedSelectedBackground(context);
-      final brightnessKey = Theme.of(context).brightness;
       return SegmentedButtonTheme(
         data: _segmentedThemeData(context, selectedBg),
         child: SizedBox(
@@ -485,8 +469,6 @@ class UnitSegmentRow extends StatelessWidget {
         final appColors = context.appColors;
         final trackBackground = _segmentedTrackBackground(context);
 
-        final selectedIndex = segmentOptions.indexOf(value);
-        final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
         final thumbLeft = textDirection == TextDirection.ltr
             ? (safeIndex * segmentWidth)
             : ((segmentOptions.length - 1 - safeIndex) * segmentWidth);
@@ -668,13 +650,12 @@ class ThemeSegmentRow extends StatelessWidget {
     required String value,
     required Function(String) onChanged,
   }) {
+    final l10n = AppLocalizations.of(context)!;
+    final displayValue = value == 'system' ? 'light' : value;
+    final selectedBg = _segmentedSelectedBackground(context);
+    final brightnessKey = Theme.of(context).brightness;
+    final localeKey = Localizations.localeOf(context).toLanguageTag();
     if (PlatformInfo.isIOS) {
-      final l10n = AppLocalizations.of(context)!;
-      final displayValue = value == 'system' ? 'light' : value;
-      final selectedIndex = displayValue == 'light' ? 0 : 1;
-      final selectedBg = _segmentedSelectedBackground(context);
-      final brightnessKey = Theme.of(context).brightness;
-      final localeKey = Localizations.localeOf(context).toLanguageTag();
       return SegmentedButtonTheme(
         data: _segmentedThemeData(context, selectedBg),
         child: SizedBox(
@@ -682,7 +663,7 @@ class ThemeSegmentRow extends StatelessWidget {
           child: _buildPlatformSegmentedControl(
             key: ValueKey('theme_segment_${brightnessKey.name}_$localeKey'),
             labels: [l10n.light, l10n.dark],
-            selectedIndex: selectedIndex,
+            selectedIndex: displayValue == 'light' ? 0 : 1,
             onValueChanged: (index) {
               onChanged(index == 0 ? 'light' : 'dark');
             },
@@ -693,8 +674,6 @@ class ThemeSegmentRow extends StatelessWidget {
       );
     }
 
-    final l10n = AppLocalizations.of(context)!;
-    final displayValue = value == 'system' ? 'light' : value;
     return LayoutBuilder(
       builder: (context, constraints) {
         final segmentWidth = (constraints.maxWidth - 4) / 2;
@@ -1223,6 +1202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             trailing: IgnorePointer(
                               ignoring: !provider.isPremium,
                               child: _buildPlatformSwitch(
+                                context: context,
                                 value: provider.voiceGuideEnabled,
                                 onChanged: (value) {
                                   if (!provider.isPremium) return;
@@ -1242,6 +1222,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             iconColor: Colors.orange,
                             title: AppLocalizations.of(context)!.soundEffects,
                             trailing: _buildPlatformSwitch(
+                              context: context,
                               value: provider.soundEffectsEnabled,
                               onChanged: (value) {
                                 provider.updateSoundEffects(value);
@@ -1261,6 +1242,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 .workoutReminderTitle,
                             subtitle: _reminderSubtitle(context, provider),
                             trailing: _buildPlatformSwitch(
+                              context: context,
                               value: provider.workoutReminderEnabled,
                               onChanged: (enabled) async {
                                 final success =
