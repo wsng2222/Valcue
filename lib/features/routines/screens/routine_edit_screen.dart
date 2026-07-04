@@ -457,6 +457,20 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     });
   }
 
+  String _getLocalizedDifficulty(
+      BuildContext context, String storedDifficulty) {
+    final l10n = AppLocalizations.of(context)!;
+    final difficultyStorageValues = ['쉬움', '중간', '높음'];
+    final difficultyDisplayValues = [l10n.easy, l10n.medium, l10n.hard];
+    final index = difficultyStorageValues.indexOf(storedDifficulty);
+
+    if (index >= 0 && index < difficultyDisplayValues.length) {
+      return difficultyDisplayValues[index];
+    }
+
+    return storedDifficulty;
+  }
+
   void _showDifficultyPicker(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final difficultyStorageValues = ['쉬움', '중간', '높음'];
@@ -644,10 +658,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         brightness: theme.brightness,
         primaryColor: theme.colorScheme.primary,
         barBackgroundColor: theme.colorScheme.surface,
-        scaffoldBackgroundColor: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
+        scaffoldBackgroundColor: isDark
+            ? const Color(0xFF000000)
+            : CupertinoColors.systemGroupedBackground,
       ),
       child: CupertinoPageScaffold(
-        backgroundColor: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
+        backgroundColor: isDark
+            ? const Color(0xFF000000)
+            : CupertinoColors.systemGroupedBackground,
         navigationBar: CupertinoNavigationBar(
           leading: CupertinoNavigationBarBackButton(
             onPressed: () => Navigator.pop(context),
@@ -665,145 +683,149 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           bottom: true,
           child: Column(
             children: [
-            // Header
-            RoutineHeader(
-              title: _nameController.text.isEmpty
-                  ? AppLocalizations.of(context)!.unnamedRoutine
-                  : _nameController.text,
-              totalDurationSeconds: totalDuration,
-              intervalCount: _intervals.length,
-              difficulty: _difficulty,
-              isEditing: true,
-            ),
-            // Name and difficulty section
-            CupertinoListSection.insetGrouped(
-              margin: EdgeInsets.zero,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CupertinoListTile(
-                      title: Text(AppLocalizations.of(context)!.name),
-                      trailing: SizedBox(
-                        width: 200,
-                        child: CupertinoTextField(
-                          controller: _nameController,
-                          placeholder:
-                              AppLocalizations.of(context)!.unnamedRoutine,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 8,
-                          ),
-                          decoration: null,
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: _nameError != null
-                                ? CupertinoColors.destructiveRed
-                                : CupertinoColors.label,
-                          ),
-                          textAlign: TextAlign.right,
-                          maxLength: 24,
-                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(24),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (_nameError != null)
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, top: 4, bottom: 8),
-                        child: Text(
-                          _nameError!,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: CupertinoColors.destructiveRed,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                CupertinoListTile(
-                  title: Text(AppLocalizations.of(context)!.difficulty),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+              // Header
+              RoutineHeader(
+                title: _nameController.text.isEmpty
+                    ? AppLocalizations.of(context)!.unnamedRoutine
+                    : _nameController.text,
+                totalDurationSeconds: totalDuration,
+                intervalCount: _intervals.length,
+                difficulty: _difficulty,
+                isEditing: true,
+              ),
+              // Name and difficulty section
+              CupertinoListSection.insetGrouped(
+                margin: EdgeInsets.zero,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        _difficulty,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          color: CupertinoColors.secondaryLabel,
+                      CupertinoListTile(
+                        title: Text(AppLocalizations.of(context)!.name),
+                        trailing: SizedBox(
+                          width: 200,
+                          child: CupertinoTextField(
+                            controller: _nameController,
+                            placeholder:
+                                AppLocalizations.of(context)!.unnamedRoutine,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
+                            decoration: null,
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: _nameError != null
+                                  ? CupertinoColors.destructiveRed
+                                  : CupertinoColors.label,
+                            ),
+                            textAlign: TextAlign.right,
+                            maxLength: 24,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(24),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        CupertinoIcons.chevron_right,
-                        size: 16,
-                        color: CupertinoColors.secondaryLabel,
-                      ),
+                      if (_nameError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, top: 4, bottom: 8),
+                          child: Text(
+                            _nameError!,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: CupertinoColors.destructiveRed,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
-                  onTap: () => _showDifficultyPicker(context),
-                ),
-              ],
-            ),
-            // Intervals list
-            Expanded(
-              child: SingleChildScrollView(
-                child: IntervalList(
-                  intervals: _intervals,
-                  machineType: _machineType,
-                  settingsProvider: settingsProvider,
-                  isEditable: true,
-                  onIntervalTap: _onIntervalTap,
-                  onIntervalDelete: _deleteInterval,
-                  selectedIndex: _selectedIntervalIndex,
-                  onAddInterval: _addInterval,
-                ),
+                  CupertinoListTile(
+                    title: Text(AppLocalizations.of(context)!.difficulty),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _getLocalizedDifficulty(context, _difficulty),
+                          style: const TextStyle(
+                            fontSize: 17,
+                            color: CupertinoColors.secondaryLabel,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          CupertinoIcons.chevron_right,
+                          size: 16,
+                          color: CupertinoColors.secondaryLabel,
+                        ),
+                      ],
+                    ),
+                    onTap: () => _showDifficultyPicker(context),
+                  ),
+                ],
               ),
-            ),
-            // Save button
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF000000) : CupertinoColors.systemGroupedBackground,
-                border: Border(
-                  top: BorderSide(
-                    color: theme.dividerColor,
-                    width: 0.5,
+              // Intervals list
+              Expanded(
+                child: SingleChildScrollView(
+                  child: IntervalList(
+                    intervals: _intervals,
+                    machineType: _machineType,
+                    settingsProvider: settingsProvider,
+                    isEditable: true,
+                    onIntervalTap: _onIntervalTap,
+                    onIntervalDelete: _deleteInterval,
+                    selectedIndex: _selectedIntervalIndex,
+                    onAddInterval: _addInterval,
                   ),
                 ),
               ),
-              child: SafeArea(
-                top: false,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: CupertinoButton(
-                    onPressed:
-                        (_isNameValid && _intervals.isNotEmpty && _hasChanges)
-                            ? _saveRoutine
-                            : null,
-                    color: theme.colorScheme.primary,
-                    disabledColor: isDark ? const Color(0xFF2C2C2E) : CupertinoColors.systemGrey,
-                    borderRadius: BorderRadius.circular(12),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      AppLocalizations.of(context)!.save,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onPrimary,
+              // Save button
+              Container(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF000000)
+                      : CupertinoColors.systemGroupedBackground,
+                  border: Border(
+                    top: BorderSide(
+                      color: theme.dividerColor,
+                      width: 0.5,
+                    ),
+                  ),
+                ),
+                child: SafeArea(
+                  top: false,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton(
+                      onPressed:
+                          (_isNameValid && _intervals.isNotEmpty && _hasChanges)
+                              ? _saveRoutine
+                              : null,
+                      color: theme.colorScheme.primary,
+                      disabledColor: isDark
+                          ? const Color(0xFF2C2C2E)
+                          : CupertinoColors.systemGrey,
+                      borderRadius: BorderRadius.circular(12),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Text(
+                        AppLocalizations.of(context)!.save,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

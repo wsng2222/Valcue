@@ -888,21 +888,16 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                         useSmoothRectangleBorder: false,
                       )
                     : Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                        width: 38,
+                        height: 38,
                         decoration: BoxDecoration(
-                          color:
-                              theme.colorScheme.primary.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(999),
+                          color: theme.colorScheme.primary,
+                          shape: BoxShape.circle,
                         ),
-                        child: Text(
-                          'Preview',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.primary,
-                            letterSpacing: 0.2,
-                          ),
+                        child: Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 13,
+                          color: theme.colorScheme.onPrimary,
                         ),
                       ),
               ],

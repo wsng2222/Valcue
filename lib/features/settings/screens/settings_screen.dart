@@ -114,7 +114,7 @@ Widget _buildPlatformSwitch({
   return CupertinoSwitch(
     value: value,
     onChanged: onChanged,
-    activeTrackColor: CupertinoTheme.of(context).primaryColor,
+    activeTrackColor: Theme.of(context).colorScheme.primary,
   );
 }
 
