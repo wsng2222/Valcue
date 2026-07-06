@@ -395,6 +395,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     final seconds = remainingSeconds % 60;
     final countdownLabel =
         '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final detailChips = _getDetailChips(context, state, settingsProvider);
+    final primaryMetricLabel = _getPrimaryMetricLabel(context);
+    final portraitMainFontSize =
+        (MediaQuery.sizeOf(context).width * 0.14).clamp(58.0, 78.0);
 
     return Column(
       children: [
@@ -402,26 +406,29 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         SafeArea(
           bottom: false,
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(24, 56, 24, 16),
+            padding: const EdgeInsetsDirectional.fromSTEB(24, 28, 24, 12),
             child: Column(
               children: [
                 // Total remaining time text (above bar) with tabular digits
                 BidiSafeText(
                   state.formatTime(state.totalRemainingSeconds),
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 28,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: -0.8,
+                    letterSpacing: -0.7,
                     fontFeatures: const [
                       ui.FontFeature.tabularFigures()
                     ], // Tabular/monospaced digits
                   ),
                   forceLTR: true, // Timers must always be LTR
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 // Total routine remaining progress bar
-                _TopPillProgressBar(progress: state.totalRemainingProgress),
+                _TopPillProgressBar(
+                  progress: state.totalRemainingProgress,
+                  height: 12,
+                ),
               ],
             ),
           ),
@@ -429,111 +436,87 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         // Main content: Current session info and circular timer
         Expanded(
           child: Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(flex: 1),
-                // Current session value (large primary text)
-                FlashingMetricText(
-                  text: _getMainValueText(context, state, settingsProvider),
-                  style: TextStyle(
-                    fontSize: 76,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: -2.0,
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 8, 20, 20),
+            child: Align(
+              alignment: const Alignment(0, -0.08),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: _WorkoutHeroPanel(
+                  isPortrait: true,
+                  scaleFactor: 1.0,
+                  mainSection: _CurrentValueSection(
+                    metricLabel: primaryMetricLabel,
+                    mainValueText:
+                        _getMainValueText(context, state, settingsProvider),
+                    detailChips: detailChips,
+                    mainFontSize: portraitMainFontSize,
+                    currentIntervalIndex: state.currentIntervalIndex,
+                    scaleFactor: 1.0,
+                    alignCenter: true,
                   ),
-                  defaultColor: Theme.of(context).colorScheme.onSurface,
-                  flashColor: Theme.of(context).colorScheme.primary,
-                  triggerKey: state.currentIntervalIndex,
+                  timerSection: SizedBox(
+                    width: double.infinity,
+                    child: _TimerSurface(
+                      isPortrait: true,
+                      scaleFactor: 1.0,
+                      child: _CircularSessionTimer(
+                        timeText: countdownLabel,
+                        progress: 1.0 - state.currentIntervalProgress,
+                        isPaused: state.status == WorkoutStatus.paused,
+                        size: 154,
+                        currentIntervalIndex: state.currentIntervalIndex,
+                        scaleFactor: 1.0,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 16),
-                // Next session value and secondary value as stacked chips
-                Column(
-                  children: [
-                    if (_getNextValueText(context, state, settingsProvider)
-                        .isNotEmpty)
-                      _InfoChip(
-                        text:
-                            _getNextValueText(context, state, settingsProvider),
-                      ),
-                    if (_getNextValueText(context, state, settingsProvider)
-                            .isNotEmpty &&
-                        _getNextRpmText(context, state).isNotEmpty)
-                      const SizedBox(height: 8),
-                    if (_getNextRpmText(context, state).isNotEmpty)
-                      _InfoChip(
-                        text: _getNextRpmText(context, state),
-                      ),
-                    if (_getNextValueText(context, state, settingsProvider)
-                            .isNotEmpty &&
-                        _getNextRpmText(context, state).isEmpty &&
-                        _getSecondaryValueText(context, state).isNotEmpty)
-                      const SizedBox(height: 8),
-                    if (_getNextValueText(context, state, settingsProvider)
-                            .isNotEmpty &&
-                        _getNextRpmText(context, state).isEmpty &&
-                        _getSecondaryValueText(context, state).isNotEmpty)
-                      _InfoChip(
-                        text: _getSecondaryValueText(context, state),
-                      ),
-                    if (_getNextValueText(context, state, settingsProvider)
-                            .isEmpty &&
-                        _getSecondaryValueText(context, state).isNotEmpty)
-                      _InfoChip(
-                        text: _getSecondaryValueText(context, state),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 36),
-                // Circular timer for current session
-                _CircularTimerBadge(
-                  timeText: countdownLabel,
-                  progress: 1.0 - state.currentIntervalProgress,
-                  isPaused: state.status == WorkoutStatus.paused,
-                  isLandscape: _isLandscapeMode,
-                ),
-                const Spacer(flex: 1),
-              ],
+              ),
             ),
           ),
         ),
         // Bottom buttons
         Padding(
-          padding: const EdgeInsetsDirectional.only(
-            bottom: 32,
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            20,
+            0,
+            20,
+            32,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _PrimaryButton(
-                label: state.status == WorkoutStatus.paused
-                    ? AppLocalizations.of(context)!.resume
-                    : AppLocalizations.of(context)!.pause,
-                onPressed: state.status == WorkoutStatus.resumingCountdown
-                    ? () {} // Disabled during countdown
-                    : (state.status == WorkoutStatus.paused
-                        ? () {
-                            Navigator.of(context, rootNavigator: true)
-                                .popUntil((route) => route.isFirst);
-                            if (mounted) {
-                              _pauseSheetOpen = false;
-                              if (!_isCountdownActive) {
-                                _isCountdownActive = true;
-                                _suppressIntervalGuidanceOnResume = true;
-                                state.startResumeCountdown();
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 360),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _PrimaryButton(
+                  width: 200,
+                  label: state.status == WorkoutStatus.paused
+                      ? AppLocalizations.of(context)!.resume
+                      : AppLocalizations.of(context)!.pause,
+                  onPressed: state.status == WorkoutStatus.resumingCountdown
+                      ? () {} // Disabled during countdown
+                      : (state.status == WorkoutStatus.paused
+                          ? () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .popUntil((route) => route.isFirst);
+                              if (mounted) {
+                                _pauseSheetOpen = false;
+                                if (!_isCountdownActive) {
+                                  _isCountdownActive = true;
+                                  _suppressIntervalGuidanceOnResume = true;
+                                  state.startResumeCountdown();
+                                }
                               }
                             }
-                          }
-                        : () => _pauseWorkout(state)),
-              ),
-              const SizedBox(width: 12),
-              _SecondaryButton(
-                onPressed: state.status == WorkoutStatus.resumingCountdown
-                    ? () {} // Disabled during countdown
-                    : _toggleOrientation,
-              ),
-            ],
+                          : () => _pauseWorkout(state)),
+                ),
+                const SizedBox(width: 12),
+                _SecondaryButton(
+                  onPressed: state.status == WorkoutStatus.resumingCountdown
+                      ? () {} // Disabled during countdown
+                      : _toggleOrientation,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -548,6 +531,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     final seconds = remainingSeconds % 60;
     final countdownLabel =
         '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final detailChips = _getDetailChips(context, state, settingsProvider);
+    final primaryMetricLabel = _getPrimaryMetricLabel(context);
 
     // Clamp text scaling to prevent UI breaking
     return MediaQuery(
@@ -560,7 +545,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         right: false, // No right padding in landscape
         minimum: const EdgeInsets.only(
             top: 12,
-            bottom: 16), // Keep top breathing room and ensure bottom space on devices with 0 bottom padding (like Android)
+            bottom:
+                16), // Keep top breathing room and ensure bottom space on devices with 0 bottom padding (like Android)
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Get available dimensions after SafeArea
@@ -587,13 +573,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             // Calculate responsive sizes
             final circleSize = math
                 .min(
-                  scaled(availableHeight * 0.65),
-                  scaled(availableWidth * 0.33),
+                  scaled(availableHeight * 0.52),
+                  scaled(availableWidth * 0.26),
                 )
-                .clamp(scaled(100.0), scaled(180.0));
+                .clamp(scaled(112.0), scaled(170.0));
 
-            final mainFontSize = (availableHeight * 0.20 * scaleFactor)
-                .clamp(scaled(48.0), scaled(100.0));
+            final mainFontSize = (availableHeight * 0.17 * scaleFactor)
+                .clamp(scaled(46.0), scaled(88.0));
+            final panelMaxWidth = math.max(
+              scaled(600),
+              math.min(availableWidth - scaled(56), scaled(940)),
+            );
 
             return Stack(
               fit: StackFit.expand,
@@ -609,49 +599,53 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     ),
                     // Main content: Two columns layout
                     Expanded(
-                      child: Align(
-                        alignment: const Alignment(0, 0.18),
+                      child: Center(
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                             scaled(20),
-                            0,
-                            scaled(48),
-                            scaled(56),
+                            scaled(12),
+                            scaled(20),
+                            scaled(42),
                           ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: _CurrentValueSection(
-                                  mainValueText: _getMainValueText(
-                                      context, state, settingsProvider),
-                                  nextValueText: _getNextValueText(
-                                      context, state, settingsProvider),
-                                  nextRpmText: _getNextRpmText(context, state),
-                                  secondaryValueText:
-                                      _getSecondaryValueText(context, state),
-                                  mainFontSize: mainFontSize,
-                                  currentIntervalIndex:
-                                      state.currentIntervalIndex,
+                          child: ConstrainedBox(
+                            constraints:
+                                BoxConstraints(maxWidth: panelMaxWidth),
+                            child: _WorkoutHeroPanel(
+                              isPortrait: false,
+                              scaleFactor: scaleFactor,
+                              mainSection: _CurrentValueSection(
+                                metricLabel: primaryMetricLabel,
+                                mainValueText: _getMainValueText(
+                                    context, state, settingsProvider),
+                                detailChips: detailChips,
+                                mainFontSize: mainFontSize,
+                                currentIntervalIndex:
+                                    state.currentIntervalIndex,
+                                scaleFactor: scaleFactor,
+                                alignCenter: false,
+                              ),
+                              timerSection: SizedBox(
+                                width: math.max(
+                                  circleSize + scaled(28),
+                                  scaled(198),
+                                ),
+                                child: _TimerSurface(
+                                  isPortrait: false,
                                   scaleFactor: scaleFactor,
+                                  child: _CircularSessionTimer(
+                                    timeText: countdownLabel,
+                                    progress:
+                                        1.0 - state.currentIntervalProgress,
+                                    isPaused:
+                                        state.status == WorkoutStatus.paused,
+                                    size: circleSize,
+                                    currentIntervalIndex:
+                                        state.currentIntervalIndex,
+                                    scaleFactor: scaleFactor,
+                                  ),
                                 ),
                               ),
-                              SizedBox(width: scaled(24)),
-                              SizedBox(
-                                width: circleSize + scaled(12),
-                                child: _CircularSessionTimer(
-                                  timeText: countdownLabel,
-                                  progress: 1.0 - state.currentIntervalProgress,
-                                  isPaused:
-                                      state.status == WorkoutStatus.paused,
-                                  size: circleSize,
-                                  currentIntervalIndex:
-                                      state.currentIntervalIndex,
-                                  scaleFactor: scaleFactor,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -710,6 +704,16 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     }
   }
 
+  String _getPrimaryMetricLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final label = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.speed,
+      MachineType.cycle => l10n.level,
+      MachineType.stairmaster => l10n.level,
+    };
+    return '${l10n.current} $label';
+  }
+
   String _getSecondaryValueText(BuildContext context, WorkoutState state) {
     switch (widget.routine.machineType) {
       case MachineType.treadmill:
@@ -762,6 +766,58 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       return '${l10n.rpm} ${nextInterval.rpm ?? 0}';
     }
     return ''; // No next interval
+  }
+
+  List<_WorkoutDetailChipData> _getDetailChips(
+    BuildContext context,
+    WorkoutState state,
+    AppSettingsProvider settingsProvider,
+  ) {
+    final chips = <_WorkoutDetailChipData>[];
+    final nextValueText = _getNextValueText(context, state, settingsProvider);
+    final nextRpmText = _getNextRpmText(context, state);
+    final secondaryValueText = _getSecondaryValueText(context, state);
+
+    if (nextValueText.isNotEmpty) {
+      chips.add(
+        _WorkoutDetailChipData(
+          icon: Icons.arrow_outward_rounded,
+          text: nextValueText,
+          isAccent: true,
+        ),
+      );
+    }
+
+    if (nextRpmText.isNotEmpty) {
+      chips.add(
+        _WorkoutDetailChipData(
+          icon: Icons.speed_rounded,
+          text: nextRpmText,
+        ),
+      );
+    }
+
+    if (nextRpmText.isEmpty && secondaryValueText.isNotEmpty) {
+      chips.add(
+        _WorkoutDetailChipData(
+          icon: _secondaryMetricIcon(),
+          text: secondaryValueText,
+        ),
+      );
+    }
+
+    return chips;
+  }
+
+  IconData _secondaryMetricIcon() {
+    switch (widget.routine.machineType) {
+      case MachineType.treadmill:
+        return Icons.terrain_rounded;
+      case MachineType.cycle:
+        return Icons.speed_rounded;
+      case MachineType.stairmaster:
+        return Icons.stairs_rounded;
+    }
   }
 
   Widget _buildCountdownOverlay(WorkoutState state) {
@@ -847,17 +903,21 @@ class _TopPillProgressBarState extends State<_TopPillProgressBar>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final trackColor = isDark
+        ? Colors.white.withValues(alpha: 0.08)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.06);
     return Container(
-      height: widget.height ?? 22,
+      height: widget.height ?? 12,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: trackColor,
         borderRadius: BorderRadius.circular(999),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.20),
-            blurRadius: 20,
-            spreadRadius: 0.5,
-            offset: const Offset(0, 7),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.08),
+            blurRadius: 14,
+            spreadRadius: 0,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -871,7 +931,7 @@ class _TopPillProgressBarState extends State<_TopPillProgressBar>
               // Background
               Container(
                 width: double.infinity,
-                color: theme.colorScheme.surface,
+                color: trackColor,
               ),
               // Primary fill bar with smooth animation (always left to right)
               AnimatedBuilder(
@@ -881,7 +941,17 @@ class _TopPillProgressBarState extends State<_TopPillProgressBar>
                     widthFactor: _animation.value.clamp(0.0, 1.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
+                        gradient: LinearGradient(
+                          colors: [
+                            theme.colorScheme.primary,
+                            Color.lerp(
+                                  theme.colorScheme.primary,
+                                  Colors.white,
+                                  isDark ? 0.08 : 0.18,
+                                ) ??
+                                theme.colorScheme.primary,
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -895,179 +965,23 @@ class _TopPillProgressBarState extends State<_TopPillProgressBar>
   }
 }
 
-// Small circular timer badge with full red ring
-class _CircularTimerBadge extends StatefulWidget {
-  final String timeText;
-  final double progress; // 0.0 to 1.0, where 1.0 = full ring, 0.0 = empty
-  final bool isPaused;
-  final bool isLandscape;
-
-  const _CircularTimerBadge({
-    required this.timeText,
-    required this.progress,
-    required this.isPaused,
-    required this.isLandscape,
-  });
-
-  @override
-  State<_CircularTimerBadge> createState() => _CircularTimerBadgeState();
-}
-
-class _CircularTimerBadgeState extends State<_CircularTimerBadge>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  double _previousProgress = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _previousProgress = widget.progress;
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-    _animation = Tween<double>(
-      begin: widget.progress,
-      end: widget.progress,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-    ));
-    _controller.value = 1.0; // Start at the end
-  }
-
-  @override
-  void didUpdateWidget(_CircularTimerBadge oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.progress != widget.progress) {
-      _previousProgress = _animation.value;
-      _animation = Tween<double>(
-        begin: _previousProgress,
-        end: widget.progress,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: Curves.linear,
-      ));
-      _controller.reset();
-      _controller.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Larger size in landscape mode
-    final double size = widget.isLandscape ? 200.0 : 130.0;
-    final double strokeWidth = widget.isLandscape ? 14.0 : 10.0;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    // Dark mode: use near-black/charcoal surface, light mode: white
-    final backgroundColor = isDark
-        ? const Color(0xFF1C1C1E) // Dark surface (charcoal)
-        : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
-
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          // Background circle with shadow
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: backgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.15),
-                  blurRadius: 12,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-          ),
-          // Progress ring (background gray + foreground red arc) with smooth animation
-          SizedBox(
-            width: size,
-            height: size,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: _ProgressRingPainter(
-                    strokeWidth: strokeWidth,
-                    progress: _animation.value,
-                    backgroundColor: backgroundColor,
-                    progressColor: theme.colorScheme.primary,
-                  ),
-                );
-              },
-            ),
-          ),
-          // Time text (always LTR for timers) with tabular digits
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BidiSafeText(
-                widget.timeText,
-                style: TextStyle(
-                  fontSize: widget.isLandscape ? 36.0 : 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
-                  letterSpacing: -0.5,
-                  fontFeatures: const [
-                    ui.FontFeature.tabularFigures()
-                  ], // Tabular/monospaced digits
-                ),
-                forceLTR: true, // Timers must always be LTR
-              ),
-              if (widget.isPaused) ...[
-                SizedBox(height: widget.isLandscape ? 6 : 4),
-                Text(
-                  AppLocalizations.of(context)!.paused,
-                  style: TextStyle(
-                    fontSize: widget.isLandscape ? 12.0 : 10.0,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).extension<AppColors>()!.mutedText,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // Painter for progress ring: gray background + primary arc
 class _ProgressRingPainter extends CustomPainter {
   final double strokeWidth;
   final double progress; // 0.0 to 1.0
-  final Color backgroundColor;
+  final Color trackColor;
   final Color progressColor;
 
-  final Paint _backgroundPaint;
+  final Paint _trackPaint;
   final Paint _progressPaint;
 
   _ProgressRingPainter({
     required this.strokeWidth,
     required this.progress,
-    required this.backgroundColor,
+    required this.trackColor,
     required this.progressColor,
-  })  : _backgroundPaint = Paint()
-          ..color = backgroundColor
+  })  : _trackPaint = Paint()
+          ..color = trackColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = strokeWidth
           ..strokeCap = StrokeCap.round,
@@ -1083,7 +997,7 @@ class _ProgressRingPainter extends CustomPainter {
     final radius = (size.width - strokeWidth) / 2;
 
     // Draw background ring (full circle)
-    canvas.drawCircle(center, radius, _backgroundPaint);
+    canvas.drawCircle(center, radius, _trackPaint);
 
     // Draw progress arc (clockwise from top)
     if (progress > 0) {
@@ -1107,7 +1021,7 @@ class _ProgressRingPainter extends CustomPainter {
   bool shouldRepaint(_ProgressRingPainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.strokeWidth != strokeWidth ||
-        oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.trackColor != trackColor ||
         oldDelegate.progressColor != progressColor;
   }
 }
@@ -1116,16 +1030,18 @@ class _ProgressRingPainter extends CustomPainter {
 class _PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
+  final double width;
 
   const _PrimaryButton({
     required this.label,
     required this.onPressed,
+    this.width = 150,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
+      width: width,
       height: 56,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -1171,9 +1087,8 @@ class _SecondaryButton extends StatelessWidget {
     final bgColor = isDark
         ? const Color(0xFF2C2C2E).withValues(alpha: 0.5)
         : Colors.grey.shade50;
-    final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.15)
-        : const Color(0xFFD0D0D0);
+    final borderColor =
+        isDark ? Colors.white.withValues(alpha: 0.15) : const Color(0xFFD0D0D0);
 
     return Opacity(
       opacity: onPressed == null ? 0.5 : 1.0,
@@ -1207,15 +1122,94 @@ class _SecondaryButton extends StatelessWidget {
   }
 }
 
-// Premium info chip with icon (landscape mode)
-class _PremiumInfoChip extends StatelessWidget {
+class _WorkoutHeroPanel extends StatelessWidget {
+  final bool isPortrait;
+  final double scaleFactor;
+  final Widget mainSection;
+  final Widget timerSection;
+
+  const _WorkoutHeroPanel({
+    required this.isPortrait,
+    required this.scaleFactor,
+    required this.mainSection,
+    required this.timerSection,
+  });
+
+  double _scaled(double base) => base * scaleFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: _scaled(isPortrait ? 4 : 8),
+        vertical: _scaled(isPortrait ? 12 : 6),
+      ),
+      child: isPortrait
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                mainSection,
+                SizedBox(height: _scaled(34)),
+                timerSection,
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: _scaled(560)),
+                  child: mainSection,
+                ),
+                SizedBox(width: _scaled(18)),
+                timerSection,
+              ],
+            ),
+    );
+  }
+}
+
+class _TimerSurface extends StatelessWidget {
+  final bool isPortrait;
+  final double scaleFactor;
+  final Widget child;
+
+  const _TimerSurface({
+    required this.isPortrait,
+    required this.scaleFactor,
+    required this.child,
+  });
+
+  double _scaled(double base) => base * scaleFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: _scaled(isPortrait ? 0 : 8)),
+      child: child,
+    );
+  }
+}
+
+class _WorkoutDetailChipData {
   final IconData icon;
   final String text;
-  final double scaleFactor;
+  final bool isAccent;
 
-  const _PremiumInfoChip({
+  const _WorkoutDetailChipData({
     required this.icon,
     required this.text,
+    this.isAccent = false,
+  });
+}
+
+class _WorkoutDetailChip extends StatelessWidget {
+  final _WorkoutDetailChipData chip;
+  final double scaleFactor;
+
+  const _WorkoutDetailChip({
+    required this.chip,
     required this.scaleFactor,
   });
 
@@ -1225,25 +1219,28 @@ class _PremiumInfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    // Very light tint (near white), not flat gray
-    final chipColor = isDark
-        ? const Color(0xFF2C2C2E) // Dark surface
-        : Colors.grey.shade50;
+    final chipColor = chip.isAccent
+        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.08 : 0.04)
+        : isDark
+            ? Colors.white.withValues(alpha: 0.03)
+            : Colors.black.withValues(alpha: 0.02);
+    final borderColor = chip.isAccent
+        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.55 : 0.28)
+        : isDark
+            ? Colors.white.withValues(alpha: 0.08)
+            : Colors.black.withValues(alpha: 0.10);
 
     return Container(
-      constraints: BoxConstraints(minHeight: _scaled(42)),
+      constraints: BoxConstraints(minHeight: _scaled(40)),
       padding: EdgeInsets.symmetric(
-        horizontal: _scaled(16),
-        vertical: _scaled(10),
+        horizontal: _scaled(14),
+        vertical: _scaled(9),
       ),
       decoration: BoxDecoration(
         color: chipColor,
-        borderRadius:
-            BorderRadius.circular(_scaled(24)), // >= 18 for premium look
+        borderRadius: BorderRadius.circular(_scaled(999)),
         border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : Colors.black.withValues(alpha: 0.08),
+          color: borderColor,
           width: 1,
         ),
       ),
@@ -1251,19 +1248,23 @@ class _PremiumInfoChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            icon,
-            size: _scaled(16),
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            chip.icon,
+            size: _scaled(15),
+            color: chip.isAccent
+                ? theme.colorScheme.primary
+                : theme.colorScheme.onSurface.withValues(alpha: 0.56),
           ),
           SizedBox(width: _scaled(10)),
           Flexible(
             child: Text(
-              text,
+              chip.text,
               style: TextStyle(
-                fontSize: _scaled(18),
-                fontWeight: FontWeight.w500,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
-                letterSpacing: -0.2,
+                fontSize: _scaled(15),
+                fontWeight: FontWeight.w600,
+                color: chip.isAccent
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.84),
+                letterSpacing: -0.1,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -1305,109 +1306,71 @@ class _BottomControlBar extends StatelessWidget {
         start: _scaled(32),
         end: _scaled(32),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Left spacer
-          const Spacer(),
-          // Center: Primary pause/resume button (pill shape)
-          Container(
-            height: _scaled(48),
-            decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(_scaled(24)), // >= 20 for premium look
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
-                  blurRadius: _scaled(8),
-                  spreadRadius: 0,
-                  offset: Offset(0, _scaled(2)),
+      child: Align(
+        alignment: Alignment.center,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: _scaled(320)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Center: Primary pause/resume button (pill shape)
+              Container(
+                height: _scaled(48),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                      _scaled(24)), // >= 20 for premium look
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
+                      blurRadius: _scaled(8),
+                      spreadRadius: 0,
+                      offset: Offset(0, _scaled(2)),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: ElevatedButton(
-              onPressed: isResumingCountdown ? () {} : onPauseResume,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary,
-                foregroundColor: theme.colorScheme.onPrimary,
-                padding: EdgeInsets.symmetric(
-                  horizontal: _scaled(32),
-                  vertical: _scaled(12),
+                child: ElevatedButton(
+                  onPressed: isResumingCountdown ? () {} : onPauseResume,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: _scaled(32),
+                      vertical: _scaled(12),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(_scaled(24)),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    isPaused ? l10n.resume : l10n.pause,
+                    style: TextStyle(
+                      fontSize: _scaled(17),
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(_scaled(24)),
-                ),
-                elevation: 0,
               ),
-              child: Text(
-                isPaused ? l10n.resume : l10n.pause,
-                style: TextStyle(
-                  fontSize: _scaled(17),
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.3,
+              SizedBox(width: _scaled(10)),
+              // Right: Rotate button (right of pause button)
+              SecondaryOutlinedIconButton(
+                onPressed: isResumingCountdown
+                    ? null
+                    : () {
+                        HapticFeedback.lightImpact();
+                        onRotate();
+                      },
+                size: _scaled(44),
+                iconColor: theme.colorScheme.onSurface,
+                icon: Icon(
+                  Icons.rotate_right,
+                  size: _scaled(20),
                 ),
               ),
-            ),
+            ],
           ),
-          SizedBox(width: _scaled(10)),
-          // Right: Rotate button (right of pause button)
-          SecondaryOutlinedIconButton(
-            onPressed: isResumingCountdown
-                ? null
-                : () {
-                    HapticFeedback.lightImpact();
-                    onRotate();
-                  },
-            size: _scaled(44),
-            iconColor: theme.colorScheme.onSurface,
-            icon: Icon(
-              Icons.rotate_right,
-              size: _scaled(20),
-            ),
-          ),
-          // Right spacer
-          const Spacer(),
-        ],
-      ),
-    );
-  }
-}
-
-// Info chip for next speed/incline
-class _InfoChip extends StatelessWidget {
-  final String text;
-
-  const _InfoChip({
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final chipColor = isDark
-        ? const Color(0xFF2C2C2E) // Dark surface
-        : Colors.grey.shade100;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-      decoration: BoxDecoration(
-        color: chipColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : Colors.black.withValues(alpha: 0.06),
-          width: 1,
-        ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-          letterSpacing: -0.2,
         ),
       ),
     );
@@ -1543,22 +1506,22 @@ class _TopRoutineProgressHeader extends StatelessWidget {
 
 // Current value section widget (left column in landscape)
 class _CurrentValueSection extends StatefulWidget {
+  final String metricLabel;
   final String mainValueText;
-  final String nextValueText;
-  final String nextRpmText;
-  final String secondaryValueText;
+  final List<_WorkoutDetailChipData> detailChips;
   final double mainFontSize;
   final int currentIntervalIndex;
   final double scaleFactor;
+  final bool alignCenter;
 
   const _CurrentValueSection({
+    required this.metricLabel,
     required this.mainValueText,
-    required this.nextValueText,
-    required this.nextRpmText,
-    required this.secondaryValueText,
+    required this.detailChips,
     required this.mainFontSize,
     required this.currentIntervalIndex,
     required this.scaleFactor,
+    required this.alignCenter,
   });
 
   double _scaled(double base) => base * scaleFactor;
@@ -1604,74 +1567,79 @@ class _CurrentValueSectionState extends State<_CurrentValueSection>
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: widget.alignCenter
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
+        Text(
+          widget.metricLabel,
+          style: TextStyle(
+            fontSize: widget._scaled(13),
+            fontWeight: FontWeight.w700,
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.42),
+            letterSpacing: 1.3,
+          ),
+          textAlign: widget.alignCenter ? TextAlign.center : TextAlign.start,
+        ),
+        SizedBox(height: widget._scaled(12)),
         // Current session value (large primary text) with pulse animation
-        AnimatedBuilder(
-          animation: _pulseController,
-          builder: (context, child) {
-            final scale = 1.0 + (_pulseController.value * 0.1);
-            return Transform.scale(
-              scale: scale,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: FlashingMetricText(
-                  text: widget.mainValueText,
-                  style: TextStyle(
-                    fontSize: widget.mainFontSize,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: -2.0,
+        Align(
+          alignment: widget.alignCenter
+              ? Alignment.center
+              : AlignmentDirectional.centerStart,
+          widthFactor: widget.alignCenter ? null : 1,
+          child: AnimatedBuilder(
+            animation: _pulseController,
+            builder: (context, child) {
+              final scale = 1.0 + (_pulseController.value * 0.1);
+              return Transform.scale(
+                scale: scale,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: widget.alignCenter
+                      ? Alignment.center
+                      : AlignmentDirectional.centerStart,
+                  child: FlashingMetricText(
+                    text: widget.mainValueText,
+                    style: TextStyle(
+                      fontSize: widget.mainFontSize,
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      letterSpacing: -1.8,
+                    ),
+                    defaultColor: Theme.of(context).colorScheme.onSurface,
+                    flashColor: Theme.of(context).colorScheme.primary,
+                    triggerKey: widget.currentIntervalIndex,
                   ),
-                  defaultColor: Theme.of(context).colorScheme.onSurface,
-                  flashColor: Theme.of(context).colorScheme.primary,
-                  triggerKey: widget.currentIntervalIndex,
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-        SizedBox(height: widget._scaled(20)),
-        // Next session value and secondary value as stacked premium chips
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (widget.nextValueText.isNotEmpty)
-              _PremiumInfoChip(
-                icon: Icons.arrow_forward_ios,
-                text: widget.nextValueText,
-                scaleFactor: widget.scaleFactor,
-              ),
-            if (widget.nextRpmText.isNotEmpty)
-              SizedBox(height: widget._scaled(8)),
-            if (widget.nextRpmText.isNotEmpty)
-              _PremiumInfoChip(
-                icon: Icons.speed,
-                text: widget.nextRpmText,
-                scaleFactor: widget.scaleFactor,
-              ),
-            if (widget.nextValueText.isNotEmpty &&
-                widget.nextRpmText.isEmpty &&
-                widget.secondaryValueText.isNotEmpty)
-              SizedBox(height: widget._scaled(8)),
-            if (widget.nextValueText.isNotEmpty &&
-                widget.nextRpmText.isEmpty &&
-                widget.secondaryValueText.isNotEmpty)
-              _PremiumInfoChip(
-                icon: Icons.terrain,
-                text: widget.secondaryValueText,
-                scaleFactor: widget.scaleFactor,
-              ),
-            if (widget.nextValueText.isEmpty &&
-                widget.nextRpmText.isEmpty &&
-                widget.secondaryValueText.isNotEmpty)
-              _PremiumInfoChip(
-                icon: Icons.terrain,
-                text: widget.secondaryValueText,
-                scaleFactor: widget.scaleFactor,
-              ),
-          ],
-        ),
+        if (widget.detailChips.isNotEmpty) ...[
+          SizedBox(height: widget._scaled(16)),
+          Align(
+            alignment: widget.alignCenter
+                ? Alignment.center
+                : AlignmentDirectional.centerStart,
+            widthFactor: widget.alignCenter ? null : 1,
+            child: Wrap(
+              alignment: widget.alignCenter
+                  ? WrapAlignment.center
+                  : WrapAlignment.start,
+              spacing: widget._scaled(10),
+              runSpacing: widget._scaled(10),
+              children: [
+                for (final chip in widget.detailChips)
+                  _WorkoutDetailChip(
+                    chip: chip,
+                    scaleFactor: widget.scaleFactor,
+                  ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -1784,6 +1752,9 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
         ? const Color(0xFF1C1C1E) // Dark surface (charcoal)
         : Colors.white;
     final textColor = isDark ? Colors.white : Colors.black;
+    final trackColor = isDark
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.black.withValues(alpha: 0.06);
     final strokeWidth =
         (widget.size * 0.07).clamp(widget._scaled(10.0), widget._scaled(14.0));
     final fontSize =
@@ -1809,10 +1780,10 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
                   boxShadow: [
                     BoxShadow(
                       color:
-                          Colors.black.withValues(alpha: isDark ? 0.4 : 0.15),
-                      blurRadius: 12,
+                          Colors.black.withValues(alpha: isDark ? 0.28 : 0.1),
+                      blurRadius: 10,
                       spreadRadius: 0,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -1831,7 +1802,7 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
                         painter: _ProgressRingPainter(
                           strokeWidth: strokeWidth,
                           progress: _animation.value,
-                          backgroundColor: backgroundColor,
+                          trackColor: trackColor,
                           progressColor: theme.colorScheme.primary,
                         ),
                       ),
