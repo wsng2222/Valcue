@@ -372,6 +372,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                         orientation == Orientation.portrait
                             ? _buildPortraitLayout(state, settingsProvider)
                             : _buildLandscapeLayout(state, settingsProvider),
+                        _IntervalPulseOverlay(
+                          triggerKey: state.currentIntervalIndex,
+                          enabled: state.status == WorkoutStatus.running,
+                        ),
                         // Countdown overlay
                         if (state.status == WorkoutStatus.resumingCountdown)
                           _buildCountdownOverlay(state),
@@ -409,19 +413,12 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             padding: const EdgeInsetsDirectional.fromSTEB(24, 28, 24, 12),
             child: Column(
               children: [
-                // Total remaining time text (above bar) with tabular digits
-                BidiSafeText(
-                  state.formatTime(state.totalRemainingSeconds),
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: -0.7,
-                    fontFeatures: const [
-                      ui.FontFeature.tabularFigures()
-                    ], // Tabular/monospaced digits
-                  ),
-                  forceLTR: true, // Timers must always be LTR
+                _HeaderTimeSummary(
+                  totalRemainingTimeFormatted:
+                      state.formatTime(state.totalRemainingSeconds),
+                  currentIntervalIndex: state.currentIntervalIndex,
+                  totalIntervals: widget.routine.intervals.length,
+                  scaleFactor: 1.0,
                 ),
                 const SizedBox(height: 10),
                 // Total routine remaining progress bar
@@ -595,6 +592,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       totalRemainingTimeFormatted:
                           state.formatTime(state.totalRemainingSeconds),
                       progress: state.totalRemainingProgress,
+                      currentIntervalIndex: state.currentIntervalIndex,
+                      totalIntervals: widget.routine.intervals.length,
                       scaleFactor: scaleFactor,
                     ),
                     // Main content: Two columns layout
@@ -1275,6 +1274,118 @@ class _WorkoutDetailChip extends StatelessWidget {
   }
 }
 
+class _IntervalPulseOverlay extends StatefulWidget {
+  final int triggerKey;
+  final bool enabled;
+
+  const _IntervalPulseOverlay({
+    required this.triggerKey,
+    required this.enabled,
+  });
+
+  @override
+  State<_IntervalPulseOverlay> createState() => _IntervalPulseOverlayState();
+}
+
+class _IntervalPulseOverlayState extends State<_IntervalPulseOverlay>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _controller.value = 1.0;
+  }
+
+  @override
+  void didUpdateWidget(_IntervalPulseOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.enabled) return;
+    if (oldWidget.triggerKey != widget.triggerKey) {
+      HapticFeedback.lightImpact();
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          final decay = Curves.easeOutQuad.transform(_controller.value);
+          final intensity = 1 - decay;
+          final flashOpacity = intensity * (isDark ? 0.16 : 0.10);
+          final borderOpacity = intensity * (isDark ? 0.50 : 0.34);
+          final glowOpacity = intensity * (isDark ? 0.28 : 0.16);
+          final borderWidth = 1.0 + (intensity * 5.5);
+
+          if (flashOpacity <= 0.001 &&
+              borderOpacity <= 0.001 &&
+              glowOpacity <= 0.001) {
+            return const SizedBox.shrink();
+          }
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: const Alignment(0, -0.05),
+                    radius: 1.0,
+                    colors: [
+                      theme.colorScheme.primary.withValues(
+                        alpha: flashOpacity,
+                      ),
+                      theme.colorScheme.primary.withValues(alpha: 0),
+                    ],
+                    stops: const [0.0, 1.0],
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withValues(
+                      alpha: borderOpacity,
+                    ),
+                    width: borderWidth,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(
+                        alpha: glowOpacity,
+                      ),
+                      blurRadius: 28,
+                      spreadRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
 // Bottom control bar widget (landscape mode)
 class _BottomControlBar extends StatelessWidget {
   final bool isPaused;
@@ -1433,15 +1544,121 @@ class _CountdownOverlayState extends State<_CountdownOverlay> {
   }
 }
 
+class _HeaderTimeSummary extends StatelessWidget {
+  final String totalRemainingTimeFormatted;
+  final int currentIntervalIndex;
+  final int totalIntervals;
+  final double scaleFactor;
+
+  const _HeaderTimeSummary({
+    required this.totalRemainingTimeFormatted,
+    required this.currentIntervalIndex,
+    required this.totalIntervals,
+    required this.scaleFactor,
+  });
+
+  double _scaled(double base) => base * scaleFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      width: double.infinity,
+      height: _scaled(40),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          BidiSafeText(
+            totalRemainingTimeFormatted,
+            style: TextStyle(
+              fontSize: _scaled(28),
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
+              letterSpacing: -0.7,
+              height: 1.0,
+              fontFeatures: const [ui.FontFeature.tabularFigures()],
+            ),
+            forceLTR: true,
+          ),
+          PositionedDirectional(
+            end: 0,
+            child: _HeaderIntervalIndicator(
+              currentIntervalIndex: currentIntervalIndex,
+              totalIntervals: totalIntervals,
+              scaleFactor: scaleFactor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderIntervalIndicator extends StatelessWidget {
+  final int currentIntervalIndex;
+  final int totalIntervals;
+  final double scaleFactor;
+
+  const _HeaderIntervalIndicator({
+    required this.currentIntervalIndex,
+    required this.totalIntervals,
+    required this.scaleFactor,
+  });
+
+  double _scaled(double base) => base * scaleFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final safeTotal = totalIntervals < 1 ? 1 : totalIntervals;
+    final currentStep =
+        math.min(math.max(currentIntervalIndex + 1, 1), safeTotal);
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: _scaled(10),
+        vertical: _scaled(6),
+      ),
+      decoration: BoxDecoration(
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.05)
+            : Colors.black.withValues(alpha: 0.035),
+        borderRadius: BorderRadius.circular(_scaled(999)),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+          width: 1,
+        ),
+      ),
+      child: BidiSafeText(
+        '$currentStep/$safeTotal',
+        style: TextStyle(
+          fontSize: _scaled(14),
+          fontWeight: FontWeight.w700,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
+          letterSpacing: -0.2,
+          fontFeatures: const [ui.FontFeature.tabularFigures()],
+        ),
+        forceLTR: true,
+      ),
+    );
+  }
+}
+
 // Top routine progress header widget (reusable for landscape)
 class _TopRoutineProgressHeader extends StatelessWidget {
   final String totalRemainingTimeFormatted;
   final double progress;
+  final int currentIntervalIndex;
+  final int totalIntervals;
   final double scaleFactor;
 
   const _TopRoutineProgressHeader({
     required this.totalRemainingTimeFormatted,
     required this.progress,
+    required this.currentIntervalIndex,
+    required this.totalIntervals,
     required this.scaleFactor,
   });
 
@@ -1463,20 +1680,11 @@ class _TopRoutineProgressHeader extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Total remaining time text (compact) with tabular digits
-              BidiSafeText(
-                totalRemainingTimeFormatted,
-                style: TextStyle(
-                  fontSize: _scaled(28),
-                  fontWeight: FontWeight.w700,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.7,
-                  height: 1.0,
-                  fontFeatures: const [
-                    ui.FontFeature.tabularFigures()
-                  ], // Tabular/monospaced digits
-                ),
-                forceLTR: true, // Timers must always be LTR
+              _HeaderTimeSummary(
+                totalRemainingTimeFormatted: totalRemainingTimeFormatted,
+                currentIntervalIndex: currentIntervalIndex,
+                totalIntervals: totalIntervals,
+                scaleFactor: scaleFactor,
               ),
               SizedBox(height: _scaled(10)),
               // Total routine remaining progress bar (thinner)
@@ -1610,6 +1818,7 @@ class _CurrentValueSectionState extends State<_CurrentValueSection>
                     ),
                     defaultColor: Theme.of(context).colorScheme.onSurface,
                     flashColor: Theme.of(context).colorScheme.primary,
+                    enableScalePulse: true,
                     triggerKey: widget.currentIntervalIndex,
                   ),
                 ),
