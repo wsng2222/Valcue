@@ -575,39 +575,16 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                   },
                   minimumSize: const Size(0, 0),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
-                    ),
+                    width: 46,
+                    height: 46,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
-                      borderRadius: BorderRadius.circular(999),
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              theme.colorScheme.primary.withValues(alpha: 0.18),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
+                      shape: BoxShape.circle,
                     ),
-                    child: Text(
-                      (() {
-                        try {
-                          return (l10n as dynamic).checkRoutine ??
-                              'Check Routine';
-                        } catch (e) {
-                          return 'Check Routine';
-                        }
-                      })(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onPrimary,
-                        decoration: TextDecoration.none,
-                      ),
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 15,
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
                 ),

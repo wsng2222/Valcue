@@ -140,6 +140,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get repeatPattern => 'Patroon herhalen';
 
   @override
+  String get reorderIntervals => 'Volgorde wijzigen';
+
+  @override
+  String get reorderMode => 'Modus voor volgorde wijzigen';
+
+  @override
+  String get reorderModeHint =>
+      'Houd een kaart ingedrukt om deze naar de gewenste plek te verplaatsen.';
+
+  @override
   String get patternLength => 'Patroonlengte';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM laat zien hoe vaak je pedalen in één minuut ronddraaien. Een hogere RPM betekent dat je met een snellere cadans fietst.';
 
   @override
   String get resistance => 'Weerstand';

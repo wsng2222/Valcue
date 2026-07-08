@@ -140,6 +140,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get repeatPattern => 'Muster wiederholen';
 
   @override
+  String get reorderIntervals => 'Reihenfolge ändern';
+
+  @override
+  String get reorderMode => 'Modus zum Ändern der Reihenfolge';
+
+  @override
+  String get reorderModeHint =>
+      'Halte eine Karte gedrückt, um sie an die gewünschte Position zu verschieben.';
+
+  @override
   String get patternLength => 'Musterlänge';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM zeigt an, wie oft sich deine Pedale in einer Minute drehen. Ein höherer RPM-Wert bedeutet, dass du mit einer schnelleren Trittfrequenz pedalierst.';
 
   @override
   String get resistance => 'Widerstand';

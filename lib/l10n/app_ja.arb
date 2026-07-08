@@ -56,6 +56,9 @@
   "addDefault": "基本追加",
   "duplicateLast": "最後を複製",
   "repeatPattern": "パターン反復",
+  "reorderIntervals": "順序変更",
+  "reorderMode": "順序変更モード",
+  "reorderModeHint": "カードを長押しして、好きな位置に移動してください。",
   "patternLength": "パターン長",
   "repeatCount": "追加回数",
   "noIntervals": "インターバルがありません",
@@ -76,6 +79,7 @@
     }
   },
   "rpm": "RPM",
+  "rpmInfoDescription": "RPMは1分間にペダルが何回転するかを示す値です。数値が高いほど、より速いケイデンスでペダルをこいでいることを意味します。",
   "resistance": "抵抗",
   "resistanceLevel": "抵抗（レベル）",
   "resistanceColon": "抵抗 {resistance}",

@@ -139,6 +139,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get repeatPattern => 'تكرار النمط';
 
   @override
+  String get reorderIntervals => 'إعادة الترتيب';
+
+  @override
+  String get reorderMode => 'وضع إعادة الترتيب';
+
+  @override
+  String get reorderModeHint =>
+      'اضغط مطولاً على البطاقة لنقلها إلى المكان الذي تريده.';
+
+  @override
   String get patternLength => 'طول النمط';
 
   @override
@@ -178,6 +188,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get rpm => 'دورة/دقيقة';
+
+  @override
+  String get rpmInfoDescription =>
+      'يوضح RPM عدد المرات التي تدور فيها الدواسات خلال دقيقة واحدة. وكلما ارتفع الرقم، فهذا يعني أنك تبدل بسرعة إيقاع أعلى.';
 
   @override
   String get resistance => 'المقاومة';

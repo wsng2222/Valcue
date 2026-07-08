@@ -56,6 +56,9 @@
   "addDefault": "Añadir base",
   "duplicateLast": "Duplicar última",
   "repeatPattern": "Repetir patrón",
+  "reorderIntervals": "Reordenar",
+  "reorderMode": "Modo de reordenación",
+  "reorderModeHint": "Mantén pulsada una tarjeta para moverla a la posición que quieras.",
   "patternLength": "Largo del patrón",
   "repeatCount": "Repeticiones",
   "noIntervals": "No hay intervalos",
@@ -76,6 +79,7 @@
     }
   },
   "rpm": "RPM",
+  "rpmInfoDescription": "RPM muestra cuántas veces giran tus pedales en un minuto. Un RPM más alto significa que pedaleas con una cadencia más rápida.",
   "resistance": "Resistencia",
   "resistanceLevel": "Resistencia (Nivel)",
   "resistanceColon": "Resistencia {resistance}",

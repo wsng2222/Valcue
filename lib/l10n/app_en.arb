@@ -178,6 +178,18 @@
   "@repeatPattern": {
     "description": "Repeat the last interval pattern"
   },
+  "reorderIntervals": "Reorder",
+  "@reorderIntervals": {
+    "description": "Button label to enter interval reordering mode"
+  },
+  "reorderMode": "Reorder Mode",
+  "@reorderMode": {
+    "description": "Title shown while reordering routine intervals"
+  },
+  "reorderModeHint": "Press and hold a card to move it into place.",
+  "@reorderModeHint": {
+    "description": "Instruction shown while reordering routine intervals"
+  },
   "patternLength": "Pattern Size",
   "@patternLength": {
     "description": "Pattern length picker label"
@@ -234,6 +246,10 @@
   "rpm": "RPM",
   "@rpm": {
     "description": "RPM label"
+  },
+  "rpmInfoDescription": "RPM shows how many times your pedals turn in one minute. A higher RPM means you are pedaling with a faster cadence.",
+  "@rpmInfoDescription": {
+    "description": "Explanation of RPM for users who may not know the term"
   },
   "resistance": "Resistance",
   "@resistance": {

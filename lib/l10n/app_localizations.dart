@@ -378,6 +378,24 @@ abstract class AppLocalizations {
   /// **'Repeat Pattern'**
   String get repeatPattern;
 
+  /// Button label to enter interval reordering mode
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorderIntervals;
+
+  /// Title shown while reordering routine intervals
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder Mode'**
+  String get reorderMode;
+
+  /// Instruction shown while reordering routine intervals
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold a card to move it into place.'**
+  String get reorderModeHint;
+
   /// Pattern length picker label
   ///
   /// In en, this message translates to:
@@ -455,6 +473,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'RPM'**
   String get rpm;
+
+  /// Explanation of RPM for users who may not know the term
+  ///
+  /// In en, this message translates to:
+  /// **'RPM shows how many times your pedals turn in one minute. A higher RPM means you are pedaling with a faster cadence.'**
+  String get rpmInfoDescription;
 
   /// Resistance label
   ///

@@ -140,6 +140,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get repeatPattern => 'Ripeti schema';
 
   @override
+  String get reorderIntervals => 'Riordina';
+
+  @override
+  String get reorderMode => 'Modalità riordino';
+
+  @override
+  String get reorderModeHint =>
+      'Tieni premuta una scheda per spostarla nella posizione desiderata.';
+
+  @override
   String get patternLength => 'Lunghezza schema';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM indica quante volte i pedali girano in un minuto. Un valore RPM più alto significa che stai pedalando con una cadenza più veloce.';
 
   @override
   String get resistance => 'Resistenza';

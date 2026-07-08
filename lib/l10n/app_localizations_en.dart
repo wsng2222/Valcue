@@ -140,6 +140,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repeatPattern => 'Repeat Pattern';
 
   @override
+  String get reorderIntervals => 'Reorder';
+
+  @override
+  String get reorderMode => 'Reorder Mode';
+
+  @override
+  String get reorderModeHint => 'Press and hold a card to move it into place.';
+
+  @override
   String get patternLength => 'Pattern Size';
 
   @override
@@ -179,6 +188,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM shows how many times your pedals turn in one minute. A higher RPM means you are pedaling with a faster cadence.';
 
   @override
   String get resistance => 'Resistance';

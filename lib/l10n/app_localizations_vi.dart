@@ -140,6 +140,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get repeatPattern => 'Lặp mẫu';
 
   @override
+  String get reorderIntervals => 'Sắp xếp lại thứ tự';
+
+  @override
+  String get reorderMode => 'Chế độ sắp xếp lại';
+
+  @override
+  String get reorderModeHint =>
+      'Nhấn và giữ một thẻ để di chuyển thẻ đến vị trí bạn muốn.';
+
+  @override
   String get patternLength => 'Độ dài mẫu';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM cho biết bàn đạp quay bao nhiêu vòng trong một phút. RPM càng cao nghĩa là bạn đang đạp với nhịp nhanh hơn.';
 
   @override
   String get resistance => 'Kháng cự';

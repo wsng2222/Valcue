@@ -56,6 +56,9 @@
   "addDefault": "Standard hinzu",
   "duplicateLast": "Letzte kopieren",
   "repeatPattern": "Muster wiederholen",
+  "reorderIntervals": "Reihenfolge ändern",
+  "reorderMode": "Modus zum Ändern der Reihenfolge",
+  "reorderModeHint": "Halte eine Karte gedrückt, um sie an die gewünschte Position zu verschieben.",
   "patternLength": "Musterlänge",
   "repeatCount": "Wiederholungen",
   "noIntervals": "Keine Intervalle",
@@ -76,6 +79,7 @@
     }
   },
   "rpm": "RPM",
+  "rpmInfoDescription": "RPM zeigt an, wie oft sich deine Pedale in einer Minute drehen. Ein höherer RPM-Wert bedeutet, dass du mit einer schnelleren Trittfrequenz pedalierst.",
   "resistance": "Widerstand",
   "resistanceLevel": "Widerstand (Stufe)",
   "resistanceColon": "Widerstand {resistance}",

@@ -7,6 +7,7 @@ import 'package:interval_cardio/utils/responsive.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
+import '../utils/reorder_utils.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../storage/routine_provider.dart';
 import '../../workout/screens/workout_screen.dart';
@@ -83,6 +84,7 @@ class _RoutineDetailSheetContentState
   late List<Interval> _intervals;
   late MachineType _machineType;
   bool _isDeleting = false;
+  bool _isReordering = false;
   String? _nameError;
   final Set<String> _enteringIntervalIds = <String>{};
   final Set<String> _removingIntervalIds = <String>{};
@@ -168,6 +170,8 @@ class _RoutineDetailSheetContentState
     final trimmed = _nameController.text.trim();
     return trimmed.isNotEmpty && trimmed.length <= 24;
   }
+
+  bool get _canReorderIntervals => _intervals.length > 1;
 
   /// Build current routine from state - READ ONLY, NO MUTATIONS
   /// This is called in build() and must never mutate intervals or any state
@@ -281,6 +285,7 @@ class _RoutineDetailSheetContentState
           _difficulty = _draftRoutine!.difficulty;
           _intervals = _draftRoutine!.intervals.toList();
           _machineType = _draftRoutine!.machineType;
+          _isReordering = false;
           _enteringIntervalIds.clear();
           _removingIntervalIds.clear();
           _isEditing = false;
@@ -300,6 +305,7 @@ class _RoutineDetailSheetContentState
           _draftRoutine = sourceRoutine.deepCopy();
           _intervals = _draftRoutine!.intervals.toList();
         }
+        _isReordering = false;
         _enteringIntervalIds.clear();
         _removingIntervalIds.clear();
         _isEditing = true;
@@ -633,6 +639,9 @@ class _RoutineDetailSheetContentState
     setState(() {
       _removingIntervalIds.remove(intervalId);
       _intervals.removeWhere((i) => i.id == intervalId);
+      if (!_canReorderIntervals) {
+        _isReordering = false;
+      }
     });
     // DRIFT GUARD: Log after deleting interval
     _logIntervalSnapshot('DELETE_INTERVAL', _intervals);
@@ -647,6 +656,27 @@ class _RoutineDetailSheetContentState
         // DRIFT GUARD: Log after updating interval
         _logIntervalSnapshot('UPDATE_INTERVAL', _intervals);
       }
+    });
+  }
+
+  void _reorderIntervals(int oldIndex, int newIndex) {
+    if (oldIndex == newIndex) {
+      return;
+    }
+
+    setState(() {
+      _intervals = reorderItems(_intervals, oldIndex, newIndex);
+    });
+    _logIntervalSnapshot('REORDER_INTERVALS', _intervals);
+  }
+
+  void _toggleReorderMode() {
+    if (!_canReorderIntervals) {
+      return;
+    }
+
+    setState(() {
+      _isReordering = !_isReordering;
     });
   }
 
@@ -793,6 +823,7 @@ class _RoutineDetailSheetContentState
       if (mounted) {
         setState(() {
           _isEditing = false;
+          _isReordering = false;
           _originalRoutine = savedRoutine.deepCopy();
           _draftRoutine = savedRoutine.deepCopy();
           _intervals = _draftRoutine!.intervals.toList();
@@ -943,6 +974,323 @@ class _RoutineDetailSheetContentState
     }
   }
 
+  Widget _buildSheetHeader(
+    Routine currentRoutine,
+    String totalDurationFormatted,
+    Color layeredSurfaceColor,
+  ) {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+
+    return Column(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 52,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 56),
+                    child: _isEditing
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 260,
+                                    child: TextField(
+                                      controller: _nameController,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      maxLength: 24,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(24),
+                                      ],
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: _nameError != null
+                                            ? theme.colorScheme.error
+                                            : theme.colorScheme.onSurface,
+                                        letterSpacing: -0.5,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.zero,
+                                        counterText: '',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 180,
+                                child: Container(
+                                  height: 1.25,
+                                  margin: const EdgeInsets.only(bottom: 2),
+                                  decoration: BoxDecoration(
+                                    color: _nameError != null
+                                        ? theme.colorScheme.error
+                                        : theme.colorScheme.onSurface
+                                            .withValues(alpha: 0.22),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            currentRoutine.name,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                  ),
+                  if (!_isEditing && widget.routine != null && !widget.isNew)
+                    Positioned(
+                      right: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: _isDeleting
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: _showDeleteConfirmation,
+                              minimumSize: const Size(32, 32),
+                              child: Icon(
+                                CupertinoIcons.trash,
+                                color: theme.colorScheme.error,
+                                size: 20,
+                              ),
+                            ),
+                    ),
+                ],
+              ),
+            ),
+            if (_isEditing && _nameError != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  _nameError!,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: theme.colorScheme.error,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Text(
+          totalDurationFormatted,
+          style: TextStyle(
+            fontSize: 56,
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
+            letterSpacing: -1.5,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 12),
+        _isEditing
+            ? GestureDetector(
+                onTap: _showDifficultyPicker,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: layeredSurfaceColor,
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: theme.brightness == Brightness.dark
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : appColors.border,
+                    ),
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.difficultyColon(
+                        _getLocalizedDifficulty(context, _difficulty)),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -0.2,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: layeredSurfaceColor,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : appColors.border,
+                  ),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.difficultyColon(
+                      _getLocalizedDifficulty(
+                          context, currentRoutine.difficulty)),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                    letterSpacing: -0.2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+        const SizedBox(height: 24),
+        if (_isEditing && _intervals.isNotEmpty) ...[
+          _buildQuickToolsCard(),
+          const SizedBox(height: 16),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildEmptyIntervalsState() {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context)!.noIntervals,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: appColors.mutedText,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: _addInterval,
+            icon: const Icon(Icons.add_circle_outline),
+            color: theme.colorScheme.primary,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddIntervalButton() {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton.icon(
+            onPressed: _addInterval,
+            icon: Icon(Icons.add_circle_outline,
+                color: theme.colorScheme.primary),
+            label: Text(
+              AppLocalizations.of(context)!.addInterval,
+              style: TextStyle(color: theme.colorScheme.primary),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReorderProxy(
+    Widget child,
+    int index,
+    Animation<double> animation,
+  ) {
+    return child;
+  }
+
+  Widget _buildIntervalsSliver() {
+    if (_intervals.isEmpty && _isEditing) {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        sliver: SliverToBoxAdapter(child: _buildEmptyIntervalsState()),
+      );
+    }
+
+    if (_isEditing && _isReordering) {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        sliver: SliverReorderableList(
+          itemBuilder: (context, index) {
+            final interval = _intervals[index];
+            return _buildIntervalRow(
+              interval,
+              _machineType,
+              widget.settingsProvider,
+              reorderIndex: index,
+            );
+          },
+          itemCount: _intervals.length,
+          onReorder: _reorderIntervals,
+          proxyDecorator: _buildReorderProxy,
+        ),
+      );
+    }
+
+    if (_isEditing) {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final interval = _intervals[index];
+            return _buildIntervalRow(
+              interval,
+              _machineType,
+              widget.settingsProvider,
+            );
+          }, childCount: _intervals.length),
+        ),
+      );
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final interval = _intervals[index];
+          return _buildIntervalRow(
+            interval,
+            _machineType,
+            widget.settingsProvider,
+          );
+        }, childCount: _intervals.length),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // CRITICAL: build() must be PURE - NO mutations, NO setState, NO side effects
@@ -993,271 +1341,27 @@ class _RoutineDetailSheetContentState
           ),
           // Content
           Flexible(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-              child: Column(
-                children: [
-                  // Routine name header with delete button (fixed height Stack)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 52,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // Centered title/field with horizontal padding to prevent overlap
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 56),
-                              child: _isEditing
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Center(
-                                            child: SizedBox(
-                                              width: 260,
-                                              child: TextField(
-                                                controller: _nameController,
-                                                textAlign: TextAlign.center,
-                                                maxLines: 1,
-                                                maxLength: 24,
-                                                inputFormatters: [
-                                                  LengthLimitingTextInputFormatter(
-                                                      24),
-                                                ],
-                                                style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: _nameError != null
-                                                      ? theme.colorScheme.error
-                                                      : theme.colorScheme
-                                                          .onSurface,
-                                                  letterSpacing: -0.5,
-                                                ),
-                                                decoration:
-                                                    const InputDecoration(
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  counterText: '',
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 180,
-                                          child: Container(
-                                            height: 1.25,
-                                            margin: const EdgeInsets.only(
-                                              bottom: 2,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: _nameError != null
-                                                  ? theme.colorScheme.error
-                                                  : theme.colorScheme.onSurface
-                                                      .withValues(alpha: 0.22),
-                                              borderRadius:
-                                                  BorderRadius.circular(999),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Text(
-                                      currentRoutine.name,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: theme.colorScheme.onSurface,
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                            ),
-                            // Delete button pinned to top-right, vertically centered
-                            if (!_isEditing &&
-                                widget.routine != null &&
-                                !widget.isNew)
-                              Positioned(
-                                right: 16,
-                                top: 0,
-                                bottom: 0,
-                                child: _isDeleting
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : CupertinoButton(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: _showDeleteConfirmation,
-                                        minimumSize: const Size(32, 32),
-                                        child: Icon(
-                                          CupertinoIcons.trash,
-                                          color: theme.colorScheme.error,
-                                          size: 20,
-                                        ),
-                                      ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      // Error message below name field
-                      if (_isEditing && _nameError != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text(
-                            _nameError!,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: theme.colorScheme.error,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  // Very large centered duration
-                  Text(
-                    totalDurationFormatted,
-                    style: TextStyle(
-                      fontSize: 56,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -1.5,
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: _buildSheetHeader(
+                      currentRoutine,
+                      totalDurationFormatted,
+                      layeredSurfaceColor,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 12),
-                  // Centered difficulty line - editable in edit mode
-                  _isEditing
-                      ? GestureDetector(
-                          onTap: _showDifficultyPicker,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: layeredSurfaceColor,
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
-                                color: theme.brightness == Brightness.dark
-                                    ? Colors.white.withValues(alpha: 0.08)
-                                    : appColors.border,
-                              ),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.difficultyColon(
-                                  _getLocalizedDifficulty(
-                                      context, _difficulty)),
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface,
-                                letterSpacing: -0.2,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: layeredSurfaceColor,
-                            borderRadius: BorderRadius.circular(999),
-                            border: Border.all(
-                              color: theme.brightness == Brightness.dark
-                                  ? Colors.white.withValues(alpha: 0.08)
-                                  : appColors.border,
-                            ),
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!.difficultyColon(
-                                _getLocalizedDifficulty(
-                                    context, currentRoutine.difficulty)),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface,
-                              letterSpacing: -0.2,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                  const SizedBox(height: 24),
-                  if (_isEditing && _intervals.isNotEmpty) ...[
-                    _buildQuickToolsCard(),
-                    const SizedBox(height: 16),
-                  ],
-                  // Interval rows
-                  if (_intervals.isEmpty && _isEditing)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              AppLocalizations.of(context)!.noIntervals,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: appColors.mutedText,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: _addInterval,
-                            icon: const Icon(Icons.add_circle_outline),
-                            color: theme.colorScheme.primary,
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    ..._intervals.map((interval) {
-                      return _buildIntervalRow(
-                        interval,
-                        _machineType,
-                        widget.settingsProvider,
-                      );
-                    }),
-                  // Add interval button (only in edit mode)
-                  if (_isEditing && _intervals.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                            onPressed: _addInterval,
-                            icon: Icon(Icons.add_circle_outline,
-                                color: theme.colorScheme.primary),
-                            label: Text(
-                              AppLocalizations.of(context)!.addInterval,
-                              style:
-                                  TextStyle(color: theme.colorScheme.primary),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                ),
+                _buildIntervalsSliver(),
+                if (_isEditing && !_isReordering && _intervals.isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                    sliver:
+                        SliverToBoxAdapter(child: _buildAddIntervalButton()),
+                  ),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              ],
             ),
           ),
           // Bottom fixed action bar
@@ -1350,24 +1454,28 @@ class _RoutineDetailSheetContentState
     );
   }
 
-  Widget _buildIntervalRow(
-    Interval interval,
-    MachineType machineType,
-    AppSettingsProvider settingsProvider,
-  ) {
+  Widget _buildIntervalRow(Interval interval, MachineType machineType,
+      AppSettingsProvider settingsProvider,
+      {int? reorderIndex}) {
+    final isReorderingRow = reorderIndex != null;
+
     return _EditableIntervalRow(
       key: ValueKey(interval.id), // Stable key based on interval ID
       interval: interval,
       machineType: machineType,
       settingsProvider: settingsProvider,
+      reorderIndex: reorderIndex,
       isEditing: _isEditing,
       isEntering: _enteringIntervalIds.contains(interval.id),
       isRemoving: _removingIntervalIds.contains(interval.id),
       onUpdate: (updatedInterval) =>
           _updateIntervalById(interval.id, updatedInterval),
-      onDuplicate:
-          _isEditing ? () => _duplicateIntervalBelow(interval.id) : null,
-      onDelete: _isEditing ? () => _deleteInterval(interval.id) : null,
+      onDuplicate: _isEditing && !isReorderingRow
+          ? () => _duplicateIntervalBelow(interval.id)
+          : null,
+      onDelete: _isEditing && !isReorderingRow
+          ? () => _deleteInterval(interval.id)
+          : null,
     );
   }
 
@@ -1436,7 +1544,7 @@ class _RoutineDetailSheetContentState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l10n.quickTools,
+            _isReordering ? l10n.reorderMode : l10n.quickTools,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
@@ -1445,22 +1553,50 @@ class _RoutineDetailSheetContentState
             ),
           ),
           const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildQuickActionButton(
-                icon: Icons.content_copy_outlined,
-                label: l10n.duplicateLast,
-                onTap: _duplicateLastInterval,
+          if (_isReordering) ...[
+            Text(
+              l10n.reorderModeHint,
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.45,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
               ),
-              _buildQuickActionButton(
-                icon: Icons.repeat,
-                label: l10n.repeatPattern,
-                onTap: _showRepeatPatternPicker,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildQuickActionButton(
+                  icon: Icons.check_rounded,
+                  label: l10n.done,
+                  onTap: _toggleReorderMode,
+                ),
+              ],
+            ),
+          ] else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildQuickActionButton(
+                  icon: Icons.content_copy_outlined,
+                  label: l10n.duplicateLast,
+                  onTap: _duplicateLastInterval,
+                ),
+                _buildQuickActionButton(
+                  icon: Icons.repeat,
+                  label: l10n.repeatPattern,
+                  onTap: _showRepeatPatternPicker,
+                ),
+                if (_canReorderIntervals)
+                  _buildQuickActionButton(
+                    icon: Icons.reorder_rounded,
+                    label: l10n.reorderIntervals,
+                    onTap: _toggleReorderMode,
+                  ),
+              ],
+            ),
         ],
       ),
     );
@@ -1605,6 +1741,7 @@ class _EditableIntervalRow extends StatefulWidget {
   final Interval interval;
   final MachineType machineType;
   final AppSettingsProvider settingsProvider;
+  final int? reorderIndex;
   final bool isEditing;
   final bool isEntering;
   final bool isRemoving;
@@ -1617,6 +1754,7 @@ class _EditableIntervalRow extends StatefulWidget {
     required this.interval,
     required this.machineType,
     required this.settingsProvider,
+    this.reorderIndex,
     required this.isEditing,
     this.isEntering = false,
     this.isRemoving = false,
@@ -2845,7 +2983,9 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
             Expanded(
               child: chipRow,
             ),
-            if (widget.onDuplicate != null || widget.onDelete != null) ...[
+            if (widget.reorderIndex != null ||
+                widget.onDuplicate != null ||
+                widget.onDelete != null) ...[
               const SizedBox(width: 10),
               Container(
                 width: 1,
@@ -2855,6 +2995,23 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                     : appColors.border,
               ),
               const SizedBox(width: 2),
+              if (widget.reorderIndex != null)
+                ReorderableDragStartListener(
+                  index: widget.reorderIndex!,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.grab,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Icon(
+                        Icons.drag_indicator_rounded,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.56,
+                        ),
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ),
               if (widget.onDuplicate != null)
                 GestureDetector(
                   onTap: widget.onDuplicate,

@@ -140,6 +140,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get repeatPattern => 'Повторить шаблон';
 
   @override
+  String get reorderIntervals => 'Изменить порядок';
+
+  @override
+  String get reorderMode => 'Режим изменения порядка';
+
+  @override
+  String get reorderModeHint =>
+      'Нажмите и удерживайте карточку, чтобы переместить её в нужное место.';
+
+  @override
   String get patternLength => 'Длина шаблона';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rpm => 'об/мин';
+
+  @override
+  String get rpmInfoDescription =>
+      'об/мин показывает, сколько раз педали совершают оборот за одну минуту. Чем выше значение, тем быстрее ваш каденс при педалировании.';
 
   @override
   String get resistance => 'Сопротивление';

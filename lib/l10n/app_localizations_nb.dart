@@ -140,6 +140,16 @@ class AppLocalizationsNb extends AppLocalizations {
   String get repeatPattern => 'Gjenta mønster';
 
   @override
+  String get reorderIntervals => 'Endre rekkefølge';
+
+  @override
+  String get reorderMode => 'Modus for å endre rekkefølge';
+
+  @override
+  String get reorderModeHint =>
+      'Trykk og hold på et kort for å flytte det til ønsket plassering.';
+
+  @override
   String get patternLength => 'Mønsterlengde';
 
   @override
@@ -179,6 +189,10 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM viser hvor mange ganger pedalene dine går rundt i løpet av ett minutt. En høyere RPM betyr at du tråkker med raskere kadens.';
 
   @override
   String get resistance => 'Motstand';

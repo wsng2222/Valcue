@@ -139,6 +139,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get repeatPattern => '重复模式';
 
   @override
+  String get reorderIntervals => '调整顺序';
+
+  @override
+  String get reorderMode => '顺序调整模式';
+
+  @override
+  String get reorderModeHint => '长按卡片并拖动到你想要的位置。';
+
+  @override
   String get patternLength => '模式长度';
 
   @override
@@ -178,6 +187,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription => 'RPM 表示踏板在 1 分钟内转动的次数。数值越高，表示你踩踏的踏频越快。';
 
   @override
   String get resistance => '阻力';

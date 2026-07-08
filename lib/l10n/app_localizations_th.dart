@@ -139,6 +139,15 @@ class AppLocalizationsTh extends AppLocalizations {
   String get repeatPattern => 'ทำซ้ำแพทเทิร์น';
 
   @override
+  String get reorderIntervals => 'จัดลำดับใหม่';
+
+  @override
+  String get reorderMode => 'โหมดจัดลำดับใหม่';
+
+  @override
+  String get reorderModeHint => 'กดการ์ดค้างไว้เพื่อย้ายไปยังตำแหน่งที่ต้องการ';
+
+  @override
   String get patternLength => 'ความยาวแพทเทิร์น';
 
   @override
@@ -178,6 +187,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM แสดงจำนวนรอบที่แป้นปั่นหมุนใน 1 นาที ยิ่งตัวเลขสูง ก็ยิ่งหมายความว่าคุณกำลังปั่นด้วยรอบขาที่เร็วขึ้น';
 
   @override
   String get resistance => 'แรงต้าน';

@@ -56,6 +56,9 @@
   "addDefault": "إضافة أساسية",
   "duplicateLast": "نسخ الأخير",
   "repeatPattern": "تكرار النمط",
+  "reorderIntervals": "إعادة الترتيب",
+  "reorderMode": "وضع إعادة الترتيب",
+  "reorderModeHint": "اضغط مطولاً على البطاقة لنقلها إلى المكان الذي تريده.",
   "patternLength": "طول النمط",
   "repeatCount": "عدد التكرار",
   "noIntervals": "لا توجد فترات",
@@ -76,6 +79,7 @@
     }
   },
   "rpm": "دورة/دقيقة",
+  "rpmInfoDescription": "يوضح RPM عدد المرات التي تدور فيها الدواسات خلال دقيقة واحدة. وكلما ارتفع الرقم، فهذا يعني أنك تبدل بسرعة إيقاع أعلى.",
   "resistance": "المقاومة",
   "resistanceLevel": "المقاومة (المستوى)",
   "resistanceColon": "المقاومة {resistance}",

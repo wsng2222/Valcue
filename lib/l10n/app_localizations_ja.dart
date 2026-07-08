@@ -139,6 +139,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get repeatPattern => 'パターン反復';
 
   @override
+  String get reorderIntervals => '順序変更';
+
+  @override
+  String get reorderMode => '順序変更モード';
+
+  @override
+  String get reorderModeHint => 'カードを長押しして、好きな位置に移動してください。';
+
+  @override
   String get patternLength => 'パターン長';
 
   @override
@@ -178,6 +187,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPMは1分間にペダルが何回転するかを示す値です。数値が高いほど、より速いケイデンスでペダルをこいでいることを意味します。';
 
   @override
   String get resistance => '抵抗';

@@ -139,6 +139,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get repeatPattern => '패턴 반복';
 
   @override
+  String get reorderIntervals => '순서 변경';
+
+  @override
+  String get reorderMode => '순서 변경 모드';
+
+  @override
+  String get reorderModeHint => '카드를 길게 눌러 원하는 위치로 옮겨보세요.';
+
+  @override
   String get patternLength => '패턴 길이';
 
   @override
@@ -178,6 +187,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get rpm => 'RPM';
+
+  @override
+  String get rpmInfoDescription =>
+      'RPM은 1분 동안 페달이 몇 바퀴 도는지 보여주는 값이에요. 숫자가 높을수록 더 빠른 케이던스로 페달을 밟는다는 뜻입니다.';
 
   @override
   String get resistance => '저항';

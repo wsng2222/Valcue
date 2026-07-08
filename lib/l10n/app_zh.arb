@@ -56,6 +56,9 @@
   "addDefault": "添加默认",
   "duplicateLast": "复制最后",
   "repeatPattern": "重复模式",
+  "reorderIntervals": "调整顺序",
+  "reorderMode": "顺序调整模式",
+  "reorderModeHint": "长按卡片并拖动到你想要的位置。",
   "patternLength": "模式长度",
   "repeatCount": "重复次数",
   "noIntervals": "没有间隔",
@@ -76,6 +79,7 @@
     }
   },
   "rpm": "RPM",
+  "rpmInfoDescription": "RPM 表示踏板在 1 分钟内转动的次数。数值越高，表示你踩踏的踏频越快。",
   "resistance": "阻力",
   "resistanceLevel": "阻力（级别）",
   "resistanceColon": "阻力 {resistance}",
