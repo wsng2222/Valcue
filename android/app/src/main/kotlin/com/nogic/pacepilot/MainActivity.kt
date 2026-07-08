@@ -1,4 +1,4 @@
-package com.wheesung.interval_cardio
+package com.nogic.pacepilot
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

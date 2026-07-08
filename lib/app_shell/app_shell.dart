@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:url_launcher/url_launcher.dart';
 import '../features/routines/screens/routine_list_screen.dart';
 import '../features/routines/models/machine_type.dart';
 import '../features/settings/screens/settings_screen.dart';
@@ -13,6 +14,24 @@ import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
 import '../widgets/unified_screen_header.dart';
+
+const _privacyPolicyUri =
+    'https://wsng2222.github.io/PacePilot/privacy-policy.html';
+
+Future<void> _openPrivacyPolicy(BuildContext context) async {
+  final messenger = ScaffoldMessenger.maybeOf(context);
+  final uri = Uri.parse(_privacyPolicyUri);
+  final launched = await launchUrl(uri);
+
+  if (!launched) {
+    messenger?.showSnackBar(
+      const SnackBar(
+        content: Text('Unable to open privacy policy'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+}
 
 // Extension to provide fallback for new localization keys until code generation runs
 extension AppLocalizationsExtension on AppLocalizations {
@@ -492,7 +511,9 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                         ),
                         _FooterLink(
                           text: l10n.privacy,
-                          onTap: () {},
+                          onTap: () async {
+                            await _openPrivacyPolicy(context);
+                          },
                         ),
                         Text(
                           ' • ',
