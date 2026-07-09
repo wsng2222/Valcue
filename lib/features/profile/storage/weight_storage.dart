@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/weight_entry.dart';
+import '../../../utils/debug_log.dart';
 
 class WeightStorage {
   static const String _storageKey = 'weight_entries';
@@ -13,10 +14,30 @@ class WeightStorage {
       if (jsonString == null || jsonString.isEmpty) {
         return [];
       }
-      final List<dynamic> jsonList = jsonDecode(jsonString);
-      return jsonList.map((json) => WeightEntry.fromJson(json as Map<String, dynamic>)).toList()
-        ..sort((a, b) => b.dateTime.compareTo(a.dateTime)); // Newest first
+      final decoded = jsonDecode(jsonString);
+      if (decoded is! List) {
+        debugLog('[WeightStorage] Expected a list payload');
+        return [];
+      }
+
+      final entries = <WeightEntry>[];
+      for (final item in decoded) {
+        if (item is! Map) {
+          debugLog('[WeightStorage] Skipping malformed weight entry');
+          continue;
+        }
+
+        try {
+          entries.add(WeightEntry.fromJson(Map<String, dynamic>.from(item)));
+        } catch (e) {
+          debugLog('[WeightStorage] Failed to parse weight entry: $e');
+        }
+      }
+
+      entries.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+      return entries;
     } catch (e) {
+      debugLog('[WeightStorage] Failed to load entries: $e');
       return [];
     }
   }
@@ -28,7 +49,7 @@ class WeightStorage {
       final jsonString = jsonEncode(jsonList);
       await prefs.setString(_storageKey, jsonString);
     } catch (e) {
-      // Handle error silently
+      debugLog('[WeightStorage] Failed to save entries: $e');
     }
   }
 
@@ -60,6 +81,7 @@ class WeightStorage {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getDouble(_goalWeightKey);
     } catch (e) {
+      debugLog('[WeightStorage] Failed to load goal weight: $e');
       return null;
     }
   }
@@ -73,8 +95,7 @@ class WeightStorage {
         await prefs.setDouble(_goalWeightKey, weightKg);
       }
     } catch (e) {
-      // Handle error silently
+      debugLog('[WeightStorage] Failed to save goal weight: $e');
     }
   }
 }
-

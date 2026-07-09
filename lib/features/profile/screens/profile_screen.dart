@@ -594,8 +594,8 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
 
     String formatDistance(double meters) {
       if (isMetric) {
-        // Auto-format: show km if >= 0.1 km, otherwise show m
-        if (meters >= 100) {
+        // Keep metric distance formatting consistent across the app.
+        if (meters >= 1000) {
           return '${(meters / 1000).toStringAsFixed(2)} km';
         }
         return '${meters.toStringAsFixed(0)} m';
@@ -828,7 +828,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
 
     String? formatDistance(double meters) {
       if (isMetric) {
-        if (meters >= 100) {
+        if (meters >= 1000) {
           return '${(meters / 1000).toStringAsFixed(2)} km';
         }
         return '${meters.toStringAsFixed(0)} m';
@@ -848,7 +848,11 @@ class _WorkoutHistoryCard extends StatelessWidget {
       if (session.machineType == MachineType.treadmill &&
           session.distanceMeters != null &&
           session.durationSeconds > 0) {
-        final hours = session.durationSeconds / 3600.0;
+        final elapsedSeconds = session.elapsedMilliseconds != null &&
+                session.elapsedMilliseconds! > 0
+            ? session.elapsedMilliseconds! / 1000.0
+            : session.durationSeconds.toDouble();
+        final hours = elapsedSeconds / 3600.0;
         final speedKmh = (session.distanceMeters! / 1000.0) / hours;
         if (isMetric) {
           return 'Avg. ${speedKmh.toStringAsFixed(1)} km/h';
@@ -1602,7 +1606,7 @@ class _DayWorkoutRow extends StatelessWidget {
 
     String? formatDistance(double meters) {
       if (isMetric) {
-        if (meters >= 100) {
+        if (meters >= 1000) {
           return '${(meters / 1000).toStringAsFixed(2)} km';
         }
         return '${meters.toStringAsFixed(0)} m';
@@ -1621,7 +1625,11 @@ class _DayWorkoutRow extends StatelessWidget {
       if (session.machineType == MachineType.treadmill &&
           session.distanceMeters != null &&
           session.durationSeconds > 0) {
-        final hours = session.durationSeconds / 3600.0;
+        final elapsedSeconds = session.elapsedMilliseconds != null &&
+                session.elapsedMilliseconds! > 0
+            ? session.elapsedMilliseconds! / 1000.0
+            : session.durationSeconds.toDouble();
+        final hours = elapsedSeconds / 3600.0;
         final speedKmh = (session.distanceMeters! / 1000.0) / hours;
         if (isMetric) {
           return 'Avg. ${speedKmh.toStringAsFixed(1)} km/h';

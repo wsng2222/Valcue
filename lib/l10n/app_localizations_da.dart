@@ -9,7 +9,7 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
-  String get appTitle => 'Interval Cardio';
+  String get appTitle => 'PacePilot';
 
   @override
   String get settingsTitle => 'Indstillinger';

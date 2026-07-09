@@ -9,7 +9,7 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
-  String get appTitle => 'Interval Cardio';
+  String get appTitle => 'PacePilot';
 
   @override
   String get settingsTitle => 'Instellingen';

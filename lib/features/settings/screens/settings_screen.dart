@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:interval_cardio/l10n/app_localizations.dart';
 import 'package:intl/intl.dart' as intl;
@@ -811,6 +812,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   Timer? _aboutHoldTimer;
+  String _appVersionLabel = '...';
   static const List<int> _weekdayOrder = <int>[
     DateTime.monday,
     DateTime.tuesday,
@@ -822,9 +824,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  @override
   void dispose() {
     _aboutHoldTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _loadAppVersion() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      if (!mounted) return;
+
+      final buildNumber = info.buildNumber.trim();
+      setState(() {
+        _appVersionLabel = buildNumber.isEmpty
+            ? info.version
+            : '${info.version}+${info.buildNumber}';
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _appVersionLabel = 'unknown';
+      });
+    }
   }
 
   void _startAboutHold() {
@@ -1337,8 +1364,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: Icons.info_outline,
                             iconColor: Colors.grey,
                             title: AppLocalizations.of(context)!.about,
-                            subtitle:
-                                AppLocalizations.of(context)!.version('1.0.0'),
+                            subtitle: AppLocalizations.of(context)!.version(
+                              _appVersionLabel,
+                            ),
                             showDivider: false,
                           ),
                         ),

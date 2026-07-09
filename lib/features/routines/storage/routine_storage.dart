@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/routine.dart';
+import '../../../utils/debug_log.dart';
 
 class RoutineStorage {
   static const String _storageKey = 'routines';
@@ -73,13 +74,29 @@ class RoutineStorage {
       if (jsonString == null || jsonString.isEmpty) {
         return [];
       }
-      final List<dynamic> jsonList = json.decode(jsonString);
-      final routines = jsonList
-          .map((json) => Routine.fromJson(json as Map<String, dynamic>))
-          .toList();
+      final decoded = json.decode(jsonString);
+      if (decoded is! List) {
+        debugLog('[RoutineStorage] Expected a list payload');
+        return [];
+      }
+
+      final routines = <Routine>[];
+      for (final item in decoded) {
+        if (item is! Map) {
+          debugLog('[RoutineStorage] Skipping malformed routine entry');
+          continue;
+        }
+
+        try {
+          routines.add(Routine.fromJson(Map<String, dynamic>.from(item)));
+        } catch (e) {
+          debugLog('[RoutineStorage] Failed to parse routine entry: $e');
+        }
+      }
 
       return routines;
     } catch (e) {
+      debugLog('[RoutineStorage] Failed to load routines: $e');
       return [];
     }
   }

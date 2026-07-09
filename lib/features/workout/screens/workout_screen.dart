@@ -33,6 +33,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   late WorkoutState _workoutState;
   bool _pauseSheetOpen = false;
   bool _endConfirmOpen = false;
+  bool _hasNavigatedToFinished = false;
   bool _isCountdownActive = false;
   bool _isLandscapeMode = false;
   int _lastSpokenIntervalIndex = -1;
@@ -203,11 +204,16 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 
   void _navigateToFinished() {
+    if (_hasNavigatedToFinished || !mounted) {
+      return;
+    }
+    _hasNavigatedToFinished = true;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => WorkoutFinishedScreen(
           routine: widget.routine,
-          elapsedSeconds: _workoutState.totalElapsedSeconds,
+          elapsedSeconds: _workoutState.roundedElapsedSeconds,
+          elapsedMilliseconds: _workoutState.totalElapsedMilliseconds,
           finishTime: DateTime.now(),
           distanceMeters:
               _workoutState.isTreadmill ? _workoutState.distanceMeters : null,
@@ -493,8 +499,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       ? () {} // Disabled during countdown
                       : (state.status == WorkoutStatus.paused
                           ? () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .popUntil((route) => route.isFirst);
                               if (mounted) {
                                 _pauseSheetOpen = false;
                                 if (!_isCountdownActive) {
@@ -664,8 +668,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                         ? () {}
                         : (state.status == WorkoutStatus.paused
                             ? () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .popUntil((route) => route.isFirst);
                                 if (mounted) {
                                   _pauseSheetOpen = false;
                                   if (!_isCountdownActive) {

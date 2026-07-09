@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/workout_session.dart';
 import '../../routines/models/machine_type.dart';
+import '../../../utils/debug_log.dart';
 
 class WorkoutSessionStorage {
   static const String _storageKey = 'workout_sessions';
@@ -13,9 +14,32 @@ class WorkoutSessionStorage {
       if (jsonString == null || jsonString.isEmpty) {
         return [];
       }
-      final List<dynamic> jsonList = jsonDecode(jsonString);
-      return jsonList.map((json) => WorkoutSession.fromJson(json as Map<String, dynamic>)).toList();
+      final decoded = jsonDecode(jsonString);
+      if (decoded is! List) {
+        debugLog('[WorkoutSessionStorage] Expected a list payload');
+        return [];
+      }
+
+      final sessions = <WorkoutSession>[];
+      for (final item in decoded) {
+        if (item is! Map) {
+          debugLog('[WorkoutSessionStorage] Skipping malformed session entry');
+          continue;
+        }
+
+        try {
+          sessions.add(
+            WorkoutSession.fromJson(Map<String, dynamic>.from(item)),
+          );
+        } catch (e) {
+          debugLog('[WorkoutSessionStorage] Failed to parse session entry: $e');
+        }
+      }
+
+      sessions.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+      return sessions;
     } catch (e) {
+      debugLog('[WorkoutSessionStorage] Failed to load sessions: $e');
       return [];
     }
   }
@@ -27,7 +51,7 @@ class WorkoutSessionStorage {
       final jsonString = jsonEncode(jsonList);
       await prefs.setString(_storageKey, jsonString);
     } catch (e) {
-      // Handle error silently
+      debugLog('[WorkoutSessionStorage] Failed to save sessions: $e');
     }
   }
 
@@ -45,12 +69,14 @@ class WorkoutSessionStorage {
     await saveSessions(sessions);
   }
 
-  Future<List<WorkoutSession>> getSessionsByMachineType(MachineType machineType) async {
+  Future<List<WorkoutSession>> getSessionsByMachineType(
+      MachineType machineType) async {
     final sessions = await loadSessions();
     return sessions.where((s) => s.machineType == machineType).toList();
   }
 
-  Future<List<WorkoutSession>> getSessionsByDateRange(DateTime start, DateTime end) async {
+  Future<List<WorkoutSession>> getSessionsByDateRange(
+      DateTime start, DateTime end) async {
     final sessions = await loadSessions();
     return sessions.where((s) {
       return s.dateTime.isAfter(start.subtract(const Duration(days: 1))) &&
@@ -58,4 +84,3 @@ class WorkoutSessionStorage {
     }).toList();
   }
 }
-

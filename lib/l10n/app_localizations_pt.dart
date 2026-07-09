@@ -9,7 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get appTitle => 'Interval Cardio';
+  String get appTitle => 'PacePilot';
 
   @override
   String get settingsTitle => 'Configurações';

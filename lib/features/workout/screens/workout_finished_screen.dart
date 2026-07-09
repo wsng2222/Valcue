@@ -14,12 +14,14 @@ import '../../../widgets/bidi_safe_text.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../services/ad_service.dart';
+import '../../../utils/debug_log.dart';
 import '../../profile/models/workout_session.dart';
 import '../../profile/providers/workout_history_provider.dart';
 
 class WorkoutFinishedScreen extends StatefulWidget {
   final Routine routine;
   final int elapsedSeconds;
+  final int? elapsedMilliseconds;
   final DateTime finishTime;
   final double? distanceMeters; // Distance in meters (null for non-treadmill)
   final int
@@ -31,6 +33,7 @@ class WorkoutFinishedScreen extends StatefulWidget {
     super.key,
     required this.routine,
     required this.elapsedSeconds,
+    this.elapsedMilliseconds,
     required this.finishTime,
     this.distanceMeters,
     required this.currentIntervalIndex,
@@ -144,6 +147,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
       machineType: widget.routine.machineType,
       dateTime: widget.finishTime,
       durationSeconds: widget.elapsedSeconds,
+      elapsedMilliseconds: widget.elapsedMilliseconds,
       distanceMeters: widget.distanceMeters,
       averageRpm: avgRpm,
       averageLevel: avgLevel,
@@ -230,7 +234,10 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
         sharePositionOrigin: shareOrigin,
       );
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('error: $e')));
+      debugLog('[WorkoutFinishedScreen] Failed to share workout: $e');
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Unable to share workout')),
+      );
     }
   }
 

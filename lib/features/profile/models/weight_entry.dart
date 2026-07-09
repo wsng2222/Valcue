@@ -22,7 +22,7 @@ class WeightEntry {
     return WeightEntry(
       id: json['id'] as String,
       dateTime: DateTime.parse(json['dateTime'] as String),
-      weightKg: json['weightKg'] as double,
+      weightKg: (json['weightKg'] as num).toDouble(),
     );
   }
 
@@ -40,4 +40,3 @@ class WeightEntry {
     }
   }
 }
-

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -15,9 +17,12 @@ import 'features/profile/providers/weight_tracker_provider.dart';
 import 'theme/app_theme.dart';
 import 'services/sound_service.dart';
 import 'services/ad_service.dart';
+import 'services/app_error_service.dart';
 import 'services/voice_guide_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'onboarding/onboarding_flow.dart';
+
+const _appDisplayName = 'PacePilot';
 
 void _debugLog(String message) {
   if (kDebugMode) {
@@ -28,6 +33,40 @@ void _debugLog(String message) {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await AppErrorService.instance.init();
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    unawaited(
+      AppErrorService.instance.recordFlutterError(details, fatal: true),
+    );
+  };
+  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
+    unawaited(
+      AppErrorService.instance.recordError(
+        error,
+        stack,
+        source: 'platform',
+        fatal: true,
+      ),
+    );
+    return true;
+  };
+
+  await runZonedGuarded(() async {
+    await _bootstrapApp();
+  }, (error, stack) {
+    unawaited(
+      AppErrorService.instance.recordError(
+        error,
+        stack,
+        source: 'zone',
+        fatal: true,
+      ),
+    );
+  });
+}
+
+Future<void> _bootstrapApp() async {
   // Hide Android system navigation bar with maximum intensity
   const platform = MethodChannel('com.interval_cardio/system');
   try {
@@ -134,7 +173,7 @@ class MyApp extends StatelessWidget {
 
           if (PlatformInfo.isIOS) {
             return AdaptiveApp(
-              title: 'Interval Cardio',
+              title: _appDisplayName,
               themeMode: settingsProvider.themeModeEnum,
               materialLightTheme: AppTheme.lightTheme,
               materialDarkTheme: AppTheme.darkTheme,
@@ -153,7 +192,7 @@ class MyApp extends StatelessWidget {
           }
 
           return MaterialApp(
-            title: 'Interval Cardio',
+            title: _appDisplayName,
             themeMode: settingsProvider.themeModeEnum,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

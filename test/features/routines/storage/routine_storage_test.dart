@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:interval_cardio/features/routines/models/interval.dart';
 import 'package:interval_cardio/features/routines/models/machine_type.dart';
@@ -121,5 +123,42 @@ void main() {
     SharedPreferences.setMockInitialValues({'routines': 'not-json'});
 
     expect(await storage.loadRoutines(), isEmpty);
+  });
+
+  test('loadRoutines skips malformed entries and keeps valid routines',
+      () async {
+    final validRoutine = Routine(
+      id: 'valid-routine',
+      name: 'Valid',
+      difficulty: '중간',
+      machineType: MachineType.treadmill,
+      intervals: [
+        Interval.treadmill(
+          id: 'valid-interval',
+          durationSeconds: 60,
+          speedKmh: 7.5,
+          grade: 1.0,
+        ),
+      ],
+    );
+
+    SharedPreferences.setMockInitialValues({
+      'routines': jsonEncode([
+        validRoutine.toJson(),
+        'bad-entry',
+        {
+          'id': 'broken-routine',
+          'name': 'Broken',
+          'difficulty': '중간',
+          'machineType': 'treadmill',
+        },
+      ]),
+    });
+
+    final loaded = await storage.loadRoutines();
+
+    expect(loaded, hasLength(1));
+    expect(loaded.single.id, 'valid-routine');
+    expect(loaded.single.intervals.single.speedKmh, 7.5);
   });
 }

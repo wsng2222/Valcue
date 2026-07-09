@@ -1,11 +1,11 @@
 {
-    "name": "interval_cardio",
-    "short_name": "interval_cardio",
+    "name": "PacePilot",
+    "short_name": "PacePilot",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "PacePilot workout timer for treadmill, bike, and stair workouts.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -6,12 +6,13 @@ class WorkoutSession {
   final MachineType machineType;
   final DateTime dateTime;
   final int durationSeconds;
-  
+  final int? elapsedMilliseconds;
+
   // Machine-specific metrics
   final double? distanceMeters; // Treadmill
   final double? averageRpm; // Bike
   final double? averageLevel; // Stairmaster
-  
+
   // Routine info
   final String routineName;
   final String routineId;
@@ -21,6 +22,7 @@ class WorkoutSession {
     required this.machineType,
     required this.dateTime,
     required this.durationSeconds,
+    this.elapsedMilliseconds,
     this.distanceMeters,
     this.averageRpm,
     this.averageLevel,
@@ -34,6 +36,7 @@ class WorkoutSession {
       'machineType': machineType.toJson(),
       'dateTime': dateTime.toIso8601String(),
       'durationSeconds': durationSeconds,
+      'elapsedMilliseconds': elapsedMilliseconds,
       'distanceMeters': distanceMeters,
       'averageRpm': averageRpm,
       'averageLevel': averageLevel,
@@ -47,10 +50,11 @@ class WorkoutSession {
       id: json['id'] as String,
       machineType: MachineType.fromJson(json['machineType'] as String),
       dateTime: DateTime.parse(json['dateTime'] as String),
-      durationSeconds: json['durationSeconds'] as int,
-      distanceMeters: json['distanceMeters'] as double?,
-      averageRpm: json['averageRpm'] as double?,
-      averageLevel: json['averageLevel'] as double?,
+      durationSeconds: (json['durationSeconds'] as num).toInt(),
+      elapsedMilliseconds: (json['elapsedMilliseconds'] as num?)?.toInt(),
+      distanceMeters: (json['distanceMeters'] as num?)?.toDouble(),
+      averageRpm: (json['averageRpm'] as num?)?.toDouble(),
+      averageLevel: (json['averageLevel'] as num?)?.toDouble(),
       routineName: json['routineName'] as String,
       routineId: json['routineId'] as String,
     );
@@ -60,12 +64,17 @@ class WorkoutSession {
   String? getKeyMetric() {
     switch (machineType) {
       case MachineType.treadmill:
-        return distanceMeters != null ? '${distanceMeters!.toStringAsFixed(2)} m' : null;
+        return distanceMeters != null
+            ? '${distanceMeters!.toStringAsFixed(2)} m'
+            : null;
       case MachineType.cycle:
-        return averageRpm != null ? '${averageRpm!.toStringAsFixed(1)} RPM' : null;
+        return averageRpm != null
+            ? '${averageRpm!.toStringAsFixed(1)} RPM'
+            : null;
       case MachineType.stairmaster:
-        return averageLevel != null ? 'Level ${averageLevel!.toStringAsFixed(1)}' : null;
+        return averageLevel != null
+            ? 'Level ${averageLevel!.toStringAsFixed(1)}'
+            : null;
     }
   }
 }
-

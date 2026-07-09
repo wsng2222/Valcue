@@ -405,15 +405,6 @@ class _RoutineDetailSheetContentState
     );
   }
 
-  void _duplicateLastInterval() {
-    final source =
-        _intervals.isEmpty ? _buildDefaultInterval() : _intervals.last;
-    _insertIntervalsWithAnimation(
-      [_cloneIntervalWithNewId(source)],
-      logStage: 'DUPLICATE_LAST_INTERVAL',
-    );
-  }
-
   void _duplicateIntervalBelow(String intervalId) {
     final index =
         _intervals.indexWhere((interval) => interval.id == intervalId);
@@ -1491,6 +1482,7 @@ class _RoutineDetailSheetContentState
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF3C3C3C) : Colors.white,
@@ -1502,7 +1494,7 @@ class _RoutineDetailSheetContentState
           ),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 16, color: theme.colorScheme.primary),
             const SizedBox(width: 8),
@@ -1563,37 +1555,36 @@ class _RoutineDetailSheetContentState
               ),
             ),
             const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Row(
               children: [
-                _buildQuickActionButton(
-                  icon: Icons.check_rounded,
-                  label: l10n.done,
-                  onTap: _toggleReorderMode,
+                Expanded(
+                  child: _buildQuickActionButton(
+                    icon: Icons.check_rounded,
+                    label: l10n.done,
+                    onTap: _toggleReorderMode,
+                  ),
                 ),
               ],
             ),
           ] else
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Row(
               children: [
-                _buildQuickActionButton(
-                  icon: Icons.content_copy_outlined,
-                  label: l10n.duplicateLast,
-                  onTap: _duplicateLastInterval,
-                ),
-                _buildQuickActionButton(
-                  icon: Icons.repeat,
-                  label: l10n.repeatPattern,
-                  onTap: _showRepeatPatternPicker,
+                Expanded(
+                  child: _buildQuickActionButton(
+                    icon: Icons.repeat,
+                    label: l10n.repeatPattern,
+                    onTap: _showRepeatPatternPicker,
+                  ),
                 ),
                 if (_canReorderIntervals)
-                  _buildQuickActionButton(
-                    icon: Icons.reorder_rounded,
-                    label: l10n.reorderIntervals,
-                    onTap: _toggleReorderMode,
+                  const SizedBox(width: 8),
+                if (_canReorderIntervals)
+                  Expanded(
+                    child: _buildQuickActionButton(
+                      icon: Icons.reorder_rounded,
+                      label: l10n.reorderIntervals,
+                      onTap: _toggleReorderMode,
+                    ),
                   ),
               ],
             ),

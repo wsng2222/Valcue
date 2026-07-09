@@ -16,6 +16,7 @@ enum WorkoutStatus {
 class WorkoutState extends ChangeNotifier {
   final Routine routine;
   final DateTime startTime;
+  final DateTime Function() _now;
 
   // Store initial total duration ONCE at workout start
   final int initialTotalSeconds;
@@ -23,6 +24,7 @@ class WorkoutState extends ChangeNotifier {
   int _currentIntervalIndex = 0;
   int _remainingSeconds = 0;
   int _totalElapsedSeconds = 0;
+  int _activeElapsedMilliseconds = 0;
   WorkoutStatus _status = WorkoutStatus.running;
   bool _stoppedEarly = false;
 
@@ -33,6 +35,7 @@ class WorkoutState extends ChangeNotifier {
   // Distance tracking for treadmill workouts
   double _distanceMeters = 0.0;
   DateTime? _lastTickTime;
+  DateTime? _runningStartedAt;
   Timer? _distanceTimer;
 
   // Flag to prevent double-playing finished sound effect
@@ -41,7 +44,9 @@ class WorkoutState extends ChangeNotifier {
   WorkoutState({
     required this.routine,
     required this.startTime,
-  }) : initialTotalSeconds = routine.totalDurationSeconds {
+    DateTime Function()? nowProvider,
+  })  : _now = nowProvider ?? DateTime.now,
+        initialTotalSeconds = routine.totalDurationSeconds {
     _initializeWorkout();
   }
 
@@ -112,16 +117,28 @@ class WorkoutState extends ChangeNotifier {
   }
 
   double get distanceMeters => _distanceMeters;
+  int get totalElapsedMilliseconds {
+    if (_runningStartedAt == null) {
+      return _activeElapsedMilliseconds;
+    }
+
+    return _activeElapsedMilliseconds +
+        _now().difference(_runningStartedAt!).inMilliseconds;
+  }
+
+  int get roundedElapsedSeconds => (totalElapsedMilliseconds / 1000).round();
 
   bool get isTreadmill => routine.machineType == MachineType.treadmill;
 
   void _startTimer() {
     _status = WorkoutStatus.running;
     _timer?.cancel();
+    final startedAt = _now();
+    _runningStartedAt = startedAt;
 
     // Initialize distance tracking for treadmill
     if (isTreadmill) {
-      _lastTickTime = DateTime.now();
+      _lastTickTime = startedAt;
       _startDistanceTracking();
     }
 
@@ -152,7 +169,7 @@ class WorkoutState extends ChangeNotifier {
 
   void _startDistanceTracking() {
     _distanceTimer?.cancel();
-    _lastTickTime = DateTime.now();
+    _lastTickTime ??= _now();
 
     // Update distance every 500ms for smooth tracking
     _distanceTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
@@ -164,18 +181,19 @@ class WorkoutState extends ChangeNotifier {
     });
   }
 
-  void _updateDistance() {
+  void _updateDistance({DateTime? now, bool shouldNotify = true}) {
     if (_lastTickTime == null || !isTreadmill) return;
 
-    final now = DateTime.now();
-    final deltaSeconds = now.difference(_lastTickTime!).inMilliseconds / 1000.0;
+    final snapshotTime = now ?? _now();
+    final deltaSeconds =
+        snapshotTime.difference(_lastTickTime!).inMilliseconds / 1000.0;
 
     if (deltaSeconds <= 0) return;
 
     // Get current speed in km/h
     final currentSpeedKmh = currentInterval.speedKmh ?? 0.0;
     if (currentSpeedKmh <= 0) {
-      _lastTickTime = now;
+      _lastTickTime = snapshotTime;
       return;
     }
 
@@ -186,15 +204,28 @@ class WorkoutState extends ChangeNotifier {
         (currentSpeedKmh * 1000.0 / 3600.0) * deltaSeconds;
     _distanceMeters += distanceIncrement;
 
-    _lastTickTime = now;
-    notifyListeners();
+    _lastTickTime = snapshotTime;
+    if (shouldNotify) {
+      notifyListeners();
+    }
   }
 
-  void _finalizeDistance() {
+  void _finalizeDistance({DateTime? atTime}) {
     // Final distance update before stopping
     if (isTreadmill && _lastTickTime != null) {
-      _updateDistance();
+      _updateDistance(now: atTime, shouldNotify: false);
     }
+  }
+
+  void _finalizeElapsedTime({DateTime? atTime}) {
+    if (_runningStartedAt == null) return;
+
+    final endTime = atTime ?? _now();
+    final elapsed = endTime.difference(_runningStartedAt!).inMilliseconds;
+    if (elapsed > 0) {
+      _activeElapsedMilliseconds += elapsed;
+    }
+    _runningStartedAt = null;
   }
 
   /// Play the finished sound effect exactly once per workout
@@ -208,7 +239,7 @@ class WorkoutState extends ChangeNotifier {
   void _advanceToNextInterval() {
     // Finalize distance up to now before changing speed
     if (isTreadmill) {
-      _finalizeDistance();
+      _finalizeDistance(atTime: _now());
     }
 
     if (_currentIntervalIndex < routine.intervals.length - 1) {
@@ -223,11 +254,13 @@ class WorkoutState extends ChangeNotifier {
   }
 
   void _finishWorkout() {
+    final snapshotTime = _now();
     _timer?.cancel();
     if (isTreadmill) {
-      _finalizeDistance();
+      _finalizeDistance(atTime: snapshotTime);
       _distanceTimer?.cancel();
     }
+    _finalizeElapsedTime(atTime: snapshotTime);
     // Play finished sound before marking as finished
     _playFinishSfxOnce();
     _status = WorkoutStatus.finished;
@@ -235,11 +268,13 @@ class WorkoutState extends ChangeNotifier {
   }
 
   void stopWorkout() {
+    final snapshotTime = _now();
     _timer?.cancel();
     if (isTreadmill) {
-      _finalizeDistance();
+      _finalizeDistance(atTime: snapshotTime);
       _distanceTimer?.cancel();
     }
+    _finalizeElapsedTime(atTime: snapshotTime);
     // Play finished sound when user confirms stop
     _playFinishSfxOnce();
     _status = WorkoutStatus.stopped;
@@ -249,14 +284,16 @@ class WorkoutState extends ChangeNotifier {
 
   void pauseWorkout() {
     if (_status == WorkoutStatus.running) {
+      final snapshotTime = _now();
       _status = WorkoutStatus.paused;
       _timer?.cancel();
       if (isTreadmill) {
         // Finalize distance up to pause moment
-        _finalizeDistance();
+        _finalizeDistance(atTime: snapshotTime);
         _distanceTimer?.cancel();
         _lastTickTime = null; // Reset so we don't accumulate during pause
       }
+      _finalizeElapsedTime(atTime: snapshotTime);
       notifyListeners();
     }
   }

@@ -1,4 +1,4 @@
-# interval_cardio
+# PacePilot
 
 A new Flutter project.
 
