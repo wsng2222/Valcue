@@ -24,7 +24,8 @@ class WorkoutHistoryProvider with ChangeNotifier {
   }
 
   Future<void> addSession(WorkoutSession session) async {
-    _sessions = [session, ..._sessions]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    _sessions = [session, ..._sessions]
+      ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
     notifyListeners();
     _storage.addSession(session).catchError((e) {
       loadSessions();
@@ -55,4 +56,3 @@ class WorkoutHistoryProvider with ChangeNotifier {
     return getSessionsByDate(date).isNotEmpty;
   }
 }
-

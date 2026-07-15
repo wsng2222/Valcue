@@ -32,4 +32,3 @@ class OnboardingTreadmillIcon extends StatelessWidget {
     );
   }
 }
-

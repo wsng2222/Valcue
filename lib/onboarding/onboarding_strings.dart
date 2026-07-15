@@ -1675,22 +1675,22 @@ class OnboardingStrings {
 
   // Subtitle is a rich text where a phrase is red.
   String s7SubtitleLine1() => _t({
-        'ko': 'PacePilot과 함께\n',
-        'en': 'With PacePilot,\n',
-        'es': 'Con PacePilot,\n',
-        'fr': 'Avec PacePilot,\n',
-        'de': 'Mit PacePilot,\n',
-        'it': 'Con PacePilot,\n',
-        'nl': 'Met PacePilot,\n',
-        'da': 'Med PacePilot,\n',
-        'nb': 'Med PacePilot,\n',
-        'ru': 'С PacePilot,\n',
-        'pt': 'Com o PacePilot,\n',
-        'ja': 'PacePilotと一緒に\n',
-        'zh': '和 PacePilot 一起\n',
-        'vi': 'Cùng PacePilot,\n',
-        'ar': 'مع PacePilot،\n',
-        'th': 'ไปกับ PacePilot\n',
+        'ko': 'Valcue와 함께\n',
+        'en': 'With Valcue,\n',
+        'es': 'Con Valcue,\n',
+        'fr': 'Avec Valcue,\n',
+        'de': 'Mit Valcue,\n',
+        'it': 'Con Valcue,\n',
+        'nl': 'Met Valcue,\n',
+        'da': 'Med Valcue,\n',
+        'nb': 'Med Valcue,\n',
+        'ru': 'С Valcue,\n',
+        'pt': 'Com o Valcue,\n',
+        'ja': 'Valcueと一緒に\n',
+        'zh': '和 Valcue 一起\n',
+        'vi': 'Cùng Valcue,\n',
+        'ar': 'مع Valcue،\n',
+        'th': 'ไปกับ Valcue\n',
       });
 
   String s7SubtitleRedPhrase() => _t({

@@ -9,7 +9,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get appTitle => 'PacePilot';
+  String get appTitle => 'Valcue';
 
   @override
   String get settingsTitle => 'Innstillinger';

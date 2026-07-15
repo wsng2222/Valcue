@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/features/routines/utils/reorder_utils.dart';
+import 'package:valcue/features/routines/utils/reorder_utils.dart';
 
 void main() {
   group('reorderItems', () {

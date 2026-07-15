@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'premium_bottom_sheet.dart';
 import '../models/premium_feature.dart';
 
@@ -7,7 +7,7 @@ import '../models/premium_feature.dart';
 class PremiumGateModal {
   static void show(BuildContext context, PremiumFeature feature) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     List<String> benefits;
     switch (feature) {
       case PremiumFeature.voiceGuide:
@@ -41,4 +41,3 @@ class PremiumGateModal {
     );
   }
 }
-

@@ -69,12 +69,10 @@ class _GrayChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final fill = isDark
-        ? OnboardingTheme.darkGrayFill
-        : const Color(0xFFF0F0F0);
-    final border = isDark
-        ? OnboardingTheme.darkGrayFill
-        : const Color(0xFFF0F0F0);
+    final fill =
+        isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0);
+    final border =
+        isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
@@ -107,9 +105,8 @@ class _RingTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final trackColor = isDark
-        ? OnboardingTheme.darkGrayFill
-        : const Color(0xFFF0F0F0);
+    final trackColor =
+        isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0);
     return Container(
       width: 200, // Reduced from 210 for premium feel
       height: 200, // Reduced from 210
@@ -170,4 +167,3 @@ class _RingPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-

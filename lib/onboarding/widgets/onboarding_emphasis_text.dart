@@ -34,7 +34,9 @@ class OnboardingRichTitle extends StatelessWidget {
                   height: 1.30,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.8,
-                  color: s.isRed ? OnboardingTheme.primaryRed : theme.colorScheme.onSurface,
+                  color: s.isRed
+                      ? OnboardingTheme.primaryRed
+                      : theme.colorScheme.onSurface,
                 ),
               ),
             )
@@ -44,4 +46,3 @@ class OnboardingRichTitle extends StatelessWidget {
     );
   }
 }
-

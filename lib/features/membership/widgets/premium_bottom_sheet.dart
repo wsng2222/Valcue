@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import '../../../app_shell/app_shell.dart';
 import '../../../theme/app_theme.dart';
 import '../../../utils/bottom_sheet_utils.dart';

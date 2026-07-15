@@ -28,7 +28,8 @@ class WeightTrackerProvider with ChangeNotifier {
   }
 
   Future<void> addEntry(WeightEntry entry) async {
-    _entries = [entry, ..._entries]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    _entries = [entry, ..._entries]
+      ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
     notifyListeners();
     _storage.addEntry(entry).catchError((e) {
       loadData();
@@ -74,7 +75,9 @@ class WeightTrackerProvider with ChangeNotifier {
     if (_entries.isEmpty) return null;
     final targetDate = DateTime.now().subtract(Duration(days: days));
     final targetEntry = _entries.firstWhere(
-      (e) => e.dateTime.isBefore(targetDate) || e.dateTime.isAtSameMomentAs(targetDate),
+      (e) =>
+          e.dateTime.isBefore(targetDate) ||
+          e.dateTime.isAtSameMomentAs(targetDate),
       orElse: () => _entries.last,
     );
     return _entries.first.weightKg - targetEntry.weightKg;
@@ -99,4 +102,3 @@ class WeightTrackerProvider with ChangeNotifier {
     return _entries.take(count).toList().reversed.toList();
   }
 }
-

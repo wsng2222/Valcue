@@ -4,4 +4,3 @@ enum PremiumFeature {
   bike,
   stairmaster,
 }
-

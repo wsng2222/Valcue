@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:interval_cardio/utils/responsive.dart';
+import 'package:valcue/utils/responsive.dart';
 
 /// A crisp modern pill-shaped bottom navigation bar.
 /// Features a solid white pill with a gray inset capsule for the selected item.

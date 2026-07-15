@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'PacePilot';
+  String get appTitle => 'Valcue';
 
   @override
   String get settingsTitle => 'إعدادات';

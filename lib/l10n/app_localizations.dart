@@ -129,7 +129,7 @@ abstract class AppLocalizations {
   /// Application title
   ///
   /// In en, this message translates to:
-  /// **'PacePilot'**
+  /// **'Valcue'**
   String get appTitle;
 
   /// Settings screen title

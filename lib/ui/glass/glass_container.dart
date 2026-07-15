@@ -68,7 +68,8 @@ class GlassContainer extends StatelessWidget {
       padding: padding,
       showBorder: showBorder,
       backgroundColor: Colors.white.withValues(alpha: opacity),
-      borderColor: Colors.white.withValues(alpha: 0.35), // Slightly increased for better visibility
+      borderColor: Colors.white
+          .withValues(alpha: 0.35), // Slightly increased for better visibility
       width: width,
       height: height,
       child: child,
@@ -95,7 +96,8 @@ class GlassContainer extends StatelessWidget {
       padding: padding,
       showBorder: showBorder,
       backgroundColor: Colors.black.withValues(alpha: opacity),
-      borderColor: Colors.white.withValues(alpha: 0.25), // Slightly increased for better visibility
+      borderColor: Colors.white
+          .withValues(alpha: 0.25), // Slightly increased for better visibility
       width: width,
       height: height,
       child: child,
@@ -107,9 +109,9 @@ class GlassContainer extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     // Use high text scale factor as proxy for reduced transparency preference
     // High contrast mode or accessibility needs often prefer solid backgrounds
-    final isReducedTransparency = mediaQuery.textScaler.scale(1.0) > 1.3 || 
-                                   mediaQuery.boldText ||
-                                   mediaQuery.highContrast;
+    final isReducedTransparency = mediaQuery.textScaler.scale(1.0) > 1.3 ||
+        mediaQuery.boldText ||
+        mediaQuery.highContrast;
     final brightness = Theme.of(context).brightness;
     final isDark = brightness == Brightness.dark;
 
@@ -209,4 +211,3 @@ class GlassContainer extends StatelessWidget {
     );
   }
 }
-

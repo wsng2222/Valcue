@@ -1,7 +1,7 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/routine.dart';
 import '../models/interval.dart' as interval_model;

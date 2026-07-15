@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/features/profile/models/weight_entry.dart';
-import 'package:interval_cardio/features/profile/models/workout_session.dart';
-import 'package:interval_cardio/features/profile/storage/weight_storage.dart';
-import 'package:interval_cardio/features/profile/storage/workout_session_storage.dart';
-import 'package:interval_cardio/features/routines/models/machine_type.dart';
+import 'package:valcue/features/profile/models/weight_entry.dart';
+import 'package:valcue/features/profile/models/workout_session.dart';
+import 'package:valcue/features/profile/storage/weight_storage.dart';
+import 'package:valcue/features/profile/storage/workout_session_storage.dart';
+import 'package:valcue/features/routines/models/machine_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

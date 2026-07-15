@@ -9,7 +9,7 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get appTitle => 'PacePilot';
+  String get appTitle => 'Valcue';
 
   @override
   String get settingsTitle => 'Einstellungen';

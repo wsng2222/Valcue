@@ -1,11 +1,11 @@
 {
-    "name": "PacePilot",
-    "short_name": "PacePilot",
+    "name": "Valcue",
+    "short_name": "Valcue",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "PacePilot workout timer for treadmill, bike, and stair workouts.",
+    "description": "Valcue workout timer for treadmill, bike, and stair workouts.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

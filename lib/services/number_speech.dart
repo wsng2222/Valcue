@@ -188,4 +188,3 @@ class NumberSpeech {
     return out.join('');
   }
 }
-

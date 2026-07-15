@@ -1,7 +1,7 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +16,7 @@ import '../utils/app_shadows.dart';
 import '../widgets/unified_screen_header.dart';
 
 const _privacyPolicyUri =
-    'https://wsng2222.github.io/PacePilot/privacy-policy.html';
+    'https://wsng2222.github.io/Valcue/privacy-policy.html';
 
 Future<void> _openPrivacyPolicy(BuildContext context) async {
   final messenger = ScaffoldMessenger.maybeOf(context);

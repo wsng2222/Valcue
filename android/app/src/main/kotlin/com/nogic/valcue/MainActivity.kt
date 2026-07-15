@@ -1,4 +1,4 @@
-package com.nogic.pacepilot
+package com.nogic.valcue
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -8,7 +8,7 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 
 class MainActivity : FlutterActivity() {
-    private val CHANNEL = "com.interval_cardio/system"
+    private val CHANNEL = "com.nogic.valcue/system"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

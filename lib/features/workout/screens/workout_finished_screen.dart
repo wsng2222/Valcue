@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../../widgets/bidi_safe_text.dart';
@@ -926,7 +926,7 @@ class _ShareCard extends StatelessWidget {
                 children: [
                   const Expanded(
                     child: Text(
-                      'PacePilot',
+                      'Valcue',
                       style: TextStyle(
                         color: primaryText,
                         fontSize: 28,

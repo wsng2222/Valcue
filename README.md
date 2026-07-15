@@ -1,6 +1,6 @@
-# PacePilot
+# Valcue
 
-A new Flutter project.
+Valcue is a voice-guided interval cardio app for treadmill, bike, and stair workouts.
 
 ## Getting Started
 

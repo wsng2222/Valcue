@@ -23,12 +23,14 @@ class OnboardingScreen1Welcome extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 80), // Reduced from 86
-                const OnboardingTreadmillIcon(size: 104), // Reduced from 110 (~5%)
+                const OnboardingTreadmillIcon(
+                    size: 104), // Reduced from 110 (~5%)
                 const SizedBox(height: 28), // Reduced from 34 (tighter spacing)
                 OnboardingRichTitle(
                   spans: [EmphasisTextSpan(s.s1Title())],
                 ),
-                const SizedBox(height: 10), // Reduced from 14 (more intentional)
+                const SizedBox(
+                    height: 10), // Reduced from 14 (more intentional)
                 Text(
                   s.s1Subtitle(),
                   textAlign: TextAlign.center,
@@ -48,4 +50,3 @@ class OnboardingScreen1Welcome extends StatelessWidget {
     );
   }
 }
-

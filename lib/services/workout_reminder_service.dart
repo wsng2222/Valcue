@@ -13,7 +13,7 @@ class WorkoutReminderService {
   static final WorkoutReminderService instance = WorkoutReminderService._();
 
   static const int _notificationIdBase = 7100;
-  static const String _channelId = 'interval_cardio_workout_reminder';
+  static const String _channelId = 'valcue_workout_reminder';
   static const String _channelName = 'Workout reminders';
   static const String _channelDescription =
       'Scheduled workout reminder notifications';

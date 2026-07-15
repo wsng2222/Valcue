@@ -67,7 +67,8 @@ class OnboardingStorage {
 
   static Future<SpeedUnit?> getSpeedUnit() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_kSpeedUnit) ?? prefs.getString(_kSpeedUnitLegacy);
+    final raw =
+        prefs.getString(_kSpeedUnit) ?? prefs.getString(_kSpeedUnitLegacy);
     if (raw == null) return null;
     return SpeedUnit.values
         .cast<SpeedUnit?>()
@@ -82,11 +83,11 @@ class OnboardingStorage {
 
   static Future<WeightUnit?> getWeightUnit() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_kWeightUnit) ?? prefs.getString(_kWeightUnitLegacy);
+    final raw =
+        prefs.getString(_kWeightUnit) ?? prefs.getString(_kWeightUnitLegacy);
     if (raw == null) return null;
     return WeightUnit.values
         .cast<WeightUnit?>()
         .firstWhere((e) => e?.name == raw, orElse: () => null);
   }
 }
-

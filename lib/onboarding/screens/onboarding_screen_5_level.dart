@@ -48,7 +48,8 @@ class OnboardingScreen5Level extends StatelessWidget {
                       leading: const Text('🏃', style: TextStyle(fontSize: 28)),
                       title: s.levelIntermediateTitle(),
                       subtitle: s.levelIntermediateSub(),
-                      selected: controller.level == OnboardingLevel.intermediate,
+                      selected:
+                          controller.level == OnboardingLevel.intermediate,
                       onTap: () {
                         AnalyticsService.instance.logEvent(
                           'level_selected',
@@ -78,6 +79,4 @@ class OnboardingScreen5Level extends StatelessWidget {
       },
     );
   }
-
 }
-

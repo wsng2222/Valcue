@@ -51,8 +51,9 @@ class OnboardingController extends ChangeNotifier {
     await OnboardingStorage.setComplete(true);
 
     // Apply unit selections to app settings immediately.
-    await settingsProvider.updateMeasurement(speedUnit == SpeedUnit.kmh ? 'kmh' : 'mph');
-    await settingsProvider.updateWeightUnit(weightUnit == WeightUnit.kg ? 'kg' : 'lbs');
+    await settingsProvider
+        .updateMeasurement(speedUnit == SpeedUnit.kmh ? 'kmh' : 'mph');
+    await settingsProvider
+        .updateWeightUnit(weightUnit == WeightUnit.kg ? 'kg' : 'lbs');
   }
 }
-

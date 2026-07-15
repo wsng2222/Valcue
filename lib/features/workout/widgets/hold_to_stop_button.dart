@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'dart:async';
 
 class HoldToStopButton extends StatefulWidget {
@@ -28,7 +28,8 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
 
     final startTime = DateTime.now();
     _holdTimer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
-      final elapsed = DateTime.now().difference(startTime).inMilliseconds / 1000.0;
+      final elapsed =
+          DateTime.now().difference(startTime).inMilliseconds / 1000.0;
       final progress = (elapsed / _holdDuration).clamp(0.0, 1.0);
 
       setState(() {
@@ -191,4 +192,3 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
     );
   }
 }
-

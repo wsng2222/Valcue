@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'app_shell/app_shell.dart';
 import 'app_settings/app_settings_provider.dart';
@@ -22,7 +22,7 @@ import 'services/voice_guide_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'onboarding/onboarding_flow.dart';
 
-const _appDisplayName = 'PacePilot';
+const _appDisplayName = 'Valcue';
 
 void _debugLog(String message) {
   if (kDebugMode) {
@@ -68,7 +68,7 @@ void main() async {
 
 Future<void> _bootstrapApp() async {
   // Hide Android system navigation bar with maximum intensity
-  const platform = MethodChannel('com.interval_cardio/system');
+  const platform = MethodChannel('com.nogic.valcue/system');
   try {
     await platform.invokeMethod('hideSystemUI');
   } catch (e) {
@@ -243,7 +243,7 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
-    const platform = MethodChannel('com.interval_cardio/system');
+    const platform = MethodChannel('com.nogic.valcue/system');
     platform.invokeMethod('hideSystemUI').catchError((e) {
       _debugLog('Failed to hide system UI: $e');
     });

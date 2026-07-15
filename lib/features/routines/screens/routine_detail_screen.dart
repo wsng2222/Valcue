@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
-import 'package:interval_cardio/l10n/app_localizations.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../models/routine.dart';
 import '../../../app_settings/app_settings_provider.dart';

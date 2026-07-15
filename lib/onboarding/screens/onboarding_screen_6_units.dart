@@ -108,7 +108,8 @@ class OnboardingScreen6Units extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16), // Increased spacing for helper text
+                    const SizedBox(
+                        height: 16), // Increased spacing for helper text
                     Text(
                       s.s6Helper(),
                       textAlign: TextAlign.center,
@@ -130,4 +131,3 @@ class OnboardingScreen6Units extends StatelessWidget {
     );
   }
 }
-

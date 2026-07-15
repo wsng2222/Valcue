@@ -1,9 +1,9 @@
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/features/routines/models/interval.dart';
-import 'package:interval_cardio/features/routines/models/machine_type.dart';
-import 'package:interval_cardio/features/routines/models/routine.dart';
-import 'package:interval_cardio/features/workout/state/workout_state.dart';
+import 'package:valcue/features/routines/models/interval.dart';
+import 'package:valcue/features/routines/models/machine_type.dart';
+import 'package:valcue/features/routines/models/routine.dart';
+import 'package:valcue/features/workout/state/workout_state.dart';
 
 void main() {
   Routine buildRoutine({

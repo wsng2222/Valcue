@@ -1,7 +1,7 @@
 # Multilingual Support Implementation Summary
 
 ## Overview
-Full i18n support has been implemented for the Interval Cardio app with 11 languages:
+Full i18n support has been implemented for the Valcue app with 11 languages:
 - English (en)
 - Español (es)
 - Français (fr)
@@ -128,4 +128,3 @@ Full i18n support has been implemented for the Interval Cardio app with 11 langu
 - Language can be changed in Settings without restart
 - RTL is automatically handled by Flutter for Arabic
 - Difficulty values are stored in Korean but displayed in selected language
-

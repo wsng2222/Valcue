@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/features/routines/models/interval.dart';
-import 'package:interval_cardio/features/routines/models/machine_type.dart';
-import 'package:interval_cardio/features/routines/models/routine.dart';
-import 'package:interval_cardio/features/routines/storage/routine_storage.dart';
+import 'package:valcue/features/routines/models/interval.dart';
+import 'package:valcue/features/routines/models/machine_type.dart';
+import 'package:valcue/features/routines/models/routine.dart';
+import 'package:valcue/features/routines/storage/routine_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

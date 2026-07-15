@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/app_settings/app_settings_model.dart';
+import 'package:valcue/app_settings/app_settings_model.dart';
 
 void main() {
   group('AppSettings theme migration', () {

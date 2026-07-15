@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:interval_cardio/features/routines/models/interval.dart';
-import 'package:interval_cardio/features/routines/models/machine_type.dart';
-import 'package:interval_cardio/features/routines/models/routine.dart';
+import 'package:valcue/features/routines/models/interval.dart';
+import 'package:valcue/features/routines/models/machine_type.dart';
+import 'package:valcue/features/routines/models/routine.dart';
 
 void main() {
   test('Interval formats duration as mm:ss', () {
