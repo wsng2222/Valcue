@@ -136,6 +136,9 @@
   "pausedSubtitle": "Вы можете продолжить или завершить тренировку",
   "endWorkoutConfirmationMessage": "Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.",
   "workoutComplete": "Тренировка завершена",
+  "backgroundIntervalNotificationTitle": "Новый интервал",
+  "backgroundIntervalNotificationsTitle": "Фоновые уведомления об интервалах",
+  "backgroundIntervalNotificationsSubtitle": "Получайте настройки тренажёра и длительность интервала при использовании других приложений",
   "totalWorkoutTime": "Общее время",
   "totalDistance": "Общее расстояние",
   "totalTime": "Общее время",
@@ -433,6 +436,7 @@
     }
   },
   "benefitVoiceCoaching": "Премиум-система голосового коучинга",
+  "benefitBackgroundIntervalNotifications": "Уведомления об интервалах при использовании других приложений",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },

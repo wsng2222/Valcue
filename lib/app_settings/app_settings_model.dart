@@ -4,6 +4,7 @@ class AppSettings {
   final String weightUnit; // 'kg' or 'lbs'
   final bool isPremium;
   final bool voiceGuideEnabled;
+  final bool backgroundIntervalNotificationsEnabled;
   final String themeMode;
   final bool themeModeUserSet;
   final bool soundEffectsEnabled;
@@ -19,6 +20,7 @@ class AppSettings {
     this.weightUnit = 'kg',
     required this.isPremium,
     required this.voiceGuideEnabled,
+    required this.backgroundIntervalNotificationsEnabled,
     required this.themeMode,
     required this.themeModeUserSet,
     required this.soundEffectsEnabled,
@@ -35,6 +37,7 @@ class AppSettings {
     String? weightUnit,
     bool? isPremium,
     bool? voiceGuideEnabled,
+    bool? backgroundIntervalNotificationsEnabled,
     String? themeMode,
     bool? themeModeUserSet,
     bool? soundEffectsEnabled,
@@ -50,6 +53,9 @@ class AppSettings {
       weightUnit: weightUnit ?? this.weightUnit,
       isPremium: isPremium ?? this.isPremium,
       voiceGuideEnabled: voiceGuideEnabled ?? this.voiceGuideEnabled,
+      backgroundIntervalNotificationsEnabled:
+          backgroundIntervalNotificationsEnabled ??
+              this.backgroundIntervalNotificationsEnabled,
       themeMode: themeMode ?? this.themeMode,
       themeModeUserSet: themeModeUserSet ?? this.themeModeUserSet,
       soundEffectsEnabled: soundEffectsEnabled ?? this.soundEffectsEnabled,
@@ -72,6 +78,8 @@ class AppSettings {
       'weightUnit': weightUnit,
       'isPremium': isPremium,
       'voiceGuideEnabled': voiceGuideEnabled,
+      'backgroundIntervalNotificationsEnabled':
+          backgroundIntervalNotificationsEnabled,
       'themeMode': themeMode,
       'themeModeUserSet': themeModeUserSet,
       'soundEffectsEnabled': soundEffectsEnabled,
@@ -109,6 +117,8 @@ class AppSettings {
       weightUnit: json['weightUnit'] as String? ?? 'kg',
       isPremium: json['isPremium'] as bool? ?? false,
       voiceGuideEnabled: json['voiceGuideEnabled'] as bool? ?? false,
+      backgroundIntervalNotificationsEnabled:
+          json['backgroundIntervalNotificationsEnabled'] as bool? ?? true,
       themeMode: themeMode,
       themeModeUserSet: themeModeUserSet,
       soundEffectsEnabled: json['soundEffectsEnabled'] as bool? ?? true,
@@ -126,6 +136,7 @@ class AppSettings {
         weightUnit: 'kg',
         isPremium: false,
         voiceGuideEnabled: false,
+        backgroundIntervalNotificationsEnabled: true,
         themeMode: 'system', // Follow device by default
         themeModeUserSet: false,
         soundEffectsEnabled: true,

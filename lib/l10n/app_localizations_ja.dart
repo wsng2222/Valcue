@@ -334,6 +334,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get workoutComplete => 'ワークアウト完了';
 
   @override
+  String get backgroundIntervalNotificationTitle => '新しい区間開始';
+
+  @override
+  String get backgroundIntervalNotificationsTitle => 'バックグラウンド区間通知';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      '他のアプリ使用中もマシン設定と区間時間を通知します';
+
+  @override
   String get totalWorkoutTime => '合計時間';
 
   @override
@@ -868,6 +878,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'プレミアム音声コーチングシステム';
+
+  @override
+  String get benefitBackgroundIntervalNotifications => '他のアプリ使用中も区間変更を通知';
 
   @override
   String get benefitCycleStairmasterRoutines => 'すべての有酸素機器に完全対応';

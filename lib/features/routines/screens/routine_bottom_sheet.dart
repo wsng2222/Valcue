@@ -14,6 +14,7 @@ import '../../workout/screens/workout_screen.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../services/ad_service.dart';
+import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 import '../../../utils/app_shadows.dart';
 
@@ -823,19 +824,32 @@ class _RoutineDetailSheetContentState
     }
   }
 
-  void _startWorkout() {
+  Future<void> _startWorkout() async {
     final routine = _buildCurrentRoutine();
 
     // Check if user is premium - premium users don't see ads
     final isPremium = widget.settingsProvider.isPremium;
 
     if (isPremium) {
+      final navigator = Navigator.of(context);
+      var notificationsAuthorized = false;
+      if (widget.settingsProvider.backgroundIntervalNotificationsEnabled) {
+        notificationsAuthorized =
+            await WorkoutReminderService.instance.requestPermissions();
+        if (!notificationsAuthorized) {
+          await widget.settingsProvider
+              .updateBackgroundIntervalNotifications(false);
+        }
+      }
+      if (!mounted) return;
       // Premium user: close bottom sheet and navigate directly without ads
-      Navigator.pop(context);
-      Navigator.push(
-        context,
+      navigator.pop();
+      navigator.push(
         MaterialPageRoute(
-          builder: (context) => WorkoutScreen(routine: routine),
+          builder: (context) => WorkoutScreen(
+            routine: routine,
+            backgroundNotificationsAuthorized: notificationsAuthorized,
+          ),
         ),
       );
       return;
@@ -1576,8 +1590,7 @@ class _RoutineDetailSheetContentState
                     onTap: _showRepeatPatternPicker,
                   ),
                 ),
-                if (_canReorderIntervals)
-                  const SizedBox(width: 8),
+                if (_canReorderIntervals) const SizedBox(width: 8),
                 if (_canReorderIntervals)
                   Expanded(
                     child: _buildQuickActionButton(

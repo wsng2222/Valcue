@@ -339,6 +339,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get workoutComplete => 'Hoàn thành bài tập';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'Bắt đầu hiệp mới';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'Thông báo hiệp khi chạy nền';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'Nhận cài đặt máy và thời lượng hiệp khi dùng ứng dụng khác';
+
+  @override
   String get totalWorkoutTime => 'Tổng thời gian';
 
   @override
@@ -903,6 +914,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'Hệ Thống Huấn Luyện Giọng Nói Premium';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'Thông báo chuyển hiệp khi dùng ứng dụng khác';
 
   @override
   String get benefitCycleStairmasterRoutines =>

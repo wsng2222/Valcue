@@ -136,6 +136,9 @@
   "pausedSubtitle": "続けるか、ワークアウトを終了できます",
   "endWorkoutConfirmationMessage": "終了すると、現在進行中のワークアウトが終了し、要約画面に移動します。",
   "workoutComplete": "ワークアウト完了",
+  "backgroundIntervalNotificationTitle": "新しい区間開始",
+  "backgroundIntervalNotificationsTitle": "バックグラウンド区間通知",
+  "backgroundIntervalNotificationsSubtitle": "他のアプリ使用中もマシン設定と区間時間を通知します",
   "totalWorkoutTime": "合計時間",
   "totalDistance": "総距離",
   "totalTime": "合計時間",
@@ -433,6 +436,7 @@
     }
   },
   "benefitVoiceCoaching": "プレミアム音声コーチングシステム",
+  "benefitBackgroundIntervalNotifications": "他のアプリ使用中も区間変更を通知",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },

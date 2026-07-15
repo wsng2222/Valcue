@@ -71,6 +71,12 @@ class MembershipScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildBenefitItem(
               context,
+              AppLocalizations.of(context)!
+                  .benefitBackgroundIntervalNotifications,
+            ),
+            const SizedBox(height: 16),
+            _buildBenefitItem(
+              context,
               AppLocalizations.of(context)!.benefitCycleStairmaster,
             ),
             const SizedBox(height: 16),

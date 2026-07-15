@@ -136,6 +136,9 @@
   "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc thói quen",
   "endWorkoutConfirmationMessage": "Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.",
   "workoutComplete": "Hoàn thành bài tập",
+  "backgroundIntervalNotificationTitle": "Bắt đầu hiệp mới",
+  "backgroundIntervalNotificationsTitle": "Thông báo hiệp khi chạy nền",
+  "backgroundIntervalNotificationsSubtitle": "Nhận cài đặt máy và thời lượng hiệp khi dùng ứng dụng khác",
   "totalWorkoutTime": "Tổng thời gian",
   "totalDistance": "Tổng khoảng cách",
   "totalTime": "Tổng thời gian",
@@ -433,6 +436,7 @@
     }
   },
   "benefitVoiceCoaching": "Hệ Thống Huấn Luyện Giọng Nói Premium",
+  "benefitBackgroundIntervalNotifications": "Thông báo chuyển hiệp khi dùng ứng dụng khác",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },

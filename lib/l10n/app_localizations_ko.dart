@@ -334,6 +334,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get workoutComplete => '운동 완료';
 
   @override
+  String get backgroundIntervalNotificationTitle => '새 구간 시작';
+
+  @override
+  String get backgroundIntervalNotificationsTitle => '백그라운드 구간 알림';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      '다른 앱 사용 중에도 기구 설정값과 구간 시간을 알려드려요';
+
+  @override
   String get totalWorkoutTime => '총 시간';
 
   @override
@@ -871,6 +881,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => '프리미엄 음성 코칭 시스템';
+
+  @override
+  String get benefitBackgroundIntervalNotifications => '다른 앱 사용 중에도 구간 변경 알림';
 
   @override
   String get benefitCycleStairmasterRoutines => '모든 유산소 기구 완벽 지원';

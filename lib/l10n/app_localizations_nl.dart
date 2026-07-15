@@ -338,6 +338,17 @@ class AppLocalizationsNl extends AppLocalizations {
   String get workoutComplete => 'Workout voltooid';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'Nieuw interval';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'Intervalmeldingen op de achtergrond';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'Ontvang machine-instellingen en intervalduur terwijl je andere apps gebruikt';
+
+  @override
   String get totalWorkoutTime => 'Totale tijd';
 
   @override
@@ -902,6 +913,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'Premium Spraakcoaching Systeem';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'Intervalmeldingen terwijl je andere apps gebruikt';
 
   @override
   String get benefitCycleStairmasterRoutines =>

@@ -338,6 +338,17 @@ class AppLocalizationsNb extends AppLocalizations {
   String get workoutComplete => 'Økt fullført';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'Nytt intervall starter';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'Intervallvarsler i bakgrunnen';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'Få maskininnstillinger og intervalltid mens du bruker andre apper';
+
+  @override
   String get totalWorkoutTime => 'Total tid';
 
   @override
@@ -903,6 +914,10 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'Premium Stemmecoaching System';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'Intervallvarsler mens du bruker andre apper';
 
   @override
   String get benefitCycleStairmasterRoutines =>

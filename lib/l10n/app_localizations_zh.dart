@@ -332,6 +332,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get workoutComplete => '锻炼完成';
 
   @override
+  String get backgroundIntervalNotificationTitle => '新间歇开始';
+
+  @override
+  String get backgroundIntervalNotificationsTitle => '后台间歇提醒';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle => '使用其他应用时也会提醒器械设置和间歇时长';
+
+  @override
   String get totalWorkoutTime => '总时间';
 
   @override
@@ -866,6 +875,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => '高级语音指导系统';
+
+  @override
+  String get benefitBackgroundIntervalNotifications => '使用其他应用时也接收间歇切换提醒';
 
   @override
   String get benefitCycleStairmasterRoutines => '全面支持所有有氧器械';

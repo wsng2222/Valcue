@@ -921,6 +921,10 @@ class _BenefitsList extends StatelessWidget {
         text: l10n.benefitVoiceCoaching,
       ),
       _BenefitItem(
+        icon: Icons.notifications_active_outlined,
+        text: l10n.benefitBackgroundIntervalNotifications,
+      ),
+      _BenefitItem(
         icon: Icons.fitness_center,
         text: l10n.benefitCycleStairmasterRoutines,
       ),

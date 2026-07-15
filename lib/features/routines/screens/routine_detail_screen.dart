@@ -9,6 +9,7 @@ import 'routine_edit_screen.dart';
 import '../storage/routine_provider.dart';
 import '../widgets/routine_shared_widgets.dart';
 import '../../../services/ad_service.dart';
+import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 
 class RoutineDetailSheet {
@@ -217,22 +218,35 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                   // Start button (primary)
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Check if user is premium - premium users don't see ads
                         final isPremium = settingsProvider.isPremium;
 
                         if (isPremium) {
-                          // Premium user: close bottom sheet and navigate directly without ads
-                          Navigator.pop(context);
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WorkoutScreen(routine: routine),
-                              ),
-                            );
+                          final navigator = Navigator.of(context);
+                          var notificationsAuthorized = false;
+                          if (settingsProvider
+                              .backgroundIntervalNotificationsEnabled) {
+                            notificationsAuthorized =
+                                await WorkoutReminderService.instance
+                                    .requestPermissions();
+                            if (!notificationsAuthorized) {
+                              await settingsProvider
+                                  .updateBackgroundIntervalNotifications(false);
+                            }
                           }
+                          if (!context.mounted) return;
+                          // Premium user: close bottom sheet and navigate directly without ads
+                          navigator.pop();
+                          navigator.push(
+                            MaterialPageRoute(
+                              builder: (context) => WorkoutScreen(
+                                routine: routine,
+                                backgroundNotificationsAuthorized:
+                                    notificationsAuthorized,
+                              ),
+                            ),
+                          );
                           return;
                         }
 

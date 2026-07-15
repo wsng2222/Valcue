@@ -338,6 +338,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get workoutComplete => 'اكتمل التمرين';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'بدء فترة جديدة';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'تنبيهات الفترات في الخلفية';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'اعرض إعدادات الجهاز ومدة الفترة أثناء استخدام تطبيقات أخرى';
+
+  @override
   String get totalWorkoutTime => 'إجمالي الوقت';
 
   @override
@@ -897,6 +908,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'نظام التدريب الصوتي المتميز';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'تنبيهات تغيّر الفترات أثناء استخدام تطبيقات أخرى';
 
   @override
   String get benefitCycleStairmasterRoutines => 'دعم كامل لجميع أجهزة الكارديو';

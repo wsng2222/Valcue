@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -16,20 +17,25 @@ import '../widgets/flashing_metric_text.dart';
 import 'workout_finished_screen.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 import '../../../services/voice_guide_service.dart';
+import '../../../services/workout_interval_notification_planner.dart';
+import '../../../services/workout_reminder_service.dart';
 
 class WorkoutScreen extends StatefulWidget {
   final Routine routine;
+  final bool backgroundNotificationsAuthorized;
 
   const WorkoutScreen({
     super.key,
     required this.routine,
+    this.backgroundNotificationsAuthorized = false,
   });
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
+class _WorkoutScreenState extends State<WorkoutScreen>
+    with WidgetsBindingObserver {
   late WorkoutState _workoutState;
   bool _pauseSheetOpen = false;
   bool _endConfirmOpen = false;
@@ -42,10 +48,14 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   bool _suppressIntervalGuidanceOnResume = false;
   bool _isSpeakingIntervalInfo =
       false; // Prevent countdown during interval speech
+  late final bool _notificationsAuthorized;
+  bool _backgroundLifecycleHandled = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _notificationsAuthorized = widget.backgroundNotificationsAuthorized;
     _workoutState = WorkoutState(
       routine: widget.routine,
       startTime: DateTime.now(),
@@ -63,6 +73,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(
+      WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+    );
     _workoutState.removeListener(_onWorkoutStateChanged);
     _workoutState.dispose();
 
@@ -79,6 +93,100 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        if (_backgroundLifecycleHandled) return;
+        _backgroundLifecycleHandled = true;
+        VoiceGuideService.instance.stop();
+        _workoutState.suspendForBackground();
+        unawaited(_scheduleBackgroundWorkoutNotifications());
+        break;
+      case AppLifecycleState.resumed:
+        unawaited(
+          WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+        );
+        if (!_backgroundLifecycleHandled) return;
+        _backgroundLifecycleHandled = false;
+        // Do not replay a voice cue that the background notification already
+        // delivered while reconciling possibly several elapsed intervals.
+        _suppressIntervalGuidanceOnResume = true;
+        _workoutState.resumeFromBackground();
+        _suppressIntervalGuidanceOnResume = false;
+        _lastSpokenIntervalIndex = _workoutState.currentIntervalIndex;
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+        break;
+    }
+  }
+
+  Future<void> _scheduleBackgroundWorkoutNotifications() async {
+    if (!mounted) return;
+
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    final service = WorkoutReminderService.instance;
+    if (!settingsProvider.isPremium ||
+        !settingsProvider.backgroundIntervalNotificationsEnabled ||
+        !_notificationsAuthorized) {
+      await service.cancelWorkoutIntervalNotifications();
+      return;
+    }
+
+    final state = _workoutState;
+    late final int firstIntervalIndex;
+    late final Duration delayUntilFirstInterval;
+    switch (state.status) {
+      case WorkoutStatus.running:
+        firstIntervalIndex = state.currentIntervalIndex + 1;
+        delayUntilFirstInterval = state.currentIntervalRemainingDuration;
+        break;
+      case WorkoutStatus.resumingCountdown:
+        if (state.isInitialCountdown) {
+          firstIntervalIndex = state.currentIntervalIndex;
+          delayUntilFirstInterval = state.countdownRemainingDuration;
+        } else {
+          // Resuming the same section is not a new interval, so the first alert
+          // remains the next actual boundary after countdown + remaining time.
+          firstIntervalIndex = state.currentIntervalIndex + 1;
+          delayUntilFirstInterval = state.countdownRemainingDuration +
+              state.currentIntervalRemainingDuration;
+        }
+        break;
+      case WorkoutStatus.paused:
+      case WorkoutStatus.finished:
+      case WorkoutStatus.stopped:
+        await service.cancelWorkoutIntervalNotifications();
+        return;
+    }
+
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final notifications = WorkoutIntervalNotificationPlanner.build(
+      routine: widget.routine,
+      firstIntervalIndex: firstIntervalIndex,
+      delayUntilFirstInterval: delayUntilFirstInterval,
+      measurement: settingsProvider.measurement,
+      languageCode: settingsProvider.language,
+      labels: WorkoutNotificationLabels(
+        newInterval: l10n.backgroundIntervalNotificationTitle,
+        workoutComplete: l10n.workoutComplete,
+        speed: l10n.speed,
+        incline: l10n.incline,
+        resistance: l10n.resistance,
+        level: l10n.level,
+        duration: l10n.duration,
+      ),
+    );
+    await service.scheduleWorkoutIntervalNotifications(
+      notifications: notifications,
+      routineId: widget.routine.id,
+    );
+  }
+
   void _onWorkoutStateChanged() {
     final status = _workoutState.status;
 
@@ -91,6 +199,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
     if (_workoutState.status == WorkoutStatus.finished ||
         _workoutState.status == WorkoutStatus.stopped) {
+      unawaited(
+        WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+      );
       _navigateToFinished();
     } else if (_workoutState.status == WorkoutStatus.running &&
         _isCountdownActive) {
@@ -250,6 +361,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     }
 
     state.pauseWorkout();
+    unawaited(
+      WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+    );
     _showPauseSheet(state);
   }
 

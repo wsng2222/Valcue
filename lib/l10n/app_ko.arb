@@ -136,6 +136,9 @@
   "pausedSubtitle": "계속하거나 운동을 종료할 수 있어요",
   "endWorkoutConfirmationMessage": "종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.",
   "workoutComplete": "운동 완료",
+  "backgroundIntervalNotificationTitle": "새 구간 시작",
+  "backgroundIntervalNotificationsTitle": "백그라운드 구간 알림",
+  "backgroundIntervalNotificationsSubtitle": "다른 앱 사용 중에도 기구 설정값과 구간 시간을 알려드려요",
   "totalWorkoutTime": "총 시간",
   "totalDistance": "총 거리",
   "totalTime": "총 시간",
@@ -436,6 +439,7 @@
   "@benefitVoiceCoaching": {
     "description": "프리미엄 혜택: 음성 코칭"
   },
+  "benefitBackgroundIntervalNotifications": "다른 앱 사용 중에도 구간 변경 알림",
   "benefitCycleStairmasterRoutines": "모든 유산소 기구 완벽 지원",
   "@benefitCycleStairmasterRoutines": {
     "description": "프리미엄 혜택: 사이클 및 천국의 계단 루틴"

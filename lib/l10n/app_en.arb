@@ -440,6 +440,18 @@
   "@workoutComplete": {
     "description": "Workout complete title (always English)"
   },
+  "backgroundIntervalNotificationTitle": "New interval",
+  "@backgroundIntervalNotificationTitle": {
+    "description": "Title for a premium notification shown when a new workout interval begins in the background"
+  },
+  "backgroundIntervalNotificationsTitle": "Background interval alerts",
+  "@backgroundIntervalNotificationsTitle": {
+    "description": "Settings title for premium background interval notifications"
+  },
+  "backgroundIntervalNotificationsSubtitle": "Get equipment settings and interval duration while using other apps",
+  "@backgroundIntervalNotificationsSubtitle": {
+    "description": "Settings subtitle for premium background interval notifications"
+  },
   "totalWorkoutTime": "Total Time",
   "@totalWorkoutTime": {
     "description": "Total workout time label"
@@ -1032,6 +1044,10 @@
   "benefitVoiceCoaching": "Premium Voice Coaching System",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
+  },
+  "benefitBackgroundIntervalNotifications": "Interval alerts while using other apps",
+  "@benefitBackgroundIntervalNotifications": {
+    "description": "Premium benefit: background workout interval notifications"
   },
   "benefitCycleStairmasterRoutines": "Full Support for All Cardio Equipment",
   "@benefitCycleStairmasterRoutines": {

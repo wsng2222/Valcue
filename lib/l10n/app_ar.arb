@@ -136,6 +136,9 @@
   "pausedSubtitle": "يمكنك المتابعة أو إنهاء التمرين",
   "endWorkoutConfirmationMessage": "إذا أنهيت الآن، سينتهي التمرين الحالي وستنتقل إلى شاشة الملخص.",
   "workoutComplete": "اكتمل التمرين",
+  "backgroundIntervalNotificationTitle": "بدء فترة جديدة",
+  "backgroundIntervalNotificationsTitle": "تنبيهات الفترات في الخلفية",
+  "backgroundIntervalNotificationsSubtitle": "اعرض إعدادات الجهاز ومدة الفترة أثناء استخدام تطبيقات أخرى",
   "totalWorkoutTime": "إجمالي الوقت",
   "totalDistance": "إجمالي المسافة",
   "totalTime": "الوقت الإجمالي",
@@ -433,6 +436,7 @@
     }
   },
   "benefitVoiceCoaching": "نظام التدريب الصوتي المتميز",
+  "benefitBackgroundIntervalNotifications": "تنبيهات تغيّر الفترات أثناء استخدام تطبيقات أخرى",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },

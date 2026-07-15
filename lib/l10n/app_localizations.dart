@@ -756,6 +756,24 @@ abstract class AppLocalizations {
   /// **'Workout Complete'**
   String get workoutComplete;
 
+  /// Title for a premium notification shown when a new workout interval begins in the background
+  ///
+  /// In en, this message translates to:
+  /// **'New interval'**
+  String get backgroundIntervalNotificationTitle;
+
+  /// Settings title for premium background interval notifications
+  ///
+  /// In en, this message translates to:
+  /// **'Background interval alerts'**
+  String get backgroundIntervalNotificationsTitle;
+
+  /// Settings subtitle for premium background interval notifications
+  ///
+  /// In en, this message translates to:
+  /// **'Get equipment settings and interval duration while using other apps'**
+  String get backgroundIntervalNotificationsSubtitle;
+
   /// Total workout time label
   ///
   /// In en, this message translates to:
@@ -1799,6 +1817,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Premium Voice Coaching System'**
   String get benefitVoiceCoaching;
+
+  /// Premium benefit: background workout interval notifications
+  ///
+  /// In en, this message translates to:
+  /// **'Interval alerts while using other apps'**
+  String get benefitBackgroundIntervalNotifications;
 
   /// Premium benefit: cycle and stairmaster routines
   ///

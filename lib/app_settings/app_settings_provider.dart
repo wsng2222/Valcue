@@ -39,6 +39,9 @@ class AppSettingsProvider with ChangeNotifier {
   bool get isPremium => _settings.isPremium;
   bool get voiceGuideEnabled =>
       _settings.isPremium ? _settings.voiceGuideEnabled : false;
+  bool get backgroundIntervalNotificationsEnabled => _settings.isPremium
+      ? _settings.backgroundIntervalNotificationsEnabled
+      : false;
   String get themeMode => _settings.themeMode;
   bool get soundEffectsEnabled => _settings.soundEffectsEnabled;
   bool get workoutReminderEnabled => _settings.workoutReminderEnabled;
@@ -99,11 +102,14 @@ class AppSettingsProvider with ChangeNotifier {
       weightUnit: _settings.weightUnit,
       isPremium: _settings.isPremium,
       voiceGuideEnabled: _settings.voiceGuideEnabled,
+      backgroundIntervalNotificationsEnabled:
+          _settings.backgroundIntervalNotificationsEnabled,
       themeMode: _settings.themeMode,
       themeModeUserSet: _settings.themeModeUserSet,
       soundEffectsEnabled: _settings.soundEffectsEnabled,
       workoutReminderEnabled: _settings.workoutReminderEnabled,
-      workoutReminderWeekdays: List<int>.from(_settings.workoutReminderWeekdays),
+      workoutReminderWeekdays:
+          List<int>.from(_settings.workoutReminderWeekdays),
       workoutReminderHour: _settings.workoutReminderHour,
       workoutReminderMinute: _settings.workoutReminderMinute,
       workoutReminderMessage: _settings.workoutReminderMessage,
@@ -131,6 +137,10 @@ class AppSettingsProvider with ChangeNotifier {
       voiceGuideEnabled: isPremium ? _settings.voiceGuideEnabled : false,
     );
     await _store.saveSettings(_settings);
+    if (!isPremium) {
+      await WorkoutReminderService.instance
+          .cancelWorkoutIntervalNotifications();
+    }
     notifyListeners();
   }
 
@@ -141,6 +151,26 @@ class AppSettingsProvider with ChangeNotifier {
     _settings = _settings.copyWith(voiceGuideEnabled: enabled);
     await _store.saveSettings(_settings);
     notifyListeners();
+  }
+
+  Future<bool> updateBackgroundIntervalNotifications(bool enabled) async {
+    if (!_settings.isPremium && enabled) return false;
+
+    if (enabled) {
+      final granted =
+          await WorkoutReminderService.instance.requestPermissions();
+      if (!granted) return false;
+    } else {
+      await WorkoutReminderService.instance
+          .cancelWorkoutIntervalNotifications();
+    }
+
+    _settings = _settings.copyWith(
+      backgroundIntervalNotificationsEnabled: enabled,
+    );
+    await _store.saveSettings(_settings);
+    notifyListeners();
+    return true;
   }
 
   Future<void> updateThemeMode(String themeMode) async {

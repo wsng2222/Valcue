@@ -1238,6 +1238,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
+                          SettingsRow(
+                            icon: Icons.notifications_active_outlined,
+                            iconColor: Colors.indigoAccent,
+                            title: AppLocalizations.of(context)!
+                                .backgroundIntervalNotificationsTitle,
+                            subtitle: AppLocalizations.of(context)!
+                                .backgroundIntervalNotificationsSubtitle,
+                            onTap: provider.isPremium
+                                ? null
+                                : () {
+                                    PremiumGateModal.show(
+                                      context,
+                                      PremiumFeature
+                                          .backgroundIntervalNotifications,
+                                    );
+                                  },
+                            trailing: IgnorePointer(
+                              ignoring: !provider.isPremium,
+                              child: _buildPlatformSwitch(
+                                context: context,
+                                value: provider
+                                    .backgroundIntervalNotificationsEnabled,
+                                onChanged: (enabled) async {
+                                  if (!provider.isPremium) return;
+                                  final success = await provider
+                                      .updateBackgroundIntervalNotifications(
+                                    enabled,
+                                  );
+                                  if (success || !mounted) return;
+                                  ScaffoldMessenger.of(this.context)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        AppLocalizations.of(this.context)!
+                                            .workoutReminderPermissionRequired,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            showDivider: false,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 4),

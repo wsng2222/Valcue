@@ -339,6 +339,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get workoutComplete => 'Тренировка завершена';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'Новый интервал';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'Фоновые уведомления об интервалах';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'Получайте настройки тренажёра и длительность интервала при использовании других приложений';
+
+  @override
   String get totalWorkoutTime => 'Общее время';
 
   @override
@@ -908,6 +919,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'Премиум-система голосового коучинга';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'Уведомления об интервалах при использовании других приложений';
 
   @override
   String get benefitCycleStairmasterRoutines =>

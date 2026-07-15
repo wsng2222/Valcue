@@ -17,6 +17,13 @@ class PremiumGateModal {
           (l10n as dynamic).voiceGuideBenefit3 ?? '핸즈프리로 루틴 집중',
         ];
         break;
+      case PremiumFeature.backgroundIntervalNotifications:
+        benefits = [
+          l10n.backgroundIntervalNotificationsSubtitle,
+          l10n.voiceGuideBenefit2,
+          l10n.voiceGuideBenefit3,
+        ];
+        break;
       case PremiumFeature.unlimitedRoutines:
         benefits = [
           l10n.benefitUnlimitedRoutines,

@@ -35,4 +35,30 @@ void main() {
       expect(settings.themeModeUserSet, isTrue);
     });
   });
+
+  group('background interval notification setting', () {
+    test('defaults to enabled for new and legacy settings', () {
+      expect(
+        AppSettings.defaultSettings.backgroundIntervalNotificationsEnabled,
+        isTrue,
+      );
+
+      final legacy = AppSettings.fromJson({
+        'measurement': 'kmh',
+        'isPremium': true,
+        'voiceGuideEnabled': false,
+        'themeMode': 'system',
+      });
+      expect(legacy.backgroundIntervalNotificationsEnabled, isTrue);
+    });
+
+    test('persists an explicit disabled preference', () {
+      final disabled = AppSettings.defaultSettings.copyWith(
+        backgroundIntervalNotificationsEnabled: false,
+      );
+      final restored = AppSettings.fromJson(disabled.toJson());
+
+      expect(restored.backgroundIntervalNotificationsEnabled, isFalse);
+    });
+  });
 }

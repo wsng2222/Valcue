@@ -136,6 +136,9 @@
   "pausedSubtitle": "Você pode continuar ou finalizar o treino",
   "endWorkoutConfirmationMessage": "Se você finalizar agora, o treino atual terminará e você será direcionado para a tela de resumo.",
   "workoutComplete": "Treino concluído",
+  "backgroundIntervalNotificationTitle": "Novo intervalo",
+  "backgroundIntervalNotificationsTitle": "Alertas de intervalo em segundo plano",
+  "backgroundIntervalNotificationsSubtitle": "Receba os ajustes do equipamento e a duração ao usar outros apps",
   "totalWorkoutTime": "Tempo total",
   "totalDistance": "Distância total",
   "totalTime": "Tempo total",
@@ -433,6 +436,7 @@
     }
   },
   "benefitVoiceCoaching": "Sistema de Coaching por Voz Premium",
+  "benefitBackgroundIntervalNotifications": "Alertas de intervalo ao usar outros apps",
   "@benefitVoiceCoaching": {
     "description": "Premium benefit: voice coaching"
   },

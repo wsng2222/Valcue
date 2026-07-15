@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import '../../routines/models/routine.dart';
+
 import '../../routines/models/interval.dart';
 import '../../routines/models/machine_type.dart';
+import '../../routines/models/routine.dart';
 import '../../../services/sound_service.dart';
 
 enum WorkoutStatus {
@@ -13,34 +15,13 @@ enum WorkoutStatus {
   stopped,
 }
 
+/// Runtime state for an active workout.
+///
+/// Active elapsed wall-clock time is the single source of truth. Periodic
+/// timers only refresh the UI; they never advance the workout by counting
+/// callbacks. This keeps interval state, completion, and treadmill distance
+/// correct when the OS suspends Dart while another app is in the foreground.
 class WorkoutState extends ChangeNotifier {
-  final Routine routine;
-  final DateTime startTime;
-  final DateTime Function() _now;
-
-  // Store initial total duration ONCE at workout start
-  final int initialTotalSeconds;
-
-  int _currentIntervalIndex = 0;
-  int _remainingSeconds = 0;
-  int _totalElapsedSeconds = 0;
-  int _activeElapsedMilliseconds = 0;
-  WorkoutStatus _status = WorkoutStatus.running;
-  bool _stoppedEarly = false;
-
-  Timer? _timer;
-  Timer? _countdownTimer;
-  int _countdownNumber = 3;
-
-  // Distance tracking for treadmill workouts
-  double _distanceMeters = 0.0;
-  DateTime? _lastTickTime;
-  DateTime? _runningStartedAt;
-  Timer? _distanceTimer;
-
-  // Flag to prevent double-playing finished sound effect
-  bool _finishedSfxPlayed = false;
-
   WorkoutState({
     required this.routine,
     required this.startTime,
@@ -50,22 +31,36 @@ class WorkoutState extends ChangeNotifier {
     _initializeWorkout();
   }
 
-  void _initializeWorkout() {
-    // Reset flag on workout start
-    _finishedSfxPlayed = false;
+  static const Duration _countdownStep = Duration(milliseconds: 900);
+  static const int _countdownSteps = 3;
+  static const Duration _runningRefreshRate = Duration(milliseconds: 250);
+  static const Duration _countdownRefreshRate = Duration(milliseconds: 100);
 
-    if (routine.intervals.isEmpty) {
-      _status = WorkoutStatus.finished;
-      _playFinishSfxOnce();
-      notifyListeners();
-      return;
-    }
+  final Routine routine;
+  final DateTime startTime;
+  final DateTime Function() _now;
 
-    _currentIntervalIndex = 0;
-    _remainingSeconds = routine.intervals[0].durationSeconds;
-    // Start with countdown instead of immediately starting the timer
-    startInitialCountdown();
-  }
+  /// Snapshot of the planned duration at workout creation.
+  final int initialTotalSeconds;
+
+  int _currentIntervalIndex = 0;
+  int _currentIntervalRemainingMilliseconds = 0;
+  int _remainingSeconds = 0;
+  int _totalElapsedSeconds = 0;
+  int _activeElapsedMilliseconds = 0;
+  WorkoutStatus _status = WorkoutStatus.running;
+  bool _stoppedEarly = false;
+
+  DateTime? _runningAnchor;
+  Timer? _runningRefreshTimer;
+
+  int _countdownNumber = _countdownSteps;
+  DateTime? _countdownEndsAt;
+  Timer? _countdownRefreshTimer;
+  bool _isInitialCountdown = true;
+  bool _isBackgrounded = false;
+
+  bool _finishedSfxPlayed = false;
 
   int get currentIntervalIndex => _currentIntervalIndex;
   int get remainingSeconds => _remainingSeconds;
@@ -73,209 +68,296 @@ class WorkoutState extends ChangeNotifier {
   WorkoutStatus get status => _status;
   bool get stoppedEarly => _stoppedEarly;
   int get countdownNumber => _countdownNumber;
+  bool get isInitialCountdown => _isInitialCountdown;
 
   Interval get currentInterval => routine.intervals[_currentIntervalIndex];
   int get totalIntervals => routine.intervals.length;
 
   int get totalRemainingSeconds {
-    int remaining = _remainingSeconds;
-    for (int i = _currentIntervalIndex + 1; i < routine.intervals.length; i++) {
-      remaining += routine.intervals[i].durationSeconds;
-    }
-    return remaining;
-  }
-
-  int get totalDurationSeconds {
-    return routine.totalDurationSeconds;
+    final remainingMilliseconds =
+        (_totalDurationMilliseconds - totalElapsedMilliseconds).clamp(
+      0,
+      _totalDurationMilliseconds,
+    );
+    return (remainingMilliseconds / 1000).ceil();
   }
 
   double get currentIntervalProgress {
-    final intervalTotalSeconds = currentInterval.durationSeconds;
-    if (intervalTotalSeconds == 0) return 0.0;
-    final elapsed = intervalTotalSeconds - _remainingSeconds;
-    final progress = elapsed / intervalTotalSeconds;
-    // Ensure progress reaches 1.0 when interval is complete
-    return progress.clamp(0.0, 1.0);
+    if (routine.intervals.isEmpty) return 0;
+    final intervalMilliseconds = currentInterval.durationSeconds * 1000;
+    if (intervalMilliseconds <= 0) return 1;
+    final elapsed =
+        intervalMilliseconds - _currentIntervalRemainingMilliseconds;
+    return (elapsed / intervalMilliseconds).clamp(0.0, 1.0);
   }
 
   double get totalWorkoutProgress {
-    final total = totalDurationSeconds;
-    if (total == 0) return 0.0;
-    return _totalElapsedSeconds / total;
+    final total = _totalDurationMilliseconds;
+    if (total <= 0) return 0;
+    return (totalElapsedMilliseconds / total).clamp(0.0, 1.0);
   }
 
-  // Progress for the circular ring: remaining / initial (decreases as time passes)
   double get totalRemainingProgress {
-    if (initialTotalSeconds == 0) return 0.0;
-    final progress = totalRemainingSeconds / initialTotalSeconds;
-    return progress.clamp(0.0, 1.0);
+    if (initialTotalSeconds <= 0) return 0;
+    return (totalRemainingSeconds / initialTotalSeconds).clamp(0.0, 1.0);
   }
 
   int get currentIntervalElapsedSeconds {
-    final intervalTotalSeconds = currentInterval.durationSeconds;
-    return intervalTotalSeconds - _remainingSeconds;
+    if (routine.intervals.isEmpty) return 0;
+    final elapsedMilliseconds = currentInterval.durationSeconds * 1000 -
+        _currentIntervalRemainingMilliseconds;
+    return (elapsedMilliseconds.clamp(
+              0,
+              currentInterval.durationSeconds * 1000,
+            ) /
+            1000)
+        .floor();
   }
 
-  double get distanceMeters => _distanceMeters;
   int get totalElapsedMilliseconds {
-    if (_runningStartedAt == null) {
+    if (_status != WorkoutStatus.running || _runningAnchor == null) {
       return _activeElapsedMilliseconds;
     }
 
-    return _activeElapsedMilliseconds +
-        _now().difference(_runningStartedAt!).inMilliseconds;
+    final sinceAnchor = _now().difference(_runningAnchor!).inMilliseconds;
+    return (_activeElapsedMilliseconds + sinceAnchor).clamp(
+      0,
+      _totalDurationMilliseconds,
+    );
   }
 
   int get roundedElapsedSeconds => (totalElapsedMilliseconds / 1000).round();
 
   bool get isTreadmill => routine.machineType == MachineType.treadmill;
 
-  void _startTimer() {
-    _status = WorkoutStatus.running;
-    _timer?.cancel();
-    final startedAt = _now();
-    _runningStartedAt = startedAt;
-
-    // Initialize distance tracking for treadmill
-    if (isTreadmill) {
-      _lastTickTime = startedAt;
-      _startDistanceTracking();
+  /// Remaining real time before the current interval ends.
+  Duration get currentIntervalRemainingDuration {
+    if (_status != WorkoutStatus.running || routine.intervals.isEmpty) {
+      return Duration(
+        milliseconds: _currentIntervalRemainingMilliseconds.clamp(
+          0,
+          _totalDurationMilliseconds,
+        ),
+      );
     }
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_status != WorkoutStatus.running) {
-        return;
-      }
+    final activeNow = totalElapsedMilliseconds;
+    final intervalEnd = _intervalEndMilliseconds(_currentIntervalIndex);
+    return Duration(
+        milliseconds: (intervalEnd - activeNow).clamp(0, intervalEnd));
+  }
 
-      _remainingSeconds--;
-      _totalElapsedSeconds++;
+  /// Remaining real time before an initial/resume countdown completes.
+  Duration get countdownRemainingDuration {
+    if (_status != WorkoutStatus.resumingCountdown ||
+        _countdownEndsAt == null) {
+      return Duration.zero;
+    }
+    final milliseconds = _countdownEndsAt!.difference(_now()).inMilliseconds;
+    return Duration(milliseconds: milliseconds < 0 ? 0 : milliseconds);
+  }
 
-      // If interval is complete, ensure _remainingSeconds is 0 (not negative)
-      // so progress calculation shows exactly 1.0
-      if (_remainingSeconds < 0) {
-        _remainingSeconds = 0;
-      }
+  /// Treadmill distance is integrated across every interval's speed instead of
+  /// applying a delayed background tick to whichever interval happens to be
+  /// current when the app resumes.
+  double get distanceMeters {
+    if (!isTreadmill) return 0;
 
-      // Notify listeners with progress = 1.0 when interval completes
+    var elapsedMilliseconds = totalElapsedMilliseconds;
+    var distance = 0.0;
+    for (final interval in routine.intervals) {
+      if (elapsedMilliseconds <= 0) break;
+      final intervalMilliseconds = interval.durationSeconds * 1000;
+      final overlapMilliseconds = elapsedMilliseconds.clamp(
+        0,
+        intervalMilliseconds,
+      );
+      final speedMetersPerSecond = (interval.speedKmh ?? 0) * 1000.0 / 3600.0;
+      distance += speedMetersPerSecond * overlapMilliseconds / 1000.0;
+      elapsedMilliseconds -= overlapMilliseconds;
+    }
+    return distance;
+  }
+
+  int get _totalDurationMilliseconds => initialTotalSeconds * 1000;
+
+  void _initializeWorkout() {
+    _finishedSfxPlayed = false;
+
+    if (routine.intervals.isEmpty || _totalDurationMilliseconds <= 0) {
+      _status = WorkoutStatus.finished;
+      _activeElapsedMilliseconds = 0;
+      _remainingSeconds = 0;
+      _playFinishSfxOnce();
       notifyListeners();
-
-      // After notifying with progress = 1.0, advance to next interval
-      if (_remainingSeconds == 0) {
-        _advanceToNextInterval();
-        notifyListeners();
-      }
-    });
-  }
-
-  void _startDistanceTracking() {
-    _distanceTimer?.cancel();
-    _lastTickTime ??= _now();
-
-    // Update distance every 500ms for smooth tracking
-    _distanceTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (_status != WorkoutStatus.running || !isTreadmill) {
-        return;
-      }
-
-      _updateDistance();
-    });
-  }
-
-  void _updateDistance({DateTime? now, bool shouldNotify = true}) {
-    if (_lastTickTime == null || !isTreadmill) return;
-
-    final snapshotTime = now ?? _now();
-    final deltaSeconds =
-        snapshotTime.difference(_lastTickTime!).inMilliseconds / 1000.0;
-
-    if (deltaSeconds <= 0) return;
-
-    // Get current speed in km/h
-    final currentSpeedKmh = currentInterval.speedKmh ?? 0.0;
-    if (currentSpeedKmh <= 0) {
-      _lastTickTime = snapshotTime;
       return;
     }
 
-    // Calculate distance: speed (km/h) * time (hours) = distance (km)
-    // Convert to meters: km * 1000 = meters
-    // speedKmh * 1000 / 3600 = meters per second
-    final distanceIncrement =
-        (currentSpeedKmh * 1000.0 / 3600.0) * deltaSeconds;
-    _distanceMeters += distanceIncrement;
+    _currentIntervalIndex = 0;
+    _currentIntervalRemainingMilliseconds =
+        routine.intervals.first.durationSeconds * 1000;
+    _remainingSeconds = routine.intervals.first.durationSeconds;
+    startInitialCountdown();
+  }
 
-    _lastTickTime = snapshotTime;
-    if (shouldNotify) {
-      notifyListeners();
+  int _intervalEndMilliseconds(int intervalIndex) {
+    var result = 0;
+    for (var index = 0; index <= intervalIndex; index++) {
+      result += routine.intervals[index].durationSeconds * 1000;
+    }
+    return result;
+  }
+
+  void _startRunningAt(DateTime startedAt) {
+    _countdownRefreshTimer?.cancel();
+    _countdownRefreshTimer = null;
+    _countdownEndsAt = null;
+    _countdownNumber = 0;
+    _status = WorkoutStatus.running;
+    _runningAnchor = startedAt;
+    if (!_isBackgrounded) {
+      _startRunningRefreshTimer();
     }
   }
 
-  void _finalizeDistance({DateTime? atTime}) {
-    // Final distance update before stopping
-    if (isTreadmill && _lastTickTime != null) {
-      _updateDistance(now: atTime, shouldNotify: false);
-    }
+  void _startRunningRefreshTimer() {
+    _runningRefreshTimer?.cancel();
+    if (_status != WorkoutStatus.running || _isBackgrounded) return;
+
+    _runningRefreshTimer = Timer.periodic(_runningRefreshRate, (_) {
+      _synchronizeRunning(_now());
+    });
   }
 
-  void _finalizeElapsedTime({DateTime? atTime}) {
-    if (_runningStartedAt == null) return;
+  void _synchronizeRunning(
+    DateTime snapshotTime, {
+    bool notify = true,
+    bool playSounds = true,
+  }) {
+    if (_status != WorkoutStatus.running || _runningAnchor == null) return;
 
-    final endTime = atTime ?? _now();
-    final elapsed = endTime.difference(_runningStartedAt!).inMilliseconds;
-    if (elapsed > 0) {
-      _activeElapsedMilliseconds += elapsed;
-    }
-    _runningStartedAt = null;
-  }
+    final deltaMilliseconds =
+        snapshotTime.difference(_runningAnchor!).inMilliseconds;
+    if (deltaMilliseconds <= 0) return;
 
-  /// Play the finished sound effect exactly once per workout
-  void _playFinishSfxOnce() {
-    if (!_finishedSfxPlayed) {
-      _finishedSfxPlayed = true;
-      SoundService().playFinished();
-    }
-  }
+    final oldIntervalIndex = _currentIntervalIndex;
+    final targetElapsed = (_activeElapsedMilliseconds + deltaMilliseconds)
+        .clamp(0, _totalDurationMilliseconds);
+    _activeElapsedMilliseconds = targetElapsed;
+    _runningAnchor = snapshotTime;
+    _deriveTimelineFromElapsed();
 
-  void _advanceToNextInterval() {
-    // Finalize distance up to now before changing speed
-    if (isTreadmill) {
-      _finalizeDistance(atTime: _now());
+    if (_activeElapsedMilliseconds >= _totalDurationMilliseconds) {
+      _finishWorkout(playSound: playSounds, notify: notify);
+      return;
     }
 
-    if (_currentIntervalIndex < routine.intervals.length - 1) {
-      _currentIntervalIndex++;
-      _remainingSeconds =
-          routine.intervals[_currentIntervalIndex].durationSeconds;
-      // Play beep on session transition
+    if (playSounds && _currentIntervalIndex != oldIntervalIndex) {
       SoundService().playBeep();
-    } else {
-      _finishWorkout();
+    }
+    if (notify) notifyListeners();
+  }
+
+  void _deriveTimelineFromElapsed() {
+    _totalElapsedSeconds = _activeElapsedMilliseconds ~/ 1000;
+
+    if (routine.intervals.isEmpty) {
+      _currentIntervalIndex = 0;
+      _currentIntervalRemainingMilliseconds = 0;
+      _remainingSeconds = 0;
+      return;
+    }
+
+    var intervalStart = 0;
+    for (var index = 0; index < routine.intervals.length; index++) {
+      final intervalMilliseconds =
+          routine.intervals[index].durationSeconds * 1000;
+      final intervalEnd = intervalStart + intervalMilliseconds;
+      if (_activeElapsedMilliseconds < intervalEnd) {
+        _currentIntervalIndex = index;
+        _currentIntervalRemainingMilliseconds =
+            intervalEnd - _activeElapsedMilliseconds;
+        _remainingSeconds =
+            (_currentIntervalRemainingMilliseconds / 1000).ceil();
+        return;
+      }
+      intervalStart = intervalEnd;
+    }
+
+    _currentIntervalIndex = routine.intervals.length - 1;
+    _currentIntervalRemainingMilliseconds = 0;
+    _remainingSeconds = 0;
+  }
+
+  void _finishWorkout({bool playSound = true, bool notify = true}) {
+    if (_status == WorkoutStatus.finished) return;
+
+    _activeElapsedMilliseconds = _totalDurationMilliseconds;
+    _deriveTimelineFromElapsed();
+    _runningAnchor = null;
+    _runningRefreshTimer?.cancel();
+    _runningRefreshTimer = null;
+    _countdownRefreshTimer?.cancel();
+    _countdownRefreshTimer = null;
+    if (playSound) _playFinishSfxOnce();
+    _status = WorkoutStatus.finished;
+    if (notify) notifyListeners();
+  }
+
+  void _playFinishSfxOnce() {
+    if (_finishedSfxPlayed) return;
+    _finishedSfxPlayed = true;
+    SoundService().playFinished();
+  }
+
+  /// Reconciles the timeline with the injected/system wall clock immediately.
+  /// Useful on lifecycle resume and in tests that simulate OS suspension.
+  void synchronizeWithClock({bool playSounds = false}) {
+    final snapshot = _now();
+    if (_status == WorkoutStatus.resumingCountdown) {
+      _synchronizeCountdown(snapshot, playSounds: playSounds);
+    }
+    if (_status == WorkoutStatus.running) {
+      _synchronizeRunning(snapshot, playSounds: playSounds);
     }
   }
 
-  void _finishWorkout() {
-    final snapshotTime = _now();
-    _timer?.cancel();
-    if (isTreadmill) {
-      _finalizeDistance(atTime: snapshotTime);
-      _distanceTimer?.cancel();
+  /// Stops UI refresh callbacks while allowing active workout time to continue
+  /// against the wall clock. The OS notification schedule owns background cues.
+  void suspendForBackground() {
+    if (_isBackgrounded) return;
+    _isBackgrounded = true;
+    synchronizeWithClock(playSounds: false);
+    _runningRefreshTimer?.cancel();
+    _runningRefreshTimer = null;
+    _countdownRefreshTimer?.cancel();
+    _countdownRefreshTimer = null;
+  }
+
+  /// Reconciles all background time and restarts foreground UI refreshes.
+  void resumeFromBackground() {
+    if (!_isBackgrounded) return;
+    _isBackgrounded = false;
+    synchronizeWithClock(playSounds: false);
+    if (_status == WorkoutStatus.running) {
+      _startRunningRefreshTimer();
+    } else if (_status == WorkoutStatus.resumingCountdown) {
+      _startCountdownRefreshTimer();
     }
-    _finalizeElapsedTime(atTime: snapshotTime);
-    // Play finished sound before marking as finished
-    _playFinishSfxOnce();
-    _status = WorkoutStatus.finished;
-    notifyListeners();
   }
 
   void stopWorkout() {
-    final snapshotTime = _now();
-    _timer?.cancel();
-    if (isTreadmill) {
-      _finalizeDistance(atTime: snapshotTime);
-      _distanceTimer?.cancel();
+    if (_status == WorkoutStatus.running) {
+      _synchronizeRunning(_now(), playSounds: false);
+      if (_status == WorkoutStatus.finished) return;
     }
-    _finalizeElapsedTime(atTime: snapshotTime);
-    // Play finished sound when user confirms stop
+
+    _runningRefreshTimer?.cancel();
+    _runningRefreshTimer = null;
+    _countdownRefreshTimer?.cancel();
+    _countdownRefreshTimer = null;
+    _runningAnchor = null;
+    _countdownEndsAt = null;
     _playFinishSfxOnce();
     _status = WorkoutStatus.stopped;
     _stoppedEarly = true;
@@ -283,84 +365,93 @@ class WorkoutState extends ChangeNotifier {
   }
 
   void pauseWorkout() {
-    if (_status == WorkoutStatus.running) {
-      final snapshotTime = _now();
-      _status = WorkoutStatus.paused;
-      _timer?.cancel();
-      if (isTreadmill) {
-        // Finalize distance up to pause moment
-        _finalizeDistance(atTime: snapshotTime);
-        _distanceTimer?.cancel();
-        _lastTickTime = null; // Reset so we don't accumulate during pause
-      }
-      _finalizeElapsedTime(atTime: snapshotTime);
-      notifyListeners();
-    }
+    if (_status != WorkoutStatus.running) return;
+
+    _synchronizeRunning(_now(), playSounds: false);
+    if (_status == WorkoutStatus.finished) return;
+
+    _status = WorkoutStatus.paused;
+    _runningAnchor = null;
+    _runningRefreshTimer?.cancel();
+    _runningRefreshTimer = null;
+    notifyListeners();
   }
 
   void startInitialCountdown() {
-    // Start countdown when workout first begins
-    _status = WorkoutStatus.resumingCountdown;
-    _countdownNumber = 3;
-    _countdownTimer?.cancel();
-    SoundService().playBeep();
-    notifyListeners();
-
-    // Start countdown immediately, then tick every 900ms
-    _countdownTimer =
-        Timer.periodic(const Duration(milliseconds: 900), (timer) {
-      _countdownNumber--;
-      // Play beep for countdown numbers 3, 2, 1
-      if (_countdownNumber >= 1) {
-        SoundService().playBeep();
-      }
-      notifyListeners();
-
-      if (_countdownNumber <= 0) {
-        timer.cancel();
-        _countdownTimer = null;
-        _startTimer(); // Start workout timer after countdown
-      }
-    });
+    _isInitialCountdown = true;
+    _beginCountdown();
   }
 
   void startResumeCountdown() {
-    if (_status == WorkoutStatus.paused) {
-      _status = WorkoutStatus.resumingCountdown;
-      _countdownNumber = 3;
-      _countdownTimer?.cancel();
-      SoundService().playBeep();
-      notifyListeners();
+    if (_status != WorkoutStatus.paused) return;
+    _isInitialCountdown = false;
+    _beginCountdown();
+  }
 
-      // Start countdown immediately, then tick every 900ms
-      _countdownTimer =
-          Timer.periodic(const Duration(milliseconds: 900), (timer) {
-        _countdownNumber--;
-        // Play beep for countdown numbers 3, 2, 1
-        if (_countdownNumber >= 1) {
-          SoundService().playBeep();
-        }
-        notifyListeners();
-
-        if (_countdownNumber <= 0) {
-          timer.cancel();
-          _countdownTimer = null;
-          _startTimer(); // Start workout timer after countdown (will restart distance tracking)
-        }
-      });
+  void _beginCountdown() {
+    _status = WorkoutStatus.resumingCountdown;
+    _countdownNumber = _countdownSteps;
+    _countdownEndsAt = _now().add(
+      Duration(
+        milliseconds: _countdownStep.inMilliseconds * _countdownSteps,
+      ),
+    );
+    _countdownRefreshTimer?.cancel();
+    SoundService().playBeep();
+    if (!_isBackgrounded) {
+      _startCountdownRefreshTimer();
     }
+    notifyListeners();
+  }
+
+  void _startCountdownRefreshTimer() {
+    _countdownRefreshTimer?.cancel();
+    if (_status != WorkoutStatus.resumingCountdown || _isBackgrounded) return;
+
+    _countdownRefreshTimer = Timer.periodic(_countdownRefreshRate, (_) {
+      _synchronizeCountdown(_now());
+    });
+  }
+
+  void _synchronizeCountdown(
+    DateTime snapshotTime, {
+    bool playSounds = true,
+  }) {
+    final endsAt = _countdownEndsAt;
+    if (_status != WorkoutStatus.resumingCountdown || endsAt == null) return;
+
+    final remainingMilliseconds =
+        endsAt.difference(snapshotTime).inMilliseconds;
+    if (remainingMilliseconds <= 0) {
+      _startRunningAt(endsAt);
+      _synchronizeRunning(
+        snapshotTime,
+        playSounds: playSounds,
+      );
+      if (_status == WorkoutStatus.running && snapshotTime == endsAt) {
+        notifyListeners();
+      }
+      return;
+    }
+
+    final nextNumber = (remainingMilliseconds / _countdownStep.inMilliseconds)
+        .ceil()
+        .clamp(1, _countdownSteps);
+    if (nextNumber == _countdownNumber) return;
+
+    _countdownNumber = nextNumber;
+    if (playSounds) SoundService().playBeep();
+    notifyListeners();
   }
 
   void resumeWorkout() {
-    // Legacy method - now starts countdown instead
     startResumeCountdown();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
-    _countdownTimer?.cancel();
-    _distanceTimer?.cancel();
+    _runningRefreshTimer?.cancel();
+    _countdownRefreshTimer?.cancel();
     super.dispose();
   }
 

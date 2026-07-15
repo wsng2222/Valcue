@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
+
+import 'workout_interval_notification_planner.dart';
 
 class WorkoutReminderService {
   WorkoutReminderService._();
@@ -17,11 +20,23 @@ class WorkoutReminderService {
   static const String _channelName = 'Workout reminders';
   static const String _channelDescription =
       'Scheduled workout reminder notifications';
+  static const int _workoutNotificationIdBase = 7200;
+
+  // iOS keeps 64 pending local notifications for the entire app. Reserve the
+  // seven weekly reminder slots plus one spare slot.
+  static const int _maxWorkoutNotifications = 56;
+  static const String _workoutChannelId = 'valcue_workout_intervals_v1';
+  static const String _workoutChannelName = 'Workout interval alerts';
+  static const String _workoutChannelDescription =
+      'Alerts when a new workout interval starts';
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
+  bool _exactAlarmPermissionRequestedThisSession = false;
+  int _workoutScheduleGeneration = 0;
+  final Set<int> _activeWorkoutNotificationIds = <int>{};
   Timer? _foregroundTicker;
   Set<int> _foregroundWeekdays = <int>{};
   int _foregroundHour = 0;
@@ -117,7 +132,8 @@ class WorkoutReminderService {
       tz.setLocalLocation(tz.getLocation(timezoneName));
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('[WorkoutReminderService] Failed to set timezone: $e. Falling back to UTC.');
+        debugPrint(
+            '[WorkoutReminderService] Failed to set timezone: $e. Falling back to UTC.');
       }
       try {
         tz.setLocalLocation(tz.getLocation('UTC'));
@@ -141,6 +157,12 @@ class WorkoutReminderService {
 
     await _plugin.initialize(settings);
     _initialized = true;
+
+    // A cold launch has no restorable active workout yet. Remove only stale
+    // workout alerts while preserving the independent weekly reminders.
+    await _cancelWorkoutNotificationsForGeneration(
+      ++_workoutScheduleGeneration,
+    );
   }
 
   Future<bool> requestPermissions() async {
@@ -155,9 +177,15 @@ class WorkoutReminderService {
     if (androidPermission == false) {
       granted = false;
     }
-    // Android 14+ exact alarm permission. If denied, we still fallback to
-    // inexact scheduling in _scheduleWeeklyReminder.
-    await androidPlugin?.requestExactAlarmsPermission();
+    // Android 14+ exact alarm access is needed for short workout intervals.
+    // If denied, scheduling still falls back to inexact delivery.
+    final canScheduleExactly =
+        await androidPlugin?.canScheduleExactNotifications();
+    if (canScheduleExactly == false &&
+        !_exactAlarmPermissionRequestedThisSession) {
+      _exactAlarmPermissionRequestedThisSession = true;
+      await androidPlugin?.requestExactAlarmsPermission();
+    }
 
     final iosPlugin = _plugin.resolvePlatformSpecificImplementation<
         IOSFlutterLocalNotificationsPlugin>();
@@ -183,6 +211,172 @@ class WorkoutReminderService {
 
     return granted;
   }
+
+  /// Replaces the current background-workout schedule without touching weekly
+  /// workout reminders. A generation guard prevents a late async schedule from
+  /// surviving a fast foreground resume/cancel.
+  Future<void> scheduleWorkoutIntervalNotifications({
+    required List<PlannedWorkoutNotification> notifications,
+    required String routineId,
+  }) async {
+    await init();
+    final scheduleBase = tz.TZDateTime.now(tz.local);
+    final generation = ++_workoutScheduleGeneration;
+    await _cancelWorkoutNotificationsForGeneration(generation);
+    if (generation != _workoutScheduleGeneration) return;
+
+    final selected = notifications.take(_maxWorkoutNotifications).toList();
+
+    // Schedule furthest first so the earliest, most useful alerts are the last
+    // inserted if an OS applies its own pending-notification limit.
+    for (var index = selected.length - 1; index >= 0; index--) {
+      if (generation != _workoutScheduleGeneration) return;
+
+      final notification = selected[index];
+      final id = _workoutNotificationIdBase + index;
+      final safeDelay = notification.delay < const Duration(milliseconds: 250)
+          ? const Duration(milliseconds: 250)
+          : notification.delay;
+      final requestedDate = scheduleBase.add(safeDelay);
+      final minimumDate =
+          tz.TZDateTime.now(tz.local).add(const Duration(milliseconds: 250));
+      final scheduledDate =
+          requestedDate.isAfter(minimumDate) ? requestedDate : minimumDate;
+      final payload = jsonEncode({
+        'type': notification.intervalIndex == null
+            ? 'workout_complete'
+            : 'workout_interval',
+        'routineId': routineId,
+        if (notification.intervalIndex != null)
+          'intervalIndex': notification.intervalIndex,
+      });
+
+      try {
+        await _scheduleWorkoutNotification(
+          id: id,
+          title: notification.title,
+          body: notification.body,
+          scheduledDate: scheduledDate,
+          payload: payload,
+        );
+      } catch (error) {
+        if (kDebugMode) {
+          debugPrint(
+            '[WorkoutReminderService] Failed to schedule workout alert: $error',
+          );
+        }
+        continue;
+      }
+
+      if (generation != _workoutScheduleGeneration) {
+        await _plugin.cancel(id);
+        return;
+      }
+      _activeWorkoutNotificationIds.add(id);
+    }
+  }
+
+  Future<void> cancelWorkoutIntervalNotifications() async {
+    await init();
+    final generation = ++_workoutScheduleGeneration;
+    await _cancelWorkoutNotificationsForGeneration(generation);
+  }
+
+  Future<void> _cancelWorkoutNotificationsForGeneration(
+    int generation,
+  ) async {
+    final ids = <int>{..._activeWorkoutNotificationIds};
+    try {
+      final pending = await _plugin.pendingNotificationRequests();
+      ids.addAll(
+        pending.map((request) => request.id).where(_isWorkoutNotificationId),
+      );
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint(
+          '[WorkoutReminderService] Failed to inspect pending alerts: $error',
+        );
+      }
+    }
+
+    await Future.wait(
+      ids.map((id) async {
+        try {
+          await _plugin.cancel(id);
+        } catch (error) {
+          if (kDebugMode) {
+            debugPrint(
+              '[WorkoutReminderService] Failed to cancel workout alert $id: $error',
+            );
+          }
+        }
+      }),
+    );
+    if (generation == _workoutScheduleGeneration) {
+      _activeWorkoutNotificationIds.removeAll(ids);
+    }
+  }
+
+  bool _isWorkoutNotificationId(int id) {
+    return id >= _workoutNotificationIdBase &&
+        id < _workoutNotificationIdBase + _maxWorkoutNotifications;
+  }
+
+  Future<void> _scheduleWorkoutNotification({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime scheduledDate,
+    required String payload,
+  }) async {
+    try {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        _workoutNotificationDetails,
+        payload: payload,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    } catch (_) {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        _workoutNotificationDetails,
+        payload: payload,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      );
+    }
+  }
+
+  NotificationDetails get _workoutNotificationDetails =>
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          _workoutChannelId,
+          _workoutChannelName,
+          channelDescription: _workoutChannelDescription,
+          importance: Importance.high,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+          category: AndroidNotificationCategory.alarm,
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentSound: true,
+        ),
+        macOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentSound: true,
+        ),
+      );
 
   Future<void> syncSchedule({
     required bool enabled,

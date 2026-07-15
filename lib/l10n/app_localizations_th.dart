@@ -336,6 +336,17 @@ class AppLocalizationsTh extends AppLocalizations {
   String get workoutComplete => 'ออกกำลังกายเสร็จสิ้น';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'เริ่มช่วงใหม่';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'แจ้งเตือนช่วงในเบื้องหลัง';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'รับค่าการตั้งค่าเครื่องและระยะเวลาช่วงขณะใช้แอปอื่น';
+
+  @override
   String get totalWorkoutTime => 'เวลารวม';
 
   @override
@@ -900,6 +911,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'ระบบโค้ชเสียงพรีเมียม';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'แจ้งเตือนการเปลี่ยนช่วงขณะใช้แอปอื่น';
 
   @override
   String get benefitCycleStairmasterRoutines =>

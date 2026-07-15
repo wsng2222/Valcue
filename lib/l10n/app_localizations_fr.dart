@@ -342,6 +342,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get workoutComplete => 'Entraînement terminé';
 
   @override
+  String get backgroundIntervalNotificationTitle => 'Nouvel intervalle';
+
+  @override
+  String get backgroundIntervalNotificationsTitle =>
+      'Alertes d’intervalle en arrière-plan';
+
+  @override
+  String get backgroundIntervalNotificationsSubtitle =>
+      'Recevez les réglages de l’appareil et la durée en utilisant d’autres apps';
+
+  @override
   String get totalWorkoutTime => 'Temps total';
 
   @override
@@ -911,6 +922,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get benefitVoiceCoaching => 'Système de Coaching Vocal Premium';
+
+  @override
+  String get benefitBackgroundIntervalNotifications =>
+      'Alertes d’intervalle pendant l’utilisation d’autres apps';
 
   @override
   String get benefitCycleStairmasterRoutines =>
