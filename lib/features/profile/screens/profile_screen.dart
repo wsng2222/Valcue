@@ -10,7 +10,6 @@ import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
 import '../../../utils/app_shadows.dart';
-import '../../../widgets/unified_screen_header.dart';
 import '../models/workout_session.dart';
 import '../models/weight_entry.dart';
 import '../providers/workout_history_provider.dart';
@@ -149,12 +148,39 @@ class _ProfileScreenState extends State<ProfileScreen>
           children: [
             // Header - same style as Settings screen
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: UnifiedScreenHeader(
-                icon: Icons.person,
-                title: AppLocalizations.of(context)!.myTab,
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(
+                        alpha: 0.10,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      size: 22,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    AppLocalizations.of(context)!.myTab,
+                    style: GoogleFonts.lato(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -0.9,
+                    ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 20),
             // Tabs: Workout History, Calendar, Weight
             TabBar(
               controller: _tabController,

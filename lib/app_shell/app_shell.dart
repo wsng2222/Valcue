@@ -361,11 +361,11 @@ class _PremiumScreenState extends State<_PremiumScreen> {
         bottom: false,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Column(
               children: [
                 const _PremiumHeroCard(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 _PlanSelector(selectionNotifier: _selectionNotifier),
                 const SizedBox(height: 24),
                 const _BenefitsList(),
@@ -561,7 +561,7 @@ class _PremiumHeroCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
+      padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
       child: Row(
         children: [
           Container(

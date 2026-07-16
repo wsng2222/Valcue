@@ -534,7 +534,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                       _buildMachineSegmentedControl(context),
                     ],
                   ),
