@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -199,6 +200,21 @@ class VoiceGuideService {
 
       // Configure TTS engine.
       await _safe(() async {
+        final session = await AudioSession.instance;
+        await session.configure(AudioSessionConfiguration(
+          avAudioSessionCategory: AVAudioSessionCategory.playback,
+          avAudioSessionCategoryOptions:
+              AVAudioSessionCategoryOptions.duckOthers |
+                  AVAudioSessionCategoryOptions.mixWithOthers,
+          androidAudioAttributes: const AndroidAudioAttributes(
+            contentType: AndroidAudioContentType.speech,
+            usage: AndroidAudioUsage.assistant,
+          ),
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
+        ));
+
+
+
         // iOS audio session configuration (critical for iOS TTS reliability)
         await _tts.setIosAudioCategory(
           IosTextToSpeechAudioCategory.playback,

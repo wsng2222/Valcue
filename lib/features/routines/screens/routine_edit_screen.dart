@@ -453,8 +453,218 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   void _updateInterval(int index, Interval updatedInterval) {
     setState(() {
-      _intervals[index] = updatedInterval;
+      final oldInterval = _intervals[index];
+      if (oldInterval.groupId != null) {
+        final groupId = oldInterval.groupId;
+        final repeatCount = oldInterval.repeatCount ?? 1;
+        
+        final groupIndices = <int>[];
+        for (int i = 0; i < _intervals.length; i++) {
+          if (_intervals[i].groupId == groupId) {
+            groupIndices.add(i);
+          }
+        }
+        
+        if (groupIndices.isNotEmpty) {
+          final uniqueCount = (groupIndices.length / repeatCount).ceil();
+          final firstIndex = groupIndices.first;
+          final relativeOffset = (index - firstIndex) % uniqueCount;
+          
+          for (int r = 0; r < repeatCount; r++) {
+            final targetIdx = firstIndex + relativeOffset + (r * uniqueCount);
+            if (targetIdx < _intervals.length && _intervals[targetIdx].groupId == groupId) {
+              _intervals[targetIdx] = updatedInterval.copyWith(
+                id: _intervals[targetIdx].id,
+              );
+            }
+          }
+        }
+      } else {
+        _intervals[index] = updatedInterval;
+      }
       _selectedIntervalIndex = null;
+    });
+  }
+
+  void _addRepeatBlock() {
+    final locale = Localizations.localeOf(context).languageCode;
+    final title = locale == 'ko' ? '반복 세션 추가' : 'Add Repeat Block';
+    
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        int selectedRepeats = 3;
+        
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Container(
+              height: 280,
+              padding: const EdgeInsets.only(top: 6),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: theme.dividerColor,
+                            width: 0.5,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () => Navigator.pop(context),
+                            minimumSize: const Size(0, 0),
+                            child: Text(
+                              AppLocalizations.of(context)!.cancel,
+                              style: const TextStyle(fontSize: 17),
+                            ),
+                          ),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _insertRepeatBlock(selectedRepeats);
+                            },
+                            minimumSize: const Size(0, 0),
+                            child: Text(
+                              AppLocalizations.of(context)!.addInterval,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                          initialItem: selectedRepeats - 2,
+                        ),
+                        itemExtent: 40,
+                        onSelectedItemChanged: (index) {
+                          setDialogState(() {
+                            selectedRepeats = index + 2;
+                          });
+                        },
+                        children: List.generate(9, (index) {
+                          final count = index + 2;
+                          return Center(
+                            child: Text(
+                              locale == 'ko' ? '$count회 반복' : '$count repeats',
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        );
+      }
+    );
+  }
+
+  void _insertRepeatBlock(int repeatCount) {
+    final groupId = 'group_${DateTime.now().millisecondsSinceEpoch}';
+    final List<Interval> blockIntervals = [];
+
+    switch (_machineType) {
+      case MachineType.treadmill:
+        blockIntervals.add(Interval.treadmill(
+          id: '${groupId}_run',
+          durationSeconds: 60,
+          speedKmh: 8.0,
+          grade: 0.0,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        blockIntervals.add(Interval.treadmill(
+          id: '${groupId}_walk',
+          durationSeconds: 60,
+          speedKmh: 4.0,
+          grade: 0.0,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        break;
+      case MachineType.cycle:
+        blockIntervals.add(Interval.cycle(
+          id: '${groupId}_high',
+          durationSeconds: 60,
+          rpm: 80,
+          resistance: 10,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        blockIntervals.add(Interval.cycle(
+          id: '${groupId}_low',
+          durationSeconds: 60,
+          rpm: 60,
+          resistance: 4,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        break;
+      case MachineType.stairmaster:
+        blockIntervals.add(Interval.stairmaster(
+          id: '${groupId}_high',
+          durationSeconds: 60,
+          level: 8,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        blockIntervals.add(Interval.stairmaster(
+          id: '${groupId}_low',
+          durationSeconds: 60,
+          level: 4,
+          groupId: groupId,
+          repeatCount: repeatCount,
+        ));
+        break;
+    }
+
+    final List<Interval> finalGroupedList = [];
+    for (int r = 0; r < repeatCount; r++) {
+      for (final interval in blockIntervals) {
+        finalGroupedList.add(interval.copyWith(
+          id: '${interval.id}_rep_$r',
+        ));
+      }
+    }
+
+    setState(() {
+      _intervals.addAll(finalGroupedList);
     });
   }
 
@@ -778,6 +988,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     onIntervalDelete: _deleteInterval,
                     selectedIndex: _selectedIntervalIndex,
                     onAddInterval: _addInterval,
+                    onAddRepeatBlock: _addRepeatBlock,
                   ),
                 ),
               ),

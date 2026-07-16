@@ -181,6 +181,58 @@ class IntervalRow extends StatelessWidget {
   }
 }
 
+class _IntervalGroupItem {
+  final String? groupId;
+  final int? repeatCount;
+  final List<int> originalIndices;
+  final List<Interval> intervals;
+
+  _IntervalGroupItem({
+    this.groupId,
+    this.repeatCount,
+    required this.originalIndices,
+    required this.intervals,
+  });
+}
+
+List<_IntervalGroupItem> _groupIntervals(List<Interval> flatList) {
+  final groups = <_IntervalGroupItem>[];
+  if (flatList.isEmpty) return groups;
+
+  String? currentGroupId = flatList[0].groupId;
+  int? currentRepeatCount = flatList[0].repeatCount;
+  var currentIndices = <int>[0];
+  var currentIntervals = <Interval>[flatList[0]];
+
+  for (int i = 1; i < flatList.length; i++) {
+    final interval = flatList[i];
+    if (interval.groupId != null && interval.groupId == currentGroupId) {
+      currentIndices.add(i);
+      currentIntervals.add(interval);
+    } else {
+      groups.add(_IntervalGroupItem(
+        groupId: currentGroupId,
+        repeatCount: currentRepeatCount,
+        originalIndices: currentIndices,
+        intervals: currentIntervals,
+      ));
+      currentGroupId = interval.groupId;
+      currentRepeatCount = interval.repeatCount;
+      currentIndices = [i];
+      currentIntervals = [interval];
+    }
+  }
+
+  groups.add(_IntervalGroupItem(
+    groupId: currentGroupId,
+    repeatCount: currentRepeatCount,
+    originalIndices: currentIndices,
+    intervals: currentIntervals,
+  ));
+
+  return groups;
+}
+
 /// Shared interval list widget
 class IntervalList extends StatelessWidget {
   final List<Interval> intervals;
@@ -191,6 +243,7 @@ class IntervalList extends StatelessWidget {
   final Function(int)? onIntervalDelete;
   final int? selectedIndex;
   final VoidCallback? onAddInterval;
+  final VoidCallback? onAddRepeatBlock; // Optional callback for repeat block button
 
   const IntervalList({
     super.key,
@@ -202,12 +255,122 @@ class IntervalList extends StatelessWidget {
     this.onIntervalDelete,
     this.selectedIndex,
     this.onAddInterval,
+    this.onAddRepeatBlock,
   });
+
+  Widget _buildGroupCard(BuildContext context, _IntervalGroupItem group) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    final repeatCount = group.repeatCount ?? 1;
+    final uniqueCount = (group.intervals.length / repeatCount).ceil().clamp(1, group.intervals.length);
+    
+    final uniqueIntervals = group.intervals.sublist(0, uniqueCount);
+    final uniqueIndices = group.originalIndices.sublist(0, uniqueCount);
+
+    final locale = Localizations.localeOf(context).languageCode;
+    final sessionLabel = locale == 'ko' ? '세션 반복 세트' : 'Session Repeat Block';
+    final repeatLabel = locale == 'ko' ? '$repeatCount회 반복' : '${repeatCount}x repeats';
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E22) : Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  CupertinoIcons.repeat,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '$sessionLabel ($repeatLabel)',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const Spacer(),
+                if (isEditable && onIntervalDelete != null)
+                  GestureDetector(
+                    onTap: () {
+                      for (int i = group.originalIndices.length - 1; i >= 0; i--) {
+                        onIntervalDelete!(group.originalIndices[i]);
+                      }
+                    },
+                    child: Icon(
+                      CupertinoIcons.trash,
+                      size: 16,
+                      color: theme.colorScheme.error.withValues(alpha: 0.8),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: uniqueIntervals.length,
+            itemBuilder: (context, idx) {
+              final interval = uniqueIntervals[idx];
+              final originalIndex = uniqueIndices[idx];
+              
+              Widget row = IntervalRow(
+                interval: interval,
+                machineType: machineType,
+                settingsProvider: settingsProvider,
+                isEditable: isEditable,
+                onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                isSelected: selectedIndex == originalIndex,
+              );
+
+              if (idx < uniqueIntervals.length - 1) {
+                row = Column(
+                  children: [
+                    row,
+                    Divider(
+                      height: 0.5,
+                      color: theme.dividerColor,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                  ],
+                );
+              }
+              return row;
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    final addRepeatBlockLabel = locale == 'ko' ? '반복 세션 추가' : 'Add Repeat Block';
 
     if (intervals.isEmpty && !isEditable) {
       return Padding(
@@ -224,47 +387,64 @@ class IntervalList extends StatelessWidget {
       );
     }
 
+    final groups = _groupIntervals(intervals);
+
     return Column(
       children: [
-        // Interval rows
-        ...intervals.asMap().entries.map((entry) {
-          final index = entry.key;
-          final interval = entry.value;
-
-          if (isEditable && onIntervalDelete != null) {
-            return _IntervalSwipeDelete(
-              key: Key('interval_${interval.id}'),
-              itemId: interval.id,
-              onDelete: () {
-                final currentIndex =
-                    intervals.indexWhere((i) => i.id == interval.id);
-                if (currentIndex >= 0) {
-                  onIntervalDelete!(currentIndex);
-                }
-              },
-              child: IntervalRow(
-                interval: interval,
-                machineType: machineType,
-                settingsProvider: settingsProvider,
-                isEditable: isEditable,
-                onTap:
-                    onIntervalTap != null ? () => onIntervalTap!(index) : null,
-                isSelected: selectedIndex == index,
-              ),
-            );
+        ...groups.map((group) {
+          if (group.groupId != null) {
+            if (isEditable && onIntervalDelete != null) {
+              return _IntervalSwipeDelete(
+                key: Key('group_${group.groupId}'),
+                itemId: group.groupId!,
+                onDelete: () {
+                  for (int i = group.originalIndices.length - 1; i >= 0; i--) {
+                    onIntervalDelete!(group.originalIndices[i]);
+                  }
+                },
+                child: _buildGroupCard(context, group),
+              );
+            } else {
+              return _buildGroupCard(context, group);
+            }
           } else {
-            return IntervalRow(
-              interval: interval,
-              machineType: machineType,
-              settingsProvider: settingsProvider,
-              isEditable: isEditable,
-              onTap: onIntervalTap != null ? () => onIntervalTap!(index) : null,
-              isSelected: selectedIndex == index,
+            // Render individual intervals
+            return Column(
+              children: group.intervals.asMap().entries.map((entry) {
+                final localIdx = entry.key;
+                final interval = entry.value;
+                final originalIndex = group.originalIndices[localIdx];
+
+                if (isEditable && onIntervalDelete != null) {
+                  return _IntervalSwipeDelete(
+                    key: Key('interval_${interval.id}'),
+                    itemId: interval.id,
+                    onDelete: () => onIntervalDelete!(originalIndex),
+                    child: IntervalRow(
+                      interval: interval,
+                      machineType: machineType,
+                      settingsProvider: settingsProvider,
+                      isEditable: isEditable,
+                      onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                      isSelected: selectedIndex == originalIndex,
+                    ),
+                  );
+                } else {
+                  return IntervalRow(
+                    interval: interval,
+                    machineType: machineType,
+                    settingsProvider: settingsProvider,
+                    isEditable: isEditable,
+                    onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                    isSelected: selectedIndex == originalIndex,
+                  );
+                }
+              }).toList(),
             );
           }
         }),
         // Add interval footer (only in editable mode)
-        if (isEditable && onAddInterval != null)
+        if (isEditable && (onAddInterval != null || onAddRepeatBlock != null))
           Container(
             decoration: BoxDecoration(
               border: Border(
@@ -274,21 +454,49 @@ class IntervalList extends StatelessWidget {
                 ),
               ),
             ),
-            child: CupertinoListTile(
-              leading: Icon(
-                CupertinoIcons.add_circled,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
-              title: Text(
-                l10n.addInterval,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-              onTap: onAddInterval,
+            child: Column(
+              children: [
+                if (onAddInterval != null)
+                  CupertinoListTile(
+                    leading: Icon(
+                      CupertinoIcons.add_circled,
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    title: Text(
+                      l10n.addInterval,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    onTap: onAddInterval,
+                  ),
+                if (onAddRepeatBlock != null) ...[
+                  Divider(
+                    height: 0.5,
+                    color: theme.dividerColor,
+                    indent: 16,
+                  ),
+                  CupertinoListTile(
+                    leading: Icon(
+                      CupertinoIcons.repeat,
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    title: Text(
+                      addRepeatBlockLabel,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    onTap: onAddRepeatBlock,
+                  ),
+                ],
+              ],
             ),
           ),
       ],

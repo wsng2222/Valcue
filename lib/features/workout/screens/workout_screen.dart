@@ -518,7 +518,23 @@ class _WorkoutScreenState extends State<WorkoutScreen>
           preparingStatusText: l10n.liveActivityPreparing,
           runningStatusText: l10n.liveActivityInProgress,
           finishedStatusText: l10n.workoutComplete,
-          intervalText: l10n.liveActivityIntervalFormat,
+          intervalText: (current, total) {
+            final locale = Localizations.localeOf(context).languageCode;
+            final sessionWord = switch (locale) {
+              'ko' => '세션',
+              'es' => 'Sesión',
+              'fr' => 'Session',
+              'de' => 'Session',
+              'ru' => 'Сессия',
+              'pt' => 'Sessão',
+              'ja' => 'セッション',
+              'zh' => '阶段',
+              'vi' => 'Phiên',
+              'ar' => 'الجلسة',
+              _ => 'Session',
+            };
+            return '$sessionWord $current/$total';
+          },
           durationText: (durationSeconds) {
             final formatted = WorkoutIntervalNotificationPlanner.formatDuration(
               durationSeconds,
@@ -777,10 +793,23 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         now: _now(),
         machineName: machineName,
         statusText: statusText,
-        intervalText: l10n.liveActivityIntervalFormat(
-          state.currentIntervalIndex + 1,
-          state.totalIntervals,
-        ),
+        intervalText: (() {
+          final locale = Localizations.localeOf(context).languageCode;
+          final sessionWord = switch (locale) {
+            'ko' => '세션',
+            'es' => 'Sesión',
+            'fr' => 'Session',
+            'de' => 'Session',
+            'ru' => 'Сессия',
+            'pt' => 'Sessão',
+            'ja' => 'セッション',
+            'zh' => '阶段',
+            'vi' => 'Phiên',
+            'ar' => 'الجلسة',
+            _ => 'Session',
+          };
+          return '$sessionWord ${state.currentIntervalIndex + 1}/${state.totalIntervals}';
+        })(),
         durationText: l10n.liveActivityDurationFormat(formattedDuration),
         speedLabel: l10n.speed,
         inclineLabel: l10n.incline,

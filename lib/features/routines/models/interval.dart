@@ -17,6 +17,10 @@ class Interval {
   // Stairmaster fields
   final int? level;
 
+  // Repeat Group fields (optional)
+  final String? groupId;
+  final int? repeatCount;
+
   // Constructor: accepts doubles for speed/grade, ints for others
   Interval({
     String? id,
@@ -26,6 +30,8 @@ class Interval {
     this.rpm,
     this.resistance,
     this.level,
+    this.groupId,
+    this.repeatCount,
   }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   // Factory constructors for each machine type
@@ -34,12 +40,16 @@ class Interval {
     required int durationSeconds,
     required double speedKmh,
     required double grade,
+    String? groupId,
+    int? repeatCount,
   }) {
     return Interval(
       id: id,
       durationSeconds: durationSeconds,
       speedKmh: speedKmh,
       grade: grade,
+      groupId: groupId,
+      repeatCount: repeatCount,
     );
   }
 
@@ -48,12 +58,16 @@ class Interval {
     required int durationSeconds,
     required int rpm,
     required int resistance,
+    String? groupId,
+    int? repeatCount,
   }) {
     return Interval(
       id: id,
       durationSeconds: durationSeconds,
       rpm: rpm,
       resistance: resistance,
+      groupId: groupId,
+      repeatCount: repeatCount,
     );
   }
 
@@ -61,11 +75,15 @@ class Interval {
     String? id,
     required int durationSeconds,
     required int level,
+    String? groupId,
+    int? repeatCount,
   }) {
     return Interval(
       id: id,
       durationSeconds: durationSeconds,
       level: level,
+      groupId: groupId,
+      repeatCount: repeatCount,
     );
   }
 
@@ -91,6 +109,8 @@ class Interval {
     if (rpm != null) json['rpm'] = rpm;
     if (resistance != null) json['resistance'] = resistance;
     if (level != null) json['level'] = level;
+    if (groupId != null) json['groupId'] = groupId;
+    if (repeatCount != null) json['repeatCount'] = repeatCount;
     return json;
   }
 
@@ -134,6 +154,8 @@ class Interval {
       rpm: json['rpm'] != null ? json['rpm'] as int : null,
       resistance: json['resistance'] != null ? json['resistance'] as int : null,
       level: json['level'] != null ? json['level'] as int : null,
+      groupId: json['groupId'] as String?,
+      repeatCount: json['repeatCount'] as int?,
     );
   }
 
@@ -145,6 +167,8 @@ class Interval {
     int? rpm,
     int? resistance,
     int? level,
+    String? groupId,
+    int? repeatCount,
   }) {
     return Interval(
       id: id ?? this.id,
@@ -154,6 +178,8 @@ class Interval {
       rpm: rpm ?? this.rpm,
       resistance: resistance ?? this.resistance,
       level: level ?? this.level,
+      groupId: groupId ?? this.groupId,
+      repeatCount: repeatCount ?? this.repeatCount,
     );
   }
 }

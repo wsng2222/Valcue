@@ -1150,7 +1150,7 @@ class _ShareCard extends StatelessWidget {
   }
 }
 
-class _WorkoutChart extends StatelessWidget {
+class _WorkoutChart extends StatefulWidget {
   final Routine routine;
   final int currentIntervalIndex;
   final int elapsedSecondsInCurrentSession;
@@ -1162,16 +1162,162 @@ class _WorkoutChart extends StatelessWidget {
   });
 
   @override
+  State<_WorkoutChart> createState() => _WorkoutChartState();
+}
+
+class _WorkoutChartState extends State<_WorkoutChart> {
+  int? _hoveredIntervalIndex;
+
+  void _updateHoveredIndex(double localX, double totalWidth) {
+    if (widget.routine.intervals.isEmpty || totalWidth <= 0) return;
+
+    final totalDuration = widget.routine.intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    if (totalDuration == 0) return;
+
+    final progressPercent = (localX / totalWidth).clamp(0.0, 1.0);
+    final elapsedSeconds = (progressPercent * totalDuration).round();
+
+    int calculatedIndex = 0;
+    int accumulated = 0;
+    for (int i = 0; i < widget.routine.intervals.length; i++) {
+      accumulated += widget.routine.intervals[i].durationSeconds;
+      if (elapsedSeconds <= accumulated) {
+        calculatedIndex = i;
+        break;
+      }
+    }
+
+    if (_hoveredIntervalIndex != calculatedIndex) {
+      setState(() {
+        _hoveredIntervalIndex = calculatedIndex;
+      });
+      HapticFeedback.selectionClick();
+    }
+  }
+
+  void _clearHoveredIndex() {
+    if (_hoveredIntervalIndex != null) {
+      setState(() {
+        _hoveredIntervalIndex = null;
+      });
+    }
+  }
+
+  Widget _buildTooltip(Interval interval, double chartWidth, double chartHeight, int index) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final totalDuration = widget.routine.intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    if (totalDuration == 0) return const SizedBox.shrink();
+
+    // Calculate center X of this interval
+    int durationBefore = 0;
+    for (int i = 0; i < index; i++) {
+      durationBefore += widget.routine.intervals[i].durationSeconds;
+    }
+    final intervalDuration = interval.durationSeconds;
+    final intervalCenterSeconds = durationBefore + (intervalDuration / 2);
+    final pointX = (intervalCenterSeconds / totalDuration) * chartWidth;
+
+    const tooltipWidth = 140.0;
+    final leftPos = (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
+
+    // Format metrics based on machineType
+    String metricText = '';
+    switch (widget.routine.machineType) {
+      case MachineType.treadmill:
+        final speed = interval.speedKmh?.toStringAsFixed(1) ?? '0.0';
+        final grade = interval.grade?.toStringAsFixed(1) ?? '0.0';
+        metricText = '$speed km/h • $grade%';
+        break;
+      case MachineType.cycle:
+        final rpm = interval.rpm?.toString() ?? '0';
+        final res = interval.resistance?.toString() ?? '0';
+        metricText = '$rpm RPM • Res $res';
+        break;
+      case MachineType.stairmaster:
+        final lvl = interval.level?.toString() ?? '0';
+        metricText = 'Lvl $lvl';
+        break;
+    }
+
+    // Format session index (e.g. Session 3) and duration (e.g. 02:00)
+    final locale = Localizations.localeOf(context).languageCode;
+    final sessionWord = switch (locale) {
+      'ko' => '세션',
+      'es' => 'Sesión',
+      'fr' => 'Session',
+      'de' => 'Session',
+      'ru' => 'Сессия',
+      'pt' => 'Sessão',
+      'ja' => 'セッション',
+      'zh' => '阶段',
+      'vi' => 'Phiên',
+      'ar' => 'الجلسة',
+      _ => 'Session',
+    };
+    final intervalTitle = '$sessionWord ${index + 1}';
+    final durationFormatted = interval.durationFormatted;
+
+    return Positioned(
+      left: leftPos,
+      top: -56, // Floating above the card
+      child: Container(
+        width: tooltipWidth,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.grey.shade300,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              metricText,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: theme.colorScheme.primary,
+                letterSpacing: -0.3,
+              ),
+            ),
+            const SizedBox(height: 1),
+            Text(
+              '$intervalTitle ($durationFormatted)',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white54 : Colors.black54,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final appColors = theme.extension<AppColors>()!;
 
-    if (routine.intervals.isEmpty) return const SizedBox.shrink();
+    if (widget.routine.intervals.isEmpty) return const SizedBox.shrink();
 
     // Map MachineType display names
-    final machineName = switch (routine.machineType) {
+    final machineName = switch (widget.routine.machineType) {
       MachineType.treadmill => l10n.treadmill,
       MachineType.cycle => l10n.cycle,
       MachineType.stairmaster => l10n.stairmaster,
@@ -1227,16 +1373,67 @@ class _WorkoutChart extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: CustomPaint(
-              painter: _WorkoutChartPainter(
-                intervals: routine.intervals,
-                currentIntervalIndex: currentIntervalIndex,
-                elapsedSecondsInCurrentSession: elapsedSecondsInCurrentSession,
-                primaryColor: theme.colorScheme.primary,
-                secondaryColor: theme.colorScheme.secondary,
-                isDark: isDark,
-                machineType: routine.machineType,
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final chartWidth = constraints.maxWidth;
+                final chartHeight = constraints.maxHeight;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    GestureDetector(
+                      onHorizontalDragStart: (details) {
+                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                      },
+                      onHorizontalDragUpdate: (details) {
+                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                      },
+                      onHorizontalDragEnd: (details) {
+                        _clearHoveredIndex();
+                      },
+                      onHorizontalDragCancel: () {
+                        _clearHoveredIndex();
+                      },
+                      onTapDown: (details) {
+                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                      },
+                      onTapUp: (details) {
+                        Future.delayed(const Duration(seconds: 2), () {
+                          if (mounted) {
+                            _clearHoveredIndex();
+                          }
+                        });
+                      },
+                      onTapCancel: () {
+                        _clearHoveredIndex();
+                      },
+                      child: Container(
+                        color: Colors.transparent, // Ensure gesture detector grabs touches
+                        child: CustomPaint(
+                          painter: _WorkoutChartPainter(
+                            intervals: widget.routine.intervals,
+                            currentIntervalIndex: widget.currentIntervalIndex,
+                            elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
+                            primaryColor: theme.colorScheme.primary,
+                            secondaryColor: theme.colorScheme.secondary,
+                            isDark: isDark,
+                            machineType: widget.routine.machineType,
+                            hoveredIntervalIndex: _hoveredIntervalIndex,
+                          ),
+                          size: Size.infinite,
+                        ),
+                      ),
+                    ),
+                    if (_hoveredIntervalIndex != null && _hoveredIntervalIndex! < widget.routine.intervals.length)
+                      _buildTooltip(
+                        widget.routine.intervals[_hoveredIntervalIndex!],
+                        chartWidth,
+                        chartHeight,
+                        _hoveredIntervalIndex!,
+                      ),
+                  ],
+                );
+              }
             ),
           ),
         ],
@@ -1253,6 +1450,7 @@ class _WorkoutChartPainter extends CustomPainter {
   final Color secondaryColor;
   final bool isDark;
   final MachineType machineType;
+  final int? hoveredIntervalIndex;
 
   _WorkoutChartPainter({
     required this.intervals,
@@ -1262,6 +1460,7 @@ class _WorkoutChartPainter extends CustomPainter {
     required this.secondaryColor,
     required this.isDark,
     required this.machineType,
+    this.hoveredIntervalIndex,
   });
 
   @override
@@ -1426,7 +1625,47 @@ class _WorkoutChartPainter extends CustomPainter {
     canvas.drawPath(strokePath, strokePaint);
 
     // Draw End Indicator vertical line
-    if (progressPercent > 0.0 && progressPercent < 1.0) {
+    if (hoveredIntervalIndex != null && hoveredIntervalIndex! < intervals.length) {
+      // Calculate center X of this interval
+      int durationBefore = 0;
+      for (int i = 0; i < hoveredIntervalIndex!; i++) {
+        durationBefore += intervals[i].durationSeconds;
+      }
+      final intervalDuration = intervals[hoveredIntervalIndex!].durationSeconds;
+      final intervalCenterSeconds = durationBefore + (intervalDuration / 2);
+      final hoveredX = (intervalCenterSeconds / totalDuration) * width;
+
+      final val = values[hoveredIntervalIndex!];
+      final hoveredY = height - ((val - minVal) / valRange) * height * 0.85 - 2;
+
+      final verticalLinePaint = Paint()
+        ..color = primaryColor.withValues(alpha: 0.5)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.2;
+
+      // Draw vertical dashed line
+      double dashY = 0;
+      const dashSpace = 4.0;
+      while (dashY < height) {
+        canvas.drawLine(Offset(hoveredX, dashY), Offset(hoveredX, dashY + dashSpace), verticalLinePaint);
+        dashY += dashSpace * 2;
+      }
+
+      // Draw dot and shadow highlight like _WeightSparklinePainter
+      final dotPaint = Paint()
+        ..color = primaryColor
+        ..style = PaintingStyle.fill;
+      final outerCirclePaint = Paint()
+        ..color = primaryColor.withValues(alpha: 0.2)
+        ..style = PaintingStyle.fill;
+      final centerCirclePaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(Offset(hoveredX, hoveredY), 8.0, outerCirclePaint);
+      canvas.drawCircle(Offset(hoveredX, hoveredY), 4.5, dotPaint);
+      canvas.drawCircle(Offset(hoveredX, hoveredY), 2.2, centerCirclePaint);
+    } else if (progressPercent > 0.0 && progressPercent < 1.0) {
       final verticalLinePaint = Paint()
         ..color = primaryColor.withValues(alpha: 0.5)
         ..style = PaintingStyle.stroke
@@ -1474,7 +1713,8 @@ class _WorkoutChartPainter extends CustomPainter {
         oldDelegate.elapsedSecondsInCurrentSession != elapsedSecondsInCurrentSession ||
         oldDelegate.primaryColor != primaryColor ||
         oldDelegate.secondaryColor != secondaryColor ||
-        oldDelegate.isDark != isDark;
+        oldDelegate.isDark != isDark ||
+        oldDelegate.hoveredIntervalIndex != hoveredIntervalIndex;
   }
 }
 

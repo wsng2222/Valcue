@@ -22,10 +22,13 @@ struct WorkoutLiveActivityWidget: Widget {
                             Text(context.attributes.routineName)
                                 .font(.headline)
                                 .lineLimit(1)
+                                .minimumScaleFactor(0.75)
                             if !isStale {
                                 Text(context.state.statusText)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
                             }
                         }
                     }

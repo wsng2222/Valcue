@@ -30,9 +30,13 @@ class SoundService {
     if (!_enabled || _audioCache == null) return;
 
     try {
-      // Play the actual beep sound file
-      await _audioCache!
-          .play('beep.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.8);
+      // Play the actual beep sound file with duckAudio: true to mix with background music
+      await _audioCache!.play(
+        'beep.mp3',
+        mode: PlayerMode.LOW_LATENCY,
+        volume: 0.8,
+        duckAudio: true,
+      );
     } catch (e) {
       // Sound effects should fail silently during runtime.
       return;
@@ -45,8 +49,12 @@ class SoundService {
 
     try {
       // audioplayers 0.18.3 API: use AudioCache to play asset files
-      await _audioCache!
-          .play('finished.mp3', mode: PlayerMode.LOW_LATENCY, volume: 1.3);
+      await _audioCache!.play(
+        'finished.mp3',
+        mode: PlayerMode.LOW_LATENCY,
+        volume: 1.3,
+        duckAudio: true,
+      );
     } catch (e) {
       // Silently fail if sound can't be played
       // (e.g., file not found, permission issues)
