@@ -343,11 +343,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Сопровождение тренировки в реальном времени';
+      'Оповещения при выключенном экране';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Просматривайте информацию о тренировке и подсказки по интервалам в реальном времени при использовании других приложений';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Подготовка';

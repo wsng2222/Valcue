@@ -137,7 +137,7 @@
   "endWorkoutConfirmationMessage": "종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.",
   "workoutComplete": "운동 완료",
   "backgroundIntervalNotificationTitle": "새 구간 시작",
-  "backgroundIntervalNotificationsTitle": "앱을 나가도 알림으로 운동 정보 받기",
+  "backgroundIntervalNotificationsTitle": "화면 꺼짐 중에도 알림",
   "backgroundIntervalNotificationsSubtitle": "",
   "liveActivityPreparing": "준비",
   "liveActivityInProgress": "운동 중",

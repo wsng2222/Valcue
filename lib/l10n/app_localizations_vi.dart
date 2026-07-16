@@ -343,11 +343,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Hướng dẫn tập luyện theo thời gian thực';
+      'Thông báo khi tắt màn hình';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Xem thông tin bài tập và hướng dẫn từng hiệp theo thời gian thực khi dùng ứng dụng khác';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Chuẩn bị';

@@ -342,11 +342,10 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Treningsveiledning i sanntid';
+      'Varsler når skjermen er av';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Se treningsinformasjon og intervallveiledning i sanntid mens du bruker andre apper';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Forbereder';

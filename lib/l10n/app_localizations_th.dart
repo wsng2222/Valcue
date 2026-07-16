@@ -339,12 +339,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => 'เริ่มช่วงใหม่';
 
   @override
-  String get backgroundIntervalNotificationsTitle =>
-      'การโค้ชการออกกำลังกายแบบเรียลไทม์';
+  String get backgroundIntervalNotificationsTitle => 'แจ้งเตือนเมื่อปิดหน้าจอ';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'ดูข้อมูลการออกกำลังกายและคำแนะนำแต่ละช่วงแบบเรียลไทม์ขณะใช้แอปอื่น';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'กำลังเตรียม';

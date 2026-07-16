@@ -346,11 +346,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Coaching sportif en temps réel';
+      'Alertes avec l\'écran éteint';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Consultez les informations d’entraînement et les consignes d’intervalle en temps réel pendant l’utilisation d’autres apps';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Préparation';

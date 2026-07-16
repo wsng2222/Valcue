@@ -765,13 +765,13 @@ abstract class AppLocalizations {
   /// Settings title for premium live workout coaching
   ///
   /// In en, this message translates to:
-  /// **'Live workout coaching'**
+  /// **'Alerts when screen is off'**
   String get backgroundIntervalNotificationsTitle;
 
   /// Settings subtitle for premium live workout information and interval guidance available while using other apps
   ///
   /// In en, this message translates to:
-  /// **'See live workout information and interval guidance while using other apps'**
+  /// **''**
   String get backgroundIntervalNotificationsSubtitle;
 
   /// Live Activity status shown while the workout is preparing to start

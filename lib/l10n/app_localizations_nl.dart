@@ -341,11 +341,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => 'Nieuw interval';
 
   @override
-  String get backgroundIntervalNotificationsTitle => 'Live workoutcoaching';
+  String get backgroundIntervalNotificationsTitle =>
+      'Meldingen bij uitgeschakeld scherm';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Bekijk live trainingsinformatie en intervalbegeleiding terwijl je andere apps gebruikt';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Voorbereiden';

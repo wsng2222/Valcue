@@ -335,11 +335,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '新间歇开始';
 
   @override
-  String get backgroundIntervalNotificationsTitle => '实时运动指导';
+  String get backgroundIntervalNotificationsTitle => '屏幕熄灭时也接收通知';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      '使用其他应用时也能查看实时运动信息和间歇指导';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => '准备中';

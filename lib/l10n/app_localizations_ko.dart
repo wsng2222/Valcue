@@ -337,7 +337,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '새 구간 시작';
 
   @override
-  String get backgroundIntervalNotificationsTitle => '앱을 나가도 알림으로 운동 정보 받기';
+  String get backgroundIntervalNotificationsTitle => '화면 꺼짐 중에도 알림';
 
   @override
   String get backgroundIntervalNotificationsSubtitle => '';

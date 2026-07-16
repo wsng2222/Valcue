@@ -337,11 +337,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '新しい区間開始';
 
   @override
-  String get backgroundIntervalNotificationsTitle => 'リアルタイムワークアウトコーチング';
+  String get backgroundIntervalNotificationsTitle => '画面オフでも通知';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      '他のアプリの使用中もリアルタイムのワークアウト情報とインターバル案内を確認できます';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => '準備中';

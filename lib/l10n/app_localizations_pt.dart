@@ -343,11 +343,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Orientação de treino em tempo real';
+      'Alertas com a tela desligada';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Veja informações do treino e orientações de intervalo em tempo real enquanto usa outros apps';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Preparando';

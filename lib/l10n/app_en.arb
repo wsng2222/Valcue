@@ -444,11 +444,11 @@
   "@backgroundIntervalNotificationTitle": {
     "description": "Title for a premium notification shown when a new workout interval begins in the background"
   },
-  "backgroundIntervalNotificationsTitle": "Live workout coaching",
+  "backgroundIntervalNotificationsTitle": "Alerts when screen is off",
   "@backgroundIntervalNotificationsTitle": {
     "description": "Settings title for premium live workout coaching"
   },
-  "backgroundIntervalNotificationsSubtitle": "See live workout information and interval guidance while using other apps",
+  "backgroundIntervalNotificationsSubtitle": "",
   "@backgroundIntervalNotificationsSubtitle": {
     "description": "Settings subtitle for premium live workout information and interval guidance available while using other apps"
   },

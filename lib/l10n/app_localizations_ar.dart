@@ -342,11 +342,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'التوجيه الفوري أثناء التمرين';
+      'تنبيهات عند إيقاف تشغيل الشاشة';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'اطّلع على معلومات التمرين وإرشادات الفترات في الوقت الفعلي أثناء استخدام تطبيقات أخرى';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'جارٍ الاستعداد';

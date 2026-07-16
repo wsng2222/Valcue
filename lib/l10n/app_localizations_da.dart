@@ -343,11 +343,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Træningsvejledning i realtid';
+      'Beskeder når skærmen er slukket';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      'Se træningsoplysninger og intervalvejledning i realtid, mens du bruger andre apps';
+  String get backgroundIntervalNotificationsSubtitle => '';
 
   @override
   String get liveActivityPreparing => 'Forbereder';
