@@ -13,7 +13,6 @@ import '../app_settings/app_settings_provider.dart';
 import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
-import '../widgets/unified_screen_header.dart';
 import '../widgets/bounceable.dart';
 
 const _privacyPolicyUri =
@@ -558,11 +557,41 @@ class _PremiumHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return UnifiedScreenHeader(
-      icon: Icons.local_fire_department,
-      title: l10n.premiumTab,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 24, 0, 14),
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(
+                alpha: 0.10,
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.local_fire_department,
+              size: 22,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            l10n.premiumTab,
+            style: GoogleFonts.lato(
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic,
+              color: theme.colorScheme.onSurface,
+              letterSpacing: -0.9,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
