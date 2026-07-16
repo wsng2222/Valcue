@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
@@ -13,7 +14,6 @@ import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
 import '../../../onboarding/onboarding_flow.dart';
 import '../../../utils/app_shadows.dart';
-import '../../../widgets/unified_screen_header.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -1157,15 +1157,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Top header area
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: UnifiedScreenHeader(
-                      icon: Icons.settings,
-                      title: AppLocalizations.of(context)!.settingsTitle,
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.10,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.settings,
+                            size: 22,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.settingsTitle,
+                          style: GoogleFonts.lato(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            color: theme.colorScheme.onSurface,
+                            letterSpacing: -0.9,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 20),
                 ),
                 // Settings sections
                 SliverToBoxAdapter(
