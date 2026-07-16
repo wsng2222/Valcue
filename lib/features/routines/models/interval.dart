@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'machine_type.dart';
+
 class Interval {
   // Stable ID for tracking intervals across edits (single source of truth)
   final String id;
@@ -154,3 +157,59 @@ class Interval {
     );
   }
 }
+
+enum IntensityLevel { low, moderate, high }
+
+extension IntervalIntensity on Interval {
+  IntensityLevel getIntensity(MachineType machineType) {
+    switch (machineType) {
+      case MachineType.treadmill:
+        final speed = speedKmh ?? 0.0;
+        if (speed <= 5.5) return IntensityLevel.low;
+        if (speed <= 9.0) return IntensityLevel.moderate;
+        return IntensityLevel.high;
+      case MachineType.cycle:
+        final r = rpm ?? 0;
+        if (r <= 65) return IntensityLevel.low;
+        if (r <= 85) return IntensityLevel.moderate;
+        return IntensityLevel.high;
+      case MachineType.stairmaster:
+        final l = level ?? 0;
+        if (l <= 5) return IntensityLevel.low;
+        if (l <= 10) return IntensityLevel.moderate;
+        return IntensityLevel.high;
+    }
+  }
+
+  Color getIntensityColor(BuildContext context, MachineType machineType) {
+    final theme = Theme.of(context);
+    final intensity = getIntensity(machineType);
+    switch (intensity) {
+      case IntensityLevel.low:
+        return theme.brightness == Brightness.dark
+            ? const Color(0xFF0F261C) // Deep dark emerald green
+            : const Color(0xFFE8F5E9); // Soft light green
+      case IntensityLevel.moderate:
+        return theme.brightness == Brightness.dark
+            ? const Color(0xFF2E1C0A) // Deep dark amber/orange
+            : const Color(0xFFFFF3E0); // Soft light orange
+      case IntensityLevel.high:
+        return theme.brightness == Brightness.dark
+            ? const Color(0xFF2D0F0F) // Deep dark red
+            : const Color(0xFFFFEBEE); // Soft light red
+    }
+  }
+
+  Color getIntensityActiveColor(BuildContext context, MachineType machineType) {
+    final intensity = getIntensity(machineType);
+    switch (intensity) {
+      case IntensityLevel.low:
+        return const Color(0xFF00C853); // Vibrant green
+      case IntensityLevel.moderate:
+        return const Color(0xFFFFAB00); // Vibrant amber/orange
+      case IntensityLevel.high:
+        return const Color(0xFFFF1744); // Vibrant red/crimson
+    }
+  }
+}
+

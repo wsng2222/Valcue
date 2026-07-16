@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart' show Share, XFile;
 import 'package:valcue/l10n/app_localizations.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
+import '../../routines/models/interval.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
@@ -55,7 +56,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
   void initState() {
     super.initState();
     _confettiController = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 3000),
       vsync: this,
     );
     _fadeController = AnimationController(
@@ -257,8 +258,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
         child: Stack(
           children: [
             // Confetti animation overlay
-            if (_confettiController.isAnimating)
-              _ConfettiAnimation(controller: _confettiController),
+            _ConfettiAnimation(controller: _confettiController),
             // Main content
             FadeTransition(
               opacity: _fadeController,
@@ -307,6 +307,13 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                       finishTime: widget.finishTime,
                       routine: widget.routine,
                       machineTypeLabel: machineTypeLabel,
+                      currentIntervalIndex: widget.currentIntervalIndex,
+                      elapsedSecondsInCurrentSession:
+                          widget.elapsedSecondsInCurrentSession,
+                    ),
+                    const SizedBox(height: 12),
+                    _WorkoutChart(
+                      routine: widget.routine,
                       currentIntervalIndex: widget.currentIntervalIndex,
                       elapsedSecondsInCurrentSession:
                           widget.elapsedSecondsInCurrentSession,
@@ -630,7 +637,7 @@ class _WorkoutSummaryCard extends StatelessWidget {
   }
 }
 
-// Simple confetti animation
+// Advanced physics-based confetti particle animation
 class _ConfettiAnimation extends StatelessWidget {
   final AnimationController controller;
 
@@ -657,34 +664,112 @@ class _ConfettiPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (progress <= 0) return;
+    if (progress <= 0.0 || progress >= 1.0) return;
 
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 2;
+    final width = size.width;
+    final height = size.height;
 
     final colors = [
-      Colors.red,
-      Colors.orange,
-      Colors.yellow,
-      Colors.green,
-      Colors.blue,
-      Colors.purple,
+      const Color(0xFFFF1744), // Vibrant Red
+      const Color(0xFFFF9100), // Orange
+      const Color(0xFFFFEA00), // Yellow
+      const Color(0xFF00E676), // Green
+      const Color(0xFF2979FF), // Blue
+      const Color(0xFFD500F9), // Purple
+      const Color(0xFF00E5FF), // Cyan
     ];
 
-    const particleCount = 30;
-    final centerX = size.width / 2;
-    final centerY = size.height / 3;
-
+    const particleCount = 100;
+    
     for (int i = 0; i < particleCount; i++) {
-      final angle = (i / particleCount) * 2 * math.pi;
-      final distance = progress * 200;
-      final x = centerX + math.cos(angle) * distance;
-      final y =
-          centerY + math.sin(angle) * distance - (progress * progress * 300);
+      // Use deterministic random based on particle index so we don't need real-time state updates
+      final rand = math.Random(i + 100);
 
-      paint.color = colors[i % colors.length].withValues(alpha: 1.0 - progress);
-      canvas.drawCircle(Offset(x, y), 4 * (1.0 - progress), paint);
+      // Emitter side: true = left bottom, false = right bottom
+      final isLeft = i % 2 == 0;
+      final startX = isLeft ? width * 0.10 : width * 0.90;
+      final startY = height * 0.85;
+
+      // Launch Angle: shoot upwards and towards the center
+      // Left side shoots at -30 to -60 degrees, Right side shoots at -120 to -150 degrees
+      final angleRange = rand.nextDouble() * (math.pi / 4); // 0 to 45 deg
+      final baseAngle = isLeft ? -math.pi / 6 - angleRange : -5 * math.pi / 6 + angleRange;
+
+      // Initial speed (pixels per second)
+      final speed = 700 + rand.nextDouble() * 600;
+      final vx = math.cos(baseAngle) * speed;
+      final vy = math.sin(baseAngle) * speed;
+
+      // Gravity (pixels per second squared)
+      final gravity = 700 + rand.nextDouble() * 300;
+
+      // Wind (sinusoidal horizontal drift)
+      final windFreq = 2.0 + rand.nextDouble() * 3.0;
+      final windAmp = 40.0 + rand.nextDouble() * 50.0;
+
+      // Rotation settings
+      final rotationSpeed = (rand.nextDouble() - 0.5) * 8.0;
+      final rotationPhase = rand.nextDouble() * math.pi;
+
+      // Size and scale settings
+      final sizeScale = 8.0 + rand.nextDouble() * 10.0;
+      final shapeType = rand.nextInt(3); // 0: rectangle, 1: circle, 2: triangle
+
+      // Time (t goes from 0.0 to 3.0 seconds based on progress)
+      final t = progress * 3.0;
+
+      // Update positions using projectile physics with drag & wind
+      final drag = math.exp(-0.25 * t);
+      
+      // Position equations
+      final x = startX + (vx * t) * drag + math.sin(t * windFreq + rotationPhase) * windAmp * t;
+      final y = startY + (vy * t) * drag + (0.5 * gravity * t * t);
+
+      // Skip painting if off-screen below bottom
+      if (y > height + 20) continue;
+
+      // Fading opacity: stays solid, then fades out in the last 30% of progress
+      final double opacity = progress < 0.7 ? 1.0 : (1.0 - (progress - 0.7) / 0.3).clamp(0.0, 1.0);
+      if (opacity <= 0.0) continue;
+
+      // Rotation angle
+      final angle = rotationPhase + rotationSpeed * t;
+
+      final paint = Paint()
+        ..color = colors[i % colors.length].withValues(alpha: opacity)
+        ..style = PaintingStyle.fill;
+
+      canvas.save();
+      canvas.translate(x, y);
+      canvas.rotate(angle);
+      
+      // 3D scaling simulation
+      final scaleX = math.sin(t * 5.0 + rotationPhase).abs().clamp(0.1, 1.0);
+      canvas.scale(scaleX, 1.0);
+
+      // Draw different shapes
+      switch (shapeType) {
+        case 0: // Rectangle ribbon
+          canvas.drawRect(
+            Rect.fromCenter(center: Offset.zero, width: sizeScale, height: sizeScale * 0.5),
+            paint,
+          );
+          break;
+        case 1: // Circle dot
+          canvas.drawCircle(Offset.zero, sizeScale * 0.35, paint);
+          break;
+        case 2: // Triangle
+          final path = Path();
+          final r = sizeScale * 0.5;
+          path.moveTo(0, -r);
+          path.lineTo(r * 0.86, r * 0.5);
+          path.lineTo(-r * 0.86, r * 0.5);
+          path.close();
+          canvas.drawPath(path, paint);
+          break;
+      }
+
+      canvas.restore();
     }
   }
 
@@ -1053,3 +1138,332 @@ class _ShareCard extends StatelessWidget {
     );
   }
 }
+
+class _WorkoutChart extends StatelessWidget {
+  final Routine routine;
+  final int currentIntervalIndex;
+  final int elapsedSecondsInCurrentSession;
+
+  const _WorkoutChart({
+    required this.routine,
+    required this.currentIntervalIndex,
+    required this.elapsedSecondsInCurrentSession,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+    final appColors = theme.extension<AppColors>()!;
+
+    if (routine.intervals.isEmpty) return const SizedBox.shrink();
+
+    // Map MachineType display names
+    final machineName = switch (routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
+
+    return Container(
+      height: 142,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1C1C1E) : const Color.fromARGB(245, 245, 245, 245),
+        borderRadius: BorderRadius.circular(24),
+        border: isDark
+            ? Border.all(
+                color: Colors.white.withValues(alpha: 0.1),
+                width: 1,
+              )
+            : null,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
+            blurRadius: 20,
+            spreadRadius: 0,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.routineTab,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: appColors.mutedText,
+                  letterSpacing: -0.1,
+                ),
+              ),
+              Text(
+                machineName,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.primary,
+                  letterSpacing: -0.1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: CustomPaint(
+              painter: _WorkoutChartPainter(
+                intervals: routine.intervals,
+                currentIntervalIndex: currentIntervalIndex,
+                elapsedSecondsInCurrentSession: elapsedSecondsInCurrentSession,
+                primaryColor: theme.colorScheme.primary,
+                secondaryColor: theme.colorScheme.secondary,
+                isDark: isDark,
+                machineType: routine.machineType,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WorkoutChartPainter extends CustomPainter {
+  final List<Interval> intervals;
+  final int currentIntervalIndex;
+  final int elapsedSecondsInCurrentSession;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final bool isDark;
+  final MachineType machineType;
+
+  _WorkoutChartPainter({
+    required this.intervals,
+    required this.currentIntervalIndex,
+    required this.elapsedSecondsInCurrentSession,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.isDark,
+    required this.machineType,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (intervals.isEmpty) return;
+
+    final width = size.width;
+    final height = size.height;
+
+    // Calculate total seconds and completed seconds
+    final totalDuration = intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    if (totalDuration == 0) return;
+
+    int completedSeconds = 0;
+    for (int i = 0; i < currentIntervalIndex && i < intervals.length; i++) {
+      completedSeconds += intervals[i].durationSeconds;
+    }
+    if (currentIntervalIndex < intervals.length) {
+      completedSeconds += elapsedSecondsInCurrentSession;
+    }
+    completedSeconds = completedSeconds.clamp(0, totalDuration);
+
+    final progressPercent = completedSeconds / totalDuration;
+    final progressX = progressPercent * width;
+
+    // Extract values
+    final values = intervals.map((i) {
+      switch (machineType) {
+        case MachineType.treadmill:
+          return i.speedKmh ?? 0.0;
+        case MachineType.cycle:
+          return (i.rpm ?? 0).toDouble();
+        case MachineType.stairmaster:
+          return (i.level ?? 0).toDouble();
+      }
+    }).toList();
+
+    // Max/min limits
+    double maxLimit = 10.0;
+    double minLimit = 0.0;
+    switch (machineType) {
+      case MachineType.treadmill:
+        maxLimit = 12.0;
+        break;
+      case MachineType.cycle:
+        maxLimit = 100.0;
+        break;
+      case MachineType.stairmaster:
+        maxLimit = 15.0;
+        break;
+    }
+
+    double maxVal = maxLimit;
+    double minVal = minLimit;
+    for (final v in values) {
+      if (v > maxVal) maxVal = v;
+      if (v < minVal) minVal = v;
+    }
+
+    final valRange = maxVal - minVal == 0 ? 1.0 : maxVal - minVal;
+
+    // Grid Lines (Low/Medium/High boundaries)
+    final gridPaint = Paint()
+      ..color = isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    // Draw horizontal dividers
+    canvas.drawLine(Offset(0, height * 0.25), Offset(width, height * 0.25), gridPaint);
+    canvas.drawLine(Offset(0, height * 0.65), Offset(width, height * 0.65), gridPaint);
+
+    // Build the step paths
+    final fillPath = Path();
+    final strokePath = Path();
+
+    fillPath.moveTo(0, height);
+
+    double currentX = 0;
+    double? lastY;
+
+    for (int i = 0; i < intervals.length; i++) {
+      final interval = intervals[i];
+      final val = values[i];
+      final duration = interval.durationSeconds;
+      final stepWidth = (duration / totalDuration) * width;
+      final y = height - ((val - minVal) / valRange) * height * 0.85 - 2;
+
+      if (i == 0) {
+        fillPath.lineTo(0, y);
+        strokePath.moveTo(0, y);
+      } else {
+        if (lastY != null) {
+          fillPath.lineTo(currentX, lastY);
+          fillPath.lineTo(currentX, y);
+          strokePath.lineTo(currentX, y);
+        }
+      }
+
+      fillPath.lineTo(currentX + stepWidth, y);
+      strokePath.lineTo(currentX + stepWidth, y);
+
+      lastY = y;
+      currentX += stepWidth;
+    }
+
+    fillPath.lineTo(width, height);
+    fillPath.close();
+
+    // Shader for completed (active colors) vs skipped (muted gray)
+    final gradientColors = [
+      primaryColor,
+      secondaryColor,
+      isDark ? const Color(0xFF333336) : const Color(0xFFD1D1D6),
+      isDark ? const Color(0xFF242426) : const Color(0xFFE5E5EA),
+    ];
+    final gradientStops = [
+      0.0,
+      progressPercent,
+      progressPercent + 0.005,
+      1.0,
+    ].map((e) => e.clamp(0.0, 1.0)).toList();
+
+    // Handle corner cases where progress is 0% or 100%
+    if (progressPercent <= 0.0) {
+      gradientColors.removeRange(0, 2);
+      gradientStops.clear();
+      gradientStops.addAll([0.0, 1.0]);
+    } else if (progressPercent >= 1.0) {
+      gradientColors.removeRange(2, 4);
+      gradientStops.clear();
+      gradientStops.addAll([0.0, 1.0]);
+    }
+
+    final shader = ui.Gradient.linear(
+      Offset.zero,
+      Offset(width, 0),
+      gradientColors,
+      gradientStops,
+    );
+
+    // Paint Area Fill
+    final fillPaint = Paint()
+      ..shader = shader
+      ..style = PaintingStyle.fill
+      ..color = Colors.grey;
+    
+    final fillShader = ui.Gradient.linear(
+      Offset.zero,
+      Offset(width, 0),
+      gradientColors.map((c) => c.withValues(alpha: 0.18)).toList(),
+      gradientStops,
+    );
+    fillPaint.shader = fillShader;
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Paint Stroke Line
+    final strokePaint = Paint()
+      ..shader = shader
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round;
+    canvas.drawPath(strokePath, strokePaint);
+
+    // Draw End Indicator vertical line
+    if (progressPercent > 0.0 && progressPercent < 1.0) {
+      final verticalLinePaint = Paint()
+        ..color = primaryColor.withValues(alpha: 0.5)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.2;
+      
+      // Draw vertical dashed line
+      double dashY = 0;
+      const dashSpace = 4.0;
+      while (dashY < height) {
+        canvas.drawLine(Offset(progressX, dashY), Offset(progressX, dashY + dashSpace), verticalLinePaint);
+        dashY += dashSpace * 2;
+      }
+
+      // Find current interval y coordinate to draw dot
+      double indicatorY = height;
+      double indicatorXAcc = 0;
+      for (int i = 0; i < intervals.length; i++) {
+        final duration = intervals[i].durationSeconds;
+        final stepWidth = (duration / totalDuration) * width;
+        if (progressX >= indicatorXAcc && progressX <= indicatorXAcc + stepWidth) {
+          final val = values[i];
+          indicatorY = height - ((val - minVal) / valRange) * height * 0.85 - 2;
+          break;
+        }
+        indicatorXAcc += stepWidth;
+      }
+
+      // Draw dot
+      final dotPaint = Paint()
+        ..color = primaryColor
+        ..style = PaintingStyle.fill;
+      final shadowPaint = Paint()
+        ..color = primaryColor.withValues(alpha: 0.3)
+        ..style = PaintingStyle.fill
+        ..imageFilter = ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0);
+      
+      canvas.drawCircle(Offset(progressX, indicatorY), 8, shadowPaint);
+      canvas.drawCircle(Offset(progressX, indicatorY), 4, dotPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_WorkoutChartPainter oldDelegate) {
+    return oldDelegate.currentIntervalIndex != currentIntervalIndex ||
+        oldDelegate.elapsedSecondsInCurrentSession != elapsedSecondsInCurrentSession ||
+        oldDelegate.primaryColor != primaryColor ||
+        oldDelegate.secondaryColor != secondaryColor ||
+        oldDelegate.isDark != isDark;
+  }
+}
+

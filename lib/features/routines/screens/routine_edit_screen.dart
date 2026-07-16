@@ -11,6 +11,7 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../widgets/routine_shared_widgets.dart';
 import '../widgets/interval_edit_popup.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
+import '../../../theme/app_theme.dart';
 
 class RoutineEditScreen extends StatefulWidget {
   final Routine? routine;
@@ -479,99 +480,102 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: const BoxDecoration(
-          color: CupertinoColors.systemBackground,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+      builder: (context) {
+        final theme = Theme.of(context);
+        return Container(
+          height: 260,
+          padding: const EdgeInsets.only(top: 6),
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: CupertinoColors.separator,
-                      width: 0.5,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: theme.dividerColor,
+                        width: 0.5,
+                      ),
                     ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => Navigator.pop(context),
-                      minimumSize: const Size(0, 0),
-                      child: Text(
-                        l10n.cancel,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => Navigator.pop(context),
+                        minimumSize: const Size(0, 0),
+                        child: Text(
+                          l10n.cancel,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                      l10n.difficulty,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.none,
-                        decorationColor: Colors.transparent,
-                      ),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => Navigator.pop(context),
-                      minimumSize: const Size(0, 0),
-                      child: Text(
-                        l10n.done,
+                      Text(
+                        l10n.difficulty,
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
-                          color: CupertinoColors.activeBlue,
+                          decoration: TextDecoration.none,
+                          decorationColor: Colors.transparent,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: CupertinoPicker(
-                  scrollController: FixedExtentScrollController(
-                    initialItem: currentIndex >= 0 ? currentIndex : 0,
-                  ),
-                  itemExtent: 40,
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      _difficulty = difficultyStorageValues[index];
-                    });
-                  },
-                  children: difficultyDisplayValues.map((difficulty) {
-                    return Center(
-                      child: Text(
-                        difficulty,
-                        style: const TextStyle(fontSize: 20),
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => Navigator.pop(context),
+                        minimumSize: const Size(0, 0),
+                        child: Text(
+                          l10n.done,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
                       ),
-                    );
-                  }).toList(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: CupertinoPicker(
+                    scrollController: FixedExtentScrollController(
+                      initialItem: currentIndex >= 0 ? currentIndex : 0,
+                    ),
+                    itemExtent: 40,
+                    onSelectedItemChanged: (index) {
+                      setState(() {
+                        _difficulty = difficultyStorageValues[index];
+                      });
+                    },
+                    children: difficultyDisplayValues.map((difficulty) {
+                      return Center(
+                        child: Text(
+                          difficulty,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -658,14 +662,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         brightness: theme.brightness,
         primaryColor: theme.colorScheme.primary,
         barBackgroundColor: theme.colorScheme.surface,
-        scaffoldBackgroundColor: isDark
-            ? const Color(0xFF000000)
-            : CupertinoColors.systemGroupedBackground,
+        scaffoldBackgroundColor: theme.scaffoldBackgroundColor,
       ),
       child: CupertinoPageScaffold(
-        backgroundColor: isDark
-            ? const Color(0xFF000000)
-            : CupertinoColors.systemGroupedBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         navigationBar: CupertinoNavigationBar(
           leading: CupertinoNavigationBarBackButton(
             onPressed: () => Navigator.pop(context),
@@ -716,8 +716,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                             style: TextStyle(
                               fontSize: 17,
                               color: _nameError != null
-                                  ? CupertinoColors.destructiveRed
-                                  : CupertinoColors.label,
+                                  ? theme.colorScheme.error
+                                  : theme.colorScheme.onSurface,
                             ),
                             textAlign: TextAlign.right,
                             maxLength: 24,
@@ -734,9 +734,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                               left: 16, top: 4, bottom: 8),
                           child: Text(
                             _nameError!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: CupertinoColors.destructiveRed,
+                              color: theme.colorScheme.error,
                             ),
                           ),
                         ),
@@ -749,16 +749,16 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       children: [
                         Text(
                           _getLocalizedDifficulty(context, _difficulty),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 17,
-                            color: CupertinoColors.secondaryLabel,
+                            color: theme.extension<AppColors>()!.mutedText,
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(
+                        Icon(
                           CupertinoIcons.chevron_right,
                           size: 16,
-                          color: CupertinoColors.secondaryLabel,
+                          color: theme.extension<AppColors>()!.mutedText,
                         ),
                       ],
                     ),
@@ -785,9 +785,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF000000)
-                      : CupertinoColors.systemGroupedBackground,
+                  color: theme.scaffoldBackgroundColor,
                   border: Border(
                     top: BorderSide(
                       color: theme.dividerColor,
@@ -807,7 +805,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       color: theme.colorScheme.primary,
                       disabledColor: isDark
                           ? const Color(0xFF2C2C2E)
-                          : CupertinoColors.systemGrey,
+                          : theme.extension<AppColors>()!.mutedText,
                       borderRadius: BorderRadius.circular(12),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       child: Text(

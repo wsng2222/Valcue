@@ -149,7 +149,7 @@ class LiquidGlassPillNavBar extends StatelessWidget {
                       if (visualIndex >= 0)
                         AnimatedPositioned(
                           duration: animationDuration,
-                          curve: Curves.easeOutCubic,
+                          curve: Curves.easeOutBack,
                           left: textDirection == TextDirection.ltr
                               ? lensLeft
                               : null,
@@ -276,12 +276,8 @@ class _NavItem extends StatelessWidget {
       label: item.semanticLabel ?? item.label,
       selected: isSelected,
       button: true,
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
-        behavior: HitTestBehavior.opaque,
+      child: _BouncyTabItem(
+        onTap: onTap,
         child: Container(
           constraints: const BoxConstraints(
             minHeight: 70.0,
@@ -361,12 +357,8 @@ class _CircularNavItem extends StatelessWidget {
       label: item.semanticLabel ?? item.label,
       selected: isSelected,
       button: true,
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
-        behavior: HitTestBehavior.opaque,
+      child: _BouncyTabItem(
+        onTap: onTap,
         child: Container(
           width: size,
           height: size,
@@ -421,6 +413,73 @@ class _CircularNavItem extends StatelessWidget {
                   ],
                 ),
         ),
+      ),
+    );
+  }
+}
+
+class _BouncyTabItem extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _BouncyTabItem({
+    required this.child,
+    required this.onTap,
+  });
+
+  @override
+  State<_BouncyTabItem> createState() => _BouncyTabItemState();
+}
+
+class _BouncyTabItemState extends State<_BouncyTabItem> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.90).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    if (mediaQuery.disableAnimations) {
+      return GestureDetector(
+        onTap: widget.onTap,
+        behavior: HitTestBehavior.opaque,
+        child: widget.child,
+      );
+    }
+
+    return GestureDetector(
+      onTapDown: (_) {
+        _controller.forward();
+      },
+      onTapUp: (_) {
+        _controller.reverse();
+        HapticFeedback.selectionClick();
+        widget.onTap();
+      },
+      onTapCancel: () {
+        _controller.reverse();
+      },
+      behavior: HitTestBehavior.opaque,
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: widget.child,
       ),
     );
   }

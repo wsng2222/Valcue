@@ -160,26 +160,56 @@ class MyApp extends StatelessWidget {
             // IMPORTANT: This builder runs under Localizations, so we can safely
             // read locale and react to runtime changes.
             final originalMediaQuery = MediaQuery.of(context);
+            final actualWidth = originalMediaQuery.size.width;
+            final actualHeight = originalMediaQuery.size.height;
+
+            // baseline 가로 해상도 (기기 너비가 375보다 작으면 비율 축소)
+            const double baselineWidth = 375.0;
+            final double scale = (actualWidth > 0 && actualWidth < baselineWidth)
+                ? actualWidth / baselineWidth
+                : 1.0;
+
             final clampedTextScaler = TextScaler.linear(
               originalMediaQuery.textScaler.scale(1.0).clamp(1.0, 1.20),
             );
 
-            return MediaQuery(
-              data: originalMediaQuery.copyWith(
-                textScaler: clampedTextScaler,
-              ),
-              child: Theme(
-                data: materialTheme,
-                child: HeroMode(
-                  enabled: false,
-                  child: ScaffoldMessenger(
-                    child: _VoiceGuideBootstrap(
-                      voiceEnabled: settingsProvider.voiceGuideEnabled,
-                      child: child ?? const SizedBox.shrink(),
-                    ),
+            final mediaQueryData = originalMediaQuery.copyWith(
+              textScaler: clampedTextScaler,
+              size: scale < 1.0 ? Size(baselineWidth, actualHeight / scale) : originalMediaQuery.size,
+              padding: scale < 1.0 ? originalMediaQuery.padding * (1 / scale) : originalMediaQuery.padding,
+              viewInsets: scale < 1.0 ? originalMediaQuery.viewInsets * (1 / scale) : originalMediaQuery.viewInsets,
+              viewPadding: scale < 1.0 ? originalMediaQuery.viewPadding * (1 / scale) : originalMediaQuery.viewPadding,
+            );
+
+            Widget mainContent = Theme(
+              data: materialTheme,
+              child: HeroMode(
+                enabled: false,
+                child: ScaffoldMessenger(
+                  child: _VoiceGuideBootstrap(
+                    voiceEnabled: settingsProvider.voiceGuideEnabled,
+                    child: child ?? const SizedBox.shrink(),
                   ),
                 ),
               ),
+            );
+
+            if (scale < 1.0) {
+              mainContent = FractionallySizedBox(
+                widthFactor: 1 / scale,
+                heightFactor: 1 / scale,
+                alignment: Alignment.topLeft,
+                child: Transform.scale(
+                  scale: scale,
+                  alignment: Alignment.topLeft,
+                  child: mainContent,
+                ),
+              );
+            }
+
+            return MediaQuery(
+              data: mediaQueryData,
+              child: mainContent,
             );
           }
 

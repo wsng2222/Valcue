@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -831,8 +831,8 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     final totalRemainingMs = state.totalRemainingDuration.inMilliseconds;
     final progressBucket = (state.totalWorkoutProgress * 1000).round();
     return '${state.status.name}:${state.currentIntervalIndex}:'
-        '${state.isInitialCountdown}:${intervalRemainingMs}:'
-        '${totalRemainingMs}:${progressBucket}';
+        '${state.isInitialCountdown}:$intervalRemainingMs:'
+        '$totalRemainingMs:$progressBucket';
   }
 
   void _onWorkoutStateChanged() {
@@ -1177,8 +1177,19 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     final detailChips = _getDetailChips(context, state, settingsProvider);
     final primaryMetricLabel = _getPrimaryMetricLabel(context);
+
+    // Calculate dynamic scaleFactor for portrait based on baseline iPhone 14 Pro (393 x 852)
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    const double basePortraitWidth = 393.0;
+    const double basePortraitHeight = 852.0;
+    
+    final double widthScale = screenWidth > 0 ? screenWidth / basePortraitWidth : 1.0;
+    final double heightScale = screenHeight > 0 ? screenHeight / basePortraitHeight : 1.0;
+    final double scaleFactor = math.min(widthScale, heightScale).clamp(0.75, 1.15);
+
     final portraitMainFontSize =
-        (MediaQuery.sizeOf(context).width * 0.14).clamp(58.0, 78.0);
+        (screenWidth * 0.14 * scaleFactor).clamp(48.0, 78.0);
 
     return Column(
       children: [
@@ -1186,7 +1197,12 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         SafeArea(
           bottom: false,
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(24, 28, 24, 12),
+            padding: EdgeInsetsDirectional.fromSTEB(
+              24 * scaleFactor,
+              28 * scaleFactor,
+              24 * scaleFactor,
+              12 * scaleFactor,
+            ),
             child: Column(
               children: [
                 _HeaderTimeSummary(
@@ -1194,13 +1210,13 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                       state.formatTime(state.totalRemainingSeconds),
                   currentIntervalIndex: state.currentIntervalIndex,
                   totalIntervals: widget.routine.intervals.length,
-                  scaleFactor: 1.0,
+                  scaleFactor: scaleFactor,
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10 * scaleFactor),
                 // Total routine remaining progress bar
                 _TopPillProgressBar(
                   progress: state.totalRemainingProgress,
-                  height: 12,
+                  height: 12 * scaleFactor,
                 ),
               ],
             ),
@@ -1209,14 +1225,19 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         // Main content: Current session info and circular timer
         Expanded(
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(20, 8, 20, 20),
+            padding: EdgeInsetsDirectional.fromSTEB(
+              20 * scaleFactor,
+              8 * scaleFactor,
+              20 * scaleFactor,
+              20 * scaleFactor,
+            ),
             child: Align(
               alignment: const Alignment(0, -0.08),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 560),
+                constraints: BoxConstraints(maxWidth: 560 * scaleFactor),
                 child: _WorkoutHeroPanel(
                   isPortrait: true,
-                  scaleFactor: 1.0,
+                  scaleFactor: scaleFactor,
                   mainSection: _CurrentValueSection(
                     metricLabel: primaryMetricLabel,
                     mainValueText:
@@ -1224,21 +1245,21 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                     detailChips: detailChips,
                     mainFontSize: portraitMainFontSize,
                     currentIntervalIndex: state.currentIntervalIndex,
-                    scaleFactor: 1.0,
+                    scaleFactor: scaleFactor,
                     alignCenter: true,
                   ),
                   timerSection: SizedBox(
                     width: double.infinity,
                     child: _TimerSurface(
                       isPortrait: true,
-                      scaleFactor: 1.0,
+                      scaleFactor: scaleFactor,
                       child: _CircularSessionTimer(
                         timeText: countdownLabel,
                         progress: 1.0 - state.currentIntervalProgress,
                         isPaused: state.status == WorkoutStatus.paused,
-                        size: 154,
+                        size: 154 * scaleFactor,
                         currentIntervalIndex: state.currentIntervalIndex,
-                        scaleFactor: 1.0,
+                        scaleFactor: scaleFactor,
                       ),
                     ),
                   ),
@@ -1249,19 +1270,19 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         ),
         // Bottom buttons
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(
-            20,
+          padding: EdgeInsetsDirectional.fromSTEB(
+            20 * scaleFactor,
             0,
-            20,
-            32,
+            20 * scaleFactor,
+            32 * scaleFactor,
           ),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 360),
+            constraints: BoxConstraints(maxWidth: 360 * scaleFactor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _PrimaryButton(
-                  width: 200,
+                  width: 200 * scaleFactor,
                   label: state.status == WorkoutStatus.paused
                       ? AppLocalizations.of(context)!.resume
                       : AppLocalizations.of(context)!.pause,
@@ -1279,12 +1300,14 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                               }
                             }
                           : () => _pauseWorkout(state)),
+                  scaleFactor: scaleFactor,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12 * scaleFactor),
                 _SecondaryButton(
                   onPressed: state.status == WorkoutStatus.resumingCountdown
                       ? () {} // Disabled during countdown
                       : _toggleOrientation,
+                  scaleFactor: scaleFactor,
                 ),
               ],
             ),
@@ -1406,16 +1429,16 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                                   isPortrait: false,
                                   scaleFactor: scaleFactor,
                                   child: _CircularSessionTimer(
-                                    timeText: countdownLabel,
-                                    progress:
-                                        1.0 - state.currentIntervalProgress,
-                                    isPaused:
-                                        state.status == WorkoutStatus.paused,
-                                    size: circleSize,
-                                    currentIntervalIndex:
-                                        state.currentIntervalIndex,
-                                    scaleFactor: scaleFactor,
-                                  ),
+                                      timeText: countdownLabel,
+                                      progress:
+                                          1.0 - state.currentIntervalProgress,
+                                      isPaused:
+                                          state.status == WorkoutStatus.paused,
+                                      size: circleSize,
+                                      currentIntervalIndex:
+                                          state.currentIntervalIndex,
+                                      scaleFactor: scaleFactor,
+                                    ),
                                 ),
                               ),
                             ),
@@ -1802,20 +1825,22 @@ class _PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final double width;
+  final double scaleFactor;
 
   const _PrimaryButton({
     required this.label,
     required this.onPressed,
     this.width = 150,
+    this.scaleFactor = 1.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: 56,
+      height: 56 * scaleFactor,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14 * scaleFactor),
         boxShadow: AppShadows.elevatedSoft,
       ),
       child: ElevatedButton(
@@ -1824,16 +1849,16 @@ class _PrimaryButton extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14 * scaleFactor),
           ),
           elevation: 0,
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 16 * scaleFactor,
             fontWeight: FontWeight.w600,
-            letterSpacing: -0.3,
+            letterSpacing: -0.3 * scaleFactor,
           ),
         ),
       ),
@@ -1844,9 +1869,11 @@ class _PrimaryButton extends StatelessWidget {
 // Secondary button (neutral/gray) - for Rotate
 class _SecondaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
+  final double scaleFactor;
 
   const _SecondaryButton({
     required this.onPressed,
+    this.scaleFactor = 1.0,
   });
 
   @override
@@ -1864,10 +1891,10 @@ class _SecondaryButton extends StatelessWidget {
     return Opacity(
       opacity: onPressed == null ? 0.5 : 1.0,
       child: Container(
-        width: 56,
-        height: 56,
+        width: 56 * scaleFactor,
+        height: 56 * scaleFactor,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14 * scaleFactor),
           color: bgColor,
           border: Border.all(
             color: borderColor,
@@ -1878,13 +1905,13 @@ class _SecondaryButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onPressed,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14 * scaleFactor),
             splashColor: Colors.black.withValues(alpha: 0.08),
             highlightColor: Colors.black.withValues(alpha: 0.05),
             child: Icon(
               Icons.rotate_right,
               color: theme.colorScheme.onSurface,
-              size: 24,
+              size: 24 * scaleFactor,
             ),
           ),
         ),

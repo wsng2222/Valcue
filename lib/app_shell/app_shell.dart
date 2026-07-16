@@ -748,7 +748,7 @@ class _PlanCard extends StatelessWidget {
     final appColors = theme.extension<AppColors>()!;
     final cardPadding = isPrimary ? 24.0 : 20.0;
     final baseColor = isDark
-        ? (isSelected ? const Color(0xFF181B21) : const Color(0xFF101216))
+        ? (isSelected ? appColors.surfaceElevated : theme.colorScheme.surface)
         : Colors.white;
 
     return GestureDetector(
