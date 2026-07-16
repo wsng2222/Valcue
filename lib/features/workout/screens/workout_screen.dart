@@ -17,17 +17,28 @@ import '../widgets/flashing_metric_text.dart';
 import 'workout_finished_screen.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 import '../../../services/voice_guide_service.dart';
+import '../../../services/firebase_workout_live_activity_schedule_backend.dart';
 import '../../../services/workout_interval_notification_planner.dart';
+import '../../../services/workout_live_activity_payload_builder.dart';
+import '../../../services/workout_live_activity_schedule_backend.dart';
+import '../../../services/workout_live_activity_schedule_coordinator.dart';
+import '../../../services/workout_live_activity_schedule_models.dart';
+import '../../../services/workout_live_activity_schedule_planner.dart';
+import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 
 class WorkoutScreen extends StatefulWidget {
   final Routine routine;
   final bool backgroundNotificationsAuthorized;
+  final WorkoutLiveActivityScheduleBackend? liveActivityScheduleBackend;
+  final DateTime Function()? nowProvider;
 
   const WorkoutScreen({
     super.key,
     required this.routine,
     this.backgroundNotificationsAuthorized = false,
+    this.liveActivityScheduleBackend,
+    this.nowProvider,
   });
 
   @override
@@ -36,7 +47,13 @@ class WorkoutScreen extends StatefulWidget {
 
 class _WorkoutScreenState extends State<WorkoutScreen>
     with WidgetsBindingObserver {
+  static const int _maxLiveActivityStartRetries = 1;
+  // Refresh token-rotation uploads from the current workout timeline instead
+  // of keeping already elapsed boundaries for the full eight-hour window.
+  static const Duration _remoteScheduleRefreshAge = Duration(minutes: 4);
+
   late WorkoutState _workoutState;
+  late final DateTime Function() _now;
   bool _pauseSheetOpen = false;
   bool _endConfirmOpen = false;
   bool _hasNavigatedToFinished = false;
@@ -50,17 +67,49 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       false; // Prevent countdown during interval speech
   late final bool _notificationsAuthorized;
   bool _backgroundLifecycleHandled = false;
+  bool _liveActivityStarted = false;
+  bool _liveActivityEnded = false;
+  bool _liveActivityInitializing = false;
+  bool _retryLiveActivityInitialization = false;
+  bool _isReconcilingLiveActivityFromBackground = false;
+  int _liveActivityStartRetryCount = 0;
+  String? _lastLiveActivitySignature;
+  String? _finishedLiveActivityStatusText;
+  Map<String, dynamic>? _lastLiveActivityPayload;
+  Future<void> _liveActivityCommandQueue = Future<void>.value();
+  late final String _workoutSessionId;
+  late final WorkoutLiveActivityScheduleCoordinator
+      _liveActivityScheduleCoordinator;
+  StreamSubscription<WorkoutLiveActivityNativeEvent>?
+      _liveActivityNativeEventsSubscription;
+  AppSettingsProvider? _observedSettingsProvider;
+  bool? _lastRemoteScheduleFeatureEnabled;
+  String? _lastRemoteScheduleTransition;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _notificationsAuthorized = widget.backgroundNotificationsAuthorized;
+    _now = widget.nowProvider ?? DateTime.now;
     _workoutState = WorkoutState(
       routine: widget.routine,
-      startTime: DateTime.now(),
+      startTime: _now(),
+      nowProvider: _now,
     );
     _workoutState.addListener(_onWorkoutStateChanged);
+    _workoutSessionId = generateWorkoutLiveActivitySessionId();
+    _liveActivityScheduleCoordinator = WorkoutLiveActivityScheduleCoordinator(
+      sessionId: _workoutSessionId,
+      backend: widget.liveActivityScheduleBackend ??
+          FirebaseWorkoutLiveActivityScheduleBackend(),
+      nowProvider: _now,
+    );
+    _liveActivityNativeEventsSubscription =
+        WorkoutLiveActivityService.instance.events.listen(
+      _handleLiveActivityNativeEvent,
+      onError: (Object _, StackTrace __) {},
+    );
 
     // Keep screen awake
     WakelockPlus.enable();
@@ -69,14 +118,45 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyRemoteScheduleForCurrentState(force: true);
+      unawaited(_refreshNativePushRegistrations());
+      _requestLiveActivityInitialization();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final provider = Provider.of<AppSettingsProvider>(context, listen: false);
+    if (identical(provider, _observedSettingsProvider)) return;
+
+    _observedSettingsProvider?.removeListener(_onAppSettingsChanged);
+    _observedSettingsProvider = provider;
+    _lastRemoteScheduleFeatureEnabled =
+        _isRemoteScheduleFeatureEnabled(provider);
+    provider.addListener(_onAppSettingsChanged);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _observedSettingsProvider?.removeListener(_onAppSettingsChanged);
+    unawaited(_liveActivityNativeEventsSubscription?.cancel());
+    if (!_liveActivityScheduleCoordinator.isTerminal) {
+      unawaited(
+        _liveActivityScheduleCoordinator.cancel(
+          WorkoutLiveActivityScheduleCancelReason.disposed,
+          terminal: true,
+        ),
+      );
+    }
+    _liveActivityScheduleCoordinator.dispose();
     unawaited(
       WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
     );
+    _endLiveActivityFromDispose();
     _workoutState.removeListener(_onWorkoutStateChanged);
     _workoutState.dispose();
 
@@ -102,20 +182,48 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         _backgroundLifecycleHandled = true;
         VoiceGuideService.instance.stop();
         _workoutState.suspendForBackground();
+        unawaited(_liveActivityScheduleCoordinator.reconcile());
         unawaited(_scheduleBackgroundWorkoutNotifications());
         break;
       case AppLifecycleState.resumed:
+        _liveActivityStartRetryCount = 0;
         unawaited(
           WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
         );
-        if (!_backgroundLifecycleHandled) return;
+        if (!_backgroundLifecycleHandled) {
+          _requestLiveActivityInitialization();
+          return;
+        }
         _backgroundLifecycleHandled = false;
         // Do not replay a voice cue that the background notification already
         // delivered while reconciling possibly several elapsed intervals.
         _suppressIntervalGuidanceOnResume = true;
-        _workoutState.resumeFromBackground();
-        _suppressIntervalGuidanceOnResume = false;
+        _isReconcilingLiveActivityFromBackground = true;
+        try {
+          _workoutState.resumeFromBackground();
+        } finally {
+          _isReconcilingLiveActivityFromBackground = false;
+          _suppressIntervalGuidanceOnResume = false;
+        }
         _lastSpokenIntervalIndex = _workoutState.currentIntervalIndex;
+        if (_liveActivityScheduleCoordinator.desiredPlan?.isActive == true &&
+            !_liveActivityScheduleCoordinator.isDesiredStateAcknowledged) {
+          // An upload may have been waiting for a token/network while interval
+          // boundaries elapsed. Rebuild from the reconciled current timeline.
+          _applyRemoteScheduleForCurrentState(force: true);
+        } else {
+          unawaited(_liveActivityScheduleCoordinator.reconcile());
+        }
+        unawaited(_refreshNativePushRegistrations());
+        if (_liveActivityStarted) {
+          // State reconciliation callbacks are suppressed above, so this is
+          // the single ActivityKit update for the foreground resume.
+          _syncLiveActivity(force: true);
+        } else {
+          // Native start is allowed only while UIApplication is active. Retry
+          // if the user left while the initial capability checks were pending.
+          _requestLiveActivityInitialization();
+        }
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
@@ -187,8 +295,549 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     );
   }
 
+  bool _isRemoteScheduleFeatureEnabled(AppSettingsProvider provider) {
+    if (widget.routine.intervals.isEmpty ||
+        _workoutState.status == WorkoutStatus.finished ||
+        _workoutState.status == WorkoutStatus.stopped) {
+      return false;
+    }
+    return provider.isPremium &&
+        provider.backgroundIntervalNotificationsEnabled;
+  }
+
+  void _onAppSettingsChanged() {
+    if (!mounted) return;
+    final provider = _observedSettingsProvider;
+    if (provider == null) return;
+
+    final enabled = _isRemoteScheduleFeatureEnabled(provider);
+    if (_lastRemoteScheduleFeatureEnabled == enabled) return;
+    _lastRemoteScheduleFeatureEnabled = enabled;
+
+    if (enabled) {
+      _lastRemoteScheduleTransition = null;
+      _applyRemoteScheduleForCurrentState(force: true);
+      _requestLiveActivityInitialization();
+      return;
+    }
+
+    final reason = provider.isPremium
+        ? WorkoutLiveActivityScheduleCancelReason.featureDisabled
+        : WorkoutLiveActivityScheduleCancelReason.premiumRevoked;
+    unawaited(
+      _liveActivityScheduleCoordinator.cancel(reason, terminal: true),
+    );
+    unawaited(
+      WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+    );
+    _syncLiveActivity();
+  }
+
+  void _handleLiveActivityNativeEvent(
+    WorkoutLiveActivityNativeEvent event,
+  ) {
+    unawaited(_processLiveActivityNativeEvent(event));
+  }
+
+  Future<void> _processLiveActivityNativeEvent(
+    WorkoutLiveActivityNativeEvent event,
+  ) async {
+    if (event.workoutSessionId != _workoutSessionId ||
+        event.activityId.isEmpty) {
+      return;
+    }
+
+    switch (event.type) {
+      case WorkoutLiveActivityNativeEventType.activityStarted:
+        await _liveActivityScheduleCoordinator.attachActivity(
+          sessionId: event.workoutSessionId,
+          activityId: event.activityId,
+        );
+        break;
+      case WorkoutLiveActivityNativeEventType.activitySnapshot:
+        await _liveActivityScheduleCoordinator.attachActivity(
+          sessionId: event.workoutSessionId,
+          activityId: event.activityId,
+        );
+        await _applyPushTokenEvent(event);
+        break;
+      case WorkoutLiveActivityNativeEventType.pushToken:
+        // A token can beat the start method result. The coordinator buffers it
+        // by activity ID until attachActivity joins the other half.
+        await _applyPushTokenEvent(event);
+        break;
+      case WorkoutLiveActivityNativeEventType.pushTokenInvalidated:
+        final attachedActivityId = _liveActivityScheduleCoordinator.activityId;
+        if (attachedActivityId == null ||
+            attachedActivityId == event.activityId) {
+          await _liveActivityScheduleCoordinator.cancel(
+            WorkoutLiveActivityScheduleCancelReason.staleSession,
+            terminal: true,
+          );
+        }
+        break;
+      case WorkoutLiveActivityNativeEventType.activityState:
+        if (event.activityState == 'ended' ||
+            event.activityState == 'dismissed') {
+          final attachedActivityId =
+              _liveActivityScheduleCoordinator.activityId;
+          if (attachedActivityId != null &&
+              attachedActivityId != event.activityId) {
+            break;
+          }
+          await _liveActivityScheduleCoordinator.cancel(
+            WorkoutLiveActivityScheduleCancelReason.staleSession,
+            terminal: true,
+          );
+        }
+        break;
+      case WorkoutLiveActivityNativeEventType.unknown:
+        break;
+    }
+  }
+
+  Future<void> _applyPushTokenEvent(
+    WorkoutLiveActivityNativeEvent event,
+  ) async {
+    final token = event.tokenHex;
+    final environment = _remotePushEnvironment(event.environment);
+    if (token == null || token.isEmpty || environment == null) return;
+
+    final desiredPlan = _liveActivityScheduleCoordinator.desiredPlan;
+    final isNewerToken =
+        event.tokenVersion > _liveActivityScheduleCoordinator.tokenVersion;
+    final shouldRefreshPlan = mounted &&
+        !_liveActivityScheduleCoordinator.isTerminal &&
+        isNewerToken &&
+        desiredPlan != null &&
+        desiredPlan.isActive &&
+        _now().difference(desiredPlan.generatedAt) >=
+            _remoteScheduleRefreshAge &&
+        _isLiveActivityFeatureEnabled;
+
+    // Store and upload the rotated token first. Any subsequent fresh-plan
+    // registration then uses only the new bearer token, even if its first
+    // network attempt fails or an interval boundary is due concurrently.
+    await _liveActivityScheduleCoordinator.updatePushToken(
+      sessionId: event.workoutSessionId,
+      activityId: event.activityId,
+      pushToken: token,
+      tokenVersion: event.tokenVersion,
+      environment: environment,
+    );
+
+    if (shouldRefreshPlan &&
+        mounted &&
+        !_liveActivityScheduleCoordinator.isTerminal &&
+        _isLiveActivityFeatureEnabled) {
+      await _liveActivityScheduleCoordinator.applyPlan(
+        _buildRemoteSchedulePlan(),
+      );
+    }
+  }
+
+  WorkoutLiveActivityPushEnvironment? _remotePushEnvironment(String value) {
+    return switch (value) {
+      'sandbox' => WorkoutLiveActivityPushEnvironment.sandbox,
+      'production' => WorkoutLiveActivityPushEnvironment.production,
+      _ => null,
+    };
+  }
+
+  Future<void> _refreshNativePushRegistrations() async {
+    final registrations =
+        await WorkoutLiveActivityService.instance.getPushRegistrations();
+    for (final registration in registrations) {
+      await _processLiveActivityNativeEvent(registration);
+    }
+  }
+
+  void _applyRemoteScheduleForCurrentState({bool force = false}) {
+    if (!mounted || widget.routine.intervals.isEmpty) return;
+
+    final state = _workoutState;
+    final isTerminal = state.status == WorkoutStatus.finished ||
+        state.status == WorkoutStatus.stopped;
+    if (!isTerminal && !_isLiveActivityFeatureEnabled) return;
+    if (isTerminal && _liveActivityScheduleCoordinator.isTerminal) return;
+
+    final transition = '${state.status.name}:${state.isInitialCountdown}';
+    if (!force && transition == _lastRemoteScheduleTransition) return;
+    _lastRemoteScheduleTransition = transition;
+
+    // The initial/resume plans already contain all later interval boundaries.
+    // Foreground ticks and running interval changes must not churn revisions.
+    if (!force && state.status == WorkoutStatus.running) return;
+    if (!force &&
+        state.status == WorkoutStatus.resumingCountdown &&
+        state.isInitialCountdown) {
+      return;
+    }
+
+    unawaited(
+      _liveActivityScheduleCoordinator.applyPlan(
+        _buildRemoteSchedulePlan(),
+      ),
+    );
+  }
+
+  WorkoutLiveActivitySchedulePlan _buildRemoteSchedulePlan() {
+    final state = _workoutState;
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
+    final capturedAt = _now();
+    final machineName = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
+    final phase = switch (state.status) {
+      WorkoutStatus.resumingCountdown => state.isInitialCountdown
+          ? WorkoutLiveActivitySchedulePhase.initialCountdown
+          : WorkoutLiveActivitySchedulePhase.resumeCountdown,
+      WorkoutStatus.running => WorkoutLiveActivitySchedulePhase.running,
+      WorkoutStatus.paused => WorkoutLiveActivitySchedulePhase.paused,
+      WorkoutStatus.finished => WorkoutLiveActivitySchedulePhase.finished,
+      WorkoutStatus.stopped => WorkoutLiveActivitySchedulePhase.stopped,
+    };
+
+    return WorkoutLiveActivitySchedulePlanner.build(
+      WorkoutLiveActivityScheduleSnapshot(
+        routine: widget.routine,
+        phase: phase,
+        currentIntervalIndex: state.currentIntervalIndex,
+        currentIntervalRemaining: state.currentIntervalRemainingDuration,
+        totalRemaining: state.totalRemainingDuration,
+        countdownRemaining: state.countdownRemainingDuration,
+        progress: state.totalWorkoutProgress,
+        measurement: settingsProvider.measurement,
+        capturedAt: capturedAt,
+        labels: WorkoutLiveActivityScheduleLabels(
+          machineName: machineName,
+          preparingStatusText: l10n.liveActivityPreparing,
+          runningStatusText: l10n.liveActivityInProgress,
+          finishedStatusText: l10n.workoutComplete,
+          intervalText: l10n.liveActivityIntervalFormat,
+          durationText: (durationSeconds) {
+            final formatted = WorkoutIntervalNotificationPlanner.formatDuration(
+              durationSeconds,
+              settingsProvider.language,
+            );
+            return l10n.liveActivityDurationFormat(formatted);
+          },
+          speedLabel: l10n.speed,
+          inclineLabel: l10n.incline,
+          resistanceLabel: l10n.resistance,
+          levelLabel: l10n.level,
+        ),
+      ),
+    );
+  }
+
+  void _requestLiveActivityInitialization() {
+    if (!mounted ||
+        _liveActivityStarted ||
+        _liveActivityEnded ||
+        widget.routine.intervals.isEmpty) {
+      return;
+    }
+
+    if (_liveActivityInitializing) {
+      _retryLiveActivityInitialization = true;
+      return;
+    }
+
+    unawaited(_initializeLiveActivity());
+  }
+
+  bool get _isApplicationResumed {
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    return lifecycle == null || lifecycle == AppLifecycleState.resumed;
+  }
+
+  bool get _isLiveActivityFeatureEnabled {
+    if (!mounted || widget.routine.intervals.isEmpty) return false;
+    if (_workoutState.status == WorkoutStatus.finished ||
+        _workoutState.status == WorkoutStatus.stopped) {
+      return false;
+    }
+
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    return settingsProvider.isPremium &&
+        settingsProvider.backgroundIntervalNotificationsEnabled;
+  }
+
+  bool get _canInitializeLiveActivity =>
+      !_liveActivityStarted &&
+      !_liveActivityEnded &&
+      _isApplicationResumed &&
+      _isLiveActivityFeatureEnabled;
+
+  Future<void> _initializeLiveActivity() async {
+    if (_liveActivityInitializing) {
+      _retryLiveActivityInitialization = true;
+      return;
+    }
+
+    _liveActivityInitializing = true;
+    try {
+      if (!_canInitializeLiveActivity) return;
+
+      final service = WorkoutLiveActivityService.instance;
+      final supported = await service.isSupported();
+      if (!supported || !_canInitializeLiveActivity) return;
+
+      final enabled = await service.areActivitiesEnabled();
+      if (!enabled || !_canInitializeLiveActivity) return;
+      if (!mounted) return;
+
+      // Capture both immediately before start. Absolute deadlines stay valid
+      // if native startup takes a moment.
+      final payload = _buildLiveActivityPayload();
+      final signature = _liveActivitySignature;
+      final finishedStatusText = AppLocalizations.of(context)!.workoutComplete;
+      _finishedLiveActivityStatusText = finishedStatusText;
+
+      // Premium or the feature may have changed while capability calls were in
+      // flight. Recheck at the last possible point before creating the native
+      // activity.
+      if (!_canInitializeLiveActivity) return;
+      final startResult = await service.startSession(payload);
+      final started = startResult.started &&
+          startResult.activityId.isNotEmpty &&
+          startResult.workoutSessionId == _workoutSessionId;
+      if (!started) {
+        if (_isApplicationResumed &&
+            _isLiveActivityFeatureEnabled &&
+            _liveActivityStartRetryCount < _maxLiveActivityStartRetries) {
+          _liveActivityStartRetryCount++;
+          _retryLiveActivityInitialization = true;
+        }
+        return;
+      }
+
+      final finishedPayload = _finishedLiveActivityPayload(
+        payload,
+        statusText: finishedStatusText,
+      );
+      if (!mounted) {
+        await service.end(<String, dynamic>{
+          ...finishedPayload,
+          'dismissImmediately': true,
+        });
+        return;
+      }
+
+      // cleanup() may have run while native start was pending. Never allow a
+      // late result to recreate a disabled or non-premium activity.
+      if (!_isLiveActivityFeatureEnabled) {
+        await service.end(<String, dynamic>{
+          ...finishedPayload,
+          'dismissImmediately': true,
+        });
+        return;
+      }
+
+      _liveActivityStarted = true;
+      _liveActivityStartRetryCount = 0;
+      _lastLiveActivityPayload = payload;
+      _lastLiveActivitySignature = signature;
+      await _liveActivityScheduleCoordinator.attachActivity(
+        sessionId: startResult.workoutSessionId,
+        activityId: startResult.activityId,
+      );
+      unawaited(_refreshNativePushRegistrations());
+
+      // Avoid an unconditional start+update pair. Only catch up if the status
+      // or interval actually changed while awaiting ActivityKit.
+      if (_liveActivitySignature != signature) {
+        _syncLiveActivity();
+      }
+    } finally {
+      _liveActivityInitializing = false;
+      final shouldRetry = _retryLiveActivityInitialization;
+      _retryLiveActivityInitialization = false;
+      if (shouldRetry &&
+          mounted &&
+          !_liveActivityStarted &&
+          !_liveActivityEnded &&
+          _isApplicationResumed) {
+        scheduleMicrotask(_requestLiveActivityInitialization);
+      }
+    }
+  }
+
+  void _syncLiveActivity({bool force = false}) {
+    if (!_liveActivityStarted || _liveActivityEnded || !mounted) return;
+
+    if (!_isLiveActivityFeatureEnabled) {
+      _liveActivityStarted = false;
+      _liveActivityEnded = true;
+      _queueLiveActivityCommand(
+        WorkoutLiveActivityService.instance.cleanup,
+      );
+      return;
+    }
+
+    final status = _workoutState.status;
+    if (status == WorkoutStatus.finished || status == WorkoutStatus.stopped) {
+      _endLiveActivity();
+      return;
+    }
+
+    final signature = _liveActivitySignature;
+    if (!force && signature == _lastLiveActivitySignature) return;
+
+    final payload = _buildLiveActivityPayload();
+    _lastLiveActivitySignature = signature;
+    _lastLiveActivityPayload = payload;
+    _queueLiveActivityCommand(
+      () => WorkoutLiveActivityService.instance.update(payload),
+    );
+  }
+
+  void _endLiveActivity() {
+    if (!_liveActivityStarted || _liveActivityEnded) return;
+    _liveActivityEnded = true;
+
+    final payload = mounted
+        ? _buildLiveActivityPayload(forceFinished: true)
+        : _finishedLiveActivityPayload(_lastLiveActivityPayload);
+    if (_workoutState.status == WorkoutStatus.stopped) {
+      payload['dismissImmediately'] = true;
+    } else {
+      payload['dismissalDelaySeconds'] = 60;
+    }
+    _lastLiveActivityPayload = payload;
+    _queueLiveActivityCommand(
+      () => WorkoutLiveActivityService.instance.end(payload),
+    );
+  }
+
+  void _endLiveActivityFromDispose() {
+    if (!_liveActivityStarted || _liveActivityEnded) return;
+    _liveActivityEnded = true;
+    final payload = <String, dynamic>{
+      ..._finishedLiveActivityPayload(_lastLiveActivityPayload),
+      'dismissImmediately': true,
+    };
+    _lastLiveActivityPayload = payload;
+    _queueLiveActivityCommand(
+      () => WorkoutLiveActivityService.instance.end(payload),
+    );
+  }
+
+  void _queueLiveActivityCommand(Future<void> Function() command) {
+    _liveActivityCommandQueue = _liveActivityCommandQueue
+        .catchError((Object _) {})
+        .then((_) => command());
+  }
+
+  Map<String, dynamic> _buildLiveActivityPayload({
+    bool forceFinished = false,
+  }) {
+    final state = _workoutState;
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
+    final phase = forceFinished
+        ? WorkoutLiveActivityPhase.finished
+        : _liveActivityPhaseFor(state.status);
+    final machineName = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
+    final statusText = switch (phase) {
+      WorkoutLiveActivityPhase.preparing => l10n.liveActivityPreparing,
+      WorkoutLiveActivityPhase.running => l10n.liveActivityInProgress,
+      WorkoutLiveActivityPhase.paused => l10n.paused,
+      WorkoutLiveActivityPhase.finished => state.status == WorkoutStatus.stopped
+          ? l10n.endWorkout
+          : l10n.workoutComplete,
+    };
+    final interval = state.currentInterval;
+    final formattedDuration = WorkoutIntervalNotificationPlanner.formatDuration(
+      interval.durationSeconds,
+      settingsProvider.language,
+    );
+
+    return <String, dynamic>{
+      ...WorkoutLiveActivityPayloadBuilder.build(
+        routine: widget.routine,
+        intervalIndex: state.currentIntervalIndex,
+        phase: phase,
+        intervalRemaining: state.currentIntervalRemainingDuration,
+        totalRemaining: state.totalRemainingDuration,
+        countdownRemaining: state.countdownRemainingDuration,
+        progress: state.totalWorkoutProgress,
+        measurement: settingsProvider.measurement,
+        now: _now(),
+        machineName: machineName,
+        statusText: statusText,
+        intervalText: l10n.liveActivityIntervalFormat(
+          state.currentIntervalIndex + 1,
+          state.totalIntervals,
+        ),
+        durationText: l10n.liveActivityDurationFormat(formattedDuration),
+        speedLabel: l10n.speed,
+        inclineLabel: l10n.incline,
+        resistanceLabel: l10n.resistance,
+        levelLabel: l10n.level,
+      ),
+      'workoutSessionId': _workoutSessionId,
+    };
+  }
+
+  Map<String, dynamic> _finishedLiveActivityPayload(
+    Map<String, dynamic>? source, {
+    String? statusText,
+  }) {
+    return <String, dynamic>{
+      ...?source,
+      'status': WorkoutLiveActivityPhase.finished.name,
+      'statusText': statusText ??
+          _finishedLiveActivityStatusText ??
+          source?['statusText'] ??
+          'Workout complete',
+      'timerEndAtMs': 0,
+      'workoutEndAtMs': 0,
+      'progress': _workoutState.status == WorkoutStatus.finished
+          ? 1.0
+          : (source?['progress'] ?? 0.0),
+    };
+  }
+
+  WorkoutLiveActivityPhase _liveActivityPhaseFor(WorkoutStatus status) {
+    switch (status) {
+      case WorkoutStatus.resumingCountdown:
+        return WorkoutLiveActivityPhase.preparing;
+      case WorkoutStatus.running:
+        return WorkoutLiveActivityPhase.running;
+      case WorkoutStatus.paused:
+        return WorkoutLiveActivityPhase.paused;
+      case WorkoutStatus.finished:
+      case WorkoutStatus.stopped:
+        return WorkoutLiveActivityPhase.finished;
+    }
+  }
+
+  String get _liveActivitySignature {
+    final state = _workoutState;
+    final intervalRemainingMs =
+        state.currentIntervalRemainingDuration.inMilliseconds;
+    final totalRemainingMs = state.totalRemainingDuration.inMilliseconds;
+    final progressBucket = (state.totalWorkoutProgress * 1000).round();
+    return '${state.status.name}:${state.currentIntervalIndex}:'
+        '${state.isInitialCountdown}:${intervalRemainingMs}:'
+        '${totalRemainingMs}:${progressBucket}';
+  }
+
   void _onWorkoutStateChanged() {
     final status = _workoutState.status;
+    _applyRemoteScheduleForCurrentState();
 
     // Stop immediately when paused/stopped/finished to avoid lingering speech.
     if (status == WorkoutStatus.paused ||
@@ -199,6 +848,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
     if (_workoutState.status == WorkoutStatus.finished ||
         _workoutState.status == WorkoutStatus.stopped) {
+      _endLiveActivity();
       unawaited(
         WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
       );
@@ -223,6 +873,12 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       if (!_isSpeakingIntervalInfo) {
         _maybeSpeakCountdownGuidance();
       }
+    }
+
+    if (status != WorkoutStatus.finished &&
+        status != WorkoutStatus.stopped &&
+        !_isReconcilingLiveActivityFromBackground) {
+      _syncLiveActivity();
     }
 
     // Note: Pause sheet is shown in _pauseWorkout(), not here, to avoid duplication
