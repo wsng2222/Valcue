@@ -1854,6 +1854,9 @@ class _WeightTabState extends State<_WeightTab> {
                       onRecordTap: () => _showRecordWeightBottomSheet(context),
                     ),
                     const SizedBox(height: 20),
+                    // Weight Calendar
+                    const _WeightCalendar(),
+                    const SizedBox(height: 20),
                     // Trend Chart (only if 2+ entries - need at least 2 points to draw a line)
                     if (provider.entries.length >= 2) ...[
                       _WeightTrendChart(timeframe: _selectedTimeframe),
@@ -2003,30 +2006,48 @@ class _WeightTabState extends State<_WeightTab> {
   }
 
   void _showRecordWeightBottomSheet(BuildContext context) {
-    final settingsProvider =
-        Provider.of<AppSettingsProvider>(context, listen: false);
-    final provider = Provider.of<WeightTrackerProvider>(context, listen: false);
-    final isWeightMetric = settingsProvider.weightUnit == 'kg';
-    final weightController = TextEditingController();
-    final currentWeight = provider.currentWeight;
+    _showRecordWeightBottomSheetHelper(context);
+  }
+}
 
+/// Helper function to show weight recording/editing bottom sheet
+void _showRecordWeightBottomSheetHelper(
+  BuildContext context, {
+  DateTime? initialDateTime,
+  WeightEntry? editEntry,
+}) {
+  final settingsProvider =
+      Provider.of<AppSettingsProvider>(context, listen: false);
+  final provider = Provider.of<WeightTrackerProvider>(context, listen: false);
+  final isWeightMetric = settingsProvider.weightUnit == 'kg';
+  final weightController = TextEditingController();
+
+  if (editEntry != null) {
+    weightController.text = isWeightMetric
+        ? editEntry.weightKg.toStringAsFixed(1)
+        : (editEntry.weightKg * 2.20462).toStringAsFixed(1);
+  } else {
+    final currentWeight = provider.currentWeight;
     if (currentWeight != null) {
       weightController.text = isWeightMetric
           ? currentWeight.weightKg.toStringAsFixed(1)
           : (currentWeight.weightKg * 2.20462).toStringAsFixed(1);
     }
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      isDismissible: true,
-      builder: (context) => _RecordWeightBottomSheet(
-        weightController: weightController,
-        isMetric: isWeightMetric,
-      ),
-    );
   }
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    isDismissible: true,
+    builder: (context) => _RecordWeightBottomSheet(
+      weightController: weightController,
+      isMetric: isWeightMetric,
+      initialDateTime: initialDateTime ?? editEntry?.dateTime,
+      isEditing: editEntry != null,
+      entryId: editEntry?.id,
+    ),
+  );
 }
 
 // Weight Summary Card - Unified card with current weight, delta, goal, progress bar
@@ -2640,28 +2661,7 @@ class _WeightHistoryList extends StatelessWidget {
   });
 
   void _showEditWeightBottomSheet(BuildContext context, WeightEntry entry) {
-    final settingsProvider =
-        Provider.of<AppSettingsProvider>(context, listen: false);
-    final isWeightMetric = settingsProvider.weightUnit == 'kg';
-    final weightController = TextEditingController(
-      text: isWeightMetric
-          ? entry.weightKg.toStringAsFixed(1)
-          : (entry.weightKg * 2.20462).toStringAsFixed(1),
-    );
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      isDismissible: true,
-      builder: (context) => _RecordWeightBottomSheet(
-        weightController: weightController,
-        isMetric: isWeightMetric,
-        initialDateTime: entry.dateTime,
-        isEditing: true,
-        entryId: entry.id,
-      ),
-    );
+    _showRecordWeightBottomSheetHelper(context, editEntry: entry);
   }
 
   @override
@@ -3854,4 +3854,421 @@ class _MachineTabItem {
     required this.icon,
     required this.label,
   });
+}
+
+class _WeightCalendar extends StatefulWidget {
+  const _WeightCalendar();
+
+  @override
+  State<_WeightCalendar> createState() => _WeightCalendarState();
+}
+
+class _WeightCalendarState extends State<_WeightCalendar> {
+  DateTime _currentMonth = DateTime.now();
+
+  String _getWeightCalendarTitle(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+    switch (locale) {
+      case 'ko':
+        return '체중 캘린더';
+      case 'ja':
+        return '体重カレンダー';
+      case 'zh':
+        return '体重日历';
+      default:
+        return 'Weight Calendar';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<WeightTrackerProvider, AppSettingsProvider>(
+      builder: (context, provider, settingsProvider, child) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+        final appColors = theme.extension<AppColors>()!;
+        final isWeightMetric = settingsProvider.weightUnit == 'kg';
+
+        // Group entries by date (date only)
+        final entriesByDate = <DateTime, WeightEntry>{};
+        for (final entry in provider.entries) {
+          final dateOnly = DateTime(
+            entry.dateTime.year,
+            entry.dateTime.month,
+            entry.dateTime.day,
+          );
+          entriesByDate.putIfAbsent(dateOnly, () => entry);
+        }
+
+        final title = _getWeightCalendarTitle(context);
+
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : appColors.border,
+              width: 1,
+            ),
+            boxShadow: AppShadows.elevatedSoft,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header: Title & Month Navigation
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.chevron_left, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          setState(() {
+                            _currentMonth = DateTime(
+                              _currentMonth.year,
+                              _currentMonth.month - 1,
+                            );
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        DateFormat.yMMMM(
+                                Localizations.localeOf(context).toString())
+                            .format(_currentMonth),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.chevron_right, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          setState(() {
+                            _currentMonth = DateTime(
+                              _currentMonth.year,
+                              _currentMonth.month + 1,
+                            );
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Weekday Headers
+              _buildWeekdayHeaders(context, appColors),
+              const SizedBox(height: 8),
+              // Calendar Grid
+              _buildCalendarGrid(
+                context,
+                provider,
+                entriesByDate,
+                isWeightMetric,
+                theme,
+                appColors,
+                isDark,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildWeekdayHeaders(BuildContext context, AppColors appColors) {
+    final l10n = AppLocalizations.of(context)!;
+    final weekdays = <String>[
+      l10n.mon,
+      l10n.tue,
+      l10n.wed,
+      l10n.thu,
+      l10n.fri,
+      l10n.sat,
+      l10n.sun,
+    ];
+
+    return Row(
+      children: weekdays.map((day) {
+        return Expanded(
+          child: Center(
+            child: Text(
+              day,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: appColors.mutedText,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildCalendarGrid(
+    BuildContext context,
+    WeightTrackerProvider provider,
+    Map<DateTime, WeightEntry> entriesByDate,
+    bool isWeightMetric,
+    ThemeData theme,
+    AppColors appColors,
+    bool isDark,
+  ) {
+    final firstDay = DateTime(_currentMonth.year, _currentMonth.month, 1);
+    final lastDay = DateTime(_currentMonth.year, _currentMonth.month + 1, 0);
+    final firstWeekday = firstDay.weekday; // 1 = Monday, 7 = Sunday
+    final daysInMonth = lastDay.day;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+        childAspectRatio: 0.85,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
+      ),
+      itemCount: (firstWeekday - 1) + daysInMonth,
+      itemBuilder: (context, index) {
+        if (index < firstWeekday - 1) {
+          return const SizedBox.shrink();
+        }
+
+        final day = index - (firstWeekday - 1) + 1;
+        final date = DateTime(_currentMonth.year, _currentMonth.month, day);
+        final entry = entriesByDate[date];
+        final isToday = date == today;
+
+        return _buildCalendarCell(
+          context,
+          date,
+          day,
+          entry,
+          isToday,
+          isWeightMetric,
+          theme,
+          appColors,
+          isDark,
+          provider,
+        );
+      },
+    );
+  }
+
+  Widget _buildCalendarCell(
+    BuildContext context,
+    DateTime date,
+    int day,
+    WeightEntry? entry,
+    bool isToday,
+    bool isWeightMetric,
+    ThemeData theme,
+    AppColors appColors,
+    bool isDark,
+    WeightTrackerProvider provider,
+  ) {
+    final hasEntry = entry != null;
+
+    return GestureDetector(
+      onTap: () {
+        if (hasEntry) {
+          _showCellOptions(context, entry, provider);
+        } else {
+          _showRecordWeightBottomSheetHelper(context, initialDateTime: date);
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: hasEntry
+              ? theme.colorScheme.primary.withValues(alpha: 0.12)
+              : isToday
+                  ? (isDark
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : Colors.grey.shade100)
+                  : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: hasEntry
+                ? theme.colorScheme.primary.withValues(alpha: 0.35)
+                : isToday
+                    ? theme.colorScheme.primary.withValues(alpha: 0.5)
+                    : isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey.shade200,
+            width: isToday ? 1.5 : 1,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$day',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight:
+                    isToday || hasEntry ? FontWeight.bold : FontWeight.normal,
+                color: isToday
+                    ? theme.colorScheme.primary
+                    : hasEntry
+                        ? theme.colorScheme.onSurface
+                        : isDark
+                            ? Colors.white70
+                            : Colors.black87,
+              ),
+            ),
+            if (hasEntry) ...[
+              const SizedBox(height: 2),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  isWeightMetric
+                      ? entry.weightKg.toStringAsFixed(1)
+                      : (entry.weightKg * 2.20462).toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ] else ...[
+              const SizedBox(height: 2),
+              Text(
+                '+',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isDark ? Colors.white30 : Colors.black26,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCellOptions(
+    BuildContext context,
+    WeightEntry entry,
+    WeightTrackerProvider provider,
+  ) {
+    final theme = Theme.of(context);
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.brightness == Brightness.dark
+                ? const Color(0xFF1C1C1E)
+                : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    DateFormat.yMMMd(
+                            Localizations.localeOf(context).toString())
+                        .format(entry.dateTime),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.edit_outlined),
+                  title: Text(isKorean ? '수정하기' : 'Edit'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showRecordWeightBottomSheetHelper(context, editEntry: entry);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delete_outline, color: Colors.red),
+                  title: Text(
+                    isKorean ? '삭제하기' : 'Delete',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _confirmDelete(context, entry, provider);
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmDelete(
+    BuildContext context,
+    WeightEntry entry,
+    WeightTrackerProvider provider,
+  ) {
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    HapticFeedback.mediumImpact();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(isKorean ? '기록 삭제' : 'Delete Entry'),
+          content: Text(isKorean
+              ? '이 체중 기록을 삭제하시겠습니까?'
+              : 'Are you sure you want to delete this weight entry?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(isKorean ? '취소' : 'Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                provider.deleteEntry(entry.id);
+                HapticFeedback.lightImpact();
+              },
+              child: Text(
+                isKorean ? '삭제' : 'Delete',
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

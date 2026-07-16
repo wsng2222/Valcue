@@ -343,11 +343,27 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Фоновые уведомления об интервалах';
+      'Сопровождение тренировки в реальном времени';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'Получайте настройки тренажёра и длительность интервала при использовании других приложений';
+      'Просматривайте информацию о тренировке и подсказки по интервалам в реальном времени при использовании других приложений';
+
+  @override
+  String get liveActivityPreparing => 'Подготовка';
+
+  @override
+  String get liveActivityInProgress => 'Тренировка идёт';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'Интервал $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'В течение $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'Общее время';

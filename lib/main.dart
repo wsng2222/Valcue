@@ -19,6 +19,7 @@ import 'services/sound_service.dart';
 import 'services/ad_service.dart';
 import 'services/app_error_service.dart';
 import 'services/voice_guide_service.dart';
+import 'services/workout_live_activity_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'onboarding/onboarding_flow.dart';
 
@@ -86,6 +87,7 @@ Future<void> _bootstrapApp() async {
   // Initialize sound service
   await SoundService().init();
   await WorkoutReminderService.instance.init();
+  await WorkoutLiveActivityService.instance.cleanup();
 
   // Initialize Google Mobile Ads (with error handling)
   try {
@@ -157,14 +159,24 @@ class MyApp extends StatelessWidget {
 
             // IMPORTANT: This builder runs under Localizations, so we can safely
             // read locale and react to runtime changes.
-            return Theme(
-              data: materialTheme,
-              child: HeroMode(
-                enabled: false,
-                child: ScaffoldMessenger(
-                  child: _VoiceGuideBootstrap(
-                    voiceEnabled: settingsProvider.voiceGuideEnabled,
-                    child: child ?? const SizedBox.shrink(),
+            final originalMediaQuery = MediaQuery.of(context);
+            final clampedTextScaler = TextScaler.linear(
+              originalMediaQuery.textScaler.scale(1.0).clamp(1.0, 1.20),
+            );
+
+            return MediaQuery(
+              data: originalMediaQuery.copyWith(
+                textScaler: clampedTextScaler,
+              ),
+              child: Theme(
+                data: materialTheme,
+                child: HeroMode(
+                  enabled: false,
+                  child: ScaffoldMessenger(
+                    child: _VoiceGuideBootstrap(
+                      voiceEnabled: settingsProvider.voiceGuideEnabled,
+                      child: child ?? const SizedBox.shrink(),
+                    ),
                   ),
                 ),
               ),

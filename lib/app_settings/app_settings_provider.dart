@@ -3,12 +3,21 @@ import 'dart:ui' as ui;
 import 'app_settings_model.dart';
 import 'app_settings_store.dart';
 import '../services/sound_service.dart';
+import '../services/workout_live_activity_service.dart';
 import '../services/workout_reminder_service.dart';
 
 class AppSettingsProvider with ChangeNotifier {
-  final AppSettingsStore _store = AppSettingsStore();
-  AppSettings _settings = AppSettings.defaultSettings;
+  final AppSettingsStore _store;
+  final Future<bool> Function() _requestWorkoutNotificationPermissions;
+  final Future<bool> Function() _areLiveActivitiesEnabled;
+  final Future<void> Function() _cancelWorkoutIntervalNotifications;
+  final Future<void> Function() _cleanupLiveActivities;
+
+  AppSettings _settings;
   bool _isLoading = false;
+  int _backgroundCoachingMutationGeneration = 0;
+  Future<void> _backgroundCoachingCleanupTail = Future<void>.value();
+  Future<void> _settingsWriteTail = Future<void>.value();
 
   // Supported languages (same as in LanguageHelper)
   static const List<String> _supportedLanguages = [
@@ -73,8 +82,30 @@ class AppSettingsProvider with ChangeNotifier {
     return Locale(_getResolvedLanguage());
   }
 
-  AppSettingsProvider() {
-    loadSettings();
+  AppSettingsProvider({
+    AppSettingsStore? store,
+    AppSettings? initialSettings,
+    bool loadSettingsOnCreate = true,
+    Future<bool> Function()? requestWorkoutNotificationPermissions,
+    Future<bool> Function()? areLiveActivitiesEnabled,
+    Future<void> Function()? cancelWorkoutIntervalNotifications,
+    Future<void> Function()? cleanupLiveActivities,
+  })  : _store = store ?? AppSettingsStore(),
+        _settings = initialSettings ?? AppSettings.defaultSettings,
+        _requestWorkoutNotificationPermissions =
+            requestWorkoutNotificationPermissions ??
+                WorkoutReminderService.instance.requestPermissions,
+        _areLiveActivitiesEnabled = areLiveActivitiesEnabled ??
+            WorkoutLiveActivityService.instance.areActivitiesEnabled,
+        _cancelWorkoutIntervalNotifications =
+            cancelWorkoutIntervalNotifications ??
+                WorkoutReminderService
+                    .instance.cancelWorkoutIntervalNotifications,
+        _cleanupLiveActivities = cleanupLiveActivities ??
+            WorkoutLiveActivityService.instance.cleanup {
+    if (loadSettingsOnCreate) {
+      loadSettings();
+    }
   }
 
   Future<void> loadSettings() async {
@@ -90,7 +121,7 @@ class AppSettingsProvider with ChangeNotifier {
 
   Future<void> updateLanguage(String language) async {
     _settings = _settings.copyWith(language: language);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
   }
@@ -114,34 +145,44 @@ class AppSettingsProvider with ChangeNotifier {
       workoutReminderMinute: _settings.workoutReminderMinute,
       workoutReminderMessage: _settings.workoutReminderMessage,
     );
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
   }
 
   Future<void> updateMeasurement(String measurement) async {
     _settings = _settings.copyWith(measurement: measurement);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     notifyListeners();
   }
 
   Future<void> updateWeightUnit(String weightUnit) async {
     _settings = _settings.copyWith(weightUnit: weightUnit);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     notifyListeners();
   }
 
   Future<void> updatePremium(bool isPremium) async {
+    if (!isPremium) {
+      // Invalidate an in-flight enable before it can commit after entitlement
+      // revocation. The preference itself is preserved for a future renewal.
+      _backgroundCoachingMutationGeneration++;
+    }
+
     _settings = _settings.copyWith(
       isPremium: isPremium,
       voiceGuideEnabled: isPremium ? _settings.voiceGuideEnabled : false,
     );
-    await _store.saveSettings(_settings);
-    if (!isPremium) {
-      await WorkoutReminderService.instance
-          .cancelWorkoutIntervalNotifications();
-    }
+    final settingsSnapshot = _settings;
     notifyListeners();
+
+    final save = _saveSettingsInOrder(settingsSnapshot);
+    if (!isPremium) {
+      final cleanup = _queueBackgroundCoachingCleanup();
+      await Future.wait<void>([save, cleanup]);
+      return;
+    }
+    await save;
   }
 
   Future<void> updateVoiceGuide(bool enabled) async {
@@ -149,39 +190,102 @@ class AppSettingsProvider with ChangeNotifier {
       return; // Cannot enable voice guide without premium
     }
     _settings = _settings.copyWith(voiceGuideEnabled: enabled);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     notifyListeners();
   }
 
   Future<bool> updateBackgroundIntervalNotifications(bool enabled) async {
-    if (!_settings.isPremium && enabled) return false;
+    final generation = ++_backgroundCoachingMutationGeneration;
 
     if (enabled) {
-      final granted =
-          await WorkoutReminderService.instance.requestPermissions();
-      if (!granted) return false;
-    } else {
-      await WorkoutReminderService.instance
-          .cancelWorkoutIntervalNotifications();
+      if (!_settings.isPremium) return false;
+
+      // Live Activity is the primary iOS surface. Notification permission is
+      // still requested so local alerts are ready if Live Activity is
+      // unavailable or fails when a workout starts.
+      final liveActivitiesEnabled =
+          await _readCapability(_areLiveActivitiesEnabled);
+      if (!_isCurrentBackgroundEnable(generation)) return true;
+
+      final notificationsGranted = await _readCapability(
+        _requestWorkoutNotificationPermissions,
+      );
+      if (!_isCurrentBackgroundEnable(generation)) return true;
+
+      if (!notificationsGranted && !liveActivitiesEnabled) return false;
+
+      // A preceding OFF may still be cleaning native state. Never publish a
+      // newer ON until that cleanup has completed.
+      await _backgroundCoachingCleanupTail;
+      if (!_isCurrentBackgroundEnable(generation)) return true;
+
+      _settings = _settings.copyWith(
+        backgroundIntervalNotificationsEnabled: true,
+      );
+      final settingsSnapshot = _settings;
+      notifyListeners();
+      await _saveSettingsInOrder(settingsSnapshot);
+      return true;
     }
 
     _settings = _settings.copyWith(
-      backgroundIntervalNotificationsEnabled: enabled,
+      backgroundIntervalNotificationsEnabled: false,
     );
-    await _store.saveSettings(_settings);
+    final settingsSnapshot = _settings;
     notifyListeners();
+    final save = _saveSettingsInOrder(settingsSnapshot);
+    final cleanup = _queueBackgroundCoachingCleanup();
+    await Future.wait<void>([save, cleanup]);
     return true;
+  }
+
+  bool _isCurrentBackgroundEnable(int generation) {
+    return generation == _backgroundCoachingMutationGeneration &&
+        _settings.isPremium;
+  }
+
+  Future<bool> _readCapability(Future<bool> Function() read) async {
+    try {
+      return await read();
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _saveSettingsInOrder(AppSettings settings) {
+    final operation =
+        _settingsWriteTail.then((_) => _store.saveSettings(settings));
+    _settingsWriteTail = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace __) {},
+    );
+    return operation;
+  }
+
+  Future<void> _queueBackgroundCoachingCleanup() {
+    final operation = _backgroundCoachingCleanupTail.then((_) async {
+      try {
+        await _cancelWorkoutIntervalNotifications();
+      } finally {
+        await _cleanupLiveActivities();
+      }
+    });
+    _backgroundCoachingCleanupTail = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace __) {},
+    );
+    return operation;
   }
 
   Future<void> updateThemeMode(String themeMode) async {
     _settings = _settings.copyWith(themeMode: themeMode);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     notifyListeners();
   }
 
   Future<void> updateSoundEffects(bool enabled) async {
     _settings = _settings.copyWith(soundEffectsEnabled: enabled);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     // Sync sound service with updated setting
     SoundService().setEnabled(enabled);
     notifyListeners();
@@ -197,7 +301,7 @@ class AppSettingsProvider with ChangeNotifier {
     }
 
     _settings = _settings.copyWith(workoutReminderEnabled: enabled);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
     return true;
@@ -212,7 +316,7 @@ class AppSettingsProvider with ChangeNotifier {
     if (normalized.isEmpty) return;
 
     _settings = _settings.copyWith(workoutReminderWeekdays: normalized);
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
   }
@@ -222,7 +326,7 @@ class AppSettingsProvider with ChangeNotifier {
       workoutReminderHour: time.hour,
       workoutReminderMinute: time.minute,
     );
-    await _store.saveSettings(_settings);
+    await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
   }

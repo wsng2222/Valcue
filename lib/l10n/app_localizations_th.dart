@@ -340,11 +340,27 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'แจ้งเตือนช่วงในเบื้องหลัง';
+      'การโค้ชการออกกำลังกายแบบเรียลไทม์';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'รับค่าการตั้งค่าเครื่องและระยะเวลาช่วงขณะใช้แอปอื่น';
+      'ดูข้อมูลการออกกำลังกายและคำแนะนำแต่ละช่วงแบบเรียลไทม์ขณะใช้แอปอื่น';
+
+  @override
+  String get liveActivityPreparing => 'กำลังเตรียม';
+
+  @override
+  String get liveActivityInProgress => 'กำลังออกกำลังกาย';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'ช่วงที่ $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'เป็นเวลา $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'เวลารวม';

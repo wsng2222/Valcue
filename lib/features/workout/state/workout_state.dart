@@ -74,12 +74,20 @@ class WorkoutState extends ChangeNotifier {
   int get totalIntervals => routine.intervals.length;
 
   int get totalRemainingSeconds {
+    return (totalRemainingDuration.inMilliseconds / 1000).ceil();
+  }
+
+  /// Remaining active workout time with millisecond precision.
+  ///
+  /// Live Activities use this duration to hand the system a wall-clock end
+  /// date, allowing their countdown to keep moving while Dart is suspended.
+  Duration get totalRemainingDuration {
     final remainingMilliseconds =
         (_totalDurationMilliseconds - totalElapsedMilliseconds).clamp(
       0,
       _totalDurationMilliseconds,
     );
-    return (remainingMilliseconds / 1000).ceil();
+    return Duration(milliseconds: remainingMilliseconds);
   }
 
   double get currentIntervalProgress {

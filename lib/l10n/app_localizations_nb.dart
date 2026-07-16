@@ -342,11 +342,27 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Intervallvarsler i bakgrunnen';
+      'Treningsveiledning i sanntid';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'Få maskininnstillinger og intervalltid mens du bruker andre apper';
+      'Se treningsinformasjon og intervallveiledning i sanntid mens du bruker andre apper';
+
+  @override
+  String get liveActivityPreparing => 'Forbereder';
+
+  @override
+  String get liveActivityInProgress => 'Trening pågår';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'Intervall $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'I $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'Total tid';

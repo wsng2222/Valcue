@@ -762,17 +762,41 @@ abstract class AppLocalizations {
   /// **'New interval'**
   String get backgroundIntervalNotificationTitle;
 
-  /// Settings title for premium background interval notifications
+  /// Settings title for premium live workout coaching
   ///
   /// In en, this message translates to:
-  /// **'Background interval alerts'**
+  /// **'Live workout coaching'**
   String get backgroundIntervalNotificationsTitle;
 
-  /// Settings subtitle for premium background interval notifications
+  /// Settings subtitle for premium live workout information and interval guidance available while using other apps
   ///
   /// In en, this message translates to:
-  /// **'Get equipment settings and interval duration while using other apps'**
+  /// **'See live workout information and interval guidance while using other apps'**
   String get backgroundIntervalNotificationsSubtitle;
+
+  /// Live Activity status shown while the workout is preparing to start
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get liveActivityPreparing;
+
+  /// Live Activity status shown while the workout is in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Workout in progress'**
+  String get liveActivityInProgress;
+
+  /// Live Activity label for the current interval position
+  ///
+  /// In en, this message translates to:
+  /// **'Interval {current}/{total}'**
+  String liveActivityIntervalFormat(int current, int total);
+
+  /// Live Activity label describing how long the current interval lasts
+  ///
+  /// In en, this message translates to:
+  /// **'For {duration}'**
+  String liveActivityDurationFormat(String duration);
 
   /// Total workout time label
   ///

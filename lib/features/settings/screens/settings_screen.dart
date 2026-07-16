@@ -290,7 +290,7 @@ class SettingsRow extends StatelessWidget {
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
-                if (subtitle != null) ...[
+                if (subtitle != null && subtitle!.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
                     subtitle!,
@@ -1239,7 +1239,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           ),
                           SettingsRow(
-                            icon: Icons.notifications_active_outlined,
+                            icon: Icons.monitor_heart_outlined,
                             iconColor: Colors.indigoAccent,
                             title: AppLocalizations.of(context)!
                                 .backgroundIntervalNotificationsTitle,

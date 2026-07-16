@@ -4,6 +4,8 @@ import AVFoundation
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+  private var liveActivityBridge: LiveActivityBridge?
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -17,6 +19,11 @@ import AVFoundation
     }
     
     GeneratedPluginRegistrant.register(with: self)
+    if let flutterViewController = window?.rootViewController as? FlutterViewController {
+      liveActivityBridge = LiveActivityBridge(
+        messenger: flutterViewController.binaryMessenger
+      )
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

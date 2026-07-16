@@ -9,6 +9,7 @@ import 'routine_edit_screen.dart';
 import '../storage/routine_provider.dart';
 import '../widgets/routine_shared_widgets.dart';
 import '../../../services/ad_service.dart';
+import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 
@@ -231,8 +232,15 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                                 await WorkoutReminderService.instance
                                     .requestPermissions();
                             if (!notificationsAuthorized) {
-                              await settingsProvider
-                                  .updateBackgroundIntervalNotifications(false);
+                              final liveActivitiesEnabled =
+                                  await WorkoutLiveActivityService.instance
+                                      .areActivitiesEnabled();
+                              if (!liveActivitiesEnabled) {
+                                await settingsProvider
+                                    .updateBackgroundIntervalNotifications(
+                                  false,
+                                );
+                              }
                             }
                           }
                           if (!context.mounted) return;

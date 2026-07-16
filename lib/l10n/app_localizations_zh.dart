@@ -335,10 +335,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '新间歇开始';
 
   @override
-  String get backgroundIntervalNotificationsTitle => '后台间歇提醒';
+  String get backgroundIntervalNotificationsTitle => '实时运动指导';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle => '使用其他应用时也会提醒器械设置和间歇时长';
+  String get backgroundIntervalNotificationsSubtitle =>
+      '使用其他应用时也能查看实时运动信息和间歇指导';
+
+  @override
+  String get liveActivityPreparing => '准备中';
+
+  @override
+  String get liveActivityInProgress => '锻炼中';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return '第 $current/$total 个间歇';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return '持续 $duration';
+  }
 
   @override
   String get totalWorkoutTime => '总时间';

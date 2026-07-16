@@ -14,6 +14,7 @@ import '../../workout/screens/workout_screen.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../services/ad_service.dart';
+import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 import '../../../utils/app_shadows.dart';
@@ -837,8 +838,12 @@ class _RoutineDetailSheetContentState
         notificationsAuthorized =
             await WorkoutReminderService.instance.requestPermissions();
         if (!notificationsAuthorized) {
-          await widget.settingsProvider
-              .updateBackgroundIntervalNotifications(false);
+          final liveActivitiesEnabled =
+              await WorkoutLiveActivityService.instance.areActivitiesEnabled();
+          if (!liveActivitiesEnabled) {
+            await widget.settingsProvider
+                .updateBackgroundIntervalNotifications(false);
+          }
         }
       }
       if (!mounted) return;

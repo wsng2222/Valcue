@@ -341,12 +341,27 @@ class AppLocalizationsNl extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => 'Nieuw interval';
 
   @override
-  String get backgroundIntervalNotificationsTitle =>
-      'Intervalmeldingen op de achtergrond';
+  String get backgroundIntervalNotificationsTitle => 'Live workoutcoaching';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'Ontvang machine-instellingen en intervalduur terwijl je andere apps gebruikt';
+      'Bekijk live trainingsinformatie en intervalbegeleiding terwijl je andere apps gebruikt';
+
+  @override
+  String get liveActivityPreparing => 'Voorbereiden';
+
+  @override
+  String get liveActivityInProgress => 'Training bezig';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'Interval $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'Voor $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'Totale tijd';

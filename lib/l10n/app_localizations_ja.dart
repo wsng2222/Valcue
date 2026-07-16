@@ -337,11 +337,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '新しい区間開始';
 
   @override
-  String get backgroundIntervalNotificationsTitle => 'バックグラウンド区間通知';
+  String get backgroundIntervalNotificationsTitle => 'リアルタイムワークアウトコーチング';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      '他のアプリ使用中もマシン設定と区間時間を通知します';
+      '他のアプリの使用中もリアルタイムのワークアウト情報とインターバル案内を確認できます';
+
+  @override
+  String get liveActivityPreparing => '準備中';
+
+  @override
+  String get liveActivityInProgress => 'ワークアウト中';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'インターバル $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return '$duration間';
+  }
 
   @override
   String get totalWorkoutTime => '合計時間';

@@ -342,11 +342,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'تنبيهات الفترات في الخلفية';
+      'التوجيه الفوري أثناء التمرين';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'اعرض إعدادات الجهاز ومدة الفترة أثناء استخدام تطبيقات أخرى';
+      'اطّلع على معلومات التمرين وإرشادات الفترات في الوقت الفعلي أثناء استخدام تطبيقات أخرى';
+
+  @override
+  String get liveActivityPreparing => 'جارٍ الاستعداد';
+
+  @override
+  String get liveActivityInProgress => 'التمرين جارٍ';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'الفترة $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'لمدة $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'إجمالي الوقت';

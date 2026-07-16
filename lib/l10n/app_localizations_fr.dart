@@ -346,11 +346,27 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Alertes d’intervalle en arrière-plan';
+      'Coaching sportif en temps réel';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'Recevez les réglages de l’appareil et la durée en utilisant d’autres apps';
+      'Consultez les informations d’entraînement et les consignes d’intervalle en temps réel pendant l’utilisation d’autres apps';
+
+  @override
+  String get liveActivityPreparing => 'Préparation';
+
+  @override
+  String get liveActivityInProgress => 'Entraînement en cours';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'Intervalle $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'Pendant $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'Temps total';

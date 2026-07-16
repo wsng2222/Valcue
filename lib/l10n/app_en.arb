@@ -444,13 +444,42 @@
   "@backgroundIntervalNotificationTitle": {
     "description": "Title for a premium notification shown when a new workout interval begins in the background"
   },
-  "backgroundIntervalNotificationsTitle": "Background interval alerts",
+  "backgroundIntervalNotificationsTitle": "Live workout coaching",
   "@backgroundIntervalNotificationsTitle": {
-    "description": "Settings title for premium background interval notifications"
+    "description": "Settings title for premium live workout coaching"
   },
-  "backgroundIntervalNotificationsSubtitle": "Get equipment settings and interval duration while using other apps",
+  "backgroundIntervalNotificationsSubtitle": "See live workout information and interval guidance while using other apps",
   "@backgroundIntervalNotificationsSubtitle": {
-    "description": "Settings subtitle for premium background interval notifications"
+    "description": "Settings subtitle for premium live workout information and interval guidance available while using other apps"
+  },
+  "liveActivityPreparing": "Preparing",
+  "@liveActivityPreparing": {
+    "description": "Live Activity status shown while the workout is preparing to start"
+  },
+  "liveActivityInProgress": "Workout in progress",
+  "@liveActivityInProgress": {
+    "description": "Live Activity status shown while the workout is in progress"
+  },
+  "liveActivityIntervalFormat": "Interval {current}/{total}",
+  "@liveActivityIntervalFormat": {
+    "description": "Live Activity label for the current interval position",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "liveActivityDurationFormat": "For {duration}",
+  "@liveActivityDurationFormat": {
+    "description": "Live Activity label describing how long the current interval lasts",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
   },
   "totalWorkoutTime": "Total Time",
   "@totalWorkoutTime": {

@@ -19,7 +19,7 @@ class PremiumGateModal {
         break;
       case PremiumFeature.backgroundIntervalNotifications:
         benefits = [
-          l10n.backgroundIntervalNotificationsSubtitle,
+          l10n.benefitBackgroundIntervalNotifications,
           l10n.voiceGuideBenefit2,
           l10n.voiceGuideBenefit3,
         ];

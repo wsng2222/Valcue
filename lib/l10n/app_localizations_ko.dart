@@ -337,11 +337,26 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backgroundIntervalNotificationTitle => '새 구간 시작';
 
   @override
-  String get backgroundIntervalNotificationsTitle => '백그라운드 구간 알림';
+  String get backgroundIntervalNotificationsTitle => '앱을 나가도 알림으로 운동 정보 받기';
 
   @override
-  String get backgroundIntervalNotificationsSubtitle =>
-      '다른 앱 사용 중에도 기구 설정값과 구간 시간을 알려드려요';
+  String get backgroundIntervalNotificationsSubtitle => '';
+
+  @override
+  String get liveActivityPreparing => '준비';
+
+  @override
+  String get liveActivityInProgress => '운동 중';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return '$current/$total 구간';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return '$duration 동안';
+  }
 
   @override
   String get totalWorkoutTime => '총 시간';

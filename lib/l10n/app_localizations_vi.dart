@@ -343,11 +343,27 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backgroundIntervalNotificationsTitle =>
-      'Thông báo hiệp khi chạy nền';
+      'Hướng dẫn tập luyện theo thời gian thực';
 
   @override
   String get backgroundIntervalNotificationsSubtitle =>
-      'Nhận cài đặt máy và thời lượng hiệp khi dùng ứng dụng khác';
+      'Xem thông tin bài tập và hướng dẫn từng hiệp theo thời gian thực khi dùng ứng dụng khác';
+
+  @override
+  String get liveActivityPreparing => 'Chuẩn bị';
+
+  @override
+  String get liveActivityInProgress => 'Đang tập luyện';
+
+  @override
+  String liveActivityIntervalFormat(int current, int total) {
+    return 'Hiệp $current/$total';
+  }
+
+  @override
+  String liveActivityDurationFormat(String duration) {
+    return 'Trong $duration';
+  }
 
   @override
   String get totalWorkoutTime => 'Tổng thời gian';
