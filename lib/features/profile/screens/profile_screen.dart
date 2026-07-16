@@ -650,7 +650,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
               ),
               Expanded(
                 child: _SummaryStat(
-                  label: AppLocalizations.of(context)!.sessions,
+                  label: AppLocalizations.of(context)!.workouts,
                   value: '${sessions.length}',
                 ),
               ),
@@ -2334,11 +2334,94 @@ class _WeightTrendChart extends StatefulWidget {
 
 class _WeightTrendChartState extends State<_WeightTrendChart> {
   late int _selectedTimeframe;
+  int? _hoveredIndex;
 
   @override
   void initState() {
     super.initState();
     _selectedTimeframe = widget.timeframe;
+  }
+
+  void _updateHoveredIndex(double localX, double totalWidth, int entryCount) {
+    if (entryCount < 2 || totalWidth <= 0) return;
+    final availableWidth = totalWidth - 20.0;
+    final painterX = (localX - 10.0).clamp(0.0, availableWidth);
+    final stepX = availableWidth / (entryCount - 1);
+    final calculatedIndex = (painterX / stepX).round().clamp(0, entryCount - 1);
+    
+    if (_hoveredIndex != calculatedIndex) {
+      setState(() {
+        _hoveredIndex = calculatedIndex;
+      });
+      HapticFeedback.selectionClick();
+    }
+  }
+
+  void _clearHoveredIndex() {
+    if (_hoveredIndex != null) {
+      setState(() {
+        _hoveredIndex = null;
+      });
+    }
+  }
+
+  Widget _buildTooltip(WeightEntry entry, double chartWidth, double chartHeight, int index, int entryCount) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final availableWidth = chartWidth - 20.0;
+    final stepX = availableWidth / (entryCount - 1);
+    final pointX = 10.0 + index * stepX;
+    
+    const tooltipWidth = 100.0;
+    final leftPos = (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
+    
+    final formattedDate = DateFormat('MM/dd').format(entry.dateTime);
+    
+    return Positioned(
+      left: leftPos,
+      top: -46,
+      child: Container(
+        width: tooltipWidth,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.grey.shade300,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${entry.weightKg.toStringAsFixed(1)} kg',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                color: Theme.of(context).colorScheme.primary,
+                letterSpacing: -0.3,
+              ),
+            ),
+            const SizedBox(height: 1),
+            Text(
+              formattedDate,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white54 : Colors.black54,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -2489,25 +2572,68 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 130,
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.03)
-                      : Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: CustomPaint(
-                  painter: _WeightSparklinePainter(
-                    entries: chartEntries,
-                    minWeight: minWeight - padding,
-                    maxWeight: maxWeight + padding,
-                    color: theme.colorScheme.primary,
-                  ),
-                  size: Size.infinite,
-                ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final chartWidth = constraints.maxWidth;
+                  const chartHeight = 130.0;
+                  
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      GestureDetector(
+                        onHorizontalDragStart: (details) {
+                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
+                        },
+                        onHorizontalDragUpdate: (details) {
+                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
+                        },
+                        onHorizontalDragEnd: (details) {
+                          _clearHoveredIndex();
+                        },
+                        onHorizontalDragCancel: () {
+                          _clearHoveredIndex();
+                        },
+                        onTapDown: (details) {
+                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
+                        },
+                        onTapUp: (details) {
+                          Future.delayed(const Duration(seconds: 2), () {
+                            if (mounted) {
+                              _clearHoveredIndex();
+                            }
+                          });
+                        },
+                        onTapCancel: () {
+                          _clearHoveredIndex();
+                        },
+                        child: Container(
+                          height: chartHeight,
+                          width: double.infinity,
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.03)
+                                : Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: CustomPaint(
+                            painter: _WeightSparklinePainter(
+                              entries: chartEntries,
+                              minWeight: minWeight - padding,
+                              maxWeight: maxWeight + padding,
+                              color: theme.colorScheme.primary,
+                              hoveredIndex: _hoveredIndex,
+                              isDark: isDark,
+                            ),
+                            size: Size.infinite,
+                          ),
+                        ),
+                      ),
+                      if (_hoveredIndex != null && _hoveredIndex! < chartEntries.length)
+                        _buildTooltip(chartEntries[_hoveredIndex!], chartWidth, chartHeight, _hoveredIndex!, chartEntries.length),
+                    ],
+                  );
+                }
               ),
             ],
           ),
@@ -2592,12 +2718,16 @@ class _WeightSparklinePainter extends CustomPainter {
   final double minWeight;
   final double maxWeight;
   final Color color;
+  final int? hoveredIndex;
+  final bool isDark;
 
   _WeightSparklinePainter({
     required this.entries,
     required this.minWeight,
     required this.maxWeight,
     required this.color,
+    this.hoveredIndex,
+    required this.isDark,
   });
 
   @override
@@ -2611,13 +2741,19 @@ class _WeightSparklinePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
-    final pointPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    final stepX = size.width / (entries.length - 1);
+    final weightRange = maxWeight - minWeight;
+
+    // Draw horizontal grid bounds
+    final gridPaint = Paint()
+      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.04)
+      ..strokeWidth = 1.0;
+    canvas.drawLine(Offset.zero, Offset(size.width, 0), gridPaint);
+    canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), gridPaint);
 
     final path = Path();
-    final stepX = entries.length > 1 ? size.width / (entries.length - 1) : 0.0;
-    final weightRange = maxWeight - minWeight;
+    final fillPath = Path();
+    fillPath.moveTo(0, size.height);
 
     for (int i = 0; i < entries.length; i++) {
       final entry = entries[i];
@@ -2628,25 +2764,95 @@ class _WeightSparklinePainter extends CustomPainter {
 
       if (i == 0) {
         path.moveTo(x, y);
+        fillPath.lineTo(x, y);
       } else {
         path.lineTo(x, y);
-      }
-
-      // Highlight last point
-      if (i == entries.length - 1) {
-        canvas.drawCircle(Offset(x, y), 4.0, pointPaint);
-        canvas.drawCircle(Offset(x, y), 2.0, Paint()..color = Colors.white);
+        fillPath.lineTo(x, y);
       }
     }
 
+    fillPath.lineTo(size.width, size.height);
+    fillPath.close();
+
+    // Draw gradient fill under the sparkline
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          color.withValues(alpha: 0.22),
+          color.withValues(alpha: 0.0),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Draw main line path
     canvas.drawPath(path, paint);
+
+    // Draw vertical guide line and hovered point indicator if active
+    if (hoveredIndex != null && hoveredIndex! < entries.length) {
+      final hX = (hoveredIndex! * stepX).toDouble();
+      final hEntry = entries[hoveredIndex!];
+      final hNormalizedWeight =
+          weightRange > 0 ? (hEntry.weightKg - minWeight) / weightRange : 0.5;
+      final hY = (size.height - (hNormalizedWeight * size.height)).toDouble();
+
+      // Draw dashed vertical line
+      final verticalLinePaint = Paint()
+        ..color = color.withValues(alpha: 0.3)
+        ..strokeWidth = 1.2
+        ..style = PaintingStyle.stroke;
+
+      const dashHeight = 4.0;
+      const dashGap = 4.0;
+      double startY = 0.0;
+      while (startY < size.height) {
+        canvas.drawLine(
+          Offset(hX, startY),
+          Offset(hX, (startY + dashHeight).clamp(0, size.height)),
+          verticalLinePaint,
+        );
+        startY += dashHeight + dashGap;
+      }
+
+      // Draw circular indicator highlights
+      final outerCirclePaint = Paint()
+        ..color = color.withValues(alpha: 0.2)
+        ..style = PaintingStyle.fill;
+      final innerCirclePaint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
+      final centerCirclePaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(Offset(hX, hY), 8.0, outerCirclePaint);
+      canvas.drawCircle(Offset(hX, hY), 5.0, innerCirclePaint);
+      canvas.drawCircle(Offset(hX, hY), 2.5, centerCirclePaint);
+    } else {
+      // Draw standard dot on the final coordinate
+      final lastIdx = entries.length - 1;
+      final lX = (lastIdx * stepX).toDouble();
+      final lEntry = entries[lastIdx];
+      final lNormalizedWeight =
+          weightRange > 0 ? (lEntry.weightKg - minWeight) / weightRange : 0.5;
+      final lY = (size.height - (lNormalizedWeight * size.height)).toDouble();
+
+      final pointPaint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(Offset(lX, lY), 4.0, pointPaint);
+      canvas.drawCircle(Offset(lX, lY), 2.0, Paint()..color = Colors.white);
+    }
   }
 
   @override
   bool shouldRepaint(_WeightSparklinePainter oldDelegate) {
     return oldDelegate.entries != entries ||
         oldDelegate.minWeight != minWeight ||
-        oldDelegate.maxWeight != maxWeight;
+        oldDelegate.maxWeight != maxWeight ||
+        oldDelegate.hoveredIndex != hoveredIndex;
   }
 }
 

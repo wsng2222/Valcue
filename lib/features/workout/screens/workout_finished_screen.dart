@@ -12,6 +12,7 @@ import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../routines/models/interval.dart';
 import '../../../widgets/bidi_safe_text.dart';
+import '../../../widgets/bounceable.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../services/ad_service.dart';
@@ -323,25 +324,30 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                     SizedBox(
                       key: _shareButtonKey,
                       width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => _shareWorkout(context),
-                        icon: const Icon(Icons.share_outlined, size: 18),
-                        label: Text(
-                          AppLocalizations.of(context)!.share,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          side: BorderSide(
-                            color: theme.colorScheme.outline
-                                .withValues(alpha: 0.38),
+                      child: Bounceable(
+                        onTap: () => _shareWorkout(context),
+                        child: IgnorePointer(
+                          child: OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.share_outlined, size: 18),
+                            label: Text(
+                              AppLocalizations.of(context)!.share,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              side: BorderSide(
+                                color: theme.colorScheme.outline
+                                    .withValues(alpha: 0.38),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -350,8 +356,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                     // Primary button: End
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
+                      child: Bounceable(
+                        onTap: () {
                           // Check if user is premium - premium users don't see ads
                           final settingsProvider =
                               Provider.of<AppSettingsProvider>(context,
@@ -384,21 +390,26 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                             navigatorContext.popUntil((route) => route.isFirst);
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.end,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.3,
+                        child: IgnorePointer(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.primary,
+                              foregroundColor: theme.colorScheme.onPrimary,
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)!.end,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
                           ),
                         ),
                       ),

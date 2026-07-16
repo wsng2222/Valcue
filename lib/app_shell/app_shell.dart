@@ -14,6 +14,7 @@ import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
 import '../widgets/unified_screen_header.dart';
+import '../widgets/bounceable.dart';
 
 const _privacyPolicyUri =
     'https://wsng2222.github.io/Valcue/privacy-policy.html';
@@ -390,45 +391,50 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                       ),
                     );
 
-                    return DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.28,
-                            ),
-                            blurRadius: 24,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: PlatformInfo.isIOS
-                            ? AdaptiveButton.child(
-                                onPressed: onPurchase,
-                                color: theme.colorScheme.primary,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                borderRadius: BorderRadius.circular(18),
-                                child: buttonLabel,
-                              )
-                            : ElevatedButton(
-                                onPressed: onPurchase,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.primary,
-                                  foregroundColor: theme.colorScheme.onPrimary,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: buttonLabel,
+                    return Bounceable(
+                      onTap: onPurchase,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.28,
                               ),
+                              blurRadius: 24,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: IgnorePointer(
+                            child: PlatformInfo.isIOS
+                                ? AdaptiveButton.child(
+                                    onPressed: () {},
+                                    color: theme.colorScheme.primary,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 20),
+                                    borderRadius: BorderRadius.circular(18),
+                                    child: buttonLabel,
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme.colorScheme.primary,
+                                      foregroundColor: theme.colorScheme.onPrimary,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 20,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: buttonLabel,
+                                  ),
+                          ),
+                        ),
                       ),
                     );
                   },

@@ -850,7 +850,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get workout => '운동';
 
   @override
-  String get workouts => '운동';
+  String get workouts => '운동 횟수';
 
   @override
   String get goal => '목표';

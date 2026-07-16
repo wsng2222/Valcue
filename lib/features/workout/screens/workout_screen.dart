@@ -1881,12 +1881,12 @@ class _SecondaryButton extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    final appColors = theme.extension<AppColors>()!;
     // Default colors
     final bgColor = isDark
-        ? const Color(0xFF2C2C2E).withValues(alpha: 0.5)
-        : Colors.grey.shade50;
-    final borderColor =
-        isDark ? Colors.white.withValues(alpha: 0.15) : const Color(0xFFD0D0D0);
+        ? appColors.surfaceElevated.withValues(alpha: 0.5)
+        : theme.colorScheme.surface;
+    final borderColor = appColors.border;
 
     return Opacity(
       opacity: onPressed == null ? 0.5 : 1.0,
@@ -1906,8 +1906,8 @@ class _SecondaryButton extends StatelessWidget {
           child: InkWell(
             onTap: onPressed,
             borderRadius: BorderRadius.circular(14 * scaleFactor),
-            splashColor: Colors.black.withValues(alpha: 0.08),
-            highlightColor: Colors.black.withValues(alpha: 0.05),
+            splashColor: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+            highlightColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
             child: Icon(
               Icons.rotate_right,
               color: theme.colorScheme.onSurface,
@@ -2756,13 +2756,9 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark
-        ? const Color(0xFF1C1C1E) // Dark surface (charcoal)
-        : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
-    final trackColor = isDark
-        ? Colors.white.withValues(alpha: 0.08)
-        : Colors.black.withValues(alpha: 0.06);
+    final backgroundColor = theme.colorScheme.surface;
+    final textColor = theme.colorScheme.onSurface;
+    final trackColor = theme.colorScheme.onSurface.withValues(alpha: isDark ? 0.08 : 0.06);
     final strokeWidth =
         (widget.size * 0.07).clamp(widget._scaled(10.0), widget._scaled(14.0));
     final fontSize =

@@ -19,6 +19,7 @@ import 'recommended_routines_screen.dart';
 import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
+import '../../../widgets/bounceable.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -817,7 +818,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       );
     }
 
-    return GestureDetector(
+    return Bounceable(
       onTap: openPreview,
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -1139,123 +1140,128 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     String localizedDifficulty =
         _getLocalizedDifficulty(context, routine.difficulty);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.14),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  routine.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurface,
-                    letterSpacing: -0.4,
+    return Bounceable(
+      onTap: () {
+        RoutineBottomSheet.show(context, routine: routine);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.shadow.withValues(alpha: 0.14),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    routine.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w700,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -0.4,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _MetaPill(
+                  icon: Icons.bolt,
+                  text: localizedDifficulty,
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            // Big duration text (always LTR for timers)
+            BidiSafeText(
+              routine.totalDurationFormatted,
+              style: TextStyle(
+                fontSize: 46,
+                fontWeight: FontWeight.w800,
+                color: theme.colorScheme.onSurface,
+                letterSpacing: -1.0,
+              ),
+              forceLTR: true, // Timers must always be LTR
+            ),
+            const SizedBox(height: 14),
+            _buildIntervalPatternBar(context, routine),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                if (routine.machineType == MachineType.cycle) ...[
+                  _MetaPill(
+                    icon: Icons.repeat,
+                    text: '${routine.intervals.length} ${l10n.sessions}',
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                if (routine.machineType == MachineType.stairmaster) ...[
+                  _MetaPill(
+                    icon: Icons.repeat,
+                    text: '${routine.intervals.length} ${l10n.sessions}',
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                if (routine.machineType == MachineType.treadmill) ...[
+                  _MetaPill(
+                    icon: Icons.straighten,
+                    text: _buildTotalDistanceText(routine, settingsProvider),
+                  ),
+                  const SizedBox(width: 8),
+                  _MetaPill(
+                    icon: Icons.repeat,
+                    text: '${routine.intervals.length} ${l10n.sessions}',
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Full-width pill button (wrapped in IgnorePointer to let card tap dominate)
+            IgnorePointer(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 19),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.checkRoutineStart,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.lato(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic,
+                      letterSpacing: -0.3,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              _MetaPill(
-                icon: Icons.bolt,
-                text: localizedDifficulty,
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          // Big duration text (always LTR for timers)
-          BidiSafeText(
-            routine.totalDurationFormatted,
-            style: TextStyle(
-              fontSize: 46,
-              fontWeight: FontWeight.w800,
-              color: theme.colorScheme.onSurface,
-              letterSpacing: -1.0,
             ),
-            forceLTR: true, // Timers must always be LTR
-          ),
-          const SizedBox(height: 14),
-          _buildIntervalPatternBar(context, routine),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              if (routine.machineType == MachineType.cycle) ...[
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
-              if (routine.machineType == MachineType.stairmaster) ...[
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
-              if (routine.machineType == MachineType.treadmill) ...[
-                _MetaPill(
-                  icon: Icons.straighten,
-                  text: _buildTotalDistanceText(routine, settingsProvider),
-                ),
-                const SizedBox(width: 8),
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
-            ],
-          ),
-          const SizedBox(height: 20),
-          // Full-width pill button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                RoutineBottomSheet.show(context, routine: routine);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary,
-                foregroundColor: theme.colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(vertical: 19),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.checkRoutineStart,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.lato(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  letterSpacing: -0.3,
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
