@@ -10,30 +10,89 @@ struct WorkoutLiveActivityWidget: Widget {
             WorkoutLockScreenView(context: context)
                 .activityBackgroundTint(Color(.systemBackground))
                 .activitySystemActionForegroundColor(valcueAccent)
-        } dynamicIsland: { _ in
-            DynamicIsland {
+        } dynamicIsland: { context in
+            let isStale = activityIsStale(context)
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    EmptyView()
+                    HStack(spacing: 8) {
+                        Image(systemName: context.attributes.machineSymbol)
+                            .font(.title2)
+                            .foregroundStyle(valcueAccent)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(context.attributes.routineName)
+                                .font(.headline)
+                                .lineLimit(1)
+                            if !isStale {
+                                Text(context.state.statusText)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(.leading, 8)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    EmptyView()
+                    VStack(alignment: .trailing, spacing: 2) {
+                        WorkoutTimerView(
+                            state: context.state,
+                            compact: false,
+                            isStale: isStale
+                        )
+                        if !isStale {
+                            Text(context.state.intervalText)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.trailing, 8)
                 }
                 DynamicIslandExpandedRegion(.center) {
                     EmptyView()
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    EmptyView()
+                    VStack(spacing: 8) {
+                        if !isStale {
+                            HStack {
+                                if !context.state.primaryMetric.isEmpty {
+                                    Text(context.state.primaryMetric)
+                                        .font(.subheadline.weight(.bold))
+                                }
+                                Spacer()
+                                if !context.state.secondaryMetric.isEmpty {
+                                    Text(context.state.secondaryMetric)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        if let interval = workoutProgressTimerInterval(for: context.state) {
+                            ProgressView(timerInterval: interval, countsDown: false) {
+                                EmptyView()
+                            } currentValueLabel: {
+                                EmptyView()
+                            }
+                            .tint(valcueAccent)
+                        } else if !isStale {
+                            ProgressView(value: normalizedProgress(context.state.progress))
+                                .tint(valcueAccent)
+                        }
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.bottom, 4)
                 }
             } compactLeading: {
-                Image(systemName: "figure.run")
+                Image(systemName: context.attributes.machineSymbol)
                     .foregroundStyle(valcueAccent)
             } compactTrailing: {
-                Text("•")
-                    .font(.caption2.weight(.bold))
-                    .foregroundStyle(valcueAccent)
+                WorkoutTimerView(
+                    state: context.state,
+                    compact: true,
+                    isStale: isStale,
+                    usesWorkoutEndAt: true
+                )
+                .foregroundStyle(valcueAccent)
             } minimal: {
-                Image(systemName: "figure.run")
-                    .font(.caption2.weight(.bold))
+                Image(systemName: context.attributes.machineSymbol)
                     .foregroundStyle(valcueAccent)
             }
             .keylineTint(valcueAccent)
