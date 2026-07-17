@@ -18,7 +18,7 @@ class OnboardingController extends ChangeNotifier {
   SpeedUnit speedUnit;
   WeightUnit weightUnit;
 
-  bool get isLastPage => currentPage >= 6;
+  bool get isLastPage => currentPage >= 9;
 
   void setPage(int page) {
     if (page == currentPage) return;

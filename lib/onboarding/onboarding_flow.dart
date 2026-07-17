@@ -9,8 +9,10 @@ import 'onboarding_strings.dart';
 import 'screens/onboarding_screen_1_welcome.dart';
 import 'screens/onboarding_screen_2_interval_explainer.dart';
 import 'screens/onboarding_screen_2_plan.dart';
+import 'screens/onboarding_screen_2_ai_intro.dart';
 import 'screens/onboarding_screen_3_workout_preview.dart';
 import 'screens/onboarding_screen_4_history.dart';
+import 'screens/onboarding_screen_4_reminder.dart';
 import 'screens/onboarding_screen_5_level.dart';
 import 'screens/onboarding_screen_6_units.dart';
 import 'screens/onboarding_screen_7_start.dart';
@@ -171,9 +173,22 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     );
   }
 
+  void _handleBack() {
+    final pageIndex = _controller.currentPage;
+    if (pageIndex == 1 && _intervalExplainerStep > 0) {
+      setState(() {
+        _intervalExplainerStep--;
+      });
+      return;
+    }
+    if (pageIndex > 0) {
+      _goTo(pageIndex - 1);
+    }
+  }
+
   Future<void> _next() async {
-    // Pages are fixed at 8 (0..7). Keep this in sync with `pages` below.
-    final nextPage = (_controller.currentPage + 1).clamp(0, 7);
+    // Pages are fixed at 10 (0..9). Keep this in sync with `pages` below.
+    final nextPage = (_controller.currentPage + 1).clamp(0, 9);
     AnalyticsService.instance.logEvent(
       'onboarding_next_tapped',
       {'pageIndex': _controller.currentPage},
@@ -193,14 +208,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     switch (page) {
       case 0:
         return s.ctaStart();
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
       default:
-        // Last page uses finish label.
-        return page == 7 ? s.ctaFinish() : s.ctaNext();
+        // Last page (index 9) uses finish label.
+        return page == 9 ? s.ctaFinish() : s.ctaNext();
     }
   }
 
@@ -210,8 +220,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       const OnboardingScreen1Welcome(),
       OnboardingScreen2IntervalExplainer(step: _intervalExplainerStep),
       const OnboardingScreen2Plan(),
+      const OnboardingScreen2AiIntro(),
       const OnboardingScreen3WorkoutPreview(),
       const OnboardingScreen4History(),
+      OnboardingScreen4Reminder(onNext: _next),
       OnboardingScreen5Level(controller: _controller),
       OnboardingScreen6Units(controller: _controller),
       const OnboardingScreen7Start(),
@@ -223,7 +235,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       canPop: _controller.currentPage == 0,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop || _controller.currentPage <= 0) return;
-        _goTo(_controller.currentPage - 1);
+        _handleBack();
       },
       child: AnimatedBuilder(
         animation: _controller,
@@ -240,6 +252,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                   _ProgressHeader(
                     index: pageIndex,
                     total: pages.length,
+                    onBack: _handleBack,
                   ),
                   const SizedBox(height: 10),
                   Expanded(
@@ -276,24 +289,26 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 ],
               ),
             ),
-            bottomNavigationBar: OnboardingCtaButton(
-              text: _ctaLabelForPage(pageIndex),
-              onPressed: () {
-                // Screen 2 has internal steps (tap-through) before moving on.
-                if (pageIndex == 1 && _intervalExplainerStep < 7) {
-                  setState(() {
-                    _intervalExplainerStep =
-                        (_intervalExplainerStep + 1).clamp(0, 7);
-                  });
-                  return;
-                }
-                if (pageIndex == lastIndex) {
-                  _complete();
-                } else {
-                  _next();
-                }
-              },
-            ),
+            bottomNavigationBar: (pageIndex == 6)
+                ? null
+                : OnboardingCtaButton(
+                    text: _ctaLabelForPage(pageIndex),
+                    onPressed: () {
+                      // Screen 2 has internal steps (tap-through) before moving on.
+                      if (pageIndex == 1 && _intervalExplainerStep < 7) {
+                        setState(() {
+                          _intervalExplainerStep =
+                              (_intervalExplainerStep + 1).clamp(0, 7);
+                        });
+                        return;
+                      }
+                      if (pageIndex == lastIndex) {
+                        _complete();
+                      } else {
+                        _next();
+                      }
+                    },
+                  ),
           );
         },
       ),
@@ -304,49 +319,68 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 class _ProgressHeader extends StatelessWidget {
   final int index;
   final int total;
+  final VoidCallback? onBack;
 
   const _ProgressHeader({
     required this.index,
     required this.total,
+    this.onBack,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        Text(
-          '${index + 1}/$total',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.2,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(total, (i) {
-            final active = i == index;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: active ? 16 : 7,
-              height: 7,
-              decoration: BoxDecoration(
-                color: active
-                    ? OnboardingTheme.primaryRed
-                    : (isDark
-                        ? OnboardingTheme.darkGrayFill
-                        : OnboardingTheme.lightGrayFill),
-                borderRadius: BorderRadius.circular(99),
+        Column(
+          children: [
+            Text(
+              '${index + 1}/$total',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.2,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
               ),
-            );
-          }),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(total, (i) {
+                final active = i == index;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  width: active ? 16 : 7,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    color: active
+                        ? OnboardingTheme.primaryRed
+                        : (isDark
+                            ? OnboardingTheme.darkGrayFill
+                            : OnboardingTheme.lightGrayFill),
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
+        if (index > 0 && onBack != null)
+          Positioned(
+            left: 16,
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 20,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+              onPressed: onBack,
+            ),
+          ),
       ],
     );
   }

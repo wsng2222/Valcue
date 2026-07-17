@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../onboarding_strings.dart';
 import '../widgets/onboarding_emphasis_text.dart';
@@ -70,7 +71,7 @@ class OnboardingScreen2IntervalExplainer extends StatelessWidget {
   }
 }
 
-class _ComparisonStep extends StatelessWidget {
+class _ComparisonStep extends StatefulWidget {
   final OnboardingStrings strings;
 
   const _ComparisonStep({
@@ -79,56 +80,126 @@ class _ComparisonStep extends StatelessWidget {
   });
 
   @override
+  State<_ComparisonStep> createState() => _ComparisonStepState();
+}
+
+class _ComparisonStepState extends State<_ComparisonStep> {
+  int? _selectedOption;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final cardShadow = OnboardingTheme.mediumShadow;
+
     return Column(
       children: [
-        const SizedBox(height: 30), // Adjusted spacing
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(OnboardingTheme.radiusLarge),
-            boxShadow: [cardShadow],
-            border: Border.all(
-              color:
-                  isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0),
-              width: 0.5,
-            ),
+        const SizedBox(height: 62),
+        Text(
+          widget.strings.ex2Question(),
+          textAlign: TextAlign.center,
+          style: GoogleFonts.lato(
+            fontSize: 25,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -0.8,
+            color: theme.colorScheme.onSurface,
+            height: 1.25,
           ),
-          child: Column(
+        ),
+        const SizedBox(height: 30),
+        SizedBox(
+          height: 266,
+          child: Row(
             children: [
-              _CompareRow(
-                icon: Icons.directions_walk,
-                titleSpans: strings.ex2WalkTitleSpans(),
+              Expanded(
+                child: _CompareChoiceCard(
+                  titleSpans: widget.strings.ex2WalkTitleSpans(),
+                  intensity: 2,
+                  isRun: false,
+                  isDark: isDark,
+                  isSelected: _selectedOption == 0,
+                  onTap: () => setState(() => _selectedOption = 0),
+                  intensityLabel: widget.strings.ex2IntensityLabel(),
+                ),
               ),
-              const SizedBox(height: 16), // Reduced from 18
-              Container(
-                width: double.infinity,
-                height: 0.8, // Slightly thinner divider
-                color: isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0),
+              SizedBox(
+                width: 42,
+                child: Center(
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color:
+                          isDark ? OnboardingTheme.darkSurface : Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.10)
+                            : const Color(0xFFE5E5EA),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'VS',
+                        style: GoogleFonts.lato(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.48),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(height: 16), // Reduced from 18
-              _CompareRow(
-                icon: Icons.directions_run,
-                titleSpans: strings.ex2RunTitleSpans(),
+              Expanded(
+                child: _CompareChoiceCard(
+                  titleSpans: widget.strings.ex2RunTitleSpans(),
+                  intensity: 5,
+                  isRun: true,
+                  isDark: isDark,
+                  isSelected: _selectedOption == 1,
+                  onTap: () => setState(() => _selectedOption = 1),
+                  intensityLabel: widget.strings.ex2IntensityLabel(),
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 28),
-        Text(
-          strings.ex2Question(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-            letterSpacing: -0.6,
-            color: theme.colorScheme.onSurface,
-            height: 1.30,
+        const SizedBox(height: 20),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 180),
+          child: Row(
+            key: ValueKey(_selectedOption),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (_selectedOption != null) ...[
+                const Icon(
+                  Icons.check_circle_rounded,
+                  size: 16,
+                  color: OnboardingTheme.primaryRed,
+                ),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                _selectedOption == null
+                    ? widget.strings.ex2ChoosePrompt()
+                    : widget.strings.ex2ChoiceSaved(),
+                style: GoogleFonts.lato(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: _selectedOption == null
+                      ? theme.colorScheme.onSurface.withValues(alpha: 0.42)
+                      : OnboardingTheme.primaryRed,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -136,26 +207,173 @@ class _ComparisonStep extends StatelessWidget {
   }
 }
 
-class _CompareRow extends StatelessWidget {
-  final IconData icon;
+class _CompareChoiceCard extends StatelessWidget {
   final List<EmphasisTextSpan> titleSpans;
+  final int intensity;
+  final bool isRun;
+  final bool isDark;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final String intensityLabel;
 
-  const _CompareRow({
-    required this.icon,
+  const _CompareChoiceCard({
     required this.titleSpans,
+    required this.intensity,
+    required this.isRun,
+    required this.isDark,
+    required this.isSelected,
+    required this.onTap,
+    required this.intensityLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, size: 104, color: OnboardingTheme.primaryRed),
-        const SizedBox(height: 14),
-        SizedBox(
-          width: double.infinity,
-          child: OnboardingRichTitle(spans: titleSpans),
+    final theme = Theme.of(context);
+    final neutralBorder =
+        isDark ? Colors.white.withValues(alpha: 0.10) : const Color(0xFFE5E5EA);
+    final duration = titleSpans.first.text.trim();
+    final activitySpans = titleSpans.skip(1);
+
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: titleSpans.map((span) => span.text).join(),
+      excludeSemantics: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(OnboardingTheme.radiusMedium),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+            decoration: BoxDecoration(
+              color: isDark ? OnboardingTheme.darkSurface : Colors.white,
+              borderRadius: BorderRadius.circular(OnboardingTheme.radiusMedium),
+              border: Border.all(
+                color: isSelected ? OnboardingTheme.primaryRed : neutralBorder,
+                width: isSelected ? 1.8 : 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isSelected
+                      ? OnboardingTheme.primaryRed.withValues(alpha: 0.12)
+                      : Colors.black.withValues(alpha: isDark ? 0.16 : 0.055),
+                  blurRadius: isSelected ? 20 : 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: 23,
+                    height: 23,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? OnboardingTheme.primaryRed
+                          : Colors.transparent,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected
+                            ? OnboardingTheme.primaryRed
+                            : theme.colorScheme.onSurface
+                                .withValues(alpha: 0.18),
+                        width: 1.4,
+                      ),
+                    ),
+                    child: isSelected
+                        ? const Icon(
+                            Icons.check_rounded,
+                            size: 15,
+                            color: Colors.white,
+                          )
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  duration,
+                  maxLines: 1,
+                  style: GoogleFonts.lato(
+                    fontSize: 37,
+                    height: 1,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -1.2,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 13),
+                Text.rich(
+                  TextSpan(
+                    children: activitySpans
+                        .map(
+                          (span) => TextSpan(
+                            text: span.text,
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              height: 1.2,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.4,
+                              color: span.isRed
+                                  ? OnboardingTheme.primaryRed
+                                  : theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Spacer(),
+                Divider(
+                  height: 1,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                ),
+                const SizedBox(height: 13),
+                Text(
+                  intensityLabel,
+                  style: GoogleFonts.lato(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.42),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: List.generate(5, (index) {
+                    final isActive = index < intensity;
+                    return Expanded(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        height: 7,
+                        margin: EdgeInsets.only(right: index == 4 ? 0 : 4),
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? (isRun
+                                  ? OnboardingTheme.primaryRed
+                                  : theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.28))
+                              : theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -182,13 +400,11 @@ class _IntervalsStep extends StatelessWidget {
     // 7: show "이게 더 잘 빠집니다" (in addition to line 1)
     final showCount = step.clamp(1, 4);
     final lines = strings.ex2IntervalLines();
-
     return Column(
       children: [
-        const SizedBox(height: 42),
-        const Icon(Icons.directions_run,
-            size: 116, color: OnboardingTheme.primaryRed),
-        const SizedBox(height: 22),
+        // Keep a modest breathing room below the progress header without
+        // leaving an illustration-sized hole in the layout.
+        const SizedBox(height: 72),
 
         // Staggered reveal: each line animates in when it becomes visible.
         for (int i = 0; i < 4; i++) ...[
@@ -437,5 +653,263 @@ class _Dot extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _IntervalChartVisualizer extends StatefulWidget {
+  final int step;
+
+  const _IntervalChartVisualizer({required this.step});
+
+  @override
+  State<_IntervalChartVisualizer> createState() =>
+      _IntervalChartVisualizerState();
+}
+
+class _IntervalChartVisualizerState extends State<_IntervalChartVisualizer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late Animation<double> _animation;
+  int _prevStep = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _prevStep = widget.step;
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _animation =
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic);
+    _controller.forward(from: 0.0);
+  }
+
+  @override
+  void didUpdateWidget(covariant _IntervalChartVisualizer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.step != widget.step) {
+      _prevStep = oldWidget.step;
+      _controller.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, _) {
+        return Container(
+          width: double.infinity,
+          height: 120,
+          margin: const EdgeInsets.only(top: 20, bottom: 20),
+          decoration: BoxDecoration(
+            color: theme.brightness == Brightness.dark
+                ? const Color(0xFF1C1C1E)
+                : const Color(0xFFF9F9F9),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: theme.brightness == Brightness.dark
+                  ? const Color(0xFF2C2C2E)
+                  : const Color(0xFFE5E5EA),
+              width: 0.8,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: CustomPaint(
+              painter: _IntervalChartPainter(
+                step: widget.step,
+                prevStep: _prevStep,
+                animValue: _animation.value,
+                isDark: theme.brightness == Brightness.dark,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _IntervalChartPainter extends CustomPainter {
+  final int step;
+  final int prevStep;
+  final double animValue;
+  final bool isDark;
+
+  _IntervalChartPainter({
+    required this.step,
+    required this.prevStep,
+    required this.animValue,
+    required this.isDark,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final width = size.width;
+    final height = size.height;
+
+    // Define colors
+    const walkStartColor = Color(0xFF00C6FF);
+    const walkEndColor = Color(0xFF0072FF);
+    const runStartColor = Color(0xFFFF416C);
+    const runEndColor = Color(0xFFFF4B2B);
+
+    final walkPaint = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+        colors: [walkStartColor, walkEndColor],
+      ).createShader(Rect.fromLTWH(0, 0, width, height));
+
+    final runPaint = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+        colors: [runStartColor, runEndColor],
+      ).createShader(Rect.fromLTWH(0, 0, width, height));
+
+    // Helpers to draw rounded rect blocks at the bottom
+    void drawBlock(
+        double left, double right, double targetHeight, Paint paint) {
+      if (left >= right) return;
+      final rect = RRect.fromRectAndCorners(
+        Rect.fromLTRB(left, height - targetHeight, right, height),
+        topLeft: const Radius.circular(8),
+        topRight: const Radius.circular(8),
+      );
+
+      // Draw glow shadow
+      canvas.save();
+      final glowPaint = Paint()
+        ..color = (paint.shader == null)
+            ? Colors.grey.withValues(alpha: 0.1)
+            : const Color(0xFFFF4B2B).withValues(alpha: 0.15)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+      canvas.drawRRect(rect, glowPaint);
+      canvas.restore();
+
+      canvas.drawRRect(rect, paint);
+    }
+
+    if (step <= 4) {
+      // 4 blocks mode
+      final blockWidths = [0.25, 0.30, 0.20, 0.25];
+      final heights = [
+        0.35 * height,
+        0.85 * height,
+        0.35 * height,
+        0.85 * height
+      ];
+      final paints = [walkPaint, runPaint, walkPaint, runPaint];
+
+      double currentX = 0;
+      for (int i = 0; i < 4; i++) {
+        final bWidth = blockWidths[i] * width;
+        final startX = currentX;
+        final endX = currentX + bWidth;
+        currentX = endX;
+
+        // Determine actual height based on step and animation
+        double actualHeight = 0;
+        if (i < step - 1) {
+          // Previously completed blocks
+          actualHeight = heights[i];
+        } else if (i == step - 1) {
+          // Currently animating block
+          if (prevStep < step) {
+            actualHeight = heights[i] * animValue;
+          } else {
+            actualHeight = heights[i];
+          }
+        }
+
+        drawBlock(startX, endX, actualHeight, paints[i]);
+      }
+    } else {
+      // Step 5, 6, 7: Zoomed out, repeating wave (e.g. 6 cycles)
+      const totalCycles = 6;
+      final cycleWidth = width / totalCycles;
+      final walkW = cycleWidth * 0.4;
+      final walkH = 0.35 * height;
+      final runH = 0.85 * height;
+
+      for (int i = 0; i < totalCycles; i++) {
+        final cycleStartX = i * cycleWidth;
+        // Walk block
+        drawBlock(
+          cycleStartX,
+          cycleStartX + walkW,
+          walkH,
+          walkPaint,
+        );
+        // Run block
+        drawBlock(
+          cycleStartX + walkW,
+          cycleStartX + cycleWidth,
+          runH,
+          runPaint,
+        );
+      }
+
+      // Step 7: Steady cardio contrast line
+      if (step >= 7) {
+        final linePaint = Paint()
+          ..color = isDark
+              ? Colors.white.withValues(alpha: 0.35)
+              : Colors.black.withValues(alpha: 0.35)
+          ..strokeWidth = 2.5
+          ..style = PaintingStyle.stroke;
+
+        // Draw dashed line
+        const dashWidth = 8.0;
+        const dashSpace = 5.0;
+        double startX = 0;
+        final yVal = height - (0.45 * height);
+
+        // Animate line fading in
+        final double opacity = (prevStep < 7) ? animValue : 1.0;
+        linePaint.color =
+            linePaint.color.withValues(alpha: linePaint.color.a * opacity);
+
+        while (startX < width) {
+          canvas.drawLine(
+            Offset(startX, yVal),
+            Offset((startX + dashWidth).clamp(0, width), yVal),
+            linePaint,
+          );
+          startX += dashWidth + dashSpace;
+        }
+
+        // Draw a small text for steady state label if space allows
+        final textPainter = TextPainter(
+          text: TextSpan(
+            text: 'Steady State',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              color: linePaint.color,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
+        textPainter.paint(canvas, Offset(12, yVal - 14));
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _IntervalChartPainter oldDelegate) {
+    return oldDelegate.step != step ||
+        oldDelegate.animValue != animValue ||
+        oldDelegate.isDark != isDark;
   }
 }

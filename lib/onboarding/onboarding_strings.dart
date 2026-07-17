@@ -135,14 +135,13 @@ class OnboardingStrings {
   // ---- Screen 2 ----
   List<EmphasisTextSpan> s2TitleSpans() => _spans({
         'ko': const [
-          EmphasisTextSpan('몇분 걷고 몇분 뛰고 ...\n'),
-          EmphasisTextSpan('인터벌 운동을 '),
-          EmphasisTextSpan('직접 기획하세요!', isRed: true),
+          EmphasisTextSpan('걷기와 달리기를\n'),
+          EmphasisTextSpan('원하는 대로 ', isRed: true),
+          EmphasisTextSpan('조합하세요'),
         ],
         'en': const [
-          EmphasisTextSpan('Walk, run...\n'),
-          EmphasisTextSpan('Plan your interval routine '),
-          EmphasisTextSpan('yourself!', isRed: true),
+          EmphasisTextSpan('Combine walking and running\n'),
+          EmphasisTextSpan('your way', isRed: true),
         ],
         'es': const [
           EmphasisTextSpan('Camina, corre...\n'),
@@ -400,6 +399,63 @@ class OnboardingStrings {
         'vi': 'Cái nào giúp giảm mỡ tốt hơn?',
         'ar': 'أيّهما يحرق الدهون أكثر؟',
         'th': 'อะไรช่วยเผาผลาญไขมันได้ดีกว่า?',
+      });
+
+  String ex2IntensityLabel() => _t({
+        'ko': '운동 강도',
+        'en': 'Intensity',
+        'es': 'Intensidad',
+        'fr': 'Intensité',
+        'de': 'Intensität',
+        'it': 'Intensità',
+        'nl': 'Intensiteit',
+        'da': 'Intensitet',
+        'nb': 'Intensitet',
+        'ru': 'Интенсивность',
+        'pt': 'Intensidade',
+        'ja': '運動強度',
+        'zh': '运动强度',
+        'vi': 'Cường độ',
+        'ar': 'الشدة',
+        'th': 'ความเข้มข้น',
+      });
+
+  String ex2ChoosePrompt() => _t({
+        'ko': '하나를 선택해 보세요',
+        'en': 'Choose one',
+        'es': 'Elige una opción',
+        'fr': 'Choisis une option',
+        'de': 'Wähle eine Option',
+        'it': 'Scegli un’opzione',
+        'nl': 'Kies er één',
+        'da': 'Vælg én',
+        'nb': 'Velg én',
+        'ru': 'Выберите вариант',
+        'pt': 'Escolha uma opção',
+        'ja': 'どちらかを選んでください',
+        'zh': '请选择一个',
+        'vi': 'Chọn một phương án',
+        'ar': 'اختر واحدًا',
+        'th': 'เลือกหนึ่งตัวเลือก',
+      });
+
+  String ex2ChoiceSaved() => _t({
+        'ko': '선택 완료 · 다음에서 확인하세요',
+        'en': 'Selected · See the answer next',
+        'es': 'Elegido · Descubre la respuesta',
+        'fr': 'Choisi · Découvre ensuite la réponse',
+        'de': 'Ausgewählt · Die Antwort kommt gleich',
+        'it': 'Scelto · Scopri ora la risposta',
+        'nl': 'Gekozen · Bekijk hierna het antwoord',
+        'da': 'Valgt · Se svaret på næste skærm',
+        'nb': 'Valgt · Se svaret på neste skjerm',
+        'ru': 'Выбрано · Ответ — дальше',
+        'pt': 'Selecionado · Veja a resposta a seguir',
+        'ja': '選択しました・次で答えを確認',
+        'zh': '已选择 · 下一步揭晓答案',
+        'vi': 'Đã chọn · Xem đáp án tiếp theo',
+        'ar': 'تم الاختيار · اكتشف الإجابة تاليًا',
+        'th': 'เลือกแล้ว · ดูคำตอบถัดไป',
       });
 
   List<String> ex2IntervalLines() => [
@@ -924,23 +980,6 @@ class OnboardingStrings {
     return null;
   }
 
-  List<EmphasisTextSpan> ex2FinalSpans() => _spans({
-        'ko': const [
-          EmphasisTextSpan('이렇게 '),
-          EmphasisTextSpan('30분씩', isRed: true),
-          EmphasisTextSpan(','),
-          EmphasisTextSpan('이게 더 잘 '),
-          EmphasisTextSpan('빠집니다'),
-        ],
-        'en': const [
-          EmphasisTextSpan('Like this, for '),
-          EmphasisTextSpan('30 minutes', isRed: true),
-          EmphasisTextSpan(','),
-          EmphasisTextSpan(' this works better'),
-          EmphasisTextSpan(''),
-        ],
-      });
-
   List<EmphasisTextSpan> ex2FinalLine1Spans() => _spans({
         'ko': const [
           EmphasisTextSpan('이렇게 '),
@@ -1094,27 +1133,150 @@ class OnboardingStrings {
         'th': 'เวลารวม',
       });
 
-  String setLabel(int n) {
+  String planTotalMinutesLabel(int n) {
     final template = _t({
-      'ko': '{n}세트',
-      'en': 'Set {n}',
-      'es': 'Serie {n}',
-      'fr': 'Série {n}',
-      'de': 'Satz {n}',
-      'it': 'Serie {n}',
-      'nl': 'Set {n}',
-      'da': 'Sæt {n}',
-      'nb': 'Sett {n}',
-      'ru': 'Подход {n}',
-      'pt': 'Série {n}',
-      'ja': '{n}セット',
-      'zh': '第{n}组',
-      'vi': 'Hiệp {n}',
-      'ar': 'مجموعة {n}',
-      'th': 'เซ็ต {n}',
+      'ko': '총 {n}분',
+      'en': '{n} min total',
+      'es': '{n} min en total',
+      'fr': '{n} min au total',
+      'de': 'Insgesamt {n} Min.',
+      'it': '{n} min totali',
+      'nl': 'Totaal {n} min',
+      'da': '{n} min i alt',
+      'nb': '{n} min totalt',
+      'ru': 'Всего {n} мин',
+      'pt': '{n} min no total',
+      'ja': '合計{n}分',
+      'zh': '共{n}分钟',
+      'vi': 'Tổng {n} phút',
+      'ar': '{n} دقيقة إجمالًا',
+      'th': 'รวม {n} นาที',
     });
     return template.replaceAll('{n}', n.toString());
   }
+
+  String planIntervalCountLabel(int n) {
+    final template = _t({
+      'ko': '{n}개 구간',
+      'en': '{n} intervals',
+      'es': '{n} intervalos',
+      'fr': '{n} intervalles',
+      'de': '{n} Intervalle',
+      'it': '{n} intervalli',
+      'nl': '{n} intervallen',
+      'da': '{n} intervaller',
+      'nb': '{n} intervaller',
+      'ru': '{n} интервала',
+      'pt': '{n} intervalos',
+      'ja': '{n}区間',
+      'zh': '{n}个区间',
+      'vi': '{n} chặng',
+      'ar': '{n} فترات',
+      'th': '{n} ช่วง',
+    });
+    return template.replaceAll('{n}', n.toString());
+  }
+
+  String planIntervalLabel(int n) {
+    final template = _t({
+      'ko': '{n}구간',
+      'en': 'Interval {n}',
+      'es': 'Intervalo {n}',
+      'fr': 'Intervalle {n}',
+      'de': 'Intervall {n}',
+      'it': 'Intervallo {n}',
+      'nl': 'Interval {n}',
+      'da': 'Interval {n}',
+      'nb': 'Intervall {n}',
+      'ru': 'Интервал {n}',
+      'pt': 'Intervalo {n}',
+      'ja': '区間{n}',
+      'zh': '第{n}区间',
+      'vi': 'Chặng {n}',
+      'ar': 'الفترة {n}',
+      'th': 'ช่วงที่ {n}',
+    });
+    return template.replaceAll('{n}', n.toString());
+  }
+
+  String planMinutesLabel(int n) {
+    final template = _t({
+      'ko': '{n}분',
+      'en': '{n} min',
+      'es': '{n} min',
+      'fr': '{n} min',
+      'de': '{n} Min.',
+      'it': '{n} min',
+      'nl': '{n} min',
+      'da': '{n} min',
+      'nb': '{n} min',
+      'ru': '{n} мин',
+      'pt': '{n} min',
+      'ja': '{n}分',
+      'zh': '{n}分钟',
+      'vi': '{n} phút',
+      'ar': '{n} دقائق',
+      'th': '{n} นาที',
+    });
+    return template.replaceAll('{n}', n.toString());
+  }
+
+  String planRecoveryWalkLabel() => _t({
+        'ko': '회복 걷기',
+        'en': 'Recovery walk',
+        'es': 'Caminata de recuperación',
+        'fr': 'Marche de récupération',
+        'de': 'Erholungsgehen',
+        'it': 'Camminata di recupero',
+        'nl': 'Herstelwandeling',
+        'da': 'Restitutionsgang',
+        'nb': 'Restitusjonsgange',
+        'ru': 'Восстановительная ходьба',
+        'pt': 'Caminhada de recuperação',
+        'ja': 'リカバリーウォーク',
+        'zh': '恢复步行',
+        'vi': 'Đi bộ hồi phục',
+        'ar': 'مشي للاستشفاء',
+        'th': 'เดินฟื้นตัว',
+      });
+
+  String planFastRunLabel() => _t({
+        'ko': '빠른 달리기',
+        'en': 'Fast run',
+        'es': 'Carrera rápida',
+        'fr': 'Course rapide',
+        'de': 'Schneller Lauf',
+        'it': 'Corsa veloce',
+        'nl': 'Snelle run',
+        'da': 'Hurtigt løb',
+        'nb': 'Rask løping',
+        'ru': 'Быстрый бег',
+        'pt': 'Corrida rápida',
+        'ja': '速いラン',
+        'zh': '快速跑',
+        'vi': 'Chạy nhanh',
+        'ar': 'جري سريع',
+        'th': 'วิ่งเร็ว',
+      });
+
+  String planFinishRunLabel() => _t({
+        'ko': '피니시 달리기',
+        'en': 'Finishing run',
+        'es': 'Carrera final',
+        'fr': 'Course finale',
+        'de': 'Abschlusslauf',
+        'it': 'Corsa finale',
+        'nl': 'Eindsprint',
+        'da': 'Afsluttende løb',
+        'nb': 'Avsluttende løp',
+        'ru': 'Финальный бег',
+        'pt': 'Corrida final',
+        'ja': 'フィニッシュラン',
+        'zh': '冲刺跑',
+        'vi': 'Chạy nước rút',
+        'ar': 'جري ختامي',
+        'th': 'วิ่งปิดท้าย',
+      });
 
   // ---- Screen 3 ----
   List<EmphasisTextSpan> s3TitleSpans() => _spans({
@@ -1325,41 +1487,133 @@ class OnboardingStrings {
   // History list mock strings
   List<({String title, String subtitle})> historyItems() => [
         (
-          title: _t({
-            'ko': '러닝 인터벌 루틴 1',
-            'en': 'Treadmill Interval Routine 1',
-          }),
+          title: historyTreadmillRoutineTitle(1),
           subtitle: _historySubRun(time: '30:00', dist: '4.52', avg: '8.5'),
         ),
         (
-          title: _t({
-            'ko': '러닝 인터벌 루틴 2',
-            'en': 'Treadmill Interval Routine 2',
-          }),
+          title: historyTreadmillRoutineTitle(2),
           subtitle: _historySubRun(time: '15:00', dist: '2.4', avg: '5.0'),
         ),
         (
-          title: _t({
-            'ko': '러닝 인터벌 루틴 3',
-            'en': 'Treadmill Interval Routine 3',
-          }),
+          title: historyTreadmillRoutineTitle(3),
           subtitle: _historySubRun(time: '20:00', dist: '5.8', avg: '7.5'),
         ),
         (
-          title: _t({
-            'ko': '사이클 인터벌 루틴 2',
-            'en': 'Cycle Interval Routine 2',
-          }),
+          title: historyCycleRoutineTitle(2),
           subtitle: historySubCycle(),
         ),
         (
-          title: _t({
-            'ko': '천국의 계단 인터벌 루틴 1',
-            'en': 'Stairmaster Interval Routine 1',
-          }),
+          title: historyStairRoutineTitle(1),
           subtitle: historySubStair(),
         ),
       ];
+
+  String historyWeeklyConsistencyLabel() => _t({
+        'ko': '주간 꾸준함',
+        'en': 'Weekly consistency',
+        'es': 'Constancia semanal',
+        'fr': 'Régularité hebdomadaire',
+        'de': 'Wöchentliche Konstanz',
+        'it': 'Costanza settimanale',
+        'nl': 'Wekelijkse regelmaat',
+        'da': 'Ugentlig kontinuitet',
+        'nb': 'Ukentlig kontinuitet',
+        'ru': 'Регулярность за неделю',
+        'pt': 'Consistência semanal',
+        'ja': '週間の継続状況',
+        'zh': '每周坚持情况',
+        'vi': 'Duy trì hằng tuần',
+        'ar': 'الاستمرارية الأسبوعية',
+        'th': 'ความสม่ำเสมอรายสัปดาห์',
+      });
+
+  String historyWeekStreakLabel(int n) {
+    final template = _t({
+      'ko': '🔥 {n}주 연속',
+      'en': '🔥 {n}-week streak',
+      'es': '🔥 Racha de {n} semanas',
+      'fr': '🔥 Série de {n} semaines',
+      'de': '🔥 {n} Wochen in Folge',
+      'it': '🔥 Serie di {n} settimane',
+      'nl': '🔥 {n} weken op rij',
+      'da': '🔥 {n} uger i træk',
+      'nb': '🔥 {n} uker på rad',
+      'ru': '🔥 {n} недель подряд',
+      'pt': '🔥 Sequência de {n} semanas',
+      'ja': '🔥 {n}週間連続',
+      'zh': '🔥 连续{n}周',
+      'vi': '🔥 Chuỗi {n} tuần',
+      'ar': '🔥 {n} أسبوعًا متتاليًا',
+      'th': '🔥 ต่อเนื่อง {n} สัปดาห์',
+    });
+    return template.replaceAll('{n}', n.toString());
+  }
+
+  String historyTreadmillRoutineTitle(int n) => _numberedLabel(
+        n,
+        {
+          'ko': '러닝 인터벌 루틴 {n}',
+          'en': 'Treadmill interval routine {n}',
+          'es': 'Intervalos en cinta {n}',
+          'fr': 'Fractionné sur tapis {n}',
+          'de': 'Laufband-Intervall {n}',
+          'it': 'Intervalli su tapis roulant {n}',
+          'nl': 'Loopbandinterval {n}',
+          'da': 'Løbebåndsinterval {n}',
+          'nb': 'Tredemølleintervall {n}',
+          'ru': 'Интервалы на дорожке {n}',
+          'pt': 'Intervalos na esteira {n}',
+          'ja': 'トレッドミル・インターバル {n}',
+          'zh': '跑步机间歇训练 {n}',
+          'vi': 'Interval máy chạy bộ {n}',
+          'ar': 'فترات جهاز المشي {n}',
+          'th': 'อินเทอร์วัลลู่วิ่ง {n}',
+        },
+      );
+
+  String historyCycleRoutineTitle(int n) => _numberedLabel(
+        n,
+        {
+          'ko': '사이클 인터벌 루틴 {n}',
+          'en': 'Cycle interval routine {n}',
+          'es': 'Intervalos en bicicleta {n}',
+          'fr': 'Fractionné vélo {n}',
+          'de': 'Fahrrad-Intervall {n}',
+          'it': 'Intervalli in bici {n}',
+          'nl': 'Fietsinterval {n}',
+          'da': 'Cykelinterval {n}',
+          'nb': 'Sykkelintervall {n}',
+          'ru': 'Велоинтервалы {n}',
+          'pt': 'Intervalos na bicicleta {n}',
+          'ja': 'バイク・インターバル {n}',
+          'zh': '单车间歇训练 {n}',
+          'vi': 'Interval xe đạp {n}',
+          'ar': 'فترات الدراجة {n}',
+          'th': 'อินเทอร์วัลจักรยาน {n}',
+        },
+      );
+
+  String historyStairRoutineTitle(int n) => _numberedLabel(
+        n,
+        {
+          'ko': '천국의 계단 인터벌 루틴 {n}',
+          'en': 'Stair climber interval routine {n}',
+          'es': 'Intervalos en escaladora {n}',
+          'fr': 'Fractionné escalier {n}',
+          'de': 'Treppensteiger-Intervall {n}',
+          'it': 'Intervalli su stair climber {n}',
+          'nl': 'Traptrainerinterval {n}',
+          'da': 'Trappemaskineinterval {n}',
+          'nb': 'Trappemaskinintervall {n}',
+          'ru': 'Интервалы на степпере {n}',
+          'pt': 'Intervalos na escada {n}',
+          'ja': 'ステアクライマー・インターバル {n}',
+          'zh': '登阶机间歇训练 {n}',
+          'vi': 'Interval máy leo cầu thang {n}',
+          'ar': 'فترات جهاز الدرج {n}',
+          'th': 'อินเทอร์วัลเครื่องขึ้นบันได {n}',
+        },
+      );
 
   String _historySubRun({
     required String time,
@@ -1638,6 +1892,65 @@ class OnboardingStrings {
           EmphasisTextSpan('units', isRed: true),
           EmphasisTextSpan(''),
         ],
+        'es': const [
+          EmphasisTextSpan('Elige tus '),
+          EmphasisTextSpan('unidades', isRed: true),
+        ],
+        'fr': const [
+          EmphasisTextSpan('Choisis tes '),
+          EmphasisTextSpan('unités', isRed: true),
+        ],
+        'de': const [
+          EmphasisTextSpan('Wähle deine '),
+          EmphasisTextSpan('Einheiten', isRed: true),
+        ],
+        'it': const [
+          EmphasisTextSpan('Scegli le '),
+          EmphasisTextSpan('unità', isRed: true),
+        ],
+        'nl': const [
+          EmphasisTextSpan('Kies je '),
+          EmphasisTextSpan('eenheden', isRed: true),
+        ],
+        'da': const [
+          EmphasisTextSpan('Vælg dine '),
+          EmphasisTextSpan('enheder', isRed: true),
+        ],
+        'nb': const [
+          EmphasisTextSpan('Velg dine '),
+          EmphasisTextSpan('enheter', isRed: true),
+        ],
+        'ru': const [
+          EmphasisTextSpan('Выбери '),
+          EmphasisTextSpan('единицы измерения', isRed: true),
+        ],
+        'pt': const [
+          EmphasisTextSpan('Escolha suas '),
+          EmphasisTextSpan('unidades', isRed: true),
+        ],
+        'ja': const [
+          EmphasisTextSpan('使用する'),
+          EmphasisTextSpan('単位', isRed: true),
+          EmphasisTextSpan('を選択'),
+        ],
+        'zh': const [
+          EmphasisTextSpan('选择使用的'),
+          EmphasisTextSpan('单位', isRed: true),
+        ],
+        'vi': const [
+          EmphasisTextSpan('Chọn '),
+          EmphasisTextSpan('đơn vị', isRed: true),
+          EmphasisTextSpan(' của bạn'),
+        ],
+        'ar': const [
+          EmphasisTextSpan('اختر '),
+          EmphasisTextSpan('وحدات القياس', isRed: true),
+        ],
+        'th': const [
+          EmphasisTextSpan('เลือก'),
+          EmphasisTextSpan('หน่วย', isRed: true),
+          EmphasisTextSpan('ที่ต้องการ'),
+        ],
       });
 
   String s6Helper() => _t({
@@ -1669,6 +1982,76 @@ class OnboardingStrings {
         'en': const [
           EmphasisTextSpan('Now '),
           EmphasisTextSpan('start', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'es': const [
+          EmphasisTextSpan('¡Ahora, '),
+          EmphasisTextSpan('empieza', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'fr': const [
+          EmphasisTextSpan('C’est parti, '),
+          EmphasisTextSpan('commence', isRed: true),
+          EmphasisTextSpan(' !'),
+        ],
+        'de': const [
+          EmphasisTextSpan('Jetzt '),
+          EmphasisTextSpan('starten', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'it': const [
+          EmphasisTextSpan('Ora '),
+          EmphasisTextSpan('inizia', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'nl': const [
+          EmphasisTextSpan('Ga nu '),
+          EmphasisTextSpan('van start', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'da': const [
+          EmphasisTextSpan('Kom nu '),
+          EmphasisTextSpan('i gang', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'nb': const [
+          EmphasisTextSpan('Nå kan du '),
+          EmphasisTextSpan('starte', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'ru': const [
+          EmphasisTextSpan('Теперь '),
+          EmphasisTextSpan('начинай', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'pt': const [
+          EmphasisTextSpan('Agora, '),
+          EmphasisTextSpan('comece', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'ja': const [
+          EmphasisTextSpan('さあ、'),
+          EmphasisTextSpan('始めよう', isRed: true),
+          EmphasisTextSpan('！'),
+        ],
+        'zh': const [
+          EmphasisTextSpan('现在就'),
+          EmphasisTextSpan('开始', isRed: true),
+          EmphasisTextSpan('吧！'),
+        ],
+        'vi': const [
+          EmphasisTextSpan('Giờ thì '),
+          EmphasisTextSpan('bắt đầu', isRed: true),
+          EmphasisTextSpan(' thôi!'),
+        ],
+        'ar': const [
+          EmphasisTextSpan('والآن '),
+          EmphasisTextSpan('ابدأ', isRed: true),
+          EmphasisTextSpan('!'),
+        ],
+        'th': const [
+          EmphasisTextSpan('ตอนนี้ '),
+          EmphasisTextSpan('เริ่มเลย', isRed: true),
           EmphasisTextSpan('!'),
         ],
       });
@@ -1731,7 +2114,591 @@ class OnboardingStrings {
         'th': 'แล้วสนุกไปด้วยกัน',
       });
 
+  // ---- New AI Intro Screen ----
+  List<EmphasisTextSpan> aiIntroTitleSpans() => _spans({
+        'ko': const [
+          EmphasisTextSpan('나만을 위한\n'),
+          EmphasisTextSpan('AI 루틴 ', isRed: true),
+          EmphasisTextSpan('생성'),
+        ],
+        'en': const [
+          EmphasisTextSpan('Custom '),
+          EmphasisTextSpan('AI Routine ', isRed: true),
+          EmphasisTextSpan('generator'),
+        ],
+        'es': const [
+          EmphasisTextSpan('Crea tu propia\n'),
+          EmphasisTextSpan('rutina con IA', isRed: true),
+        ],
+        'fr': const [
+          EmphasisTextSpan('Crée ta propre\n'),
+          EmphasisTextSpan('routine IA', isRed: true),
+        ],
+        'de': const [
+          EmphasisTextSpan('Erstelle deine\n'),
+          EmphasisTextSpan('KI-Routine', isRed: true),
+        ],
+        'it': const [
+          EmphasisTextSpan('Crea la tua\n'),
+          EmphasisTextSpan('routine IA', isRed: true),
+        ],
+        'nl': const [
+          EmphasisTextSpan('Maak je eigen\n'),
+          EmphasisTextSpan('AI-routine', isRed: true),
+        ],
+        'da': const [
+          EmphasisTextSpan('Skab din egen\n'),
+          EmphasisTextSpan('AI-rutine', isRed: true),
+        ],
+        'nb': const [
+          EmphasisTextSpan('Lag din egen\n'),
+          EmphasisTextSpan('AI-rutine', isRed: true),
+        ],
+        'ru': const [
+          EmphasisTextSpan('Создай свою\n'),
+          EmphasisTextSpan('ИИ-программу', isRed: true),
+        ],
+        'pt': const [
+          EmphasisTextSpan('Crie sua própria\n'),
+          EmphasisTextSpan('rotina com IA', isRed: true),
+        ],
+        'ja': const [
+          EmphasisTextSpan('自分だけの\n'),
+          EmphasisTextSpan('AIルーティン', isRed: true),
+          EmphasisTextSpan('を作成'),
+        ],
+        'zh': const [
+          EmphasisTextSpan('生成专属\n'),
+          EmphasisTextSpan('AI训练计划', isRed: true),
+        ],
+        'vi': const [
+          EmphasisTextSpan('Tạo '),
+          EmphasisTextSpan('bài tập AI', isRed: true),
+          EmphasisTextSpan('\ndành riêng cho bạn'),
+        ],
+        'ar': const [
+          EmphasisTextSpan('أنشئ روتينك\n'),
+          EmphasisTextSpan('المخصص بالذكاء الاصطناعي', isRed: true),
+        ],
+        'th': const [
+          EmphasisTextSpan('สร้างรูทีน\n'),
+          EmphasisTextSpan('AI สำหรับคุณ', isRed: true),
+        ],
+      });
+
+  String aiIntroBody() => _t({
+        'ko': '원하는 기구와 시간, 강도만 고르면\nAI가 5초 만에 맞춤 루틴을 설계해 드립니다.',
+        'en':
+            'Choose your machine, time, and intensity.\nAI builds your custom routine in 5 seconds.',
+        'es':
+            'Elige máquina, tiempo e intensidad.\nLa IA crea tu rutina en 5 segundos.',
+        'fr':
+            'Choisis la machine, la durée et l’intensité.\nL’IA crée ta routine en 5 secondes.',
+        'de':
+            'Wähle Gerät, Dauer und Intensität.\nDie KI erstellt deine Routine in 5 Sekunden.',
+        'it':
+            'Scegli attrezzo, durata e intensità.\nL’IA crea la tua routine in 5 secondi.',
+        'nl':
+            'Kies apparaat, tijd en intensiteit.\nAI maakt je routine in 5 seconden.',
+        'da':
+            'Vælg maskine, tid og intensitet.\nAI bygger din rutine på 5 sekunder.',
+        'nb':
+            'Velg apparat, tid og intensitet.\nAI lager rutinen din på 5 sekunder.',
+        'ru':
+            'Выбери тренажёр, время и нагрузку.\nИИ создаст программу за 5 секунд.',
+        'pt':
+            'Escolha aparelho, tempo e intensidade.\nA IA cria sua rotina em 5 segundos.',
+        'ja': '器具・時間・強度を選ぶだけ。\nAIが5秒で専用ルーティンを設計します。',
+        'zh': '只需选择器械、时间和强度。\nAI 会在 5 秒内生成专属计划。',
+        'vi':
+            'Chọn máy, thời gian và cường độ.\nAI tạo bài tập riêng trong 5 giây.',
+        'ar':
+            'اختر الجهاز والمدة والشدة.\nيصمم الذكاء الاصطناعي روتينك خلال 5 ثوانٍ.',
+        'th':
+            'เลือกเครื่อง เวลา และความเข้มข้น\nAI สร้างรูทีนเฉพาะคุณใน 5 วินาที',
+      });
+
+  String aiGenerationSemantics() => _t({
+        'ko': '러닝머신, 30분, 중급 조건으로 맞춤 인터벌 루틴 생성',
+        'en':
+            'Create a custom interval routine from treadmill, 30 minutes, and intermediate inputs',
+        'es':
+            'Crear una rutina por intervalos para cinta, 30 minutos y nivel intermedio',
+        'fr':
+            'Créer une séance fractionnée sur tapis de 30 minutes, niveau intermédiaire',
+        'de':
+            'Individuelles Laufband-Intervall für 30 Minuten auf mittlerem Niveau erstellen',
+        'it':
+            'Crea una routine a intervalli sul tapis roulant di 30 minuti, livello intermedio',
+        'nl': 'Maak een loopbandinterval van 30 minuten op gemiddeld niveau',
+        'da':
+            'Opret en tilpasset løbebåndsrutine på 30 minutter på mellemniveau',
+        'nb':
+            'Lag en tilpasset tredemøllerutine på 30 minutter på middels nivå',
+        'ru':
+            'Создать интервальную тренировку на дорожке на 30 минут для среднего уровня',
+        'pt':
+            'Criar uma rotina intervalada na esteira de 30 minutos, nível intermediário',
+        'ja': 'トレッドミル・30分・中級の条件で専用インターバルを作成',
+        'zh': '根据跑步机、30分钟和中级条件生成专属间歇训练',
+        'vi':
+            'Tạo bài interval máy chạy bộ 30 phút dành cho trình độ trung cấp',
+        'ar': 'إنشاء تمرين فترات مخصص لجهاز المشي لمدة 30 دقيقة بمستوى متوسط',
+        'th': 'สร้างรูทีนอินเทอร์วัลลู่วิ่ง 30 นาทีสำหรับระดับกลาง',
+      });
+
+  String aiTreadmillLabel() => _t({
+        'ko': '러닝머신',
+        'en': 'Treadmill',
+        'es': 'Cinta',
+        'fr': 'Tapis',
+        'de': 'Laufband',
+        'it': 'Tapis roulant',
+        'nl': 'Loopband',
+        'da': 'Løbebånd',
+        'nb': 'Tredemølle',
+        'ru': 'Беговая дорожка',
+        'pt': 'Esteira',
+        'ja': 'トレッドミル',
+        'zh': '跑步机',
+        'vi': 'Máy chạy bộ',
+        'ar': 'جهاز المشي',
+        'th': 'ลู่วิ่ง',
+      });
+
+  String aiCoreStatus() => _t({
+        'ko': '조건 분석 · 인터벌 설계',
+        'en': 'Analyze · Design intervals',
+        'es': 'Analizar · Diseñar intervalos',
+        'fr': 'Analyser · Créer les intervalles',
+        'de': 'Analysieren · Intervalle planen',
+        'it': 'Analisi · Creazione intervalli',
+        'nl': 'Analyseren · Intervallen ontwerpen',
+        'da': 'Analysér · Design intervaller',
+        'nb': 'Analyser · Design intervaller',
+        'ru': 'Анализ · План интервалов',
+        'pt': 'Analisar · Criar intervalos',
+        'ja': '条件を分析 · インターバルを設計',
+        'zh': '分析条件 · 设计间歇',
+        'vi': 'Phân tích · Thiết kế interval',
+        'ar': 'تحليل الشروط · تصميم الفترات',
+        'th': 'วิเคราะห์ · ออกแบบอินเทอร์วัล',
+      });
+
+  String aiCustomRoutineLabel() => _t({
+        'ko': '맞춤 인터벌 루틴',
+        'en': 'Custom interval routine',
+        'es': 'Rutina por intervalos personalizada',
+        'fr': 'Séance fractionnée personnalisée',
+        'de': 'Individuelle Intervallroutine',
+        'it': 'Routine a intervalli personalizzata',
+        'nl': 'Persoonlijke intervalroutine',
+        'da': 'Tilpasset intervalrutine',
+        'nb': 'Tilpasset intervallrutine',
+        'ru': 'Персональная интервальная программа',
+        'pt': 'Rotina intervalada personalizada',
+        'ja': '専用インターバルルーティン',
+        'zh': '专属间歇训练计划',
+        'vi': 'Bài interval riêng cho bạn',
+        'ar': 'روتين فترات مخصص',
+        'th': 'รูทีนอินเทอร์วัลเฉพาะคุณ',
+      });
+
+  String aiWalkMinutesLabel(int n) => _numberedLabel(n, {
+        'ko': '걷기 {n}분',
+        'en': 'Walk {n} min',
+        'es': 'Caminar {n} min',
+        'fr': 'Marche {n} min',
+        'de': 'Gehen {n} Min.',
+        'it': 'Cammina {n} min',
+        'nl': 'Wandelen {n} min',
+        'da': 'Gang {n} min',
+        'nb': 'Gange {n} min',
+        'ru': 'Ходьба {n} мин',
+        'pt': 'Caminhar {n} min',
+        'ja': 'ウォーク {n}分',
+        'zh': '步行 {n}分钟',
+        'vi': 'Đi bộ {n} phút',
+        'ar': 'مشي {n} دقائق',
+        'th': 'เดิน {n} นาที',
+      });
+
+  String aiRunMinutesLabel(int n) => _numberedLabel(n, {
+        'ko': '달리기 {n}분',
+        'en': 'Run {n} min',
+        'es': 'Correr {n} min',
+        'fr': 'Course {n} min',
+        'de': 'Laufen {n} Min.',
+        'it': 'Corri {n} min',
+        'nl': 'Rennen {n} min',
+        'da': 'Løb {n} min',
+        'nb': 'Løping {n} min',
+        'ru': 'Бег {n} мин',
+        'pt': 'Correr {n} min',
+        'ja': 'ラン {n}分',
+        'zh': '跑步 {n}分钟',
+        'vi': 'Chạy {n} phút',
+        'ar': 'جري {n} دقائق',
+        'th': 'วิ่ง {n} นาที',
+      });
+
+  String aiSetCountLabel(int n) => _numberedLabel(n, {
+        'ko': '× {n}세트',
+        'en': '× {n} sets',
+        'es': '× {n} series',
+        'fr': '× {n} séries',
+        'de': '× {n} Runden',
+        'it': '× {n} serie',
+        'nl': '× {n} sets',
+        'da': '× {n} sæt',
+        'nb': '× {n} sett',
+        'ru': '× {n} подходов',
+        'pt': '× {n} séries',
+        'ja': '× {n}セット',
+        'zh': '× {n}组',
+        'vi': '× {n} hiệp',
+        'ar': '× {n} مجموعات',
+        'th': '× {n} เซ็ต',
+      });
+
+  // ---- New Reminder Screen ----
+  List<EmphasisTextSpan> reminderTitleSpans() => _spans({
+        'ko': const [
+          EmphasisTextSpan('운동 습관을 위한\n'),
+          EmphasisTextSpan('알림 설정', isRed: true),
+        ],
+        'en': const [
+          EmphasisTextSpan('Build habits with\n'),
+          EmphasisTextSpan('Reminders', isRed: true),
+        ],
+        'es': const [
+          EmphasisTextSpan('Crea el hábito con\n'),
+          EmphasisTextSpan('recordatorios', isRed: true),
+        ],
+        'fr': const [
+          EmphasisTextSpan('Crée une habitude avec\n'),
+          EmphasisTextSpan('des rappels', isRed: true),
+        ],
+        'de': const [
+          EmphasisTextSpan('Gewohnheiten durch\n'),
+          EmphasisTextSpan('Erinnerungen', isRed: true),
+        ],
+        'it': const [
+          EmphasisTextSpan('Crea l’abitudine con\n'),
+          EmphasisTextSpan('i promemoria', isRed: true),
+        ],
+        'nl': const [
+          EmphasisTextSpan('Bouw een gewoonte op met\n'),
+          EmphasisTextSpan('herinneringen', isRed: true),
+        ],
+        'da': const [
+          EmphasisTextSpan('Skab vanen med\n'),
+          EmphasisTextSpan('påmindelser', isRed: true),
+        ],
+        'nb': const [
+          EmphasisTextSpan('Bygg vanen med\n'),
+          EmphasisTextSpan('påminnelser', isRed: true),
+        ],
+        'ru': const [
+          EmphasisTextSpan('Закрепляй привычку с\n'),
+          EmphasisTextSpan('напоминаниями', isRed: true),
+        ],
+        'pt': const [
+          EmphasisTextSpan('Crie o hábito com\n'),
+          EmphasisTextSpan('lembretes', isRed: true),
+        ],
+        'ja': const [
+          EmphasisTextSpan('運動習慣のために\n'),
+          EmphasisTextSpan('リマインダーを設定', isRed: true),
+        ],
+        'zh': const [
+          EmphasisTextSpan('用'),
+          EmphasisTextSpan('提醒', isRed: true),
+          EmphasisTextSpan('养成运动习惯'),
+        ],
+        'vi': const [
+          EmphasisTextSpan('Tạo thói quen với\n'),
+          EmphasisTextSpan('lời nhắc', isRed: true),
+        ],
+        'ar': const [
+          EmphasisTextSpan('ابنِ عادتك مع\n'),
+          EmphasisTextSpan('التذكيرات', isRed: true),
+        ],
+        'th': const [
+          EmphasisTextSpan('สร้างนิสัยด้วย\n'),
+          EmphasisTextSpan('การแจ้งเตือน', isRed: true),
+        ],
+      });
+
+  String reminderBody() => _t({
+        'ko': '잊지 않고 운동할 수 있도록 원하는 요일과 알림 시간을 설정해 주세요.',
+        'en':
+            'Schedule reminders on your preferred days and times to keep up your workout consistency.',
+        'es':
+            'Elige los días y la hora para no perder la constancia en tus entrenamientos.',
+        'fr':
+            'Choisis les jours et l’heure pour garder le rythme de tes entraînements.',
+        'de': 'Lege Tage und Uhrzeit fest, damit du regelmäßig trainierst.',
+        'it': 'Scegli giorni e orario per allenarti con costanza.',
+        'nl':
+            'Kies dagen en een tijd om je trainingen consequent vol te houden.',
+        'da': 'Vælg dage og tidspunkt, så du holder fast i din træning.',
+        'nb': 'Velg dager og tidspunkt, så du holder treningen ved like.',
+        'ru': 'Выбери дни и время, чтобы не пропускать тренировки.',
+        'pt':
+            'Escolha os dias e o horário para manter a constância nos treinos.',
+        'ja': '運動を忘れないよう、希望する曜日と通知時刻を設定してください。',
+        'zh': '选择提醒日期和时间，帮助你坚持运动。',
+        'vi': 'Chọn ngày và giờ nhắc để duy trì việc tập luyện đều đặn.',
+        'ar': 'اختر الأيام والوقت المناسبين لتستمر في ممارسة التمارين بانتظام.',
+        'th': 'เลือกวันและเวลาแจ้งเตือน เพื่อให้ออกกำลังกายได้อย่างสม่ำเสมอ',
+      });
+
+  String reminderDaysLabel() => _t({
+        'ko': '요일 선택',
+        'en': 'Select Days',
+        'es': 'Seleccionar días',
+        'fr': 'Choisir les jours',
+        'de': 'Tage auswählen',
+        'it': 'Seleziona i giorni',
+        'nl': 'Dagen kiezen',
+        'da': 'Vælg dage',
+        'nb': 'Velg dager',
+        'ru': 'Выберите дни',
+        'pt': 'Selecionar dias',
+        'ja': '曜日を選択',
+        'zh': '选择日期',
+        'vi': 'Chọn ngày',
+        'ar': 'اختر الأيام',
+        'th': 'เลือกวัน',
+      });
+
+  String reminderTimeLabel() => _t({
+        'ko': '시간 선택',
+        'en': 'Select Time',
+        'es': 'Seleccionar hora',
+        'fr': 'Choisir l’heure',
+        'de': 'Uhrzeit auswählen',
+        'it': 'Seleziona l’ora',
+        'nl': 'Tijd kiezen',
+        'da': 'Vælg tidspunkt',
+        'nb': 'Velg tidspunkt',
+        'ru': 'Выберите время',
+        'pt': 'Selecionar horário',
+        'ja': '時刻を選択',
+        'zh': '选择时间',
+        'vi': 'Chọn giờ',
+        'ar': 'اختر الوقت',
+        'th': 'เลือกเวลา',
+      });
+
+  String ctaSetReminder() => _t({
+        'ko': '알림 설정하고 계속하기',
+        'en': 'Set Reminder & Continue',
+        'es': 'Configurar y continuar',
+        'fr': 'Définir et continuer',
+        'de': 'Erinnerung einstellen',
+        'it': 'Imposta e continua',
+        'nl': 'Instellen en doorgaan',
+        'da': 'Indstil og fortsæt',
+        'nb': 'Angi og fortsett',
+        'ru': 'Настроить и продолжить',
+        'pt': 'Configurar e continuar',
+        'ja': '通知を設定して続ける',
+        'zh': '设置提醒并继续',
+        'vi': 'Đặt lời nhắc và tiếp tục',
+        'ar': 'اضبط التذكير وتابع',
+        'th': 'ตั้งการแจ้งเตือนและไปต่อ',
+      });
+
+  String ctaSkipReminder() => _t({
+        'ko': '나중에 설정하기',
+        'en': 'Skip for now',
+        'es': 'Configurar más tarde',
+        'fr': 'Configurer plus tard',
+        'de': 'Später einrichten',
+        'it': 'Configura più tardi',
+        'nl': 'Later instellen',
+        'da': 'Indstil senere',
+        'nb': 'Angi senere',
+        'ru': 'Настроить позже',
+        'pt': 'Configurar depois',
+        'ja': 'あとで設定',
+        'zh': '稍后设置',
+        'vi': 'Để sau',
+        'ar': 'الإعداد لاحقًا',
+        'th': 'ตั้งค่าภายหลัง',
+      });
+
+  // ---- New Premium Screen ----
+  List<EmphasisTextSpan> premiumTitleSpans() => _spans({
+        'ko': const [
+          EmphasisTextSpan('Valcue Pro로\n'),
+          EmphasisTextSpan('더 강력하게', isRed: true),
+        ],
+        'en': const [
+          EmphasisTextSpan('Go further with\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'es': const [
+          EmphasisTextSpan('Llega más lejos con\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'fr': const [
+          EmphasisTextSpan('Va plus loin avec\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'de': const [
+          EmphasisTextSpan('Mehr erreichen mit\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'it': const [
+          EmphasisTextSpan('Vai oltre con\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'nl': const [
+          EmphasisTextSpan('Ga verder met\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'da': const [
+          EmphasisTextSpan('Nå længere med\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'nb': const [
+          EmphasisTextSpan('Nå lenger med\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'ru': const [
+          EmphasisTextSpan('Больше возможностей с\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'pt': const [
+          EmphasisTextSpan('Vá mais longe com\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'ja': const [
+          EmphasisTextSpan('Valcue Proで\n'),
+          EmphasisTextSpan('さらにパワフルに', isRed: true),
+        ],
+        'zh': const [
+          EmphasisTextSpan('使用 '),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+          EmphasisTextSpan('\n解锁更强体验'),
+        ],
+        'vi': const [
+          EmphasisTextSpan('Tiến xa hơn cùng\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'ar': const [
+          EmphasisTextSpan('حقق المزيد مع\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+        'th': const [
+          EmphasisTextSpan('ไปได้ไกลกว่าด้วย\n'),
+          EmphasisTextSpan('Valcue Pro', isRed: true),
+        ],
+      });
+
+  String premiumBullet1() => _t({
+        'ko': '체중 기록 및 정밀 차트 분석 잠금해제',
+        'en': 'Unlock weight logging and advanced trend chart',
+        'es': 'Registro de peso y gráficos de tendencias avanzados',
+        'fr': 'Suivi du poids et graphiques de tendance avancés',
+        'de': 'Gewichtsprotokoll und erweiterte Trenddiagramme',
+        'it': 'Registro del peso e grafici avanzati',
+        'nl': 'Gewichtsregistratie en uitgebreide trendgrafieken',
+        'da': 'Vægtlog og avancerede trendgrafer',
+        'nb': 'Vektlogg og avanserte trendgrafer',
+        'ru': 'Журнал веса и расширенные графики динамики',
+        'pt': 'Registro de peso e gráficos avançados de tendência',
+        'ja': '体重記録と詳細な推移グラフを利用',
+        'zh': '解锁体重记录和高级趋势图表',
+        'vi': 'Mở khóa nhật ký cân nặng và biểu đồ nâng cao',
+        'ar': 'فتح سجل الوزن ومخططات الاتجاهات المتقدمة',
+        'th': 'ปลดล็อกบันทึกน้ำหนักและกราฟแนวโน้มขั้นสูง',
+      });
+
+  String premiumBullet2() => _t({
+        'ko': 'AI 맞춤형 루틴 무제한 생성',
+        'en': 'Generate unlimited personalized AI routines',
+        'es': 'Rutinas personalizadas con IA ilimitadas',
+        'fr': 'Routines IA personnalisées illimitées',
+        'de': 'Unbegrenzt individuelle KI-Routinen erstellen',
+        'it': 'Routine IA personalizzate illimitate',
+        'nl': 'Onbeperkt persoonlijke AI-routines maken',
+        'da': 'Ubegrænsede personlige AI-rutiner',
+        'nb': 'Ubegrensede personlige AI-rutiner',
+        'ru': 'Безлимитные персональные программы от ИИ',
+        'pt': 'Rotinas personalizadas com IA ilimitadas',
+        'ja': 'AI専用ルーティンを無制限に作成',
+        'zh': '无限生成 AI 个性化训练计划',
+        'vi': 'Tạo không giới hạn bài tập AI cá nhân hóa',
+        'ar': 'إنشاء غير محدود لروتينات مخصصة بالذكاء الاصطناعي',
+        'th': 'สร้างรูทีน AI เฉพาะบุคคลได้ไม่จำกัด',
+      });
+
+  String premiumBullet3() => _t({
+        'ko': '광고 없이 쾌적한 운동 환경',
+        'en': 'Completely ad-free workout sessions',
+        'es': 'Entrenamientos totalmente sin anuncios',
+        'fr': 'Entraînements entièrement sans publicité',
+        'de': 'Workouts komplett ohne Werbung',
+        'it': 'Allenamenti completamente senza pubblicità',
+        'nl': 'Volledig advertentievrije trainingen',
+        'da': 'Træning helt uden annoncer',
+        'nb': 'Trening helt uten annonser',
+        'ru': 'Тренировки без рекламы',
+        'pt': 'Treinos totalmente sem anúncios',
+        'ja': '広告なしで快適にワークアウト',
+        'zh': '完全无广告的训练体验',
+        'vi': 'Tập luyện hoàn toàn không quảng cáo',
+        'ar': 'جلسات تمرين خالية تمامًا من الإعلانات',
+        'th': 'ออกกำลังกายแบบไม่มีโฆษณารบกวน',
+      });
+
+  String ctaStartPremium() => _t({
+        'ko': 'Valcue Pro 시작하기',
+        'en': 'Start Valcue Pro',
+        'es': 'Empezar con Valcue Pro',
+        'fr': 'Commencer Valcue Pro',
+        'de': 'Valcue Pro starten',
+        'it': 'Inizia Valcue Pro',
+        'nl': 'Start Valcue Pro',
+        'da': 'Start Valcue Pro',
+        'nb': 'Start Valcue Pro',
+        'ru': 'Начать с Valcue Pro',
+        'pt': 'Começar com Valcue Pro',
+        'ja': 'Valcue Proを始める',
+        'zh': '开始使用 Valcue Pro',
+        'vi': 'Bắt đầu Valcue Pro',
+        'ar': 'ابدأ Valcue Pro',
+        'th': 'เริ่มใช้ Valcue Pro',
+      });
+
+  String ctaSkipPremium() => _t({
+        'ko': '무료 버전으로 계속하기',
+        'en': 'Continue with Free Version',
+        'es': 'Continuar con la versión gratuita',
+        'fr': 'Continuer avec la version gratuite',
+        'de': 'Mit der kostenlosen Version fortfahren',
+        'it': 'Continua con la versione gratuita',
+        'nl': 'Doorgaan met de gratis versie',
+        'da': 'Fortsæt med gratisversionen',
+        'nb': 'Fortsett med gratisversjonen',
+        'ru': 'Продолжить с бесплатной версией',
+        'pt': 'Continuar com a versão gratuita',
+        'ja': '無料版で続ける',
+        'zh': '继续使用免费版',
+        'vi': 'Tiếp tục với bản miễn phí',
+        'ar': 'المتابعة بالإصدار المجاني',
+        'th': 'ใช้เวอร์ชันฟรีต่อ',
+      });
+
   // ---- helpers ----
+  String _numberedLabel(int n, Map<String, String> map) {
+    return _t(map).replaceAll('{n}', n.toString());
+  }
+
   String _t(Map<String, String> map) => map[code] ?? map['en'] ?? '';
 
   List<EmphasisTextSpan> _spans(

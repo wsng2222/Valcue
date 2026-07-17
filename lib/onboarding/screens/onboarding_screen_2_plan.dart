@@ -1,17 +1,43 @@
 import 'package:flutter/material.dart';
 
+import '../onboarding_strings.dart';
 import '../widgets/onboarding_emphasis_text.dart';
 import '../widgets/onboarding_theme.dart';
-import '../onboarding_strings.dart';
 
-class OnboardingScreen2Plan extends StatelessWidget {
-  const OnboardingScreen2Plan({
-    super.key,
-  });
+class OnboardingScreen2Plan extends StatefulWidget {
+  const OnboardingScreen2Plan({super.key});
+
+  @override
+  State<OnboardingScreen2Plan> createState() => _OnboardingScreen2PlanState();
+}
+
+class _OnboardingScreen2PlanState extends State<OnboardingScreen2Plan>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final s = OnboardingStrings.of(context);
+    final strings = OnboardingStrings.of(context);
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final animation = reduceMotion
+        ? const AlwaysStoppedAnimation<double>(1)
+        : CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -20,10 +46,10 @@ class OnboardingScreen2Plan extends StatelessWidget {
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Column(
               children: [
-                const SizedBox(height: 60), // Adjusted for consistency
-                OnboardingRichTitle(spans: s.s2TitleSpans()),
-                const SizedBox(height: 22), // Consistent spacing
-                _PlanMockCard(strings: s),
+                const SizedBox(height: 54),
+                OnboardingRichTitle(spans: strings.s2TitleSpans()),
+                const SizedBox(height: 30),
+                _PlanOverview(strings: strings, animation: animation),
               ],
             ),
           ),
@@ -33,156 +59,374 @@ class OnboardingScreen2Plan extends StatelessWidget {
   }
 }
 
-class _PlanMockCard extends StatelessWidget {
+class _PlanOverview extends StatelessWidget {
   final OnboardingStrings strings;
+  final Animation<double> animation;
 
-  const _PlanMockCard({required this.strings});
+  const _PlanOverview({required this.strings, required this.animation});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 20), // Optimized padding
-      decoration: BoxDecoration(
-        color: isDark ? OnboardingTheme.darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusLarge),
-        boxShadow: [OnboardingTheme.mediumShadow],
-        border: Border.all(
-          color:
-              isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0),
-          width: 0.5,
-        ),
+    final intervals = [
+      _PlanIntervalData(
+        title: strings.planRecoveryWalkLabel(),
+        duration: strings.planMinutesLabel(2),
+        speed: '5.0 km/h',
+        flex: 2,
+        isRun: false,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            strings.planTotalWorkoutTimeLabel(),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.2,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.50),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '12:00',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -1.2,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 18),
-          _PlanRow(
-            setLabel: strings.setLabel(1),
-            time: '2:00',
-            speed: '5.0km/h',
-          ),
-          const SizedBox(height: 10),
-          _PlanRow(
-            setLabel: strings.setLabel(2),
-            time: '4:00',
-            speed: '9.0km/h',
-          ),
-          const SizedBox(height: 10),
-          _PlanRow(
-            setLabel: strings.setLabel(3),
-            time: '2:00',
-            speed: '5.0km/h',
-          ),
-          const SizedBox(height: 10),
-          _PlanRow(
-            setLabel: strings.setLabel(4),
-            time: '4:00',
-            speed: '10.0km/h',
-          ),
-        ],
+      _PlanIntervalData(
+        title: strings.planFastRunLabel(),
+        duration: strings.planMinutesLabel(4),
+        speed: '9.0 km/h',
+        flex: 4,
+        isRun: true,
       ),
-    );
-  }
-}
+      _PlanIntervalData(
+        title: strings.planRecoveryWalkLabel(),
+        duration: strings.planMinutesLabel(2),
+        speed: '5.0 km/h',
+        flex: 2,
+        isRun: false,
+      ),
+      _PlanIntervalData(
+        title: strings.planFinishRunLabel(),
+        duration: strings.planMinutesLabel(4),
+        speed: '10.0 km/h',
+        flex: 4,
+        isRun: true,
+      ),
+    ];
 
-class _PlanRow extends StatelessWidget {
-  final String setLabel;
-  final String time;
-  final String speed;
-
-  const _PlanRow({
-    required this.setLabel,
-    required this.time,
-    required this.speed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        SizedBox(
-          width: 50,
-          child: Text(
-            setLabel,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -0.2,
-              color: Theme.of(context).colorScheme.onSurface,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    strings.planTotalWorkoutTimeLabel(),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.2,
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.44),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    strings.planTotalMinutesLabel(12),
+                    style: TextStyle(
+                      fontSize: 34,
+                      height: 1,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1.0,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? OnboardingTheme.darkGrayFill
+                    : const Color(0xFFF2F2F7),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                strings.planIntervalCountLabel(intervals.length),
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.2,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.70),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _AnimatedTimeline(intervals: intervals, animation: animation),
+        const SizedBox(height: 22),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: isDark ? OnboardingTheme.darkSurface : Colors.white,
+            borderRadius: BorderRadius.circular(OnboardingTheme.radiusLarge),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.09)
+                  : const Color(0xFFE8E8EC),
+            ),
+            boxShadow: [OnboardingTheme.mediumShadow],
+          ),
+          child: Column(
+            children: List.generate(intervals.length, (index) {
+              final start = 0.18 + index * 0.13;
+              final end = (start + 0.34).clamp(0.0, 1.0);
+              final rowAnimation = CurvedAnimation(
+                parent: animation,
+                curve: Interval(start, end, curve: Curves.easeOutCubic),
+              );
+              return Column(
+                children: [
+                  _AnimatedPlanRow(
+                    index: index,
+                    data: intervals[index],
+                    label: strings.planIntervalLabel(index + 1),
+                    animation: rowAnimation,
+                  ),
+                  if (index != intervals.length - 1)
+                    Divider(
+                      height: 1,
+                      indent: 48,
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.07),
+                    ),
+                ],
+              );
+            }),
           ),
         ),
-        const Spacer(),
-        _Pill(text: time),
-        const SizedBox(width: 10),
-        _Pill(text: speed, isAccent: true),
       ],
     );
   }
 }
 
-class _Pill extends StatelessWidget {
-  final String text;
-  final bool isAccent;
+class _AnimatedTimeline extends StatelessWidget {
+  final List<_PlanIntervalData> intervals;
+  final Animation<double> animation;
 
-  const _Pill({
-    required this.text,
-    this.isAccent = false,
+  const _AnimatedTimeline({required this.intervals, required this.animation});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return SizedBox(
+      height: 18,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(999),
+        child: AnimatedBuilder(
+          animation: animation,
+          builder: (context, child) {
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                ColoredBox(
+                  color: isDark
+                      ? OnboardingTheme.darkGrayFill
+                      : const Color(0xFFE8E8EC),
+                ),
+                ClipRect(
+                  clipper: _TimelineRevealClipper(animation.value),
+                  child: child,
+                ),
+              ],
+            );
+          },
+          child: Row(
+            children: List.generate(intervals.length, (index) {
+              final interval = intervals[index];
+              return Expanded(
+                flex: interval.flex,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    right: index == intervals.length - 1 ? 0 : 3,
+                  ),
+                  color: interval.isRun
+                      ? OnboardingTheme.primaryRed
+                      : (isDark
+                          ? const Color(0xFF5A5A5E)
+                          : const Color(0xFFCACACF)),
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TimelineRevealClipper extends CustomClipper<Rect> {
+  final double progress;
+
+  const _TimelineRevealClipper(this.progress);
+
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(0, 0, size.width * progress, size.height);
+  }
+
+  @override
+  bool shouldReclip(_TimelineRevealClipper oldClipper) {
+    return oldClipper.progress != progress;
+  }
+}
+
+class _AnimatedPlanRow extends StatelessWidget {
+  final int index;
+  final _PlanIntervalData data;
+  final String label;
+  final Animation<double> animation;
+
+  const _AnimatedPlanRow({
+    required this.index,
+    required this.data,
+    required this.label,
+    required this.animation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: animation.value,
+          child: Transform.translate(
+            offset: Offset(16 * (1 - animation.value), 0),
+            child: child,
+          ),
+        );
+      },
+      child: _PlanRow(index: index, data: data, label: label),
+    );
+  }
+}
+
+class _PlanRow extends StatelessWidget {
+  final int index;
+  final _PlanIntervalData data;
+  final String label;
+
+  const _PlanRow({
+    required this.index,
+    required this.data,
+    required this.label,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-      decoration: BoxDecoration(
-        color: isAccent
-            ? (isDark
-                ? OnboardingTheme.darkSelectedPink
-                : OnboardingTheme.selectedPink)
-            : (isDark ? OnboardingTheme.darkGrayFill : const Color(0xFFF0F0F0)),
-        borderRadius: BorderRadius.circular(OnboardingTheme.radiusPill),
-        border: isAccent
-            ? Border.all(
-                color: OnboardingTheme.primaryRed.withValues(alpha: 0.15),
-                width: 0.5,
-              )
-            : null,
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.2,
-          color: isAccent
-              ? OnboardingTheme.primaryRed
-              : theme.colorScheme.onSurface.withValues(alpha: 0.80),
+    final accent = data.isRun
+        ? OnboardingTheme.primaryRed
+        : theme.colorScheme.onSurface.withValues(alpha: 0.46);
+
+    return Semantics(
+      label: '$label, ${data.title}, ${data.duration}, ${data.speed}',
+      excludeSemantics: true,
+      child: SizedBox(
+        height: 66,
+        child: Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: data.isRun
+                    ? OnboardingTheme.primaryRed.withValues(
+                        alpha: isDark ? 0.18 : 0.09,
+                      )
+                    : (isDark
+                        ? OnboardingTheme.darkGrayFill
+                        : const Color(0xFFF1F1F4)),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: accent,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.25,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.38),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  data.duration,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  data.speed,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: accent,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+class _PlanIntervalData {
+  final String title;
+  final String duration;
+  final String speed;
+  final int flex;
+  final bool isRun;
+
+  const _PlanIntervalData({
+    required this.title,
+    required this.duration,
+    required this.speed,
+    required this.flex,
+    required this.isRun,
+  });
 }

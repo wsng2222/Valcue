@@ -4,56 +4,106 @@ import '../widgets/onboarding_emphasis_text.dart';
 import '../widgets/onboarding_theme.dart';
 import '../onboarding_strings.dart';
 
-class OnboardingScreen3WorkoutPreview extends StatelessWidget {
+class OnboardingScreen3WorkoutPreview extends StatefulWidget {
   const OnboardingScreen3WorkoutPreview({
     super.key,
   });
+
+  @override
+  State<OnboardingScreen3WorkoutPreview> createState() =>
+      _OnboardingScreen3WorkoutPreviewState();
+}
+
+class _OnboardingScreen3WorkoutPreviewState
+    extends State<OnboardingScreen3WorkoutPreview>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 60),
+    );
+    _controller.reverse(from: 1.0);
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        _controller.reverse(from: 1.0); // Loop back
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = OnboardingStrings.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Column(
-              children: [
-                const SizedBox(height: 60), // Adjusted for consistency
-                OnboardingRichTitle(spans: s.s3TitleSpans()),
-                const SizedBox(height: 22), // Consistent spacing
-                const Text(
-                  '5.0 km/h',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1.0,
-                    color: OnboardingTheme.primaryRed,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) {
+        final double progressFraction = _controller.value;
+        final int totalSecondsLeft = (progressFraction * 60).ceil();
+        final minutes = totalSecondsLeft ~/ 60;
+        final seconds = totalSecondsLeft % 60;
+        final timeText = '$minutes:${seconds.toString().padLeft(2, '0')}';
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
                   children: [
-                    _GrayChip(
-                      text: s.chipNextSpeed('9.0 km/h'),
-                      isDark: isDark,
+                    const SizedBox(height: 60), // Adjusted for consistency
+                    OnboardingRichTitle(spans: s.s3TitleSpans()),
+                    const SizedBox(height: 22), // Consistent spacing
+                    const Text(
+                      '5.0 km/h',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -1.0,
+                        color: OnboardingTheme.primaryRed,
+                      ),
                     ),
-                    const SizedBox(width: 12),
-                    _GrayChip(
-                      text: s.chipIncline('1.0%'),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _GrayChip(
+                            text: s.chipNextSpeed('9.0 km/h'),
+                            isDark: isDark,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _GrayChip(
+                            text: s.chipIncline('1.0%'),
+                            isDark: isDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28), // Slightly increased spacing
+                    _RingTimer(
+                      timeText: timeText,
+                      progressFraction: progressFraction,
                       isDark: isDark,
                     ),
                   ],
                 ),
-                const SizedBox(height: 28), // Slightly increased spacing
-                _RingTimer(timeText: '2:00', isDark: isDark),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -85,6 +135,9 @@ class _GrayChip extends StatelessWidget {
       ),
       child: Text(
         text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w800,
@@ -98,9 +151,14 @@ class _GrayChip extends StatelessWidget {
 
 class _RingTimer extends StatelessWidget {
   final String timeText;
+  final double progressFraction;
   final bool isDark;
 
-  const _RingTimer({required this.timeText, required this.isDark});
+  const _RingTimer({
+    required this.timeText,
+    required this.progressFraction,
+    required this.isDark,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +174,10 @@ class _RingTimer extends StatelessWidget {
         boxShadow: [OnboardingTheme.mediumShadow],
       ),
       child: CustomPaint(
-        painter: _RingPainter(trackColor: trackColor),
+        painter: _RingPainter(
+          trackColor: trackColor,
+          progressFraction: progressFraction,
+        ),
         child: Center(
           child: Text(
             timeText,
@@ -135,8 +196,12 @@ class _RingTimer extends StatelessWidget {
 
 class _RingPainter extends CustomPainter {
   final Color trackColor;
+  final double progressFraction;
 
-  _RingPainter({required this.trackColor});
+  _RingPainter({
+    required this.trackColor,
+    required this.progressFraction,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -154,16 +219,19 @@ class _RingPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     canvas.drawCircle(center, radius, track);
-    // Align to exactly 12 o'clock (-π/2) and draw arc
+    // Align to exactly 12 o'clock (-π/2) and draw arc based on progressFraction
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -1.5708, // -π/2 for 12 o'clock alignment
-      5.0,
+      progressFraction * 2 * 3.14159265,
       false,
       progress,
     );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _RingPainter oldDelegate) {
+    return oldDelegate.progressFraction != progressFraction ||
+        oldDelegate.trackColor != trackColor;
+  }
 }

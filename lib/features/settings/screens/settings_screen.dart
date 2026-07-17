@@ -14,6 +14,7 @@ import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
 import '../../../onboarding/onboarding_flow.dart';
 import '../../../utils/app_shadows.dart';
+import '../../../widgets/workout_reminder_time_picker_sheet.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -856,7 +857,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _startAboutHold() {
     _aboutHoldTimer?.cancel();
-    _aboutHoldTimer = Timer(const Duration(seconds: 5), () {
+    _aboutHoldTimer = Timer(const Duration(seconds: 2), () {
       if (!mounted) return;
       _aboutHoldTimer?.cancel();
       _aboutHoldTimer = null;
@@ -913,125 +914,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     BuildContext context,
     AppSettingsProvider provider,
   ) async {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    DateTime draft = DateTime(
-      2024,
-      1,
-      1,
-      provider.workoutReminderTime.hour,
-      provider.workoutReminderTime.minute,
-    );
-
-    final picked = await showModalBottomSheet<TimeOfDay>(
+    final picked = await showWorkoutReminderTimePickerSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
-      isScrollControlled: true,
-      enableDrag: false,
-      isDismissible: true,
-      builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (modalContext, setModalState) {
-            return SafeArea(
-              top: false,
-              bottom: true,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(30)),
-                  border: Border.all(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.white.withValues(alpha: 0.08)
-                        : context.appColors.border,
-                  ),
-                  boxShadow: AppShadows.elevatedSoft,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 12),
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color:
-                            context.appColors.mutedText.withValues(alpha: 0.24),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
-                      child: Text(
-                        AppLocalizations.of(context)!.workoutReminderSelectTime,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 220,
-                      child: CupertinoTheme(
-                        data: CupertinoTheme.of(modalContext).copyWith(
-                          brightness: theme.brightness,
-                        ),
-                        child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.time,
-                          use24hFormat: false,
-                          initialDateTime: draft,
-                          onDateTimeChanged: (value) {
-                            setModalState(() {
-                              draft = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(sheetContext).pop(
-                              TimeOfDay(
-                                hour: draft.hour,
-                                minute: draft.minute,
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            l10n.done,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+      initialTime: provider.workoutReminderTime,
     );
     if (picked == null) return;
     await provider.updateWorkoutReminderTime(picked);
@@ -1261,23 +1146,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
-                          if (provider.voiceGuideEnabled && provider.isPremium) ...[
-                            Builder(
-                              builder: (context) {
-                                final isKorean = Localizations.localeOf(context).languageCode == 'ko';
-                                return SettingsRow(
-                                  icon: Icons.timer_outlined,
-                                  iconColor: Colors.amber,
-                                  title: isKorean ? '카운트다운 알림' : 'Countdown Timing',
-                                  subtitle: provider.voiceGuideCountdownTriggers.isEmpty
-                                      ? (isKorean ? '알림 없음' : 'No announcements')
-                                      : provider.voiceGuideCountdownTriggers
-                                          .map((sec) => isKorean ? '$sec초 전' : '${sec}s')
-                                          .join(', '),
-                                  onTap: () => _showCountdownTriggersPicker(context, provider),
-                                );
-                              }
-                            ),
+                          if (provider.voiceGuideEnabled &&
+                              provider.isPremium) ...[
+                            Builder(builder: (context) {
+                              final isKorean = Localizations.localeOf(context)
+                                      .languageCode ==
+                                  'ko';
+                              return SettingsRow(
+                                icon: Icons.timer_outlined,
+                                iconColor: Colors.amber,
+                                title:
+                                    isKorean ? '카운트다운 알림' : 'Countdown Timing',
+                                subtitle: provider
+                                        .voiceGuideCountdownTriggers.isEmpty
+                                    ? (isKorean ? '알림 없음' : 'No announcements')
+                                    : provider.voiceGuideCountdownTriggers
+                                        .map((sec) =>
+                                            isKorean ? '$sec초 전' : '${sec}s')
+                                        .join(', '),
+                                onTap: () => _showCountdownTriggersPicker(
+                                    context, provider),
+                              );
+                            }),
                           ],
                           SettingsRow(
                             icon: Icons.monitor_heart_outlined,
@@ -1621,63 +1511,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
-
-  void _showCountdownTriggersPicker(BuildContext context, AppSettingsProvider provider) {
+  void _showCountdownTriggersPicker(
+      BuildContext context, AppSettingsProvider provider) {
     final theme = Theme.of(context);
     final isKorean = Localizations.localeOf(context).languageCode == 'ko';
     final availableSeconds = [5, 10, 20, 30];
-    
+
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) {
-          final currentTriggers = provider.voiceGuideCountdownTriggers;
-          return CupertinoActionSheet(
-            title: Text(isKorean ? '카운트다운 알림 타이밍 선택' : 'Select Countdown Timings'),
-            message: Text(isKorean 
-                ? '운동 강도가 변경되기 전에 음성 안내를 받을 남은 시간을 선택하세요.' 
-                : 'Select when to hear remaining time announcements before intervals change.'),
-            actions: availableSeconds.map((sec) {
-              final isSelected = currentTriggers.contains(sec);
-              return CupertinoActionSheetAction(
-                onPressed: () {
-                  final newTriggers = List<int>.from(currentTriggers);
-                  if (isSelected) {
-                    newTriggers.remove(sec);
-                  } else {
-                    newTriggers.add(sec);
-                  }
-                  provider.updateVoiceGuideCountdownTriggers(newTriggers);
-                  setModalState(() {});
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      isKorean ? '$sec초 전' : '$sec seconds left',
-                      style: TextStyle(
-                        color: isSelected 
-                            ? theme.colorScheme.primary 
-                            : (theme.brightness == Brightness.dark ? Colors.white : Colors.black87),
-                        decoration: TextDecoration.none,
-                      ),
+      builder: (context) => StatefulBuilder(builder: (context, setModalState) {
+        final currentTriggers = provider.voiceGuideCountdownTriggers;
+        return CupertinoActionSheet(
+          title:
+              Text(isKorean ? '카운트다운 알림 타이밍 선택' : 'Select Countdown Timings'),
+          message: Text(isKorean
+              ? '운동 강도가 변경되기 전에 음성 안내를 받을 남은 시간을 선택하세요.'
+              : 'Select when to hear remaining time announcements before intervals change.'),
+          actions: availableSeconds.map((sec) {
+            final isSelected = currentTriggers.contains(sec);
+            return CupertinoActionSheetAction(
+              onPressed: () {
+                final newTriggers = List<int>.from(currentTriggers);
+                if (isSelected) {
+                  newTriggers.remove(sec);
+                } else {
+                  newTriggers.add(sec);
+                }
+                provider.updateVoiceGuideCountdownTriggers(newTriggers);
+                setModalState(() {});
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    isKorean ? '$sec초 전' : '$sec seconds left',
+                    style: TextStyle(
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : (theme.brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black87),
+                      decoration: TextDecoration.none,
                     ),
-                    if (isSelected) ...[
-                      const SizedBox(width: 8),
-                      Icon(Icons.check, size: 18, color: theme.colorScheme.primary),
-                    ],
+                  ),
+                  if (isSelected) ...[
+                    const SizedBox(width: 8),
+                    Icon(Icons.check,
+                        size: 18, color: theme.colorScheme.primary),
                   ],
-                ),
-              );
-            }).toList(),
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () => Navigator.pop(context),
-              child: Text(isKorean ? '완료' : 'Done'),
-            ),
-          );
-        }
-      ),
+                ],
+              ),
+            );
+          }).toList(),
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.pop(context),
+            child: Text(isKorean ? '완료' : 'Done'),
+          ),
+        );
+      }),
     );
   }
 }
@@ -1754,8 +1645,10 @@ class SettingsSliderRow extends StatelessWidget {
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 4.0,
-                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                overlayShape: const RoundSliderOverlayShape(overlayRadius: 16.0),
+                thumbShape:
+                    const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                overlayShape:
+                    const RoundSliderOverlayShape(overlayRadius: 16.0),
               ),
               child: Slider(
                 value: value,
@@ -1770,7 +1663,8 @@ class SettingsSliderRow extends StatelessWidget {
           if (showDivider)
             Padding(
               padding: const EdgeInsets.only(left: 56, top: 12),
-              child: Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor),
+              child: Divider(
+                  height: 0.5, thickness: 0.5, color: theme.dividerColor),
             ),
         ],
       ),
