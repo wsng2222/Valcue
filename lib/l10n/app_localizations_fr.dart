@@ -1018,4 +1018,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'Essayez cette routine d\'entraînement fractionné sur Valcue !\n\nRoutine : $routineName\n\nCopiez ou appuyez sur le lien pour l\'importer :\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'Scanner le code QR';
+
+  @override
+  String get placeQrInside =>
+      'Placez le code QR à l\'intérieur de la zone de guidage.';
 }

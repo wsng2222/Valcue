@@ -313,5 +313,7 @@
   "workoutReminderSelectTime": "Seleziona orario",
   "workoutReminderPermissionRequired": "È necessario il permesso per le notifiche.",
   "workoutReminderTimeLabel": "Orario",
-  "shareRoutineMessage": "Prova questo allenamento a intervalli su Valcue!\n\nAllenamento: {routineName}\n\nCopia o tocca il link per importarlo:\n{shareLink}"
+  "shareRoutineMessage": "Prova questo allenamento a intervalli su Valcue!\n\nAllenamento: {routineName}\n\nCopia o tocca il link per importarlo:\n{shareLink}",
+  "scanQrCode": "Scansiona codice QR",
+  "placeQrInside": "Inquadra il codice QR all'interno dell'area."
 }

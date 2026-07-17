@@ -1955,6 +1955,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try this interval workout routine on Valcue!\n\nRoutine: {routineName}\n\nCopy or tap the link to import it:\n{shareLink}'**
   String shareRoutineMessage(String routineName, String shareLink);
+
+  /// Title for QR code scanner screen
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR Code'**
+  String get scanQrCode;
+
+  /// Instruction description for QR scanner overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Place the QR code inside the target area.'**
+  String get placeQrInside;
 }
 
 class _AppLocalizationsDelegate

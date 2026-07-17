@@ -1012,4 +1012,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return '¡Prueba esta rutina de entrenamiento por intervalos en Valcue!\n\nRutina: $routineName\n\nCopia o toca el enlace para importarla:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'Escanear código QR';
+
+  @override
+  String get placeQrInside =>
+      'Coloque el código QR dentro del área de la guía.';
 }

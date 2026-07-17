@@ -1002,4 +1002,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'ลองใช้โปรแกรมออกกำลังกายแบบอินเทอร์วัลนี้บน Valcue!\n\nโปรแกรม: $routineName\n\nคัดลอกหรือแตะลิงก์เพื่อนำเข้า:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'สแกนคิวอาร์โค้ด';
+
+  @override
+  String get placeQrInside => 'วางคิวอาร์โค้ดให้อยู่ในกรอบนำทาง';
 }

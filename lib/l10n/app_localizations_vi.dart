@@ -1009,4 +1009,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'Hãy thử bài tập ngắt quãng này trên Valcue!\n\nBài tập: $routineName\n\nSao chép hoặc nhấn vào liên kết để nhập bài tập:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'Quét mã QR';
+
+  @override
+  String get placeQrInside => 'Đặt mã QR vào trong khung hướng dẫn.';
 }

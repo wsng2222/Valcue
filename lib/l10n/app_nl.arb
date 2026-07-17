@@ -313,5 +313,7 @@
   "workoutReminderSelectTime": "Tijd kiezen",
   "workoutReminderPermissionRequired": "Meldingtoestemming is vereist.",
   "workoutReminderTimeLabel": "Tijd",
-  "shareRoutineMessage": "Probeer deze intervaltraining op Valcue!\n\nRoutine: {routineName}\n\nKopieer of tik op de link om te importeren:\n{shareLink}"
+  "shareRoutineMessage": "Probeer deze intervaltraining op Valcue!\n\nRoutine: {routineName}\n\nKopieer of tik op de link om te importeren:\n{shareLink}",
+  "scanQrCode": "QR-code scannen",
+  "placeQrInside": "Plaats de QR-code binnen het kader."
 }

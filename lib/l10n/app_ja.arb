@@ -504,5 +504,7 @@
   "workoutReminderSelectTime": "時刻を選択",
   "workoutReminderPermissionRequired": "通知権限が必要です。",
   "workoutReminderTimeLabel": "時刻",
-  "shareRoutineMessage": "Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: {routineName}\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n{shareLink}"
+  "shareRoutineMessage": "Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: {routineName}\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n{shareLink}",
+  "scanQrCode": "QRコードスキャン",
+  "placeQrInside": "ガイド枠の中にQRコードを合わせてください。"
 }

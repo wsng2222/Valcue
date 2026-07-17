@@ -971,4 +971,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'Valcue에서 이 인터벌 운동 루틴을 해보세요!\n\n루틴 이름: $routineName\n\n아래 링크를 복사하거나 클릭해 가져올 수 있습니다:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'QR 코드 스캔';
+
+  @override
+  String get placeQrInside => '가이드 영역 안에 QR 코드를 맞춰주세요.';
 }

@@ -504,5 +504,7 @@
   "workoutReminderSelectTime": "اختر الوقت",
   "workoutReminderPermissionRequired": "يلزم منح إذن الإشعارات.",
   "workoutReminderTimeLabel": "الوقت",
-  "shareRoutineMessage": "جرّب تمارين الكارديو المتناوب هذه على Valcue!\n\nالتمرين: {routineName}\n\nانسخ الرابط أو اضغط عليه للاستيراد:\n{shareLink}"
+  "shareRoutineMessage": "جرّب تمارين الكارديو المتناوب هذه على Valcue!\n\nالتمرين: {routineName}\n\nانسخ الرابط أو اضغط عليه للاستيراد:\n{shareLink}",
+  "scanQrCode": "مسح رمز QR",
+  "placeQrInside": "ضع رمز QR داخل منطقة الإطار."
 }

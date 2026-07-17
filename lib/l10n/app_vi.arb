@@ -504,5 +504,7 @@
   "workoutReminderSelectTime": "Chọn giờ",
   "workoutReminderPermissionRequired": "Cần quyền thông báo.",
   "workoutReminderTimeLabel": "Giờ",
-  "shareRoutineMessage": "Hãy thử bài tập ngắt quãng này trên Valcue!\n\nBài tập: {routineName}\n\nSao chép hoặc nhấn vào liên kết để nhập bài tập:\n{shareLink}"
+  "shareRoutineMessage": "Hãy thử bài tập ngắt quãng này trên Valcue!\n\nBài tập: {routineName}\n\nSao chép hoặc nhấn vào liên kết để nhập bài tập:\n{shareLink}",
+  "scanQrCode": "Quét mã QR",
+  "placeQrInside": "Đặt mã QR vào trong khung hướng dẫn."
 }

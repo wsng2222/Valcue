@@ -968,4 +968,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: $routineName\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'QRコードスキャン';
+
+  @override
+  String get placeQrInside => 'ガイド枠の中にQRコードを合わせてください。';
 }

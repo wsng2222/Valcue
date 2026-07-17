@@ -999,4 +999,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'جرّب تمارين الكارديو المتناوب هذه على Valcue!\n\nالتمرين: $routineName\n\nانسخ الرابط أو اضغط عليه للاستيراد:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'مسح رمز QR';
+
+  @override
+  String get placeQrInside => 'ضع رمز QR داخل منطقة الإطار.';
 }

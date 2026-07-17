@@ -313,5 +313,7 @@
   "workoutReminderSelectTime": "เลือกเวลา",
   "workoutReminderPermissionRequired": "ต้องการสิทธิ์การแจ้งเตือน",
   "workoutReminderTimeLabel": "เวลา",
-  "shareRoutineMessage": "ลองใช้โปรแกรมออกกำลังกายแบบอินเทอร์วัลนี้บน Valcue!\n\nโปรแกรม: {routineName}\n\nคัดลอกหรือแตะลิงก์เพื่อนำเข้า:\n{shareLink}"
+  "shareRoutineMessage": "ลองใช้โปรแกรมออกกำลังกายแบบอินเทอร์วัลนี้บน Valcue!\n\nโปรแกรม: {routineName}\n\nคัดลอกหรือแตะลิงก์เพื่อนำเข้า:\n{shareLink}",
+  "scanQrCode": "สแกนคิวอาร์โค้ด",
+  "placeQrInside": "วางคิวอาร์โค้ดให้อยู่ในกรอบนำทาง"
 }

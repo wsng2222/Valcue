@@ -966,4 +966,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return '在 Valcue 上试试这个间歇训练计划！\n\n计划名称: $routineName\n\n复制或点击下方链接即可导入:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => '扫描二维码';
+
+  @override
+  String get placeQrInside => '请将二维码放入对齐框内。';
 }

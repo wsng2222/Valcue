@@ -1149,5 +1149,13 @@
         "type": "String"
       }
     }
+  },
+  "scanQrCode": "Scan QR Code",
+  "placeQrInside": "Place the QR code inside the target area.",
+  "@scanQrCode": {
+    "description": "Title for QR code scanner screen"
+  },
+  "@placeQrInside": {
+    "description": "Instruction description for QR scanner overlay"
   }
 }

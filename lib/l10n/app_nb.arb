@@ -313,5 +313,7 @@
   "workoutReminderSelectTime": "Velg tidspunkt",
   "workoutReminderPermissionRequired": "Varslingstillatelse er påkrevd.",
   "workoutReminderTimeLabel": "Tidspunkt",
-  "shareRoutineMessage": "Prøv dette intervalltreningsprogrammet på Valcue!\n\nProgram: {routineName}\n\nKopier eller trykk på lenken for å importere det:\n{shareLink}"
+  "shareRoutineMessage": "Prøv dette intervalltreningsprogrammet på Valcue!\n\nProgram: {routineName}\n\nKopier eller trykk på lenken for å importere det:\n{shareLink}",
+  "scanQrCode": "Skann QR-kode",
+  "placeQrInside": "Plasser QR-koden innenfor rammen."
 }

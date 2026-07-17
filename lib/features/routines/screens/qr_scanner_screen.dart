@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:valcue/l10n/app_localizations.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -30,7 +31,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -82,7 +83,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   onPressed: () => Navigator.pop(context),
                 ),
                 Text(
-                  isKorean ? 'QR 코드 스캔' : 'Scan QR Code',
+                  l10n.scanQrCode,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -107,9 +108,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                isKorean
-                    ? '가이드 영역 안에 QR 코드를 맞춰주세요.'
-                    : 'Place the QR code inside the target area.',
+                l10n.placeQrInside,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white70,

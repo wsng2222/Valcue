@@ -504,5 +504,7 @@
   "workoutReminderSelectTime": "Selecionar horário",
   "workoutReminderPermissionRequired": "Permissão de notificação necessária.",
   "workoutReminderTimeLabel": "Horário",
-  "shareRoutineMessage": "Experimente este treino de intervalo no Valcue!\n\nTreino: {routineName}\n\nCopie ou toque no link para importá-lo:\n{shareLink}"
+  "shareRoutineMessage": "Experimente este treino de intervalo no Valcue!\n\nTreino: {routineName}\n\nCopie ou toque no link para importá-lo:\n{shareLink}",
+  "scanQrCode": "Escanear código QR",
+  "placeQrInside": "Posicione o código QR dentro da área de foco."
 }

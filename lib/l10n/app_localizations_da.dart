@@ -1008,4 +1008,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String shareRoutineMessage(String routineName, String shareLink) {
     return 'Prøv dette intervaltræningsprogram på Valcue!\n\nProgram: $routineName\n\nKopier eller tryk på linket for at importere det:\n$shareLink';
   }
+
+  @override
+  String get scanQrCode => 'Scan QR-kode';
+
+  @override
+  String get placeQrInside => 'Placer QR-koden inden for rammen.';
 }

@@ -504,5 +504,7 @@
   "workoutReminderSelectTime": "选择时间",
   "workoutReminderPermissionRequired": "需要通知权限。",
   "workoutReminderTimeLabel": "时间",
-  "shareRoutineMessage": "在 Valcue 上试试这个间歇训练计划！\n\n计划名称: {routineName}\n\n复制或点击下方链接即可导入:\n{shareLink}"
+  "shareRoutineMessage": "在 Valcue 上试试这个间歇训练计划！\n\n计划名称: {routineName}\n\n复制或点击下方链接即可导入:\n{shareLink}",
+  "scanQrCode": "扫描二维码",
+  "placeQrInside": "请将二维码放入对齐框内。"
 }
