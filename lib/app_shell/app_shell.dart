@@ -1086,14 +1086,17 @@ class _BenefitListItem extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           Expanded(
-            child: Text(
-              item.text,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -0.3,
-                height: 1.35,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                item.text,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                  letterSpacing: -0.3,
+                  height: 1.35,
+                ),
               ),
             ),
           ),

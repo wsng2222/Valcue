@@ -61,8 +61,37 @@ class SoundService {
     }
   }
 
+  AudioPlayer? _silentPlayer;
+
+  /// Start playing the silent audio loop to keep audio session alive in background
+  Future<void> startSilentLoop() async {
+    if (!_enabled || _audioCache == null) return;
+    if (_silentPlayer != null) return;
+
+    try {
+      _silentPlayer = await _audioCache!.loop(
+        'silence.mp3',
+        volume: 0.0,
+      );
+    } catch (e) {
+      // Fail silently
+    }
+  }
+
+  /// Stop the silent audio loop
+  Future<void> stopSilentLoop() async {
+    if (_silentPlayer == null) return;
+    try {
+      await _silentPlayer!.stop();
+      _silentPlayer = null;
+    } catch (e) {
+      // Fail silently
+    }
+  }
+
   /// Dispose resources
   void dispose() {
+    stopSilentLoop();
     _audioCache?.clearCache();
     _audioCache = null;
   }

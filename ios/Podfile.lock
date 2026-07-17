@@ -131,6 +131,8 @@ PODS:
   - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (5.3.0)
+  - image_picker_ios (0.0.1):
+    - Flutter
   - MLImage (1.0.0-beta4)
   - MLKitBarcodeScanning (3.0.0):
     - MLKitCommon (~> 9.0)
@@ -206,6 +208,7 @@ DEPENDENCIES:
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - MLKitCommon (from `MLKitCommon.podspec.json`)
   - MLKitVision (from `MLKitVision.podspec.json`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/ios`)
@@ -277,6 +280,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_tts/ios"
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   MLKitCommon:
     :podspec: MLKitCommon.podspec.json
   MLKitVision:
@@ -335,6 +340,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 766ace00c6b10d8148408f329d10c4f051931850
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   GTMSessionFetcher: 127211aeec0b1e904fc49f4f6f895dcc535b0ecf
+  image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   MLImage: 7bb7c4264164ade9bf64f679b40fb29c8f33ee9b
   MLKitBarcodeScanning: 04e264482c5f3810cb89ebc134ef6b61e67db505
   MLKitCommon: bd685f4150c73b00f25deb05620fa9c33d4a8592

@@ -63,7 +63,17 @@ class _RoutineDetailSheetContent extends StatelessWidget {
               Navigator.pop(context); // Close action sheet
               final shareLink = await RoutineSharing.generateShareLink(routine);
               final message = l10n.shareRoutineMessage(routine.name, shareLink);
-              Share.share(message);
+              if (!context.mounted) return;
+              final mediaQuery = MediaQuery.of(context);
+              await Share.share(
+                message,
+                sharePositionOrigin: Rect.fromLTWH(
+                  0,
+                  0,
+                  mediaQuery.size.width,
+                  mediaQuery.size.height / 2,
+                ),
+              );
             },
             child: Text(
               Localizations.localeOf(context).languageCode == 'ko' ? '루틴 공유하기' : 'Share Routine',

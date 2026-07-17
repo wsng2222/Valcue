@@ -1345,8 +1345,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                          height: MediaQuery.of(context).padding.bottom + 30),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

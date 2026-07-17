@@ -41,6 +41,7 @@ dependencies:
   crypto: ^3.0.7
   qr_flutter: ^4.1.0
   mobile_scanner: ^3.5.0
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -58,3 +59,5 @@ flutter:
   assets:
     - assets/sfx/beep.mp3
     - assets/sfx/finished.mp3
+    - assets/sfx/silence.mp3
+    - assets/images/app_icon.png

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import '../../../widgets/secondary_outlined_button.dart';
 import 'dart:async';
 
 class HoldToStopButton extends StatefulWidget {
@@ -90,20 +91,11 @@ class _HoldToStopButtonState extends State<HoldToStopButton> {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
+                    child: SecondaryOutlinedButton(
                       onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        side: BorderSide(color: theme.dividerColor),
-                      ),
+                      borderRadius: 999,
                       child: Text(
                         AppLocalizations.of(context)!.continueWorkout,
-                        style: textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
                       ),
                     ),
                   ),

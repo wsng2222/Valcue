@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'bounceable.dart';
 
 /// Secondary outlined button with no shadow, only border
-/// Used for cancel/edit buttons in bottom sheets
+/// Uses Bounceable wrapper for premium tactile press feedback
 class SecondaryOutlinedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
@@ -29,49 +30,48 @@ class SecondaryOutlinedButton extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Default colors
+    // Premium modern color palette
     final bgColor = backgroundColor ??
         (isDark
-            ? const Color(0xFF2C2C2E).withValues(alpha: 0.5)
+            ? const Color(0xFF1C1C1E).withOpacity(0.4) // Subtle translucent dark blend
             : Colors.white);
     final fgColor = foregroundColor ?? theme.colorScheme.onSurface;
-    final border = borderColor ?? const Color(0xFFD0D0D0);
+    final border = borderColor ??
+        (isDark
+            ? Colors.white.withOpacity(0.08) // Soft translucent border in dark mode
+            : const Color(0xFFE5E5EA));      // Minimal light border
 
-    return SizedBox(
-      width: width,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: fgColor,
-          padding: padding ?? const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            side: BorderSide(
-              color: border,
-              width: 1.0,
-            ),
-          ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-        ).copyWith(
-          overlayColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.pressed)) {
-                return Colors.black.withValues(alpha: 0.08);
-              }
-              return null;
-            },
+    return Bounceable(
+      onTap: onPressed,
+      child: Container(
+        width: width,
+        padding: padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(
+            color: border,
+            width: 1.0,
           ),
         ),
-        child: child,
+        child: Center(
+          child: DefaultTextStyle(
+            style: TextStyle(
+              color: fgColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.3,
+            ),
+            child: child,
+          ),
+        ),
       ),
     );
   }
 }
 
 /// Secondary outlined icon button with no shadow, only border
-/// Used for small icon buttons (e.g., rotate button in workout screen)
+/// Uses Bounceable wrapper for premium tactile press feedback
 class SecondaryOutlinedIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget icon;
@@ -98,39 +98,33 @@ class SecondaryOutlinedIconButton extends StatelessWidget {
     // Default colors
     final bgColor = backgroundColor ??
         (isDark
-            ? const Color(0xFF2C2C2E).withValues(alpha: 0.5)
-            : Colors.grey.shade100);
+            ? const Color(0xFF1C1C1E).withOpacity(0.4)
+            : Colors.grey.shade50);
     final iconClr = iconColor ?? theme.colorScheme.onSurface;
-    final border = borderColor ?? const Color(0xFFD0D0D0);
+    final border = borderColor ??
+        (isDark
+            ? Colors.white.withOpacity(0.08)
+            : const Color(0xFFE5E5EA));
 
     return Opacity(
       opacity: onPressed == null ? 0.5 : 1.0,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: bgColor,
-          border: Border.all(
-            color: border,
-            width: 1.0,
+      child: Bounceable(
+        onTap: onPressed,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: bgColor,
+            border: Border.all(
+              color: border,
+              width: 1.0,
+            ),
           ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            borderRadius: BorderRadius.circular(size / 2),
-            splashColor: Colors.black.withValues(alpha: 0.08),
-            highlightColor: Colors.black.withValues(alpha: 0.05),
-            child: Center(
-              child: IconTheme(
-                data: IconThemeData(color: iconClr),
-                child: DefaultTextStyle(
-                  style: TextStyle(color: iconClr),
-                  child: icon,
-                ),
-              ),
+          child: Center(
+            child: IconTheme(
+              data: IconThemeData(color: iconClr),
+              child: icon,
             ),
           ),
         ),

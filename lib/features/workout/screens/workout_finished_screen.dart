@@ -7,12 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
+import 'package:image_picker/image_picker.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../routines/models/interval.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import '../../../widgets/bounceable.dart';
+import '../../../widgets/secondary_outlined_button.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../services/ad_service.dart';
@@ -168,79 +170,38 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
   }
 
   Future<void> _shareWorkout(BuildContext context) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final overlay = Overlay.of(context);
-    final l10n = AppLocalizations.of(context)!;
-    final cardKey = GlobalKey();
-    late OverlayEntry entry;
-
-    final machineTypeLabel = switch (widget.routine.machineType) {
-      MachineType.treadmill => l10n.treadmill,
-      MachineType.cycle => l10n.cycle,
-      MachineType.stairmaster => l10n.stairmaster,
-    };
-
+    // 1. Pick image from Camera
+    final picker = ImagePicker();
+    XFile? pickedFile;
     try {
-      entry = OverlayEntry(
-        builder: (_) => Positioned(
-          left: -9999,
-          top: -9999,
-          child: RepaintBoundary(
-            key: cardKey,
-            child: _ShareCard(
-              routine: widget.routine,
-              elapsedSeconds: widget.elapsedSeconds,
-              distanceMeters: widget.distanceMeters,
-              finishTime: widget.finishTime,
-              currentIntervalIndex: widget.currentIntervalIndex,
-              elapsedSecondsInCurrentSession:
-                  widget.elapsedSecondsInCurrentSession,
-              machineTypeLabel: machineTypeLabel,
-              totalTimeLabel: l10n.totalTime,
-              distanceLabel: l10n.totalDistance,
-              avgRpmLabel: l10n.averageRpm,
-              avgLevelLabel: l10n.averageLevel,
-            ),
-          ),
-        ),
-      );
-
-      overlay.insert(entry);
-      // 한 프레임 기다려서 paint 완료
-      await Future.delayed(const Duration(milliseconds: 200));
-
-      final renderObject = cardKey.currentContext?.findRenderObject();
-      if (renderObject is! RenderRepaintBoundary) {
-        entry.remove();
-        return;
-      }
-
-      final image = await renderObject.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      entry.remove();
-      if (byteData == null) return;
-
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/workout_result.png');
-      await file.writeAsBytes(byteData.buffer.asUint8List());
-
-      Rect? shareOrigin;
-      final box =
-          _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
-      if (box != null) {
-        shareOrigin = box.localToGlobal(Offset.zero) & box.size;
-      }
-
-      await Share.shareXFiles(
-        [XFile(file.path, mimeType: 'image/png')],
-        sharePositionOrigin: shareOrigin,
+      pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+        maxWidth: 1080,
+        maxHeight: 1080,
+        imageQuality: 85,
       );
     } catch (e) {
-      debugLog('[WorkoutFinishedScreen] Failed to share workout: $e');
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Unable to share workout')),
-      );
+      debugLog('[WorkoutFinishedScreen] Error picking image: $e');
     }
+
+    if (!context.mounted) return;
+
+    // 2. Show the share preview bottom sheet
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _SharePreviewSheet(
+        routine: widget.routine,
+        elapsedSeconds: widget.elapsedSeconds,
+        distanceMeters: widget.distanceMeters,
+        finishTime: widget.finishTime,
+        currentIntervalIndex: widget.currentIntervalIndex,
+        elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
+        imagePath: pickedFile?.path,
+      ),
+    );
   }
 
   @override
@@ -321,35 +282,26 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                     ),
                     const Spacer(),
                     // Share button
-                    SizedBox(
+                    SecondaryOutlinedButton(
                       key: _shareButtonKey,
-                      width: double.infinity,
-                      child: Bounceable(
-                        onTap: () => _shareWorkout(context),
-                        child: IgnorePointer(
-                          child: OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.share_outlined, size: 18),
-                            label: Text(
-                              AppLocalizations.of(context)!.share,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              side: BorderSide(
-                                color: theme.colorScheme.outline
-                                    .withValues(alpha: 0.38),
-                              ),
+                      onPressed: () => _shareWorkout(context),
+                      borderRadius: 18,
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      borderColor: theme.colorScheme.outline.withOpacity(0.38),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.share_outlined, size: 18),
+                          const SizedBox(width: 8),
+                          Text(
+                            AppLocalizations.of(context)!.share,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.3,
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 14),
@@ -802,6 +754,9 @@ class _ShareCard extends StatelessWidget {
   final String distanceLabel;
   final String avgRpmLabel;
   final String avgLevelLabel;
+  final String? imagePath;
+  final double cardW;
+  final double cardH;
 
   const _ShareCard({
     required this.routine,
@@ -815,6 +770,9 @@ class _ShareCard extends StatelessWidget {
     required this.distanceLabel,
     required this.avgRpmLabel,
     required this.avgLevelLabel,
+    this.imagePath,
+    required this.cardW,
+    required this.cardH,
   });
 
   String _formatTime(int seconds) {
@@ -872,68 +830,6 @@ class _ShareCard extends StatelessWidget {
     return null;
   }
 
-  IconData _secondaryMetricIcon() {
-    return switch (routine.machineType) {
-      MachineType.treadmill => Icons.route_outlined,
-      MachineType.cycle => Icons.speed_outlined,
-      MachineType.stairmaster => Icons.stacked_line_chart_outlined,
-    };
-  }
-
-  Widget _buildMetricCard({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color panelColor,
-    required Color borderColor,
-    required Color titleColor,
-    required Color valueColor,
-    bool emphasize = false,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          color: panelColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: borderColor),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 18, color: titleColor),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: valueColor,
-                fontSize: emphasize ? 24 : 20,
-                fontWeight: FontWeight.w800,
-                letterSpacing: emphasize ? -1.1 : -0.7,
-                height: 1.05,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: titleColor,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.1,
-                height: 1.15,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   double? _avgRpm() {
     if (routine.machineType != MachineType.cycle) return null;
     double w = 0;
@@ -978,16 +874,34 @@ class _ShareCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const cardW = 360.0;
-    const cardH = 560.0;
-    const accent = Color(0xFFFF5A4F);
-    const bg1 = Color(0xFF10111A);
-    const bg2 = Color(0xFF1B1D2A);
-    const stroke = Color(0x22FFFFFF);
-    const panel = Color(0x12FFFFFF);
-    const primaryText = Colors.white;
-    const secondaryText = Color(0x99FFFFFF);
-    const tertiaryText = Color(0x70FFFFFF);
+    final theme = Theme.of(context);
+    final isSquare = cardH == cardW;
+
+    final brandFontSize = isSquare ? 24.0 : 30.0;
+    final dateFontSize = isSquare ? 11.0 : 13.0;
+    final timeFontSize = isSquare ? 48.0 : 68.0;
+    final labelFontSize = isSquare ? 10.0 : 12.0;
+    final metricValFontSize = isSquare ? 22.0 : 28.0;
+    final metricLabelFontSize = isSquare ? 10.0 : 11.0;
+    final graphHeight = isSquare ? 36.0 : 54.0;
+    final contentPadding = isSquare 
+        ? const EdgeInsets.symmetric(horizontal: 18, vertical: 18)
+        : const EdgeInsets.symmetric(horizontal: 24, vertical: 26);
+    final bottomSpacerHeight = isSquare ? 12.0 : 20.0;
+    final graphSpacerHeight = isSquare ? 16.0 : 28.0;
+
+    const textShadows = [
+      Shadow(
+        offset: Offset(0, 1.5),
+        blurRadius: 4.0,
+        color: Colors.black87,
+      ),
+      Shadow(
+        offset: Offset(0, 3.0),
+        blurRadius: 8.0,
+        color: Colors.black54,
+      ),
+    ];
 
     final l10n = AppLocalizations.of(context)!;
     final metricLabel = switch (routine.machineType) {
@@ -996,157 +910,321 @@ class _ShareCard extends StatelessWidget {
       MachineType.stairmaster => avgLevelLabel,
     };
     final metricValue = _secondaryMetricValue(context);
-    final routineTitle =
-        routine.name.trim().isEmpty ? machineTypeLabel : routine.name;
     final dateStr = _formatDate(finishTime);
     final timeStr = _formatTimeOfDay(finishTime);
 
-    return SizedBox(
-      width: cardW,
-      height: cardH,
-      child: Container(
+    Widget backgroundWidget;
+    if (imagePath != null && File(imagePath!).existsSync()) {
+      backgroundWidget = Image.file(
+        File(imagePath!),
+        width: cardW,
+        height: cardH,
+        fit: BoxFit.cover,
+      );
+    } else {
+      backgroundWidget = Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [bg1, bg2],
+            colors: [Color(0xFF0F1016), Color(0xFF1B1D2A)],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      );
+    }
+
+    return SizedBox(
+      width: cardW,
+      height: cardH,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(0),
+        child: Stack(
+          children: [
+            Positioned.fill(child: backgroundWidget),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.35),
+                      Colors.transparent,
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.55),
+                    ],
+                    stops: const [0.0, 0.25, 0.65, 1.0],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: contentPadding,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
-                    child: Text(
-                      'Valcue',
-                      style: TextStyle(
-                        color: primaryText,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    dateStr,
-                    style: const TextStyle(
-                      color: secondaryText,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 22),
-              Text(
-                machineTypeLabel,
-                style: const TextStyle(
-                  color: accent,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                routineTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: secondaryText,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.2,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
-                  decoration: BoxDecoration(
-                    color: panel,
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: stroke),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'TIME',
-                        style: TextStyle(
-                          color: tertiaryText,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 110,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: BidiSafeText(
-                            _formatTime(elapsedSeconds),
-                            forceLTR: true,
-                            style: const TextStyle(
-                              color: primaryText,
-                              fontSize: 92,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -5,
-                              fontFeatures: [ui.FontFeature.tabularFigures()],
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/images/app_icon.png',
+                            width: brandFontSize * 1.45,
+                            height: brandFontSize * 1.45,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.directions_run,
+                                color: theme.colorScheme.primary,
+                                size: brandFontSize * 1.45,
+                              );
+                            },
+                          ),
+                          Transform.translate(
+                            offset: Offset(isSquare ? -6.0 : -8.0, 0),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: brandFontSize,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -1.2,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: theme.textTheme.titleMedium?.fontFamily,
+                                ),
+                                children: [
+                                  const TextSpan(
+                                    text: 'Val',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  TextSpan(
+                                    text: 'cue',
+                                    style: TextStyle(color: theme.colorScheme.primary),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
                       Text(
-                        totalTimeLabel,
-                        style: const TextStyle(
-                          color: secondaryText,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                        '$dateStr  $timeStr',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: dateFontSize,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.2,
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  _buildMetricCard(
-                    icon: _secondaryMetricIcon(),
-                    label: metricLabel,
-                    value: metricValue ?? '-',
-                    panelColor: panel,
-                    borderColor: stroke,
-                    titleColor: tertiaryText,
-                    valueColor: primaryText,
-                    emphasize: true,
-                  ),
-                  const SizedBox(width: 12),
-                  _buildMetricCard(
-                    icon: Icons.schedule_outlined,
-                    label: l10n.workoutComplete,
-                    value: timeStr,
-                    panelColor: panel,
-                    borderColor: stroke,
-                    titleColor: tertiaryText,
-                    valueColor: primaryText,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BidiSafeText(
+                        _formatTime(elapsedSeconds),
+                        forceLTR: true,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: timeFontSize,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: isSquare ? -1.5 : -3.0,
+                          height: 1.0,
+                          fontFeatures: const [ui.FontFeature.tabularFigures()],
+                          shadows: textShadows,
+                        ),
+                      ),
+                      Text(
+                        totalTimeLabel.toUpperCase(),
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                          fontSize: labelFontSize,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          shadows: textShadows,
+                        ),
+                      ),
+                      SizedBox(height: bottomSpacerHeight),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  metricValue ?? '-',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: metricValFontSize,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -0.8,
+                                    height: 1.1,
+                                    shadows: textShadows,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  metricLabel.toUpperCase(),
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    fontSize: metricLabelFontSize,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.4,
+                                    shadows: textShadows,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  machineTypeLabel,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: metricValFontSize,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -0.8,
+                                    height: 1.1,
+                                    shadows: textShadows,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  l10n.workout.toUpperCase(),
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    fontSize: metricLabelFontSize,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.4,
+                                    shadows: textShadows,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: graphSpacerHeight),
+                      if (routine.intervals.isNotEmpty) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          height: graphHeight,
+                          child: CustomPaint(
+                            painter: _ShareIntervalGraphPainter(
+                              intervals: routine.intervals,
+                              machineType: routine.machineType,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class _ShareIntervalGraphPainter extends CustomPainter {
+  final List<Interval> intervals;
+  final MachineType machineType;
+
+  _ShareIntervalGraphPainter({
+    required this.intervals,
+    required this.machineType,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (intervals.isEmpty) return;
+
+    final totalDuration =
+        intervals.fold<double>(0.0, (sum, i) => sum + i.durationSeconds);
+    if (totalDuration <= 0) return;
+
+    double maxVal = 1.0;
+    for (final iv in intervals) {
+      double val = 0;
+      if (machineType == MachineType.treadmill) {
+        val = iv.speedKmh ?? 0.0;
+      } else if (machineType == MachineType.cycle) {
+        val = (iv.rpm ?? 0).toDouble();
+        if (val == 0) val = (iv.resistance ?? 0).toDouble();
+      } else if (machineType == MachineType.stairmaster) {
+        val = (iv.level ?? 0).toDouble();
+      }
+      if (val > maxVal) maxVal = val;
+    }
+
+    final path = Path();
+    final fillPath = Path();
+
+    double currentX = 0.0;
+    fillPath.moveTo(0, size.height);
+
+    for (int i = 0; i < intervals.length; i++) {
+      final iv = intervals[i];
+      double val = 0;
+      if (machineType == MachineType.treadmill) {
+        val = iv.speedKmh ?? 0.0;
+      } else if (machineType == MachineType.cycle) {
+        val = (iv.rpm ?? 0).toDouble();
+        if (val == 0) val = (iv.resistance ?? 0).toDouble();
+      } else if (machineType == MachineType.stairmaster) {
+        val = (iv.level ?? 0).toDouble();
+      }
+
+      final segmentWidth = (iv.durationSeconds / totalDuration) * size.width;
+      final y = size.height - (val / maxVal) * (size.height * 0.85);
+
+      if (i == 0) {
+        path.moveTo(0, y);
+        fillPath.lineTo(0, y);
+      } else {
+        path.lineTo(currentX, y);
+        fillPath.lineTo(currentX, y);
+      }
+
+      currentX += segmentWidth;
+      path.lineTo(currentX, y);
+      fillPath.lineTo(currentX, y);
+    }
+
+    fillPath.lineTo(size.width, size.height);
+    fillPath.close();
+
+    final linePaint = Paint()
+      ..color = Colors.white.withOpacity(0.85)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round;
+
+    final fillPaint = Paint()
+      ..color = Colors.white.withOpacity(0.18)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawPath(fillPath, fillPaint);
+    canvas.drawPath(path, linePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _ShareIntervalGraphPainter oldDelegate) {
+    return oldDelegate.intervals != intervals ||
+        oldDelegate.machineType != machineType;
   }
 }
 
@@ -1710,11 +1788,289 @@ class _WorkoutChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(_WorkoutChartPainter oldDelegate) {
     return oldDelegate.currentIntervalIndex != currentIntervalIndex ||
-        oldDelegate.elapsedSecondsInCurrentSession != elapsedSecondsInCurrentSession ||
+        oldDelegate.elapsedSecondsInCurrentSession !=
+            elapsedSecondsInCurrentSession ||
         oldDelegate.primaryColor != primaryColor ||
         oldDelegate.secondaryColor != secondaryColor ||
         oldDelegate.isDark != isDark ||
         oldDelegate.hoveredIntervalIndex != hoveredIntervalIndex;
+  }
+}
+
+class _SharePreviewSheet extends StatefulWidget {
+  final Routine routine;
+  final int elapsedSeconds;
+  final double? distanceMeters;
+  final DateTime finishTime;
+  final int currentIntervalIndex;
+  final int elapsedSecondsInCurrentSession;
+  final String? imagePath;
+
+  const _SharePreviewSheet({
+    required this.routine,
+    required this.elapsedSeconds,
+    this.distanceMeters,
+    required this.finishTime,
+    required this.currentIntervalIndex,
+    required this.elapsedSecondsInCurrentSession,
+    this.imagePath,
+  });
+
+  @override
+  State<_SharePreviewSheet> createState() => _SharePreviewSheetState();
+}
+
+class _SharePreviewSheetState extends State<_SharePreviewSheet> {
+  String _aspectRatio = '9:14'; // '9:14', '9:16', '1:1'
+  final GlobalKey _cardKey = GlobalKey();
+  bool _isSharing = false;
+
+  double get _cardW => 360.0;
+  double get _cardH {
+    if (_aspectRatio == '9:16') return 640.0;
+    if (_aspectRatio == '1:1') return 360.0;
+    return 560.0; // '9:14'
+  }
+
+  Future<void> _shareCardImage() async {
+    setState(() {
+      _isSharing = true;
+    });
+
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      // Wait for layout/paint
+      await Future.delayed(const Duration(milliseconds: 300));
+      final renderObject = _cardKey.currentContext?.findRenderObject();
+      if (renderObject is! RenderRepaintBoundary) {
+        setState(() {
+          _isSharing = false;
+        });
+        return;
+      }
+
+      final image = await renderObject.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) {
+        setState(() {
+          _isSharing = false;
+        });
+        return;
+      }
+
+      final tempDir = await getTemporaryDirectory();
+      final file = File(
+          '${tempDir.path}/workout_result_${_aspectRatio.replaceAll(':', '_')}.png');
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+
+      // Get share origin bounds
+      Rect? shareOrigin;
+      final mediaQuery = MediaQuery.of(context);
+      shareOrigin = Rect.fromLTWH(
+        0,
+        mediaQuery.size.height - 100,
+        mediaQuery.size.width,
+        100,
+      );
+
+      // Dismiss preview sheet
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      await Share.shareXFiles(
+        [XFile(file.path, mimeType: 'image/png')],
+        sharePositionOrigin: shareOrigin,
+      );
+    } catch (e) {
+      debugLog('[SharePreviewSheet] Failed to share: $e');
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Unable to share workout')),
+      );
+      if (mounted) {
+        setState(() {
+          _isSharing = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+
+    final machineTypeLabel = switch (widget.routine.machineType) {
+      MachineType.treadmill => l10n.treadmill,
+      MachineType.cycle => l10n.cycle,
+      MachineType.stairmaster => l10n.stairmaster,
+    };
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: theme.dividerColor,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Text(
+              Localizations.localeOf(context).languageCode == 'ko'
+                  ? '공유 카드 꾸미기'
+                  : 'Customize Share Card',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Card Preview Area
+            Container(
+              height: 320,
+              decoration: BoxDecoration(
+                color: isDark ? Colors.black26 : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: isDark ? Colors.white12 : Colors.grey.shade300,
+                ),
+              ),
+              child: Center(
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: RepaintBoundary(
+                    key: _cardKey,
+                    child: _ShareCard(
+                      routine: widget.routine,
+                      elapsedSeconds: widget.elapsedSeconds,
+                      distanceMeters: widget.distanceMeters,
+                      finishTime: widget.finishTime,
+                      currentIntervalIndex: widget.currentIntervalIndex,
+                      elapsedSecondsInCurrentSession:
+                          widget.elapsedSecondsInCurrentSession,
+                      machineTypeLabel: machineTypeLabel,
+                      totalTimeLabel: l10n.totalTime,
+                      distanceLabel: l10n.totalDistance,
+                      avgRpmLabel: l10n.averageRpm,
+                      avgLevelLabel: l10n.averageLevel,
+                      imagePath: widget.imagePath,
+                      cardW: _cardW,
+                      cardH: _cardH,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Aspect Ratio Selector
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildRatioOption('9:14', '9:14 (기본)'),
+                const SizedBox(width: 8),
+                _buildRatioOption('9:16', '9:16 (스토리)'),
+                const SizedBox(width: 8),
+                _buildRatioOption('1:1', '1:1 (정사각형)'),
+              ],
+            ),
+            const SizedBox(height: 32),
+            // Share Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isSharing ? null : _shareCardImage,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                child: _isSharing
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        l10n.share,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRatioOption(String ratio, String label) {
+    final isSelected = _aspectRatio == ratio;
+    final theme = Theme.of(context);
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _aspectRatio = ratio;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? theme.colorScheme.primary.withOpacity(0.12)
+                : Colors.transparent,
+            border: Border.all(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.dividerColor,
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withOpacity(0.8),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import '../../routines/models/interval.dart';
 import '../../routines/models/machine_type.dart';
@@ -262,6 +263,7 @@ class WorkoutState extends ChangeNotifier {
 
     if (playSounds && _currentIntervalIndex != oldIntervalIndex) {
       SoundService().playBeep();
+      HapticFeedback.heavyImpact();
     }
     if (notify) notifyListeners();
   }
@@ -307,7 +309,13 @@ class WorkoutState extends ChangeNotifier {
     _runningRefreshTimer = null;
     _countdownRefreshTimer?.cancel();
     _countdownRefreshTimer = null;
-    if (playSound) _playFinishSfxOnce();
+    SoundService().stopSilentLoop();
+    if (playSound) {
+      _playFinishSfxOnce();
+      Future.delayed(Duration.zero, () => HapticFeedback.vibrate());
+      Future.delayed(const Duration(milliseconds: 300), () => HapticFeedback.mediumImpact());
+      Future.delayed(const Duration(milliseconds: 600), () => HapticFeedback.heavyImpact());
+    }
     _status = WorkoutStatus.finished;
     if (notify) notifyListeners();
   }
@@ -366,6 +374,7 @@ class WorkoutState extends ChangeNotifier {
     _countdownRefreshTimer = null;
     _runningAnchor = null;
     _countdownEndsAt = null;
+    SoundService().stopSilentLoop();
     _playFinishSfxOnce();
     _status = WorkoutStatus.stopped;
     _stoppedEarly = true;
@@ -382,6 +391,7 @@ class WorkoutState extends ChangeNotifier {
     _runningAnchor = null;
     _runningRefreshTimer?.cancel();
     _runningRefreshTimer = null;
+    SoundService().stopSilentLoop();
     notifyListeners();
   }
 
@@ -406,6 +416,7 @@ class WorkoutState extends ChangeNotifier {
     );
     _countdownRefreshTimer?.cancel();
     SoundService().playBeep();
+    SoundService().startSilentLoop();
     if (!_isBackgrounded) {
       _startCountdownRefreshTimer();
     }

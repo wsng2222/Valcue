@@ -930,6 +930,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     _lastSpokenCountdownSecond = sec;
 
     VoiceGuideService.instance.speakCountdown(sec);
+    HapticFeedback.lightImpact();
   }
 
   void _maybeSpeakIntervalGuidance() {
@@ -2983,29 +2984,13 @@ class _PauseBottomSheet extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   // Secondary button: End workout
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: onEndWorkout,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        side: BorderSide(
-                          color: theme.colorScheme.outlineVariant,
-                          width: 1,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: Text(
-                        l10n.endWorkout,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
+                  SecondaryOutlinedButton(
+                    onPressed: onEndWorkout,
+                    borderRadius: 14,
+                    borderColor: theme.colorScheme.outlineVariant,
+                    child: Text(
+                      l10n.endWorkout,
+                      style: const TextStyle(fontSize: 17),
                     ),
                   ),
                 ],
@@ -3097,29 +3082,13 @@ class _EndWorkoutConfirmationBottomSheet extends StatelessWidget {
                     children: [
                       // Cancel button (secondary)
                       Expanded(
-                        child: OutlinedButton(
+                        child: SecondaryOutlinedButton(
                           onPressed: onCancel,
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            side: BorderSide(
-                              color: theme.colorScheme.outlineVariant,
-                              width: 1,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ).copyWith(
-                            backgroundColor:
-                                WidgetStateProperty.all(Colors.transparent),
-                          ),
+                          borderRadius: 14,
+                          borderColor: theme.colorScheme.outlineVariant,
                           child: Text(
                             l10n.cancel,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface,
-                              letterSpacing: -0.3,
-                            ),
+                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                       ),

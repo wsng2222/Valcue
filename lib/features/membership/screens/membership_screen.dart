@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import '../../../widgets/secondary_outlined_button.dart';
 import '../../../app_settings/app_settings_provider.dart';
 
 class MembershipScreen extends StatelessWidget {
@@ -89,28 +90,13 @@ class MembershipScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: SecondaryOutlinedButton(
                     onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      side: BorderSide(
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.2)
-                            : theme.dividerColor,
-                      ),
-                    ),
+                    borderRadius: 999,
                     child: Text(
                       AppLocalizations.of(context)!.later,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface,
-                      ),
                     ),
                   ),
                 ),
@@ -157,11 +143,15 @@ class MembershipScreen extends StatelessWidget {
   Widget _buildBenefitItem(BuildContext context, String text) {
     final theme = Theme.of(context);
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          Icons.check_circle,
-          color: theme.colorScheme.primary,
-          size: 24,
+        Padding(
+          padding: const EdgeInsets.only(top: 1),
+          child: Icon(
+            Icons.check_circle,
+            color: theme.colorScheme.primary,
+            size: 20,
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -171,6 +161,7 @@ class MembershipScreen extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: theme.colorScheme.onSurface,
+              height: 1.4,
             ),
           ),
         ),

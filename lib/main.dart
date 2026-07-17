@@ -31,29 +31,29 @@ void _debugLog(String message) {
   }
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  await AppErrorService.instance.init();
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    unawaited(
-      AppErrorService.instance.recordFlutterError(details, fatal: true),
-    );
-  };
-  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
-    unawaited(
-      AppErrorService.instance.recordError(
-        error,
-        stack,
-        source: 'platform',
-        fatal: true,
-      ),
-    );
-    return true;
-  };
+    await AppErrorService.instance.init();
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      unawaited(
+        AppErrorService.instance.recordFlutterError(details, fatal: true),
+      );
+    };
+    WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
+      unawaited(
+        AppErrorService.instance.recordError(
+          error,
+          stack,
+          source: 'platform',
+          fatal: true,
+        ),
+      );
+      return true;
+    };
 
-  await runZonedGuarded(() async {
     await _bootstrapApp();
   }, (error, stack) {
     unawaited(
