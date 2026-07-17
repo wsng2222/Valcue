@@ -674,6 +674,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                             icon: const Icon(Icons.qr_code_scanner),
                             color: theme.colorScheme.onSurface,
                             iconSize: 26,
+                            tooltip: Localizations.localeOf(context).languageCode == 'ko'
+                                ? 'QR 코드 스캔'
+                                : 'Scan QR Code',
                             onPressed: () => _scanQrCode(context),
                           ),
                         ],
