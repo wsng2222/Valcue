@@ -1907,6 +1907,11 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
       MachineType.stairmaster => l10n.stairmaster,
     };
 
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final defaultLabel = isKorean ? '9:14 (기본)' : '9:14 (Default)';
+    final storyLabel = isKorean ? '9:16 (스토리)' : '9:16 (Story)';
+    final squareLabel = isKorean ? '1:1 (정사각형)' : '1:1 (Square)';
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -1978,15 +1983,14 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
               ),
             ),
             const SizedBox(height: 24),
-            // Aspect Ratio Selector
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildRatioOption('9:14', '9:14 (기본)'),
+                _buildRatioOption('9:14', defaultLabel),
                 const SizedBox(width: 8),
-                _buildRatioOption('9:16', '9:16 (스토리)'),
+                _buildRatioOption('9:16', storyLabel),
                 const SizedBox(width: 8),
-                _buildRatioOption('1:1', '1:1 (정사각형)'),
+                _buildRatioOption('1:1', squareLabel),
               ],
             ),
             const SizedBox(height: 32),
