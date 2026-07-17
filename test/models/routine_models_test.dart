@@ -48,8 +48,8 @@ void main() {
     expect(longRoutine.totalDurationFormatted, '1:01:05');
   });
 
-  test('Routine truncates names longer than 40 chars', () {
-    final longName = 'A' * 45;
+  test('Routine truncates names longer than 100 chars', () {
+    final longName = 'A' * 110;
     final routine = Routine(
       id: 'r3',
       name: longName,
@@ -60,8 +60,8 @@ void main() {
       ],
     );
 
-    expect(routine.name.length, 40);
-    expect(routine.name, longName.substring(0, 40));
+    expect(routine.name.length, 100);
+    expect(routine.name, longName.substring(0, 100));
   });
 
   test('MachineType toJson/fromJson roundtrip', () {

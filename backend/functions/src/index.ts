@@ -29,10 +29,12 @@ import {
   LiveActivityScheduleService,
   type ServiceLogger,
 } from "./service/live_activity_schedule_service.js";
+import { FirestoreSharedRoutinesRepository } from "./infrastructure/shared_routines_repository.js";
 
 if (getApps().length === 0) initializeApp();
 
 const repository = new FirestoreSessionRepository(getFirestore());
+const sharedRoutinesRepository = new FirestoreSharedRoutinesRepository(getFirestore());
 const scheduler = new FirebaseTaskScheduler(REGION, DISPATCH_FUNCTION_NAME);
 const serviceLogger: ServiceLogger = {
   info: (message, data) => logger.info(message, data),
@@ -194,4 +196,52 @@ export const dispatchLiveActivityEvent = onTaskDispatched<DispatchTaskPayload>(
     await dispatchService().dispatch(payload);
   },
 );
+
+function validateAuthenticatedCaller(request: CallableRequest<unknown>): string {
+  if (request.auth === undefined) {
+    throw new HttpsError("unauthenticated", "Firebase Authentication is required.");
+  }
+  if (request.app === undefined) {
+    throw new HttpsError("failed-precondition", "Firebase App Check is required.");
+  }
+  return request.auth.uid;
+}
+
+export const shareRoutine = onCall(
+  callableOptions,
+  async (request) => {
+    try {
+      validateAuthenticatedCaller(request);
+      const { routineData } = request.data as { routineData?: string };
+      if (!routineData || typeof routineData !== "string") {
+        throw new HttpsError("invalid-argument", "The 'routineData' field is required and must be a string.");
+      }
+      const id = await sharedRoutinesRepository.save(routineData);
+      return { id };
+    } catch (error) {
+      throw asHttpsError(error);
+    }
+  }
+);
+
+export const getSharedRoutine = onCall(
+  callableOptions,
+  async (request) => {
+    try {
+      validateAuthenticatedCaller(request);
+      const { id } = request.data as { id?: string };
+      if (!id || typeof id !== "string") {
+        throw new HttpsError("invalid-argument", "The 'id' field is required and must be a string.");
+      }
+      const routineData = await sharedRoutinesRepository.get(id);
+      if (routineData === null) {
+        throw new HttpsError("not-found", "Shared routine not found.");
+      }
+      return { routineData };
+    } catch (error) {
+      throw asHttpsError(error);
+    }
+  }
+);
+
 

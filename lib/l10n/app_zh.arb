@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "您确定要删除此例行程序吗？此操作无法撤销。",
   "deleteError": "删除时发生错误",
   "nameRequired": "请输入名称",
-  "nameMaxLength": "名称必须为24个字符或更少",
+  "nameMaxLength": "名称必须为50个字符或更少",
   "minIntervalsRequired": "至少需要一个间隔",
   "intervalMinDuration": "间隔时间必须至少为1秒",
   "intervalMaxDuration": "间隔时间最多为3小时（10800秒）",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "每天",
   "workoutReminderSelectTime": "选择时间",
   "workoutReminderPermissionRequired": "需要通知权限。",
-  "workoutReminderTimeLabel": "时间"
+  "workoutReminderTimeLabel": "时间",
+  "shareRoutineMessage": "在 Valcue 上试试这个间歇训练计划！\n\n计划名称: {routineName}\n\n复制或点击下方链接即可导入:\n{shareLink}"
 }

@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "Tem certeza de que deseja excluir esta rotina? Isso não pode ser desfeito.",
   "deleteError": "Ocorreu um erro ao excluir",
   "nameRequired": "Por favor, insira um nome",
-  "nameMaxLength": "O nome deve ter 24 caracteres ou menos",
+  "nameMaxLength": "O nome deve ter 50 caracteres ou menos",
   "minIntervalsRequired": "Pelo menos um intervalo é necessário",
   "intervalMinDuration": "A duração do intervalo deve ser de pelo menos 1 segundo",
   "intervalMaxDuration": "A duração do intervalo deve ser de no máximo 3 horas (10800 segundos)",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "Todo dia",
   "workoutReminderSelectTime": "Selecionar horário",
   "workoutReminderPermissionRequired": "Permissão de notificação necessária.",
-  "workoutReminderTimeLabel": "Horário"
+  "workoutReminderTimeLabel": "Horário",
+  "shareRoutineMessage": "Experimente este treino de intervalo no Valcue!\n\nTreino: {routineName}\n\nCopie ou toque no link para importá-lo:\n{shareLink}"
 }

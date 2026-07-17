@@ -118,7 +118,7 @@
   "mph": "mph",
   "myTab": "Min",
   "name": "Navn",
-  "nameMaxLength": "Navnet må være 24 tegn eller mindre",
+  "nameMaxLength": "Navnet må være 50 tegn eller mindre",
   "nameRequired": "Skriv inn et navn",
   "newLabel": "Ny",
   "noAds": "Ingen annonser",
@@ -312,5 +312,6 @@
   "workoutReminderEveryDay": "Hver dag",
   "workoutReminderSelectTime": "Velg tidspunkt",
   "workoutReminderPermissionRequired": "Varslingstillatelse er påkrevd.",
-  "workoutReminderTimeLabel": "Tidspunkt"
+  "workoutReminderTimeLabel": "Tidspunkt",
+  "shareRoutineMessage": "Prøv dette intervalltreningsprogrammet på Valcue!\n\nProgram: {routineName}\n\nKopier eller trykk på lenken for å importere det:\n{shareLink}"
 }

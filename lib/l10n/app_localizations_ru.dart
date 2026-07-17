@@ -231,7 +231,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nameRequired => 'Пожалуйста, введите название';
 
   @override
-  String get nameMaxLength => 'Название должно содержать не более 24 символов';
+  String get nameMaxLength => 'Название должно содержать не более 50 символов';
 
   @override
   String get minIntervalsRequired => 'Требуется хотя бы один интервал';
@@ -1008,4 +1008,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'Время';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Попробуйте эту интервальную тренировку в Valcue!\n\nТренировка: $routineName\n\nСкопируйте или нажмите на ссылку, чтобы импортировать её:\n$shareLink';
+  }
 }

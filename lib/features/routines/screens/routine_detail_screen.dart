@@ -2,12 +2,15 @@ import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/routine.dart';
+import '../storage/routine_provider.dart';
+import '../utils/routine_sharing.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../workout/screens/workout_screen.dart';
 import 'routine_edit_screen.dart';
-import '../storage/routine_provider.dart';
 import '../widgets/routine_shared_widgets.dart';
+import '../widgets/qr_share_dialog.dart';
 import '../../../services/ad_service.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
@@ -54,6 +57,27 @@ class _RoutineDetailSheetContent extends StatelessWidget {
       context: context,
       builder: (context) => CupertinoActionSheet(
         actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              final l10n = AppLocalizations.of(context)!;
+              Navigator.pop(context); // Close action sheet
+              final shareLink = await RoutineSharing.generateShareLink(routine);
+              final message = l10n.shareRoutineMessage(routine.name, shareLink);
+              Share.share(message);
+            },
+            child: Text(
+              Localizations.localeOf(context).languageCode == 'ko' ? '루틴 공유하기' : 'Share Routine',
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context); // Close action sheet
+              QrShareDialog.show(context, routine);
+            },
+            child: Text(
+              Localizations.localeOf(context).languageCode == 'ko' ? 'QR 코드로 공유' : 'Share via QR Code',
+            ),
+          ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {

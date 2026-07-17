@@ -227,7 +227,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nameRequired => '请输入名称';
 
   @override
-  String get nameMaxLength => '名称必须为24个字符或更少';
+  String get nameMaxLength => '名称必须为50个字符或更少';
 
   @override
   String get minIntervalsRequired => '至少需要一个间隔';
@@ -961,4 +961,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => '时间';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return '在 Valcue 上试试这个间歇训练计划！\n\n计划名称: $routineName\n\n复制或点击下方链接即可导入:\n$shareLink';
+  }
 }

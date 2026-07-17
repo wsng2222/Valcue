@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "このルーティンを削除してもよろしいですか？この操作は元に戻せません。",
   "deleteError": "削除中にエラーが発生しました",
   "nameRequired": "名前を入力してください",
-  "nameMaxLength": "名前は24文字以下である必要があります",
+  "nameMaxLength": "名前は50文字以下である必要があります",
   "minIntervalsRequired": "少なくとも1つのインターバルが必要です",
   "intervalMinDuration": "インターバルの時間は少なくとも1秒である必要があります",
   "intervalMaxDuration": "インターバルの時間は最大3時間（10800秒）まで可能です",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "毎日",
   "workoutReminderSelectTime": "時刻を選択",
   "workoutReminderPermissionRequired": "通知権限が必要です。",
-  "workoutReminderTimeLabel": "時刻"
+  "workoutReminderTimeLabel": "時刻",
+  "shareRoutineMessage": "Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: {routineName}\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n{shareLink}"
 }

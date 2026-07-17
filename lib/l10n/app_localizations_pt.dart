@@ -231,7 +231,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get nameRequired => 'Por favor, insira um nome';
 
   @override
-  String get nameMaxLength => 'O nome deve ter 24 caracteres ou menos';
+  String get nameMaxLength => 'O nome deve ter 50 caracteres ou menos';
 
   @override
   String get minIntervalsRequired => 'Pelo menos um intervalo é necessário';
@@ -1005,4 +1005,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'Horário';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Experimente este treino de intervalo no Valcue!\n\nTreino: $routineName\n\nCopie ou toque no link para importá-lo:\n$shareLink';
+  }
 }

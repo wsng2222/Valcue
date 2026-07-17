@@ -231,7 +231,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nameRequired => 'Vui lòng nhập tên';
 
   @override
-  String get nameMaxLength => 'Tên phải có 24 ký tự trở xuống';
+  String get nameMaxLength => 'Tên phải có 50 ký tự trở xuống';
 
   @override
   String get minIntervalsRequired => 'Cần ít nhất một khoảng thời gian';
@@ -1004,4 +1004,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'Giờ';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Hãy thử bài tập ngắt quãng này trên Valcue!\n\nBài tập: $routineName\n\nSao chép hoặc nhấn vào liên kết để nhập bài tập:\n$shareLink';
+  }
 }

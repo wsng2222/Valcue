@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "Вы уверены, что хотите удалить эту программу? Это действие нельзя отменить.",
   "deleteError": "Произошла ошибка при удалении",
   "nameRequired": "Пожалуйста, введите название",
-  "nameMaxLength": "Название должно содержать не более 24 символов",
+  "nameMaxLength": "Название должно содержать не более 50 символов",
   "minIntervalsRequired": "Требуется хотя бы один интервал",
   "intervalMinDuration": "Длительность интервала должна быть не менее 1 секунды",
   "intervalMaxDuration": "Длительность интервала должна быть не более 3 часов (10800 секунд)",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "Каждый день",
   "workoutReminderSelectTime": "Выбрать время",
   "workoutReminderPermissionRequired": "Требуется разрешение на уведомления.",
-  "workoutReminderTimeLabel": "Время"
+  "workoutReminderTimeLabel": "Время",
+  "shareRoutineMessage": "Попробуйте эту интервальную тренировку в Valcue!\n\nТренировка: {routineName}\n\nСкопируйте или нажмите на ссылку, чтобы импортировать её:\n{shareLink}"
 }

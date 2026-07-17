@@ -146,7 +146,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     setState(() {
       if (trimmed.isEmpty) {
         _nameError = l10n.nameRequired;
-      } else if (trimmed.length > 24) {
+      } else if (trimmed.length > 50) {
         _nameError = l10n.nameMaxLength;
       } else {
         _nameError = null;
@@ -156,7 +156,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   bool get _isNameValid {
     final trimmed = _nameController.text.trim();
-    return trimmed.isNotEmpty && trimmed.length <= 24;
+    return trimmed.isNotEmpty && trimmed.length <= 50;
   }
 
   bool get _hasChanges {
@@ -930,10 +930,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                                   : theme.colorScheme.onSurface,
                             ),
                             textAlign: TextAlign.right,
-                            maxLength: 24,
+                            maxLength: 50,
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(24),
+                              LengthLimitingTextInputFormatter(50),
                             ],
                           ),
                         ),

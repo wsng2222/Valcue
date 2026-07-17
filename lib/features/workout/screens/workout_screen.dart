@@ -914,9 +914,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
   }
 
   void _maybeSpeakCountdownGuidance() {
-    // Speak: 30 / 20 / 10 seconds left.
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
     final sec = _workoutState.remainingSeconds;
-    const targets = {30, 20, 10};
+    final targets = settingsProvider.voiceGuideCountdownTriggers;
     if (!targets.contains(sec)) return;
 
     final idx = _workoutState.currentIntervalIndex;

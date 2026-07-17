@@ -118,7 +118,7 @@
   "mph": "mph",
   "myTab": "ของฉัน",
   "name": "ชื่อ",
-  "nameMaxLength": "ชื่อต้องยาวไม่เกิน 24 ตัวอักษร",
+  "nameMaxLength": "ชื่อต้องยาวไม่เกิน 50 ตัวอักษร",
   "nameRequired": "กรุณาใส่ชื่อ",
   "newLabel": "ใหม่",
   "noAds": "ไม่มีโฆษณา",
@@ -312,5 +312,6 @@
   "workoutReminderEveryDay": "ทุกวัน",
   "workoutReminderSelectTime": "เลือกเวลา",
   "workoutReminderPermissionRequired": "ต้องการสิทธิ์การแจ้งเตือน",
-  "workoutReminderTimeLabel": "เวลา"
+  "workoutReminderTimeLabel": "เวลา",
+  "shareRoutineMessage": "ลองใช้โปรแกรมออกกำลังกายแบบอินเทอร์วัลนี้บน Valcue!\n\nโปรแกรม: {routineName}\n\nคัดลอกหรือแตะลิงก์เพื่อนำเข้า:\n{shareLink}"
 }

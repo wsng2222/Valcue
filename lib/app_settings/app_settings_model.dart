@@ -14,6 +14,9 @@ class AppSettings {
   final int workoutReminderMinute;
   final String workoutReminderMessage;
 
+  // Countdown timing setting
+  final List<int> voiceGuideCountdownTriggers; // e.g. [10, 20, 30]
+
   AppSettings({
     this.language,
     required this.measurement,
@@ -29,6 +32,7 @@ class AppSettings {
     required this.workoutReminderHour,
     required this.workoutReminderMinute,
     required this.workoutReminderMessage,
+    this.voiceGuideCountdownTriggers = const [10, 20, 30],
   });
 
   AppSettings copyWith({
@@ -46,6 +50,7 @@ class AppSettings {
     int? workoutReminderHour,
     int? workoutReminderMinute,
     String? workoutReminderMessage,
+    List<int>? voiceGuideCountdownTriggers,
   }) {
     return AppSettings(
       language: language ?? this.language,
@@ -68,6 +73,8 @@ class AppSettings {
           workoutReminderMinute ?? this.workoutReminderMinute,
       workoutReminderMessage:
           workoutReminderMessage ?? this.workoutReminderMessage,
+      voiceGuideCountdownTriggers:
+          voiceGuideCountdownTriggers ?? this.voiceGuideCountdownTriggers,
     );
   }
 
@@ -88,6 +95,7 @@ class AppSettings {
       'workoutReminderHour': workoutReminderHour,
       'workoutReminderMinute': workoutReminderMinute,
       'workoutReminderMessage': workoutReminderMessage,
+      'voiceGuideCountdownTriggers': voiceGuideCountdownTriggers,
     };
   }
 
@@ -111,6 +119,15 @@ class AppSettings {
     );
     parsedWeekdays.sort();
 
+    final parsedCountdownTriggers = List<int>.of(
+      (json['voiceGuideCountdownTriggers'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toSet()
+              .toList() ??
+          const <int>[10, 20, 30],
+    );
+    parsedCountdownTriggers.sort();
+
     return AppSettings(
       language: json['language'] as String?,
       measurement: json['measurement'] as String? ?? 'kmh',
@@ -127,6 +144,7 @@ class AppSettings {
       workoutReminderHour: json['workoutReminderHour'] as int? ?? 9,
       workoutReminderMinute: json['workoutReminderMinute'] as int? ?? 0,
       workoutReminderMessage: json['workoutReminderMessage'] as String? ?? '',
+      voiceGuideCountdownTriggers: parsedCountdownTriggers,
     );
   }
 
@@ -145,5 +163,6 @@ class AppSettings {
         workoutReminderHour: 9,
         workoutReminderMinute: 0,
         workoutReminderMessage: '',
+        voiceGuideCountdownTriggers: const [10, 20, 30],
       );
 }

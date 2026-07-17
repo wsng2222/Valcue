@@ -193,6 +193,7 @@ class VoiceGuideService {
       if (_initialized) {
         await setLocale(locale);
         await setVoiceEnabled(voiceEnabled);
+        await _applyTtsSettings();
         return;
       }
 
@@ -213,32 +214,36 @@ class VoiceGuideService {
           androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
         ));
 
-
-
-        // iOS audio session configuration (critical for iOS TTS reliability)
+        // iOS setup:
+        await _tts.setSharedInstance(true);
         await _tts.setIosAudioCategory(
           IosTextToSpeechAudioCategory.playback,
           [
-            IosTextToSpeechAudioCategoryOptions.mixWithOthers,
             IosTextToSpeechAudioCategoryOptions.duckOthers,
+            IosTextToSpeechAudioCategoryOptions.mixWithOthers,
           ],
           IosTextToSpeechAudioMode.spokenAudio,
         );
         
         // iOS: awaitSpeakCompletion causes speech truncation issues
         await _tts.awaitSpeakCompletion(false);
-        // Reasonable defaults (FlutterTts ranges differ by platform).
-        await _tts.setSpeechRate(0.5);
-        await _tts.setPitch(1.0);
       });
 
       _initialized = true;
       await setLocale(locale);
       await setVoiceEnabled(voiceEnabled);
+      await _applyTtsSettings();
 
       if (_voiceEnabled) {
         _startPrewarm();
       }
+    });
+  }
+
+  Future<void> _applyTtsSettings() async {
+    await _safe(() async {
+      await _tts.setSpeechRate(0.5);
+      await _tts.setPitch(1.0);
     });
   }
 
@@ -459,7 +464,11 @@ class VoiceGuideService {
 
   String _buildText(String key, Map<String, String> placeholders) {
     final lang = _resolveLanguageCode(_locale);
-    final template = _templates[lang]?[key] ?? _templates['en']![key] ?? key;
+    
+    // Fallback logic
+    String? template = _templates[lang]?[key];
+    template ??= _templates['en']?[key];
+    template ??= key;
 
     var out = template;
     placeholders.forEach((k, v) {

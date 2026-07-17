@@ -1,5 +1,6 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +16,9 @@ import '../../../app_shell/app_shell.dart';
 import '../../../onboarding/onboarding_storage.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import 'routine_bottom_sheet.dart';
+import 'ai_routine_generator_sheet.dart';
+import '../utils/routine_sharing.dart';
+import 'qr_scanner_screen.dart';
 import 'recommended_routines_screen.dart';
 import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
@@ -167,6 +171,78 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       case OnboardingLevel.advanced:
         return Difficulty.advanced;
     }
+  }
+
+  Future<void> _scanQrCode(BuildContext context) async {
+    final routineProvider = Provider.of<RoutineProvider>(context, listen: false);
+    final settingsProvider = Provider.of<AppSettingsProvider>(context, listen: false);
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+
+    final scannedLink = await QrScannerScreen.startScanner(context);
+    if (scannedLink == null || !context.mounted) return;
+
+    // Parse the scanned link and show the import dialog
+    final routine = await RoutineSharing.parseShareLink(scannedLink);
+    if (routine == null || !context.mounted) return;
+
+    // Limit check for Treadmill free users
+    if (routine.machineType == MachineType.treadmill &&
+        !settingsProvider.isPremium &&
+        routineProvider.routines
+                .where((r) => r.machineType == MachineType.treadmill)
+                .length >=
+            2) {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text(isKorean ? '루틴 제한 초과' : 'Routine Limit Reached'),
+          content: Text(isKorean 
+              ? '무료 버전에서는 런닝머신 루틴을 최대 2개까지만 저장할 수 있습니다. 프리미엄으로 업그레이드하거나 기존 루틴을 삭제하세요.' 
+              : 'Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.'),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(isKorean ? '확인' : 'OK'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Show import confirmation dialog
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(isKorean ? '공유된 루틴 가져오기' : 'Import Shared Routine'),
+        content: Text(isKorean
+            ? '스캔한 QR 코드에 루틴이 있습니다.\n\n• 이름: ${routine.name}\n• 난이도: ${routine.difficulty}\n• 구간 수: ${routine.intervals.length}개\n\n이 루틴을 내 보관함에 저장할까요?'
+            : 'A routine was detected in the scanned QR code.\n\n• Name: ${routine.name}\n• Difficulty: ${routine.difficulty}\n• Intervals: ${routine.intervals.length}\n\nWould you like to save this routine to your library?'),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(isKorean ? '취소' : 'Cancel'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text(isKorean ? '가져오기' : 'Import'),
+            onPressed: () {
+              routineProvider.addRoutine(routine);
+              Navigator.pop(context);
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(isKorean 
+                      ? '\'${routine.name}\' 루틴을 성공적으로 가져왔습니다!' 
+                      : 'Successfully imported \'${routine.name}\'!'),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   // Method to navigate to specific machine type page
@@ -404,6 +480,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         Provider.of<RoutineProvider>(context, listen: false);
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
 
     // Check free limit when adding new treadmill routine
     if (machineType == MachineType.treadmill &&
@@ -416,12 +493,72 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       return;
     }
 
-    // Open bottom sheet in edit mode for new routine
-    RoutineBottomSheet.show(
-      context,
-      initialEditing: true,
-      isNew: true,
-      machineType: machineType,
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: Text(isKorean ? '루틴 추가 방법 선택' : 'Add Routine Option'),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              RoutineBottomSheet.show(
+                context,
+                initialEditing: true,
+                isNew: true,
+                machineType: machineType,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.edit_outlined, size: 20),
+                const SizedBox(width: 8),
+                Text(isKorean ? '새 커스텀 루틴 만들기' : 'Create Custom Routine'),
+              ],
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              AiRoutineGeneratorSheet.show(context, machineType);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.auto_awesome, size: 20, color: Colors.blueAccent),
+                const SizedBox(width: 8),
+                Text(
+                  isKorean ? 'AI 루틴 생성기' : 'AI Routine Generator',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              // Trigger manual check
+              RoutineSharing.resetLastProcessedLink(); // Reset tracking so it always triggers
+              RoutineSharing.checkClipboardAndImport(context);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.content_paste_go, size: 20),
+                const SizedBox(width: 8),
+                Text(isKorean ? '클립보드에서 가져오기' : 'Import from Clipboard'),
+              ],
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: Text(isKorean ? '취소' : 'Cancel'),
+        ),
+      ),
     );
   }
 
@@ -531,6 +668,13 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                               color: theme.colorScheme.onSurface,
                               letterSpacing: -0.9,
                             ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.qr_code_scanner),
+                            color: theme.colorScheme.onSurface,
+                            iconSize: 26,
+                            onPressed: () => _scanQrCode(context),
                           ),
                         ],
                       ),

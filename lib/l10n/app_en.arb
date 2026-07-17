@@ -300,7 +300,7 @@
   "@nameRequired": {
     "description": "Name required validation"
   },
-  "nameMaxLength": "Name must be 24 characters or less",
+  "nameMaxLength": "Name must be 50 characters or less",
   "@nameMaxLength": {
     "description": "Name max length validation"
   },
@@ -1137,5 +1137,17 @@
   "workoutReminderEveryDay": "Every day",
   "workoutReminderSelectTime": "Select time",
   "workoutReminderPermissionRequired": "Notification permission is required.",
-  "workoutReminderTimeLabel": "Time"
+  "workoutReminderTimeLabel": "Time",
+  "shareRoutineMessage": "Try this interval workout routine on Valcue!\n\nRoutine: {routineName}\n\nCopy or tap the link to import it:\n{shareLink}",
+  "@shareRoutineMessage": {
+    "description": "Message template for sharing a routine",
+    "placeholders": {
+      "routineName": {
+        "type": "String"
+      },
+      "shareLink": {
+        "type": "String"
+      }
+    }
+  }
 }

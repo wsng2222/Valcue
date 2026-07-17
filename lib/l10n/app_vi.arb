@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "Bạn có chắc chắn muốn xóa thói quen này không? Hành động này không thể hoàn tác.",
   "deleteError": "Đã xảy ra lỗi khi xóa",
   "nameRequired": "Vui lòng nhập tên",
-  "nameMaxLength": "Tên phải có 24 ký tự trở xuống",
+  "nameMaxLength": "Tên phải có 50 ký tự trở xuống",
   "minIntervalsRequired": "Cần ít nhất một khoảng thời gian",
   "intervalMinDuration": "Thời lượng khoảng thời gian phải ít nhất 1 giây",
   "intervalMaxDuration": "Thời lượng khoảng thời gian tối đa là 3 giờ (10800 giây)",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "Mỗi ngày",
   "workoutReminderSelectTime": "Chọn giờ",
   "workoutReminderPermissionRequired": "Cần quyền thông báo.",
-  "workoutReminderTimeLabel": "Giờ"
+  "workoutReminderTimeLabel": "Giờ",
+  "shareRoutineMessage": "Hãy thử bài tập ngắt quãng này trên Valcue!\n\nBài tập: {routineName}\n\nSao chép hoặc nhấn vào liên kết để nhập bài tập:\n{shareLink}"
 }

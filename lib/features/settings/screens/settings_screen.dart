@@ -1261,6 +1261,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
+                          if (provider.voiceGuideEnabled && provider.isPremium) ...[
+                            Builder(
+                              builder: (context) {
+                                final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+                                return SettingsRow(
+                                  icon: Icons.timer_outlined,
+                                  iconColor: Colors.amber,
+                                  title: isKorean ? '카운트다운 알림' : 'Countdown Timing',
+                                  subtitle: provider.voiceGuideCountdownTriggers.isEmpty
+                                      ? (isKorean ? '알림 없음' : 'No announcements')
+                                      : provider.voiceGuideCountdownTriggers
+                                          .map((sec) => isKorean ? '$sec초 전' : '${sec}s')
+                                          .join(', '),
+                                  onTap: () => _showCountdownTriggersPicker(context, provider),
+                                );
+                              }
+                            ),
+                          ],
                           SettingsRow(
                             icon: Icons.monitor_heart_outlined,
                             iconColor: Colors.indigoAccent,
@@ -1600,6 +1618,162 @@ class _SettingsScreenState extends State<SettingsScreen> {
           },
         );
       },
+    );
+  }
+
+
+
+  void _showCountdownTriggersPicker(BuildContext context, AppSettingsProvider provider) {
+    final theme = Theme.of(context);
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final availableSeconds = [5, 10, 20, 30];
+    
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final currentTriggers = provider.voiceGuideCountdownTriggers;
+          return CupertinoActionSheet(
+            title: Text(isKorean ? '카운트다운 알림 타이밍 선택' : 'Select Countdown Timings'),
+            message: Text(isKorean 
+                ? '운동 강도가 변경되기 전에 음성 안내를 받을 남은 시간을 선택하세요.' 
+                : 'Select when to hear remaining time announcements before intervals change.'),
+            actions: availableSeconds.map((sec) {
+              final isSelected = currentTriggers.contains(sec);
+              return CupertinoActionSheetAction(
+                onPressed: () {
+                  final newTriggers = List<int>.from(currentTriggers);
+                  if (isSelected) {
+                    newTriggers.remove(sec);
+                  } else {
+                    newTriggers.add(sec);
+                  }
+                  provider.updateVoiceGuideCountdownTriggers(newTriggers);
+                  setModalState(() {});
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      isKorean ? '$sec초 전' : '$sec seconds left',
+                      style: TextStyle(
+                        color: isSelected 
+                            ? theme.colorScheme.primary 
+                            : (theme.brightness == Brightness.dark ? Colors.white : Colors.black87),
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                    if (isSelected) ...[
+                      const SizedBox(width: 8),
+                      Icon(Icons.check, size: 18, color: theme.colorScheme.primary),
+                    ],
+                  ],
+                ),
+              );
+            }).toList(),
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () => Navigator.pop(context),
+              child: Text(isKorean ? '완료' : 'Done'),
+            ),
+          );
+        }
+      ),
+    );
+  }
+}
+
+class SettingsSliderRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final double value;
+  final double min;
+  final double max;
+  final String displayValue;
+  final ValueChanged<double> onChanged;
+  final bool showDivider;
+
+  const SettingsSliderRow({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.displayValue,
+    required this.onChanged,
+    this.showDivider = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = context.appColors;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, size: 20, color: iconColor),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              ),
+              Text(
+                displayValue,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: appColors.mutedText,
+                  letterSpacing: -0.2,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 56, top: 4),
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: 4.0,
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 16.0),
+              ),
+              child: Slider(
+                value: value,
+                min: min,
+                max: max,
+                activeColor: theme.colorScheme.primary,
+                inactiveColor: appColors.border,
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+          if (showDivider)
+            Padding(
+              padding: const EdgeInsets.only(left: 56, top: 12),
+              child: Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor),
+            ),
+        ],
+      ),
     );
   }
 }

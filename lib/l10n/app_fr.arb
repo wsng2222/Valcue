@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "Êtes-vous sûr de vouloir supprimer cette routine ? Cette action est irréversible.",
   "deleteError": "Une erreur s'est produite lors de la suppression",
   "nameRequired": "Veuillez entrer un nom",
-  "nameMaxLength": "Le nom doit contenir 24 caractères ou moins",
+  "nameMaxLength": "Le nom doit contenir 50 caractères ou moins",
   "minIntervalsRequired": "Au moins un intervalle est requis",
   "intervalMinDuration": "La durée de l'intervalle doit être d'au moins 1 seconde",
   "intervalMaxDuration": "La durée de l'intervalle doit être d'au plus 3 heures (10800 secondes)",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "Tous les jours",
   "workoutReminderSelectTime": "Choisir l'heure",
   "workoutReminderPermissionRequired": "L'autorisation de notification est requise.",
-  "workoutReminderTimeLabel": "Heure"
+  "workoutReminderTimeLabel": "Heure",
+  "shareRoutineMessage": "Essayez cette routine d'entraînement fractionné sur Valcue !\n\nRoutine : {routineName}\n\nCopiez ou appuyez sur le lien pour l'importer :\n{shareLink}"
 }

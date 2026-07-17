@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "Möchten Sie diese Routine wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
   "deleteError": "Beim Löschen ist ein Fehler aufgetreten",
   "nameRequired": "Bitte geben Sie einen Namen ein",
-  "nameMaxLength": "Der Name muss 24 Zeichen oder weniger haben",
+  "nameMaxLength": "Der Name muss 50 Zeichen oder weniger haben",
   "minIntervalsRequired": "Mindestens ein Intervall ist erforderlich",
   "intervalMinDuration": "Die Intervall-Dauer muss mindestens 1 Sekunde betragen",
   "intervalMaxDuration": "Die Intervall-Dauer darf höchstens 3 Stunden (10800 Sekunden) betragen",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "Jeden Tag",
   "workoutReminderSelectTime": "Zeit auswählen",
   "workoutReminderPermissionRequired": "Benachrichtigungsberechtigung erforderlich.",
-  "workoutReminderTimeLabel": "Uhrzeit"
+  "workoutReminderTimeLabel": "Uhrzeit",
+  "shareRoutineMessage": "Probiere dieses Intervall-Workout in Valcue aus!\n\nRoutine: {routineName}\n\nKopiere oder tippe auf den Link, um es zu importieren:\n{shareLink}"
 }

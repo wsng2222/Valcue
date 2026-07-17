@@ -549,7 +549,7 @@ abstract class AppLocalizations {
   /// Name max length validation
   ///
   /// In en, this message translates to:
-  /// **'Name must be 24 characters or less'**
+  /// **'Name must be 50 characters or less'**
   String get nameMaxLength;
 
   /// Minimum intervals required
@@ -1949,6 +1949,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get workoutReminderTimeLabel;
+
+  /// Message template for sharing a routine
+  ///
+  /// In en, this message translates to:
+  /// **'Try this interval workout routine on Valcue!\n\nRoutine: {routineName}\n\nCopy or tap the link to import it:\n{shareLink}'**
+  String shareRoutineMessage(String routineName, String shareLink);
 }
 
 class _AppLocalizationsDelegate

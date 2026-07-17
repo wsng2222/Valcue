@@ -27,6 +27,8 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks! :linkage => :static
+  pod 'MLKitVision', :podspec => 'MLKitVision.podspec.json'
+  pod 'MLKitCommon', :podspec => 'MLKitCommon.podspec.json'
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
@@ -36,6 +38,10 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+      
+      # Allow legacy implicit function declarations in older pods on Xcode 15/16
+      cflags = config.build_settings['OTHER_CFLAGS'] || '$(inherited)'
+      config.build_settings['OTHER_CFLAGS'] = "#{cflags} -Wno-error=implicit-function-declaration -Wno-implicit-function-declaration"
     end
   end
 end

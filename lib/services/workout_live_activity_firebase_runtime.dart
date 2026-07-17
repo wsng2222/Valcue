@@ -48,21 +48,28 @@ class WorkoutLiveActivityFirebaseRuntime {
 
   Future<FirebaseFunctions?>? _initializing;
 
-  bool get isConfigured {
-    return _remoteUpdatesEnabled &&
-        !kIsWeb &&
-        defaultTargetPlatform == TargetPlatform.iOS &&
+  /// Returns true if the app is built with valid Firebase configuration variables.
+  bool get isFirebaseAvailable {
+    return !kIsWeb &&
         _apiKey.isNotEmpty &&
         _appId.isNotEmpty &&
         _messagingSenderId.isNotEmpty &&
         _projectId.isNotEmpty;
   }
 
+  /// Whether remote Live Activity updates are supported on this device.
+  bool get isConfigured {
+    return _remoteUpdatesEnabled &&
+        !kIsWeb &&
+        defaultTargetPlatform == TargetPlatform.iOS &&
+        isFirebaseAvailable;
+  }
+
   /// Returns `null` when phase-two remote updates are intentionally disabled.
   /// Initialization failures are allowed to propagate to the schedule backend,
   /// which treats them as retryable without interrupting the active workout.
   Future<FirebaseFunctions?> functions() {
-    if (!isConfigured) return Future<FirebaseFunctions?>.value();
+    if (!isFirebaseAvailable) return Future<FirebaseFunctions?>.value();
 
     final pending = _initializing;
     if (pending != null) return pending;
@@ -96,6 +103,9 @@ class WorkoutLiveActivityFirebaseRuntime {
       providerApple: _debugAppCheck
           ? const AppleDebugProvider()
           : const AppleAppAttestWithDeviceCheckFallbackProvider(),
+      providerAndroid: _debugAppCheck
+          ? const AndroidDebugProvider()
+          : const AndroidPlayIntegrityProvider(),
     );
     await appCheck.setTokenAutoRefreshEnabled(true);
 

@@ -328,18 +328,20 @@ class _VoiceGuideBootstrapState extends State<_VoiceGuideBootstrap>
     if (_lastLocale == null || _lastEnabled == null) {
       _lastLocale = locale;
       _lastEnabled = enabled;
-      // Fire-and-forget; service internally guards initialization.
-      VoiceGuideService.instance.init(locale: locale, voiceEnabled: enabled);
+      VoiceGuideService.instance.init(
+        locale: locale,
+        voiceEnabled: enabled,
+      );
       return;
     }
 
-    if (localeChanged) {
+    if (localeChanged || enabledChanged) {
       _lastLocale = locale;
-      VoiceGuideService.instance.setLocale(locale);
-    }
-    if (enabledChanged) {
       _lastEnabled = enabled;
-      VoiceGuideService.instance.setVoiceEnabled(enabled);
+      VoiceGuideService.instance.init(
+        locale: locale,
+        voiceEnabled: enabled,
+      );
     }
   }
 

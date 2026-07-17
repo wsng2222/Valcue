@@ -228,7 +228,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nameRequired => '이름을 입력해주세요';
 
   @override
-  String get nameMaxLength => '이름은 24자 이하여야 합니다';
+  String get nameMaxLength => '이름은 50자 이하여야 합니다';
 
   @override
   String get minIntervalsRequired => '최소 하나의 인터벌이 필요합니다';
@@ -966,4 +966,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => '시간';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Valcue에서 이 인터벌 운동 루틴을 해보세요!\n\n루틴 이름: $routineName\n\n아래 링크를 복사하거나 클릭해 가져올 수 있습니다:\n$shareLink';
+  }
 }

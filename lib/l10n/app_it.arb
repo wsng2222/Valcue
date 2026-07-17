@@ -118,7 +118,7 @@
   "mph": "mph",
   "myTab": "Io",
   "name": "Nome",
-  "nameMaxLength": "Il nome deve essere di 24 caratteri o meno",
+  "nameMaxLength": "Il nome deve essere di 50 caratteri o meno",
   "nameRequired": "Inserisci un nome",
   "newLabel": "Nuovo",
   "noAds": "Niente pubblicità",
@@ -312,5 +312,6 @@
   "workoutReminderEveryDay": "Ogni giorno",
   "workoutReminderSelectTime": "Seleziona orario",
   "workoutReminderPermissionRequired": "È necessario il permesso per le notifiche.",
-  "workoutReminderTimeLabel": "Orario"
+  "workoutReminderTimeLabel": "Orario",
+  "shareRoutineMessage": "Prova questo allenamento a intervalli su Valcue!\n\nAllenamento: {routineName}\n\nCopia o tocca il link per importarlo:\n{shareLink}"
 }

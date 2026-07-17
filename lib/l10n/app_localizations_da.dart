@@ -231,7 +231,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get nameRequired => 'Indtast et navn';
 
   @override
-  String get nameMaxLength => 'Navnet skal være 24 tegn eller mindre';
+  String get nameMaxLength => 'Navnet skal være 50 tegn eller mindre';
 
   @override
   String get minIntervalsRequired => 'Mindst ét interval er påkrævet';
@@ -1003,4 +1003,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'Tidspunkt';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Prøv dette intervaltræningsprogram på Valcue!\n\nProgram: $routineName\n\nKopier eller tryk på linket for at importere det:\n$shareLink';
+  }
 }

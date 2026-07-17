@@ -9,6 +9,7 @@ import '../features/routines/screens/routine_list_screen.dart';
 import '../features/routines/models/machine_type.dart';
 import '../features/settings/screens/settings_screen.dart';
 import '../features/profile/screens/profile_screen.dart';
+import '../features/routines/utils/routine_sharing.dart';
 import '../app_settings/app_settings_provider.dart';
 import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
@@ -212,8 +213,36 @@ class AppShell extends StatefulWidget {
   }
 }
 
-class _AppShellState extends State<AppShell> {
+class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   int _currentIndex = 1; // Default to Routine tab
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkClipboard();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkClipboard();
+    }
+  }
+
+  Future<void> _checkClipboard() async {
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (!mounted) return;
+    await RoutineSharing.checkClipboardAndImport(context);
+  }
 
   void _changeTab(int index) {
     setState(() {

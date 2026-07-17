@@ -229,7 +229,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get nameRequired => 'กรุณาใส่ชื่อ';
 
   @override
-  String get nameMaxLength => 'ชื่อต้องยาวไม่เกิน 24 ตัวอักษร';
+  String get nameMaxLength => 'ชื่อต้องยาวไม่เกิน 50 ตัวอักษร';
 
   @override
   String get minIntervalsRequired => 'ต้องมีอย่างน้อย 1 อินเทอร์วัล';
@@ -997,4 +997,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'เวลา';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'ลองใช้โปรแกรมออกกำลังกายแบบอินเทอร์วัลนี้บน Valcue!\n\nโปรแกรม: $routineName\n\nคัดลอกหรือแตะลิงก์เพื่อนำเข้า:\n$shareLink';
+  }
 }

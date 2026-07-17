@@ -20,9 +20,9 @@ class Routine {
     this.source,
     this.templateId,
   }) {
-    // Enforce storage limit (40 chars) - truncate if longer
-    if (name.length > 40) {
-      name = name.substring(0, 40);
+    // Enforce storage limit (100 chars) - truncate if longer
+    if (name.length > 100) {
+      name = name.substring(0, 100);
     }
   }
 
@@ -57,9 +57,9 @@ class Routine {
 
   factory Routine.fromJson(Map<String, dynamic> json) {
     String name = json['name'] as String;
-    // Enforce storage limit (40 chars) - truncate if longer (backward compatibility)
-    if (name.length > 40) {
-      name = name.substring(0, 40);
+    // Enforce storage limit (100 chars) - truncate if longer (backward compatibility)
+    if (name.length > 100) {
+      name = name.substring(0, 100);
     }
 
     return Routine(

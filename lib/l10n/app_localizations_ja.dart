@@ -228,7 +228,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nameRequired => '名前を入力してください';
 
   @override
-  String get nameMaxLength => '名前は24文字以下である必要があります';
+  String get nameMaxLength => '名前は50文字以下である必要があります';
 
   @override
   String get minIntervalsRequired => '少なくとも1つのインターバルが必要です';
@@ -963,4 +963,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => '時刻';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: $routineName\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n$shareLink';
+  }
 }

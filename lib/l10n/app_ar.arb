@@ -98,7 +98,7 @@
   "deleteRoutineMessage": "هل أنت متأكد من أنك تريد حذف هذا الروتين؟ لا يمكن التراجع عن هذا الإجراء.",
   "deleteError": "حدث خطأ أثناء الحذف",
   "nameRequired": "الرجاء إدخال اسم",
-  "nameMaxLength": "يجب أن يكون الاسم 24 حرفاً أو أقل",
+  "nameMaxLength": "يجب أن يكون الاسم 50 حرفاً أو أقل",
   "minIntervalsRequired": "مطلوب فترة واحدة على الأقل",
   "intervalMinDuration": "يجب أن تكون مدة الفترة ثانية واحدة على الأقل",
   "intervalMaxDuration": "يجب أن تكون مدة الفترة 3 ساعات كحد أقصى (10800 ثانية)",
@@ -503,5 +503,6 @@
   "workoutReminderEveryDay": "كل يوم",
   "workoutReminderSelectTime": "اختر الوقت",
   "workoutReminderPermissionRequired": "يلزم منح إذن الإشعارات.",
-  "workoutReminderTimeLabel": "الوقت"
+  "workoutReminderTimeLabel": "الوقت",
+  "shareRoutineMessage": "جرّب تمارين الكارديو المتناوب هذه على Valcue!\n\nالتمرين: {routineName}\n\nانسخ الرابط أو اضغط عليه للاستيراد:\n{shareLink}"
 }

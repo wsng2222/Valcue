@@ -61,6 +61,10 @@ class AppSettingsProvider with ChangeNotifier {
         minute: _settings.workoutReminderMinute,
       );
 
+  // Countdown timing setting getter
+  List<int> get voiceGuideCountdownTriggers =>
+      List<int>.unmodifiable(_settings.voiceGuideCountdownTriggers);
+
   /// Resolve language: use device language if supported, otherwise fallback to English
   String _getResolvedLanguage() {
     if (_settings.language != null) {
@@ -190,6 +194,13 @@ class AppSettingsProvider with ChangeNotifier {
       return; // Cannot enable voice guide without premium
     }
     _settings = _settings.copyWith(voiceGuideEnabled: enabled);
+    await _saveSettingsInOrder(_settings);
+    notifyListeners();
+  }
+
+  Future<void> updateVoiceGuideCountdownTriggers(List<int> triggers) async {
+    final sortedTriggers = List<int>.from(triggers)..sort();
+    _settings = _settings.copyWith(voiceGuideCountdownTriggers: sortedTriggers);
     await _saveSettingsInOrder(_settings);
     notifyListeners();
   }

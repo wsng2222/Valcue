@@ -18,6 +18,9 @@ import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
 import '../../../utils/app_shadows.dart';
+import 'package:share_plus/share_plus.dart';
+import '../utils/routine_sharing.dart';
+import '../widgets/qr_share_dialog.dart';
 
 class RoutineBottomSheet {
   /// Entry function to show routine sheet
@@ -90,6 +93,7 @@ class _RoutineDetailSheetContentState
   String? _nameError;
   final Set<String> _enteringIntervalIds = <String>{};
   final Set<String> _removingIntervalIds = <String>{};
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   // Original routine for cancel (deep copy)
   late Routine? _originalRoutine;
@@ -160,7 +164,7 @@ class _RoutineDetailSheetContentState
     setState(() {
       if (trimmed.isEmpty) {
         _nameError = l10n.nameRequired;
-      } else if (trimmed.length > 24) {
+      } else if (trimmed.length > 50) {
         _nameError = l10n.nameMaxLength;
       } else {
         _nameError = null;
@@ -170,7 +174,7 @@ class _RoutineDetailSheetContentState
 
   bool get _isNameValid {
     final trimmed = _nameController.text.trim();
-    return trimmed.isNotEmpty && trimmed.length <= 24;
+    return trimmed.isNotEmpty && trimmed.length <= 50;
   }
 
   bool get _canReorderIntervals => _intervals.length > 1;
@@ -183,9 +187,9 @@ class _RoutineDetailSheetContentState
         ? 'Untitled Routine'
         : _nameController.text.trim();
 
-    // Enforce storage limit (40 chars for backward compatibility)
-    if (name.length > 40) {
-      name = name.substring(0, 40);
+    // Enforce storage limit (100 chars for backward compatibility)
+    if (name.length > 100) {
+      name = name.substring(0, 100);
       assert(() {
         return true;
       }());
@@ -697,7 +701,7 @@ class _RoutineDetailSheetContentState
       });
       return;
     }
-    if (trimmedName.length > 24) {
+    if (trimmedName.length > 50) {
       setState(() {
         _nameError = l10n.nameMaxLength;
       });
@@ -984,6 +988,52 @@ class _RoutineDetailSheetContentState
     }
   }
 
+  void _shareRoutine() {
+    final routine = widget.routine;
+    if (routine == null) return;
+
+    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context); // Close action sheet
+              final l10n = AppLocalizations.of(context)!;
+              final shareLink = await RoutineSharing.generateShareLink(routine);
+              final message = l10n.shareRoutineMessage(routine.name, shareLink);
+
+              final box = _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
+              Rect? shareOrigin;
+              if (box != null) {
+                shareOrigin = box.localToGlobal(Offset.zero) & box.size;
+              }
+
+              Share.share(
+                message,
+                sharePositionOrigin: shareOrigin,
+              );
+            },
+            child: Text(isKorean ? '루틴 공유하기' : 'Share Routine'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context); // Close action sheet
+              QrShareDialog.show(context, routine);
+            },
+            child: Text(isKorean ? 'QR 코드로 공유' : 'Share via QR Code'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: Text(isKorean ? '취소' : 'Cancel'),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSheetHeader(
     Routine currentRoutine,
     String totalDurationFormatted,
@@ -1016,9 +1066,9 @@ class _RoutineDetailSheetContentState
                                       controller: _nameController,
                                       textAlign: TextAlign.center,
                                       maxLines: 1,
-                                      maxLength: 24,
+                                      maxLength: 50,
                                       inputFormatters: [
-                                        LengthLimitingTextInputFormatter(24),
+                                        LengthLimitingTextInputFormatter(50),
                                       ],
                                       style: TextStyle(
                                         fontSize: 24,
@@ -1067,6 +1117,23 @@ class _RoutineDetailSheetContentState
                             ),
                           ),
                   ),
+                  if (!_isEditing && widget.routine != null && !widget.isNew)
+                    Positioned(
+                      left: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: CupertinoButton(
+                        key: _shareButtonKey,
+                        padding: EdgeInsets.zero,
+                        onPressed: _shareRoutine,
+                        minimumSize: const Size(32, 32),
+                        child: Icon(
+                          CupertinoIcons.share,
+                          color: theme.colorScheme.primary,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                   if (!_isEditing && widget.routine != null && !widget.isNew)
                     Positioned(
                       right: 16,

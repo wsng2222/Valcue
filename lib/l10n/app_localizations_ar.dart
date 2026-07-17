@@ -230,7 +230,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get nameRequired => 'الرجاء إدخال اسم';
 
   @override
-  String get nameMaxLength => 'يجب أن يكون الاسم 24 حرفاً أو أقل';
+  String get nameMaxLength => 'يجب أن يكون الاسم 50 حرفاً أو أقل';
 
   @override
   String get minIntervalsRequired => 'مطلوب فترة واحدة على الأقل';
@@ -994,4 +994,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get workoutReminderTimeLabel => 'الوقت';
+
+  @override
+  String shareRoutineMessage(String routineName, String shareLink) {
+    return 'جرّب تمارين الكارديو المتناوب هذه على Valcue!\n\nالتمرين: $routineName\n\nانسخ الرابط أو اضغط عليه للاستيراد:\n$shareLink';
+  }
 }

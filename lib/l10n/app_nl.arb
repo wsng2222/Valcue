@@ -118,7 +118,7 @@
   "mph": "mph",
   "myTab": "Mijn",
   "name": "Naam",
-  "nameMaxLength": "Naam moet 24 tekens of minder zijn",
+  "nameMaxLength": "Naam moet 50 tekens of minder zijn",
   "nameRequired": "Voer een naam in",
   "newLabel": "Nieuw",
   "noAds": "Geen advertenties",
@@ -312,5 +312,6 @@
   "workoutReminderEveryDay": "Elke dag",
   "workoutReminderSelectTime": "Tijd kiezen",
   "workoutReminderPermissionRequired": "Meldingtoestemming is vereist.",
-  "workoutReminderTimeLabel": "Tijd"
+  "workoutReminderTimeLabel": "Tijd",
+  "shareRoutineMessage": "Probeer deze intervaltraining op Valcue!\n\nRoutine: {routineName}\n\nKopieer of tik op de link om te importeren:\n{shareLink}"
 }
