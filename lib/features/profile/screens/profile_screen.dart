@@ -14,6 +14,9 @@ import '../models/workout_session.dart';
 import '../models/weight_entry.dart';
 import '../providers/workout_history_provider.dart';
 import '../providers/weight_tracker_provider.dart';
+import '../models/achievement.dart';
+import '../models/achievement_translations.dart';
+import '../providers/achievement_provider.dart';
 import '../../routines/models/machine_type.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
@@ -124,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -188,6 +191,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                 Tab(text: AppLocalizations.of(context)!.historyTab),
                 Tab(text: AppLocalizations.of(context)!.calendarTab),
                 Tab(text: AppLocalizations.of(context)!.weightTab),
+                Tab(
+                  text: AchievementTranslations.getUiString(
+                    'tab_achievements',
+                    Localizations.localeOf(context).languageCode,
+                  ),
+                ),
               ],
               labelColor: theme.colorScheme.primary,
               unselectedLabelColor: theme.extension<AppColors>()!.mutedText,
@@ -215,6 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             _buildPremiumLockOverlay(context),
                         ],
                       ),
+                      const _AchievementsTab(),
                     ],
                   );
                 },
@@ -2982,28 +2992,40 @@ class _WeightSparklinePainter extends CustomPainter {
     canvas.drawLine(Offset.zero, Offset(size.width, 0), gridPaint);
     canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), gridPaint);
 
-    final path = Path();
-    final fillPath = Path();
-    fillPath.moveTo(0, size.height);
-
+    final points = <Offset>[];
     for (int i = 0; i < entries.length; i++) {
       final entry = entries[i];
       final x = (i * stepX).toDouble();
       final normalizedWeight =
           weightRange > 0 ? (entry.weightKg - minWeight) / weightRange : 0.5;
       final y = (size.height - (normalizedWeight * size.height)).toDouble();
-
-      if (i == 0) {
-        path.moveTo(x, y);
-        fillPath.lineTo(x, y);
-      } else {
-        path.lineTo(x, y);
-        fillPath.lineTo(x, y);
-      }
+      points.add(Offset(x, y));
     }
 
-    fillPath.lineTo(size.width, size.height);
-    fillPath.close();
+    final path = Path();
+    final fillPath = Path();
+
+    if (points.isNotEmpty) {
+      path.moveTo(points.first.dx, points.first.dy);
+      fillPath.moveTo(points.first.dx, size.height);
+      fillPath.lineTo(points.first.dx, points.first.dy);
+
+      for (int i = 0; i < points.length - 1; i++) {
+        final p0 = points[i];
+        final p1 = points[i + 1];
+
+        final controlX1 = p0.dx + (p1.dx - p0.dx) / 2;
+        final controlY1 = p0.dy;
+        final controlX2 = p0.dx + (p1.dx - p0.dx) / 2;
+        final controlY2 = p1.dy;
+
+        path.cubicTo(controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
+        fillPath.cubicTo(controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
+      }
+
+      fillPath.lineTo(points.last.dx, size.height);
+      fillPath.close();
+    }
 
     // Draw gradient fill under the sparkline
     final fillPaint = Paint()
@@ -4707,5 +4729,649 @@ class _WeightCalendarState extends State<_WeightCalendar> {
         );
       },
     );
+  }
+}
+
+class _AchievementsTab extends StatefulWidget {
+  const _AchievementsTab();
+
+  @override
+  State<_AchievementsTab> createState() => _AchievementsTabState();
+}
+
+class _AchievementsTabState extends State<_AchievementsTab> {
+  int _filterIndex = 0; // 0: All, 1: Unlocked, 2: Locked
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+    final langCode = Localizations.localeOf(context).languageCode;
+    final isKorean = langCode == 'ko';
+
+    return Consumer<AchievementProvider>(
+      builder: (context, provider, child) {
+        final achievements = provider.achievements;
+        if (achievements.isEmpty) {
+          return Center(
+            child: Text(
+              AchievementTranslations.getUiString('no_achievements', langCode),
+              style: TextStyle(color: appColors.mutedText),
+            ),
+          );
+        }
+
+        // Apply filters
+        List<Achievement> filtered = achievements;
+        if (_filterIndex == 1) {
+          filtered = achievements.where((a) => a.isUnlocked).toList();
+        } else if (_filterIndex == 2) {
+          filtered = achievements.where((a) => !a.isUnlocked).toList();
+        }
+
+        // Count unlocked
+        final unlockedCount = achievements.where((a) => a.isUnlocked).length;
+        final totalCount = achievements.length;
+        final completionRate = totalCount > 0 ? unlockedCount / totalCount : 0.0;
+
+        // Custom User Title based on unlock count
+        String userTitle = '';
+        if (completionRate == 1.0) {
+          userTitle = AchievementTranslations.getUiString('grand_master', langCode);
+        } else if (completionRate >= 0.7) {
+          userTitle = AchievementTranslations.getUiString('pace_master', langCode);
+        } else if (completionRate >= 0.4) {
+          userTitle = AchievementTranslations.getUiString('pro_runner', langCode);
+        } else if (completionRate >= 0.1) {
+          userTitle = AchievementTranslations.getUiString('active_beginner', langCode);
+        } else {
+          userTitle = AchievementTranslations.getUiString('trainee', langCode);
+        }
+
+        return Column(
+          children: [
+            const SizedBox(height: 16),
+            // Premium Header stats card
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      theme.colorScheme.primary.withOpacity(0.08),
+                      theme.colorScheme.secondary.withOpacity(0.03),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withOpacity(0.15),
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Circular Progress
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: CircularProgressIndicator(
+                            value: completionRate,
+                            strokeWidth: 6,
+                            backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                            valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+                          ),
+                        ),
+                        Text(
+                          '${(completionRate * 100).round()}%',
+                          style: GoogleFonts.outfit(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userTitle,
+                            style: GoogleFonts.outfit(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            AchievementTranslations.getUiString(
+                              'unlocked_x_of_y',
+                              langCode,
+                              {'unlocked': '$unlockedCount', 'total': '$totalCount'},
+                            ),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: appColors.mutedText,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          // completion text
+                          Text(
+                            AchievementTranslations.getUiString('collect_desc', langCode),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: appColors.mutedText.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Elegant Pill Filters
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  _buildFilterButton(0, AchievementTranslations.getUiString('filter_all', langCode)),
+                  const SizedBox(width: 8),
+                  _buildFilterButton(1, AchievementTranslations.getUiString('filter_unlocked', langCode)),
+                  const SizedBox(width: 8),
+                  _buildFilterButton(2, AchievementTranslations.getUiString('filter_locked', langCode)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Premium Grid Layout
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
+                      child: Text(
+                        AchievementTranslations.getUiString('no_matching', langCode),
+                        style: TextStyle(color: appColors.mutedText),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        final ach = filtered[index];
+                        return _buildAchievementListCard(context, ach, appColors, langCode);
+                      },
+                    ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterButton(int index, String label) {
+    final theme = Theme.of(context);
+    final isSelected = _filterIndex == index;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _filterIndex = index;
+        });
+        HapticFeedback.lightImpact();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isSelected
+                ? theme.colorScheme.primary
+                : theme.extension<AppColors>()!.border,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  )
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+            fontSize: 13,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAchievementListCard(
+    BuildContext context,
+    Achievement ach,
+    AppColors appColors,
+    String langCode,
+  ) {
+    final theme = Theme.of(context);
+    final title = ach.getTitle(langCode);
+    final desc = ach.getDescription(langCode);
+
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.mediumImpact();
+        _showAchievementDetails(context, ach, langCode);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: ach.isUnlocked
+              ? theme.colorScheme.surface
+              : appColors.surfaceElevated.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: ach.isUnlocked
+                ? ach.gradientColors[0].withOpacity(0.35)
+                : appColors.border.withOpacity(0.7),
+            width: ach.isUnlocked ? 1.5 : 1.0,
+          ),
+          boxShadow: ach.isUnlocked
+              ? [
+                  BoxShadow(
+                    color: ach.gradientColors[0].withOpacity(0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ]
+              : null,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Badge icon circle
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: ach.isUnlocked
+                        ? ach.gradientColors
+                        : [Colors.grey.shade300, Colors.grey.shade400],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: ach.isUnlocked
+                      ? [
+                          BoxShadow(
+                            color: ach.gradientColors[0].withOpacity(0.35),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          )
+                        ]
+                      : null,
+                ),
+                child: Icon(
+                  ach.isUnlocked ? ach.icon : Icons.lock_outline,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Texts
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: ach.isUnlocked
+                                  ? theme.colorScheme.onSurface
+                                  : appColors.mutedText,
+                            ),
+                          ),
+                        ),
+                        if (ach.isUnlocked && ach.unlockedAt != null)
+                          Text(
+                            _formatUnlockDateSimple(ach.unlockedAt!, langCode),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: appColors.mutedText,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      desc,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: ach.isUnlocked
+                            ? theme.colorScheme.onSurface.withOpacity(0.8)
+                            : appColors.mutedText.withOpacity(0.7),
+                      ),
+                    ),
+                    if (!ach.isUnlocked) ...[
+                      const SizedBox(height: 10),
+                      // Progress Bar
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(3),
+                              child: LinearProgressIndicator(
+                                value: ach.progress,
+                                minHeight: 5,
+                                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  theme.colorScheme.primary.withOpacity(0.5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            _formatProgressShort(ach, langCode),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatUnlockDateSimple(DateTime dt, String langCode) {
+    try {
+      return DateFormat.MMMd(langCode).format(dt);
+    } catch (_) {
+      return DateFormat.MMMd('en').format(dt);
+    }
+  }
+
+  void _showAchievementDetails(BuildContext context, Achievement ach, String langCode) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+    final title = ach.getTitle(langCode);
+    final desc = ach.getDescription(langCode);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 20,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Bottom sheet handle indicator
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: appColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 28),
+              // Big icon with gradient glow
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: ach.isUnlocked
+                        ? ach.gradientColors
+                        : [Colors.grey.shade300, Colors.grey.shade400],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: ach.isUnlocked
+                      ? [
+                          BoxShadow(
+                            color: ach.gradientColors[0].withOpacity(0.4),
+                            blurRadius: 20,
+                            offset: const Offset(0, 6),
+                          )
+                        ]
+                      : null,
+                ),
+                child: Icon(
+                  ach.isUnlocked ? ach.icon : Icons.lock_outline,
+                  color: Colors.white,
+                  size: 48,
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Title
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.outfit(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Description
+              Text(
+                desc,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: appColors.mutedText,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 28),
+              // Unlock detail card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: appColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: appColors.border),
+                ),
+                child: Column(
+                  children: [
+                    if (ach.isUnlocked && ach.unlockedAt != null) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AchievementTranslations.getUiString('unlock_date', langCode),
+                            style: TextStyle(color: appColors.mutedText, fontSize: 13),
+                          ),
+                          Text(
+                            _formatUnlockDateDetailed(ach.unlockedAt!, langCode),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ] else ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AchievementTranslations.getUiString('progress_label', langCode),
+                            style: TextStyle(color: appColors.mutedText, fontSize: 13),
+                          ),
+                          Text(
+                            '${(ach.progress * 100).round()}%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: ach.progress,
+                          minHeight: 6,
+                          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AchievementTranslations.getUiString('current_value_label', langCode),
+                            style: TextStyle(color: appColors.mutedText, fontSize: 12),
+                          ),
+                          Text(
+                            _formatProgressTextDetailed(ach, langCode),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
+              // Close button
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AchievementTranslations.getUiString('close', langCode),
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatUnlockDateDetailed(DateTime dt, String langCode) {
+    try {
+      return DateFormat.yMMMd(langCode).format(dt);
+    } catch (_) {
+      return DateFormat.yMMMd('en').format(dt);
+    }
+  }
+
+  String _formatProgressShort(Achievement ach, String langCode) {
+    final id = ach.id;
+    if (id.startsWith('treadmill_dist_') || id == 'treadmill_marathon' || id.startsWith('cycle_dist_')) {
+      final cur = ach.currentValue.toDouble();
+      final target = ach.targetValue.toDouble();
+      return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
+    }
+    if (id.startsWith('treadmill_5k') || id.startsWith('treadmill_10k') || id.startsWith('treadmill_half_marathon')) {
+      final cur = ach.currentValue.toDouble();
+      final target = ach.targetValue.toDouble();
+      return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
+    }
+    if (id.startsWith('treadmill_speed_')) {
+      return '${ach.currentValue.toStringAsFixed(1)}/${ach.targetValue.toStringAsFixed(0)}km/h';
+    }
+    if (id.startsWith('cycle_rpm')) {
+      return '${ach.currentValue.round()}/${ach.targetValue.round()}';
+    }
+    if (id.startsWith('stairmaster_level')) {
+      return 'L${ach.currentValue.round()}/${ach.targetValue.round()}';
+    }
+    if (id.startsWith('duration_')) {
+      return '${ach.currentValue.round()}/${ach.targetValue.round()}${AchievementTranslations.getUiString('min', langCode)}';
+    }
+    if (id.startsWith('total_duration_') || id.startsWith('stairmaster_time_')) {
+      return '${ach.currentValue.toStringAsFixed(1)}/${ach.targetValue.toStringAsFixed(0)}${AchievementTranslations.getUiString('hours', langCode)}';
+    }
+    return '${ach.currentValue.round()}/${ach.targetValue.round()}';
+  }
+
+  String _formatProgressTextDetailed(Achievement ach, String langCode) {
+    final id = ach.id;
+    if (id.startsWith('treadmill_dist_') || id == 'treadmill_marathon' || id.startsWith('cycle_dist_') || id.startsWith('treadmill_5k') || id.startsWith('treadmill_10k') || id.startsWith('treadmill_half_marathon')) {
+      final cur = ach.currentValue.toDouble().toStringAsFixed(2);
+      final target = ach.targetValue.toDouble().toStringAsFixed(0);
+      return '$cur km / $target km';
+    }
+    if (id.startsWith('treadmill_speed_')) {
+      return '${ach.currentValue.toStringAsFixed(2)} km/h / ${ach.targetValue.toStringAsFixed(0)} km/h';
+    }
+    if (id.startsWith('cycle_rpm')) {
+      return '${ach.currentValue.round()} RPM / ${ach.targetValue.round()} RPM';
+    }
+    if (id.startsWith('stairmaster_level')) {
+      return 'Level ${ach.currentValue.round()} / Level ${ach.targetValue.round()}';
+    }
+    if (id.startsWith('duration_')) {
+      return '${ach.currentValue.round()} ${AchievementTranslations.getUiString('min', langCode)} / ${ach.targetValue.round()} ${AchievementTranslations.getUiString('min', langCode)}';
+    }
+    if (id.startsWith('total_duration_') || id.startsWith('stairmaster_time_')) {
+      return '${ach.currentValue.toStringAsFixed(1)} ${AchievementTranslations.getUiString('hours', langCode)} / ${ach.targetValue.toStringAsFixed(0)} ${AchievementTranslations.getUiString('hours', langCode)}';
+    }
+    return '${ach.currentValue.round()} / ${ach.targetValue.round()}';
   }
 }

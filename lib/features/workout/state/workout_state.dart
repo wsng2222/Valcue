@@ -249,6 +249,7 @@ class WorkoutState extends ChangeNotifier {
         snapshotTime.difference(_runningAnchor!).inMilliseconds;
     if (deltaMilliseconds <= 0) return;
 
+    final oldRemainingSeconds = _remainingSeconds;
     final oldIntervalIndex = _currentIntervalIndex;
     final targetElapsed = (_activeElapsedMilliseconds + deltaMilliseconds)
         .clamp(0, _totalDurationMilliseconds);
@@ -263,7 +264,12 @@ class WorkoutState extends ChangeNotifier {
 
     if (playSounds && _currentIntervalIndex != oldIntervalIndex) {
       SoundService().playBeep();
-      HapticFeedback.heavyImpact();
+      _safeHaptic(HapticFeedback.heavyImpact);
+    } else if (playSounds &&
+        _currentIntervalIndex == oldIntervalIndex &&
+        _remainingSeconds != oldRemainingSeconds &&
+        (_remainingSeconds == 3 || _remainingSeconds == 2 || _remainingSeconds == 1)) {
+      _safeHaptic(HapticFeedback.lightImpact);
     }
     if (notify) notifyListeners();
   }
@@ -312,9 +318,9 @@ class WorkoutState extends ChangeNotifier {
     SoundService().stopSilentLoop();
     if (playSound) {
       _playFinishSfxOnce();
-      Future.delayed(Duration.zero, () => HapticFeedback.vibrate());
-      Future.delayed(const Duration(milliseconds: 300), () => HapticFeedback.mediumImpact());
-      Future.delayed(const Duration(milliseconds: 600), () => HapticFeedback.heavyImpact());
+      Future.delayed(Duration.zero, () => _safeHaptic(HapticFeedback.vibrate));
+      Future.delayed(const Duration(milliseconds: 300), () => _safeHaptic(HapticFeedback.mediumImpact));
+      Future.delayed(const Duration(milliseconds: 600), () => _safeHaptic(HapticFeedback.heavyImpact));
     }
     _status = WorkoutStatus.finished;
     if (notify) notifyListeners();
@@ -459,7 +465,10 @@ class WorkoutState extends ChangeNotifier {
     if (nextNumber == _countdownNumber) return;
 
     _countdownNumber = nextNumber;
-    if (playSounds) SoundService().playBeep();
+    if (playSounds) {
+      SoundService().playBeep();
+      _safeHaptic(HapticFeedback.mediumImpact);
+    }
     notifyListeners();
   }
 
@@ -489,5 +498,15 @@ class WorkoutState extends ChangeNotifier {
       return '$hours:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
     }
     return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  void _safeHaptic(Future<void> Function() hapticAction) {
+    try {
+      hapticAction().catchError((_) {
+        // Fail silently in tests
+      });
+    } catch (_) {
+      // Ignored in unit tests or platform exceptions
+    }
   }
 }

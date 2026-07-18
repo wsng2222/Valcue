@@ -14,6 +14,7 @@ import 'app_settings/app_settings_provider.dart';
 import 'features/routines/storage/routine_provider.dart';
 import 'features/profile/providers/workout_history_provider.dart';
 import 'features/profile/providers/weight_tracker_provider.dart';
+import 'features/profile/providers/achievement_provider.dart';
 import 'theme/app_theme.dart';
 import 'services/sound_service.dart';
 import 'services/ad_service.dart';
@@ -117,6 +118,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RoutineProvider()),
         ChangeNotifierProvider(create: (_) => WorkoutHistoryProvider()),
         ChangeNotifierProvider(create: (_) => WeightTrackerProvider()),
+        ChangeNotifierProxyProvider<WorkoutHistoryProvider, AchievementProvider>(
+          create: (context) => AchievementProvider(
+            Provider.of<WorkoutHistoryProvider>(context, listen: false),
+          ),
+          update: (context, historyProvider, previous) {
+            if (previous == null) {
+              return AchievementProvider(historyProvider);
+            }
+            previous.updateHistoryProvider(historyProvider);
+            return previous;
+          },
+        ),
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, settingsProvider, child) {

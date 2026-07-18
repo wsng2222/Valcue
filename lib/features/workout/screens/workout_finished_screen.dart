@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
 import 'package:image_picker/image_picker.dart';
 import 'package:valcue/l10n/app_localizations.dart';
@@ -21,6 +22,8 @@ import '../../../services/ad_service.dart';
 import '../../../utils/debug_log.dart';
 import '../../profile/models/workout_session.dart';
 import '../../profile/providers/workout_history_provider.dart';
+import '../../profile/models/achievement.dart';
+import '../../profile/providers/achievement_provider.dart';
 
 class WorkoutFinishedScreen extends StatefulWidget {
   final Routine routine;
@@ -160,6 +163,172 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     );
 
     historyProvider.addSession(session);
+
+    // Check if there are newly unlocked achievements to celebrate
+    final achievementProvider = Provider.of<AchievementProvider>(context, listen: false);
+    if (achievementProvider.newlyUnlocked.isNotEmpty) {
+      _showCongratsDialog(achievementProvider.newlyUnlocked);
+    }
+  }
+
+  void _showCongratsDialog(List<Achievement> achievements) {
+    if (!mounted) return;
+
+    final langCode = Localizations.localeOf(context).languageCode;
+    final isKorean = langCode == 'ko';
+
+    // Play a premium vibration
+    HapticFeedback.heavyImpact();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                  blurRadius: 24,
+                  spreadRadius: 4,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Celebration header
+                  Text(
+                    isKorean ? '🏆 업적 달성!' : '🏆 Achievement Unlocked!',
+                    style: GoogleFonts.lato(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: Theme.of(context).colorScheme.primary,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    isKorean
+                        ? '새로운 배지를 획득하셨습니다. 축하합니다!'
+                        : 'Congratulations! You earned a new badge!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).extension<AppColors>()!.mutedText,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // List/Grid of newly unlocked badges
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        alignment: WrapAlignment.center,
+                        children: achievements.map((ach) {
+                          final title = ach.getTitle(langCode);
+                          final desc = ach.getDescription(langCode);
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    colors: ach.gradientColors,
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ach.gradientColors[0].withOpacity(0.4),
+                                      blurRadius: 12,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  ach.icon,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                desc,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(context)
+                                      .extension<AppColors>()!
+                                      .mutedText,
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  // OK Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      onPressed: () {
+                        // Clear newly unlocked list and dismiss
+                        final provider = Provider.of<AchievementProvider>(context, listen: false);
+                        provider.clearNewlyUnlocked();
+                        Navigator.pop(context);
+                        HapticFeedback.lightImpact();
+                      },
+                      child: Text(
+                        isKorean ? '확인' : 'Awesome!',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
