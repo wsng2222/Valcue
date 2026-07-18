@@ -1046,18 +1046,18 @@ class _ShareCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isSquare = cardH == cardW;
 
-    final brandFontSize = isSquare ? 24.0 : 30.0;
-    final dateFontSize = isSquare ? 11.0 : 13.0;
-    final timeFontSize = isSquare ? 48.0 : 68.0;
-    final labelFontSize = isSquare ? 10.0 : 12.0;
-    final metricValFontSize = isSquare ? 22.0 : 28.0;
-    final metricLabelFontSize = isSquare ? 10.0 : 11.0;
-    final graphHeight = isSquare ? 36.0 : 54.0;
+    final brandFontSize = isSquare ? 18.0 : 22.0;
+    final dateFontSize = isSquare ? 10.0 : 12.0;
+    final timeFontSize = isSquare ? 26.0 : 32.0;
+    final labelFontSize = isSquare ? 9.0 : 10.0;
+    final metricValFontSize = isSquare ? 16.0 : 20.0;
+    final metricLabelFontSize = isSquare ? 9.0 : 10.0;
+    final graphHeight = isSquare ? 30.0 : 44.0;
     final contentPadding = isSquare 
         ? const EdgeInsets.symmetric(horizontal: 18, vertical: 18)
         : const EdgeInsets.symmetric(horizontal: 24, vertical: 26);
-    final bottomSpacerHeight = isSquare ? 12.0 : 20.0;
-    final graphSpacerHeight = isSquare ? 16.0 : 28.0;
+    final bottomSpacerHeight = isSquare ? 8.0 : 12.0;
+    final graphSpacerHeight = isSquare ? 12.0 : 18.0;
 
     const textShadows = [
       Shadow(
@@ -1153,7 +1153,7 @@ class _ShareCard extends StatelessWidget {
                             },
                           ),
                           Transform.translate(
-                            offset: Offset(isSquare ? -6.0 : -8.0, 0),
+                            offset: Offset(isSquare ? -1.0 : -2.0, 0),
                             child: RichText(
                               text: TextSpan(
                                 style: TextStyle(
