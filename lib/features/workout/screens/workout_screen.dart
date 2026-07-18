@@ -1790,7 +1790,7 @@ class _TopPillProgressBarState extends State<_TopPillProgressBar>
   }
 }
 
-// Painter for progress ring: gray background + primary arc + neon glow
+// Painter for progress ring: gray background + primary arc
 class _ProgressRingPainter extends CustomPainter {
   final double strokeWidth;
   final double progress; // 0.0 to 1.0
@@ -1799,7 +1799,6 @@ class _ProgressRingPainter extends CustomPainter {
 
   final Paint _trackPaint;
   final Paint _progressPaint;
-  final Paint _glowPaint;
 
   _ProgressRingPainter({
     required this.strokeWidth,
@@ -1815,13 +1814,7 @@ class _ProgressRingPainter extends CustomPainter {
           ..color = progressColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round,
-        _glowPaint = Paint()
-          ..color = progressColor.withValues(alpha: 0.35)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth + 4.0
-          ..strokeCap = StrokeCap.round
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8.0);
+          ..strokeCap = StrokeCap.round;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1840,15 +1833,6 @@ class _ProgressRingPainter extends CustomPainter {
       const startAngle = -math.pi / 2; // Start from top (-90 degrees)
 
       final rect = Rect.fromCircle(center: center, radius: radius);
-
-      // Draw neon glow arc underneath
-      canvas.drawArc(
-        rect,
-        startAngle,
-        sweepAngle,
-        false,
-        _glowPaint,
-      );
 
       // Draw main progress arc
       canvas.drawArc(
