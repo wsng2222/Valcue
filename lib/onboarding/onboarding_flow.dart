@@ -99,6 +99,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   late final OnboardingController _controller;
   bool _didInitDefaults = false;
   int _intervalExplainerStep = 0; // internal steps for screen 2
+  int? _quizSelectedOption;
 
   @override
   void initState() {
@@ -218,7 +219,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget build(BuildContext context) {
     final pages = [
       const OnboardingScreen1Welcome(),
-      OnboardingScreen2IntervalExplainer(step: _intervalExplainerStep),
+      OnboardingScreen2IntervalExplainer(
+        step: _intervalExplainerStep,
+        selectedOption: _quizSelectedOption,
+        onOptionSelected: (idx) {
+          setState(() {
+            _quizSelectedOption = idx;
+          });
+        },
+      ),
       const OnboardingScreen2Plan(),
       const OnboardingScreen2AiIntro(),
       const OnboardingScreen3WorkoutPreview(),
@@ -293,21 +302,25 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 ? null
                 : OnboardingCtaButton(
                     text: _ctaLabelForPage(pageIndex),
-                    onPressed: () {
-                      // Screen 2 has internal steps (tap-through) before moving on.
-                      if (pageIndex == 1 && _intervalExplainerStep < 7) {
-                        setState(() {
-                          _intervalExplainerStep =
-                              (_intervalExplainerStep + 1).clamp(0, 7);
-                        });
-                        return;
-                      }
-                      if (pageIndex == lastIndex) {
-                        _complete();
-                      } else {
-                        _next();
-                      }
-                    },
+                    onPressed: (pageIndex == 1 &&
+                            _intervalExplainerStep == 0 &&
+                            _quizSelectedOption == null)
+                        ? null
+                        : () {
+                            // Screen 2 has internal steps (tap-through) before moving on.
+                            if (pageIndex == 1 && _intervalExplainerStep < 7) {
+                              setState(() {
+                                _intervalExplainerStep =
+                                    (_intervalExplainerStep + 1).clamp(0, 7);
+                              });
+                              return;
+                            }
+                            if (pageIndex == lastIndex) {
+                              _complete();
+                            } else {
+                              _next();
+                            }
+                          },
                   ),
           );
         },

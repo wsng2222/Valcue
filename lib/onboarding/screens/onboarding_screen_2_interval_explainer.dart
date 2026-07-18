@@ -7,10 +7,14 @@ import '../widgets/onboarding_theme.dart';
 
 class OnboardingScreen2IntervalExplainer extends StatelessWidget {
   final int step; // 0..7 (0 = comparison, 1-7 = interval steps)
+  final int? selectedOption;
+  final ValueChanged<int>? onOptionSelected;
 
   const OnboardingScreen2IntervalExplainer({
     super.key,
     required this.step,
+    this.selectedOption,
+    this.onOptionSelected,
   });
 
   @override
@@ -53,7 +57,12 @@ class OnboardingScreen2IntervalExplainer extends StatelessWidget {
                     );
                   },
                   child: step == 0
-                      ? _ComparisonStep(strings: s, key: const ValueKey('cmp'))
+                      ? _ComparisonStep(
+                          strings: s,
+                          key: const ValueKey('cmp'),
+                          selectedOption: selectedOption,
+                          onOptionSelected: onOptionSelected,
+                        )
                       : _IntervalsStep(
                           // Keep key stable so AnimatedSwitcher does NOT animate
                           // when step changes (icon stays fixed).
@@ -73,10 +82,14 @@ class OnboardingScreen2IntervalExplainer extends StatelessWidget {
 
 class _ComparisonStep extends StatefulWidget {
   final OnboardingStrings strings;
+  final int? selectedOption;
+  final ValueChanged<int>? onOptionSelected;
 
   const _ComparisonStep({
     super.key,
     required this.strings,
+    this.selectedOption,
+    this.onOptionSelected,
   });
 
   @override
@@ -84,12 +97,11 @@ class _ComparisonStep extends StatefulWidget {
 }
 
 class _ComparisonStepState extends State<_ComparisonStep> {
-  int? _selectedOption;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final selectedOption = widget.selectedOption;
 
     return Column(
       children: [
@@ -116,8 +128,8 @@ class _ComparisonStepState extends State<_ComparisonStep> {
                   intensity: 2,
                   isRun: false,
                   isDark: isDark,
-                  isSelected: _selectedOption == 0,
-                  onTap: () => setState(() => _selectedOption = 0),
+                  isSelected: selectedOption == 0,
+                  onTap: () => widget.onOptionSelected?.call(0),
                   intensityLabel: widget.strings.ex2IntensityLabel(),
                 ),
               ),
@@ -164,8 +176,8 @@ class _ComparisonStepState extends State<_ComparisonStep> {
                   intensity: 5,
                   isRun: true,
                   isDark: isDark,
-                  isSelected: _selectedOption == 1,
-                  onTap: () => setState(() => _selectedOption = 1),
+                  isSelected: selectedOption == 1,
+                  onTap: () => widget.onOptionSelected?.call(1),
                   intensityLabel: widget.strings.ex2IntensityLabel(),
                 ),
               ),
@@ -176,10 +188,10 @@ class _ComparisonStepState extends State<_ComparisonStep> {
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 180),
           child: Row(
-            key: ValueKey(_selectedOption),
+            key: ValueKey(selectedOption),
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_selectedOption != null) ...[
+              if (selectedOption != null) ...[
                 const Icon(
                   Icons.check_circle_rounded,
                   size: 16,
@@ -188,13 +200,13 @@ class _ComparisonStepState extends State<_ComparisonStep> {
                 const SizedBox(width: 6),
               ],
               Text(
-                _selectedOption == null
+                selectedOption == null
                     ? widget.strings.ex2ChoosePrompt()
                     : widget.strings.ex2ChoiceSaved(),
                 style: GoogleFonts.lato(
                   fontSize: 13.5,
                   fontWeight: FontWeight.w700,
-                  color: _selectedOption == null
+                  color: selectedOption == null
                       ? theme.colorScheme.onSurface.withValues(alpha: 0.42)
                       : OnboardingTheme.primaryRed,
                 ),
@@ -321,7 +333,10 @@ class _CompareChoiceCard extends StatelessWidget {
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.4,
                               color: span.isRed
-                                  ? OnboardingTheme.primaryRed
+                                  ? (isSelected
+                                      ? OnboardingTheme.primaryRed
+                                      : theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.54))
                                   : theme.colorScheme.onSurface,
                             ),
                           ),
@@ -356,13 +371,19 @@ class _CompareChoiceCard extends StatelessWidget {
                         height: 7,
                         margin: EdgeInsets.only(right: index == 4 ? 0 : 4),
                         decoration: BoxDecoration(
-                          color: isActive
-                              ? (isRun
-                                  ? OnboardingTheme.primaryRed
+                          color: isSelected
+                              ? (isActive
+                                  ? (isRun
+                                      ? OnboardingTheme.primaryRed
+                                      : theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.54))
                                   : theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.28))
-                              : theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.08),
+                                      .withValues(alpha: 0.08))
+                              : (isActive
+                                  ? theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.16)
+                                  : theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.05)),
                           borderRadius: BorderRadius.circular(99),
                         ),
                       ),

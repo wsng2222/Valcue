@@ -6,18 +6,27 @@ import 'onboarding_theme.dart';
 
 class OnboardingCtaButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const OnboardingCtaButton({
     super.key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final onPrimary = theme.colorScheme.onPrimary;
+    final isEnabled = onPressed != null;
+
+    final btnBg = isEnabled
+        ? OnboardingTheme.primaryRed
+        : theme.colorScheme.onSurface.withValues(alpha: 0.12);
+    final btnFg = isEnabled
+        ? onPrimary
+        : theme.colorScheme.onSurface.withValues(alpha: 0.38);
+
     return SafeArea(
       top: false,
       child: Padding(
@@ -33,16 +42,20 @@ class OnboardingCtaButton extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
-              boxShadow: [OnboardingTheme.subtleShadow], // Subtle shadow
+              boxShadow: isEnabled ? [OnboardingTheme.subtleShadow] : null,
             ),
             child: ElevatedButton(
-              onPressed: () {
-                HapticFeedback.lightImpact();
-                onPressed();
-              },
+              onPressed: isEnabled
+                  ? () {
+                      HapticFeedback.lightImpact();
+                      onPressed?.call();
+                    }
+                  : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: OnboardingTheme.primaryRed,
-                foregroundColor: onPrimary,
+                backgroundColor: btnBg,
+                disabledBackgroundColor: btnBg,
+                foregroundColor: btnFg,
+                disabledForegroundColor: btnFg,
                 elevation: 0,
                 shadowColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
@@ -50,7 +63,7 @@ class OnboardingCtaButton extends StatelessWidget {
                 ),
               ).copyWith(
                 overlayColor: WidgetStatePropertyAll(
-                  onPrimary.withValues(alpha: 0.12),
+                  btnFg.withValues(alpha: 0.12),
                 ),
               ),
               child: Center(
@@ -60,7 +73,7 @@ class OnboardingCtaButton extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.2,
-                    color: onPrimary,
+                    color: btnFg,
                     height: 1.0,
                   ),
                 ),
