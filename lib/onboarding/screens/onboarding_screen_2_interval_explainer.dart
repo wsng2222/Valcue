@@ -373,10 +373,7 @@ class _CompareChoiceCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? (isActive
-                                  ? (isRun
-                                      ? OnboardingTheme.primaryRed
-                                      : theme.colorScheme.onSurface
-                                          .withValues(alpha: 0.54))
+                                  ? OnboardingTheme.primaryRed
                                   : theme.colorScheme.onSurface
                                       .withValues(alpha: 0.08))
                               : (isActive
