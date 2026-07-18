@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/routine_template.dart';
 import '../models/machine_type.dart';
 import '../models/difficulty.dart';
@@ -443,18 +442,31 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
       sections.add(
         Padding(
           padding: EdgeInsets.only(
-            bottom: 12,
-            top: i > 0 ? 24 : 4, // More spacing between sections
+            bottom: 14,
+            top: i > 0 ? 28 : 8,
           ),
-          child: Text(
-            _getDifficultyText(context, difficulty),
-            style: GoogleFonts.lato(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-              fontStyle: FontStyle.italic,
-              color: theme.colorScheme.onSurface,
-              decoration: TextDecoration.none,
-            ),
+          child: Row(
+            children: [
+              Container(
+                width: 4,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                _getDifficultyText(context, difficulty),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: theme.colorScheme.onSurface,
+                  decoration: TextDecoration.none,
+                  letterSpacing: -0.3,
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -545,7 +557,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
               children: [
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: appColors.surfaceElevated,
                     borderRadius: BorderRadius.circular(999),
@@ -555,15 +567,26 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                           : appColors.border,
                     ),
                   ),
-                  child: BidiSafeText(
-                    template.totalDurationFormatted,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontSize: 14,
-                      color: theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.none,
-                    ),
-                    forceLTR: true,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time_rounded,
+                        size: 14,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                      const SizedBox(width: 6),
+                      BidiSafeText(
+                        template.totalDurationFormatted,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: 13,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.none,
+                        ),
+                        forceLTR: true,
+                      ),
+                    ],
                   ),
                 ),
                 const Spacer(),
@@ -575,15 +598,22 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                   },
                   minimumSize: const Size(0, 0),
                   child: Container(
-                    width: 46,
-                    height: 46,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
-                      size: 15,
+                      size: 13,
                       color: theme.colorScheme.onPrimary,
                     ),
                   ),
