@@ -10,6 +10,8 @@ import '../models/machine_type.dart';
 import '../storage/routine_provider.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../theme/app_theme.dart';
+import '../../../services/sound_service.dart';
+import '../../../services/voice_guide_service.dart';
 
 class AiRoutineGeneratorSheet extends StatefulWidget {
   final MachineType initialMachineType;
@@ -39,13 +41,12 @@ class AiRoutineGeneratorSheet extends StatefulWidget {
 class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   late MachineType _machineType;
   int _durationMinutes = 20;
-  String _difficulty = '중간'; // Default to Korean matching standard routines
-  String _focus = 'hiit'; // 'hiit', 'fat_burn', 'endurance', 'cardio_peak'
 
-  // Treadmill only features
-  bool _useDistanceGoal = false; 
+  // Workout Goal Variables
   double _distanceTargetKm = 5.0; // 1.0 to 10.0 km
-  bool _includeIncline = true; 
+  int _stairsTargetFloors = 50; // 10 to 200 floors (StairMaster only)
+  int _caloriesTarget = 250; // 50 to 1000 kcal
+  bool _includeIncline = true;
 
   bool _isGenerating = false;
   int _loadingStep = 0;
@@ -103,202 +104,120 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   void _finalizeGeneration() {
     final isKorean = Localizations.localeOf(context).languageCode == 'ko';
     final random = Random();
-
-    // Map difficulty display to storage keys
-    String diffStorage = _difficulty;
-    if (_difficulty == 'Easy' || _difficulty == '쉬움') diffStorage = '쉬움';
-    if (_difficulty == 'Medium' || _difficulty == '중간') diffStorage = '중간';
-    if (_difficulty == 'Hard' || _difficulty == '높음') diffStorage = '높음';
-
     final List<Interval> intervals = [];
 
+    // 1. Common Time Config
+    final totalSeconds = _durationMinutes * 60;
+    int remainingSeconds = totalSeconds - 180 - 120; // 3 min warmup, 2 min cooldown
+    if (remainingSeconds < 120) remainingSeconds = 120; // safety fallback
+
     if (_machineType == MachineType.treadmill) {
-      // Warm up: 3 min (180s)
-      double baseWarmupSpeed = 4.5 + random.nextDouble() * 0.5; // 4.5-5.0
-      double baseWarmupGrade = _includeIncline ? 1.0 : 0.0;
+      // 2. Treadmill Math
+      double avgSpeed = _distanceTargetKm / (_durationMinutes / 60.0);
+      avgSpeed = avgSpeed.clamp(4.0, 15.0);
 
-      double workSpeed = 8.0;
-      double restSpeed = 5.5;
-      double workGrade = _includeIncline ? 2.0 : 0.0;
-      double restGrade = _includeIncline ? 1.0 : 0.0;
+      double baseWarmupSpeed = (avgSpeed - 1.5).clamp(3.5, 6.0);
+      double cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
 
-      if (diffStorage == '쉬움') {
-        workSpeed = 7.0 + random.nextInt(2) * 0.5; // 7.0-7.5
-        restSpeed = 5.0;
-      } else if (diffStorage == '중간') {
-        workSpeed = 9.0 + random.nextInt(3) * 0.5; // 9.0-10.0
-        restSpeed = 5.5;
-        workGrade = _includeIncline ? 3.0 : 0.0;
-      } else {
-        workSpeed = 11.5 + random.nextInt(4) * 0.5; // 11.5-13.0
-        restSpeed = 6.0;
-        workGrade = _includeIncline ? 4.0 : 0.0;
-      }
+      double speedMMin = avgSpeed * 16.67;
+      double baseCaloriesPerMin = (3.5 + 0.2 * speedMMin) * 70.0 / 200.0;
+      double baseKcal = baseCaloriesPerMin * _durationMinutes;
 
-      if (_focus == 'fat_burn') {
-        // Fat burn focuses more on steady state + steep inclines (grade)
-        workSpeed -= 1.0;
-        workGrade = _includeIncline ? (workGrade + 2.0) : 0.0;
-        restGrade = _includeIncline ? (restGrade + 1.0) : 0.0;
-      }
+      double avgGrade = 0.0;
+      double workGrade = 0.0;
+      double restGrade = 0.0;
+      double warmupGrade = 0.0;
 
-      if (_useDistanceGoal) {
-        // Distance Goal Mode
-        // Warm up distance = 180s @ warmup speed
-        double warmupDist = baseWarmupSpeed * (180 / 3600); // ~0.24km
-        // Cool down distance = 120s @ cooldown speed
-        double cooldownSpeed = baseWarmupSpeed - 0.5;
-        double cooldownDist = cooldownSpeed * (120 / 3600); // ~0.15km
-        double remainingDist = _distanceTargetKm - warmupDist - cooldownDist;
-
-        // Ensure target is reasonable
-        if (remainingDist < 0.1) remainingDist = 0.5;
-
-        // One cycle duration & distance
-        int workSeconds = _focus == 'hiit' ? 60 : 120;
-        int restSeconds = 60;
-        int cycleDuration = workSeconds + restSeconds; // 120s or 180s
-
-        double cycleDist = (workSpeed * (workSeconds / 3600)) + (restSpeed * (restSeconds / 3600));
-        int cycles = (remainingDist / cycleDist).round();
-
-        // Limit cycles so that the total workout duration does not exceed 1 hour (3600s)
-        int maxCycles = (3600 - 180 - 120) ~/ cycleDuration;
-        if (cycles > maxCycles) cycles = maxCycles;
-        if (cycles < 1) cycles = 1;
-
-        // Recalculate workSpeed to EXACTLY fit the target distance over these cycles
-        // remainingDist = cycles * (workSpeed * (workSeconds / 3600) + restSpeed * (restSeconds / 3600))
-        // workSpeed * (workSeconds / 3600) = (remainingDist / cycles) - (restSpeed * (restSeconds / 3600))
-        // workSpeed = ((remainingDist / cycles) - (restSpeed * restSeconds / 3600)) * 3600 / workSeconds
-        double calculatedWorkSpeed = ((remainingDist / cycles) - (restSpeed * restSeconds / 3600)) * 3600 / workSeconds;
-        
-        // Clamp speed to realistic bounds (e.g. 5.5 to 16.0 km/h)
-        workSpeed = calculatedWorkSpeed.clamp(restSpeed + 0.5, 16.0);
-
-        // Add Warm up
-        intervals.add(Interval.treadmill(
-          durationSeconds: 180,
-          speedKmh: baseWarmupSpeed,
-          grade: baseWarmupGrade,
-        ));
-
-        String groupId = 'ai_group_${random.nextInt(10000)}';
-        for (int i = 0; i < cycles; i++) {
-          intervals.add(Interval.treadmill(
-            durationSeconds: workSeconds,
-            speedKmh: double.parse(workSpeed.toStringAsFixed(1)),
-            grade: workGrade,
-            groupId: groupId,
-            repeatCount: cycles,
-          ));
-          intervals.add(Interval.treadmill(
-            durationSeconds: restSeconds,
-            speedKmh: restSpeed,
-            grade: restGrade,
-            groupId: groupId,
-            repeatCount: cycles,
-          ));
-        }
-
-        // Add Cool down
-        intervals.add(Interval.treadmill(
-          durationSeconds: 120,
-          speedKmh: cooldownSpeed,
-          grade: 0.0,
-        ));
-      } else {
-        // Time Goal Mode
-        final totalSeconds = _durationMinutes * 60;
-        intervals.add(Interval.treadmill(
-          durationSeconds: 180,
-          speedKmh: baseWarmupSpeed,
-          grade: baseWarmupGrade,
-        ));
-
-        int remainingSeconds = totalSeconds - 180 - 120;
-        int intervalLen = _focus == 'hiit' ? 120 : 180;
-        int cycles = remainingSeconds ~/ intervalLen;
-        if (cycles < 1) cycles = 1;
-
-        String groupId = 'ai_group_${random.nextInt(10000)}';
-        for (int i = 0; i < cycles; i++) {
-          if (_focus == 'hiit') {
-            intervals.add(Interval.treadmill(
-              durationSeconds: 60,
-              speedKmh: workSpeed,
-              grade: workGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
-            intervals.add(Interval.treadmill(
-              durationSeconds: 60,
-              speedKmh: restSpeed,
-              grade: restGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
-          } else if (_focus == 'fat_burn') {
-            intervals.add(Interval.treadmill(
-              durationSeconds: 120,
-              speedKmh: workSpeed,
-              grade: workGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
-            intervals.add(Interval.treadmill(
-              durationSeconds: 60,
-              speedKmh: restSpeed,
-              grade: restGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
-          } else {
-            double speedPyramid = workSpeed - 1.0 + (i % 3) * 0.7;
-            intervals.add(Interval.treadmill(
-              durationSeconds: 120,
-              speedKmh: double.parse(speedPyramid.toStringAsFixed(1)),
-              grade: workGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
-            intervals.add(Interval.treadmill(
-              durationSeconds: 60,
-              speedKmh: restSpeed,
-              grade: restGrade,
-              groupId: groupId,
-              repeatCount: cycles,
-            ));
+      if (_includeIncline) {
+        // Adjust average incline (grade %) to match target calories
+        if (_caloriesTarget > baseKcal) {
+          double diff = (_caloriesTarget * 200.0 / 70.0) / _durationMinutes - (3.5 + 0.2 * speedMMin);
+          if (diff > 0) {
+            avgGrade = (diff / (0.9 * speedMMin)) * 100.0;
           }
         }
+        avgGrade = avgGrade.clamp(0.0, 12.0);
+        workGrade = (avgGrade * 1.4).clamp(0.0, 15.0);
+        restGrade = (avgGrade * 0.6).clamp(0.0, 8.0);
+        warmupGrade = 1.0;
+      } else {
+        // No Incline: recalculate speed to match calories
+        if (_caloriesTarget > baseKcal) {
+          double targetPerMin = (_caloriesTarget * 200.0) / (70.0 * _durationMinutes);
+          double neededSpeedMMin = (targetPerMin - 3.5) / 0.2;
+          avgSpeed = neededSpeedMMin / 16.67;
+          avgSpeed = avgSpeed.clamp(4.0, 16.0);
+          baseWarmupSpeed = (avgSpeed - 1.5).clamp(3.5, 6.0);
+          cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
+        }
+      }
 
+      double workSpeed = (avgSpeed + 1.5).clamp(4.5, 16.0);
+      double restSpeed = (avgSpeed - 1.0).clamp(3.0, 10.0);
+
+      // Warm up
+      intervals.add(Interval.treadmill(
+        durationSeconds: 180,
+        speedKmh: double.parse(baseWarmupSpeed.toStringAsFixed(1)),
+        grade: warmupGrade,
+      ));
+
+      // Intervals (2 min cycles)
+      int cycleDuration = 120;
+      int cycles = remainingSeconds ~/ cycleDuration;
+      if (cycles < 1) cycles = 1;
+
+      String groupId = 'ai_group_${random.nextInt(10000)}';
+      for (int i = 0; i < cycles; i++) {
         intervals.add(Interval.treadmill(
-          durationSeconds: 120,
-          speedKmh: baseWarmupSpeed - 0.5,
-          grade: 0.0,
+          durationSeconds: 60,
+          speedKmh: double.parse(workSpeed.toStringAsFixed(1)),
+          grade: double.parse(workGrade.toStringAsFixed(1)),
+          groupId: groupId,
+          repeatCount: cycles,
+        ));
+        intervals.add(Interval.treadmill(
+          durationSeconds: 60,
+          speedKmh: double.parse(restSpeed.toStringAsFixed(1)),
+          grade: double.parse(restGrade.toStringAsFixed(1)),
+          groupId: groupId,
+          repeatCount: cycles,
         ));
       }
 
-    } else if (_machineType == MachineType.cycle) {
-      // Cycle: Time goal only (DurationMinutes max 60)
-      final totalSeconds = _durationMinutes * 60;
-      int baseRes = diffStorage == '쉬움' ? 5 : (diffStorage == '중간' ? 8 : 12);
-      int workRes = baseRes + 4;
-      int workRpm = _focus == 'hiit' ? 105 : 90;
-      int restRpm = 75;
-
-      intervals.add(Interval.cycle(
-        durationSeconds: 180,
-        rpm: 80,
-        resistance: baseRes,
+      // Cool down
+      intervals.add(Interval.treadmill(
+        durationSeconds: 120,
+        speedKmh: double.parse(cooldownSpeed.toStringAsFixed(1)),
+        grade: 0.0,
       ));
 
-      int remainingSeconds = totalSeconds - 180 - 120;
-      int intervalLen = 120;
-      int cycles = remainingSeconds ~/ intervalLen;
-      if (cycles < 1) cycles = 1;
-      String groupId = 'ai_group_${random.nextInt(10000)}';
+    } else if (_machineType == MachineType.cycle) {
+      // 3. Cycle Math
+      double avgSpeed = _distanceTargetKm / (_durationMinutes / 60.0);
+      double avgRpm = (avgSpeed * 2.8).clamp(50.0, 110.0);
 
+      double avgRes = _caloriesTarget / (avgRpm * _durationMinutes * 0.002 * (70.0 / 200.0));
+      avgRes = avgRes.clamp(2.0, 18.0);
+
+      // Warm up
+      intervals.add(Interval.cycle(
+        durationSeconds: 180,
+        rpm: (avgRpm - 10).clamp(50, 90).toInt(),
+        resistance: (avgRes - 2).clamp(1, 15).toInt(),
+      ));
+
+      // Intervals (2 min cycles)
+      int cycleDuration = 120;
+      int cycles = remainingSeconds ~/ cycleDuration;
+      if (cycles < 1) cycles = 1;
+
+      int workRpm = (avgRpm + 12).clamp(60, 120).toInt();
+      int restRpm = (avgRpm - 8).clamp(45, 95).toInt();
+      int workRes = (avgRes + 2).clamp(2, 20).toInt();
+      int restRes = (avgRes - 1).clamp(1, 16).toInt();
+
+      String groupId = 'ai_group_${random.nextInt(10000)}';
       for (int i = 0; i < cycles; i++) {
         intervals.add(Interval.cycle(
           durationSeconds: 60,
@@ -310,35 +229,47 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         intervals.add(Interval.cycle(
           durationSeconds: 60,
           rpm: restRpm,
-          resistance: baseRes,
+          resistance: restRes,
           groupId: groupId,
           repeatCount: cycles,
         ));
       }
 
+      // Cool down
       intervals.add(Interval.cycle(
         durationSeconds: 120,
-        rpm: 70,
-        resistance: baseRes - 2 > 2 ? baseRes - 2 : 2,
+        rpm: (avgRpm - 15).clamp(45, 80).toInt(),
+        resistance: (avgRes - 3).clamp(1, 12).toInt(),
       ));
 
     } else {
-      // StairMaster: Time goal only (DurationMinutes max 60)
-      final totalSeconds = _durationMinutes * 60;
-      int baseLevel = diffStorage == '쉬움' ? 4 : (diffStorage == '중간' ? 7 : 11);
-      int workLevel = baseLevel + 4;
+      // 4. StairMaster Math
+      double floorsPerMin = _stairsTargetFloors / _durationMinutes;
+      double stepsPerMin = floorsPerMin * 16.0;
+      double avgLevel = (stepsPerMin / 6.0).clamp(3.0, 15.0);
 
+      double baseCaloriesPerMin = avgLevel * 70.0 * 0.05;
+      double baseKcal = baseCaloriesPerMin * _durationMinutes;
+      double levelDelta = 0.0;
+      if (_caloriesTarget > baseKcal) {
+        levelDelta = ((_caloriesTarget - baseKcal) / (70.0 * _durationMinutes * 0.05)).clamp(0.0, 4.0);
+      }
+
+      // Warm up
       intervals.add(Interval.stairmaster(
         durationSeconds: 180,
-        level: baseLevel,
+        level: (avgLevel - 2).clamp(2, 12).toInt(),
       ));
 
-      int remainingSeconds = totalSeconds - 180 - 120;
-      int intervalLen = 120;
-      int cycles = remainingSeconds ~/ intervalLen;
+      // Intervals (2 min cycles)
+      int cycleDuration = 120;
+      int cycles = remainingSeconds ~/ cycleDuration;
       if (cycles < 1) cycles = 1;
-      String groupId = 'ai_group_${random.nextInt(10000)}';
 
+      int workLevel = (avgLevel + levelDelta).clamp(4, 20).toInt();
+      int restLevel = (avgLevel - (levelDelta / 2)).clamp(2, 14).toInt();
+
+      String groupId = 'ai_group_${random.nextInt(10000)}';
       for (int i = 0; i < cycles; i++) {
         intervals.add(Interval.stairmaster(
           durationSeconds: 60,
@@ -348,30 +279,27 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         ));
         intervals.add(Interval.stairmaster(
           durationSeconds: 60,
-          level: baseLevel,
+          level: restLevel,
           groupId: groupId,
           repeatCount: cycles,
         ));
       }
 
+      // Cool down
       intervals.add(Interval.stairmaster(
         durationSeconds: 120,
-        level: baseLevel - 2 > 1 ? baseLevel - 2 : 1,
+        level: (avgLevel - 3).clamp(1, 10).toInt(),
       ));
     }
 
-    // Name translation
-    String focusName = '';
-    if (_focus == 'hiit') focusName = isKorean ? '고강도 인터벌' : 'HIIT';
-    if (_focus == 'fat_burn') focusName = isKorean ? '지방 연소' : 'Fat Burn';
-    if (_focus == 'endurance') focusName = isKorean ? '지구력' : 'Endurance';
-    if (_focus == 'cardio_peak') focusName = isKorean ? '심폐 극대화' : 'Cardio Peak';
-
+    // Name formatting
     String name = '';
-    if (_machineType == MachineType.treadmill && _useDistanceGoal) {
-      name = 'AI $focusName ${_distanceTargetKm.toStringAsFixed(1)}km';
+    if (_machineType == MachineType.treadmill) {
+      name = 'AI Run ${_distanceTargetKm.toStringAsFixed(1)}km (${_caloriesTarget}kcal)';
+    } else if (_machineType == MachineType.cycle) {
+      name = 'AI Cycle ${_distanceTargetKm.toStringAsFixed(1)}km (${_caloriesTarget}kcal)';
     } else {
-      name = 'AI $focusName ${_durationMinutes}m';
+      name = 'AI Stairs ${_stairsTargetFloors}F (${_caloriesTarget}kcal)';
     }
 
     setState(() {
@@ -379,11 +307,18 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       _generatedRoutine = Routine(
         id: 'ai_${DateTime.now().millisecondsSinceEpoch}',
         name: name,
-        difficulty: diffStorage,
+        difficulty: _caloriesTarget > 350 ? '높음' : (_caloriesTarget > 200 ? '중간' : '쉬움'),
         intervals: intervals,
         machineType: _machineType,
       );
     });
+
+    // Trigger completion feedback effects
+    unawaited(SoundService().playFinished());
+    final speechText = isKorean
+        ? '맞춤형 루틴 설계를 완료했습니다. $_caloriesTarget 칼로리 소모를 목표로 시작해보세요!'
+        : 'Completed custom routine design. Let\'s target $_caloriesTarget calories!';
+    unawaited(VoiceGuideService.instance.speakCustom(speechText));
   }
 
   void _saveRoutine() {
@@ -768,276 +703,365 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     List<({String key, String label})> focusOptions,
     List<String> difficultyOptions,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final isStairMaster = _machineType == MachineType.stairmaster;
+
+    // Premium styling tokens
+    final cardBgColor = theme.brightness == Brightness.dark
+        ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.03);
+    final borderColor = theme.colorScheme.onSurface.withValues(alpha: 0.06);
+    final iconColor = theme.colorScheme.onSurface.withValues(alpha: 0.5);
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header with AI Gradient
+          // 1. Premium Header with clear primary text color (No blurry gradient)
           Center(
-            child: ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [Colors.purpleAccent, Colors.blueAccent],
-              ).createShader(bounds),
-              child: Text(
-                isKorean ? 'AI Workout Designer' : 'AI Workout Designer',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  letterSpacing: -0.5,
-                ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.15), width: 1),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
+                    color: theme.colorScheme.primary,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'AI Workout Designer',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: theme.colorScheme.primary,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           const SizedBox(height: 24),
 
-          // Goal Type Selection (Treadmill only)
-          if (_machineType == MachineType.treadmill) ...[
-            Text(
-              isKorean ? '목표 설정 방식' : 'Goal Type',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          // 2. Goal Selection Cards
+          // Time Card
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: cardBgColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderColor, width: 1),
             ),
-            const SizedBox(height: 8),
-            Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _useDistanceGoal = false),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: !_useDistanceGoal 
-                            ? theme.colorScheme.primary.withValues(alpha: 0.1) 
-                            : theme.colorScheme.onSurface.withValues(alpha: 0.04),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: !_useDistanceGoal ? theme.colorScheme.primary : Colors.transparent,
-                          width: 1.5,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.timer_outlined, color: iconColor, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          isKorean ? '운동 시간' : 'Duration',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        isKorean ? '시간 목표' : 'Time Goal',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: !_useDistanceGoal ? FontWeight.w600 : FontWeight.w400,
-                          color: !_useDistanceGoal ? theme.colorScheme.primary : theme.colorScheme.onSurface,
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _useDistanceGoal = true),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: _useDistanceGoal 
-                            ? theme.colorScheme.primary.withValues(alpha: 0.1) 
-                            : theme.colorScheme.onSurface.withValues(alpha: 0.04),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: _useDistanceGoal ? theme.colorScheme.primary : Colors.transparent,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Text(
-                        isKorean ? '거리 목표' : 'Distance Goal',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: _useDistanceGoal ? FontWeight.w600 : FontWeight.w400,
-                          color: _useDistanceGoal ? theme.colorScheme.primary : theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-          ],
-
-          // Goal Parameter Slider
-          if (_machineType != MachineType.treadmill || !_useDistanceGoal) ...[
-            // Time Goal Duration Slider (Max 60 Minutes)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isKorean ? '운동 시간' : 'Duration',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  '$_durationMinutes ${isKorean ? '분' : 'min'}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: theme.colorScheme.primary),
-                ),
-              ],
-            ),
-            Slider(
-              value: _durationMinutes.toDouble(),
-              min: 10,
-              max: 60,
-              divisions: 10, // 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
-              activeColor: theme.colorScheme.primary,
-              onChanged: (val) => setState(() => _durationMinutes = val.toInt()),
-            ),
-          ] else ...[
-            // Distance Goal Slider (Treadmill only: 1.0 to 10.0 km)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isKorean ? '목표 거리' : 'Target Distance',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  '${_distanceTargetKm.toStringAsFixed(1)} km',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: theme.colorScheme.primary),
-                ),
-              ],
-            ),
-            Slider(
-              value: _distanceTargetKm,
-              min: 1.0,
-              max: 10.0,
-              divisions: 18, // Steps of 0.5km
-              onChanged: (val) => setState(() => _distanceTargetKm = val),
-            ),
-          ],
-          const SizedBox(height: 12),
-
-          // Incline Toggle (Treadmill only)
-          if (_machineType == MachineType.treadmill) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isKorean ? '경사도(Incline) 적용' : 'Include Incline (Grade)',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-                CupertinoSwitch(
-                  value: _includeIncline,
-                  activeTrackColor: theme.colorScheme.primary,
-                  onChanged: (val) => setState(() => _includeIncline = val),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-          ],
-
-          // Workout Focus Options
-          Text(
-            isKorean ? '운동 목표' : 'Workout Goal Focus',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: focusOptions.map((opt) {
-              final isSel = _focus == opt.key;
-              return GestureDetector(
-                onTap: () => setState(() => _focus = opt.key),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: isSel ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.onSurface.withValues(alpha: 0.04),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: isSel ? theme.colorScheme.primary : Colors.transparent,
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Text(
-                    opt.label,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: isSel ? FontWeight.w600 : FontWeight.w400,
-                      color: isSel ? theme.colorScheme.primary : theme.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 20),
-
-          // Difficulty Options
-          Text(
-            isKorean ? '난이도' : 'Difficulty',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: difficultyOptions.map((diff) {
-              String diffKey = diff;
-              if (diff == 'Easy' || diff == '쉬움') diffKey = '쉬움';
-              if (diff == 'Medium' || diff == '중간') diffKey = '중간';
-              if (diff == 'Hard' || diff == '높음') diffKey = '높음';
-
-              String myDiffKey = _difficulty;
-              if (_difficulty == 'Easy' || _difficulty == '쉬움') myDiffKey = '쉬움';
-              if (_difficulty == 'Medium' || _difficulty == '중간') myDiffKey = '중간';
-              if (_difficulty == 'Hard' || _difficulty == '높음') myDiffKey = '높음';
-
-              final isSel = myDiffKey == diffKey;
-
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => setState(() => _difficulty = diffKey),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: isSel ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.onSurface.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: isSel ? theme.colorScheme.primary : Colors.transparent,
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Text(
-                      diff,
+                    Text(
+                      '$_durationMinutes ${isKorean ? '분' : 'min'}',
                       style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: isSel ? FontWeight.w600 : FontWeight.w400,
-                        color: isSel ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 6,
+                    activeTrackColor: theme.colorScheme.primary,
+                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    thumbColor: theme.colorScheme.primary,
+                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                  ),
+                  child: Slider(
+                    value: _durationMinutes.toDouble(),
+                    min: 10,
+                    max: 60,
+                    divisions: 10,
+                    onChanged: (val) => setState(() => _durationMinutes = val.toInt()),
                   ),
                 ),
-              );
-            }).toList(),
+              ],
+            ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 14),
 
-          // Generate Button
+          // Distance or Floor Card
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: cardBgColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderColor, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          isStairMaster ? Icons.stairs_outlined : Icons.directions_run_outlined,
+                          color: iconColor,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          isStairMaster ? l10n.targetStairs : l10n.targetDistance,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      isStairMaster
+                          ? '$_stairsTargetFloors ${isKorean ? '층' : 'Floors'}'
+                          : '${_distanceTargetKm.toStringAsFixed(1)} km',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 6,
+                    activeTrackColor: theme.colorScheme.primary,
+                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    thumbColor: theme.colorScheme.primary,
+                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                  ),
+                  child: isStairMaster
+                      ? Slider(
+                          value: _stairsTargetFloors.toDouble(),
+                          min: 10,
+                          max: 200,
+                          divisions: 19,
+                          onChanged: (val) => setState(() => _stairsTargetFloors = val.toInt()),
+                        )
+                      : Slider(
+                          value: _distanceTargetKm,
+                          min: 1.0,
+                          max: 15.0,
+                          divisions: 28,
+                          onChanged: (val) => setState(() => _distanceTargetKm = val),
+                        ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Calories Card
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: cardBgColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderColor, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.local_fire_department_outlined, color: iconColor, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.targetCalories,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '$_caloriesTarget kcal',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 6,
+                    activeTrackColor: theme.colorScheme.primary,
+                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    thumbColor: theme.colorScheme.primary,
+                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                  ),
+                  child: Slider(
+                    value: _caloriesTarget.toDouble(),
+                    min: 50,
+                    max: 1000,
+                    divisions: 19,
+                    onChanged: (val) => setState(() => _caloriesTarget = val.toInt()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Incline Toggle Card (Treadmill only)
+          if (_machineType == MachineType.treadmill) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              decoration: BoxDecoration(
+                color: cardBgColor,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: borderColor, width: 1),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.trending_up, color: iconColor, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        isKorean ? '경사도(Incline) 적용' : 'Include Incline (Grade)',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Transform.scale(
+                    scale: 0.85,
+                    child: CupertinoSwitch(
+                      value: _includeIncline,
+                      activeTrackColor: theme.colorScheme.primary,
+                      onChanged: (val) => setState(() => _includeIncline = val),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+          ] else ...[
+            const SizedBox(height: 28),
+          ],
+
+          // 3. Action Button (Red Sporty accent)
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: theme.colorScheme.onSurface,
-                foregroundColor: theme.colorScheme.surface,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                backgroundColor: const Color(0xFFE53935), // 스포츠 레드
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
               onPressed: _startGeneration,
-              child: Text(
-                isKorean ? 'AI 루틴 생성하기' : 'Generate AI Routine',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.auto_awesome, color: Colors.white, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    isKorean ? 'AI 루틴 생성하기' : 'Generate AI Routine',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 24),
         ],
       ),
     );
+  }
+}
+
+extension AppLocalizationsAiExtension on AppLocalizations {
+  String get targetCalories {
+    try {
+      return (this as dynamic).targetCalories ?? '목표 칼로리';
+    } catch (_) {
+      return '목표 칼로리';
+    }
+  }
+
+  String get targetStairs {
+    try {
+      return (this as dynamic).targetStairs ?? '목표 층수';
+    } catch (_) {
+      return '목표 층수';
+    }
+  }
+
+  String get targetDistance {
+    try {
+      return (this as dynamic).targetDistance ?? '목표 거리';
+    } catch (_) {
+      return '목표 거리';
+    }
+  }
+
+  String get aiSuccessMessage {
+    try {
+      return (this as dynamic).aiSuccessMessage ?? '맞춤형 루틴 설계를 완료했습니다!';
+    } catch (_) {
+      return '맞춤형 루틴 설계를 완료했습니다!';
+    }
   }
 }

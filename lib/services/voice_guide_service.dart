@@ -423,6 +423,33 @@ class VoiceGuideService {
     });
   }
 
+  /// Speak a custom raw text string
+  Future<void> speakCustom(String text) async {
+    if (!_voiceEnabled) return;
+    if (!_initialized) return;
+
+    await _mutex.synchronized(() async {
+      if (!_voiceEnabled) return;
+      if (!_initialized) return;
+      
+      final gen = ++_stopGeneration;
+
+      await _safe(() async {
+        await _tts.stop();
+      });
+
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      if (gen != _stopGeneration) return;
+      if (!_voiceEnabled) return;
+
+      await _safe(() async {
+        if (gen != _stopGeneration) return;
+        await _tts.speak(text);
+      });
+    });
+  }
+
   Future<void> _speak({
     required String key,
     required Map<String, String> placeholders,
