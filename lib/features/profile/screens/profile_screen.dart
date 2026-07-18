@@ -184,19 +184,19 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
             ),
             const SizedBox(height: 20),
-            // Tabs: Workout History, Calendar, Weight
+            // Tabs: Workout History, Calendar, Achievements, Weight
             TabBar(
               controller: _tabController,
               tabs: [
                 Tab(text: AppLocalizations.of(context)!.historyTab),
                 Tab(text: AppLocalizations.of(context)!.calendarTab),
-                Tab(text: AppLocalizations.of(context)!.weightTab),
                 Tab(
                   text: AchievementTranslations.getUiString(
                     'tab_achievements',
                     Localizations.localeOf(context).languageCode,
                   ),
                 ),
+                Tab(text: AppLocalizations.of(context)!.weightTab),
               ],
               labelColor: theme.colorScheme.primary,
               unselectedLabelColor: theme.extension<AppColors>()!.mutedText,
@@ -217,6 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             setState(() => _selectedMachineTab = i),
                       ),
                       const _CalendarTab(),
+                      const _AchievementsTab(),
                       Stack(
                         children: [
                           const _WeightTab(),
@@ -224,7 +225,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                             _buildPremiumLockOverlay(context),
                         ],
                       ),
-                      const _AchievementsTab(),
                     ],
                   );
                 },

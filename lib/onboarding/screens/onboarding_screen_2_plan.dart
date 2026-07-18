@@ -72,30 +72,30 @@ class _PlanOverview extends StatelessWidget {
     final intervals = [
       _PlanIntervalData(
         title: strings.planRecoveryWalkLabel(),
-        duration: strings.planMinutesLabel(2),
+        duration: strings.planMinutesLabel(3),
         speed: '5.0 km/h',
-        flex: 2,
+        flex: 3,
         isRun: false,
       ),
       _PlanIntervalData(
         title: strings.planFastRunLabel(),
-        duration: strings.planMinutesLabel(4),
+        duration: strings.planMinutesLabel(7),
         speed: '9.0 km/h',
-        flex: 4,
+        flex: 7,
         isRun: true,
       ),
       _PlanIntervalData(
         title: strings.planRecoveryWalkLabel(),
-        duration: strings.planMinutesLabel(2),
+        duration: strings.planMinutesLabel(3),
         speed: '5.0 km/h',
-        flex: 2,
+        flex: 3,
         isRun: false,
       ),
       _PlanIntervalData(
         title: strings.planFinishRunLabel(),
-        duration: strings.planMinutesLabel(4),
+        duration: strings.planMinutesLabel(7),
         speed: '10.0 km/h',
-        flex: 4,
+        flex: 7,
         isRun: true,
       ),
     ];
@@ -121,7 +121,7 @@ class _PlanOverview extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    strings.planTotalMinutesLabel(12),
+                    strings.planTotalMinutesLabel(20),
                     style: TextStyle(
                       fontSize: 34,
                       height: 1,
