@@ -25,6 +25,7 @@
 		A1100008A1100008A1100008 /* ActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1200007A1200007A1200007 /* ActivityKit.framework */; };
 		A1100009A1100009A1100009 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1200008A1200008A1200008 /* SwiftUI.framework */; };
 		A110000AA110000AA110000A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1200009A1200009A1200009 /* WidgetKit.framework */; };
+		B370F7B553D85E775B3F5B7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FE395E70CE985FBF3FFFA8F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		1FE395E70CE985FBF3FFFA8F /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2E596D83FC4A92F184057B02 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +162,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				F21ECB3192FD32B7A1FD2B53 /* Pods */,
 				ACC0E8B6B9EE7D964D3B52A0 /* Frameworks */,
+				1FE395E70CE985FBF3FFFA8F /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -356,6 +359,7 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				B370F7B553D85E775B3F5B7A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

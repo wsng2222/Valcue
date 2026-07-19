@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import '../models/routine.dart';
@@ -12,6 +13,9 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../../../theme/app_theme.dart';
 import '../../../services/sound_service.dart';
 import '../../../services/voice_guide_service.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/bottom_sheet_action_bar.dart';
+import '../../../widgets/app_bottom_sheet.dart';
 
 class AiRoutineGeneratorSheet extends StatefulWidget {
   final MachineType initialMachineType;
@@ -35,7 +39,8 @@ class AiRoutineGeneratorSheet extends StatefulWidget {
   }
 
   @override
-  State<AiRoutineGeneratorSheet> createState() => _AiRoutineGeneratorSheetState();
+  State<AiRoutineGeneratorSheet> createState() =>
+      _AiRoutineGeneratorSheetState();
 }
 
 class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
@@ -46,26 +51,13 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   double _distanceTargetKm = 5.0; // 1.0 to 10.0 km
   int _stairsTargetFloors = 50; // 10 to 200 floors (StairMaster only)
   int _caloriesTarget = 250; // 50 to 1000 kcal
+  double _bodyWeightKg = 70.0;
   bool _includeIncline = true;
 
   bool _isGenerating = false;
   int _loadingStep = 0;
   Routine? _generatedRoutine;
   Timer? _generationTimer;
-
-  final List<String> _loadingPhrasesKo = [
-    '유산소 강도 목표 설정 중...',
-    '웜업 및 쿨다운 간격 설계 중...',
-    '구간별 맞춤형 페이스 커브 연산 중...',
-    '안내 음성 코칭 템플릿 튜닝 중...',
-  ];
-
-  final List<String> _loadingPhrasesEn = [
-    'Analyzing cardio target heart zones...',
-    'Structuring warm-up & cool-down intervals...',
-    'Computing customized intensity curve...',
-    'Optimizing voice coaching announcements...',
-  ];
 
   @override
   void initState() {
@@ -88,7 +80,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
 
     _generationTimer?.cancel();
     int currentStep = 0;
-    _generationTimer = Timer.periodic(const Duration(milliseconds: 700), (timer) {
+    _generationTimer =
+        Timer.periodic(const Duration(milliseconds: 700), (timer) {
       if (currentStep < 3) {
         currentStep++;
         setState(() {
@@ -102,13 +95,14 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   }
 
   void _finalizeGeneration() {
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
     final random = Random();
     final List<Interval> intervals = [];
 
     // 1. Common Time Config
     final totalSeconds = _durationMinutes * 60;
-    int remainingSeconds = totalSeconds - 180 - 120; // 3 min warmup, 2 min cooldown
+    int remainingSeconds =
+        totalSeconds - 180 - 120; // 3 min warmup, 2 min cooldown
     if (remainingSeconds < 120) remainingSeconds = 120; // safety fallback
 
     if (_machineType == MachineType.treadmill) {
@@ -120,7 +114,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       double cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
 
       double speedMMin = avgSpeed * 16.67;
-      double baseCaloriesPerMin = (3.5 + 0.2 * speedMMin) * 70.0 / 200.0;
+      double baseCaloriesPerMin =
+          (3.5 + 0.2 * speedMMin) * _bodyWeightKg / 200.0;
       double baseKcal = baseCaloriesPerMin * _durationMinutes;
 
       double avgGrade = 0.0;
@@ -131,7 +126,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       if (_includeIncline) {
         // Adjust average incline (grade %) to match target calories
         if (_caloriesTarget > baseKcal) {
-          double diff = (_caloriesTarget * 200.0 / 70.0) / _durationMinutes - (3.5 + 0.2 * speedMMin);
+          double diff =
+              (_caloriesTarget * 200.0 / _bodyWeightKg) / _durationMinutes -
+                  (3.5 + 0.2 * speedMMin);
           if (diff > 0) {
             avgGrade = (diff / (0.9 * speedMMin)) * 100.0;
           }
@@ -143,7 +140,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       } else {
         // No Incline: recalculate speed to match calories
         if (_caloriesTarget > baseKcal) {
-          double targetPerMin = (_caloriesTarget * 200.0) / (70.0 * _durationMinutes);
+          double targetPerMin =
+              (_caloriesTarget * 200.0) / (_bodyWeightKg * _durationMinutes);
           double neededSpeedMMin = (targetPerMin - 3.5) / 0.2;
           avgSpeed = neededSpeedMMin / 16.67;
           avgSpeed = avgSpeed.clamp(4.0, 16.0);
@@ -191,13 +189,13 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         speedKmh: double.parse(cooldownSpeed.toStringAsFixed(1)),
         grade: 0.0,
       ));
-
     } else if (_machineType == MachineType.cycle) {
       // 3. Cycle Math
       double avgSpeed = _distanceTargetKm / (_durationMinutes / 60.0);
       double avgRpm = (avgSpeed * 2.8).clamp(50.0, 110.0);
 
-      double avgRes = _caloriesTarget / (avgRpm * _durationMinutes * 0.002 * (70.0 / 200.0));
+      double avgRes = _caloriesTarget /
+          (avgRpm * _durationMinutes * 0.002 * (_bodyWeightKg / 200.0));
       avgRes = avgRes.clamp(2.0, 18.0);
 
       // Warm up
@@ -241,18 +239,19 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         rpm: (avgRpm - 15).clamp(45, 80).toInt(),
         resistance: (avgRes - 3).clamp(1, 12).toInt(),
       ));
-
     } else {
       // 4. StairMaster Math
       double floorsPerMin = _stairsTargetFloors / _durationMinutes;
       double stepsPerMin = floorsPerMin * 16.0;
       double avgLevel = (stepsPerMin / 6.0).clamp(3.0, 15.0);
 
-      double baseCaloriesPerMin = avgLevel * 70.0 * 0.05;
+      double baseCaloriesPerMin = avgLevel * _bodyWeightKg * 0.05;
       double baseKcal = baseCaloriesPerMin * _durationMinutes;
       double levelDelta = 0.0;
       if (_caloriesTarget > baseKcal) {
-        levelDelta = ((_caloriesTarget - baseKcal) / (70.0 * _durationMinutes * 0.05)).clamp(0.0, 4.0);
+        levelDelta = ((_caloriesTarget - baseKcal) /
+                (_bodyWeightKg * _durationMinutes * 0.05))
+            .clamp(0.0, 4.0);
       }
 
       // Warm up
@@ -295,19 +294,30 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     // Name formatting
     String name = '';
     if (_machineType == MachineType.treadmill) {
-      name = 'AI Run ${_distanceTargetKm.toStringAsFixed(1)}km (${_caloriesTarget}kcal)';
+      name = l10n.customRunName(
+        _distanceTargetKm.toStringAsFixed(1),
+        _caloriesTarget,
+      );
     } else if (_machineType == MachineType.cycle) {
-      name = 'AI Cycle ${_distanceTargetKm.toStringAsFixed(1)}km (${_caloriesTarget}kcal)';
+      name = l10n.customCycleName(
+        _distanceTargetKm.toStringAsFixed(1),
+        _caloriesTarget,
+      );
     } else {
-      name = 'AI Stairs ${_stairsTargetFloors}F (${_caloriesTarget}kcal)';
+      name = l10n.customStairsName(
+        _stairsTargetFloors,
+        _caloriesTarget,
+      );
     }
 
     setState(() {
       _isGenerating = false;
       _generatedRoutine = Routine(
-        id: 'ai_${DateTime.now().millisecondsSinceEpoch}',
+        id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
         name: name,
-        difficulty: _caloriesTarget > 350 ? '높음' : (_caloriesTarget > 200 ? '중간' : '쉬움'),
+        difficulty: _caloriesTarget > 350
+            ? l10n.hard
+            : (_caloriesTarget > 200 ? l10n.medium : l10n.easy),
         intervals: intervals,
         machineType: _machineType,
       );
@@ -315,17 +325,28 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
 
     // Trigger completion feedback effects
     unawaited(SoundService().playFinished());
-    final speechText = isKorean
-        ? '맞춤형 루틴 설계를 완료했습니다. $_caloriesTarget 칼로리 소모를 목표로 시작해보세요!'
-        : 'Completed custom routine design. Let\'s target $_caloriesTarget calories!';
-    unawaited(VoiceGuideService.instance.speakCustom(speechText));
+    unawaited(
+      VoiceGuideService.instance.speakCustom(
+        l10n.customRoutineSpeech(_caloriesTarget),
+      ),
+    );
   }
 
-  void _saveRoutine() {
+  Future<void> _saveRoutine() async {
     if (_generatedRoutine == null) return;
 
-    final routineProvider = Provider.of<RoutineProvider>(context, listen: false);
-    routineProvider.addRoutine(_generatedRoutine!);
+    final routineProvider =
+        Provider.of<RoutineProvider>(context, listen: false);
+    await routineProvider.addRoutine(_generatedRoutine!);
+    if (!mounted) return;
+    AnalyticsService.instance.logEvent(
+      'custom_routine_created',
+      {
+        'machine_type': _machineType.name,
+        'duration_minutes': _durationMinutes,
+        'interval_count': _generatedRoutine!.intervals.length,
+      },
+    );
 
     Navigator.pop(context); // Close bottom sheet
   }
@@ -334,49 +355,21 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
 
-    final focusOptions = [
-      (key: 'hiit', label: isKorean ? 'HIIT 인터벌' : 'HIIT'),
-      (key: 'fat_burn', label: isKorean ? '지방 태우기' : 'Fat Burn'),
-      (key: 'endurance', label: isKorean ? '지구력 향상' : 'Endurance'),
-      (key: 'cardio_peak', label: isKorean ? '심폐 기능 극대화' : 'Cardio Peak'),
-    ];
-
-    final difficultyOptions = isKorean ? ['쉬움', '중간', '높음'] : ['Easy', 'Medium', 'Hard'];
-
-    return Container(
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+    return AppBottomSheetFrame(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.85,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag handle
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.dividerColor,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-
           if (_isGenerating) ...[
-            _buildLoadingState(theme, appColors, isKorean)
+            _buildLoadingState(theme, appColors)
           ] else if (_generatedRoutine != null) ...[
-            _buildPreviewState(theme, appColors, isKorean)
+            _buildPreviewState(theme, appColors)
           ] else ...[
             Flexible(
-              child: _buildConfigurationState(theme, appColors, isKorean, focusOptions, difficultyOptions),
+              child: _buildConfigurationState(theme, appColors),
             ),
           ],
         ],
@@ -384,8 +377,14 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     );
   }
 
-  Widget _buildLoadingState(ThemeData theme, AppColors appColors, bool isKorean) {
-    final phrases = isKorean ? _loadingPhrasesKo : _loadingPhrasesEn;
+  Widget _buildLoadingState(ThemeData theme, AppColors appColors) {
+    final l10n = AppLocalizations.of(context)!;
+    final phrases = [
+      l10n.customRoutineLoadingTarget,
+      l10n.customRoutineLoadingStructure,
+      l10n.customRoutineLoadingPace,
+      l10n.customRoutineLoadingVoice,
+    ];
     return Expanded(
       child: Center(
         child: Padding(
@@ -400,7 +399,11 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [Colors.purpleAccent, Colors.blueAccent, Colors.cyanAccent],
+                    colors: [
+                      Colors.purpleAccent,
+                      Colors.blueAccent,
+                      Colors.cyanAccent
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -425,7 +428,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               ),
               const SizedBox(height: 48),
               Text(
-                isKorean ? 'AI가 운동 루틴을 생성하고 있습니다' : 'AI is designing your routine...',
+                l10n.customRoutineGenerating,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -443,10 +446,16 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     child: Row(
                       children: [
                         Icon(
-                          isDone ? Icons.check_circle : (isCurrent ? Icons.circle_outlined : Icons.circle_outlined),
-                          color: isDone 
-                              ? Colors.greenAccent 
-                              : (isCurrent ? Colors.blueAccent : Colors.grey.withValues(alpha: 0.4)),
+                          isDone
+                              ? Icons.check_circle
+                              : (isCurrent
+                                  ? Icons.circle_outlined
+                                  : Icons.circle_outlined),
+                          color: isDone
+                              ? Colors.greenAccent
+                              : (isCurrent
+                                  ? Colors.blueAccent
+                                  : Colors.grey.withValues(alpha: 0.4)),
                           size: 20,
                         ),
                         const SizedBox(width: 16),
@@ -454,10 +463,13 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           phrases[idx],
                           style: TextStyle(
                             fontSize: 15,
-                            fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w400,
-                            color: isDone 
-                                ? theme.colorScheme.onSurface 
-                                : (isCurrent ? theme.colorScheme.primary : appColors.mutedText),
+                            fontWeight:
+                                isCurrent ? FontWeight.w600 : FontWeight.w400,
+                            color: isDone
+                                ? theme.colorScheme.onSurface
+                                : (isCurrent
+                                    ? theme.colorScheme.primary
+                                    : appColors.mutedText),
                           ),
                         ),
                       ],
@@ -472,7 +484,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     );
   }
 
-  Widget _buildPreviewState(ThemeData theme, AppColors appColors, bool isKorean) {
+  Widget _buildPreviewState(ThemeData theme, AppColors appColors) {
+    final l10n = AppLocalizations.of(context)!;
     return Expanded(
       child: Column(
         children: [
@@ -487,7 +500,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isKorean ? '생성 완료!' : 'Generation Complete!',
+                        l10n.generationComplete,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -506,12 +519,20 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.caloriesEstimateByWeight,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: appColors.mutedText,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 TextButton(
                   onPressed: _startGeneration,
-                  child: Text(isKorean ? '재생성' : 'Regenerate'),
+                  child: Text(l10n.regenerate),
                 ),
               ],
             ),
@@ -522,67 +543,29 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: _buildFlatIntervalList(theme, appColors, isKorean),
+              child: _buildFlatIntervalList(theme, appColors),
             ),
           ),
 
-          // Bottom Bar
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
-            ),
-            child: SafeArea(
-              top: false,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      ),
-                      onPressed: () => setState(() => _generatedRoutine = null),
-                      child: Text(
-                        isKorean ? '이전으로' : 'Back',
-                        style: TextStyle(color: theme.colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: theme.colorScheme.primary,
-                        foregroundColor: theme.colorScheme.onPrimary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      ),
-                      onPressed: _saveRoutine,
-                      child: Text(
-                        isKorean ? '루틴 저장' : 'Save Routine',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          BottomSheetActionBar(
+            secondaryLabel: l10n.adjustGoals,
+            primaryLabel: l10n.saveRoutine,
+            onSecondaryPressed: () => setState(() => _generatedRoutine = null),
+            onPrimaryPressed: _saveRoutine,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFlatIntervalList(ThemeData theme, AppColors appColors, bool isKorean) {
+  Widget _buildFlatIntervalList(ThemeData theme, AppColors appColors) {
     final l10n = AppLocalizations.of(context)!;
     final isDark = theme.brightness == Brightness.dark;
     final layeredSurfaceColor =
         isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
     final chipSurfaceColor = isDark ? const Color(0xFF3C3C3C) : Colors.white;
-    final settingsProvider = Provider.of<AppSettingsProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -598,7 +581,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           case MachineType.treadmill:
             if (interval.speedKmh != null && interval.grade != null) {
               pill1Text = settingsProvider.formatSpeed(interval.speedKmh!);
-              pill2Text = '${interval.grade!.toStringAsFixed(1)}% ${l10n.incline}';
+              pill2Text =
+                  '${interval.grade!.toStringAsFixed(1)}% ${l10n.incline}';
             }
             break;
           case MachineType.cycle:
@@ -636,7 +620,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
                         color: chipSurfaceColor,
                         borderRadius: BorderRadius.circular(14),
@@ -653,7 +638,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     if (pill1Text != null) ...[
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
                           color: chipSurfaceColor,
                           borderRadius: BorderRadius.circular(14),
@@ -671,7 +657,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     if (pill2Text != null) ...[
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
                           color: chipSurfaceColor,
                           borderRadius: BorderRadius.circular(14),
@@ -699,9 +686,6 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   Widget _buildConfigurationState(
     ThemeData theme,
     AppColors appColors,
-    bool isKorean,
-    List<({String key, String label})> focusOptions,
-    List<String> difficultyOptions,
   ) {
     final l10n = AppLocalizations.of(context)!;
     final isStairMaster = _machineType == MachineType.stairmaster;
@@ -726,7 +710,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               decoration: BoxDecoration(
                 color: theme.colorScheme.primary.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.15), width: 1),
+                border: Border.all(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                    width: 1),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -738,7 +724,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'AI Workout Designer',
+                    l10n.customRoutineBuilder,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
@@ -772,17 +758,18 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         Icon(Icons.timer_outlined, color: iconColor, size: 20),
                         const SizedBox(width: 8),
                         Text(
-                          isKorean ? '운동 시간' : 'Duration',
+                          l10n.duration,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                       ],
                     ),
                     Text(
-                      '$_durationMinutes ${isKorean ? '분' : 'min'}',
+                      l10n.durationMinutes(_durationMinutes),
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -796,18 +783,23 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    inactiveTrackColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                     thumbColor: theme.colorScheme.primary,
-                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                    overlayColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 18),
                   ),
                   child: Slider(
                     value: _durationMinutes.toDouble(),
                     min: 10,
                     max: 60,
                     divisions: 10,
-                    onChanged: (val) => setState(() => _durationMinutes = val.toInt()),
+                    onChanged: (val) =>
+                        setState(() => _durationMinutes = val.toInt()),
                   ),
                 ),
               ],
@@ -832,24 +824,29 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     Row(
                       children: [
                         Icon(
-                          isStairMaster ? Icons.stairs_outlined : Icons.directions_run_outlined,
+                          isStairMaster
+                              ? Icons.stairs_outlined
+                              : Icons.directions_run_outlined,
                           color: iconColor,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          isStairMaster ? l10n.targetStairs : l10n.targetDistance,
+                          isStairMaster
+                              ? l10n.targetStairs
+                              : l10n.targetDistance,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                       ],
                     ),
                     Text(
                       isStairMaster
-                          ? '$_stairsTargetFloors ${isKorean ? '층' : 'Floors'}'
+                          ? l10n.floorCount(_stairsTargetFloors)
                           : '${_distanceTargetKm.toStringAsFixed(1)} km',
                       style: TextStyle(
                         fontSize: 17,
@@ -864,11 +861,15 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    inactiveTrackColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                     thumbColor: theme.colorScheme.primary,
-                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                    overlayColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 18),
                   ),
                   child: isStairMaster
                       ? Slider(
@@ -876,15 +877,81 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           min: 10,
                           max: 200,
                           divisions: 19,
-                          onChanged: (val) => setState(() => _stairsTargetFloors = val.toInt()),
+                          onChanged: (val) =>
+                              setState(() => _stairsTargetFloors = val.toInt()),
                         )
                       : Slider(
                           value: _distanceTargetKm,
                           min: 1.0,
                           max: 15.0,
                           divisions: 28,
-                          onChanged: (val) => setState(() => _distanceTargetKm = val),
+                          onChanged: (val) =>
+                              setState(() => _distanceTargetKm = val),
                         ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Used only for this calculation and never saved to weight history.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: cardBgColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderColor, width: 1),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.monitor_weight_outlined, color: iconColor, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.currentWeight,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 64,
+                  child: TextFormField(
+                    initialValue: '70',
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.right,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(3),
+                    ],
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w900,
+                      color: theme.colorScheme.primary,
+                    ),
+                    onChanged: (value) {
+                      final weight = double.tryParse(value);
+                      if (weight != null && weight > 0) {
+                        _bodyWeightKg = weight;
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'kg',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: appColors.mutedText,
+                  ),
                 ),
               ],
             ),
@@ -907,14 +974,16 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.local_fire_department_outlined, color: iconColor, size: 20),
+                        Icon(Icons.local_fire_department_outlined,
+                            color: iconColor, size: 20),
                         const SizedBox(width: 8),
                         Text(
                           l10n.targetCalories,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -934,18 +1003,23 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    inactiveTrackColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                     thumbColor: theme.colorScheme.primary,
-                    overlayColor: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                    overlayColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.12),
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 9),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 18),
                   ),
                   child: Slider(
                     value: _caloriesTarget.toDouble(),
                     min: 50,
                     max: 1000,
                     divisions: 19,
-                    onChanged: (val) => setState(() => _caloriesTarget = val.toInt()),
+                    onChanged: (val) =>
+                        setState(() => _caloriesTarget = val.toInt()),
                   ),
                 ),
               ],
@@ -970,11 +1044,12 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       Icon(Icons.trending_up, color: iconColor, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        isKorean ? '경사도(Incline) 적용' : 'Include Incline (Grade)',
+                        l10n.includeIncline,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -1003,7 +1078,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 backgroundColor: const Color(0xFFE53935), // 스포츠 레드
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
               onPressed: _startGeneration,
@@ -1013,7 +1089,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   const Icon(Icons.auto_awesome, color: Colors.white, size: 18),
                   const SizedBox(width: 8),
                   Text(
-                    isKorean ? 'AI 루틴 생성하기' : 'Generate AI Routine',
+                    l10n.generateCustomRoutine,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -1029,39 +1105,5 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         ],
       ),
     );
-  }
-}
-
-extension AppLocalizationsAiExtension on AppLocalizations {
-  String get targetCalories {
-    try {
-      return (this as dynamic).targetCalories ?? '목표 칼로리';
-    } catch (_) {
-      return '목표 칼로리';
-    }
-  }
-
-  String get targetStairs {
-    try {
-      return (this as dynamic).targetStairs ?? '목표 층수';
-    } catch (_) {
-      return '목표 층수';
-    }
-  }
-
-  String get targetDistance {
-    try {
-      return (this as dynamic).targetDistance ?? '목표 거리';
-    } catch (_) {
-      return '목표 거리';
-    }
-  }
-
-  String get aiSuccessMessage {
-    try {
-      return (this as dynamic).aiSuccessMessage ?? '맞춤형 루틴 설계를 완료했습니다!';
-    } catch (_) {
-      return '맞춤형 루틴 설계를 완료했습니다!';
-    }
   }
 }

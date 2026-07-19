@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import '../../../app_shell/app_shell.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/bottom_sheet_utils.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/app_bottom_sheet.dart';
+import '../../../widgets/bottom_sheet_action_bar.dart';
 
 /// Reusable premium bottom sheet with consistent styling
 /// Used for premium gates, membership promotions, etc.
@@ -18,6 +20,19 @@ class PremiumBottomSheet {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    AnalyticsService.instance.logEvent(
+      'paywall_viewed',
+      {'source': 'premium_gate'},
+    );
+
+    final primaryAction = onPrimary ??
+        () {
+          Navigator.pop(context);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            AppShell.navigateToPremiumTab();
+          });
+        };
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -30,13 +45,13 @@ class PremiumBottomSheet {
         description: description,
         bulletItems: bulletItems,
         primaryButtonText: primaryButtonText ?? l10n.viewMembership,
-        onPrimary: onPrimary ??
-            () {
-              Navigator.pop(context);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                AppShell.navigateToPremiumTab();
-              });
-            },
+        onPrimary: () {
+          AnalyticsService.instance.logEvent(
+            'premium_clicked',
+            {'source': 'premium_gate'},
+          );
+          primaryAction();
+        },
       ),
     );
   }
@@ -61,29 +76,10 @@ class _PremiumBottomSheetContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
+    return AppBottomSheetFrame(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag handle
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -119,38 +115,13 @@ class _PremiumBottomSheetContent extends StatelessWidget {
                     child: _buildBenefitItem(context, entry.value),
                   );
                 }),
-                const SizedBox(height: 32),
-                // Primary CTA Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: onPrimary,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      foregroundColor: theme.colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      primaryButtonText,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                // Respects system bottom inset and adds minimal padding
-                SizedBox(
-                  height: 12 + BottomSheetUtils.getSystemBottomInset(context),
-                ),
+                const SizedBox(height: 8),
               ],
             ),
+          ),
+          BottomSheetPrimaryActionBar(
+            label: primaryButtonText,
+            onPressed: onPrimary,
           ),
         ],
       ),

@@ -972,4 +972,200 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get placeQrInside => '请将二维码放入对齐框内。';
+
+  @override
+  String get customRoutineBuilder => '定制训练生成';
+
+  @override
+  String get customRoutineGenerating => '正在生成定制训练…';
+
+  @override
+  String get customRoutineLoadingTarget => '正在设定有氧强度目标…';
+
+  @override
+  String get customRoutineLoadingStructure => '正在安排热身和放松阶段…';
+
+  @override
+  String get customRoutineLoadingPace => '正在计算各阶段配速…';
+
+  @override
+  String get customRoutineLoadingVoice => '正在准备语音指导…';
+
+  @override
+  String get generationComplete => '生成完成！';
+
+  @override
+  String get regenerate => '重新生成';
+
+  @override
+  String get caloriesEstimateByWeight => '卡路里为根据所填体重计算的估算值。';
+
+  @override
+  String get commonBack => '返回';
+
+  @override
+  String get adjustGoals => '修改条件';
+
+  @override
+  String get targetCalories => '目标卡路里';
+
+  @override
+  String get targetStairs => '目标楼层';
+
+  @override
+  String get targetDistance => '目标距离';
+
+  @override
+  String get currentWeight => '当前体重';
+
+  @override
+  String get includeIncline => '包含坡度';
+
+  @override
+  String get generateCustomRoutine => '生成定制训练';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count 层';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return '定制跑步 $distance公里（$calories千卡）';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return '定制骑行 $distance公里（$calories千卡）';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return '定制爬楼 $floors层（$calories千卡）';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return '定制训练已准备好。开始挑战约$calories卡路里吧！';
+  }
+
+  @override
+  String get weightDeleteTitle => '删除记录';
+
+  @override
+  String get weightDeleteConfirm => '确定要删除这条体重记录吗？';
+
+  @override
+  String get achievementUnlocked => '🏆 解锁成就！';
+
+  @override
+  String get achievementCongratulations => '恭喜你获得新徽章！';
+
+  @override
+  String get awesome => '太棒了！';
+
+  @override
+  String get shareCardDefault => '9:14（默认）';
+
+  @override
+  String get shareCardStory => '9:16（故事）';
+
+  @override
+  String get shareCardSquare => '1:1（正方形）';
+
+  @override
+  String get customizeShareCard => '自定义分享卡片';
+
+  @override
+  String get shareRoutine => '分享训练';
+
+  @override
+  String get shareViaQrCode => '通过二维码分享';
+
+  @override
+  String get routineLimitReached => '已达到训练上限';
+
+  @override
+  String get routineLimitMessage => '免费用户最多可保存2个跑步机训练。请升级至高级版或删除已有训练。';
+
+  @override
+  String get importSharedRoutine => '导入分享的训练';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return '扫描的二维码中发现训练。\n\n• 名称：$name\n• 难度：$difficulty\n• 阶段数：$count\n\n要保存到训练库吗？';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return '剪贴板中发现分享的训练。\n\n• 名称：$name\n• 难度：$difficulty\n• 阶段数：$count\n\n要保存到训练库吗？';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return '已成功导入“$name”！';
+  }
+
+  @override
+  String get importAction => '导入';
+
+  @override
+  String get addRoutineOption => '选择添加训练的方式';
+
+  @override
+  String get createCustomRoutine => '创建自定义训练';
+
+  @override
+  String get importFromClipboard => '从剪贴板导入';
+
+  @override
+  String get countdownTiming => '倒计时提醒';
+
+  @override
+  String get noAnnouncements => '无提醒';
+
+  @override
+  String secondsShort(int seconds) {
+    return '提前$seconds秒';
+  }
+
+  @override
+  String get selectCountdownTimings => '选择倒计时提醒';
+
+  @override
+  String get countdownTimingMessage => '请选择在训练阶段切换前多久播放语音提醒。';
+
+  @override
+  String secondsLeft(int seconds) {
+    return '剩余$seconds秒';
+  }
+
+  @override
+  String get qrShareInstruction => '使用另一台设备上的 Valcue 扫描此二维码，\n即可立即导入该训练。';
+
+  @override
+  String get quickStart => '快速开始';
+
+  @override
+  String get sessionRepeatBlock => '训练阶段重复组';
+
+  @override
+  String repeatTimes(int count) {
+    return '重复 $count 次';
+  }
+
+  @override
+  String get addRepeatBlock => '添加重复组';
+
+  @override
+  String get unableToShareWorkout => '无法分享训练。';
+
+  @override
+  String get unableToOpenPrivacyPolicy => '无法打开隐私政策。';
 }

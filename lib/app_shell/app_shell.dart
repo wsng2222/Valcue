@@ -15,20 +15,23 @@ import '../ui/glass/liquid_glass_pill_navbar.dart';
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
 import '../widgets/bounceable.dart';
+import '../services/analytics_service.dart';
+import '../widgets/app_message.dart';
 
 const _privacyPolicyUri =
     'https://wsng2222.github.io/Valcue/privacy-policy.html';
 
 Future<void> _openPrivacyPolicy(BuildContext context) async {
   final messenger = ScaffoldMessenger.maybeOf(context);
+  final errorMessage = AppLocalizations.of(context)!.unableToOpenPrivacyPolicy;
   final uri = Uri.parse(_privacyPolicyUri);
   final launched = await launchUrl(uri);
 
   if (!launched) {
     messenger?.showSnackBar(
-      const SnackBar(
-        content: Text('Unable to open privacy policy'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(errorMessage),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -137,7 +140,14 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  final int initialIndex;
+  final bool enableClipboardChecks;
+
+  const AppShell({
+    super.key,
+    this.initialIndex = 1,
+    this.enableClipboardChecks = true,
+  });
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -214,14 +224,26 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
-  int _currentIndex = 1; // Default to Routine tab
+  late int _currentIndex;
+  late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex.clamp(0, 3);
+    _screens = [
+      const _PremiumScreen(),
+      RoutineListScreen(
+        key: widget.enableClipboardChecks ? RoutineListScreen.globalKey : null,
+      ),
+      const SettingsScreen(),
+      const ProfileScreen(),
+    ];
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkClipboard();
+      if (widget.enableClipboardChecks) {
+        _checkClipboard();
+      }
     });
   }
 
@@ -233,7 +255,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (widget.enableClipboardChecks && state == AppLifecycleState.resumed) {
       _checkClipboard();
     }
   }
@@ -245,17 +267,16 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   }
 
   void _changeTab(int index) {
+    if (index == 0 && _currentIndex != 0) {
+      AnalyticsService.instance.logEvent(
+        'paywall_viewed',
+        {'source': 'premium_tab'},
+      );
+    }
     setState(() {
       _currentIndex = index;
     });
   }
-
-  final List<Widget> _screens = [
-    const _PremiumScreen(),
-    RoutineListScreen(key: RoutineListScreen.globalKey),
-    const SettingsScreen(),
-    const ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -402,8 +423,32 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                 _SupportingLine(selectionNotifier: _selectionNotifier),
                 Consumer<AppSettingsProvider>(
                   builder: (context, provider, child) {
-                    void onPurchase() {
-                      provider.updatePremium(true);
+                    Future<void> onPurchase() async {
+                      final plan = _selectionNotifier.value.name;
+                      AnalyticsService.instance.logEvent(
+                        'premium_clicked',
+                        {
+                          'source': 'premium_tab',
+                          'plan': plan,
+                        },
+                      );
+                      AnalyticsService.instance.logEvent(
+                        'premium_purchase_started',
+                        {
+                          'source': 'premium_tab',
+                          'plan': plan,
+                          'checkout_mode': 'local_preview',
+                        },
+                      );
+                      await provider.updatePremium(true);
+                      AnalyticsService.instance.logEvent(
+                        'premium_purchased',
+                        {
+                          'source': 'premium_tab',
+                          'plan': plan,
+                          'checkout_mode': 'local_preview',
+                        },
+                      );
                     }
 
                     final buttonLabel = Text(
@@ -441,16 +486,18 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                                 ? AdaptiveButton.child(
                                     onPressed: () {},
                                     color: theme.colorScheme.primary,
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
                                     borderRadius: BorderRadius.circular(18),
                                     child: buttonLabel,
                                   )
                                 : ElevatedButton(
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: theme.colorScheme.primary,
-                                      foregroundColor: theme.colorScheme.onPrimary,
+                                      backgroundColor:
+                                          theme.colorScheme.primary,
+                                      foregroundColor:
+                                          theme.colorScheme.onPrimary,
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 20,
                                       ),
@@ -559,11 +606,10 @@ class _PremiumScreenState extends State<_PremiumScreen> {
                         _FooterLink(
                           text: l10n.restore,
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(l10n.restore),
-                                duration: const Duration(seconds: 1),
-                              ),
+                            showAppMessage(
+                              context,
+                              l10n.restore,
+                              type: AppMessageType.success,
                             );
                           },
                         ),

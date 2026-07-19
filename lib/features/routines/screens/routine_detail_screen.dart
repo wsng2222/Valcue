@@ -15,6 +15,7 @@ import '../../../services/ad_service.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
+import '../../../widgets/app_dialog.dart';
 
 class RoutineDetailSheet {
   static void show(BuildContext context, Routine routine,
@@ -75,18 +76,14 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                 ),
               );
             },
-            child: Text(
-              Localizations.localeOf(context).languageCode == 'ko' ? '루틴 공유하기' : 'Share Routine',
-            ),
+            child: Text(l10n.shareRoutine),
           ),
           CupertinoActionSheetAction(
             onPressed: () {
               Navigator.pop(context); // Close action sheet
               QrShareDialog.show(context, routine);
             },
-            child: Text(
-              Localizations.localeOf(context).languageCode == 'ko' ? 'QR 코드로 공유' : 'Share via QR Code',
-            ),
+            child: Text(l10n.shareViaQrCode),
           ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
@@ -107,51 +104,28 @@ class _RoutineDetailSheetContent extends StatelessWidget {
 
   void _confirmDelete(BuildContext context, RoutineProvider routineProvider) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final baseTextStyle = theme.textTheme.bodyMedium;
 
-    showCupertinoDialog(
+    showAppDialog<void>(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: DefaultTextStyle.merge(
-          style: baseTextStyle?.copyWith(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface,
-            decoration: TextDecoration.none,
-          ),
-          child: Text(l10n.deleteRoutineTitle),
-        ),
-        content: DefaultTextStyle.merge(
-          style: baseTextStyle?.copyWith(
-            fontSize: 13,
-            color: theme.colorScheme.onSurface,
-            decoration: TextDecoration.none,
-          ),
-          child: Text(l10n.deleteRoutineMessage),
-        ),
+      builder: (dialogContext) => AppDialog(
+        icon: Icons.delete_outline_rounded,
+        iconColor: Theme.of(dialogContext).colorScheme.error,
+        title: l10n.deleteRoutineTitle,
+        message: l10n.deleteRoutineMessage,
         actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context),
-            child: DefaultTextStyle.merge(
-              style: baseTextStyle?.copyWith(decoration: TextDecoration.none),
-              child: Text(l10n.cancel),
-            ),
+          AppDialogAction(
+            label: l10n.cancel,
+            style: AppDialogActionStyle.secondary,
+            onPressed: () => Navigator.of(dialogContext).pop(),
           ),
-          CupertinoDialogAction(
-            isDestructiveAction: true,
+          AppDialogAction(
+            label: l10n.delete,
+            style: AppDialogActionStyle.destructive,
             onPressed: () {
               routineProvider.deleteRoutine(routine.id);
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Close detail sheet
+              Navigator.of(dialogContext).pop();
+              Navigator.of(context).pop();
             },
-            child: DefaultTextStyle.merge(
-              style: baseTextStyle?.copyWith(
-                color: theme.colorScheme.error,
-                decoration: TextDecoration.none,
-              ),
-              child: Text(l10n.delete),
-            ),
           ),
         ],
       ),
@@ -210,7 +184,7 @@ class _RoutineDetailSheetContent extends StatelessWidget {
           ),
           // Bottom buttons
           Container(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               border: Border(
@@ -237,7 +211,7 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                           ),
                         );
                       },
-                      borderRadius: 14,
+                      borderRadius: 999,
                       child: Text(
                         AppLocalizations.of(context)!.editRoutine,
                         style: TextStyle(
@@ -333,7 +307,7 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                         foregroundColor: theme.colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(999),
                         ),
                         elevation: 0,
                       ),

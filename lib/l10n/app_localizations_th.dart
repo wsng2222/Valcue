@@ -1008,4 +1008,205 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get placeQrInside => 'วางคิวอาร์โค้ดให้อยู่ในกรอบนำทาง';
+
+  @override
+  String get customRoutineBuilder => 'สร้างรูทีนเฉพาะบุคคล';
+
+  @override
+  String get customRoutineGenerating => 'กำลังสร้างรูทีนเฉพาะบุคคล…';
+
+  @override
+  String get customRoutineLoadingTarget => 'กำลังกำหนดเป้าหมายความหนัก…';
+
+  @override
+  String get customRoutineLoadingStructure =>
+      'กำลังจัดช่วงวอร์มอัพและคูลดาวน์…';
+
+  @override
+  String get customRoutineLoadingPace => 'กำลังคำนวณจังหวะแต่ละช่วง…';
+
+  @override
+  String get customRoutineLoadingVoice => 'กำลังเตรียมคำแนะนำเสียง…';
+
+  @override
+  String get generationComplete => 'สร้างเสร็จแล้ว!';
+
+  @override
+  String get regenerate => 'สร้างใหม่';
+
+  @override
+  String get caloriesEstimateByWeight => 'แคลอรีเป็นค่าประมาณจากน้ำหนักที่กรอก';
+
+  @override
+  String get commonBack => 'กลับ';
+
+  @override
+  String get adjustGoals => 'ปรับเป้าหมาย';
+
+  @override
+  String get targetCalories => 'เป้าหมายแคลอรี';
+
+  @override
+  String get targetStairs => 'เป้าหมายจำนวนชั้น';
+
+  @override
+  String get targetDistance => 'ระยะทางเป้าหมาย';
+
+  @override
+  String get currentWeight => 'น้ำหนักปัจจุบัน';
+
+  @override
+  String get includeIncline => 'รวมความชัน';
+
+  @override
+  String get generateCustomRoutine => 'สร้างรูทีนเฉพาะบุคคล';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes นาที';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count ชั้น';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'วิ่งเฉพาะบุคคล $distance กม. ($calories kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'ปั่นจักรยานเฉพาะบุคคล $distance กม. ($calories kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'ขึ้นบันไดเฉพาะบุคคล $floors ชั้น ($calories kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'รูทีนเฉพาะบุคคลพร้อมแล้ว ตั้งเป้าประมาณ $calories แคลอรีกันเลย!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'ลบบันทึก';
+
+  @override
+  String get weightDeleteConfirm => 'ต้องการลบบันทึกน้ำหนักนี้หรือไม่';
+
+  @override
+  String get achievementUnlocked => '🏆 ปลดล็อกความสำเร็จ!';
+
+  @override
+  String get achievementCongratulations => 'ยินดีด้วย! คุณได้รับเหรียญตราใหม่';
+
+  @override
+  String get awesome => 'ยอดเยี่ยม!';
+
+  @override
+  String get shareCardDefault => '9:14 (ค่าเริ่มต้น)';
+
+  @override
+  String get shareCardStory => '9:16 (สตอรี่)';
+
+  @override
+  String get shareCardSquare => '1:1 (สี่เหลี่ยม)';
+
+  @override
+  String get customizeShareCard => 'ปรับแต่งการ์ดแชร์';
+
+  @override
+  String get shareRoutine => 'แชร์รูทีน';
+
+  @override
+  String get shareViaQrCode => 'แชร์ผ่านคิวอาร์โค้ด';
+
+  @override
+  String get routineLimitReached => 'ถึงขีดจำกัดรูทีนแล้ว';
+
+  @override
+  String get routineLimitMessage =>
+      'ผู้ใช้ฟรีบันทึกรูทีนลู่วิ่งได้สูงสุด 2 รูทีน อัปเกรดเป็น Premium หรือลบรูทีนเดิม';
+
+  @override
+  String get importSharedRoutine => 'นำเข้ารูทีนที่แชร์';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'พบรูทีนในคิวอาร์โค้ด\n\n• ชื่อ: $name\n• ความยาก: $difficulty\n• ช่วง: $count\n\nต้องการบันทึกลงคลังหรือไม่';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'พบรูทีนที่แชร์ในคลิปบอร์ด\n\n• ชื่อ: $name\n• ความยาก: $difficulty\n• ช่วง: $count\n\nต้องการบันทึกลงคลังหรือไม่';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return 'นำเข้า “$name” สำเร็จ!';
+  }
+
+  @override
+  String get importAction => 'นำเข้า';
+
+  @override
+  String get addRoutineOption => 'เลือกวิธีเพิ่มรูทีน';
+
+  @override
+  String get createCustomRoutine => 'สร้างรูทีนกำหนดเอง';
+
+  @override
+  String get importFromClipboard => 'นำเข้าจากคลิปบอร์ด';
+
+  @override
+  String get countdownTiming => 'การแจ้งเตือนนับถอยหลัง';
+
+  @override
+  String get noAnnouncements => 'ไม่มีการแจ้งเตือน';
+
+  @override
+  String secondsShort(int seconds) {
+    return 'ก่อน $seconds วิ.';
+  }
+
+  @override
+  String get selectCountdownTimings => 'เลือกเวลานับถอยหลัง';
+
+  @override
+  String get countdownTimingMessage =>
+      'เลือกเวลาที่จะได้ยินเวลาคงเหลือก่อนเปลี่ยนช่วง';
+
+  @override
+  String secondsLeft(int seconds) {
+    return 'เหลือ $seconds วินาที';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'สแกนคิวอาร์โค้ดนี้จากแอป Valcue บนอุปกรณ์อื่น\nเพื่อนำเข้ารูทีนทันที';
+
+  @override
+  String get quickStart => 'เริ่มด่วน';
+
+  @override
+  String get sessionRepeatBlock => 'บล็อกเซสชันแบบทำซ้ำ';
+
+  @override
+  String repeatTimes(int count) {
+    return 'ทำซ้ำ $count ครั้ง';
+  }
+
+  @override
+  String get addRepeatBlock => 'เพิ่มบล็อกทำซ้ำ';
+
+  @override
+  String get unableToShareWorkout => 'ไม่สามารถแชร์การออกกำลังกายได้';
+
+  @override
+  String get unableToOpenPrivacyPolicy =>
+      'ไม่สามารถเปิดนโยบายความเป็นส่วนตัวได้';
 }

@@ -200,7 +200,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
           return (l10n as dynamic).templateStairmasterAdvanced1Title ??
               'Hard Blocks 20';
         default:
-          return 'Untitled Routine';
+          return l10n.unnamedRoutine;
       }
     } catch (e) {
       // Fallback to English defaults
@@ -242,7 +242,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
         case 'template_stairmaster_advanced_2_title':
           return 'Sprint Steps 18';
         default:
-          return 'Untitled Routine';
+          return l10n.unnamedRoutine;
       }
     }
   }

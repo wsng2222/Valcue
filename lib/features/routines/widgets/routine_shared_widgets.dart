@@ -268,9 +268,9 @@ class IntervalList extends StatelessWidget {
     final uniqueIntervals = group.intervals.sublist(0, uniqueCount);
     final uniqueIndices = group.originalIndices.sublist(0, uniqueCount);
 
-    final locale = Localizations.localeOf(context).languageCode;
-    final sessionLabel = locale == 'ko' ? '세션 반복 세트' : 'Session Repeat Block';
-    final repeatLabel = locale == 'ko' ? '$repeatCount회 반복' : '${repeatCount}x repeats';
+    final l10n = AppLocalizations.of(context)!;
+    final sessionLabel = l10n.sessionRepeatBlock;
+    final repeatLabel = l10n.repeatTimes(repeatCount);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -369,8 +369,7 @@ class IntervalList extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context).languageCode;
-    final addRepeatBlockLabel = locale == 'ko' ? '반복 세션 추가' : 'Add Repeat Block';
+    final addRepeatBlockLabel = l10n.addRepeatBlock;
 
     if (intervals.isEmpty && !isEditable) {
       return Padding(

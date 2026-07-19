@@ -2,17 +2,26 @@ import 'package:flutter/foundation.dart';
 import '../models/workout_session.dart';
 import '../storage/workout_session_storage.dart';
 import '../../routines/models/machine_type.dart';
+import '../../../screenshot/store_screenshot_data.dart';
 
 class WorkoutHistoryProvider with ChangeNotifier {
   final WorkoutSessionStorage _storage = WorkoutSessionStorage();
+  final bool _inMemoryOnly;
   List<WorkoutSession> _sessions = [];
   bool _isLoading = false;
 
   List<WorkoutSession> get sessions => _sessions;
   bool get isLoading => _isLoading;
 
-  WorkoutHistoryProvider() {
-    loadSessions();
+  WorkoutHistoryProvider({List<WorkoutSession>? initialSessions})
+      : _inMemoryOnly = initialSessions != null || kStoreScreenshotMode {
+    if (initialSessions != null || kStoreScreenshotMode) {
+      _sessions = List<WorkoutSession>.from(
+        initialSessions ?? buildStoreScreenshotSessions(),
+      )..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    } else {
+      loadSessions();
+    }
   }
 
   Future<void> loadSessions() async {
@@ -27,6 +36,7 @@ class WorkoutHistoryProvider with ChangeNotifier {
     _sessions = [session, ..._sessions]
       ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
     notifyListeners();
+    if (_inMemoryOnly) return;
     _storage.addSession(session).catchError((e) {
       loadSessions();
     });
@@ -35,6 +45,7 @@ class WorkoutHistoryProvider with ChangeNotifier {
   Future<void> deleteSession(String id) async {
     _sessions = _sessions.where((s) => s.id != id).toList();
     notifyListeners();
+    if (_inMemoryOnly) return;
     _storage.deleteSession(id).catchError((e) {
       loadSessions();
     });

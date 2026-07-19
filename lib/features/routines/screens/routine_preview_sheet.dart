@@ -12,8 +12,10 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/app_shadows.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/app_bottom_sheet.dart';
+import '../../../widgets/bottom_sheet_action_bar.dart';
 
 enum _RoutinePreviewResult {
   saved,
@@ -302,10 +304,10 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
           return (l10n as dynamic).templateStairmasterAdvanced1Title ??
               'Hard Blocks 20';
         default:
-          return 'Untitled Routine';
+          return l10n.unnamedRoutine;
       }
     } catch (e) {
-      return 'Untitled Routine';
+      return l10n.unnamedRoutine;
     }
   }
 
@@ -551,6 +553,14 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
 
     // Save routine
     await provider.addRoutine(routine);
+    AnalyticsService.instance.logEvent(
+      'routine_added',
+      {
+        'source': 'recommended',
+        'machine_type': routine.machineType.name,
+        'interval_count': routine.intervals.length,
+      },
+    );
 
     if (context.mounted) {
       // Close the bottom sheet and return result to parent
@@ -687,36 +697,11 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     final theme = Theme.of(context);
     final appColors = context.appColors;
 
-    return Container(
+    return AppBottomSheetFrame(
       constraints: BoxConstraints(maxHeight: maxHeight),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        border: Border.all(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.08)
-              : appColors.border,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag handle
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
           // Content (scrollable)
           Flexible(
             child: SingleChildScrollView(
@@ -805,57 +790,17 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
               ),
             ),
           ),
-          // Bottom fixed save button
-          Container(
-            padding: EdgeInsets.fromLTRB(
-              24,
-              16,
-              24,
-              16 + MediaQuery.of(context).padding.bottom,
-            ),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              border: Border(
-                top: BorderSide(
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : appColors.border,
-                ),
-              ),
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: isSaved ? null : () => _saveTemplate(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  disabledBackgroundColor: appColors.surfaceElevated,
-                  disabledForegroundColor: appColors.mutedText,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  (() {
-                    try {
-                      return isSaved
-                          ? (l10n as dynamic).saved ?? 'Saved'
-                          : (l10n as dynamic).saveRoutine ?? 'Save Routine';
-                    } catch (e) {
-                      return isSaved ? 'Saved' : 'Save Routine';
-                    }
-                  })(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-              ),
-            ),
+          BottomSheetPrimaryActionBar(
+            label: (() {
+              try {
+                return isSaved
+                    ? (l10n as dynamic).saved ?? 'Saved'
+                    : (l10n as dynamic).saveRoutine ?? 'Save Routine';
+              } catch (e) {
+                return isSaved ? 'Saved' : 'Save Routine';
+              }
+            })(),
+            onPressed: isSaved ? null : () => _saveTemplate(context),
           ),
         ],
       ),

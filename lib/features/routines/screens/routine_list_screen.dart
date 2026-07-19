@@ -24,30 +24,20 @@ import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../widgets/bounceable.dart';
+import '../../../widgets/app_dialog.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/app_segmented_control.dart';
+import '../../../widgets/app_message.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+  return appSegmentedSelectedBackground(context);
 }
 
 SegmentedButtonThemeData _segmentedThemeData(
   BuildContext context,
   Color selectedBackground,
 ) {
-  final theme = Theme.of(context);
-  final isDark = theme.brightness == Brightness.dark;
-  final selectedForeground = isDark ? Colors.white : Colors.black87;
-  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
-
-  return SegmentedButtonThemeData(
-    style: SegmentedButton.styleFrom(
-      selectedBackgroundColor: selectedBackground,
-      selectedForegroundColor: selectedForeground,
-      foregroundColor: theme.colorScheme.onSurface,
-      backgroundColor: theme.colorScheme.surface,
-      side: BorderSide(color: borderColor),
-    ),
-  );
+  return appSegmentedThemeData(context, selectedBackground);
 }
 
 Widget _buildPlatformSegmentedControl({
@@ -58,36 +48,13 @@ Widget _buildPlatformSegmentedControl({
   required double height,
   Color? color,
 }) {
-  if (PlatformInfo.isIOS) {
-    return AdaptiveSegmentedControl(
-      key: key,
-      labels: labels,
-      selectedIndex: selectedIndex,
-      onValueChanged: onValueChanged,
-      height: height,
-      color: color,
-    );
-  }
-
-  final hasLabels = labels.isNotEmpty;
-  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
-
-  return SizedBox(
+  return AppSegmentedControl(
     key: key,
+    labels: labels,
+    selectedIndex: selectedIndex,
+    onValueChanged: onValueChanged,
     height: height,
-    width: double.infinity,
-    child: SegmentedButton<int>(
-      segments: [
-        for (var i = 0; i < labels.length; i++)
-          ButtonSegment<int>(value: i, label: Text(labels[i])),
-      ],
-      selected: hasLabels ? {safeIndex} : const <int>{},
-      showSelectedIcon: false,
-      onSelectionChanged: (selection) {
-        if (selection.isEmpty) return;
-        onValueChanged(selection.first);
-      },
-    ),
+    color: color,
   );
 }
 
@@ -174,9 +141,11 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   }
 
   Future<void> _scanQrCode(BuildContext context) async {
-    final routineProvider = Provider.of<RoutineProvider>(context, listen: false);
-    final settingsProvider = Provider.of<AppSettingsProvider>(context, listen: false);
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final routineProvider =
+        Provider.of<RoutineProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
 
     final scannedLink = await QrScannerScreen.startScanner(context);
     if (scannedLink == null || !context.mounted) return;
@@ -192,18 +161,17 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                 .where((r) => r.machineType == MachineType.treadmill)
                 .length >=
             2) {
-      showCupertinoDialog(
+      showAppDialog<void>(
         context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: Text(isKorean ? '루틴 제한 초과' : 'Routine Limit Reached'),
-          content: Text(isKorean 
-              ? '무료 버전에서는 런닝머신 루틴을 최대 2개까지만 저장할 수 있습니다. 프리미엄으로 업그레이드하거나 기존 루틴을 삭제하세요.' 
-              : 'Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.'),
+        builder: (dialogContext) => AppDialog(
+          icon: Icons.lock_outline_rounded,
+          title: l10n.routineLimitReached,
+          message: l10n.routineLimitMessage,
           actions: [
-            CupertinoDialogAction(
-              child: Text(isKorean ? '확인' : 'OK'),
-              onPressed: () => Navigator.pop(context),
-            )
+            AppDialogAction(
+              label: l10n.ok,
+              onPressed: () => Navigator.of(dialogContext).pop(),
+            ),
           ],
         ),
       );
@@ -211,32 +179,41 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     }
 
     // Show import confirmation dialog
-    showCupertinoDialog(
+    showAppDialog<void>(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(isKorean ? '공유된 루틴 가져오기' : 'Import Shared Routine'),
-        content: Text(isKorean
-            ? '스캔한 QR 코드에 루틴이 있습니다.\n\n• 이름: ${routine.name}\n• 난이도: ${routine.difficulty}\n• 구간 수: ${routine.intervals.length}개\n\n이 루틴을 내 보관함에 저장할까요?'
-            : 'A routine was detected in the scanned QR code.\n\n• Name: ${routine.name}\n• Difficulty: ${routine.difficulty}\n• Intervals: ${routine.intervals.length}\n\nWould you like to save this routine to your library?'),
+      builder: (dialogContext) => AppDialog(
+        icon: Icons.download_rounded,
+        title: l10n.importSharedRoutine,
+        message: l10n.importQrRoutinePrompt(
+          routine.name,
+          routine.difficulty,
+          routine.intervals.length,
+        ),
         actions: [
-          CupertinoDialogAction(
-            child: Text(isKorean ? '취소' : 'Cancel'),
-            onPressed: () => Navigator.pop(context),
+          AppDialogAction(
+            label: l10n.cancel,
+            style: AppDialogActionStyle.secondary,
+            onPressed: () => Navigator.of(dialogContext).pop(),
           ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text(isKorean ? '가져오기' : 'Import'),
-            onPressed: () {
-              routineProvider.addRoutine(routine);
-              Navigator.pop(context);
-              
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(isKorean 
-                      ? '\'${routine.name}\' 루틴을 성공적으로 가져왔습니다!' 
-                      : 'Successfully imported \'${routine.name}\'!'),
-                  duration: const Duration(seconds: 3),
-                ),
+          AppDialogAction(
+            label: l10n.importAction,
+            onPressed: () async {
+              await routineProvider.addRoutine(routine);
+              AnalyticsService.instance.logEvent(
+                'routine_imported',
+                {
+                  'method': 'qr',
+                  'machine_type': routine.machineType.name,
+                  'interval_count': routine.intervals.length,
+                },
+              );
+              if (!context.mounted || !dialogContext.mounted) return;
+              Navigator.of(dialogContext).pop();
+
+              showAppMessage(
+                context,
+                l10n.importRoutineSuccess(routine.name),
+                type: AppMessageType.success,
               );
             },
           ),
@@ -480,7 +457,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         Provider.of<RoutineProvider>(context, listen: false);
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
 
     // Check free limit when adding new treadmill routine
     if (machineType == MachineType.treadmill &&
@@ -496,7 +473,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
-        title: Text(isKorean ? '루틴 추가 방법 선택' : 'Add Routine Option'),
+        title: Text(l10n.addRoutineOption),
         actions: [
           CupertinoActionSheetAction(
             onPressed: () {
@@ -513,7 +490,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               children: [
                 const Icon(Icons.edit_outlined, size: 20),
                 const SizedBox(width: 8),
-                Text(isKorean ? '새 커스텀 루틴 만들기' : 'Create Custom Routine'),
+                Text(l10n.createCustomRoutine),
               ],
             ),
           ),
@@ -525,10 +502,11 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.auto_awesome, size: 20, color: Colors.blueAccent),
+                const Icon(Icons.auto_awesome,
+                    size: 20, color: Colors.blueAccent),
                 const SizedBox(width: 8),
                 Text(
-                  isKorean ? 'AI 루틴 생성기' : 'AI Routine Generator',
+                  l10n.customRoutineBuilder,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
@@ -541,7 +519,8 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             onPressed: () {
               Navigator.pop(context);
               // Trigger manual check
-              RoutineSharing.resetLastProcessedLink(); // Reset tracking so it always triggers
+              RoutineSharing
+                  .resetLastProcessedLink(); // Reset tracking so it always triggers
               RoutineSharing.checkClipboardAndImport(context);
             },
             child: Row(
@@ -549,14 +528,14 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               children: [
                 const Icon(Icons.content_paste_go, size: 20),
                 const SizedBox(width: 8),
-                Text(isKorean ? '클립보드에서 가져오기' : 'Import from Clipboard'),
+                Text(l10n.importFromClipboard),
               ],
             ),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: Text(isKorean ? '취소' : 'Cancel'),
+          child: Text(l10n.cancel),
         ),
       ),
     );
@@ -674,9 +653,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                             icon: const Icon(Icons.qr_code_scanner),
                             color: theme.colorScheme.onSurface,
                             iconSize: 26,
-                            tooltip: Localizations.localeOf(context).languageCode == 'ko'
-                                ? 'QR 코드 스캔'
-                                : 'Scan QR Code',
+                            tooltip: l10n.scanQrCode,
                             onPressed: () => _scanQrCode(context),
                           ),
                         ],
@@ -921,7 +898,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             if (previewTemplates.isNotEmpty) ...[
               const SizedBox(height: 160),
               Text(
-                'Quick start',
+                l10n.quickStart,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -1114,10 +1091,10 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
           return (l10n as dynamic).templateStairmasterAdvanced2Title ??
               'Sprint Steps 18';
         default:
-          return 'Untitled Routine';
+          return l10n.unnamedRoutine;
       }
     } catch (e) {
-      return 'Untitled Routine';
+      return l10n.unnamedRoutine;
     }
   }
 
@@ -1287,26 +1264,22 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     String localizedDifficulty =
         _getLocalizedDifficulty(context, routine.difficulty);
 
-    return Bounceable(
-      onTap: () {
-        RoutineBottomSheet.show(context, routine: routine);
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 24),
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.shadow.withValues(alpha: 0.14),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: Column(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withValues(alpha: 0.14),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -1378,37 +1351,35 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            // Full-width pill button (wrapped in IgnorePointer to let card tap dominate)
-            IgnorePointer(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 19),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    elevation: 0,
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  RoutineBottomSheet.show(context, routine: routine);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 19),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.checkRoutineStart,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.lato(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      letterSpacing: -0.3,
-                    ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.checkRoutineStart,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.lato(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w900,
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: -0.3,
                   ),
                 ),
               ),
             ),
           ],
-        ),
       ),
     );
   }

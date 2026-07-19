@@ -12,6 +12,7 @@ import '../widgets/routine_shared_widgets.dart';
 import '../widgets/interval_edit_popup.dart';
 import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../theme/app_theme.dart';
+import '../../../services/analytics_service.dart';
 
 class RoutineEditScreen extends StatefulWidget {
   final Routine? routine;
@@ -126,8 +127,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (widget.routine == null && _nameController.text.isEmpty) {
-      _nameController.text = 'Untitled Routine';
-      _originalName = 'Untitled Routine';
+      final unnamedRoutine = AppLocalizations.of(context)!.unnamedRoutine;
+      _nameController.text = unnamedRoutine;
+      _originalName = unnamedRoutine;
     }
     _validateName();
   }
@@ -457,22 +459,23 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       if (oldInterval.groupId != null) {
         final groupId = oldInterval.groupId;
         final repeatCount = oldInterval.repeatCount ?? 1;
-        
+
         final groupIndices = <int>[];
         for (int i = 0; i < _intervals.length; i++) {
           if (_intervals[i].groupId == groupId) {
             groupIndices.add(i);
           }
         }
-        
+
         if (groupIndices.isNotEmpty) {
           final uniqueCount = (groupIndices.length / repeatCount).ceil();
           final firstIndex = groupIndices.first;
           final relativeOffset = (index - firstIndex) % uniqueCount;
-          
+
           for (int r = 0; r < repeatCount; r++) {
             final targetIdx = firstIndex + relativeOffset + (r * uniqueCount);
-            if (targetIdx < _intervals.length && _intervals[targetIdx].groupId == groupId) {
+            if (targetIdx < _intervals.length &&
+                _intervals[targetIdx].groupId == groupId) {
               _intervals[targetIdx] = updatedInterval.copyWith(
                 id: _intervals[targetIdx].id,
               );
@@ -487,17 +490,16 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   }
 
   void _addRepeatBlock() {
-    final locale = Localizations.localeOf(context).languageCode;
-    final title = locale == 'ko' ? '반복 세션 추가' : 'Add Repeat Block';
-    
+    final l10n = AppLocalizations.of(context)!;
+    final title = l10n.addRepeatBlock;
+
     showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        final theme = Theme.of(context);
-        int selectedRepeats = 3;
-        
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
+        context: context,
+        builder: (context) {
+          final theme = Theme.of(context);
+          int selectedRepeats = 3;
+
+          return StatefulBuilder(builder: (context, setDialogState) {
             return Container(
               height: 280,
               padding: const EdgeInsets.only(top: 6),
@@ -516,7 +518,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -578,7 +581,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                           final count = index + 2;
                           return Center(
                             child: Text(
-                              locale == 'ko' ? '$count회 반복' : '$count repeats',
+                              l10n.repeatTimes(count),
                               style: const TextStyle(fontSize: 20),
                             ),
                           );
@@ -589,10 +592,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 ),
               ),
             );
-          }
-        );
-      }
-    );
+          });
+        });
   }
 
   void _insertRepeatBlock(int repeatCount) {
@@ -838,6 +839,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         machineType: _machineType,
       );
       await provider.addRoutine(newRoutine);
+      AnalyticsService.instance.logEvent(
+        'routine_added',
+        {
+          'source': 'manual',
+          'machine_type': newRoutine.machineType.name,
+          'interval_count': newRoutine.intervals.length,
+        },
+      );
     }
 
     if (mounted) {

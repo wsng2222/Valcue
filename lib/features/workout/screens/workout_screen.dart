@@ -26,12 +26,14 @@ import '../../../services/workout_live_activity_schedule_models.dart';
 import '../../../services/workout_live_activity_schedule_planner.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
+import '../../../services/analytics_service.dart';
 
 class WorkoutScreen extends StatefulWidget {
   final Routine routine;
   final bool backgroundNotificationsAuthorized;
   final WorkoutLiveActivityScheduleBackend? liveActivityScheduleBackend;
   final DateTime Function()? nowProvider;
+  final Duration? previewElapsed;
 
   const WorkoutScreen({
     super.key,
@@ -39,6 +41,7 @@ class WorkoutScreen extends StatefulWidget {
     this.backgroundNotificationsAuthorized = false,
     this.liveActivityScheduleBackend,
     this.nowProvider,
+    this.previewElapsed,
   });
 
   @override
@@ -57,6 +60,8 @@ class _WorkoutScreenState extends State<WorkoutScreen>
   bool _pauseSheetOpen = false;
   bool _endConfirmOpen = false;
   bool _hasNavigatedToFinished = false;
+  bool _hasLoggedWorkoutCompletion = false;
+  bool _hasLoggedWorkoutStop = false;
   bool _isCountdownActive = false;
   bool _isLandscapeMode = false;
   int _lastSpokenIntervalIndex = -1;
@@ -89,7 +94,9 @@ class _WorkoutScreenState extends State<WorkoutScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    if (widget.previewElapsed == null) {
+      WidgetsBinding.instance.addObserver(this);
+    }
     _notificationsAuthorized = widget.backgroundNotificationsAuthorized;
     _now = widget.nowProvider ?? DateTime.now;
     _workoutState = WorkoutState(
@@ -97,7 +104,20 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       startTime: _now(),
       nowProvider: _now,
     );
+    if (widget.previewElapsed != null) {
+      _workoutState.setPreviewElapsed(widget.previewElapsed!);
+    }
     _workoutState.addListener(_onWorkoutStateChanged);
+    if (widget.previewElapsed == null) {
+      AnalyticsService.instance.logEvent(
+        'workout_started',
+        {
+          'machine_type': widget.routine.machineType.name,
+          'duration_seconds': widget.routine.totalDurationSeconds,
+          'interval_count': widget.routine.intervals.length,
+        },
+      );
+    }
     _workoutSessionId = generateWorkoutLiveActivitySessionId();
     _liveActivityScheduleCoordinator = WorkoutLiveActivityScheduleCoordinator(
       sessionId: _workoutSessionId,
@@ -105,30 +125,39 @@ class _WorkoutScreenState extends State<WorkoutScreen>
           FirebaseWorkoutLiveActivityScheduleBackend(),
       nowProvider: _now,
     );
-    _liveActivityNativeEventsSubscription =
-        WorkoutLiveActivityService.instance.events.listen(
-      _handleLiveActivityNativeEvent,
-      onError: (Object _, StackTrace __) {},
-    );
+    if (widget.previewElapsed == null) {
+      _liveActivityNativeEventsSubscription =
+          WorkoutLiveActivityService.instance.events.listen(
+        _handleLiveActivityNativeEvent,
+        onError: (Object _, StackTrace __) {},
+      );
+    }
 
     // Keep screen awake
-    WakelockPlus.enable();
+    if (widget.previewElapsed == null) {
+      WakelockPlus.enable();
+    }
 
     // Lock orientation initially
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+    if (widget.previewElapsed == null) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _applyRemoteScheduleForCurrentState(force: true);
-      unawaited(_refreshNativePushRegistrations());
-      _requestLiveActivityInitialization();
-    });
+    if (widget.previewElapsed == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _applyRemoteScheduleForCurrentState(force: true);
+        unawaited(_refreshNativePushRegistrations());
+        _requestLiveActivityInitialization();
+      });
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (widget.previewElapsed != null) return;
     final provider = Provider.of<AppSettingsProvider>(context, listen: false);
     if (identical(provider, _observedSettingsProvider)) return;
 
@@ -141,10 +170,13 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    if (widget.previewElapsed == null) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
     _observedSettingsProvider?.removeListener(_onAppSettingsChanged);
     unawaited(_liveActivityNativeEventsSubscription?.cancel());
-    if (!_liveActivityScheduleCoordinator.isTerminal) {
+    if (widget.previewElapsed == null &&
+        !_liveActivityScheduleCoordinator.isTerminal) {
       unawaited(
         _liveActivityScheduleCoordinator.cancel(
           WorkoutLiveActivityScheduleCancelReason.disposed,
@@ -153,28 +185,35 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       );
     }
     _liveActivityScheduleCoordinator.dispose();
-    unawaited(
-      WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
-    );
-    _endLiveActivityFromDispose();
+    if (widget.previewElapsed == null) {
+      unawaited(
+        WorkoutReminderService.instance.cancelWorkoutIntervalNotifications(),
+      );
+      _endLiveActivityFromDispose();
+    }
     _workoutState.removeListener(_onWorkoutStateChanged);
     _workoutState.dispose();
 
     // Release wakelock
-    WakelockPlus.disable();
+    if (widget.previewElapsed == null) {
+      WakelockPlus.disable();
+    }
 
     // Reset orientation
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    if (widget.previewElapsed == null) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
 
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (widget.previewElapsed != null) return;
     switch (state) {
       case AppLifecycleState.hidden:
       case AppLifecycleState.paused:
@@ -868,6 +907,31 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     final status = _workoutState.status;
     _applyRemoteScheduleForCurrentState();
 
+    if (status == WorkoutStatus.finished && !_hasLoggedWorkoutCompletion) {
+      _hasLoggedWorkoutCompletion = true;
+      AnalyticsService.instance.logEvent(
+        'workout_completed',
+        {
+          'machine_type': widget.routine.machineType.name,
+          'elapsed_seconds': _workoutState.roundedElapsedSeconds,
+          'interval_count': widget.routine.intervals.length,
+        },
+      );
+    }
+
+    if (status == WorkoutStatus.stopped && !_hasLoggedWorkoutStop) {
+      _hasLoggedWorkoutStop = true;
+      AnalyticsService.instance.logEvent(
+        'workout_stopped',
+        {
+          'machine_type': widget.routine.machineType.name,
+          'elapsed_seconds': _workoutState.roundedElapsedSeconds,
+          'interval_index': _workoutState.currentIntervalIndex,
+          'interval_count': widget.routine.intervals.length,
+        },
+      );
+    }
+
     // Stop immediately when paused/stopped/finished to avoid lingering speech.
     if (status == WorkoutStatus.paused ||
         status == WorkoutStatus.stopped ||
@@ -1214,10 +1278,13 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     final screenHeight = MediaQuery.sizeOf(context).height;
     const double basePortraitWidth = 393.0;
     const double basePortraitHeight = 852.0;
-    
-    final double widthScale = screenWidth > 0 ? screenWidth / basePortraitWidth : 1.0;
-    final double heightScale = screenHeight > 0 ? screenHeight / basePortraitHeight : 1.0;
-    final double scaleFactor = math.min(widthScale, heightScale).clamp(0.75, 1.15);
+
+    final double widthScale =
+        screenWidth > 0 ? screenWidth / basePortraitWidth : 1.0;
+    final double heightScale =
+        screenHeight > 0 ? screenHeight / basePortraitHeight : 1.0;
+    final double scaleFactor =
+        math.min(widthScale, heightScale).clamp(0.75, 1.15);
 
     final portraitMainFontSize =
         (screenWidth * 0.14 * scaleFactor).clamp(48.0, 78.0);
@@ -1460,16 +1527,16 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                                   isPortrait: false,
                                   scaleFactor: scaleFactor,
                                   child: _CircularSessionTimer(
-                                      timeText: countdownLabel,
-                                      progress:
-                                          1.0 - state.currentIntervalProgress,
-                                      isPaused:
-                                          state.status == WorkoutStatus.paused,
-                                      size: circleSize,
-                                      currentIntervalIndex:
-                                          state.currentIntervalIndex,
-                                      scaleFactor: scaleFactor,
-                                    ),
+                                    timeText: countdownLabel,
+                                    progress:
+                                        1.0 - state.currentIntervalProgress,
+                                    isPaused:
+                                        state.status == WorkoutStatus.paused,
+                                    size: circleSize,
+                                    currentIntervalIndex:
+                                        state.currentIntervalIndex,
+                                    scaleFactor: scaleFactor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -2792,7 +2859,8 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
     final isDark = theme.brightness == Brightness.dark;
     final backgroundColor = theme.colorScheme.surface;
     final textColor = theme.colorScheme.onSurface;
-    final trackColor = theme.colorScheme.onSurface.withValues(alpha: isDark ? 0.08 : 0.06);
+    final trackColor =
+        theme.colorScheme.onSurface.withValues(alpha: isDark ? 0.08 : 0.06);
     final strokeWidth =
         (widget.size * 0.07).clamp(widget._scaled(10.0), widget._scaled(14.0));
     final fontSize =
@@ -3087,7 +3155,7 @@ class _EndWorkoutConfirmationBottomSheet extends StatelessWidget {
                       Expanded(
                         child: SecondaryOutlinedButton(
                           onPressed: onCancel,
-                          borderRadius: 14,
+                          borderRadius: 999,
                           borderColor: theme.colorScheme.outlineVariant,
                           child: Text(
                             l10n.cancel,
@@ -3105,7 +3173,7 @@ class _EndWorkoutConfirmationBottomSheet extends StatelessWidget {
                             foregroundColor: theme.colorScheme.onError,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                             elevation: 0,
                           ),

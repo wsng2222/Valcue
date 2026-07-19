@@ -1014,4 +1014,208 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get placeQrInside => 'Placer QR-koden inden for rammen.';
+
+  @override
+  String get customRoutineBuilder => 'Lav personlig rutine';
+
+  @override
+  String get customRoutineGenerating => 'Din personlige rutine bliver lavet…';
+
+  @override
+  String get customRoutineLoadingTarget => 'Dit intensitetsmål indstilles…';
+
+  @override
+  String get customRoutineLoadingStructure =>
+      'Opvarmning og nedkøling planlægges…';
+
+  @override
+  String get customRoutineLoadingPace => 'Dit intervaltempo beregnes…';
+
+  @override
+  String get customRoutineLoadingVoice => 'Stemmevejledning forberedes…';
+
+  @override
+  String get generationComplete => 'Rutinen er klar!';
+
+  @override
+  String get regenerate => 'Lav igen';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'Kalorier er et estimat baseret på den indtastede vægt.';
+
+  @override
+  String get commonBack => 'Tilbage';
+
+  @override
+  String get adjustGoals => 'Juster mål';
+
+  @override
+  String get targetCalories => 'Kaloriemål';
+
+  @override
+  String get targetStairs => 'Mål for etager';
+
+  @override
+  String get targetDistance => 'Distancemål';
+
+  @override
+  String get currentWeight => 'Nuværende vægt';
+
+  @override
+  String get includeIncline => 'Medtag stigning';
+
+  @override
+  String get generateCustomRoutine => 'Lav personlig rutine';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min.';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count etager';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'Personligt løb $distance km ($calories kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'Personlig cykling $distance km ($calories kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'Personlig trappetræning $floors etager ($calories kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'Din personlige rutine er klar. Sigt efter cirka $calories kalorier!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'Slet registrering';
+
+  @override
+  String get weightDeleteConfirm =>
+      'Er du sikker på, at du vil slette denne vægtregistrering?';
+
+  @override
+  String get achievementUnlocked => '🏆 Præstation låst op!';
+
+  @override
+  String get achievementCongratulations =>
+      'Tillykke! Du har fået et nyt badge.';
+
+  @override
+  String get awesome => 'Fantastisk!';
+
+  @override
+  String get shareCardDefault => '9:14 (Standard)';
+
+  @override
+  String get shareCardStory => '9:16 (Story)';
+
+  @override
+  String get shareCardSquare => '1:1 (Kvadrat)';
+
+  @override
+  String get customizeShareCard => 'Tilpas delingskort';
+
+  @override
+  String get shareRoutine => 'Del rutine';
+
+  @override
+  String get shareViaQrCode => 'Del via QR-kode';
+
+  @override
+  String get routineLimitReached => 'Rutinegrænse nået';
+
+  @override
+  String get routineLimitMessage =>
+      'Gratis brugere kan gemme op til 2 løbebåndsrutiner. Opgrader til Premium, eller slet en eksisterende rutine.';
+
+  @override
+  String get importSharedRoutine => 'Importér delt rutine';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'Der blev fundet en rutine i QR-koden.\n\n• Navn: $name\n• Sværhedsgrad: $difficulty\n• Intervaller: $count\n\nVil du gemme den i dit bibliotek?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'Der blev fundet en delt rutine i udklipsholderen.\n\n• Navn: $name\n• Sværhedsgrad: $difficulty\n• Intervaller: $count\n\nVil du gemme den i dit bibliotek?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return '“$name” blev importeret!';
+  }
+
+  @override
+  String get importAction => 'Importér';
+
+  @override
+  String get addRoutineOption => 'Vælg, hvordan du tilføjer en rutine';
+
+  @override
+  String get createCustomRoutine => 'Opret personlig rutine';
+
+  @override
+  String get importFromClipboard => 'Importér fra udklipsholder';
+
+  @override
+  String get countdownTiming => 'Nedtællingsbeskeder';
+
+  @override
+  String get noAnnouncements => 'Ingen beskeder';
+
+  @override
+  String secondsShort(int seconds) {
+    return '$seconds sek. før';
+  }
+
+  @override
+  String get selectCountdownTimings => 'Vælg nedtællingstider';
+
+  @override
+  String get countdownTimingMessage =>
+      'Vælg, hvornår resttiden skal læses op før et intervalskift.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return '$seconds sekunder tilbage';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'Scan QR-koden fra en anden Valcue-app\nfor at importere rutinen med det samme.';
+
+  @override
+  String get quickStart => 'Hurtig start';
+
+  @override
+  String get sessionRepeatBlock => 'Gentaget sessionsblok';
+
+  @override
+  String repeatTimes(int count) {
+    return '$count gentagelser';
+  }
+
+  @override
+  String get addRepeatBlock => 'Tilføj gentagelsesblok';
+
+  @override
+  String get unableToShareWorkout => 'Træningen kunne ikke deles.';
+
+  @override
+  String get unableToOpenPrivacyPolicy =>
+      'Privatlivspolitikken kunne ikke åbnes.';
 }

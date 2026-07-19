@@ -977,4 +977,202 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get placeQrInside => '가이드 영역 안에 QR 코드를 맞춰주세요.';
+
+  @override
+  String get customRoutineBuilder => '맞춤 루틴 생성';
+
+  @override
+  String get customRoutineGenerating => '맞춤 운동 루틴을 생성하고 있어요';
+
+  @override
+  String get customRoutineLoadingTarget => '유산소 강도 목표 설정 중...';
+
+  @override
+  String get customRoutineLoadingStructure => '준비 운동과 마무리 운동 구성 중...';
+
+  @override
+  String get customRoutineLoadingPace => '구간별 맞춤 페이스 계산 중...';
+
+  @override
+  String get customRoutineLoadingVoice => '음성 코칭 준비 중...';
+
+  @override
+  String get generationComplete => '생성 완료!';
+
+  @override
+  String get regenerate => '재생성';
+
+  @override
+  String get caloriesEstimateByWeight => '칼로리는 입력한 체중 기준 예상치예요.';
+
+  @override
+  String get commonBack => '이전으로';
+
+  @override
+  String get adjustGoals => '조건 수정';
+
+  @override
+  String get targetCalories => '목표 칼로리';
+
+  @override
+  String get targetStairs => '목표 층수';
+
+  @override
+  String get targetDistance => '목표 거리';
+
+  @override
+  String get currentWeight => '현재 체중';
+
+  @override
+  String get includeIncline => '경사도 적용';
+
+  @override
+  String get generateCustomRoutine => '맞춤 루틴 생성하기';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count층';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return '맞춤 러닝 ${distance}km (${calories}kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return '맞춤 사이클 ${distance}km (${calories}kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return '맞춤 계단 $floors층 (${calories}kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return '맞춤 루틴이 완성됐어요. 약 $calories칼로리를 목표로 시작해 보세요!';
+  }
+
+  @override
+  String get weightDeleteTitle => '기록 삭제';
+
+  @override
+  String get weightDeleteConfirm => '이 체중 기록을 삭제하시겠습니까?';
+
+  @override
+  String get achievementUnlocked => '🏆 업적 달성!';
+
+  @override
+  String get achievementCongratulations => '새로운 배지를 획득했어요. 축하합니다!';
+
+  @override
+  String get awesome => '확인';
+
+  @override
+  String get shareCardDefault => '9:14 (기본)';
+
+  @override
+  String get shareCardStory => '9:16 (스토리)';
+
+  @override
+  String get shareCardSquare => '1:1 (정사각형)';
+
+  @override
+  String get customizeShareCard => '공유 카드 꾸미기';
+
+  @override
+  String get shareRoutine => '루틴 공유하기';
+
+  @override
+  String get shareViaQrCode => 'QR 코드로 공유';
+
+  @override
+  String get routineLimitReached => '루틴 제한 초과';
+
+  @override
+  String get routineLimitMessage =>
+      '무료 사용자는 러닝머신 루틴을 최대 2개까지 저장할 수 있습니다. 프리미엄으로 업그레이드하거나 기존 루틴을 삭제하세요.';
+
+  @override
+  String get importSharedRoutine => '공유된 루틴 가져오기';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return '스캔한 QR 코드에서 루틴을 찾았습니다.\n\n• 이름: $name\n• 난이도: $difficulty\n• 구간 수: $count개\n\n이 루틴을 보관함에 저장할까요?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return '클립보드에서 공유된 루틴을 찾았습니다.\n\n• 이름: $name\n• 난이도: $difficulty\n• 구간 수: $count개\n\n이 루틴을 보관함에 저장할까요?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return '\'$name\' 루틴을 가져왔습니다!';
+  }
+
+  @override
+  String get importAction => '가져오기';
+
+  @override
+  String get addRoutineOption => '루틴 추가 방법 선택';
+
+  @override
+  String get createCustomRoutine => '새 커스텀 루틴 만들기';
+
+  @override
+  String get importFromClipboard => '클립보드에서 가져오기';
+
+  @override
+  String get countdownTiming => '카운트다운 알림';
+
+  @override
+  String get noAnnouncements => '알림 없음';
+
+  @override
+  String secondsShort(int seconds) {
+    return '$seconds초 전';
+  }
+
+  @override
+  String get selectCountdownTimings => '카운트다운 알림 타이밍 선택';
+
+  @override
+  String get countdownTimingMessage => '운동 강도가 바뀌기 몇 초 전에 음성 안내를 받을지 선택하세요.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return '$seconds초 전';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      '상대방의 Valcue 앱에서 QR 코드를 스캔하면\n이 루틴을 바로 가져올 수 있습니다.';
+
+  @override
+  String get quickStart => '빠른 시작';
+
+  @override
+  String get sessionRepeatBlock => '세션 반복 세트';
+
+  @override
+  String repeatTimes(int count) {
+    return '$count회 반복';
+  }
+
+  @override
+  String get addRepeatBlock => '반복 세션 추가';
+
+  @override
+  String get unableToShareWorkout => '운동을 공유할 수 없습니다.';
+
+  @override
+  String get unableToOpenPrivacyPolicy => '개인정보처리방침을 열 수 없습니다.';
 }

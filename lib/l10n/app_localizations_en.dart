@@ -1011,4 +1011,208 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get placeQrInside => 'Place the QR code inside the target area.';
+
+  @override
+  String get customRoutineBuilder => 'Custom Routine Builder';
+
+  @override
+  String get customRoutineGenerating => 'Designing your custom routine...';
+
+  @override
+  String get customRoutineLoadingTarget =>
+      'Setting your cardio intensity target...';
+
+  @override
+  String get customRoutineLoadingStructure =>
+      'Building warm-up and cool-down intervals...';
+
+  @override
+  String get customRoutineLoadingPace => 'Calculating your interval pace...';
+
+  @override
+  String get customRoutineLoadingVoice => 'Preparing voice coaching...';
+
+  @override
+  String get generationComplete => 'Generation Complete!';
+
+  @override
+  String get regenerate => 'Regenerate';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'Calories are estimates based on the entered weight.';
+
+  @override
+  String get commonBack => 'Back';
+
+  @override
+  String get adjustGoals => 'Adjust goals';
+
+  @override
+  String get targetCalories => 'Target Calories';
+
+  @override
+  String get targetStairs => 'Target Floors';
+
+  @override
+  String get targetDistance => 'Target Distance';
+
+  @override
+  String get currentWeight => 'Current weight';
+
+  @override
+  String get includeIncline => 'Include Incline';
+
+  @override
+  String get generateCustomRoutine => 'Generate Custom Routine';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count floors';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'Custom Run $distance km ($calories kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'Custom Cycle $distance km ($calories kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'Custom Stairs ${floors}F ($calories kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'Your custom routine is ready. Aim for about $calories calories!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'Delete Entry';
+
+  @override
+  String get weightDeleteConfirm =>
+      'Are you sure you want to delete this weight entry?';
+
+  @override
+  String get achievementUnlocked => '🏆 Achievement Unlocked!';
+
+  @override
+  String get achievementCongratulations =>
+      'Congratulations! You earned a new badge!';
+
+  @override
+  String get awesome => 'Awesome!';
+
+  @override
+  String get shareCardDefault => '9:14 (Default)';
+
+  @override
+  String get shareCardStory => '9:16 (Story)';
+
+  @override
+  String get shareCardSquare => '1:1 (Square)';
+
+  @override
+  String get customizeShareCard => 'Customize Share Card';
+
+  @override
+  String get shareRoutine => 'Share Routine';
+
+  @override
+  String get shareViaQrCode => 'Share via QR Code';
+
+  @override
+  String get routineLimitReached => 'Routine Limit Reached';
+
+  @override
+  String get routineLimitMessage =>
+      'Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.';
+
+  @override
+  String get importSharedRoutine => 'Import Shared Routine';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'A routine was detected in the scanned QR code.\n\n• Name: $name\n• Difficulty: $difficulty\n• Intervals: $count\n\nWould you like to save this routine to your library?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'A shared routine was detected in your clipboard.\n\n• Name: $name\n• Difficulty: $difficulty\n• Intervals: $count\n\nWould you like to save this routine to your library?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return 'Successfully imported \'$name\'!';
+  }
+
+  @override
+  String get importAction => 'Import';
+
+  @override
+  String get addRoutineOption => 'Choose How to Add a Routine';
+
+  @override
+  String get createCustomRoutine => 'Create Custom Routine';
+
+  @override
+  String get importFromClipboard => 'Import from Clipboard';
+
+  @override
+  String get countdownTiming => 'Countdown Timing';
+
+  @override
+  String get noAnnouncements => 'No announcements';
+
+  @override
+  String secondsShort(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get selectCountdownTimings => 'Select Countdown Timings';
+
+  @override
+  String get countdownTimingMessage =>
+      'Select when to hear remaining-time announcements before intervals change.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return '$seconds seconds left';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'Scan this QR code from another Valcue app\nto import this routine instantly.';
+
+  @override
+  String get quickStart => 'Quick start';
+
+  @override
+  String get sessionRepeatBlock => 'Session Repeat Block';
+
+  @override
+  String repeatTimes(int count) {
+    return '$count repeats';
+  }
+
+  @override
+  String get addRepeatBlock => 'Add Repeat Block';
+
+  @override
+  String get unableToShareWorkout => 'Unable to share workout';
+
+  @override
+  String get unableToOpenPrivacyPolicy => 'Unable to open privacy policy';
 }

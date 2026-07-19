@@ -18,28 +18,17 @@ import '../models/achievement.dart';
 import '../models/achievement_translations.dart';
 import '../providers/achievement_provider.dart';
 import '../../routines/models/machine_type.dart';
+import '../../../widgets/app_dialog.dart';
+import '../../../widgets/app_segmented_control.dart';
+import '../../../widgets/app_bottom_sheet.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+  return appSegmentedSelectedBackground(context);
 }
 
 SegmentedButtonThemeData _segmentedThemeData(
     BuildContext context, Color selectedBackground) {
-  final theme = Theme.of(context);
-  final isDark = theme.brightness == Brightness.dark;
-  final selectedForeground = isDark ? Colors.white : Colors.black87;
-  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
-
-  return SegmentedButtonThemeData(
-    style: SegmentedButton.styleFrom(
-      selectedBackgroundColor: selectedBackground,
-      selectedForegroundColor: selectedForeground,
-      foregroundColor: theme.colorScheme.onSurface,
-      backgroundColor: theme.colorScheme.surface,
-      side: BorderSide(color: borderColor),
-    ),
-  );
+  return appSegmentedThemeData(context, selectedBackground);
 }
 
 Color _weightSegmentSelectedBackground(BuildContext context) {
@@ -78,37 +67,14 @@ Widget _buildPlatformSegmentedControl({
   bool shrinkWrap = false,
   Color? color,
 }) {
-  if (PlatformInfo.isIOS) {
-    return AdaptiveSegmentedControl(
-      key: key,
-      labels: labels,
-      selectedIndex: selectedIndex,
-      onValueChanged: onValueChanged,
-      height: height,
-      shrinkWrap: shrinkWrap,
-      color: color,
-    );
-  }
-
-  final hasLabels = labels.isNotEmpty;
-  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
-
-  return SizedBox(
+  return AppSegmentedControl(
     key: key,
-    width: shrinkWrap ? null : double.infinity,
+    labels: labels,
+    selectedIndex: selectedIndex,
+    onValueChanged: onValueChanged,
     height: height,
-    child: SegmentedButton<int>(
-      segments: [
-        for (var i = 0; i < labels.length; i++)
-          ButtonSegment<int>(value: i, label: Text(labels[i])),
-      ],
-      selected: hasLabels ? {safeIndex} : const <int>{},
-      showSelectedIcon: false,
-      onSelectionChanged: (selection) {
-        if (selection.isEmpty) return;
-        onValueChanged(selection.first);
-      },
-    ),
+    shrinkWrap: shrinkWrap,
+    color: color,
   );
 }
 
@@ -1035,7 +1001,7 @@ class _ActivityHeatmap extends StatelessWidget {
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     // We want the last 20 weeks. Monday of the first week.
     final daysToSubtract = (today.weekday - 1) + (19 * 7);
     final startDate = today.subtract(Duration(days: daysToSubtract));
@@ -1046,7 +1012,9 @@ class _ActivityHeatmap extends StatelessWidget {
     Color getCellColor(DateTime date) {
       final count = _getWorkoutCountOnDate(date);
       if (count == 0) {
-        return isDark ? Colors.white.withValues(alpha: 0.04) : Colors.grey.shade100;
+        return isDark
+            ? Colors.white.withValues(alpha: 0.04)
+            : Colors.grey.shade100;
       }
       final baseColor = theme.colorScheme.primary;
       if (count == 1) {
@@ -1065,7 +1033,7 @@ class _ActivityHeatmap extends StatelessWidget {
       for (int r = 0; r < rows; r++) {
         final cellDate = startDate.add(Duration(days: c * 7 + r));
         final isFuture = cellDate.isAfter(today);
-        
+
         cells.add(
           Container(
             width: 10,
@@ -1078,7 +1046,7 @@ class _ActivityHeatmap extends StatelessWidget {
           ),
         );
       }
-      
+
       final columnFirstDay = startDate.add(Duration(days: c * 7));
       Widget monthLabel = const SizedBox(height: 14);
       if (c == 0 || columnFirstDay.day <= 7) {
@@ -1141,7 +1109,9 @@ class _ActivityHeatmap extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : const Color.fromARGB(245, 245, 245, 245),
+        color: isDark
+            ? const Color(0xFF1C1C1E)
+            : const Color.fromARGB(245, 245, 245, 245),
         borderRadius: BorderRadius.circular(20),
         border: isDark
             ? Border.all(
@@ -1197,8 +1167,12 @@ class _ActivityHeatmap extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 1),
                   decoration: BoxDecoration(
                     color: count == 0
-                        ? (isDark ? Colors.white.withValues(alpha: 0.04) : Colors.grey.shade100)
-                        : theme.colorScheme.primary.withValues(alpha: count == 1 ? 0.35 : (count == 2 ? 0.65 : 1.0)),
+                        ? (isDark
+                            ? Colors.white.withValues(alpha: 0.04)
+                            : Colors.grey.shade100)
+                        : theme.colorScheme.primary.withValues(
+                            alpha:
+                                count == 1 ? 0.35 : (count == 2 ? 0.65 : 1.0)),
                     borderRadius: BorderRadius.circular(1.5),
                   ),
                 ),
@@ -2589,7 +2563,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
     final painterX = (localX - 10.0).clamp(0.0, availableWidth);
     final stepX = availableWidth / (entryCount - 1);
     final calculatedIndex = (painterX / stepX).round().clamp(0, entryCount - 1);
-    
+
     if (_hoveredIndex != calculatedIndex) {
       setState(() {
         _hoveredIndex = calculatedIndex;
@@ -2606,17 +2580,19 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
     }
   }
 
-  Widget _buildTooltip(WeightEntry entry, double chartWidth, double chartHeight, int index, int entryCount) {
+  Widget _buildTooltip(WeightEntry entry, double chartWidth, double chartHeight,
+      int index, int entryCount) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final availableWidth = chartWidth - 20.0;
     final stepX = availableWidth / (entryCount - 1);
     final pointX = 10.0 + index * stepX;
-    
+
     const tooltipWidth = 100.0;
-    final leftPos = (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
-    
+    final leftPos =
+        (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
+
     final formattedDate = DateFormat('MM/dd').format(entry.dateTime);
-    
+
     return Positioned(
       left: leftPos,
       top: -46,
@@ -2627,7 +2603,9 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.grey.shade300,
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.12)
+                : Colors.grey.shade300,
             width: 1,
           ),
           boxShadow: [
@@ -2813,69 +2791,72 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final chartWidth = constraints.maxWidth;
-                  const chartHeight = 130.0;
-                  
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      GestureDetector(
-                        onHorizontalDragStart: (details) {
-                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
-                        },
-                        onHorizontalDragUpdate: (details) {
-                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
-                        },
-                        onHorizontalDragEnd: (details) {
-                          _clearHoveredIndex();
-                        },
-                        onHorizontalDragCancel: () {
-                          _clearHoveredIndex();
-                        },
-                        onTapDown: (details) {
-                          _updateHoveredIndex(details.localPosition.dx, chartWidth, chartEntries.length);
-                        },
-                        onTapUp: (details) {
-                          Future.delayed(const Duration(seconds: 2), () {
-                            if (mounted) {
-                              _clearHoveredIndex();
-                            }
-                          });
-                        },
-                        onTapCancel: () {
-                          _clearHoveredIndex();
-                        },
-                        child: Container(
-                          height: chartHeight,
-                          width: double.infinity,
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.white.withValues(alpha: 0.03)
-                                : Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(18),
+              LayoutBuilder(builder: (context, constraints) {
+                final chartWidth = constraints.maxWidth;
+                const chartHeight = 130.0;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    GestureDetector(
+                      onHorizontalDragStart: (details) {
+                        _updateHoveredIndex(details.localPosition.dx,
+                            chartWidth, chartEntries.length);
+                      },
+                      onHorizontalDragUpdate: (details) {
+                        _updateHoveredIndex(details.localPosition.dx,
+                            chartWidth, chartEntries.length);
+                      },
+                      onHorizontalDragEnd: (details) {
+                        _clearHoveredIndex();
+                      },
+                      onHorizontalDragCancel: () {
+                        _clearHoveredIndex();
+                      },
+                      onTapDown: (details) {
+                        _updateHoveredIndex(details.localPosition.dx,
+                            chartWidth, chartEntries.length);
+                      },
+                      onTapUp: (details) {
+                        Future.delayed(const Duration(seconds: 2), () {
+                          if (mounted) {
+                            _clearHoveredIndex();
+                          }
+                        });
+                      },
+                      onTapCancel: () {
+                        _clearHoveredIndex();
+                      },
+                      child: Container(
+                        height: chartHeight,
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.03)
+                              : Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: CustomPaint(
+                          painter: _WeightSparklinePainter(
+                            entries: chartEntries,
+                            minWeight: minWeight - padding,
+                            maxWeight: maxWeight + padding,
+                            color: theme.colorScheme.primary,
+                            hoveredIndex: _hoveredIndex,
+                            isDark: isDark,
                           ),
-                          child: CustomPaint(
-                            painter: _WeightSparklinePainter(
-                              entries: chartEntries,
-                              minWeight: minWeight - padding,
-                              maxWeight: maxWeight + padding,
-                              color: theme.colorScheme.primary,
-                              hoveredIndex: _hoveredIndex,
-                              isDark: isDark,
-                            ),
-                            size: Size.infinite,
-                          ),
+                          size: Size.infinite,
                         ),
                       ),
-                      if (_hoveredIndex != null && _hoveredIndex! < chartEntries.length)
-                        _buildTooltip(chartEntries[_hoveredIndex!], chartWidth, chartHeight, _hoveredIndex!, chartEntries.length),
-                    ],
-                  );
-                }
-              ),
+                    ),
+                    if (_hoveredIndex != null &&
+                        _hoveredIndex! < chartEntries.length)
+                      _buildTooltip(chartEntries[_hoveredIndex!], chartWidth,
+                          chartHeight, _hoveredIndex!, chartEntries.length),
+                  ],
+                );
+              }),
             ],
           ),
         );
@@ -2990,7 +2971,8 @@ class _WeightSparklinePainter extends CustomPainter {
       ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.04)
       ..strokeWidth = 1.0;
     canvas.drawLine(Offset.zero, Offset(size.width, 0), gridPaint);
-    canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), gridPaint);
+    canvas.drawLine(
+        Offset(0, size.height), Offset(size.width, size.height), gridPaint);
 
     final points = <Offset>[];
     for (int i = 0; i < entries.length; i++) {
@@ -3020,7 +3002,8 @@ class _WeightSparklinePainter extends CustomPainter {
         final controlY2 = p1.dy;
 
         path.cubicTo(controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
-        fillPath.cubicTo(controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
+        fillPath.cubicTo(
+            controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
       }
 
       fillPath.lineTo(points.last.dx, size.height);
@@ -3322,81 +3305,62 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
 
         return SafeArea(
           top: false,
-          child: Container(
-            padding: const EdgeInsets.only(top: 12, bottom: 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
-              border: Border.all(
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : theme.extension<AppColors>()!.border,
-              ),
-              boxShadow: AppShadows.elevatedSoft,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 8),
-                  decoration: BoxDecoration(
-                    color: theme.extension<AppColors>()!.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        style: TextButton.styleFrom(
-                          foregroundColor:
-                              theme.extension<AppColors>()!.mutedText,
+          child: AppBottomSheetFrame(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: TextButton.styleFrom(
+                            foregroundColor:
+                                theme.extension<AppColors>()!.mutedText,
+                          ),
+                          child: Text(l10n.cancel),
                         ),
-                        child: Text(l10n.cancel),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, tempPicked),
-                        child: Text(l10n.done),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 260,
-                  child: CupertinoTheme(
-                    data: CupertinoThemeData(
-                      brightness: isDark ? Brightness.dark : Brightness.light,
-                      textTheme: CupertinoTextThemeData(
-                        dateTimePickerTextStyle: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, tempPicked),
+                          child: Text(l10n.done),
                         ),
-                      ),
-                    ),
-                    child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.date,
-                      initialDateTime: tempPicked,
-                      minimumDate: DateTime(2020),
-                      maximumDate: now,
-                      onDateTimeChanged: (value) {
-                        tempPicked = DateTime(
-                          value.year,
-                          value.month,
-                          value.day,
-                        );
-                      },
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 260,
+                    child: CupertinoTheme(
+                      data: CupertinoThemeData(
+                        brightness: isDark ? Brightness.dark : Brightness.light,
+                        textTheme: CupertinoTextThemeData(
+                          dateTimePickerTextStyle: TextStyle(
+                            color: theme.colorScheme.onSurface,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.date,
+                        initialDateTime: tempPicked,
+                        minimumDate: DateTime(2020),
+                        maximumDate: now,
+                        onDateTimeChanged: (value) {
+                          tempPicked = DateTime(
+                            value.year,
+                            value.month,
+                            value.day,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -4635,7 +4599,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
     WeightTrackerProvider provider,
   ) {
     final theme = Theme.of(context);
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
 
     showModalBottomSheet(
       context: context,
@@ -4656,8 +4620,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text(
-                    DateFormat.yMMMd(
-                            Localizations.localeOf(context).toString())
+                    DateFormat.yMMMd(Localizations.localeOf(context).toString())
                         .format(entry.dateTime),
                     style: const TextStyle(
                       fontSize: 15,
@@ -4668,16 +4631,17 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.edit_outlined),
-                  title: Text(isKorean ? '수정하기' : 'Edit'),
+                  title: Text(l10n.edit),
                   onTap: () {
                     Navigator.pop(context);
-                    _showRecordWeightBottomSheetHelper(context, editEntry: entry);
+                    _showRecordWeightBottomSheetHelper(context,
+                        editEntry: entry);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.delete_outline, color: Colors.red),
                   title: Text(
-                    isKorean ? '삭제하기' : 'Delete',
+                    l10n.delete,
                     style: const TextStyle(color: Colors.red),
                   ),
                   onTap: () {
@@ -4699,31 +4663,30 @@ class _WeightCalendarState extends State<_WeightCalendar> {
     WeightEntry entry,
     WeightTrackerProvider provider,
   ) {
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
     HapticFeedback.mediumImpact();
-    showDialog(
+    showAppDialog<void>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(isKorean ? '기록 삭제' : 'Delete Entry'),
-          content: Text(isKorean
-              ? '이 체중 기록을 삭제하시겠습니까?'
-              : 'Are you sure you want to delete this weight entry?'),
+      builder: (dialogContext) {
+        return AppDialog(
+          icon: Icons.delete_outline_rounded,
+          iconColor: Theme.of(dialogContext).colorScheme.error,
+          title: l10n.weightDeleteTitle,
+          message: l10n.weightDeleteConfirm,
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(isKorean ? '취소' : 'Cancel'),
+            AppDialogAction(
+              label: l10n.cancel,
+              style: AppDialogActionStyle.secondary,
+              onPressed: () => Navigator.of(dialogContext).pop(),
             ),
-            TextButton(
+            AppDialogAction(
+              label: l10n.delete,
+              style: AppDialogActionStyle.destructive,
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(dialogContext).pop();
                 provider.deleteEntry(entry.id);
                 HapticFeedback.lightImpact();
               },
-              child: Text(
-                isKorean ? '삭제' : 'Delete',
-                style: const TextStyle(color: Colors.red),
-              ),
             ),
           ],
         );
@@ -4747,7 +4710,6 @@ class _AchievementsTabState extends State<_AchievementsTab> {
     final theme = Theme.of(context);
     final appColors = theme.extension<AppColors>()!;
     final langCode = Localizations.localeOf(context).languageCode;
-    final isKorean = langCode == 'ko';
 
     return Consumer<AchievementProvider>(
       builder: (context, provider, child) {
@@ -4772,18 +4734,23 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         // Count unlocked
         final unlockedCount = achievements.where((a) => a.isUnlocked).length;
         final totalCount = achievements.length;
-        final completionRate = totalCount > 0 ? unlockedCount / totalCount : 0.0;
+        final completionRate =
+            totalCount > 0 ? unlockedCount / totalCount : 0.0;
 
         // Custom User Title based on unlock count
         String userTitle = '';
         if (completionRate == 1.0) {
-          userTitle = AchievementTranslations.getUiString('grand_master', langCode);
+          userTitle =
+              AchievementTranslations.getUiString('grand_master', langCode);
         } else if (completionRate >= 0.7) {
-          userTitle = AchievementTranslations.getUiString('pace_master', langCode);
+          userTitle =
+              AchievementTranslations.getUiString('pace_master', langCode);
         } else if (completionRate >= 0.4) {
-          userTitle = AchievementTranslations.getUiString('pro_runner', langCode);
+          userTitle =
+              AchievementTranslations.getUiString('pro_runner', langCode);
         } else if (completionRate >= 0.1) {
-          userTitle = AchievementTranslations.getUiString('active_beginner', langCode);
+          userTitle =
+              AchievementTranslations.getUiString('active_beginner', langCode);
         } else {
           userTitle = AchievementTranslations.getUiString('trainee', langCode);
         }
@@ -4823,8 +4790,10 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                           child: CircularProgressIndicator(
                             value: completionRate,
                             strokeWidth: 6,
-                            backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                            valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+                            backgroundColor:
+                                theme.colorScheme.primary.withOpacity(0.1),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                theme.colorScheme.primary),
                           ),
                         ),
                         Text(
@@ -4855,7 +4824,10 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                             AchievementTranslations.getUiString(
                               'unlocked_x_of_y',
                               langCode,
-                              {'unlocked': '$unlockedCount', 'total': '$totalCount'},
+                              {
+                                'unlocked': '$unlockedCount',
+                                'total': '$totalCount'
+                              },
                             ),
                             style: TextStyle(
                               fontSize: 14,
@@ -4866,7 +4838,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                           const SizedBox(height: 8),
                           // completion text
                           Text(
-                            AchievementTranslations.getUiString('collect_desc', langCode),
+                            AchievementTranslations.getUiString(
+                                'collect_desc', langCode),
                             style: TextStyle(
                               fontSize: 11,
                               color: appColors.mutedText.withOpacity(0.8),
@@ -4885,11 +4858,20 @@ class _AchievementsTabState extends State<_AchievementsTab> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  _buildFilterButton(0, AchievementTranslations.getUiString('filter_all', langCode)),
+                  _buildFilterButton(
+                      0,
+                      AchievementTranslations.getUiString(
+                          'filter_all', langCode)),
                   const SizedBox(width: 8),
-                  _buildFilterButton(1, AchievementTranslations.getUiString('filter_unlocked', langCode)),
+                  _buildFilterButton(
+                      1,
+                      AchievementTranslations.getUiString(
+                          'filter_unlocked', langCode)),
                   const SizedBox(width: 8),
-                  _buildFilterButton(2, AchievementTranslations.getUiString('filter_locked', langCode)),
+                  _buildFilterButton(
+                      2,
+                      AchievementTranslations.getUiString(
+                          'filter_locked', langCode)),
                 ],
               ),
             ),
@@ -4899,7 +4881,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
               child: filtered.isEmpty
                   ? Center(
                       child: Text(
-                        AchievementTranslations.getUiString('no_matching', langCode),
+                        AchievementTranslations.getUiString(
+                            'no_matching', langCode),
                         style: TextStyle(color: appColors.mutedText),
                       ),
                     )
@@ -4908,7 +4891,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
                         final ach = filtered[index];
-                        return _buildAchievementListCard(context, ach, appColors, langCode);
+                        return _buildAchievementListCard(
+                            context, ach, appColors, langCode);
                       },
                     ),
             ),
@@ -4932,7 +4916,9 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surface,
+          color: isSelected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected
@@ -4952,7 +4938,9 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+            color: isSelected
+                ? theme.colorScheme.onPrimary
+                : theme.colorScheme.onSurface,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
             fontSize: 13,
           ),
@@ -5087,7 +5075,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                               child: LinearProgressIndicator(
                                 value: ach.progress,
                                 minHeight: 5,
-                                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                                backgroundColor:
+                                    theme.colorScheme.primary.withOpacity(0.1),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   theme.colorScheme.primary.withOpacity(0.5),
                                 ),
@@ -5124,7 +5113,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
     }
   }
 
-  void _showAchievementDetails(BuildContext context, Achievement ach, String langCode) {
+  void _showAchievementDetails(
+      BuildContext context, Achievement ach, String langCode) {
     final theme = Theme.of(context);
     final appColors = theme.extension<AppColors>()!;
     final title = ach.getTitle(langCode);
@@ -5135,31 +5125,12 @@ class _AchievementsTabState extends State<_AchievementsTab> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.15),
-                blurRadius: 20,
-                spreadRadius: 5,
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Bottom sheet handle indicator
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: appColors.border,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+        return AppBottomSheetFrame(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
               const SizedBox(height: 28),
               // Big icon with gradient glow
               Container(
@@ -5229,12 +5200,16 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AchievementTranslations.getUiString('unlock_date', langCode),
-                            style: TextStyle(color: appColors.mutedText, fontSize: 13),
+                            AchievementTranslations.getUiString(
+                                'unlock_date', langCode),
+                            style: TextStyle(
+                                color: appColors.mutedText, fontSize: 13),
                           ),
                           Text(
-                            _formatUnlockDateDetailed(ach.unlockedAt!, langCode),
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            _formatUnlockDateDetailed(
+                                ach.unlockedAt!, langCode),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                         ],
                       ),
@@ -5243,8 +5218,10 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AchievementTranslations.getUiString('progress_label', langCode),
-                            style: TextStyle(color: appColors.mutedText, fontSize: 13),
+                            AchievementTranslations.getUiString(
+                                'progress_label', langCode),
+                            style: TextStyle(
+                                color: appColors.mutedText, fontSize: 13),
                           ),
                           Text(
                             '${(ach.progress * 100).round()}%',
@@ -5262,8 +5239,10 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                         child: LinearProgressIndicator(
                           value: ach.progress,
                           minHeight: 6,
-                          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+                          backgroundColor:
+                              theme.colorScheme.primary.withOpacity(0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              theme.colorScheme.primary),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -5271,12 +5250,15 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AchievementTranslations.getUiString('current_value_label', langCode),
-                            style: TextStyle(color: appColors.mutedText, fontSize: 12),
+                            AchievementTranslations.getUiString(
+                                'current_value_label', langCode),
+                            style: TextStyle(
+                                color: appColors.mutedText, fontSize: 12),
                           ),
                           Text(
                             _formatProgressTextDetailed(ach, langCode),
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                         ],
                       ),
@@ -5288,24 +5270,26 @@ class _AchievementsTabState extends State<_AchievementsTab> {
               // Close button
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 54,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
                     foregroundColor: theme.colorScheme.onPrimary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(999),
                     ),
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     AchievementTranslations.getUiString('close', langCode),
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -5322,12 +5306,16 @@ class _AchievementsTabState extends State<_AchievementsTab> {
 
   String _formatProgressShort(Achievement ach, String langCode) {
     final id = ach.id;
-    if (id.startsWith('treadmill_dist_') || id == 'treadmill_marathon' || id.startsWith('cycle_dist_')) {
+    if (id.startsWith('treadmill_dist_') ||
+        id == 'treadmill_marathon' ||
+        id.startsWith('cycle_dist_')) {
       final cur = ach.currentValue.toDouble();
       final target = ach.targetValue.toDouble();
       return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
     }
-    if (id.startsWith('treadmill_5k') || id.startsWith('treadmill_10k') || id.startsWith('treadmill_half_marathon')) {
+    if (id.startsWith('treadmill_5k') ||
+        id.startsWith('treadmill_10k') ||
+        id.startsWith('treadmill_half_marathon')) {
       final cur = ach.currentValue.toDouble();
       final target = ach.targetValue.toDouble();
       return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
@@ -5344,7 +5332,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
     if (id.startsWith('duration_')) {
       return '${ach.currentValue.round()}/${ach.targetValue.round()}${AchievementTranslations.getUiString('min', langCode)}';
     }
-    if (id.startsWith('total_duration_') || id.startsWith('stairmaster_time_')) {
+    if (id.startsWith('total_duration_') ||
+        id.startsWith('stairmaster_time_')) {
       return '${ach.currentValue.toStringAsFixed(1)}/${ach.targetValue.toStringAsFixed(0)}${AchievementTranslations.getUiString('hours', langCode)}';
     }
     return '${ach.currentValue.round()}/${ach.targetValue.round()}';
@@ -5352,7 +5341,12 @@ class _AchievementsTabState extends State<_AchievementsTab> {
 
   String _formatProgressTextDetailed(Achievement ach, String langCode) {
     final id = ach.id;
-    if (id.startsWith('treadmill_dist_') || id == 'treadmill_marathon' || id.startsWith('cycle_dist_') || id.startsWith('treadmill_5k') || id.startsWith('treadmill_10k') || id.startsWith('treadmill_half_marathon')) {
+    if (id.startsWith('treadmill_dist_') ||
+        id == 'treadmill_marathon' ||
+        id.startsWith('cycle_dist_') ||
+        id.startsWith('treadmill_5k') ||
+        id.startsWith('treadmill_10k') ||
+        id.startsWith('treadmill_half_marathon')) {
       final cur = ach.currentValue.toDouble().toStringAsFixed(2);
       final target = ach.targetValue.toDouble().toStringAsFixed(0);
       return '$cur km / $target km';
@@ -5369,7 +5363,8 @@ class _AchievementsTabState extends State<_AchievementsTab> {
     if (id.startsWith('duration_')) {
       return '${ach.currentValue.round()} ${AchievementTranslations.getUiString('min', langCode)} / ${ach.targetValue.round()} ${AchievementTranslations.getUiString('min', langCode)}';
     }
-    if (id.startsWith('total_duration_') || id.startsWith('stairmaster_time_')) {
+    if (id.startsWith('total_duration_') ||
+        id.startsWith('stairmaster_time_')) {
       return '${ach.currentValue.toStringAsFixed(1)} ${AchievementTranslations.getUiString('hours', langCode)} / ${ach.targetValue.toStringAsFixed(0)} ${AchievementTranslations.getUiString('hours', langCode)}';
     }
     return '${ach.currentValue.round()} / ${ach.targetValue.round()}';

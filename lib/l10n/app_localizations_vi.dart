@@ -1015,4 +1015,209 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get placeQrInside => 'Đặt mã QR vào trong khung hướng dẫn.';
+
+  @override
+  String get customRoutineBuilder => 'Tạo bài tập tùy chỉnh';
+
+  @override
+  String get customRoutineGenerating => 'Đang tạo bài tập tùy chỉnh…';
+
+  @override
+  String get customRoutineLoadingTarget => 'Đang đặt mục tiêu cường độ…';
+
+  @override
+  String get customRoutineLoadingStructure =>
+      'Đang sắp xếp phần khởi động và thả lỏng…';
+
+  @override
+  String get customRoutineLoadingPace => 'Đang tính nhịp độ từng quãng…';
+
+  @override
+  String get customRoutineLoadingVoice =>
+      'Đang chuẩn bị hướng dẫn bằng giọng nói…';
+
+  @override
+  String get generationComplete => 'Đã tạo xong!';
+
+  @override
+  String get regenerate => 'Tạo lại';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'Lượng calo là ước tính dựa trên cân nặng đã nhập.';
+
+  @override
+  String get commonBack => 'Quay lại';
+
+  @override
+  String get adjustGoals => 'Điều chỉnh mục tiêu';
+
+  @override
+  String get targetCalories => 'Calo mục tiêu';
+
+  @override
+  String get targetStairs => 'Số tầng mục tiêu';
+
+  @override
+  String get targetDistance => 'Quãng đường mục tiêu';
+
+  @override
+  String get currentWeight => 'Cân nặng hiện tại';
+
+  @override
+  String get includeIncline => 'Bao gồm độ dốc';
+
+  @override
+  String get generateCustomRoutine => 'Tạo bài tập tùy chỉnh';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes phút';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count tầng';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'Chạy bộ tùy chỉnh $distance km ($calories kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'Đạp xe tùy chỉnh $distance km ($calories kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'Leo cầu thang tùy chỉnh $floors tầng ($calories kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'Bài tập tùy chỉnh đã sẵn sàng. Hãy đặt mục tiêu khoảng $calories calo!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'Xóa bản ghi';
+
+  @override
+  String get weightDeleteConfirm =>
+      'Bạn có chắc muốn xóa bản ghi cân nặng này?';
+
+  @override
+  String get achievementUnlocked => '🏆 Đã mở khóa thành tích!';
+
+  @override
+  String get achievementCongratulations =>
+      'Chúc mừng! Bạn đã nhận được huy hiệu mới.';
+
+  @override
+  String get awesome => 'Tuyệt vời!';
+
+  @override
+  String get shareCardDefault => '9:14 (Mặc định)';
+
+  @override
+  String get shareCardStory => '9:16 (Tin)';
+
+  @override
+  String get shareCardSquare => '1:1 (Vuông)';
+
+  @override
+  String get customizeShareCard => 'Tùy chỉnh thẻ chia sẻ';
+
+  @override
+  String get shareRoutine => 'Chia sẻ bài tập';
+
+  @override
+  String get shareViaQrCode => 'Chia sẻ bằng mã QR';
+
+  @override
+  String get routineLimitReached => 'Đã đạt giới hạn bài tập';
+
+  @override
+  String get routineLimitMessage =>
+      'Người dùng miễn phí có thể lưu tối đa 2 bài tập máy chạy bộ. Hãy nâng cấp Premium hoặc xóa một bài tập hiện có.';
+
+  @override
+  String get importSharedRoutine => 'Nhập bài tập được chia sẻ';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'Đã tìm thấy bài tập trong mã QR.\n\n• Tên: $name\n• Độ khó: $difficulty\n• Quãng: $count\n\nBạn có muốn lưu vào thư viện không?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'Đã tìm thấy bài tập được chia sẻ trong bộ nhớ tạm.\n\n• Tên: $name\n• Độ khó: $difficulty\n• Quãng: $count\n\nBạn có muốn lưu vào thư viện không?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return 'Đã nhập “$name” thành công!';
+  }
+
+  @override
+  String get importAction => 'Nhập';
+
+  @override
+  String get addRoutineOption => 'Chọn cách thêm bài tập';
+
+  @override
+  String get createCustomRoutine => 'Tạo bài tập tùy chỉnh';
+
+  @override
+  String get importFromClipboard => 'Nhập từ bộ nhớ tạm';
+
+  @override
+  String get countdownTiming => 'Thông báo đếm ngược';
+
+  @override
+  String get noAnnouncements => 'Không thông báo';
+
+  @override
+  String secondsShort(int seconds) {
+    return 'trước $seconds giây';
+  }
+
+  @override
+  String get selectCountdownTimings => 'Chọn thời điểm thông báo';
+
+  @override
+  String get countdownTimingMessage =>
+      'Chọn thời điểm nghe thời gian còn lại trước khi chuyển quãng.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return 'Còn $seconds giây';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'Quét mã QR này từ một ứng dụng Valcue khác\nđể nhập bài tập ngay lập tức.';
+
+  @override
+  String get quickStart => 'Bắt đầu nhanh';
+
+  @override
+  String get sessionRepeatBlock => 'Khối bài tập lặp lại';
+
+  @override
+  String repeatTimes(int count) {
+    return 'Lặp lại $count lần';
+  }
+
+  @override
+  String get addRepeatBlock => 'Thêm khối lặp lại';
+
+  @override
+  String get unableToShareWorkout => 'Không thể chia sẻ bài tập.';
+
+  @override
+  String get unableToOpenPrivacyPolicy =>
+      'Không thể mở chính sách quyền riêng tư.';
 }

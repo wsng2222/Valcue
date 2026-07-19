@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
 import 'package:image_picker/image_picker.dart';
 import 'package:valcue/l10n/app_localizations.dart';
@@ -16,6 +15,9 @@ import '../../routines/models/interval.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import '../../../widgets/bounceable.dart';
 import '../../../widgets/secondary_outlined_button.dart';
+import '../../../widgets/app_dialog.dart';
+import '../../../widgets/app_bottom_sheet.dart';
+import '../../../widgets/app_message.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../services/ad_service.dart';
@@ -35,6 +37,7 @@ class WorkoutFinishedScreen extends StatefulWidget {
       currentIntervalIndex; // Index of the interval that was active when workout ended
   final int
       elapsedSecondsInCurrentSession; // Seconds elapsed in the current interval when workout ended
+  final bool previewMode;
 
   const WorkoutFinishedScreen({
     super.key,
@@ -45,6 +48,7 @@ class WorkoutFinishedScreen extends StatefulWidget {
     this.distanceMeters,
     required this.currentIntervalIndex,
     required this.elapsedSecondsInCurrentSession,
+    this.previewMode = false,
   });
 
   @override
@@ -72,16 +76,20 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
 
     // Save workout session
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _saveWorkoutSession();
+      if (!widget.previewMode) {
+        _saveWorkoutSession();
+      }
     });
 
     // Trigger animation and haptic on first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasPlayedAnimation) {
         _hasPlayedAnimation = true;
-        HapticFeedback.lightImpact();
         _fadeController.forward();
-        _confettiController.forward();
+        if (!widget.previewMode) {
+          HapticFeedback.lightImpact();
+          _confettiController.forward();
+        }
       }
     });
   }
@@ -165,7 +173,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     historyProvider.addSession(session);
 
     // Check if there are newly unlocked achievements to celebrate
-    final achievementProvider = Provider.of<AchievementProvider>(context, listen: false);
+    final achievementProvider =
+        Provider.of<AchievementProvider>(context, listen: false);
     if (achievementProvider.newlyUnlocked.isNotEmpty) {
       _showCongratsDialog(achievementProvider.newlyUnlocked);
     }
@@ -175,157 +184,91 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     if (!mounted) return;
 
     final langCode = Localizations.localeOf(context).languageCode;
-    final isKorean = langCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
 
     // Play a premium vibration
     HapticFeedback.heavyImpact();
 
-    showDialog(
+    showAppDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-                width: 2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                  blurRadius: 24,
-                  spreadRadius: 4,
+      builder: (dialogContext) {
+        return AppDialog(
+          icon: Icons.emoji_events_rounded,
+          title: l10n.achievementUnlocked,
+          message: l10n.achievementCongratulations,
+          content: Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            alignment: WrapAlignment.center,
+            children: achievements.map((ach) {
+              final title = ach.getTitle(langCode);
+              final desc = ach.getDescription(langCode);
+              return SizedBox(
+                width: 120,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: ach.gradientColors,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: ach.gradientColors[0]
+                                .withValues(alpha: 0.4),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Icon(ach.icon, color: Colors.white, size: 40),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      desc,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(dialogContext)
+                            .extension<AppColors>()!
+                            .mutedText,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Celebration header
-                  Text(
-                    isKorean ? '🏆 업적 달성!' : '🏆 Achievement Unlocked!',
-                    style: GoogleFonts.lato(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      color: Theme.of(context).colorScheme.primary,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    isKorean
-                        ? '새로운 배지를 획득하셨습니다. 축하합니다!'
-                        : 'Congratulations! You earned a new badge!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).extension<AppColors>()!.mutedText,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // List/Grid of newly unlocked badges
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
-                        alignment: WrapAlignment.center,
-                        children: achievements.map((ach) {
-                          final title = ach.getTitle(langCode);
-                          final desc = ach.getDescription(langCode);
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    colors: ach.gradientColors,
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: ach.gradientColors[0].withOpacity(0.4),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  ach.icon,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                title,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                desc,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context)
-                                      .extension<AppColors>()!
-                                      .mutedText,
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  // OK Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      onPressed: () {
-                        // Clear newly unlocked list and dismiss
-                        final provider = Provider.of<AchievementProvider>(context, listen: false);
-                        provider.clearNewlyUnlocked();
-                        Navigator.pop(context);
-                        HapticFeedback.lightImpact();
-                      },
-                      child: Text(
-                        isKorean ? '확인' : 'Awesome!',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+              );
+            }).toList(),
           ),
+          actions: [
+            AppDialogAction(
+              label: l10n.awesome,
+              onPressed: () {
+                final provider = Provider.of<AchievementProvider>(
+                  dialogContext,
+                  listen: false,
+                );
+                provider.clearNewlyUnlocked();
+                Navigator.of(dialogContext).pop();
+                HapticFeedback.lightImpact();
+              },
+            ),
+          ],
         );
       },
     );
@@ -388,8 +331,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
       body: SafeArea(
         child: Stack(
           children: [
-            // Confetti animation overlay
-            _ConfettiAnimation(controller: _confettiController),
+            if (!widget.previewMode)
+              _ConfettiAnimation(controller: _confettiController),
             // Main content
             FadeTransition(
               opacity: _fadeController,
@@ -812,7 +755,7 @@ class _ConfettiPainter extends CustomPainter {
     ];
 
     const particleCount = 100;
-    
+
     for (int i = 0; i < particleCount; i++) {
       // Use deterministic random based on particle index so we don't need real-time state updates
       final rand = math.Random(i + 100);
@@ -825,7 +768,8 @@ class _ConfettiPainter extends CustomPainter {
       // Launch Angle: shoot upwards and towards the center
       // Left side shoots at -30 to -60 degrees, Right side shoots at -120 to -150 degrees
       final angleRange = rand.nextDouble() * (math.pi / 4); // 0 to 45 deg
-      final baseAngle = isLeft ? -math.pi / 6 - angleRange : -5 * math.pi / 6 + angleRange;
+      final baseAngle =
+          isLeft ? -math.pi / 6 - angleRange : -5 * math.pi / 6 + angleRange;
 
       // Initial speed (pixels per second)
       final speed = 700 + rand.nextDouble() * 600;
@@ -852,16 +796,19 @@ class _ConfettiPainter extends CustomPainter {
 
       // Update positions using projectile physics with drag & wind
       final drag = math.exp(-0.25 * t);
-      
+
       // Position equations
-      final x = startX + (vx * t) * drag + math.sin(t * windFreq + rotationPhase) * windAmp * t;
+      final x = startX +
+          (vx * t) * drag +
+          math.sin(t * windFreq + rotationPhase) * windAmp * t;
       final y = startY + (vy * t) * drag + (0.5 * gravity * t * t);
 
       // Skip painting if off-screen below bottom
       if (y > height + 20) continue;
 
       // Fading opacity: stays solid, then fades out in the last 30% of progress
-      final double opacity = progress < 0.7 ? 1.0 : (1.0 - (progress - 0.7) / 0.3).clamp(0.0, 1.0);
+      final double opacity =
+          progress < 0.7 ? 1.0 : (1.0 - (progress - 0.7) / 0.3).clamp(0.0, 1.0);
       if (opacity <= 0.0) continue;
 
       // Rotation angle
@@ -874,7 +821,7 @@ class _ConfettiPainter extends CustomPainter {
       canvas.save();
       canvas.translate(x, y);
       canvas.rotate(angle);
-      
+
       // 3D scaling simulation
       final scaleX = math.sin(t * 5.0 + rotationPhase).abs().clamp(0.1, 1.0);
       canvas.scale(scaleX, 1.0);
@@ -883,7 +830,8 @@ class _ConfettiPainter extends CustomPainter {
       switch (shapeType) {
         case 0: // Rectangle ribbon
           canvas.drawRect(
-            Rect.fromCenter(center: Offset.zero, width: sizeScale, height: sizeScale * 0.5),
+            Rect.fromCenter(
+                center: Offset.zero, width: sizeScale, height: sizeScale * 0.5),
             paint,
           );
           break;
@@ -1053,7 +1001,7 @@ class _ShareCard extends StatelessWidget {
     final metricValFontSize = isSquare ? 16.0 : 20.0;
     final metricLabelFontSize = isSquare ? 9.0 : 10.0;
     final graphHeight = isSquare ? 30.0 : 44.0;
-    final contentPadding = isSquare 
+    final contentPadding = isSquare
         ? const EdgeInsets.symmetric(horizontal: 18, vertical: 18)
         : const EdgeInsets.symmetric(horizontal: 24, vertical: 26);
     final bottomSpacerHeight = isSquare ? 8.0 : 12.0;
@@ -1161,7 +1109,8 @@ class _ShareCard extends StatelessWidget {
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: -1.2,
                                   fontStyle: FontStyle.italic,
-                                  fontFamily: theme.textTheme.titleMedium?.fontFamily,
+                                  fontFamily:
+                                      theme.textTheme.titleMedium?.fontFamily,
                                 ),
                                 children: [
                                   const TextSpan(
@@ -1170,7 +1119,8 @@ class _ShareCard extends StatelessWidget {
                                   ),
                                   TextSpan(
                                     text: 'cue',
-                                    style: TextStyle(color: theme.colorScheme.primary),
+                                    style: TextStyle(
+                                        color: theme.colorScheme.primary),
                                   ),
                                 ],
                               ),
@@ -1418,7 +1368,8 @@ class _WorkoutChartState extends State<_WorkoutChart> {
   void _updateHoveredIndex(double localX, double totalWidth) {
     if (widget.routine.intervals.isEmpty || totalWidth <= 0) return;
 
-    final totalDuration = widget.routine.intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    final totalDuration = widget.routine.intervals
+        .fold<int>(0, (sum, i) => sum + i.durationSeconds);
     if (totalDuration == 0) return;
 
     final progressPercent = (localX / totalWidth).clamp(0.0, 1.0);
@@ -1450,11 +1401,13 @@ class _WorkoutChartState extends State<_WorkoutChart> {
     }
   }
 
-  Widget _buildTooltip(Interval interval, double chartWidth, double chartHeight, int index) {
+  Widget _buildTooltip(
+      Interval interval, double chartWidth, double chartHeight, int index) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final totalDuration = widget.routine.intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    final totalDuration = widget.routine.intervals
+        .fold<int>(0, (sum, i) => sum + i.durationSeconds);
     if (totalDuration == 0) return const SizedBox.shrink();
 
     // Calculate center X of this interval
@@ -1467,7 +1420,8 @@ class _WorkoutChartState extends State<_WorkoutChart> {
     final pointX = (intervalCenterSeconds / totalDuration) * chartWidth;
 
     const tooltipWidth = 140.0;
-    final leftPos = (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
+    final leftPos =
+        (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
 
     // Format metrics based on machineType
     String metricText = '';
@@ -1516,7 +1470,9 @@ class _WorkoutChartState extends State<_WorkoutChart> {
           color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.grey.shade300,
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.12)
+                : Colors.grey.shade300,
             width: 1,
           ),
           boxShadow: [
@@ -1575,7 +1531,9 @@ class _WorkoutChartState extends State<_WorkoutChart> {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : const Color.fromARGB(245, 245, 245, 245),
+        color: isDark
+            ? const Color(0xFF1C1C1E)
+            : const Color.fromARGB(245, 245, 245, 245),
         borderRadius: BorderRadius.circular(24),
         border: isDark
             ? Border.all(
@@ -1620,68 +1578,69 @@ class _WorkoutChartState extends State<_WorkoutChart> {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final chartWidth = constraints.maxWidth;
-                final chartHeight = constraints.maxHeight;
+            child: LayoutBuilder(builder: (context, constraints) {
+              final chartWidth = constraints.maxWidth;
+              final chartHeight = constraints.maxHeight;
 
-                return Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    GestureDetector(
-                      onHorizontalDragStart: (details) {
-                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
-                      },
-                      onHorizontalDragUpdate: (details) {
-                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
-                      },
-                      onHorizontalDragEnd: (details) {
-                        _clearHoveredIndex();
-                      },
-                      onHorizontalDragCancel: () {
-                        _clearHoveredIndex();
-                      },
-                      onTapDown: (details) {
-                        _updateHoveredIndex(details.localPosition.dx, chartWidth);
-                      },
-                      onTapUp: (details) {
-                        Future.delayed(const Duration(seconds: 2), () {
-                          if (mounted) {
-                            _clearHoveredIndex();
-                          }
-                        });
-                      },
-                      onTapCancel: () {
-                        _clearHoveredIndex();
-                      },
-                      child: Container(
-                        color: Colors.transparent, // Ensure gesture detector grabs touches
-                        child: CustomPaint(
-                          painter: _WorkoutChartPainter(
-                            intervals: widget.routine.intervals,
-                            currentIntervalIndex: widget.currentIntervalIndex,
-                            elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
-                            primaryColor: theme.colorScheme.primary,
-                            secondaryColor: theme.colorScheme.secondary,
-                            isDark: isDark,
-                            machineType: widget.routine.machineType,
-                            hoveredIntervalIndex: _hoveredIntervalIndex,
-                          ),
-                          size: Size.infinite,
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  GestureDetector(
+                    onHorizontalDragStart: (details) {
+                      _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                    },
+                    onHorizontalDragUpdate: (details) {
+                      _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                    },
+                    onHorizontalDragEnd: (details) {
+                      _clearHoveredIndex();
+                    },
+                    onHorizontalDragCancel: () {
+                      _clearHoveredIndex();
+                    },
+                    onTapDown: (details) {
+                      _updateHoveredIndex(details.localPosition.dx, chartWidth);
+                    },
+                    onTapUp: (details) {
+                      Future.delayed(const Duration(seconds: 2), () {
+                        if (mounted) {
+                          _clearHoveredIndex();
+                        }
+                      });
+                    },
+                    onTapCancel: () {
+                      _clearHoveredIndex();
+                    },
+                    child: Container(
+                      color: Colors
+                          .transparent, // Ensure gesture detector grabs touches
+                      child: CustomPaint(
+                        painter: _WorkoutChartPainter(
+                          intervals: widget.routine.intervals,
+                          currentIntervalIndex: widget.currentIntervalIndex,
+                          elapsedSecondsInCurrentSession:
+                              widget.elapsedSecondsInCurrentSession,
+                          primaryColor: theme.colorScheme.primary,
+                          secondaryColor: theme.colorScheme.secondary,
+                          isDark: isDark,
+                          machineType: widget.routine.machineType,
+                          hoveredIntervalIndex: _hoveredIntervalIndex,
                         ),
+                        size: Size.infinite,
                       ),
                     ),
-                    if (_hoveredIntervalIndex != null && _hoveredIntervalIndex! < widget.routine.intervals.length)
-                      _buildTooltip(
-                        widget.routine.intervals[_hoveredIntervalIndex!],
-                        chartWidth,
-                        chartHeight,
-                        _hoveredIntervalIndex!,
-                      ),
-                  ],
-                );
-              }
-            ),
+                  ),
+                  if (_hoveredIntervalIndex != null &&
+                      _hoveredIntervalIndex! < widget.routine.intervals.length)
+                    _buildTooltip(
+                      widget.routine.intervals[_hoveredIntervalIndex!],
+                      chartWidth,
+                      chartHeight,
+                      _hoveredIntervalIndex!,
+                    ),
+                ],
+              );
+            }),
           ),
         ],
       ),
@@ -1718,7 +1677,8 @@ class _WorkoutChartPainter extends CustomPainter {
     final height = size.height;
 
     // Calculate total seconds and completed seconds
-    final totalDuration = intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
+    final totalDuration =
+        intervals.fold<int>(0, (sum, i) => sum + i.durationSeconds);
     if (totalDuration == 0) return;
 
     int completedSeconds = 0;
@@ -1771,13 +1731,17 @@ class _WorkoutChartPainter extends CustomPainter {
 
     // Grid Lines (Low/Medium/High boundaries)
     final gridPaint = Paint()
-      ..color = isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05)
+      ..color = isDark
+          ? Colors.white.withValues(alpha: 0.08)
+          : Colors.black.withValues(alpha: 0.05)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
     // Draw horizontal dividers
-    canvas.drawLine(Offset(0, height * 0.25), Offset(width, height * 0.25), gridPaint);
-    canvas.drawLine(Offset(0, height * 0.65), Offset(width, height * 0.65), gridPaint);
+    canvas.drawLine(
+        Offset(0, height * 0.25), Offset(width, height * 0.25), gridPaint);
+    canvas.drawLine(
+        Offset(0, height * 0.65), Offset(width, height * 0.65), gridPaint);
 
     // Build the step paths
     final fillPath = Path();
@@ -1853,7 +1817,7 @@ class _WorkoutChartPainter extends CustomPainter {
       ..shader = shader
       ..style = PaintingStyle.fill
       ..color = Colors.grey;
-    
+
     final fillShader = ui.Gradient.linear(
       Offset.zero,
       Offset(width, 0),
@@ -1872,7 +1836,8 @@ class _WorkoutChartPainter extends CustomPainter {
     canvas.drawPath(strokePath, strokePaint);
 
     // Draw End Indicator vertical line
-    if (hoveredIntervalIndex != null && hoveredIntervalIndex! < intervals.length) {
+    if (hoveredIntervalIndex != null &&
+        hoveredIntervalIndex! < intervals.length) {
       // Calculate center X of this interval
       int durationBefore = 0;
       for (int i = 0; i < hoveredIntervalIndex!; i++) {
@@ -1894,7 +1859,8 @@ class _WorkoutChartPainter extends CustomPainter {
       double dashY = 0;
       const dashSpace = 4.0;
       while (dashY < height) {
-        canvas.drawLine(Offset(hoveredX, dashY), Offset(hoveredX, dashY + dashSpace), verticalLinePaint);
+        canvas.drawLine(Offset(hoveredX, dashY),
+            Offset(hoveredX, dashY + dashSpace), verticalLinePaint);
         dashY += dashSpace * 2;
       }
 
@@ -1917,12 +1883,13 @@ class _WorkoutChartPainter extends CustomPainter {
         ..color = primaryColor.withValues(alpha: 0.5)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.2;
-      
+
       // Draw vertical dashed line
       double dashY = 0;
       const dashSpace = 4.0;
       while (dashY < height) {
-        canvas.drawLine(Offset(progressX, dashY), Offset(progressX, dashY + dashSpace), verticalLinePaint);
+        canvas.drawLine(Offset(progressX, dashY),
+            Offset(progressX, dashY + dashSpace), verticalLinePaint);
         dashY += dashSpace * 2;
       }
 
@@ -1932,7 +1899,8 @@ class _WorkoutChartPainter extends CustomPainter {
       for (int i = 0; i < intervals.length; i++) {
         final duration = intervals[i].durationSeconds;
         final stepWidth = (duration / totalDuration) * width;
-        if (progressX >= indicatorXAcc && progressX <= indicatorXAcc + stepWidth) {
+        if (progressX >= indicatorXAcc &&
+            progressX <= indicatorXAcc + stepWidth) {
           final val = values[i];
           indicatorY = height - ((val - minVal) / valRange) * height * 0.85 - 2;
           break;
@@ -1948,7 +1916,7 @@ class _WorkoutChartPainter extends CustomPainter {
         ..color = primaryColor.withValues(alpha: 0.3)
         ..style = PaintingStyle.fill
         ..imageFilter = ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0);
-      
+
       canvas.drawCircle(Offset(progressX, indicatorY), 8, shadowPaint);
       canvas.drawCircle(Offset(progressX, indicatorY), 4, dotPaint);
     }
@@ -2006,7 +1974,8 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
       _isSharing = true;
     });
 
-    final messenger = ScaffoldMessenger.of(context);
+    final shareErrorMessage =
+        AppLocalizations.of(context)!.unableToShareWorkout;
     try {
       // Wait for layout/paint
       await Future.delayed(const Duration(milliseconds: 300));
@@ -2053,9 +2022,13 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
       );
     } catch (e) {
       debugLog('[SharePreviewSheet] Failed to share: $e');
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Unable to share workout')),
-      );
+      if (mounted) {
+        showAppMessage(
+          context,
+          shareErrorMessage,
+          type: AppMessageType.error,
+        );
+      }
       if (mounted) {
         setState(() {
           _isSharing = false;
@@ -2076,38 +2049,20 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
       MachineType.stairmaster => l10n.stairmaster,
     };
 
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
-    final defaultLabel = isKorean ? '9:14 (기본)' : '9:14 (Default)';
-    final storyLabel = isKorean ? '9:16 (스토리)' : '9:16 (Story)';
-    final squareLabel = isKorean ? '1:1 (정사각형)' : '1:1 (Square)';
+    final defaultLabel = l10n.shareCardDefault;
+    final storyLabel = l10n.shareCardStory;
+    final squareLabel = l10n.shareCardSquare;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+    return AppBottomSheetFrame(
       child: SafeArea(
-        child: Column(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Handle bar
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: theme.dividerColor,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
             Text(
-              Localizations.localeOf(context).languageCode == 'ko'
-                  ? '공유 카드 꾸미기'
-                  : 'Customize Share Card',
+              l10n.customizeShareCard,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -2173,7 +2128,7 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
                   foregroundColor: theme.colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(999),
                   ),
                   elevation: 0,
                 ),
@@ -2196,7 +2151,8 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
                       ),
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -2220,9 +2176,8 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
                 ? theme.colorScheme.primary.withOpacity(0.12)
                 : Colors.transparent,
             border: Border.all(
-              color: isSelected
-                  ? theme.colorScheme.primary
-                  : theme.dividerColor,
+              color:
+                  isSelected ? theme.colorScheme.primary : theme.dividerColor,
               width: 1.5,
             ),
             borderRadius: BorderRadius.circular(14),
@@ -2246,4 +2201,3 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
     );
   }
 }
-

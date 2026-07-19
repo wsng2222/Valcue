@@ -1013,4 +1013,210 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get placeQrInside => 'Plaats de QR-code binnen het kader.';
+
+  @override
+  String get customRoutineBuilder => 'Persoonlijke routine maken';
+
+  @override
+  String get customRoutineGenerating =>
+      'Je persoonlijke routine wordt gemaakt…';
+
+  @override
+  String get customRoutineLoadingTarget =>
+      'Je intensiteitsdoel wordt ingesteld…';
+
+  @override
+  String get customRoutineLoadingStructure =>
+      'Warming-up en cooling-down worden opgebouwd…';
+
+  @override
+  String get customRoutineLoadingPace => 'Je intervaltempo wordt berekend…';
+
+  @override
+  String get customRoutineLoadingVoice => 'Stemcoaching wordt voorbereid…';
+
+  @override
+  String get generationComplete => 'Routine gemaakt!';
+
+  @override
+  String get regenerate => 'Opnieuw maken';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'Calorieën zijn een schatting op basis van het ingevoerde gewicht.';
+
+  @override
+  String get commonBack => 'Terug';
+
+  @override
+  String get adjustGoals => 'Doelen aanpassen';
+
+  @override
+  String get targetCalories => 'Doelcalorieën';
+
+  @override
+  String get targetStairs => 'Doelverdiepingen';
+
+  @override
+  String get targetDistance => 'Doelafstand';
+
+  @override
+  String get currentWeight => 'Huidig gewicht';
+
+  @override
+  String get includeIncline => 'Helling gebruiken';
+
+  @override
+  String get generateCustomRoutine => 'Persoonlijke routine maken';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count verdiepingen';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'Persoonlijke hardlooptraining $distance km ($calories kcal)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'Persoonlijke fietstraining $distance km ($calories kcal)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'Persoonlijke traptraining $floors verdiepingen ($calories kcal)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'Je persoonlijke routine is klaar. Richt je op ongeveer $calories calorieën!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'Item verwijderen';
+
+  @override
+  String get weightDeleteConfirm =>
+      'Weet je zeker dat je deze gewichtsmeting wilt verwijderen?';
+
+  @override
+  String get achievementUnlocked => '🏆 Prestatie ontgrendeld!';
+
+  @override
+  String get achievementCongratulations =>
+      'Gefeliciteerd! Je hebt een nieuwe badge verdiend.';
+
+  @override
+  String get awesome => 'Geweldig!';
+
+  @override
+  String get shareCardDefault => '9:14 (Standaard)';
+
+  @override
+  String get shareCardStory => '9:16 (Verhaal)';
+
+  @override
+  String get shareCardSquare => '1:1 (Vierkant)';
+
+  @override
+  String get customizeShareCard => 'Deelkaart aanpassen';
+
+  @override
+  String get shareRoutine => 'Routine delen';
+
+  @override
+  String get shareViaQrCode => 'Delen via QR-code';
+
+  @override
+  String get routineLimitReached => 'Routinelimiet bereikt';
+
+  @override
+  String get routineLimitMessage =>
+      'Gratis gebruikers kunnen maximaal 2 loopbandroutines opslaan. Upgrade naar Premium of verwijder een bestaande routine.';
+
+  @override
+  String get importSharedRoutine => 'Gedeelde routine importeren';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'Er is een routine gevonden in de QR-code.\n\n• Naam: $name\n• Moeilijkheid: $difficulty\n• Intervallen: $count\n\nWil je deze in je bibliotheek opslaan?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'Er is een gedeelde routine gevonden op het klembord.\n\n• Naam: $name\n• Moeilijkheid: $difficulty\n• Intervallen: $count\n\nWil je deze in je bibliotheek opslaan?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return '‘$name’ is geïmporteerd!';
+  }
+
+  @override
+  String get importAction => 'Importeren';
+
+  @override
+  String get addRoutineOption => 'Kies hoe je een routine toevoegt';
+
+  @override
+  String get createCustomRoutine => 'Eigen routine maken';
+
+  @override
+  String get importFromClipboard => 'Importeren van klembord';
+
+  @override
+  String get countdownTiming => 'Countdownmeldingen';
+
+  @override
+  String get noAnnouncements => 'Geen meldingen';
+
+  @override
+  String secondsShort(int seconds) {
+    return '$seconds s vooraf';
+  }
+
+  @override
+  String get selectCountdownTimings => 'Countdownmomenten kiezen';
+
+  @override
+  String get countdownTimingMessage =>
+      'Kies wanneer je de resterende tijd wilt horen voordat het interval verandert.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return 'Nog $seconds seconden';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'Scan deze QR-code met een andere Valcue-app\nom de routine direct te importeren.';
+
+  @override
+  String get quickStart => 'Snel starten';
+
+  @override
+  String get sessionRepeatBlock => 'Herhaald sessieblok';
+
+  @override
+  String repeatTimes(int count) {
+    return '$count herhalingen';
+  }
+
+  @override
+  String get addRepeatBlock => 'Herhaalblok toevoegen';
+
+  @override
+  String get unableToShareWorkout => 'Training kan niet worden gedeeld.';
+
+  @override
+  String get unableToOpenPrivacyPolicy =>
+      'Privacybeleid kan niet worden geopend.';
 }

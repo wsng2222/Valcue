@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart' hide Interval;
-import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/routine.dart';
@@ -10,6 +9,10 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../models/machine_type.dart';
 import '../models/interval.dart';
 import '../../../services/workout_live_activity_firebase_runtime.dart';
+import 'package:valcue/l10n/app_localizations.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/app_dialog.dart';
+import '../../../widgets/app_message.dart';
 
 class RoutineSharing {
   static const String linkPrefix = 'valcue://share?';
@@ -33,15 +36,28 @@ class RoutineSharing {
 
   static Interval _deserializeInterval(String str, int index) {
     final fields = str.split('/');
-    
+
     int duration = int.tryParse(fields.isNotEmpty ? fields[0] : '') ?? 300;
-    double? speed = fields.length > 1 && fields[1].isNotEmpty ? double.tryParse(fields[1]) : null;
-    double? grade = fields.length > 2 && fields[2].isNotEmpty ? double.tryParse(fields[2]) : null;
-    int? rpm = fields.length > 3 && fields[3].isNotEmpty ? int.tryParse(fields[3]) : null;
-    int? resistance = fields.length > 4 && fields[4].isNotEmpty ? int.tryParse(fields[4]) : null;
-    int? level = fields.length > 5 && fields[5].isNotEmpty ? int.tryParse(fields[5]) : null;
-    String? groupId = fields.length > 6 && fields[6].isNotEmpty ? fields[6] : null;
-    int? repeatCount = fields.length > 7 && fields[7].isNotEmpty ? int.tryParse(fields[7]) : null;
+    double? speed = fields.length > 1 && fields[1].isNotEmpty
+        ? double.tryParse(fields[1])
+        : null;
+    double? grade = fields.length > 2 && fields[2].isNotEmpty
+        ? double.tryParse(fields[2])
+        : null;
+    int? rpm = fields.length > 3 && fields[3].isNotEmpty
+        ? int.tryParse(fields[3])
+        : null;
+    int? resistance = fields.length > 4 && fields[4].isNotEmpty
+        ? int.tryParse(fields[4])
+        : null;
+    int? level = fields.length > 5 && fields[5].isNotEmpty
+        ? int.tryParse(fields[5])
+        : null;
+    String? groupId =
+        fields.length > 6 && fields[6].isNotEmpty ? fields[6] : null;
+    int? repeatCount = fields.length > 7 && fields[7].isNotEmpty
+        ? int.tryParse(fields[7])
+        : null;
 
     return Interval(
       id: 'imported_interval_${DateTime.now().millisecondsSinceEpoch}_$index',
@@ -107,9 +123,11 @@ class RoutineSharing {
     }
 
     final intervalsStr = lines[2];
-    final intervalsList = intervalsStr.isEmpty ? <Interval>[] : intervalsStr.split(',').asMap().entries.map((entry) {
-      return _deserializeInterval(entry.value, entry.key);
-    }).toList();
+    final intervalsList = intervalsStr.isEmpty
+        ? <Interval>[]
+        : intervalsStr.split(',').asMap().entries.map((entry) {
+            return _deserializeInterval(entry.value, entry.key);
+          }).toList();
 
     return Routine(
       id: 'imported_${DateTime.now().millisecondsSinceEpoch}',
@@ -120,7 +138,8 @@ class RoutineSharing {
     );
   }
 
-  static Map<String, dynamic> _fromCompressedMap(Map<String, dynamic> compressed) {
+  static Map<String, dynamic> _fromCompressedMap(
+      Map<String, dynamic> compressed) {
     if (!compressed.containsKey('v')) {
       return compressed;
     }
@@ -227,7 +246,7 @@ class RoutineSharing {
         // Assign a new unique ID
         final newId = 'imported_${DateTime.now().millisecondsSinceEpoch}';
         jsonMap['id'] = newId;
-        
+
         return Routine.fromJson(jsonMap);
       } catch (e) {
         debugPrint('[RoutineSharing] Error parsing local sharing link: $e');
@@ -257,7 +276,8 @@ class RoutineSharing {
           }
         }
       } catch (e) {
-        debugPrint('[RoutineSharing] Error fetching shared routine from database: $e');
+        debugPrint(
+            '[RoutineSharing] Error fetching shared routine from database: $e');
         return null;
       }
     }
@@ -289,11 +309,13 @@ class RoutineSharing {
 
     if (!context.mounted) return;
 
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
-    
+    final l10n = AppLocalizations.of(context)!;
+
     // Check free limit for Treadmill
-    final routineProvider = Provider.of<RoutineProvider>(context, listen: false);
-    final settingsProvider = Provider.of<AppSettingsProvider>(context, listen: false);
+    final routineProvider =
+        Provider.of<RoutineProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
 
     if (routine.machineType == MachineType.treadmill &&
         !settingsProvider.isPremium &&
@@ -302,50 +324,58 @@ class RoutineSharing {
                 .length >=
             2) {
       // Prompt user about limit if they try to import
-      showCupertinoDialog(
+      showAppDialog<void>(
         context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: Text(isKorean ? '루틴 제한 초과' : 'Routine Limit Reached'),
-          content: Text(isKorean 
-              ? '무료 버전에서는 런닝머신 루틴을 최대 2개까지만 저장할 수 있습니다. 프리미엄으로 업그레이드하거나 기존 루틴을 삭제하세요.' 
-              : 'Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.'),
+        builder: (dialogContext) => AppDialog(
+          icon: Icons.lock_outline_rounded,
+          title: l10n.routineLimitReached,
+          message: l10n.routineLimitMessage,
           actions: [
-            CupertinoDialogAction(
-              child: Text(isKorean ? '확인' : 'OK'),
-              onPressed: () => Navigator.pop(context),
-            )
+            AppDialogAction(
+              label: l10n.ok,
+              onPressed: () => Navigator.of(dialogContext).pop(),
+            ),
           ],
         ),
       );
       return;
     }
 
-    showCupertinoDialog(
+    showAppDialog<void>(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(isKorean ? '공유된 루틴 가져오기' : 'Import Shared Routine'),
-        content: Text(isKorean
-            ? '클립보드에 공유된 루틴이 있습니다.\n\n• 이름: ${routine.name}\n• 난이도: ${routine.difficulty}\n• 구간 수: ${routine.intervals.length}개\n\n이 루틴을 내 보관함에 저장할까요?'
-            : 'A shared routine was detected in your clipboard.\n\n• Name: ${routine.name}\n• Difficulty: ${routine.difficulty}\n• Intervals: ${routine.intervals.length}\n\nWould you like to save this routine to your library?'),
+      builder: (dialogContext) => AppDialog(
+        icon: Icons.download_rounded,
+        title: l10n.importSharedRoutine,
+        message: l10n.importClipboardRoutinePrompt(
+          routine.name,
+          routine.difficulty,
+          routine.intervals.length,
+        ),
         actions: [
-          CupertinoDialogAction(
-            child: Text(isKorean ? '취소' : 'Cancel'),
-            onPressed: () => Navigator.pop(context),
+          AppDialogAction(
+            label: l10n.cancel,
+            style: AppDialogActionStyle.secondary,
+            onPressed: () => Navigator.of(dialogContext).pop(),
           ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text(isKorean ? '가져오기' : 'Import'),
-            onPressed: () {
-              routineProvider.addRoutine(routine);
-              Navigator.pop(context);
-              
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(isKorean 
-                      ? '\'${routine.name}\' 루틴을 성공적으로 가져왔습니다!' 
-                      : 'Successfully imported \'${routine.name}\'!'),
-                  duration: const Duration(seconds: 3),
-                ),
+          AppDialogAction(
+            label: l10n.importAction,
+            onPressed: () async {
+              await routineProvider.addRoutine(routine);
+              AnalyticsService.instance.logEvent(
+                'routine_imported',
+                {
+                  'method': 'clipboard',
+                  'machine_type': routine.machineType.name,
+                  'interval_count': routine.intervals.length,
+                },
+              );
+              if (!context.mounted || !dialogContext.mounted) return;
+              Navigator.of(dialogContext).pop();
+
+              showAppMessage(
+                context,
+                l10n.importRoutineSuccess(routine.name),
+                type: AppMessageType.success,
               );
             },
           ),

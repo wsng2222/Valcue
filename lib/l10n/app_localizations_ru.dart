@@ -1019,4 +1019,206 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get placeQrInside => 'Поместите QR-код внутрь рамки.';
+
+  @override
+  String get customRoutineBuilder => 'Создать персональную тренировку';
+
+  @override
+  String get customRoutineGenerating => 'Создаём персональную тренировку…';
+
+  @override
+  String get customRoutineLoadingTarget => 'Настраиваем целевую интенсивность…';
+
+  @override
+  String get customRoutineLoadingStructure => 'Планируем разминку и заминку…';
+
+  @override
+  String get customRoutineLoadingPace => 'Рассчитываем темп интервалов…';
+
+  @override
+  String get customRoutineLoadingVoice => 'Готовим голосовые подсказки…';
+
+  @override
+  String get generationComplete => 'Тренировка создана!';
+
+  @override
+  String get regenerate => 'Создать заново';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'Калории рассчитаны приблизительно на основе указанного веса.';
+
+  @override
+  String get commonBack => 'Назад';
+
+  @override
+  String get adjustGoals => 'Изменить цели';
+
+  @override
+  String get targetCalories => 'Цель по калориям';
+
+  @override
+  String get targetStairs => 'Цель по этажам';
+
+  @override
+  String get targetDistance => 'Целевая дистанция';
+
+  @override
+  String get currentWeight => 'Текущий вес';
+
+  @override
+  String get includeIncline => 'Добавить наклон';
+
+  @override
+  String get generateCustomRoutine => 'Создать персональную тренировку';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes мин';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count этажей';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'Персональный бег $distance км ($calories ккал)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'Персональный велозаезд $distance км ($calories ккал)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'Персональная лестница $floors этажей ($calories ккал)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'Персональная тренировка готова. Цель — около $calories калорий!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'Удалить запись';
+
+  @override
+  String get weightDeleteConfirm => 'Удалить эту запись о весе?';
+
+  @override
+  String get achievementUnlocked => '🏆 Достижение открыто!';
+
+  @override
+  String get achievementCongratulations =>
+      'Поздравляем! Вы получили новый значок.';
+
+  @override
+  String get awesome => 'Отлично!';
+
+  @override
+  String get shareCardDefault => '9:14 (Обычный)';
+
+  @override
+  String get shareCardStory => '9:16 (История)';
+
+  @override
+  String get shareCardSquare => '1:1 (Квадрат)';
+
+  @override
+  String get customizeShareCard => 'Настроить карточку';
+
+  @override
+  String get shareRoutine => 'Поделиться тренировкой';
+
+  @override
+  String get shareViaQrCode => 'Поделиться QR-кодом';
+
+  @override
+  String get routineLimitReached => 'Достигнут лимит тренировок';
+
+  @override
+  String get routineLimitMessage =>
+      'Бесплатные пользователи могут сохранить до 2 тренировок на дорожке. Перейдите на Premium или удалите существующую тренировку.';
+
+  @override
+  String get importSharedRoutine => 'Импорт общей тренировки';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'В QR-коде найдена тренировка.\n\n• Название: $name\n• Сложность: $difficulty\n• Интервалы: $count\n\nСохранить её в библиотеку?';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'В буфере обмена найдена общая тренировка.\n\n• Название: $name\n• Сложность: $difficulty\n• Интервалы: $count\n\nСохранить её в библиотеку?';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return '«$name» успешно импортирована!';
+  }
+
+  @override
+  String get importAction => 'Импортировать';
+
+  @override
+  String get addRoutineOption => 'Выберите способ добавления';
+
+  @override
+  String get createCustomRoutine => 'Создать свою тренировку';
+
+  @override
+  String get importFromClipboard => 'Импорт из буфера обмена';
+
+  @override
+  String get countdownTiming => 'Обратный отсчёт';
+
+  @override
+  String get noAnnouncements => 'Без подсказок';
+
+  @override
+  String secondsShort(int seconds) {
+    return 'за $seconds с';
+  }
+
+  @override
+  String get selectCountdownTimings => 'Выберите время подсказок';
+
+  @override
+  String get countdownTimingMessage =>
+      'Выберите, когда озвучивать оставшееся время перед сменой интервала.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return 'Осталось $seconds секунд';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'Отсканируйте этот QR-код в другом приложении Valcue,\nчтобы сразу импортировать тренировку.';
+
+  @override
+  String get quickStart => 'Быстрый старт';
+
+  @override
+  String get sessionRepeatBlock => 'Повторяющийся блок';
+
+  @override
+  String repeatTimes(int count) {
+    return 'Повторов: $count';
+  }
+
+  @override
+  String get addRepeatBlock => 'Добавить блок повторов';
+
+  @override
+  String get unableToShareWorkout => 'Не удалось поделиться тренировкой.';
+
+  @override
+  String get unableToOpenPrivacyPolicy =>
+      'Не удалось открыть политику конфиденциальности.';
 }

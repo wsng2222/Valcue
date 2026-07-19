@@ -209,6 +209,26 @@ class WorkoutState extends ChangeNotifier {
     startInitialCountdown();
   }
 
+  /// Freezes the workout at a deterministic point for store screenshots.
+  /// No countdown, timers, sounds, haptics, or persistence are started.
+  void setPreviewElapsed(Duration elapsed) {
+    _runningRefreshTimer?.cancel();
+    _countdownRefreshTimer?.cancel();
+    _runningRefreshTimer = null;
+    _countdownRefreshTimer = null;
+    _countdownEndsAt = null;
+    _countdownNumber = 0;
+    _isInitialCountdown = false;
+    _activeElapsedMilliseconds = elapsed.inMilliseconds.clamp(
+      0,
+      _totalDurationMilliseconds,
+    );
+    _runningAnchor = null;
+    _status = WorkoutStatus.running;
+    _deriveTimelineFromElapsed();
+    notifyListeners();
+  }
+
   int _intervalEndMilliseconds(int intervalIndex) {
     var result = 0;
     for (var index = 0; index <= intervalIndex; index++) {

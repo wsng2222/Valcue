@@ -2118,104 +2118,104 @@ class OnboardingStrings {
   List<EmphasisTextSpan> aiIntroTitleSpans() => _spans({
         'ko': const [
           EmphasisTextSpan('나만을 위한\n'),
-          EmphasisTextSpan('AI 루틴 ', isRed: true),
+          EmphasisTextSpan('맞춤 루틴 ', isRed: true),
           EmphasisTextSpan('생성'),
         ],
         'en': const [
           EmphasisTextSpan('Custom '),
-          EmphasisTextSpan('AI Routine ', isRed: true),
+          EmphasisTextSpan('Routine ', isRed: true),
           EmphasisTextSpan('generator'),
         ],
         'es': const [
           EmphasisTextSpan('Crea tu propia\n'),
-          EmphasisTextSpan('rutina con IA', isRed: true),
+          EmphasisTextSpan('rutina personalizada', isRed: true),
         ],
         'fr': const [
           EmphasisTextSpan('Crée ta propre\n'),
-          EmphasisTextSpan('routine IA', isRed: true),
+          EmphasisTextSpan('séance personnalisée', isRed: true),
         ],
         'de': const [
           EmphasisTextSpan('Erstelle deine\n'),
-          EmphasisTextSpan('KI-Routine', isRed: true),
+          EmphasisTextSpan('individuelles Training', isRed: true),
         ],
         'it': const [
           EmphasisTextSpan('Crea la tua\n'),
-          EmphasisTextSpan('routine IA', isRed: true),
+          EmphasisTextSpan('routine personalizzata', isRed: true),
         ],
         'nl': const [
           EmphasisTextSpan('Maak je eigen\n'),
-          EmphasisTextSpan('AI-routine', isRed: true),
+          EmphasisTextSpan('persoonlijke routine', isRed: true),
         ],
         'da': const [
           EmphasisTextSpan('Skab din egen\n'),
-          EmphasisTextSpan('AI-rutine', isRed: true),
+          EmphasisTextSpan('personlige rutine', isRed: true),
         ],
         'nb': const [
           EmphasisTextSpan('Lag din egen\n'),
-          EmphasisTextSpan('AI-rutine', isRed: true),
+          EmphasisTextSpan('personlig rutine', isRed: true),
         ],
         'ru': const [
           EmphasisTextSpan('Создай свою\n'),
-          EmphasisTextSpan('ИИ-программу', isRed: true),
+          EmphasisTextSpan('персональную программу', isRed: true),
         ],
         'pt': const [
           EmphasisTextSpan('Crie sua própria\n'),
-          EmphasisTextSpan('rotina com IA', isRed: true),
+          EmphasisTextSpan('rotina personalizada', isRed: true),
         ],
         'ja': const [
           EmphasisTextSpan('自分だけの\n'),
-          EmphasisTextSpan('AIルーティン', isRed: true),
+          EmphasisTextSpan('カスタムルーティン', isRed: true),
           EmphasisTextSpan('を作成'),
         ],
         'zh': const [
           EmphasisTextSpan('生成专属\n'),
-          EmphasisTextSpan('AI训练计划', isRed: true),
+          EmphasisTextSpan('定制训练计划', isRed: true),
         ],
         'vi': const [
           EmphasisTextSpan('Tạo '),
-          EmphasisTextSpan('bài tập AI', isRed: true),
+          EmphasisTextSpan('bài tập tùy chỉnh', isRed: true),
           EmphasisTextSpan('\ndành riêng cho bạn'),
         ],
         'ar': const [
           EmphasisTextSpan('أنشئ روتينك\n'),
-          EmphasisTextSpan('المخصص بالذكاء الاصطناعي', isRed: true),
+          EmphasisTextSpan('المخصص لك', isRed: true),
         ],
         'th': const [
           EmphasisTextSpan('สร้างรูทีน\n'),
-          EmphasisTextSpan('AI สำหรับคุณ', isRed: true),
+          EmphasisTextSpan('เฉพาะบุคคลสำหรับคุณ', isRed: true),
         ],
       });
 
   String aiIntroBody() => _t({
-        'ko': '원하는 기구와 시간, 강도만 고르면\nAI가 5초 만에 맞춤 루틴을 설계해 드립니다.',
+        'ko': '원하는 기구와 시간, 강도를 고르면\n선택에 맞는 루틴을 만들어 드립니다.',
         'en':
-            'Choose your machine, time, and intensity.\nAI builds your custom routine in 5 seconds.',
+            'Choose your machine, time, and intensity.\nWe’ll build a routine around your choices.',
         'es':
-            'Elige máquina, tiempo e intensidad.\nLa IA crea tu rutina en 5 segundos.',
+            'Elige máquina, tiempo e intensidad.\nCrearemos una rutina según tus preferencias.',
         'fr':
-            'Choisis la machine, la durée et l’intensité.\nL’IA crée ta routine en 5 secondes.',
+            'Choisis la machine, la durée et l’intensité.\nNous créerons une séance selon tes choix.',
         'de':
-            'Wähle Gerät, Dauer und Intensität.\nDie KI erstellt deine Routine in 5 Sekunden.',
+            'Wähle Gerät, Dauer und Intensität.\nWir erstellen ein Training nach deinen Vorgaben.',
         'it':
-            'Scegli attrezzo, durata e intensità.\nL’IA crea la tua routine in 5 secondi.',
+            'Scegli attrezzo, durata e intensità.\nCreeremo una routine in base alle tue scelte.',
         'nl':
-            'Kies apparaat, tijd en intensiteit.\nAI maakt je routine in 5 seconden.',
+            'Kies apparaat, tijd en intensiteit.\nWe maken een routine op basis van je keuzes.',
         'da':
-            'Vælg maskine, tid og intensitet.\nAI bygger din rutine på 5 sekunder.',
+            'Vælg maskine, tid og intensitet.\nVi laver en rutine ud fra dine valg.',
         'nb':
-            'Velg apparat, tid og intensitet.\nAI lager rutinen din på 5 sekunder.',
+            'Velg apparat, tid og intensitet.\nVi lager en rutine basert på valgene dine.',
         'ru':
-            'Выбери тренажёр, время и нагрузку.\nИИ создаст программу за 5 секунд.',
+            'Выбери тренажёр, время и нагрузку.\nМы составим тренировку по твоим параметрам.',
         'pt':
-            'Escolha aparelho, tempo e intensidade.\nA IA cria sua rotina em 5 segundos.',
-        'ja': '器具・時間・強度を選ぶだけ。\nAIが5秒で専用ルーティンを設計します。',
-        'zh': '只需选择器械、时间和强度。\nAI 会在 5 秒内生成专属计划。',
+            'Escolha aparelho, tempo e intensidade.\nCriaremos uma rotina com base nas suas escolhas.',
+        'ja': '器具・時間・強度を選ぶだけ。\n選択内容に合わせてルーティンを作成します。',
+        'zh': '只需选择器械、时间和强度。\n我们会根据你的选择生成定制训练。',
         'vi':
-            'Chọn máy, thời gian và cường độ.\nAI tạo bài tập riêng trong 5 giây.',
+            'Chọn máy, thời gian và cường độ.\nChúng tôi sẽ tạo bài tập theo lựa chọn của bạn.',
         'ar':
-            'اختر الجهاز والمدة والشدة.\nيصمم الذكاء الاصطناعي روتينك خلال 5 ثوانٍ.',
+            'اختر الجهاز والمدة والشدة.\nسننشئ تمرينًا يناسب اختياراتك.',
         'th':
-            'เลือกเครื่อง เวลา และความเข้มข้น\nAI สร้างรูทีนเฉพาะคุณใน 5 วินาที',
+            'เลือกเครื่อง เวลา และความเข้มข้น\nเราจะสร้างรูทีนตามตัวเลือกของคุณ',
       });
 
   String aiGenerationSemantics() => _t({
@@ -2619,22 +2619,22 @@ class OnboardingStrings {
       });
 
   String premiumBullet2() => _t({
-        'ko': 'AI 맞춤형 루틴 무제한 생성',
-        'en': 'Generate unlimited personalized AI routines',
-        'es': 'Rutinas personalizadas con IA ilimitadas',
-        'fr': 'Routines IA personnalisées illimitées',
-        'de': 'Unbegrenzt individuelle KI-Routinen erstellen',
-        'it': 'Routine IA personalizzate illimitate',
-        'nl': 'Onbeperkt persoonlijke AI-routines maken',
-        'da': 'Ubegrænsede personlige AI-rutiner',
-        'nb': 'Ubegrensede personlige AI-rutiner',
-        'ru': 'Безлимитные персональные программы от ИИ',
-        'pt': 'Rotinas personalizadas com IA ilimitadas',
-        'ja': 'AI専用ルーティンを無制限に作成',
-        'zh': '无限生成 AI 个性化训练计划',
-        'vi': 'Tạo không giới hạn bài tập AI cá nhân hóa',
-        'ar': 'إنشاء غير محدود لروتينات مخصصة بالذكاء الاصطناعي',
-        'th': 'สร้างรูทีน AI เฉพาะบุคคลได้ไม่จำกัด',
+        'ko': '맞춤 루틴 무제한 생성',
+        'en': 'Generate unlimited personalized routines',
+        'es': 'Rutinas personalizadas ilimitadas',
+        'fr': 'Séances personnalisées illimitées',
+        'de': 'Unbegrenzt individuelle Trainings erstellen',
+        'it': 'Routine personalizzate illimitate',
+        'nl': 'Onbeperkt persoonlijke routines maken',
+        'da': 'Ubegrænsede personlige rutiner',
+        'nb': 'Ubegrensede personlige rutiner',
+        'ru': 'Безлимитные персональные программы',
+        'pt': 'Rotinas personalizadas ilimitadas',
+        'ja': 'カスタムルーティンを無制限に作成',
+        'zh': '无限生成个性化训练计划',
+        'vi': 'Tạo không giới hạn bài tập cá nhân hóa',
+        'ar': 'إنشاء غير محدود لروتينات مخصصة',
+        'th': 'สร้างรูทีนเฉพาะบุคคลได้ไม่จำกัด',
       });
 
   String premiumBullet3() => _t({

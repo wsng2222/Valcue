@@ -12,13 +12,17 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
-import '../../../onboarding/onboarding_flow.dart';
+import '../../../screenshot/store_screenshot_capture_screen.dart';
 import '../../../utils/app_shadows.dart';
 import '../../../widgets/workout_reminder_time_picker_sheet.dart';
+import '../../../services/analytics_service.dart';
+import '../../../widgets/app_segmented_control.dart';
+import '../../../widgets/app_bottom_sheet.dart';
+import '../../../widgets/app_message.dart';
+import '../../../widgets/bottom_sheet_action_bar.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-  return isDark ? const Color(0xFF2C2C2E) : Colors.white;
+  return appSegmentedSelectedBackground(context);
 }
 
 Color _segmentedTrackBackground(BuildContext context) {
@@ -49,20 +53,7 @@ SegmentedButtonThemeData _segmentedThemeData(
   BuildContext context,
   Color selectedBackground,
 ) {
-  final theme = Theme.of(context);
-  final isDark = theme.brightness == Brightness.dark;
-  final selectedForeground = isDark ? Colors.white : Colors.black87;
-  final borderColor = theme.colorScheme.outline.withValues(alpha: 0.35);
-
-  return SegmentedButtonThemeData(
-    style: SegmentedButton.styleFrom(
-      selectedBackgroundColor: selectedBackground,
-      selectedForegroundColor: selectedForeground,
-      foregroundColor: theme.colorScheme.onSurface,
-      backgroundColor: theme.colorScheme.surface,
-      side: BorderSide(color: borderColor),
-    ),
-  );
+  return appSegmentedThemeData(context, selectedBackground);
 }
 
 Widget _buildPlatformSegmentedControl({
@@ -74,37 +65,14 @@ Widget _buildPlatformSegmentedControl({
   Color? color,
   bool shrinkWrap = false,
 }) {
-  if (PlatformInfo.isIOS) {
-    return AdaptiveSegmentedControl(
-      key: key,
-      labels: labels,
-      selectedIndex: selectedIndex,
-      onValueChanged: onValueChanged,
-      height: height,
-      color: color,
-      shrinkWrap: shrinkWrap,
-    );
-  }
-
-  final hasLabels = labels.isNotEmpty;
-  final safeIndex = hasLabels ? selectedIndex.clamp(0, labels.length - 1) : 0;
-
-  return SizedBox(
+  return AppSegmentedControl(
     key: key,
-    width: shrinkWrap ? null : double.infinity,
+    labels: labels,
+    selectedIndex: selectedIndex,
+    onValueChanged: onValueChanged,
     height: height,
-    child: SegmentedButton<int>(
-      segments: [
-        for (var i = 0; i < labels.length; i++)
-          ButtonSegment<int>(value: i, label: Text(labels[i])),
-      ],
-      selected: hasLabels ? {safeIndex} : const <int>{},
-      showSelectedIcon: false,
-      onSelectionChanged: (selection) {
-        if (selection.isEmpty) return;
-        onValueChanged(selection.first);
-      },
-    ),
+    color: color,
+    shrinkWrap: shrinkWrap,
   );
 }
 
@@ -861,7 +829,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (!mounted) return;
       _aboutHoldTimer?.cancel();
       _aboutHoldTimer = null;
-      _showOnboardingFromAbout();
+      _showStoreScreenshotCapture();
     });
   }
 
@@ -870,13 +838,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _aboutHoldTimer = null;
   }
 
-  void _showOnboardingFromAbout() {
+  void _showStoreScreenshotCapture() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const OnboardingGate(
-          home: SizedBox.shrink(),
-          forceShowOnboarding: true,
-        ),
+        builder: (context) => const StoreScreenshotCaptureScreen(),
       ),
     );
   }
@@ -1149,21 +1114,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           if (provider.voiceGuideEnabled &&
                               provider.isPremium) ...[
                             Builder(builder: (context) {
-                              final isKorean = Localizations.localeOf(context)
-                                      .languageCode ==
-                                  'ko';
+                              final l10n = AppLocalizations.of(context)!;
                               return SettingsRow(
                                 icon: Icons.timer_outlined,
                                 iconColor: Colors.amber,
-                                title:
-                                    isKorean ? '카운트다운 알림' : 'Countdown Timing',
-                                subtitle: provider
-                                        .voiceGuideCountdownTriggers.isEmpty
-                                    ? (isKorean ? '알림 없음' : 'No announcements')
-                                    : provider.voiceGuideCountdownTriggers
-                                        .map((sec) =>
-                                            isKorean ? '$sec초 전' : '${sec}s')
-                                        .join(', '),
+                                title: l10n.countdownTiming,
+                                subtitle:
+                                    provider.voiceGuideCountdownTriggers.isEmpty
+                                        ? l10n.noAnnouncements
+                                        : provider.voiceGuideCountdownTriggers
+                                            .map(l10n.secondsShort)
+                                            .join(', '),
                                 onTap: () => _showCountdownTriggersPicker(
                                     context, provider),
                               );
@@ -1197,15 +1158,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       .updateBackgroundIntervalNotifications(
                                     enabled,
                                   );
+                                  if (success && enabled) {
+                                    AnalyticsService.instance.logEvent(
+                                      'notification_enabled',
+                                      {'feature': 'background_intervals'},
+                                    );
+                                  }
                                   if (success || !mounted) return;
-                                  ScaffoldMessenger.of(this.context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        AppLocalizations.of(this.context)!
-                                            .workoutReminderPermissionRequired,
-                                      ),
-                                    ),
+                                  showAppMessage(
+                                    this.context,
+                                    AppLocalizations.of(this.context)!
+                                        .workoutReminderPermissionRequired,
+                                    type: AppMessageType.error,
                                   );
                                 },
                               ),
@@ -1250,15 +1214,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     await provider.updateWorkoutReminderEnabled(
                                   enabled,
                                 );
+                                if (success && enabled) {
+                                  AnalyticsService.instance.logEvent(
+                                    'notification_enabled',
+                                    {'feature': 'workout_reminder'},
+                                  );
+                                }
                                 if (success) return;
                                 if (!mounted) return;
-                                ScaffoldMessenger.of(this.context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      AppLocalizations.of(this.context)!
-                                          .workoutReminderPermissionRequired,
-                                    ),
-                                  ),
+                                showAppMessage(
+                                  this.context,
+                                  AppLocalizations.of(this.context)!
+                                      .workoutReminderPermissionRequired,
+                                  type: AppMessageType.error,
                                 );
                               },
                             ),
@@ -1387,31 +1355,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return SafeArea(
               top: false,
               bottom: true,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(30)),
-                  border: Border.all(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.white.withValues(alpha: 0.08)
-                        : context.appColors.border,
-                  ),
-                  boxShadow: AppShadows.elevatedSoft,
-                ),
+              child: AppBottomSheetFrame(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 12),
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color:
-                            context.appColors.mutedText.withValues(alpha: 0.24),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
                     // Fixed header
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
@@ -1463,43 +1410,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    // Red confirm button
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (selectedIndex == 0) {
-                              provider.resetLanguageToSystem();
-                            } else {
-                              provider.updateLanguage(
-                                  languageOptions[selectedIndex - 1]);
-                            }
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            l10n.done,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ),
-                      ),
+                    BottomSheetPrimaryActionBar(
+                      label: l10n.done,
+                      onPressed: () {
+                        if (selectedIndex == 0) {
+                          provider.resetLanguageToSystem();
+                        } else {
+                          provider.updateLanguage(
+                            languageOptions[selectedIndex - 1],
+                          );
+                        }
+                        Navigator.pop(context);
+                      },
                     ),
-                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -1513,7 +1436,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showCountdownTriggersPicker(
       BuildContext context, AppSettingsProvider provider) {
     final theme = Theme.of(context);
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
     final availableSeconds = [5, 10, 20, 30];
 
     showCupertinoModalPopup(
@@ -1521,11 +1444,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) => StatefulBuilder(builder: (context, setModalState) {
         final currentTriggers = provider.voiceGuideCountdownTriggers;
         return CupertinoActionSheet(
-          title:
-              Text(isKorean ? '카운트다운 알림 타이밍 선택' : 'Select Countdown Timings'),
-          message: Text(isKorean
-              ? '운동 강도가 변경되기 전에 음성 안내를 받을 남은 시간을 선택하세요.'
-              : 'Select when to hear remaining time announcements before intervals change.'),
+          title: Text(l10n.selectCountdownTimings),
+          message: Text(l10n.countdownTimingMessage),
           actions: availableSeconds.map((sec) {
             final isSelected = currentTriggers.contains(sec);
             return CupertinoActionSheetAction(
@@ -1543,7 +1463,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    isKorean ? '$sec초 전' : '$sec seconds left',
+                    l10n.secondsLeft(sec),
                     style: TextStyle(
                       color: isSelected
                           ? theme.colorScheme.primary
@@ -1564,7 +1484,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           }).toList(),
           cancelButton: CupertinoActionSheetAction(
             onPressed: () => Navigator.pop(context),
-            child: Text(isKorean ? '완료' : 'Done'),
+            child: Text(l10n.done),
           ),
         );
       }),

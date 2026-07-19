@@ -1967,6 +1967,349 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Place the QR code inside the target area.'**
   String get placeQrInside;
+
+  /// No description provided for @customRoutineBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Routine Builder'**
+  String get customRoutineBuilder;
+
+  /// No description provided for @customRoutineGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Designing your custom routine...'**
+  String get customRoutineGenerating;
+
+  /// No description provided for @customRoutineLoadingTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting your cardio intensity target...'**
+  String get customRoutineLoadingTarget;
+
+  /// No description provided for @customRoutineLoadingStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'Building warm-up and cool-down intervals...'**
+  String get customRoutineLoadingStructure;
+
+  /// No description provided for @customRoutineLoadingPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating your interval pace...'**
+  String get customRoutineLoadingPace;
+
+  /// No description provided for @customRoutineLoadingVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing voice coaching...'**
+  String get customRoutineLoadingVoice;
+
+  /// No description provided for @generationComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Generation Complete!'**
+  String get generationComplete;
+
+  /// No description provided for @regenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate'**
+  String get regenerate;
+
+  /// No description provided for @caloriesEstimateByWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories are estimates based on the entered weight.'**
+  String get caloriesEstimateByWeight;
+
+  /// No description provided for @commonBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get commonBack;
+
+  /// No description provided for @adjustGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust goals'**
+  String get adjustGoals;
+
+  /// No description provided for @targetCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Calories'**
+  String get targetCalories;
+
+  /// No description provided for @targetStairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Floors'**
+  String get targetStairs;
+
+  /// No description provided for @targetDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Distance'**
+  String get targetDistance;
+
+  /// No description provided for @currentWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Current weight'**
+  String get currentWeight;
+
+  /// No description provided for @includeIncline.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Incline'**
+  String get includeIncline;
+
+  /// No description provided for @generateCustomRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Custom Routine'**
+  String get generateCustomRoutine;
+
+  /// Duration in minutes for the custom routine builder
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String durationMinutes(int minutes);
+
+  /// Floor count for the custom routine builder
+  ///
+  /// In en, this message translates to:
+  /// **'{count} floors'**
+  String floorCount(int count);
+
+  /// Generated treadmill routine name
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Run {distance} km ({calories} kcal)'**
+  String customRunName(String distance, int calories);
+
+  /// Generated cycle routine name
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Cycle {distance} km ({calories} kcal)'**
+  String customCycleName(String distance, int calories);
+
+  /// Generated stair routine name
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Stairs {floors}F ({calories} kcal)'**
+  String customStairsName(int floors, int calories);
+
+  /// Voice message played after a custom routine is generated
+  ///
+  /// In en, this message translates to:
+  /// **'Your custom routine is ready. Aim for about {calories} calories!'**
+  String customRoutineSpeech(int calories);
+
+  /// No description provided for @weightDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Entry'**
+  String get weightDeleteTitle;
+
+  /// No description provided for @weightDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this weight entry?'**
+  String get weightDeleteConfirm;
+
+  /// No description provided for @achievementUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'🏆 Achievement Unlocked!'**
+  String get achievementUnlocked;
+
+  /// No description provided for @achievementCongratulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You earned a new badge!'**
+  String get achievementCongratulations;
+
+  /// No description provided for @awesome.
+  ///
+  /// In en, this message translates to:
+  /// **'Awesome!'**
+  String get awesome;
+
+  /// No description provided for @shareCardDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'9:14 (Default)'**
+  String get shareCardDefault;
+
+  /// No description provided for @shareCardStory.
+  ///
+  /// In en, this message translates to:
+  /// **'9:16 (Story)'**
+  String get shareCardStory;
+
+  /// No description provided for @shareCardSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'1:1 (Square)'**
+  String get shareCardSquare;
+
+  /// No description provided for @customizeShareCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize Share Card'**
+  String get customizeShareCard;
+
+  /// No description provided for @shareRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Routine'**
+  String get shareRoutine;
+
+  /// No description provided for @shareViaQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Share via QR Code'**
+  String get shareViaQrCode;
+
+  /// No description provided for @routineLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine Limit Reached'**
+  String get routineLimitReached;
+
+  /// No description provided for @routineLimitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.'**
+  String get routineLimitMessage;
+
+  /// No description provided for @importSharedRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Shared Routine'**
+  String get importSharedRoutine;
+
+  /// Confirmation shown after scanning a shared routine QR code
+  ///
+  /// In en, this message translates to:
+  /// **'A routine was detected in the scanned QR code.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?'**
+  String importQrRoutinePrompt(String name, String difficulty, int count);
+
+  /// Confirmation shown when a shared routine is found in the clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'A shared routine was detected in your clipboard.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?'**
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count);
+
+  /// Shown after a shared routine is imported
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully imported \'{name}\'!'**
+  String importRoutineSuccess(String name);
+
+  /// No description provided for @importAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get importAction;
+
+  /// No description provided for @addRoutineOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose How to Add a Routine'**
+  String get addRoutineOption;
+
+  /// No description provided for @createCustomRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Custom Routine'**
+  String get createCustomRoutine;
+
+  /// No description provided for @importFromClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from Clipboard'**
+  String get importFromClipboard;
+
+  /// No description provided for @countdownTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'Countdown Timing'**
+  String get countdownTiming;
+
+  /// No description provided for @noAnnouncements.
+  ///
+  /// In en, this message translates to:
+  /// **'No announcements'**
+  String get noAnnouncements;
+
+  /// Compact countdown timing label
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String secondsShort(int seconds);
+
+  /// No description provided for @selectCountdownTimings.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Countdown Timings'**
+  String get selectCountdownTimings;
+
+  /// No description provided for @countdownTimingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select when to hear remaining-time announcements before intervals change.'**
+  String get countdownTimingMessage;
+
+  /// Countdown timing option
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} seconds left'**
+  String secondsLeft(int seconds);
+
+  /// No description provided for @qrShareInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this QR code from another Valcue app\nto import this routine instantly.'**
+  String get qrShareInstruction;
+
+  /// No description provided for @quickStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick start'**
+  String get quickStart;
+
+  /// No description provided for @sessionRepeatBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Session Repeat Block'**
+  String get sessionRepeatBlock;
+
+  /// Number of repetitions for a repeated interval block
+  ///
+  /// In en, this message translates to:
+  /// **'{count} repeats'**
+  String repeatTimes(int count);
+
+  /// No description provided for @addRepeatBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Repeat Block'**
+  String get addRepeatBlock;
+
+  /// No description provided for @unableToShareWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to share workout'**
+  String get unableToShareWorkout;
+
+  /// No description provided for @unableToOpenPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open privacy policy'**
+  String get unableToOpenPrivacyPolicy;
 }
 
 class _AppLocalizationsDelegate

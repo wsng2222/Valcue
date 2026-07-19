@@ -105,6 +105,7 @@
         <li>Valcue does not require account creation or login.</li>
         <li>Most workout, routine, weight, and settings data is stored locally on your device.</li>
         <li>The App uses Google Mobile Ads, which may collect and process certain data such as device identifiers, IP address, diagnostics, and app interaction data.</li>
+        <li>The App uses Google Analytics for Firebase to understand feature usage, workout-flow completion, and app performance.</li>
         <li>The App does not sync your workout history or weight records to a developer-managed cloud server based on the current version of the App.</li>
       </ul>
 
@@ -123,22 +124,27 @@
 
       <h2>3. Information Collected by Third-Party SDKs</h2>
       <p>
-        The App uses Google Mobile Ads (AdMob). According to Google's documentation, the Google Mobile Ads SDK may
-        automatically collect and share certain data, including:
+        The App uses Google Mobile Ads (AdMob) and Google Analytics for Firebase. These SDKs may automatically
+        collect and process certain data, including:
       </p>
       <ul>
         <li>Approximate location inferred from IP address</li>
         <li>App interaction data</li>
+        <li>Feature usage and workout-flow events, such as starting or completing a workout</li>
         <li>Diagnostic information</li>
         <li>Device or other identifiers, such as advertising-related identifiers</li>
       </ul>
       <p>
-        This data may be used for advertising, analytics, and fraud prevention, security, and compliance purposes.
+        Valcue uses analytics data to measure onboarding completion, routine creation, workout starts and completions,
+        and interactions with premium screens. Valcue does not include routine names, weight values, or workout-history
+        records in these analytics events. Data may also be used for advertising, fraud prevention, security, and
+        compliance purposes.
       </p>
       <p>
         Learn more:
         <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google Mobile Ads data disclosure</a>
         and
+        <a href="https://firebase.google.com/support/privacy">Firebase privacy information</a>, and
         <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.
       </p>
 

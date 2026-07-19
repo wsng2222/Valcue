@@ -1005,4 +1005,204 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get placeQrInside => 'ضع رمز QR داخل منطقة الإطار.';
+
+  @override
+  String get customRoutineBuilder => 'إنشاء تمرين مخصص';
+
+  @override
+  String get customRoutineGenerating => 'جارٍ إنشاء تمرينك المخصص…';
+
+  @override
+  String get customRoutineLoadingTarget => 'جارٍ تحديد شدة التمرين المستهدفة…';
+
+  @override
+  String get customRoutineLoadingStructure => 'جارٍ إعداد الإحماء والتهدئة…';
+
+  @override
+  String get customRoutineLoadingPace => 'جارٍ حساب وتيرة الفترات…';
+
+  @override
+  String get customRoutineLoadingVoice => 'جارٍ إعداد الإرشاد الصوتي…';
+
+  @override
+  String get generationComplete => 'اكتمل الإنشاء!';
+
+  @override
+  String get regenerate => 'إعادة الإنشاء';
+
+  @override
+  String get caloriesEstimateByWeight =>
+      'السعرات تقديرية بناءً على الوزن المُدخل.';
+
+  @override
+  String get commonBack => 'رجوع';
+
+  @override
+  String get adjustGoals => 'تعديل الأهداف';
+
+  @override
+  String get targetCalories => 'السعرات المستهدفة';
+
+  @override
+  String get targetStairs => 'الطوابق المستهدفة';
+
+  @override
+  String get targetDistance => 'المسافة المستهدفة';
+
+  @override
+  String get currentWeight => 'الوزن الحالي';
+
+  @override
+  String get includeIncline => 'تضمين الميل';
+
+  @override
+  String get generateCustomRoutine => 'إنشاء تمرين مخصص';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String floorCount(int count) {
+    return '$count طابق';
+  }
+
+  @override
+  String customRunName(String distance, int calories) {
+    return 'جري مخصص $distance كم ($calories سعرة)';
+  }
+
+  @override
+  String customCycleName(String distance, int calories) {
+    return 'دراجة مخصصة $distance كم ($calories سعرة)';
+  }
+
+  @override
+  String customStairsName(int floors, int calories) {
+    return 'درج مخصص $floors طابق ($calories سعرة)';
+  }
+
+  @override
+  String customRoutineSpeech(int calories) {
+    return 'تمرينك المخصص جاهز. استهدف نحو $calories سعرة حرارية!';
+  }
+
+  @override
+  String get weightDeleteTitle => 'حذف السجل';
+
+  @override
+  String get weightDeleteConfirm => 'هل تريد بالتأكيد حذف سجل الوزن هذا؟';
+
+  @override
+  String get achievementUnlocked => '🏆 تم فتح إنجاز!';
+
+  @override
+  String get achievementCongratulations => 'تهانينا! لقد حصلت على شارة جديدة.';
+
+  @override
+  String get awesome => 'رائع!';
+
+  @override
+  String get shareCardDefault => '9:14 (افتراضي)';
+
+  @override
+  String get shareCardStory => '9:16 (قصة)';
+
+  @override
+  String get shareCardSquare => '1:1 (مربع)';
+
+  @override
+  String get customizeShareCard => 'تخصيص بطاقة المشاركة';
+
+  @override
+  String get shareRoutine => 'مشاركة التمرين';
+
+  @override
+  String get shareViaQrCode => 'المشاركة عبر رمز QR';
+
+  @override
+  String get routineLimitReached => 'تم بلوغ حد التمارين';
+
+  @override
+  String get routineLimitMessage =>
+      'يمكن للمستخدمين المجانيين حفظ تمرينين لجهاز المشي كحد أقصى. قم بالترقية إلى Premium أو احذف تمرينًا موجودًا.';
+
+  @override
+  String get importSharedRoutine => 'استيراد تمرين مشترك';
+
+  @override
+  String importQrRoutinePrompt(String name, String difficulty, int count) {
+    return 'تم العثور على تمرين في رمز QR.\n\n• الاسم: $name\n• الصعوبة: $difficulty\n• الفترات: $count\n\nهل تريد حفظه في مكتبتك؟';
+  }
+
+  @override
+  String importClipboardRoutinePrompt(
+      String name, String difficulty, int count) {
+    return 'تم العثور على تمرين مشترك في الحافظة.\n\n• الاسم: $name\n• الصعوبة: $difficulty\n• الفترات: $count\n\nهل تريد حفظه في مكتبتك؟';
+  }
+
+  @override
+  String importRoutineSuccess(String name) {
+    return 'تم استيراد «$name» بنجاح!';
+  }
+
+  @override
+  String get importAction => 'استيراد';
+
+  @override
+  String get addRoutineOption => 'اختر طريقة إضافة تمرين';
+
+  @override
+  String get createCustomRoutine => 'إنشاء تمرين مخصص';
+
+  @override
+  String get importFromClipboard => 'استيراد من الحافظة';
+
+  @override
+  String get countdownTiming => 'تنبيهات العد التنازلي';
+
+  @override
+  String get noAnnouncements => 'بلا تنبيهات';
+
+  @override
+  String secondsShort(int seconds) {
+    return 'قبل $seconds ث';
+  }
+
+  @override
+  String get selectCountdownTimings => 'اختيار أوقات العد التنازلي';
+
+  @override
+  String get countdownTimingMessage =>
+      'اختر وقت سماع الزمن المتبقي قبل تغير الفترة.';
+
+  @override
+  String secondsLeft(int seconds) {
+    return 'متبقٍ $seconds ثانية';
+  }
+
+  @override
+  String get qrShareInstruction =>
+      'امسح رمز QR هذا من تطبيق Valcue آخر\nلاستيراد التمرين فورًا.';
+
+  @override
+  String get quickStart => 'بدء سريع';
+
+  @override
+  String get sessionRepeatBlock => 'مجموعة جلسة متكررة';
+
+  @override
+  String repeatTimes(int count) {
+    return '$count تكرارات';
+  }
+
+  @override
+  String get addRepeatBlock => 'إضافة مجموعة تكرار';
+
+  @override
+  String get unableToShareWorkout => 'تعذرت مشاركة التمرين.';
+
+  @override
+  String get unableToOpenPrivacyPolicy => 'تعذر فتح سياسة الخصوصية.';
 }

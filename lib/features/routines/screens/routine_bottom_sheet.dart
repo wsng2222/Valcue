@@ -16,11 +16,15 @@ import '../../membership/widgets/premium_bottom_sheet.dart';
 import '../../../services/ad_service.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
-import '../../../widgets/secondary_outlined_button.dart';
+import '../../../widgets/app_dialog.dart';
+import '../../../widgets/bottom_sheet_action_bar.dart';
+import '../../../widgets/app_bottom_sheet.dart';
+import '../../../widgets/app_message.dart';
 import '../../../utils/app_shadows.dart';
 import 'package:share_plus/share_plus.dart';
 import '../utils/routine_sharing.dart';
 import '../widgets/qr_share_dialog.dart';
+import '../../../services/analytics_service.dart';
 
 class RoutineBottomSheet {
   /// Entry function to show routine sheet
@@ -54,6 +58,28 @@ class RoutineBottomSheet {
             machineType ?? routine?.machineType ?? MachineType.treadmill,
         settingsProvider: settingsProvider,
       ),
+    );
+  }
+}
+
+/// Embeddable version of the real routine editor used by the store capture
+/// flow. It has the same UI as the modal sheet without mutating navigation.
+class RoutineBottomSheetCapture extends StatelessWidget {
+  final Routine routine;
+
+  const RoutineBottomSheetCapture({
+    super.key,
+    required this.routine,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _RoutineDetailSheetContent(
+      routine: routine,
+      initialEditing: true,
+      isNew: false,
+      machineType: routine.machineType,
+      settingsProvider: context.read<AppSettingsProvider>(),
     );
   }
 }
@@ -139,9 +165,8 @@ class _RoutineDetailSheetContentState
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Now we can safely access AppLocalizations
-    // Set default name if empty (for new routines) - always use "Untitled Routine" regardless of language
     if (_originalRoutine == null && _nameController.text.isEmpty) {
-      _nameController.text = 'Untitled Routine';
+      _nameController.text = AppLocalizations.of(context)!.unnamedRoutine;
     }
     // Validate if editing (listener already added in initState)
     if (_isEditing) {
@@ -182,9 +207,8 @@ class _RoutineDetailSheetContentState
   /// Build current routine from state - READ ONLY, NO MUTATIONS
   /// This is called in build() and must never mutate intervals or any state
   Routine _buildCurrentRoutine() {
-    // Always use "Untitled Routine" as default name regardless of language
     String name = _nameController.text.trim().isEmpty
-        ? 'Untitled Routine'
+        ? AppLocalizations.of(context)!.unnamedRoutine
         : _nameController.text.trim();
 
     // Enforce storage limit (100 chars for backward compatibility)
@@ -709,25 +733,22 @@ class _RoutineDetailSheetContentState
     }
 
     if (_intervals.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.minIntervalsRequired)),
-      );
+      showAppMessage(context, l10n.minIntervalsRequired,
+          type: AppMessageType.error);
       return;
     }
 
     // Validate all intervals have valid values
     for (final interval in _intervals) {
       if (interval.durationSeconds < 1) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.intervalMinDuration)),
-        );
+        showAppMessage(context, l10n.intervalMinDuration,
+            type: AppMessageType.error);
         return;
       }
       if (interval.durationSeconds > 10800) {
         // 3 hours max
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.intervalMaxDuration)),
-        );
+        showAppMessage(context, l10n.intervalMaxDuration,
+            type: AppMessageType.error);
         return;
       }
 
@@ -736,17 +757,15 @@ class _RoutineDetailSheetContentState
           if (interval.speedKmh == null ||
               interval.speedKmh! <= 0 ||
               interval.speedKmh! > 25.0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.speedRange)),
-            );
+            showAppMessage(context, l10n.speedRange,
+                type: AppMessageType.error);
             return;
           }
           if (interval.grade == null ||
               interval.grade! < 0 ||
               interval.grade! > 15.0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.inclineRange)),
-            );
+            showAppMessage(context, l10n.inclineRange,
+                type: AppMessageType.error);
             return;
           }
           break;
@@ -754,17 +773,15 @@ class _RoutineDetailSheetContentState
           if (interval.rpm == null ||
               interval.rpm! < 30 ||
               interval.rpm! > 200) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.rpmRange)),
-            );
+            showAppMessage(context, l10n.rpmRange,
+                type: AppMessageType.error);
             return;
           }
           if (interval.resistance == null ||
               interval.resistance! < 1 ||
               interval.resistance! > 20) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.resistanceRange)),
-            );
+            showAppMessage(context, l10n.resistanceRange,
+                type: AppMessageType.error);
             return;
           }
           break;
@@ -772,9 +789,8 @@ class _RoutineDetailSheetContentState
           if (interval.level == null ||
               interval.level! < 1 ||
               interval.level! > 20) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.levelRange)),
-            );
+            showAppMessage(context, l10n.levelRange,
+                type: AppMessageType.error);
             return;
           }
           // SPM validation removed
@@ -803,6 +819,14 @@ class _RoutineDetailSheetContentState
         return;
       }
       await provider.addRoutine(routine);
+      AnalyticsService.instance.logEvent(
+        'routine_added',
+        {
+          'source': 'manual',
+          'machine_type': routine.machineType.name,
+          'interval_count': routine.intervals.length,
+        },
+      );
       // Close sheet after creating new routine
       if (mounted) {
         Navigator.pop(context);
@@ -979,12 +1003,7 @@ class _RoutineDetailSheetContentState
       });
 
       final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.deleteError),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      showAppMessage(context, l10n.deleteError, type: AppMessageType.error);
     }
   }
 
@@ -992,7 +1011,7 @@ class _RoutineDetailSheetContentState
     final routine = widget.routine;
     if (routine == null) return;
 
-    final isKorean = Localizations.localeOf(context).languageCode == 'ko';
+    final l10n = AppLocalizations.of(context)!;
 
     showCupertinoModalPopup(
       context: context,
@@ -1005,30 +1024,38 @@ class _RoutineDetailSheetContentState
               final shareLink = await RoutineSharing.generateShareLink(routine);
               final message = l10n.shareRoutineMessage(routine.name, shareLink);
 
-              final box = _shareButtonKey.currentContext?.findRenderObject() as RenderBox?;
+              final box = _shareButtonKey.currentContext?.findRenderObject()
+                  as RenderBox?;
               Rect? shareOrigin;
               if (box != null) {
                 shareOrigin = box.localToGlobal(Offset.zero) & box.size;
               }
 
-              Share.share(
+              await Share.share(
                 message,
                 sharePositionOrigin: shareOrigin,
               );
+              AnalyticsService.instance.logEvent(
+                'routine_shared',
+                {
+                  'method': 'system_share',
+                  'machine_type': routine.machineType.name,
+                },
+              );
             },
-            child: Text(isKorean ? '루틴 공유하기' : 'Share Routine'),
+            child: Text(l10n.shareRoutine),
           ),
           CupertinoActionSheetAction(
             onPressed: () {
               Navigator.pop(context); // Close action sheet
               QrShareDialog.show(context, routine);
             },
-            child: Text(isKorean ? 'QR 코드로 공유' : 'Share via QR Code'),
+            child: Text(l10n.shareViaQrCode),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: Text(isKorean ? '취소' : 'Cancel'),
+          child: Text(l10n.cancel),
         ),
       ),
     );
@@ -1386,36 +1413,11 @@ class _RoutineDetailSheetContentState
     final layeredSurfaceColor = theme.brightness == Brightness.dark
         ? appColors.surfaceElevated
         : const Color(0xFFF2F2F7);
-    return Container(
+    return AppBottomSheetFrame(
       constraints: BoxConstraints(maxHeight: maxHeight),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        border: Border.all(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.08)
-              : appColors.border,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag handle
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
           // Content
           Flexible(
             child: CustomScrollView(
@@ -1441,90 +1443,17 @@ class _RoutineDetailSheetContentState
               ],
             ),
           ),
-          // Bottom fixed action bar
-          Container(
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              border: Border(
-                top: BorderSide(
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : appColors.border,
-                ),
-              ),
-            ),
-            child: SafeArea(
-              top: false,
-              bottom: true,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SecondaryOutlinedButton(
-                        onPressed: _isEditing
-                            ? _toggleEditMode // Cancel
-                            : _toggleEditMode, // Edit
-                        borderRadius: 999,
-                        backgroundColor: appColors.surfaceElevated,
-                        borderColor: theme.brightness == Brightness.dark
-                            ? Colors.white.withValues(alpha: 0.08)
-                            : appColors.border,
-                        child: Text(
-                          _isEditing
-                              ? AppLocalizations.of(context)!.cancel
-                              : AppLocalizations.of(context)!.editRoutine,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.3,
-                            color: theme.brightness == Brightness.dark
-                                ? theme.colorScheme.onSurface
-                                : const Color(0xFF666666),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: (_isEditing && !_areAllIntervalsValid())
-                            ? null // Disable if invalid
-                            : (_isEditing
-                                ? _saveRoutine // Save
-                                : _startWorkout), // Start
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              (_isEditing && !_areAllIntervalsValid())
-                                  ? appColors.surfaceElevated
-                                  : theme.colorScheme.primary,
-                          foregroundColor:
-                              (_isEditing && !_areAllIntervalsValid())
-                                  ? appColors.mutedText
-                                  : theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          _isEditing
-                              ? AppLocalizations.of(context)!.save
-                              : AppLocalizations.of(context)!.start,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          BottomSheetActionBar(
+            secondaryLabel: _isEditing
+                ? AppLocalizations.of(context)!.cancel
+                : AppLocalizations.of(context)!.editRoutine,
+            primaryLabel: _isEditing
+                ? AppLocalizations.of(context)!.save
+                : AppLocalizations.of(context)!.start,
+            onSecondaryPressed: _toggleEditMode,
+            onPrimaryPressed: (_isEditing && !_areAllIntervalsValid())
+                ? null
+                : (_isEditing ? _saveRoutine : _startWorkout),
           ),
         ],
       ),
@@ -2063,16 +1992,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(
@@ -2181,16 +2101,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(
@@ -2286,16 +2197,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true, // Allow tap outside to dismiss (cancel)
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(
@@ -2393,16 +2295,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(
@@ -2514,111 +2407,20 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
 
   void _showRpmInfoSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
 
-    showGeneralDialog<void>(
+    showAppDialog<void>(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: 'RPM info',
-      barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.28),
-      transitionDuration: const Duration(milliseconds: 180),
-      pageBuilder: (dialogContext, _, __) => SafeArea(
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 340),
-            margin: const EdgeInsets.symmetric(horizontal: 24),
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: theme.brightness == Brightness.dark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : appColors.border,
-              ),
-              boxShadow: AppShadows.elevatedSoft,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 34,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color:
-                            theme.colorScheme.primary.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        CupertinoIcons.info,
-                        size: 18,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'RPM',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onSurface,
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  l10n.rpmInfoDescription,
-                  style: TextStyle(
-                    fontSize: 15,
-                    height: 1.5,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.78),
-                    decoration: TextDecoration.none,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    minimumSize: Size.zero,
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                    child: Text(
-                      l10n.done,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      builder: (dialogContext) => AppDialog(
+        icon: CupertinoIcons.info,
+        title: l10n.rpm,
+        message: l10n.rpmInfoDescription,
+        actions: [
+          AppDialogAction(
+            label: l10n.done,
+            onPressed: () => Navigator.of(dialogContext).pop(),
           ),
-        ),
+        ],
       ),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final curved = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-        );
-        return FadeTransition(
-          opacity: curved,
-          child: ScaleTransition(
-            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
-            child: child,
-          ),
-        );
-      },
     );
   }
 
@@ -2635,16 +2437,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(
@@ -2733,16 +2526,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
     showCupertinoModalPopup(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Container(
-        height: 260,
-        padding: const EdgeInsets.only(top: 6),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
+      builder: (context) => AppCompactPickerSheetFrame(
         child: SafeArea(
           top: false,
           child: Column(

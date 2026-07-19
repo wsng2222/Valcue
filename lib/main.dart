@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -22,7 +23,9 @@ import 'services/app_error_service.dart';
 import 'services/voice_guide_service.dart';
 import 'services/workout_live_activity_service.dart';
 import 'services/workout_reminder_service.dart';
+import 'services/analytics_service.dart';
 import 'onboarding/onboarding_flow.dart';
+import 'firebase_options.dart';
 
 const _appDisplayName = 'Valcue';
 
@@ -69,6 +72,20 @@ void main() {
 }
 
 Future<void> _bootstrapApp() async {
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await AnalyticsService.instance.init();
+  } catch (error, stack) {
+    await AppErrorService.instance.recordError(
+      error,
+      stack,
+      source: 'firebase_bootstrap',
+      fatal: false,
+    );
+  }
+
   // Hide Android system navigation bar with maximum intensity
   const platform = MethodChannel('com.nogic.valcue/system');
   try {

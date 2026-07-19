@@ -336,7 +336,7 @@ class _AiCore extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Valcue AI',
+                'Valcue Coach',
                 style: GoogleFonts.lato(
                   fontSize: 15,
                   fontWeight: FontWeight.w900,
