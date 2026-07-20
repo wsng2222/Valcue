@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import '../utils/routine_sharing.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -46,7 +47,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               final List<Barcode> barcodes = capture.barcodes;
               for (final barcode in barcodes) {
                 final String? code = barcode.rawValue;
-                if (code != null && code.startsWith('valcue://share?')) {
+                if (code != null && RoutineSharing.isShareLink(code)) {
                   _isScanned = true;
                   Navigator.pop(context, code);
                   break;

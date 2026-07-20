@@ -8,31 +8,34 @@ import '../storage/routine_provider.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../models/machine_type.dart';
 import '../models/interval.dart';
-import '../../../services/workout_live_activity_firebase_runtime.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../services/analytics_service.dart';
 import '../../../widgets/app_dialog.dart';
 import '../../../widgets/app_message.dart';
+import 'routine_link_codec.dart';
 
 class RoutineSharing {
+  /// Legacy self-contained links. Keep parsing these so previously shared
+  /// routines continue to work.
   static const String linkPrefix = 'valcue://share?';
+  static const String shortLinkPrefix = 'valcue://r/';
 
-  static String _serializeInterval(Interval interval) {
-    final fields = [
-      interval.durationSeconds.toString(),
-      interval.speedKmh?.toString() ?? '',
-      interval.grade?.toString() ?? '',
-      interval.rpm?.toString() ?? '',
-      interval.resistance?.toString() ?? '',
-      interval.level?.toString() ?? '',
-      interval.groupId ?? '',
-      interval.repeatCount?.toString() ?? '',
-    ];
-    while (fields.isNotEmpty && fields.last.isEmpty) {
-      fields.removeLast();
+  static bool isShareLink(String value) {
+    return value.startsWith(RoutineLinkCodec.prefix) ||
+        value.startsWith(shortLinkPrefix) ||
+        value.startsWith(linkPrefix);
+  }
+
+  static String? extractShareLink(String value) {
+    final trimmed = value.trim();
+    if (isShareLink(trimmed) && !trimmed.contains(RegExp(r'\s'))) {
+      return trimmed;
     }
-    return fields.join('/');
+    final match = RegExp(
+      r'(?:^|\s)(v:[a-zA-Z0-9_-]+|valcue://r/[a-zA-Z0-9]+|valcue://share\?[^\s]+)',
+    ).firstMatch(value);
+    return match?.group(1);
   }
 
   static Interval _deserializeInterval(String str, int index) {
@@ -71,31 +74,6 @@ class RoutineSharing {
       groupId: groupId,
       repeatCount: repeatCount,
     );
-  }
-
-  static String _serializeRoutine(Routine routine) {
-    String diff = routine.difficulty;
-    if (diff == '쉬움') {
-      diff = 'e';
-    } else if (diff == '중간') {
-      diff = 'm';
-    } else if (diff == '높음') {
-      diff = 'h';
-    }
-
-    String machineTypeChar = routine.machineType.toJson();
-    if (machineTypeChar == 'treadmill') {
-      machineTypeChar = 't';
-    } else if (machineTypeChar == 'cycle') {
-      machineTypeChar = 'c';
-    } else if (machineTypeChar == 'stairmaster') {
-      machineTypeChar = 's';
-    }
-
-    final metaJson = jsonEncode([routine.name, diff, machineTypeChar]);
-    final intervalsStr = routine.intervals.map(_serializeInterval).join(',');
-
-    return '3\n$metaJson\n$intervalsStr';
   }
 
   static Routine? _deserializeV3(String text) {
@@ -190,45 +168,31 @@ class RoutineSharing {
     };
   }
 
-  /// Generates a sharing link for a routine. If Firebase is available, it saves
-  /// the routine to Firestore and returns a short ID. Otherwise, it falls back
-  /// to the offline format.
+  /// Generates the shortest self-contained link supported by the app. No
+  /// server, account, quota, or network connection is required.
   static Future<String> generateShareLink(Routine routine) async {
-    try {
-      final runtime = WorkoutLiveActivityFirebaseRuntime.instance;
-      if (runtime.isFirebaseAvailable) {
-        final functions = await runtime.functions();
-        if (functions != null) {
-          final serialized = _serializeRoutine(routine);
-          final callable = functions.httpsCallable('shareRoutine');
-          final response = await callable.call<Map<String, dynamic>>({
-            'routineData': serialized,
-          });
-          final shortId = response.data['id'] as String?;
-          if (shortId != null && shortId.isNotEmpty) {
-            return '${linkPrefix}id=$shortId';
-          }
-        }
-      }
-    } catch (e) {
-      debugPrint('[RoutineSharing] Failed to generate short share link: $e');
-    }
-
-    // Local offline fallback
-    final serialized = _serializeRoutine(routine);
-    final bytes = utf8.encode(serialized);
-    final compressed = gzip.encode(bytes);
-    final base64Str = base64Url.encode(compressed);
-    return '${linkPrefix}routine=$base64Str';
+    return RoutineLinkCodec.encode(routine);
   }
 
   /// Parses a sharing link and returns a new Routine object. Returns null if invalid.
   static Future<Routine?> parseShareLink(String link) async {
-    if (!link.startsWith(linkPrefix)) return null;
+    if (!isShareLink(link)) return null;
 
-    final uri = Uri.parse(link);
-    final routineParam = uri.queryParameters['routine'];
-    final idParam = uri.queryParameters['id'];
+    if (link.startsWith(RoutineLinkCodec.prefix)) {
+      return RoutineLinkCodec.decode(link);
+    }
+
+    String? routineParam;
+    String? idParam;
+    if (link.startsWith(shortLinkPrefix)) {
+      final candidate = link.substring(shortLinkPrefix.length);
+      if (!RegExp(r'^[a-zA-Z0-9]{6}$').hasMatch(candidate)) return null;
+      idParam = candidate;
+    } else {
+      final uri = Uri.parse(link);
+      routineParam = uri.queryParameters['routine'];
+      idParam = uri.queryParameters['id'];
+    }
 
     if (routineParam != null) {
       try {
@@ -254,33 +218,9 @@ class RoutineSharing {
         return null;
       }
     } else if (idParam != null) {
-      try {
-        final runtime = WorkoutLiveActivityFirebaseRuntime.instance;
-        if (runtime.isFirebaseAvailable) {
-          final functions = await runtime.functions();
-          if (functions != null) {
-            final callable = functions.httpsCallable('getSharedRoutine');
-            final response = await callable.call<Map<String, dynamic>>({
-              'id': idParam,
-            });
-            final decodedText = response.data['routineData'] as String?;
-            if (decodedText != null) {
-              if (decodedText.startsWith('3\n')) {
-                return _deserializeV3(decodedText);
-              }
-              var jsonMap = jsonDecode(decodedText) as Map<String, dynamic>;
-              jsonMap = _fromCompressedMap(jsonMap);
-              final newId = 'imported_${DateTime.now().millisecondsSinceEpoch}';
-              jsonMap['id'] = newId;
-              return Routine.fromJson(jsonMap);
-            }
-          }
-        }
-      } catch (e) {
-        debugPrint(
-            '[RoutineSharing] Error fetching shared routine from database: $e');
-        return null;
-      }
+      // Cloud short links were experimental. Recognition remains so they fail
+      // safely instead of being mistaken for unrelated clipboard contents.
+      return null;
     }
 
     return null;
@@ -297,16 +237,15 @@ class RoutineSharing {
   /// Checks the clipboard for a valid Valcue routine sharing link, parses it, and prompts the user to import it.
   static Future<void> checkClipboardAndImport(BuildContext context) async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    final text = data?.text?.trim();
-
+    final text = data?.text;
     if (text == null || text.isEmpty) return;
-    if (!text.startsWith(linkPrefix)) return;
-    if (text == _lastProcessedLink) return;
+    final link = extractShareLink(text);
+    if (link == null || link == _lastProcessedLink) return;
 
-    final routine = await parseShareLink(text);
+    final routine = await parseShareLink(link);
     if (routine == null) return;
 
-    _lastProcessedLink = text; // Mark as processed
+    _lastProcessedLink = link; // Mark as processed
 
     if (!context.mounted) return;
 
