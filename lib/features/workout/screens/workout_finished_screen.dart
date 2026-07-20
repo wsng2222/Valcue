@@ -282,38 +282,47 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
   }
 
   Future<void> _shareWorkout(BuildContext context) async {
-    // 1. Pick image from Camera
     final picker = ImagePicker();
-    XFile? pickedFile;
+
     try {
-      pickedFile = await picker.pickImage(
+      final pickedFile = await picker.pickImage(
         source: ImageSource.camera,
         preferredCameraDevice: CameraDevice.rear,
         maxWidth: 1080,
         maxHeight: 1080,
         imageQuality: 85,
       );
+
+      if (!context.mounted || pickedFile == null) {
+        // Closing the camera is an intentional cancellation. Keep the user on
+        // the workout completion screen instead of showing an empty card.
+        return;
+      }
+
+      await showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => _SharePreviewSheet(
+          routine: widget.routine,
+          elapsedSeconds: widget.elapsedSeconds,
+          distanceMeters: widget.distanceMeters,
+          finishTime: widget.finishTime,
+          currentIntervalIndex: widget.currentIntervalIndex,
+          elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
+          imagePath: pickedFile.path,
+        ),
+      );
     } catch (e) {
       debugLog('[WorkoutFinishedScreen] Error picking image: $e');
+      if (context.mounted) {
+        showAppMessage(
+          context,
+          AppLocalizations.of(context)!.unableToShareWorkout,
+          type: AppMessageType.error,
+        );
+      }
     }
-
-    if (!context.mounted) return;
-
-    // 2. Show the share preview bottom sheet
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _SharePreviewSheet(
-        routine: widget.routine,
-        elapsedSeconds: widget.elapsedSeconds,
-        distanceMeters: widget.distanceMeters,
-        finishTime: widget.finishTime,
-        currentIntervalIndex: widget.currentIntervalIndex,
-        elapsedSecondsInCurrentSession: widget.elapsedSecondsInCurrentSession,
-        imagePath: pickedFile?.path,
-      ),
-    );
   }
 
   @override
