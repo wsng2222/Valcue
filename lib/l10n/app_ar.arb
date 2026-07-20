@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -117,7 +117,7 @@
   "freeLimitMessage": "احصل على روتينات بلا حد مع بريميوم",
   "treadmill": "جهاز الجري",
   "cycle": "الدراجة",
-  "stairmaster": "السلم",
+  "stairmaster": "جهاز صعود الدرج",
   "selectLanguage": "اللغات",
   "selectTheme": "اختر المظهر",
   "selectDifficulty": "اختر الصعوبة",
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "لاحقة الدفع لمرة واحدة"
   },
-  "savePercent": "وفر {percent}%",
+  "savePercent": "وفّر {percent}",
   "@savePercent": {
     "description": "شارة نسبة التوفير",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -404,10 +404,10 @@
   "startTrackingYourWeight": "سجّل وزنك لتتبع تقدمك",
   "treadmillSession": "جلسة جهاز الجري",
   "bikeSession": "جلسة الدراجة",
-  "stairmasterSession": "جلسة السلم",
+  "stairmasterSession": "جلسة جهاز صعود الدرج",
   "treadmillWorkout": "تمرين جهاز الجري",
   "bikeWorkout": "تمرين الدراجة",
-  "stairmasterWorkout": "تمرين السلم",
+  "stairmasterWorkout": "تمرين صعود الدرج",
   "startAWorkoutToSeeItHere": "ستظهر تمارينك هنا",
   "mon": "الاثنين",
   "tue": "الثلاثاء",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{التمرين 1 يوم 🔥} other{التمرين {count} أيام 🔥}}",
+  "workoutDays": "أيام التمرين: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{الراحة 1 يوم 🛏️} other{الراحة {count} أيام 🛏️}}",
+  "restDays": "أيام الراحة: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -525,7 +525,7 @@
   "includeIncline": "تضمين الميل",
   "generateCustomRoutine": "إنشاء تمرين مخصص",
   "durationMinutes": "{minutes} دقيقة",
-  "floorCount": "{count} طابق",
+  "floorCount": "عدد الطوابق: {count}",
   "customRunName": "جري مخصص {distance} كم ({calories} سعرة)",
   "customCycleName": "دراجة مخصصة {distance} كم ({calories} سعرة)",
   "customStairsName": "درج مخصص {floors} طابق ({calories} سعرة)",
@@ -556,12 +556,26 @@
   "secondsShort": "قبل {seconds} ث",
   "selectCountdownTimings": "اختيار أوقات العد التنازلي",
   "countdownTimingMessage": "اختر وقت سماع الزمن المتبقي قبل تغير الفترة.",
-  "secondsLeft": "متبقٍ {seconds} ثانية",
+  "secondsLeft": "المتبقي: {seconds} ث",
   "qrShareInstruction": "امسح رمز QR هذا من تطبيق Valcue آخر\nلاستيراد التمرين فورًا.",
   "quickStart": "بدء سريع",
   "sessionRepeatBlock": "مجموعة جلسة متكررة",
-  "repeatTimes": "{count} تكرارات",
+  "repeatTimes": "عدد التكرارات: {count}",
   "addRepeatBlock": "إضافة مجموعة تكرار",
   "unableToShareWorkout": "تعذرت مشاركة التمرين.",
-  "unableToOpenPrivacyPolicy": "تعذر فتح سياسة الخصوصية."
+  "unableToOpenPrivacyPolicy": "تعذر فتح سياسة الخصوصية.",
+  "less": "أقل",
+  "more": "أكثر",
+  "inclineValue": "الميل: {value}٪",
+  "rpmValue": "{value} دورة/دقيقة",
+  "nextMetric": "التالي: {value}",
+  "weightCalendar": "تقويم الوزن",
+  "routineHeaderSummary": "{count, plural, zero{{duration} · لا فترات · {difficulty}} one{{duration} · فترة واحدة · {difficulty}} two{{duration} · فترتان · {difficulty}} few{{duration} · {countText} فترات · {difficulty}} many{{duration} · {countText} فترة · {difficulty}} other{{duration} · {countText} فترة · {difficulty}}}",
+  "goalAchievedSummary": "الهدف: {goalWeight} • تم تحقيقه!",
+  "goalRemainingSummary": "الهدف: {goalWeight} • متبقي {difference}",
+  "goalExceededSummary": "الهدف: {goalWeight} • تجاوز بمقدار {difference}",
+  "averageSpeedKmh": "متوسط السرعة: {value} كم/س",
+  "averageSpeedMph": "متوسط السرعة: {value} ميل/س",
+  "averageRpmValue": "متوسط الوتيرة: {value} دورة/دقيقة",
+  "averageLevelValue": "متوسط المستوى: {value}"
 }

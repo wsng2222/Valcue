@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// A text widget that ensures LTR rendering for values containing digits,
-/// colons, decimals, slashes, or Latin letters, while respecting RTL for other text.
+/// A text widget that can isolate machine-readable values in LTR direction.
 ///
-/// This prevents bidirectional text flips in Arabic UI for:
-/// - Timers: "00:34"
-/// - Numbers: "12.5"
-/// - Units: "km/h", "mph", "RPM"
-/// - Mixed: "5/10", "A-Z"
+/// Normal localized sentences always keep the ambient direction. Callers opt
+/// in with [forceLTR] only for direction-independent values such as timers,
+/// ratios, and metric readouts. Inferring direction from a single Latin letter
+/// or digit would incorrectly flip an entire Arabic sentence.
 class BidiSafeText extends StatelessWidget {
   /// The text to display
   final String text;
@@ -24,7 +22,7 @@ class BidiSafeText extends StatelessWidget {
   /// Text overflow handling
   final TextOverflow? overflow;
 
-  /// Whether to force LTR even if no LTR characters are detected
+  /// Whether this value is direction-independent and must render LTR.
   final bool forceLTR;
 
   const BidiSafeText(
@@ -37,21 +35,9 @@ class BidiSafeText extends StatelessWidget {
     this.forceLTR = false,
   });
 
-  /// Detects if the string contains any LTR characters that should stay LTR:
-  /// - Digits: 0-9
-  /// - Time separators: :
-  /// - Decimal points: .
-  /// - Slashes: /
-  /// - Latin letters: A-Z, a-z
-  static bool _containsLTRCharacters(String text) {
-    final ltrPattern = RegExp(r'[0-9:./A-Za-z]');
-    return ltrPattern.hasMatch(text);
-  }
-
-  /// Determines if the text should be rendered LTR
+  /// Kept as a small, testable policy helper.
   static bool shouldRenderLTR(String text, {bool forceLTR = false}) {
-    if (forceLTR) return true;
-    return _containsLTRCharacters(text);
+    return forceLTR;
   }
 
   @override
@@ -66,7 +52,6 @@ class BidiSafeText extends StatelessWidget {
       overflow: overflow,
     );
 
-    // If the text contains LTR characters, wrap it in Directionality to force LTR
     if (shouldLTR) {
       return Directionality(
         textDirection: TextDirection.ltr,

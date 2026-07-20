@@ -182,7 +182,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get level => 'المستوى';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'المستوى $level';
   }
 
@@ -200,7 +200,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get resistanceLevel => 'المقاومة (المستوى)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return 'المقاومة $resistance';
   }
 
@@ -289,7 +289,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cycle => 'الدراجة';
 
   @override
-  String get stairmaster => 'السلم';
+  String get stairmaster => 'جهاز صعود الدرج';
 
   @override
   String get selectLanguage => 'اللغات';
@@ -354,7 +354,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get liveActivityInProgress => 'التمرين جارٍ';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'الفترة $current/$total';
   }
 
@@ -496,8 +496,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get oneTime => 'دفع واحد';
 
   @override
-  String savePercent(int percent) {
-    return 'وفر $percent%';
+  String savePercent(String percent) {
+    return 'وفّر $percent';
   }
 
   @override
@@ -814,7 +814,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bikeSession => 'جلسة الدراجة';
 
   @override
-  String get stairmasterSession => 'جلسة السلم';
+  String get stairmasterSession => 'جلسة جهاز صعود الدرج';
 
   @override
   String get treadmillWorkout => 'تمرين جهاز الجري';
@@ -823,7 +823,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bikeWorkout => 'تمرين الدراجة';
 
   @override
-  String get stairmasterWorkout => 'تمرين السلم';
+  String get stairmasterWorkout => 'تمرين صعود الدرج';
 
   @override
   String get startAWorkoutToSeeItHere => 'ستظهر تمارينك هنا';
@@ -956,25 +956,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cancelAnytimeKeepAccess => 'ألغِ متى شئت واحتفظ بالوصول';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'التمرين $count أيام 🔥',
-      one: 'التمرين 1 يوم 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'أيام التمرين: $count 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'الراحة $count أيام 🛏️',
-      one: 'الراحة 1 يوم 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'أيام الراحة: $count 🛏️';
   }
 
   @override
@@ -1059,32 +1047,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get generateCustomRoutine => 'إنشاء تمرين مخصص';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes دقيقة';
   }
 
   @override
-  String floorCount(int count) {
-    return '$count طابق';
+  String floorCount(String count) {
+    return 'عدد الطوابق: $count';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'جري مخصص $distance كم ($calories سعرة)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'دراجة مخصصة $distance كم ($calories سعرة)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'درج مخصص $floors طابق ($calories سعرة)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'تمرينك المخصص جاهز. استهدف نحو $calories سعرة حرارية!';
   }
 
@@ -1132,13 +1120,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get importSharedRoutine => 'استيراد تمرين مشترك';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'تم العثور على تمرين في رمز QR.\n\n• الاسم: $name\n• الصعوبة: $difficulty\n• الفترات: $count\n\nهل تريد حفظه في مكتبتك؟';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'تم العثور على تمرين مشترك في الحافظة.\n\n• الاسم: $name\n• الصعوبة: $difficulty\n• الفترات: $count\n\nهل تريد حفظه في مكتبتك؟';
   }
 
@@ -1166,7 +1154,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noAnnouncements => 'بلا تنبيهات';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return 'قبل $seconds ث';
   }
 
@@ -1178,8 +1166,8 @@ class AppLocalizationsAr extends AppLocalizations {
       'اختر وقت سماع الزمن المتبقي قبل تغير الفترة.';
 
   @override
-  String secondsLeft(int seconds) {
-    return 'متبقٍ $seconds ثانية';
+  String secondsLeft(String seconds) {
+    return 'المتبقي: $seconds ث';
   }
 
   @override
@@ -1193,8 +1181,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sessionRepeatBlock => 'مجموعة جلسة متكررة';
 
   @override
-  String repeatTimes(int count) {
-    return '$count تكرارات';
+  String repeatTimes(String count) {
+    return 'عدد التكرارات: $count';
   }
 
   @override
@@ -1205,4 +1193,79 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unableToOpenPrivacyPolicy => 'تعذر فتح سياسة الخصوصية.';
+
+  @override
+  String get less => 'أقل';
+
+  @override
+  String get more => 'أكثر';
+
+  @override
+  String inclineValue(String value) {
+    return 'الميل: $value٪';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value دورة/دقيقة';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'التالي: $value';
+  }
+
+  @override
+  String get weightCalendar => 'تقويم الوزن';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText فترة · $difficulty',
+      many: '$duration · $countText فترة · $difficulty',
+      few: '$duration · $countText فترات · $difficulty',
+      two: '$duration · فترتان · $difficulty',
+      one: '$duration · فترة واحدة · $difficulty',
+      zero: '$duration · لا فترات · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'الهدف: $goalWeight • تم تحقيقه!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'الهدف: $goalWeight • متبقي $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'الهدف: $goalWeight • تجاوز بمقدار $difference';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'متوسط السرعة: $value كم/س';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'متوسط السرعة: $value ميل/س';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'متوسط الوتيرة: $value دورة/دقيقة';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'متوسط المستوى: $value';
+  }
 }

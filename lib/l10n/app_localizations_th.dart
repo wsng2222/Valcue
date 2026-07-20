@@ -48,7 +48,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get dark => 'โหมดมืด';
 
   @override
-  String get smartwatchSync => 'Smartwatch Sync';
+  String get smartwatchSync => 'ซิงค์สมาร์ทวอทช์';
 
   @override
   String get connectSmartwatch => 'เชื่อมต่อสมาร์ทวอทช์';
@@ -181,7 +181,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get level => 'ระดับ';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'ระดับ $level';
   }
 
@@ -199,7 +199,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get resistanceLevel => 'แรงต้าน (ระดับ)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return 'แรงต้าน $resistance';
   }
 
@@ -287,7 +287,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cycle => 'จักรยาน';
 
   @override
-  String get stairmaster => 'Stairmaster';
+  String get stairmaster => 'เครื่องขึ้นบันได';
 
   @override
   String get selectLanguage => 'ภาษา';
@@ -351,7 +351,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get liveActivityInProgress => 'กำลังออกกำลังกาย';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'ช่วงที่ $current/$total';
   }
 
@@ -412,7 +412,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumMembership => 'พรีเมียม';
 
   @override
-  String get benefitCycleStairmaster => 'รูทีนจักรยานและ StairMaster';
+  String get benefitCycleStairmaster => 'รูทีนจักรยานและเครื่องขึ้นบันได';
 
   @override
   String get benefitVoiceGuide => 'ระบบไกด์เสียงแจ้งเตือนทุกเซสชัน';
@@ -444,10 +444,11 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get routineLimitBenefit3 =>
-      'รองรับทั้งลู่วิ่ง จักรยาน และ StairMaster อย่างสมบูรณ์';
+      'รองรับทั้งลู่วิ่ง จักรยาน และเครื่องขึ้นบันได';
 
   @override
-  String get premium_benefit_1 => 'รองรับ <red>จักรยาน & StairMaster</red>';
+  String get premium_benefit_1 =>
+      'รองรับ <red>จักรยานและเครื่องขึ้นบันได</red>';
 
   @override
   String get premium_benefit_2 => '<red>โค้ชเสียงนำทาง</red> ทุกช่วงเซสชัน';
@@ -471,7 +472,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get premiumSubheadline =>
-      'ปลดล็อกไกด์เสียง ออกกำลังกายจักรยาน & Stairmaster และรูทีนไม่จำกัด';
+      'ปลดล็อกไกด์เสียง การฝึกจักรยานและเครื่องขึ้นบันได พร้อมรูทีนไม่จำกัด';
 
   @override
   String get monthly => 'รายเดือน';
@@ -495,8 +496,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get oneTime => 'ครั้งเดียว';
 
   @override
-  String savePercent(int percent) {
-    return 'ประหยัด $percent%';
+  String savePercent(String percent) {
+    return 'ประหยัด $percent';
   }
 
   @override
@@ -815,7 +816,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get bikeSession => 'เซสชันจักรยาน';
 
   @override
-  String get stairmasterSession => 'เซสชัน Stairmaster';
+  String get stairmasterSession => 'เซสชันเครื่องขึ้นบันได';
 
   @override
   String get treadmillWorkout => 'ออกกำลังกายลู่วิ่ง';
@@ -824,7 +825,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get bikeWorkout => 'ออกกำลังกายจักรยาน';
 
   @override
-  String get stairmasterWorkout => 'ออกกำลังกาย Stairmaster';
+  String get stairmasterWorkout => 'ออกกำลังกายด้วยเครื่องขึ้นบันได';
 
   @override
   String get startAWorkoutToSeeItHere => 'ประวัติการออกกำลังจะแสดงที่นี่';
@@ -959,25 +960,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cancelAnytimeKeepAccess => 'ยกเลิกได้ทุกเมื่อ แต่ยังใช้ได้ต่อ';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'การออกกำลังกาย $count วัน 🔥',
-      one: 'การออกกำลังกาย 1 วัน 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'วันออกกำลังกาย: $count วัน 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'วันพัก $count วัน 🛏️',
-      one: 'วันพัก 1 วัน 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'วันพัก: $count วัน 🛏️';
   }
 
   @override
@@ -1062,32 +1051,32 @@ class AppLocalizationsTh extends AppLocalizations {
   String get generateCustomRoutine => 'สร้างรูทีนเฉพาะบุคคล';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes นาที';
   }
 
   @override
-  String floorCount(int count) {
+  String floorCount(String count) {
     return '$count ชั้น';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'วิ่งเฉพาะบุคคล $distance กม. ($calories kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'ปั่นจักรยานเฉพาะบุคคล $distance กม. ($calories kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'ขึ้นบันไดเฉพาะบุคคล $floors ชั้น ($calories kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'รูทีนเฉพาะบุคคลพร้อมแล้ว ตั้งเป้าประมาณ $calories แคลอรีกันเลย!';
   }
 
@@ -1135,13 +1124,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get importSharedRoutine => 'นำเข้ารูทีนที่แชร์';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'พบรูทีนในคิวอาร์โค้ด\n\n• ชื่อ: $name\n• ความยาก: $difficulty\n• ช่วง: $count\n\nต้องการบันทึกลงคลังหรือไม่';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'พบรูทีนที่แชร์ในคลิปบอร์ด\n\n• ชื่อ: $name\n• ความยาก: $difficulty\n• ช่วง: $count\n\nต้องการบันทึกลงคลังหรือไม่';
   }
 
@@ -1169,7 +1158,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get noAnnouncements => 'ไม่มีการแจ้งเตือน';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return 'ก่อน $seconds วิ.';
   }
 
@@ -1181,7 +1170,7 @@ class AppLocalizationsTh extends AppLocalizations {
       'เลือกเวลาที่จะได้ยินเวลาคงเหลือก่อนเปลี่ยนช่วง';
 
   @override
-  String secondsLeft(int seconds) {
+  String secondsLeft(String seconds) {
     return 'เหลือ $seconds วินาที';
   }
 
@@ -1196,7 +1185,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get sessionRepeatBlock => 'บล็อกเซสชันแบบทำซ้ำ';
 
   @override
-  String repeatTimes(int count) {
+  String repeatTimes(String count) {
     return 'ทำซ้ำ $count ครั้ง';
   }
 
@@ -1209,4 +1198,74 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get unableToOpenPrivacyPolicy =>
       'ไม่สามารถเปิดนโยบายความเป็นส่วนตัวได้';
+
+  @override
+  String get less => 'น้อย';
+
+  @override
+  String get more => 'มาก';
+
+  @override
+  String inclineValue(String value) {
+    return 'ความชัน $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value รอบ/นาที';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'ถัดไป: $value';
+  }
+
+  @override
+  String get weightCalendar => 'ปฏิทินน้ำหนัก';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText ช่วง · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'เป้าหมาย $goalWeight • สำเร็จแล้ว!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'เป้าหมาย $goalWeight • เหลือ $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'เป้าหมาย $goalWeight • เกิน $difference';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'เฉลี่ย $value กม./ชม.';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'เฉลี่ย $value ไมล์/ชม.';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'เฉลี่ย $value รอบ/นาที';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'ระดับเฉลี่ย $value';
+  }
 }

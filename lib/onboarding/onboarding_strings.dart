@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'widgets/onboarding_emphasis_text.dart';
+import '../l10n/supported_app_language.dart';
 
 /// Onboarding-local strings for all supported app languages.
 ///
@@ -13,27 +15,10 @@ class OnboardingStrings {
 
   static OnboardingStrings of(BuildContext context) {
     final code = Localizations.localeOf(context).languageCode;
-    return OnboardingStrings._(_supported.contains(code) ? code : 'en');
+    return OnboardingStrings._(
+      SupportedAppLanguage.supports(code) ? code : 'en',
+    );
   }
-
-  static const _supported = <String>{
-    'en',
-    'es',
-    'fr',
-    'de',
-    'it',
-    'nl',
-    'da',
-    'nb',
-    'ru',
-    'pt',
-    'ja',
-    'zh',
-    'ko',
-    'vi',
-    'ar',
-    'th',
-  };
 
   // ---- CTA ----
   String ctaStart() => _t({
@@ -146,12 +131,12 @@ class OnboardingStrings {
         'es': const [
           EmphasisTextSpan('Camina, corre...\n'),
           EmphasisTextSpan('Planifica tu rutina de intervalos '),
-          EmphasisTextSpan('tú mismo!', isRed: true),
+          EmphasisTextSpan('¡a tu manera!', isRed: true),
         ],
         'fr': const [
-          EmphasisTextSpan('Marche, cours...\n'),
-          EmphasisTextSpan('Planifie ton entraînement '),
-          EmphasisTextSpan('toi-même !', isRed: true),
+          EmphasisTextSpan('Marchez, courez…\n'),
+          EmphasisTextSpan('Planifiez votre entraînement '),
+          EmphasisTextSpan('à votre façon !', isRed: true),
         ],
         'de': const [
           EmphasisTextSpan('Gehen, laufen...\n'),
@@ -161,7 +146,7 @@ class OnboardingStrings {
         'it': const [
           EmphasisTextSpan('Cammina, corri...\n'),
           EmphasisTextSpan('Pianifica la tua routine a intervalli '),
-          EmphasisTextSpan('da solo!', isRed: true),
+          EmphasisTextSpan('come vuoi!', isRed: true),
         ],
         'nl': const [
           EmphasisTextSpan('Wandelen, rennen...\n'),
@@ -181,12 +166,12 @@ class OnboardingStrings {
         'ru': const [
           EmphasisTextSpan('Ходьба, бег...\n'),
           EmphasisTextSpan('Планируй интервальную тренировку '),
-          EmphasisTextSpan('сам!', isRed: true),
+          EmphasisTextSpan('по-своему!', isRed: true),
         ],
         'pt': const [
           EmphasisTextSpan('Caminhe, corra...\n'),
           EmphasisTextSpan('Planeje seu treino intervalado '),
-          EmphasisTextSpan('você mesmo!', isRed: true),
+          EmphasisTextSpan('do seu jeito!', isRed: true),
         ],
         'ja': const [
           EmphasisTextSpan('歩いて、走って…\n'),
@@ -200,8 +185,8 @@ class OnboardingStrings {
         ],
         'vi': const [
           EmphasisTextSpan('Đi bộ, chạy...\n'),
-          EmphasisTextSpan('Tự lên kế hoạch bài interval '),
-          EmphasisTextSpan('của bạn!', isRed: true),
+          EmphasisTextSpan('Tự lên kế hoạch bài tập ngắt quãng '),
+          EmphasisTextSpan('theo cách của bạn!', isRed: true),
         ],
         'ar': const [
           EmphasisTextSpan('امشِ، اركض…\n'),
@@ -223,19 +208,18 @@ class OnboardingStrings {
           EmphasisTextSpan(' 걷기'),
         ],
         'en': const [
-          EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('slow', isRed: true),
-          EmphasisTextSpan(' walk'),
+          EmphasisTextSpan('Walk '),
+          EmphasisTextSpan('slowly', isRed: true),
+          EmphasisTextSpan(' for 30 min'),
         ],
         'es': const [
-          EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('lento', isRed: true),
-          EmphasisTextSpan(' caminar'),
+          EmphasisTextSpan('Camina '),
+          EmphasisTextSpan('despacio', isRed: true),
+          EmphasisTextSpan(' durante 30 min'),
         ],
         'fr': const [
-          EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('lent', isRed: true),
-          EmphasisTextSpan(' marcher'),
+          EmphasisTextSpan('30 min de marche '),
+          EmphasisTextSpan('lente', isRed: true),
         ],
         'de': const [
           EmphasisTextSpan('30 Min. '),
@@ -243,9 +227,8 @@ class OnboardingStrings {
           EmphasisTextSpan(' gehen'),
         ],
         'it': const [
-          EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('lento', isRed: true),
-          EmphasisTextSpan(' camminare'),
+          EmphasisTextSpan('30 min di camminata '),
+          EmphasisTextSpan('lenta', isRed: true),
         ],
         'nl': const [
           EmphasisTextSpan('30 min '),
@@ -254,8 +237,8 @@ class OnboardingStrings {
         ],
         'da': const [
           EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('roligt', isRed: true),
-          EmphasisTextSpan(' gå'),
+          EmphasisTextSpan('rolig', isRed: true),
+          EmphasisTextSpan(' gang'),
         ],
         'nb': const [
           EmphasisTextSpan('30 min '),
@@ -264,13 +247,12 @@ class OnboardingStrings {
         ],
         'ru': const [
           EmphasisTextSpan('30 мин '),
-          EmphasisTextSpan('медленно', isRed: true),
-          EmphasisTextSpan(' идти'),
+          EmphasisTextSpan('медленной', isRed: true),
+          EmphasisTextSpan(' ходьбы'),
         ],
         'pt': const [
-          EmphasisTextSpan('30 min '),
-          EmphasisTextSpan('devagar', isRed: true),
-          EmphasisTextSpan(' caminhar'),
+          EmphasisTextSpan('30 min de caminhada '),
+          EmphasisTextSpan('leve', isRed: true),
         ],
         'ja': const [
           EmphasisTextSpan('30分 '),
@@ -278,24 +260,22 @@ class OnboardingStrings {
           EmphasisTextSpan('歩く'),
         ],
         'zh': const [
-          EmphasisTextSpan('30分钟 '),
-          EmphasisTextSpan('慢慢', isRed: true),
-          EmphasisTextSpan('走'),
+          EmphasisTextSpan('慢走', isRed: true),
+          EmphasisTextSpan('30分钟'),
         ],
         'vi': const [
-          EmphasisTextSpan('30 phút '),
+          EmphasisTextSpan('Đi bộ '),
           EmphasisTextSpan('chậm', isRed: true),
-          EmphasisTextSpan(' đi bộ'),
+          EmphasisTextSpan(' trong 30 phút'),
         ],
         'ar': const [
-          EmphasisTextSpan('30 دقيقة '),
-          EmphasisTextSpan('ببطء', isRed: true),
-          EmphasisTextSpan(' مشي'),
+          EmphasisTextSpan('30 دقيقة من المشي '),
+          EmphasisTextSpan('البطيء', isRed: true),
         ],
         'th': const [
-          EmphasisTextSpan('30 นาที '),
+          EmphasisTextSpan('เดิน'),
           EmphasisTextSpan('ช้าๆ', isRed: true),
-          EmphasisTextSpan(' เดิน'),
+          EmphasisTextSpan(' 30 นาที'),
         ],
       });
 
@@ -306,19 +286,18 @@ class OnboardingStrings {
           EmphasisTextSpan(' 뛰기'),
         ],
         'en': const [
-          EmphasisTextSpan('10 min '),
+          EmphasisTextSpan('Run '),
           EmphasisTextSpan('fast', isRed: true),
-          EmphasisTextSpan(' run'),
+          EmphasisTextSpan(' for 10 min'),
         ],
         'es': const [
-          EmphasisTextSpan('10 min '),
+          EmphasisTextSpan('Corre '),
           EmphasisTextSpan('rápido', isRed: true),
-          EmphasisTextSpan(' correr'),
+          EmphasisTextSpan(' durante 10 min'),
         ],
         'fr': const [
-          EmphasisTextSpan('10 min '),
-          EmphasisTextSpan('vite', isRed: true),
-          EmphasisTextSpan(' courir'),
+          EmphasisTextSpan('10 min de course '),
+          EmphasisTextSpan('rapide', isRed: true),
         ],
         'de': const [
           EmphasisTextSpan('10 Min. '),
@@ -326,9 +305,8 @@ class OnboardingStrings {
           EmphasisTextSpan(' laufen'),
         ],
         'it': const [
-          EmphasisTextSpan('10 min '),
+          EmphasisTextSpan('10 min di corsa '),
           EmphasisTextSpan('veloce', isRed: true),
-          EmphasisTextSpan(' correre'),
         ],
         'nl': const [
           EmphasisTextSpan('10 min '),
@@ -338,22 +316,21 @@ class OnboardingStrings {
         'da': const [
           EmphasisTextSpan('10 min '),
           EmphasisTextSpan('hurtigt', isRed: true),
-          EmphasisTextSpan(' løbe'),
+          EmphasisTextSpan(' løb'),
         ],
         'nb': const [
           EmphasisTextSpan('10 min '),
-          EmphasisTextSpan('fort', isRed: true),
-          EmphasisTextSpan(' løpe'),
+          EmphasisTextSpan('rask', isRed: true),
+          EmphasisTextSpan(' løping'),
         ],
         'ru': const [
           EmphasisTextSpan('10 мин '),
-          EmphasisTextSpan('быстро', isRed: true),
-          EmphasisTextSpan(' бежать'),
+          EmphasisTextSpan('быстрого', isRed: true),
+          EmphasisTextSpan(' бега'),
         ],
         'pt': const [
-          EmphasisTextSpan('10 min '),
-          EmphasisTextSpan('rápido', isRed: true),
-          EmphasisTextSpan(' correr'),
+          EmphasisTextSpan('10 min de corrida '),
+          EmphasisTextSpan('rápida', isRed: true),
         ],
         'ja': const [
           EmphasisTextSpan('10分 '),
@@ -361,24 +338,22 @@ class OnboardingStrings {
           EmphasisTextSpan('走る'),
         ],
         'zh': const [
-          EmphasisTextSpan('10分钟 '),
-          EmphasisTextSpan('快速', isRed: true),
-          EmphasisTextSpan('跑'),
+          EmphasisTextSpan('快跑', isRed: true),
+          EmphasisTextSpan('10分钟'),
         ],
         'vi': const [
-          EmphasisTextSpan('10 phút '),
+          EmphasisTextSpan('Chạy '),
           EmphasisTextSpan('nhanh', isRed: true),
-          EmphasisTextSpan(' chạy'),
+          EmphasisTextSpan(' trong 10 phút'),
         ],
         'ar': const [
-          EmphasisTextSpan('10 دقائق '),
-          EmphasisTextSpan('سريعًا', isRed: true),
-          EmphasisTextSpan(' جري'),
+          EmphasisTextSpan('10 دقائق من الجري '),
+          EmphasisTextSpan('السريع', isRed: true),
         ],
         'th': const [
-          EmphasisTextSpan('10 นาที '),
-          EmphasisTextSpan('เร็วๆ', isRed: true),
-          EmphasisTextSpan(' วิ่ง'),
+          EmphasisTextSpan('วิ่ง'),
+          EmphasisTextSpan('เร็ว', isRed: true),
+          EmphasisTextSpan(' 10 นาที'),
         ],
       });
 
@@ -424,13 +399,13 @@ class OnboardingStrings {
         'ko': '하나를 선택해 보세요',
         'en': 'Choose one',
         'es': 'Elige una opción',
-        'fr': 'Choisis une option',
+        'fr': 'Choisissez une option',
         'de': 'Wähle eine Option',
         'it': 'Scegli un’opzione',
         'nl': 'Kies er één',
         'da': 'Vælg én',
         'nb': 'Velg én',
-        'ru': 'Выберите вариант',
+        'ru': 'Выбери вариант',
         'pt': 'Escolha uma opção',
         'ja': 'どちらかを選んでください',
         'zh': '请选择一个',
@@ -443,7 +418,7 @@ class OnboardingStrings {
         'ko': '선택 완료 · 다음에서 확인하세요',
         'en': 'Selected · See the answer next',
         'es': 'Elegido · Descubre la respuesta',
-        'fr': 'Choisi · Découvre ensuite la réponse',
+        'fr': 'Choix enregistré · Découvrez ensuite la réponse',
         'de': 'Ausgewählt · Die Antwort kommt gleich',
         'it': 'Scelto · Scopri ora la risposta',
         'nl': 'Gekozen · Bekijk hierna het antwoord',
@@ -462,14 +437,14 @@ class OnboardingStrings {
         _t({
           'ko': '2분 천천히 걷고,',
           'en': 'Walk slowly for 2 minutes,',
-          'es': 'Camina lento 2 minutos,',
-          'fr': 'Marche lentement 2 minutes,',
+          'es': 'Camina despacio durante 2 minutos,',
+          'fr': '2 minutes de marche lente,',
           'de': '2 Minuten langsam gehen,',
           'it': 'Cammina lentamente 2 minuti,',
           'nl': '2 minuten rustig wandelen,',
           'da': 'Gå roligt i 2 minutter,',
           'nb': 'Gå rolig i 2 minutter,',
-          'ru': '2 минуты идти медленно,',
+          'ru': '2 минуты медленной ходьбы,',
           'pt': 'Caminhe devagar por 2 minutos,',
           'ja': '2分ゆっくり歩いて、',
           'zh': '慢走2分钟，',
@@ -480,14 +455,14 @@ class OnboardingStrings {
         _t({
           'ko': '3분 빠르게 뛰고,',
           'en': 'run fast for 3 minutes,',
-          'es': 'corre rápido 3 minutos,',
-          'fr': 'cours vite 3 minutes,',
+          'es': 'corre rápido durante 3 minutos,',
+          'fr': '3 minutes de course rapide,',
           'de': '3 Minuten schnell laufen,',
           'it': 'corri veloce 3 minuti,',
           'nl': '3 minuten snel rennen,',
           'da': 'løb hurtigt i 3 minutter,',
-          'nb': 'løp fort i 3 minutter,',
-          'ru': '3 минуты бежать быстро,',
+          'nb': 'løp raskt i 3 minutter,',
+          'ru': '3 минуты быстрого бега,',
           'pt': 'corra rápido por 3 minutos,',
           'ja': '3分速く走って、',
           'zh': '快跑3分钟，',
@@ -498,14 +473,14 @@ class OnboardingStrings {
         _t({
           'ko': '또 다시 2분 천천히 걷고,',
           'en': 'then walk slowly for 2 minutes again,',
-          'es': 'luego camina lento 2 minutos otra vez,',
-          'fr': 'puis marche lentement 2 minutes encore,',
+          'es': 'luego camina despacio otros 2 minutos,',
+          'fr': 'puis encore 2 minutes de marche lente,',
           'de': 'dann wieder 2 Minuten langsam gehen,',
           'it': 'poi cammina lentamente 2 minuti di nuovo,',
           'nl': 'dan weer 2 minuten rustig wandelen,',
-          'da': 'så igen gå roligt i 2 minutter,',
-          'nb': 'så igjen gå rolig i 2 minutter,',
-          'ru': 'потом снова 2 минуты идти медленно,',
+          'da': 'gå så roligt i 2 minutter igen,',
+          'nb': 'gå så rolig i 2 minutter igjen,',
+          'ru': 'затем ещё 2 минуты медленной ходьбы,',
           'pt': 'depois caminhe devagar por 2 minutos de novo,',
           'ja': 'また2分ゆっくり歩いて、',
           'zh': '再慢走2分钟，',
@@ -516,14 +491,14 @@ class OnboardingStrings {
         _t({
           'ko': '또 다시 3분 빠르게 뛰고,',
           'en': 'and run fast for 3 minutes again,',
-          'es': 'y corre rápido 3 minutos otra vez,',
-          'fr': 'et cours vite 3 minutes encore,',
+          'es': 'y corre rápido otros 3 minutos,',
+          'fr': 'et encore 3 minutes de course rapide,',
           'de': 'und wieder 3 Minuten schnell laufen,',
           'it': 'e corri veloce 3 minuti di nuovo,',
           'nl': 'en weer 3 minuten snel rennen,',
-          'da': 'og igen løb hurtigt i 3 minutter,',
-          'nb': 'og igjen løp fort i 3 minutter,',
-          'ru': 'и снова 3 минуты бежать быстро,',
+          'da': 'og løb hurtigt i 3 minutter igen,',
+          'nb': 'og løp raskt i 3 minutter igjen,',
+          'ru': 'и ещё 3 минуты быстрого бега,',
           'pt': 'e corra rápido por 3 minutos de novo,',
           'ja': 'また3分速く走って、',
           'zh': '再快跑3分钟，',
@@ -597,26 +572,26 @@ class OnboardingStrings {
           case 0:
             return const [
               EmphasisTextSpan('Camina ', isRed: false),
-              EmphasisTextSpan('lento', isRed: true),
-              EmphasisTextSpan(' 2 minutos,', isRed: false),
+              EmphasisTextSpan('despacio', isRed: true),
+              EmphasisTextSpan(' durante 2 minutos,', isRed: false),
             ];
           case 1:
             return const [
               EmphasisTextSpan('corre ', isRed: false),
               EmphasisTextSpan('rápido', isRed: true),
-              EmphasisTextSpan(' 3 minutos,', isRed: false),
+              EmphasisTextSpan(' durante 3 minutos,', isRed: false),
             ];
           case 2:
             return const [
               EmphasisTextSpan('luego camina ', isRed: false),
-              EmphasisTextSpan('lento', isRed: true),
-              EmphasisTextSpan(' 2 minutos otra vez,', isRed: false),
+              EmphasisTextSpan('despacio', isRed: true),
+              EmphasisTextSpan(' otros 2 minutos,', isRed: false),
             ];
           case 3:
             return const [
               EmphasisTextSpan('y corre ', isRed: false),
               EmphasisTextSpan('rápido', isRed: true),
-              EmphasisTextSpan(' 3 minutos otra vez,', isRed: false),
+              EmphasisTextSpan(' otros 3 minutos,', isRed: false),
             ];
         }
         break;
@@ -624,27 +599,28 @@ class OnboardingStrings {
         switch (idx) {
           case 0:
             return const [
-              EmphasisTextSpan('Marche ', isRed: false),
-              EmphasisTextSpan('lentement', isRed: true),
-              EmphasisTextSpan(' 2 minutes,', isRed: false),
+              EmphasisTextSpan('2 minutes de marche ', isRed: false),
+              EmphasisTextSpan('lente', isRed: true),
+              EmphasisTextSpan(',', isRed: false),
             ];
           case 1:
             return const [
-              EmphasisTextSpan('cours ', isRed: false),
-              EmphasisTextSpan('vite', isRed: true),
-              EmphasisTextSpan(' 3 minutes,', isRed: false),
+              EmphasisTextSpan('3 minutes de course ', isRed: false),
+              EmphasisTextSpan('rapide', isRed: true),
+              EmphasisTextSpan(',', isRed: false),
             ];
           case 2:
             return const [
-              EmphasisTextSpan('puis marche ', isRed: false),
-              EmphasisTextSpan('lentement', isRed: true),
-              EmphasisTextSpan(' 2 minutes encore,', isRed: false),
+              EmphasisTextSpan('puis encore 2 minutes de marche ',
+                  isRed: false),
+              EmphasisTextSpan('lente', isRed: true),
+              EmphasisTextSpan(',', isRed: false),
             ];
           case 3:
             return const [
-              EmphasisTextSpan('et cours ', isRed: false),
-              EmphasisTextSpan('vite', isRed: true),
-              EmphasisTextSpan(' 3 minutes encore,', isRed: false),
+              EmphasisTextSpan('et encore 3 minutes de course ', isRed: false),
+              EmphasisTextSpan('rapide', isRed: true),
+              EmphasisTextSpan(',', isRed: false),
             ];
         }
         break;
@@ -748,15 +724,15 @@ class OnboardingStrings {
             ];
           case 2:
             return const [
-              EmphasisTextSpan('så igen gå ', isRed: false),
+              EmphasisTextSpan('gå så ', isRed: false),
               EmphasisTextSpan('roligt', isRed: true),
-              EmphasisTextSpan(' i 2 minutter,', isRed: false),
+              EmphasisTextSpan(' i 2 minutter igen,', isRed: false),
             ];
           case 3:
             return const [
-              EmphasisTextSpan('og igen løb ', isRed: false),
+              EmphasisTextSpan('og løb ', isRed: false),
               EmphasisTextSpan('hurtigt', isRed: true),
-              EmphasisTextSpan(' i 3 minutter,', isRed: false),
+              EmphasisTextSpan(' i 3 minutter igen,', isRed: false),
             ];
         }
         break;
@@ -771,20 +747,20 @@ class OnboardingStrings {
           case 1:
             return const [
               EmphasisTextSpan('løp ', isRed: false),
-              EmphasisTextSpan('fort', isRed: true),
+              EmphasisTextSpan('raskt', isRed: true),
               EmphasisTextSpan(' i 3 minutter,', isRed: false),
             ];
           case 2:
             return const [
-              EmphasisTextSpan('så igjen gå ', isRed: false),
+              EmphasisTextSpan('gå så ', isRed: false),
               EmphasisTextSpan('rolig', isRed: true),
-              EmphasisTextSpan(' i 2 minutter,', isRed: false),
+              EmphasisTextSpan(' i 2 minutter igjen,', isRed: false),
             ];
           case 3:
             return const [
-              EmphasisTextSpan('og igjen løp ', isRed: false),
-              EmphasisTextSpan('fort', isRed: true),
-              EmphasisTextSpan(' i 3 minutter,', isRed: false),
+              EmphasisTextSpan('og løp ', isRed: false),
+              EmphasisTextSpan('raskt', isRed: true),
+              EmphasisTextSpan(' i 3 minutter igjen,', isRed: false),
             ];
         }
         break;
@@ -792,27 +768,27 @@ class OnboardingStrings {
         switch (idx) {
           case 0:
             return const [
-              EmphasisTextSpan('2 минуты идти ', isRed: false),
-              EmphasisTextSpan('медленно', isRed: true),
-              EmphasisTextSpan(',', isRed: false),
+              EmphasisTextSpan('2 минуты ', isRed: false),
+              EmphasisTextSpan('медленной', isRed: true),
+              EmphasisTextSpan(' ходьбы,', isRed: false),
             ];
           case 1:
             return const [
-              EmphasisTextSpan('3 минуты бежать ', isRed: false),
-              EmphasisTextSpan('быстро', isRed: true),
-              EmphasisTextSpan(',', isRed: false),
+              EmphasisTextSpan('3 минуты ', isRed: false),
+              EmphasisTextSpan('быстрого', isRed: true),
+              EmphasisTextSpan(' бега,', isRed: false),
             ];
           case 2:
             return const [
-              EmphasisTextSpan('потом снова 2 минуты идти ', isRed: false),
-              EmphasisTextSpan('медленно', isRed: true),
-              EmphasisTextSpan(',', isRed: false),
+              EmphasisTextSpan('затем ещё 2 минуты ', isRed: false),
+              EmphasisTextSpan('медленной', isRed: true),
+              EmphasisTextSpan(' ходьбы,', isRed: false),
             ];
           case 3:
             return const [
-              EmphasisTextSpan('и снова 3 минуты бежать ', isRed: false),
-              EmphasisTextSpan('быстро', isRed: true),
-              EmphasisTextSpan(',', isRed: false),
+              EmphasisTextSpan('и ещё 3 минуты ', isRed: false),
+              EmphasisTextSpan('быстрого', isRed: true),
+              EmphasisTextSpan(' бега,', isRed: false),
             ];
         }
         break;
@@ -1152,7 +1128,7 @@ class OnboardingStrings {
       'ar': '{n} دقيقة إجمالًا',
       'th': 'รวม {n} นาที',
     });
-    return template.replaceAll('{n}', n.toString());
+    return template.replaceAll('{n}', _number(n));
   }
 
   String planIntervalCountLabel(int n) {
@@ -1174,7 +1150,7 @@ class OnboardingStrings {
       'ar': '{n} فترات',
       'th': '{n} ช่วง',
     });
-    return template.replaceAll('{n}', n.toString());
+    return template.replaceAll('{n}', _number(n));
   }
 
   String planIntervalLabel(int n) {
@@ -1196,7 +1172,7 @@ class OnboardingStrings {
       'ar': 'الفترة {n}',
       'th': 'ช่วงที่ {n}',
     });
-    return template.replaceAll('{n}', n.toString());
+    return template.replaceAll('{n}', _number(n));
   }
 
   String planMinutesLabel(int n) {
@@ -1218,7 +1194,7 @@ class OnboardingStrings {
       'ar': '{n} دقائق',
       'th': '{n} นาที',
     });
-    return template.replaceAll('{n}', n.toString());
+    return template.replaceAll('{n}', _number(n));
   }
 
   String planRecoveryWalkLabel() => _t({
@@ -1296,8 +1272,8 @@ class OnboardingStrings {
           EmphasisTextSpan(' al entrenar.'),
         ],
         'fr': const [
-          EmphasisTextSpan('Regarde vitesse et temps,\n'),
-          EmphasisTextSpan('suis ta routine', isRed: true),
+          EmphasisTextSpan('Regardez la vitesse et le temps,\n'),
+          EmphasisTextSpan('suivez votre séance', isRed: true),
           EmphasisTextSpan(' pendant l’entraînement.'),
         ],
         'de': const [
@@ -1347,7 +1323,7 @@ class OnboardingStrings {
         ],
         'vi': const [
           EmphasisTextSpan('Xem tốc độ và thời gian,\n'),
-          EmphasisTextSpan('tập theo đúng routine', isRed: true),
+          EmphasisTextSpan('tập theo đúng chương trình', isRed: true),
           EmphasisTextSpan('.'),
         ],
         'ar': const [
@@ -1419,7 +1395,7 @@ class OnboardingStrings {
         ],
         'fr': const [
           EmphasisTextSpan('Après l’entraînement,\n'),
-          EmphasisTextSpan('enregistre tes séances', isRed: true),
+          EmphasisTextSpan('enregistrez vos séances', isRed: true),
           EmphasisTextSpan('.'),
         ],
         'de': const [
@@ -1546,7 +1522,7 @@ class OnboardingStrings {
       'ar': '🔥 {n} أسبوعًا متتاليًا',
       'th': '🔥 ต่อเนื่อง {n} สัปดาห์',
     });
-    return template.replaceAll('{n}', n.toString());
+    return template.replaceAll('{n}', _number(n));
   }
 
   String historyTreadmillRoutineTitle(int n) => _numberedLabel(
@@ -1700,7 +1676,7 @@ class OnboardingStrings {
           EmphasisTextSpan(' de entrenamiento'),
         ],
         'fr': const [
-          EmphasisTextSpan('Choisis ton '),
+          EmphasisTextSpan('Choisissez votre '),
           EmphasisTextSpan('niveau', isRed: true),
           EmphasisTextSpan(''),
         ],
@@ -1897,7 +1873,7 @@ class OnboardingStrings {
           EmphasisTextSpan('unidades', isRed: true),
         ],
         'fr': const [
-          EmphasisTextSpan('Choisis tes '),
+          EmphasisTextSpan('Choisissez vos '),
           EmphasisTextSpan('unités', isRed: true),
         ],
         'de': const [
@@ -2099,7 +2075,7 @@ class OnboardingStrings {
         'ko': '를 즐겨보세요',
         'en': ' and enjoy it.',
         'es': ' y disfrútalo.',
-        'fr': ' et profite-en.',
+        'fr': ' et profitez-en.',
         'de': ' und hab Spaß dabei.',
         'it': ' e goditelo.',
         'nl': ' en geniet ervan.',
@@ -2131,11 +2107,11 @@ class OnboardingStrings {
           EmphasisTextSpan('rutina personalizada', isRed: true),
         ],
         'fr': const [
-          EmphasisTextSpan('Crée ta propre\n'),
+          EmphasisTextSpan('Créez votre propre\n'),
           EmphasisTextSpan('séance personnalisée', isRed: true),
         ],
         'de': const [
-          EmphasisTextSpan('Erstelle deine\n'),
+          EmphasisTextSpan('Erstelle dein\n'),
           EmphasisTextSpan('individuelles Training', isRed: true),
         ],
         'it': const [
@@ -2193,7 +2169,7 @@ class OnboardingStrings {
         'es':
             'Elige máquina, tiempo e intensidad.\nCrearemos una rutina según tus preferencias.',
         'fr':
-            'Choisis la machine, la durée et l’intensité.\nNous créerons une séance selon tes choix.',
+            'Choisissez la machine, la durée et l’intensité.\nNous créerons une séance selon vos choix.',
         'de':
             'Wähle Gerät, Dauer und Intensität.\nWir erstellen ein Training nach deinen Vorgaben.',
         'it':
@@ -2212,8 +2188,7 @@ class OnboardingStrings {
         'zh': '只需选择器械、时间和强度。\n我们会根据你的选择生成定制训练。',
         'vi':
             'Chọn máy, thời gian và cường độ.\nChúng tôi sẽ tạo bài tập theo lựa chọn của bạn.',
-        'ar':
-            'اختر الجهاز والمدة والشدة.\nسننشئ تمرينًا يناسب اختياراتك.',
+        'ar': 'اختر الجهاز والمدة والشدة.\nسننشئ تمرينًا يناسب اختياراتك.',
         'th':
             'เลือกเครื่อง เวลา และความเข้มข้น\nเราจะสร้างรูทีนตามตัวเลือกของคุณ',
       });
@@ -2376,7 +2351,7 @@ class OnboardingStrings {
           EmphasisTextSpan('recordatorios', isRed: true),
         ],
         'fr': const [
-          EmphasisTextSpan('Crée une habitude avec\n'),
+          EmphasisTextSpan('Créez une habitude avec\n'),
           EmphasisTextSpan('des rappels', isRed: true),
         ],
         'de': const [
@@ -2437,7 +2412,7 @@ class OnboardingStrings {
         'es':
             'Elige los días y la hora para no perder la constancia en tus entrenamientos.',
         'fr':
-            'Choisis les jours et l’heure pour garder le rythme de tes entraînements.',
+            'Choisissez les jours et l’heure pour garder le rythme de vos entraînements.',
         'de': 'Lege Tage und Uhrzeit fest, damit du regelmäßig trainierst.',
         'it': 'Scegli giorni e orario per allenarti con costanza.',
         'nl':
@@ -2464,7 +2439,7 @@ class OnboardingStrings {
         'nl': 'Dagen kiezen',
         'da': 'Vælg dage',
         'nb': 'Velg dager',
-        'ru': 'Выберите дни',
+        'ru': 'Выбери дни',
         'pt': 'Selecionar dias',
         'ja': '曜日を選択',
         'zh': '选择日期',
@@ -2483,7 +2458,7 @@ class OnboardingStrings {
         'nl': 'Tijd kiezen',
         'da': 'Vælg tidspunkt',
         'nb': 'Velg tidspunkt',
-        'ru': 'Выберите время',
+        'ru': 'Выбери время',
         'pt': 'Selecionar horário',
         'ja': '時刻を選択',
         'zh': '选择时间',
@@ -2696,8 +2671,12 @@ class OnboardingStrings {
 
   // ---- helpers ----
   String _numberedLabel(int n, Map<String, String> map) {
-    return _t(map).replaceAll('{n}', n.toString());
+    return _t(map).replaceAll('{n}', _number(n));
   }
+
+  String _number(num value) => NumberFormat.decimalPattern(
+        SupportedAppLanguage.fromCode(code).locale.toLanguageTag(),
+      ).format(value);
 
   String _t(Map<String, String> map) => map[code] ?? map['en'] ?? '';
 

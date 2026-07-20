@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Sufijo de pago único"
   },
-  "savePercent": "Ahorra {percent}%",
+  "savePercent": "Ahorra un {percent}",
   "@savePercent": {
     "description": "Insignia de porcentaje de ahorro",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Entrenamiento 1 día 🔥} other{Entrenamiento {count} días 🔥}}",
+  "workoutDays": "Días de entrenamiento: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Descanso 1 día 🛏️} other{Descanso {count} días 🛏️}}",
+  "restDays": "Días de descanso: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -525,7 +525,7 @@
   "includeIncline": "Incluir inclinación",
   "generateCustomRoutine": "Crear rutina personalizada",
   "durationMinutes": "{minutes} min",
-  "floorCount": "{count} pisos",
+  "floorCount": "Pisos: {count}",
   "customRunName": "Carrera personalizada {distance} km ({calories} kcal)",
   "customCycleName": "Ciclismo personalizado {distance} km ({calories} kcal)",
   "customStairsName": "Escaleras personalizadas {floors} pisos ({calories} kcal)",
@@ -556,12 +556,26 @@
   "secondsShort": "{seconds} s antes",
   "selectCountdownTimings": "Seleccionar avisos",
   "countdownTimingMessage": "Elige cuándo escuchar el tiempo restante antes de cambiar de intervalo.",
-  "secondsLeft": "Quedan {seconds} segundos",
+  "secondsLeft": "Quedan {seconds} s",
   "qrShareInstruction": "Escanea este código QR desde otra app Valcue\npara importar la rutina al instante.",
   "quickStart": "Inicio rápido",
   "sessionRepeatBlock": "Bloque de sesión repetido",
-  "repeatTimes": "{count} repeticiones",
+  "repeatTimes": "Repeticiones: {count}",
   "addRepeatBlock": "Añadir bloque repetido",
   "unableToShareWorkout": "No se pudo compartir el entrenamiento.",
-  "unableToOpenPrivacyPolicy": "No se pudo abrir la política de privacidad."
+  "unableToOpenPrivacyPolicy": "No se pudo abrir la política de privacidad.",
+  "less": "Menos",
+  "more": "Más",
+  "inclineValue": "Inclinación: {value} %",
+  "rpmValue": "{value} RPM",
+  "nextMetric": "Siguiente: {value}",
+  "weightCalendar": "Calendario de peso",
+  "routineHeaderSummary": "{count, plural, =1{{duration} · {countText} intervalo · {difficulty}} other{{duration} · {countText} intervalos · {difficulty}}}",
+  "goalAchievedSummary": "Objetivo: {goalWeight} • ¡Objetivo alcanzado!",
+  "goalRemainingSummary": "Objetivo: {goalWeight} • Faltan {difference}",
+  "goalExceededSummary": "Objetivo: {goalWeight} • {difference} por encima",
+  "averageSpeedKmh": "Prom. {value} km/h",
+  "averageSpeedMph": "Prom. {value} mph",
+  "averageRpmValue": "Prom. {value} RPM",
+  "averageLevelValue": "Nivel medio: {value}"
 }

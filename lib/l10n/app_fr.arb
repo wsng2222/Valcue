@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -117,7 +117,7 @@
   "freeLimitMessage": "Passez à Premium pour des routines illimitées",
   "treadmill": "Tapis de Course",
   "cycle": "Vélo",
-  "stairmaster": "Stepper",
+  "stairmaster": "Simulateur d’escalier",
   "selectLanguage": "Langues",
   "selectTheme": "Sélectionner le Thème",
   "selectDifficulty": "Sélectionner la Difficulté",
@@ -173,7 +173,7 @@
   "voiceGuideBenefit3": "Concentrez-vous sur votre routine en mains libres",
   "routineLimitBenefit1": "Sauvegarde illimitée des routines",
   "routineLimitBenefit2": "Routines personnalisées par objectif",
-  "routineLimitBenefit3": "Support pour tapis, vélo et escalateur",
+  "routineLimitBenefit3": "Tapis, vélo et StairMaster inclus",
   "premium_benefit_1": "Support pour <red>vélo et StairMaster</red>",
   "premium_benefit_2": "<red>Guidage vocal</red> pour chaque séance",
   "premium_benefit_3": "Sauvegarde de routines <red>illimitée</red>",
@@ -198,7 +198,7 @@
   "routineTab": "Routine",
   "settingsTab": "Paramètres",
   "myTab": "Moi",
-  "premiumSubheadline": "Débloquez le guide vocal, les entraînements vélo et stepper, et les routines illimitées",
+  "premiumSubheadline": "Profitez du guide vocal, des entraînements vélo et simulateur d’escalier, et de séances enregistrées en illimité",
   "@premiumSubheadline": {
     "description": "Description du contenu de déblocage premium"
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Suffixe de paiement unique"
   },
-  "savePercent": "Économisez {percent}%",
+  "savePercent": "Économisez {percent}",
   "@savePercent": {
     "description": "Badge de pourcentage d'économie",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -293,7 +293,7 @@
   "advanced": "Avancé",
   "recommendedRoutinesTreadmill": "Sélection tapis",
   "recommendedRoutinesCycle": "Sélection vélo",
-  "recommendedRoutinesStairmaster": "Sélection stepper",
+  "recommendedRoutinesStairmaster": "Sélection simulateur d’escalier",
   "alreadySaved": "Déjà enregistré",
   "checkRoutine": "Aperçu",
   "saveRoutine": "Enregistrer Routine",
@@ -308,9 +308,9 @@
   "templateTreadmillIntermediate1Subtitle": "Intervalle de course 1:1 pour brûler les graisses",
   "templateTreadmillIntermediate2Title": "Tapis Intermédiaire 2 (Vitesse)",
   "templateTreadmillIntermediate2Subtitle": "Course progressive en pyramide de vitesse",
-  "templateTreadmillAdvanced1Title": "Tapis Hors-pair 1",
+  "templateTreadmillAdvanced1Title": "Tapis avancé 1",
   "templateTreadmillAdvanced1Subtitle": "Intervalle cardio de haute intensité",
-  "templateTreadmillAdvanced2Title": "Tapis Hors-pair 2 (Sprint)",
+  "templateTreadmillAdvanced2Title": "Tapis avancé 2 (sprint)",
   "templateTreadmillAdvanced2Subtitle": "Répétitions de sprints courts à haute intensité",
   "templateCycleBeginner1Title": "Vélo Débutant 1",
   "templateCycleBeginner1Subtitle": "Initiation au pédalage en ajustant les RPM",
@@ -320,21 +320,21 @@
   "templateCycleIntermediate1Subtitle": "1 min haute vitesse / 1 min récupération",
   "templateCycleIntermediate2Title": "Vélo Intermédiaire 2 (Colline)",
   "templateCycleIntermediate2Subtitle": "Montée de colline à haute résistance",
-  "templateCycleAdvanced1Title": "Vélo Hors-pair 1",
+  "templateCycleAdvanced1Title": "Vélo avancé 1",
   "templateCycleAdvanced1Subtitle": "Intervalles de force de 30s à haute résistance",
-  "templateCycleAdvanced2Title": "Vélo Hors-pair 2 (Tabata)",
+  "templateCycleAdvanced2Title": "Vélo avancé 2 (Tabata)",
   "templateCycleAdvanced2Subtitle": "Circuit Tabata 20s/10s pour brûler les graisses",
-  "templateStairmasterBeginner1Title": "Escalateur Débutant 1",
-  "templateStairmasterBeginner1Subtitle": "Marche sécurisée d'adaptation à l'escalateur",
-  "templateStairmasterBeginner2Title": "Escalateur Débutant 2 (Continu)",
+  "templateStairmasterBeginner1Title": "StairMaster débutant 1",
+  "templateStairmasterBeginner1Subtitle": "Allure progressive pour s’habituer aux marches",
+  "templateStairmasterBeginner2Title": "StairMaster débutant 2 (Régulier)",
   "templateStairmasterBeginner2Subtitle": "Montée d'escalier aérobie à rythme constant",
-  "templateStairmasterIntermediate1Title": "Escalateur Intermédiaire 1 (Montée)",
+  "templateStairmasterIntermediate1Title": "StairMaster intermédiaire 1 (Montée)",
   "templateStairmasterIntermediate1Subtitle": "2 min montée / 1 min récupération fessiers",
-  "templateStairmasterIntermediate2Title": "Escalateur Intermédiaire 2",
+  "templateStairmasterIntermediate2Title": "StairMaster intermédiaire 2",
   "templateStairmasterIntermediate2Subtitle": "Intervalles alternant rythmes rapide et lent",
-  "templateStairmasterAdvanced1Title": "Escalateur Hors-pair 1",
+  "templateStairmasterAdvanced1Title": "StairMaster avancé 1",
   "templateStairmasterAdvanced1Subtitle": "Blocs d'entraînement intenses de 2 min",
-  "templateStairmasterAdvanced2Title": "Escalateur Hors-pair 2 (Sprint)",
+  "templateStairmasterAdvanced2Title": "StairMaster avancé 2 (Sprint)",
   "templateStairmasterAdvanced2Subtitle": "30s montée rapide / 60s récupération",
   "historyTab": "Historique",
   "calendarTab": "Calendrier",
@@ -404,10 +404,10 @@
   "startTrackingYourWeight": "Notez votre poids pour suivre vos progrès",
   "treadmillSession": "Session Tapis de Course",
   "bikeSession": "Session Vélo",
-  "stairmasterSession": "Session Stepper",
+  "stairmasterSession": "Séance sur simulateur d’escalier",
   "treadmillWorkout": "Entraînement Tapis de Course",
   "bikeWorkout": "Entraînement Vélo",
-  "stairmasterWorkout": "Entraînement Stepper",
+  "stairmasterWorkout": "Entraînement sur simulateur d’escalier",
   "startAWorkoutToSeeItHere": "Vos séances apparaîtront ici",
   "mon": "Lun",
   "tue": "Mar",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Entraînement 1 jour 🔥} other{Entraînement {count} jours 🔥}}",
+  "workoutDays": "Jours d’entraînement : {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Repos 1 jour 🛏️} other{Repos {count} jours 🛏️}}",
+  "restDays": "Jours de repos : {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -525,7 +525,7 @@
   "includeIncline": "Inclure l’inclinaison",
   "generateCustomRoutine": "Créer une séance personnalisée",
   "durationMinutes": "{minutes} min",
-  "floorCount": "{count} étages",
+  "floorCount": "Étages : {count}",
   "customRunName": "Course personnalisée {distance} km ({calories} kcal)",
   "customCycleName": "Vélo personnalisé {distance} km ({calories} kcal)",
   "customStairsName": "Escaliers personnalisés {floors} étages ({calories} kcal)",
@@ -556,12 +556,26 @@
   "secondsShort": "{seconds} s avant",
   "selectCountdownTimings": "Choisir les annonces",
   "countdownTimingMessage": "Choisissez quand entendre le temps restant avant le changement d’intervalle.",
-  "secondsLeft": "{seconds} secondes restantes",
+  "secondsLeft": "Encore {seconds} s",
   "qrShareInstruction": "Scannez ce code QR depuis une autre app Valcue\npour importer cette séance instantanément.",
   "quickStart": "Démarrage rapide",
   "sessionRepeatBlock": "Bloc de séance répété",
-  "repeatTimes": "{count} répétitions",
+  "repeatTimes": "Répétitions : {count}",
   "addRepeatBlock": "Ajouter un bloc répété",
   "unableToShareWorkout": "Impossible de partager l’entraînement.",
-  "unableToOpenPrivacyPolicy": "Impossible d’ouvrir la politique de confidentialité."
+  "unableToOpenPrivacyPolicy": "Impossible d’ouvrir la politique de confidentialité.",
+  "less": "Moins",
+  "more": "Plus",
+  "inclineValue": "Inclinaison : {value} %",
+  "rpmValue": "{value} tr/min",
+  "nextMetric": "À suivre : {value}",
+  "weightCalendar": "Calendrier du poids",
+  "routineHeaderSummary": "{count, plural, =1{{duration} · {countText} intervalle · {difficulty}} other{{duration} · {countText} intervalles · {difficulty}}}",
+  "goalAchievedSummary": "Objectif : {goalWeight} • Objectif atteint !",
+  "goalRemainingSummary": "Objectif : {goalWeight} • Encore {difference}",
+  "goalExceededSummary": "Objectif : {goalWeight} • Dépassé de {difference}",
+  "averageSpeedKmh": "Moy. : {value} km/h",
+  "averageSpeedMph": "Moy. : {value} mph",
+  "averageRpmValue": "Cadence moy. : {value} tr/min",
+  "averageLevelValue": "Niveau moy. : {value}"
 }

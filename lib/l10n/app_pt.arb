@@ -10,7 +10,7 @@
   "unitSetting": "Unidades",
   "kmh": "km/h",
   "mph": "mph",
-  "themeMode": "Aspeto",
+  "themeMode": "Aparência",
   "light": "Claro",
   "dark": "Escuro",
   "smartwatchSync": "Sincronização de Smartwatch",
@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -117,7 +117,7 @@
   "freeLimitMessage": "Passe a Premium para rotinas ilimitadas",
   "treadmill": "Esteira",
   "cycle": "Bicicleta",
-  "stairmaster": "Escada",
+  "stairmaster": "Simulador de escada",
   "selectLanguage": "Idiomas",
   "selectTheme": "Selecionar Tema",
   "selectDifficulty": "Selecionar Dificuldade",
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Sufixo de pagamento único"
   },
-  "savePercent": "Economize {percent}%",
+  "savePercent": "Economize {percent}",
   "@savePercent": {
     "description": "Distintivo de percentual de economia",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -291,9 +291,9 @@
   "beginner": "Iniciante",
   "intermediate": "Intermediário",
   "advanced": "Avançado",
-  "recommendedRoutinesTreadmill": "Sugestões de passadeira",
+  "recommendedRoutinesTreadmill": "Sugestões para esteira",
   "recommendedRoutinesCycle": "Sugestões de bicicleta",
-  "recommendedRoutinesStairmaster": "Sugestões de escadas",
+  "recommendedRoutinesStairmaster": "Sugestões para simulador de escada",
   "alreadySaved": "Já salvo",
   "checkRoutine": "Prévia",
   "saveRoutine": "Salvar Rotina",
@@ -399,16 +399,16 @@
   "setGoal": "Definir meta",
   "suggested": "Sugerido",
   "removeGoal": "Remover meta",
-  "addOneMoreRecordToSeeTrend": "Adicione mais 1 registo para ver a tendência",
+  "addOneMoreRecordToSeeTrend": "Adicione mais 1 registro para ver a tendência",
   "noWeightRecorded": "Ainda não há peso registrado",
-  "startTrackingYourWeight": "Registe o peso para acompanhar o progresso",
+  "startTrackingYourWeight": "Registre seu peso para acompanhar o progresso",
   "treadmillSession": "Sessão de Esteira",
   "bikeSession": "Sessão de Bicicleta",
-  "stairmasterSession": "Sessão de Escada",
+  "stairmasterSession": "Sessão no simulador de escada",
   "treadmillWorkout": "Treino de Esteira",
   "bikeWorkout": "Treino de Bicicleta",
-  "stairmasterWorkout": "Treino de Escada",
-  "startAWorkoutToSeeItHere": "Os seus treinos aparecem aqui",
+  "stairmasterWorkout": "Treino no simulador de escada",
+  "startAWorkoutToSeeItHere": "Seus treinos aparecerão aqui",
   "mon": "Seg",
   "tue": "Ter",
   "wed": "Qua",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Treino 1 dia 🔥} other{Treino {count} dias 🔥}}",
+  "workoutDays": "Dias de treino: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Descanso 1 dia 🛏️} other{Descanso {count} dias 🛏️}}",
+  "restDays": "Dias de descanso: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -508,14 +508,14 @@
   "scanQrCode": "Escanear código QR",
   "placeQrInside": "Posicione o código QR dentro da área de foco.",
   "customRoutineBuilder": "Criador de rotina personalizada",
-  "customRoutineGenerating": "A criar a sua rotina personalizada…",
-  "customRoutineLoadingTarget": "A definir o objetivo de intensidade…",
-  "customRoutineLoadingStructure": "A preparar aquecimento e retorno à calma…",
-  "customRoutineLoadingPace": "A calcular o ritmo dos intervalos…",
-  "customRoutineLoadingVoice": "A preparar a orientação por voz…",
+  "customRoutineGenerating": "Criando sua rotina personalizada…",
+  "customRoutineLoadingTarget": "Definindo a intensidade desejada…",
+  "customRoutineLoadingStructure": "Montando o aquecimento e a volta à calma…",
+  "customRoutineLoadingPace": "Calculando o ritmo dos intervalos…",
+  "customRoutineLoadingVoice": "Preparando a orientação por voz…",
   "generationComplete": "Rotina criada!",
   "regenerate": "Criar novamente",
-  "caloriesEstimateByWeight": "As calorias são uma estimativa baseada no peso introduzido.",
+  "caloriesEstimateByWeight": "As calorias são estimadas com base no peso informado.",
   "commonBack": "Voltar",
   "adjustGoals": "Ajustar metas",
   "targetCalories": "Calorias-alvo",
@@ -525,27 +525,27 @@
   "includeIncline": "Incluir inclinação",
   "generateCustomRoutine": "Criar rotina personalizada",
   "durationMinutes": "{minutes} min",
-  "floorCount": "{count} andares",
+  "floorCount": "Andares: {count}",
   "customRunName": "Corrida personalizada {distance} km ({calories} kcal)",
   "customCycleName": "Ciclismo personalizado {distance} km ({calories} kcal)",
   "customStairsName": "Escadas personalizadas {floors} andares ({calories} kcal)",
-  "customRoutineSpeech": "A sua rotina personalizada está pronta. Aponte para cerca de {calories} calorias!",
-  "weightDeleteTitle": "Eliminar registo",
-  "weightDeleteConfirm": "Tem a certeza de que pretende eliminar este registo de peso?",
+  "customRoutineSpeech": "Sua rotina personalizada está pronta. Tente atingir cerca de {calories} calorias!",
+  "weightDeleteTitle": "Excluir registro",
+  "weightDeleteConfirm": "Tem certeza de que deseja excluir este registro de peso?",
   "achievementUnlocked": "🏆 Conquista desbloqueada!",
-  "achievementCongratulations": "Parabéns! Ganhou um novo emblema.",
+  "achievementCongratulations": "Parabéns! Você ganhou um novo emblema.",
   "awesome": "Fantástico!",
-  "shareCardDefault": "9:14 (Predefinido)",
+  "shareCardDefault": "9:14 (Padrão)",
   "shareCardStory": "9:16 (Story)",
   "shareCardSquare": "1:1 (Quadrado)",
   "customizeShareCard": "Personalizar cartão",
-  "shareRoutine": "Partilhar rotina",
-  "shareViaQrCode": "Partilhar por código QR",
+  "shareRoutine": "Compartilhar rotina",
+  "shareViaQrCode": "Compartilhar por código QR",
   "routineLimitReached": "Limite de rotinas atingido",
-  "routineLimitMessage": "Os utilizadores gratuitos podem guardar até 2 rotinas de passadeira. Atualize para Premium ou elimine uma rotina existente.",
-  "importSharedRoutine": "Importar rotina partilhada",
-  "importQrRoutinePrompt": "Foi detetada uma rotina no código QR.\n\n• Nome: {name}\n• Dificuldade: {difficulty}\n• Intervalos: {count}\n\nPretende guardá-la na biblioteca?",
-  "importClipboardRoutinePrompt": "Foi detetada uma rotina partilhada na área de transferência.\n\n• Nome: {name}\n• Dificuldade: {difficulty}\n• Intervalos: {count}\n\nPretende guardá-la na biblioteca?",
+  "routineLimitMessage": "Usuários gratuitos podem salvar até 2 rotinas de esteira. Assine o Premium ou exclua uma rotina existente.",
+  "importSharedRoutine": "Importar rotina compartilhada",
+  "importQrRoutinePrompt": "Uma rotina foi detectada no código QR.\n\n• Nome: {name}\n• Dificuldade: {difficulty}\n• Intervalos: {count}\n\nDeseja salvá-la na sua biblioteca?",
+  "importClipboardRoutinePrompt": "Uma rotina compartilhada foi detectada na área de transferência.\n\n• Nome: {name}\n• Dificuldade: {difficulty}\n• Intervalos: {count}\n\nDeseja salvá-la na sua biblioteca?",
   "importRoutineSuccess": "«{name}» foi importada!",
   "importAction": "Importar",
   "addRoutineOption": "Escolher como adicionar uma rotina",
@@ -556,12 +556,26 @@
   "secondsShort": "{seconds} s antes",
   "selectCountdownTimings": "Selecionar avisos",
   "countdownTimingMessage": "Escolha quando ouvir o tempo restante antes de o intervalo mudar.",
-  "secondsLeft": "Faltam {seconds} segundos",
-  "qrShareInstruction": "Leia este código QR noutra app Valcue\npara importar a rotina de imediato.",
+  "secondsLeft": "Faltam {seconds} s",
+  "qrShareInstruction": "Escaneie este código QR em outro dispositivo com o Valcue\npara importar a rotina imediatamente.",
   "quickStart": "Início rápido",
   "sessionRepeatBlock": "Bloco de sessão repetido",
-  "repeatTimes": "{count} repetições",
+  "repeatTimes": "Repetições: {count}",
   "addRepeatBlock": "Adicionar bloco repetido",
-  "unableToShareWorkout": "Não foi possível partilhar o treino.",
-  "unableToOpenPrivacyPolicy": "Não foi possível abrir a política de privacidade."
+  "unableToShareWorkout": "Não foi possível compartilhar o treino.",
+  "unableToOpenPrivacyPolicy": "Não foi possível abrir a política de privacidade.",
+  "less": "Menos",
+  "more": "Mais",
+  "inclineValue": "Inclinação: {value}%",
+  "rpmValue": "{value} RPM",
+  "nextMetric": "Próximo: {value}",
+  "weightCalendar": "Calendário de peso",
+  "routineHeaderSummary": "{count, plural, =1{{duration} · {countText} intervalo · {difficulty}} other{{duration} · {countText} intervalos · {difficulty}}}",
+  "goalAchievedSummary": "Meta: {goalWeight} • Objetivo alcançado!",
+  "goalRemainingSummary": "Meta: {goalWeight} • Faltam {difference}",
+  "goalExceededSummary": "Meta: {goalWeight} • {difference} acima",
+  "averageSpeedKmh": "Méd. {value} km/h",
+  "averageSpeedMph": "Méd. {value} mph",
+  "averageRpmValue": "Méd. {value} RPM",
+  "averageLevelValue": "Nível médio: {value}"
 }

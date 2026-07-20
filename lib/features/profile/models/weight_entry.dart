@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 /// Represents a weight measurement entry
 class WeightEntry {
   final String id;
@@ -32,11 +34,11 @@ class WeightEntry {
   }
 
   /// Format weight based on unit preference
-  String formatWeight(bool isMetric) {
-    if (isMetric) {
-      return '${weightKg.toStringAsFixed(1)} kg';
-    } else {
-      return '${toPounds().toStringAsFixed(1)} lbs';
-    }
+  String formatWeight(bool isMetric, {required String localeName}) {
+    final formatter = NumberFormat.decimalPattern(localeName)
+      ..minimumFractionDigits = 1
+      ..maximumFractionDigits = 1;
+    final value = isMetric ? weightKg : toPounds();
+    return '${formatter.format(value)} ${isMetric ? 'kg' : 'lbs'}';
   }
 }

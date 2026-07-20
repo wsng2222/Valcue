@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 import 'app_settings_model.dart';
 import 'app_settings_store.dart';
 import '../services/sound_service.dart';
 import '../services/workout_live_activity_service.dart';
 import '../services/workout_reminder_service.dart';
+import '../l10n/supported_app_language.dart';
 
 class AppSettingsProvider with ChangeNotifier {
   final AppSettingsStore _store;
@@ -18,26 +20,6 @@ class AppSettingsProvider with ChangeNotifier {
   int _backgroundCoachingMutationGeneration = 0;
   Future<void> _backgroundCoachingCleanupTail = Future<void>.value();
   Future<void> _settingsWriteTail = Future<void>.value();
-
-  // Supported languages (same as in LanguageHelper)
-  static const List<String> _supportedLanguages = [
-    'ko',
-    'en',
-    'ja',
-    'zh',
-    'es',
-    'fr',
-    'de',
-    'it',
-    'pt',
-    'ru',
-    'ar',
-    'vi',
-    'th',
-    'nl',
-    'nb',
-    'da',
-  ];
 
   AppSettings get settings => _settings;
   bool get isLoading => _isLoading;
@@ -67,15 +49,18 @@ class AppSettingsProvider with ChangeNotifier {
 
   /// Resolve language: use device language if supported, otherwise fallback to English
   String _getResolvedLanguage() {
-    if (_settings.language != null) {
-      return _settings.language!;
+    final storedLanguage = _settings.language;
+    if (storedLanguage != null) {
+      final base = storedLanguage.toLowerCase().split(RegExp('[-_]')).first;
+      if (base == 'no') return 'nb';
+      if (SupportedAppLanguage.supports(base)) return base;
     }
     // Get device language
     final deviceLocale = ui.PlatformDispatcher.instance.locale;
     final deviceLang = deviceLocale.languageCode;
 
     // If device language is supported, use it; otherwise fallback to English
-    if (_supportedLanguages.contains(deviceLang)) {
+    if (SupportedAppLanguage.supports(deviceLang)) {
       return deviceLang;
     }
     return 'en'; // Fallback to English
@@ -83,7 +68,7 @@ class AppSettingsProvider with ChangeNotifier {
 
   /// Get current locale
   Locale get locale {
-    return Locale(_getResolvedLanguage());
+    return SupportedAppLanguage.fromCode(_getResolvedLanguage()).locale;
   }
 
   AppSettingsProvider({
@@ -124,7 +109,10 @@ class AppSettingsProvider with ChangeNotifier {
   }
 
   Future<void> updateLanguage(String language) async {
-    _settings = _settings.copyWith(language: language);
+    final base = language.toLowerCase().split(RegExp('[-_]')).first;
+    final normalized =
+        base == 'no' ? 'nb' : SupportedAppLanguage.fromCode(base).code;
+    _settings = _settings.copyWith(language: normalized);
     await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
     notifyListeners();
@@ -358,12 +346,15 @@ class AppSettingsProvider with ChangeNotifier {
   /// Storage always uses speedX10 (int) in base units (km/h)
   /// This method converts km/h to mph for display if needed, but does NOT mutate stored values
   String formatSpeed(double speedKmh) {
+    final formatter = NumberFormat.decimalPattern(locale.toLanguageTag())
+      ..minimumFractionDigits = 1
+      ..maximumFractionDigits = 1;
     if (_settings.measurement == 'mph') {
       // Convert to mph for display ONLY - storage remains in km/h (speedX10)
       final mph = speedKmh * 0.621371;
-      return '${mph.toStringAsFixed(1)} mph';
+      return '${formatter.format(mph)} mph';
     }
-    return '${speedKmh.toStringAsFixed(1)} km/h';
+    return '${formatter.format(speedKmh)} km/h';
   }
 
   Future<void> _syncWorkoutReminder() async {

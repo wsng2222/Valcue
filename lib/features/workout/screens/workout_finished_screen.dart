@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
 import 'package:image_picker/image_picker.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../routines/models/interval.dart';
@@ -532,10 +533,10 @@ class _WorkoutSummaryCard extends StatelessWidget {
     if (isMetric) {
       // Metric: show meters (< 1000m) or km (>= 1000m)
       if (distanceMeters < 1000) {
-        return '${distanceMeters.toStringAsFixed(0)} m';
+        return '${LocalizedFormat.decimal(context, distanceMeters, decimalDigits: 0)} m';
       } else {
         final km = distanceMeters / 1000.0;
-        return '${km.toStringAsFixed(2)} km';
+        return '${LocalizedFormat.decimal(context, km, decimalDigits: 2)} km';
       }
     } else {
       // Imperial: convert meters to miles
@@ -544,10 +545,10 @@ class _WorkoutSummaryCard extends StatelessWidget {
 
       if (miles < 0.1) {
         // Very small distances: show 3 decimals
-        return '${miles.toStringAsFixed(3)} mi';
+        return '${LocalizedFormat.decimal(context, miles, decimalDigits: 3)} mi';
       } else {
         // Normal distances: show 2 decimals
-        return '${miles.toStringAsFixed(2)} mi';
+        return '${LocalizedFormat.decimal(context, miles, decimalDigits: 2)} mi';
       }
     }
   }
@@ -632,14 +633,16 @@ class _WorkoutSummaryCard extends StatelessWidget {
                 final avgRpm = _calculateAverageRpm();
                 return avgRpm == null
                     ? null
-                    : '${avgRpm.toStringAsFixed(1)} RPM';
+                    : '${LocalizedFormat.decimal(context, avgRpm)} RPM';
               })()
             : routine.machineType == MachineType.stairmaster
                 ? (() {
                     final avgLevel = _calculateAverageLevel();
                     return avgLevel == null
                         ? null
-                        : 'Level ${avgLevel.toStringAsFixed(1)}';
+                        : l10n.levelColon(
+                            LocalizedFormat.decimal(context, avgLevel),
+                          );
                   })()
                 : null;
     final summaryParts =
@@ -706,7 +709,7 @@ class _WorkoutSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '${finishTime.year}.${finishTime.month.toString().padLeft(2, '0')}.${finishTime.day.toString().padLeft(2, '0')} · ${finishTime.hour.toString().padLeft(2, '0')}:${finishTime.minute.toString().padLeft(2, '0')}',
+            LocalizedFormat.dateTime(context, finishTime),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,
@@ -911,12 +914,12 @@ class _ShareCard extends StatelessWidget {
     return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
-  String _formatDate(DateTime dateTime) {
-    return '${dateTime.year}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.day.toString().padLeft(2, '0')}';
+  String _formatDate(BuildContext context, DateTime dateTime) {
+    return LocalizedFormat.date(context, dateTime);
   }
 
-  String _formatTimeOfDay(DateTime dateTime) {
-    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  String _formatTimeOfDay(BuildContext context, DateTime dateTime) {
+    return LocalizedFormat.time(context, dateTime);
   }
 
   String _formatDistance(BuildContext context, double rawDistanceMeters) {
@@ -926,16 +929,16 @@ class _ShareCard extends StatelessWidget {
 
     if (isMetric) {
       if (rawDistanceMeters < 1000) {
-        return '${rawDistanceMeters.toStringAsFixed(0)} m';
+        return '${LocalizedFormat.decimal(context, rawDistanceMeters, decimalDigits: 0)} m';
       }
-      return '${(rawDistanceMeters / 1000).toStringAsFixed(2)} km';
+      return '${LocalizedFormat.decimal(context, rawDistanceMeters / 1000, decimalDigits: 2)} km';
     }
 
     const metersPerMile = 1609.344;
     final miles = rawDistanceMeters / metersPerMile;
     return miles < 0.1
-        ? '${miles.toStringAsFixed(3)} mi'
-        : '${miles.toStringAsFixed(2)} mi';
+        ? '${LocalizedFormat.decimal(context, miles, decimalDigits: 3)} mi'
+        : '${LocalizedFormat.decimal(context, miles, decimalDigits: 2)} mi';
   }
 
   String? _secondaryMetricValue(BuildContext context) {
@@ -951,7 +954,7 @@ class _ShareCard extends StatelessWidget {
     }
     if (routine.machineType == MachineType.stairmaster) {
       final level = _avgLevel();
-      return level?.toStringAsFixed(1);
+      return level == null ? null : LocalizedFormat.decimal(context, level);
     }
     return null;
   }
@@ -1036,8 +1039,8 @@ class _ShareCard extends StatelessWidget {
       MachineType.stairmaster => avgLevelLabel,
     };
     final metricValue = _secondaryMetricValue(context);
-    final dateStr = _formatDate(finishTime);
-    final timeStr = _formatTimeOfDay(finishTime);
+    final dateStr = _formatDate(context, finishTime);
+    final timeStr = _formatTimeOfDay(context, finishTime);
 
     Widget backgroundWidget;
     if (imagePath != null && File(imagePath!).existsSync()) {
@@ -1413,6 +1416,7 @@ class _WorkoutChartState extends State<_WorkoutChart> {
   Widget _buildTooltip(
       Interval interval, double chartWidth, double chartHeight, int index) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final isDark = theme.brightness == Brightness.dark;
 
     final totalDuration = widget.routine.intervals
@@ -1434,39 +1438,45 @@ class _WorkoutChartState extends State<_WorkoutChart> {
 
     // Format metrics based on machineType
     String metricText = '';
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
     switch (widget.routine.machineType) {
       case MachineType.treadmill:
-        final speed = interval.speedKmh?.toStringAsFixed(1) ?? '0.0';
-        final grade = interval.grade?.toStringAsFixed(1) ?? '0.0';
-        metricText = '$speed km/h • $grade%';
+        final speed = settingsProvider.formatSpeed(interval.speedKmh ?? 0);
+        final grade = LocalizedFormat.decimal(context, interval.grade ?? 0);
+        metricText = '$speed • $grade%';
         break;
       case MachineType.cycle:
-        final rpm = interval.rpm?.toString() ?? '0';
-        final res = interval.resistance?.toString() ?? '0';
-        metricText = '$rpm RPM • Res $res';
+        final rpm = LocalizedFormat.decimal(
+          context,
+          interval.rpm ?? 0,
+          decimalDigits: 0,
+        );
+        final res = LocalizedFormat.decimal(
+          context,
+          interval.resistance ?? 0,
+          decimalDigits: 0,
+        );
+        metricText = '$rpm RPM • ${l10n.resistanceColon(res)}';
         break;
       case MachineType.stairmaster:
-        final lvl = interval.level?.toString() ?? '0';
-        metricText = 'Lvl $lvl';
+        final lvl = LocalizedFormat.decimal(
+          context,
+          interval.level ?? 0,
+          decimalDigits: 0,
+        );
+        metricText = l10n.levelColon(lvl);
         break;
     }
 
-    // Format session index (e.g. Session 3) and duration (e.g. 02:00)
-    final locale = Localizations.localeOf(context).languageCode;
-    final sessionWord = switch (locale) {
-      'ko' => '세션',
-      'es' => 'Sesión',
-      'fr' => 'Session',
-      'de' => 'Session',
-      'ru' => 'Сессия',
-      'pt' => 'Sessão',
-      'ja' => 'セッション',
-      'zh' => '阶段',
-      'vi' => 'Phiên',
-      'ar' => 'الجلسة',
-      _ => 'Session',
-    };
-    final intervalTitle = '$sessionWord ${index + 1}';
+    final intervalTitle = l10n.liveActivityIntervalFormat(
+      LocalizedFormat.decimal(context, index + 1, decimalDigits: 0),
+      LocalizedFormat.decimal(
+        context,
+        widget.routine.intervals.length,
+        decimalDigits: 0,
+      ),
+    );
     final durationFormatted = interval.durationFormatted;
 
     return Positioned(
@@ -2160,8 +2170,8 @@ class _SharePreviewSheetState extends State<_SharePreviewSheet> {
                       ),
               ),
             ),
-            ],
-          ),
+          ],
+        ),
         ),
       ),
     );

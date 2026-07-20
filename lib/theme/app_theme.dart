@@ -51,6 +51,35 @@ class AppColors extends ThemeExtension<AppColors> {
 }
 
 class AppTheme {
+  static ThemeData forLocale(ThemeData theme, Locale locale) {
+    final primaryFamily = switch (locale.languageCode) {
+      'ar' => GoogleFonts.notoSansArabic().fontFamily!,
+      'th' => GoogleFonts.notoSansThai().fontFamily!,
+      'ko' => GoogleFonts.notoSansKr().fontFamily!,
+      'ja' => GoogleFonts.notoSansJp().fontFamily!,
+      'zh' => GoogleFonts.notoSansSc().fontFamily!,
+      _ => GoogleFonts.lato().fontFamily!,
+    };
+    final fallbacks = switch (locale.languageCode) {
+      'ar' => [GoogleFonts.notoSansArabic().fontFamily!],
+      'th' => [GoogleFonts.notoSansThai().fontFamily!],
+      'ko' => [GoogleFonts.notoSansKr().fontFamily!],
+      'ja' => [GoogleFonts.notoSansJp().fontFamily!],
+      'zh' => [GoogleFonts.notoSansSc().fontFamily!],
+      _ => <String>[],
+    };
+    return theme.copyWith(
+      textTheme: theme.textTheme.apply(
+        fontFamily: primaryFamily,
+        fontFamilyFallback: fallbacks,
+      ),
+      primaryTextTheme: theme.primaryTextTheme.apply(
+        fontFamily: primaryFamily,
+        fontFamilyFallback: fallbacks,
+      ),
+    );
+  }
+
   // Light Theme
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,

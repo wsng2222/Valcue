@@ -48,7 +48,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get dark => '다크';
 
   @override
-  String get smartwatchSync => '스마트워치 Sync';
+  String get smartwatchSync => '스마트워치 동기화';
 
   @override
   String get connectSmartwatch => '스마트워치 연결하기';
@@ -57,11 +57,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get connect => '연결';
 
   @override
-  String get about => 'About';
+  String get about => '앱 정보';
 
   @override
   String version(String version) {
-    return 'Version $version';
+    return '버전 $version';
   }
 
   @override
@@ -181,7 +181,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get level => '레벨';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return '레벨 $level';
   }
 
@@ -199,7 +199,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resistanceLevel => '저항(레벨)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return '저항 $resistance';
   }
 
@@ -207,7 +207,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get spm => 'SPM';
 
   @override
-  String get spmSteps => 'SPM(steps/min)';
+  String get spmSteps => 'SPM(분당 걸음 수)';
 
   @override
   String get saved => '저장됨';
@@ -349,7 +349,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get liveActivityInProgress => '운동 중';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return '$current/$total 구간';
   }
 
@@ -489,8 +489,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get oneTime => '일회성';
 
   @override
-  String savePercent(int percent) {
-    return '$percent% 절약';
+  String savePercent(String percent) {
+    return '$percent 절약';
   }
 
   @override
@@ -928,25 +928,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cancelAnytimeKeepAccess => '언제든 해지, 기간 끝까지 이용';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '운동 $count일 🔥',
-      one: '운동 1일 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return '운동일 $count일 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '휴식 $count일 🛏️',
-      one: '휴식 1일 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return '휴식일 $count일 🛏️';
   }
 
   @override
@@ -1030,32 +1018,32 @@ class AppLocalizationsKo extends AppLocalizations {
   String get generateCustomRoutine => '맞춤 루틴 생성하기';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes분';
   }
 
   @override
-  String floorCount(int count) {
+  String floorCount(String count) {
     return '$count층';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return '맞춤 러닝 ${distance}km (${calories}kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return '맞춤 사이클 ${distance}km (${calories}kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return '맞춤 계단 $floors층 (${calories}kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return '맞춤 루틴이 완성됐어요. 약 $calories칼로리를 목표로 시작해 보세요!';
   }
 
@@ -1103,13 +1091,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importSharedRoutine => '공유된 루틴 가져오기';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return '스캔한 QR 코드에서 루틴을 찾았습니다.\n\n• 이름: $name\n• 난이도: $difficulty\n• 구간 수: $count개\n\n이 루틴을 보관함에 저장할까요?';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return '클립보드에서 공유된 루틴을 찾았습니다.\n\n• 이름: $name\n• 난이도: $difficulty\n• 구간 수: $count개\n\n이 루틴을 보관함에 저장할까요?';
   }
 
@@ -1137,7 +1125,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noAnnouncements => '알림 없음';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '$seconds초 전';
   }
 
@@ -1148,7 +1136,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get countdownTimingMessage => '운동 강도가 바뀌기 몇 초 전에 음성 안내를 받을지 선택하세요.';
 
   @override
-  String secondsLeft(int seconds) {
+  String secondsLeft(String seconds) {
     return '$seconds초 전';
   }
 
@@ -1163,7 +1151,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get sessionRepeatBlock => '세션 반복 세트';
 
   @override
-  String repeatTimes(int count) {
+  String repeatTimes(String count) {
     return '$count회 반복';
   }
 
@@ -1175,4 +1163,74 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get unableToOpenPrivacyPolicy => '개인정보처리방침을 열 수 없습니다.';
+
+  @override
+  String get less => '적음';
+
+  @override
+  String get more => '많음';
+
+  @override
+  String inclineValue(String value) {
+    return '경사도 $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value RPM';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return '다음: $value';
+  }
+
+  @override
+  String get weightCalendar => '체중 캘린더';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · 인터벌 $countText개 · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return '목표 $goalWeight • 달성!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return '목표 $goalWeight • $difference 남음';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return '목표 $goalWeight • $difference 초과';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return '평균 ${value}km/h';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return '평균 ${value}mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return '평균 ${value}RPM';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return '평균 레벨 $value';
+  }
 }

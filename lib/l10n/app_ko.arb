@@ -13,11 +13,11 @@
   "themeMode": "화면 모드",
   "light": "라이트",
   "dark": "다크",
-  "smartwatchSync": "스마트워치 Sync",
+  "smartwatchSync": "스마트워치 동기화",
   "connectSmartwatch": "스마트워치 연결하기",
   "connect": "연결",
-  "about": "About",
-  "version": "Version {version}",
+  "about": "앱 정보",
+  "version": "버전 {version}",
   "@version": {
     "placeholders": {
       "version": {
@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,12 +86,12 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
   "spm": "SPM",
-  "spmSteps": "SPM(steps/min)",
+  "spmSteps": "SPM(분당 걸음 수)",
   "saved": "저장됨",
   "deleted": "삭제됨",
   "deleteRoutineTitle": "루틴 삭제",
@@ -226,12 +226,12 @@
   "@oneTime": {
     "description": "일회성 결제 접미사"
   },
-  "savePercent": "{percent}% 절약",
+  "savePercent": "{percent} 절약",
   "@savePercent": {
     "description": "절약 퍼센트 배지",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "취소 신뢰 문구"
   },
-  "workoutDays": "{count, plural, one{운동 1일 🔥} other{운동 {count}일 🔥}}",
+  "workoutDays": "운동일 {count}일 🔥",
   "@workoutDays": {
     "description": "캘린더 통계에서 운동 일수",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{휴식 1일 🛏️} other{휴식 {count}일 🛏️}}",
+  "restDays": "휴식일 {count}일 🛏️",
   "@restDays": {
     "description": "캘린더 통계에서 휴식 일수",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -563,5 +563,19 @@
   "repeatTimes": "{count}회 반복",
   "addRepeatBlock": "반복 세션 추가",
   "unableToShareWorkout": "운동을 공유할 수 없습니다.",
-  "unableToOpenPrivacyPolicy": "개인정보처리방침을 열 수 없습니다."
+  "unableToOpenPrivacyPolicy": "개인정보처리방침을 열 수 없습니다.",
+  "less": "적음",
+  "more": "많음",
+  "inclineValue": "경사도 {value}%",
+  "rpmValue": "{value} RPM",
+  "nextMetric": "다음: {value}",
+  "weightCalendar": "체중 캘린더",
+  "routineHeaderSummary": "{count, plural, other{{duration} · 인터벌 {countText}개 · {difficulty}}}",
+  "goalAchievedSummary": "목표 {goalWeight} • 달성!",
+  "goalRemainingSummary": "목표 {goalWeight} • {difference} 남음",
+  "goalExceededSummary": "목표 {goalWeight} • {difference} 초과",
+  "averageSpeedKmh": "평균 {value}km/h",
+  "averageSpeedMph": "평균 {value}mph",
+  "averageRpmValue": "평균 {value}RPM",
+  "averageLevelValue": "평균 레벨 {value}"
 }

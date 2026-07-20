@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
@@ -535,7 +535,10 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 6),
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 4,
+                    bottom: 6,
+                  ),
                   child: Text(
                     _formatDateHeader(date),
                     style: TextStyle(
@@ -598,18 +601,18 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
       if (isMetric) {
         // Keep metric distance formatting consistent across the app.
         if (meters >= 1000) {
-          return '${(meters / 1000).toStringAsFixed(2)} km';
+          return '${LocalizedFormat.decimal(context, meters / 1000, decimalDigits: 2)} km';
         }
-        return '${meters.toStringAsFixed(0)} m';
+        return '${LocalizedFormat.decimal(context, meters, decimalDigits: 0)} m';
       } else {
         const metersPerMile = 1609.344;
         final miles = meters / metersPerMile;
         if (miles >= 0.1) {
-          return '${miles.toStringAsFixed(2)} mi';
+          return '${LocalizedFormat.decimal(context, miles, decimalDigits: 2)} mi';
         }
         // Convert to feet for very small distances
         final feet = meters * 3.28084;
-        return '${feet.toStringAsFixed(0)} ft';
+        return '${LocalizedFormat.decimal(context, feet, decimalDigits: 0)} ft';
       }
     }
 
@@ -681,9 +684,7 @@ class _WorkoutHistoryTabState extends State<_WorkoutHistoryTab> {
     } else if (dateOnly == yesterday) {
       return AppLocalizations.of(context)!.yesterday;
     } else {
-      final locale = Localizations.localeOf(context);
-      // Use locale-appropriate date format
-      return DateFormat.yMMMd(locale.toString()).format(date);
+      return LocalizedFormat.mediumDate(context, date);
     }
   }
 
@@ -816,6 +817,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
     final isMetric = settingsProvider.measurement == 'kmh';
+    final l10n = AppLocalizations.of(context)!;
 
     String formatDuration(int seconds) {
       final hours = seconds ~/ 3600;
@@ -831,17 +833,17 @@ class _WorkoutHistoryCard extends StatelessWidget {
     String? formatDistance(double meters) {
       if (isMetric) {
         if (meters >= 1000) {
-          return '${(meters / 1000).toStringAsFixed(2)} km';
+          return '${LocalizedFormat.decimal(context, meters / 1000, decimalDigits: 2)} km';
         }
-        return '${meters.toStringAsFixed(0)} m';
+        return '${LocalizedFormat.decimal(context, meters, decimalDigits: 0)} m';
       } else {
         const metersPerMile = 1609.344;
         final miles = meters / metersPerMile;
         if (miles >= 0.1) {
-          return '${miles.toStringAsFixed(2)} mi';
+          return '${LocalizedFormat.decimal(context, miles, decimalDigits: 2)} mi';
         }
         final feet = meters * 3.28084;
-        return '${feet.toStringAsFixed(0)} ft';
+        return '${LocalizedFormat.decimal(context, feet, decimalDigits: 0)} ft';
       }
     }
 
@@ -857,10 +859,14 @@ class _WorkoutHistoryCard extends StatelessWidget {
         final hours = elapsedSeconds / 3600.0;
         final speedKmh = (session.distanceMeters! / 1000.0) / hours;
         if (isMetric) {
-          return 'Avg. ${speedKmh.toStringAsFixed(1)} km/h';
+          return l10n.averageSpeedKmh(
+            LocalizedFormat.decimal(context, speedKmh),
+          );
         } else {
           final speedMph = speedKmh / 1.609344;
-          return 'Avg. ${speedMph.toStringAsFixed(1)} mph';
+          return l10n.averageSpeedMph(
+            LocalizedFormat.decimal(context, speedMph),
+          );
         }
       }
       return null;
@@ -874,11 +880,19 @@ class _WorkoutHistoryCard extends StatelessWidget {
               : null;
         case MachineType.cycle:
           return session.averageRpm != null
-              ? 'Avg RPM ${session.averageRpm!.round()}'
+              ? l10n.averageRpmValue(
+                  LocalizedFormat.decimal(
+                    context,
+                    session.averageRpm!.round(),
+                    decimalDigits: 0,
+                  ),
+                )
               : null;
         case MachineType.stairmaster:
           return session.averageLevel != null
-              ? 'Avg Level ${session.averageLevel!.toStringAsFixed(1)}'
+              ? l10n.averageLevelValue(
+                  LocalizedFormat.decimal(context, session.averageLevel!),
+                )
               : null;
       }
     }
@@ -1050,7 +1064,8 @@ class _ActivityHeatmap extends StatelessWidget {
       final columnFirstDay = startDate.add(Duration(days: c * 7));
       Widget monthLabel = const SizedBox(height: 14);
       if (c == 0 || columnFirstDay.day <= 7) {
-        final monthName = DateFormat('MMM').format(columnFirstDay);
+        final monthName =
+            LocalizedFormat.monthAbbreviation(context, columnFirstDay);
         monthLabel = Padding(
           padding: const EdgeInsets.only(bottom: 2),
           child: Text(
@@ -1084,7 +1099,7 @@ class _ActivityHeatmap extends StatelessWidget {
         SizedBox(
           height: 13,
           child: Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerEnd,
             child: (i % 2 == 0)
                 ? Text(
                     switch (i) {
@@ -1138,7 +1153,7 @@ class _ActivityHeatmap extends StatelessWidget {
           const SizedBox(height: 6),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            reverse: true,
+            reverse: Directionality.of(context) == TextDirection.ltr,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1156,7 +1171,7 @@ class _ActivityHeatmap extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Less',
+                l10n.less,
                 style: TextStyle(fontSize: 8, color: appColors.mutedText),
               ),
               const SizedBox(width: 4),
@@ -1178,7 +1193,7 @@ class _ActivityHeatmap extends StatelessWidget {
                 ),
               const SizedBox(width: 4),
               Text(
-                'More',
+                l10n.more,
                 style: TextStyle(fontSize: 8, color: appColors.mutedText),
               ),
             ],
@@ -1224,8 +1239,7 @@ class _CalendarTabState extends State<_CalendarTab> {
                     },
                   ),
                   Text(
-                    DateFormat.yMMMM(Localizations.localeOf(context).toString())
-                        .format(_currentMonth),
+                    LocalizedFormat.yearMonth(context, _currentMonth),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -1395,7 +1409,13 @@ class _CalendarTabState extends State<_CalendarTab> {
                 children: [
                   // Workout days
                   Text(
-                    AppLocalizations.of(context)!.workoutDays(workoutDays),
+                    AppLocalizations.of(context)!.workoutDays(
+                      LocalizedFormat.decimal(
+                        context,
+                        workoutDays,
+                        decimalDigits: 0,
+                      ),
+                    ),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1414,7 +1434,13 @@ class _CalendarTabState extends State<_CalendarTab> {
                   ),
                   // Rest days
                   Text(
-                    AppLocalizations.of(context)!.restDays(restDays),
+                    AppLocalizations.of(context)!.restDays(
+                      LocalizedFormat.decimal(
+                        context,
+                        restDays,
+                        decimalDigits: 0,
+                      ),
+                    ),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1508,9 +1534,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
                   children: [
                     // Date title
                     Text(
-                      DateFormat.yMMMMd(
-                              Localizations.localeOf(context).toString())
-                          .format(date),
+                      LocalizedFormat.longDate(context, date),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
@@ -1679,8 +1703,9 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
     if (_openItemId.value != widget.itemId) {
       _openItemId.value = widget.itemId;
     }
-    final nextOffset =
-        (_dragOffset + details.delta.dx).clamp(-actionWidth, 0.0);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final logicalDelta = isRtl ? -details.delta.dx : details.delta.dx;
+    final nextOffset = (_dragOffset + logicalDelta).clamp(-actionWidth, 0.0);
     setState(() {
       _dragOffset = nextOffset;
     });
@@ -1726,15 +1751,15 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
           onTap: _close,
           child: Stack(
             children: [
-              Positioned(
+              PositionedDirectional(
                 top: ((availableHeight - buttonDiameter) / 2) +
                     widget.verticalOffset,
-                right: 2,
+                end: 2,
                 child: SizedBox(
                   width: actionWidth,
                   height: buttonDiameter,
                   child: Align(
-                    alignment: Alignment.centerRight,
+                    alignment: AlignmentDirectional.centerEnd,
                     child: Container(
                       width: buttonDiameter,
                       height: buttonDiameter,
@@ -1764,7 +1789,10 @@ class _SwipeRevealDeleteState extends State<_SwipeRevealDelete> {
                 duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
                 transform: Matrix4.translationValues(
-                  _dragOffset.clamp(-actionWidth, 0.0),
+                  _dragOffset.clamp(-actionWidth, 0.0) *
+                      (Directionality.of(context) == TextDirection.rtl
+                          ? -1
+                          : 1),
                   0,
                   0,
                 ),
@@ -1818,21 +1846,22 @@ class _DayWorkoutRow extends StatelessWidget {
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
     final isMetric = settingsProvider.measurement == 'kmh';
+    final l10n = AppLocalizations.of(context)!;
 
     String? formatDistance(double meters) {
       if (isMetric) {
         if (meters >= 1000) {
-          return '${(meters / 1000).toStringAsFixed(2)} km';
+          return '${LocalizedFormat.decimal(context, meters / 1000, decimalDigits: 2)} km';
         }
-        return '${meters.toStringAsFixed(0)} m';
+        return '${LocalizedFormat.decimal(context, meters, decimalDigits: 0)} m';
       } else {
         const metersPerMile = 1609.344;
         final miles = meters / metersPerMile;
         if (miles >= 0.1) {
-          return '${miles.toStringAsFixed(2)} mi';
+          return '${LocalizedFormat.decimal(context, miles, decimalDigits: 2)} mi';
         }
         final feet = meters * 3.28084;
-        return '${feet.toStringAsFixed(0)} ft';
+        return '${LocalizedFormat.decimal(context, feet, decimalDigits: 0)} ft';
       }
     }
 
@@ -1847,10 +1876,14 @@ class _DayWorkoutRow extends StatelessWidget {
         final hours = elapsedSeconds / 3600.0;
         final speedKmh = (session.distanceMeters! / 1000.0) / hours;
         if (isMetric) {
-          return 'Avg. ${speedKmh.toStringAsFixed(1)} km/h';
+          return l10n.averageSpeedKmh(
+            LocalizedFormat.decimal(context, speedKmh),
+          );
         } else {
           final speedMph = speedKmh / 1.609344;
-          return 'Avg. ${speedMph.toStringAsFixed(1)} mph';
+          return l10n.averageSpeedMph(
+            LocalizedFormat.decimal(context, speedMph),
+          );
         }
       }
       return null;
@@ -1864,11 +1897,19 @@ class _DayWorkoutRow extends StatelessWidget {
               : null;
         case MachineType.cycle:
           return session.averageRpm != null
-              ? 'Avg RPM ${session.averageRpm!.round()}'
+              ? l10n.averageRpmValue(
+                  LocalizedFormat.decimal(
+                    context,
+                    session.averageRpm!.round(),
+                    decimalDigits: 0,
+                  ),
+                )
               : null;
         case MachineType.stairmaster:
           return session.averageLevel != null
-              ? 'Avg Level ${session.averageLevel!.toStringAsFixed(1)}'
+              ? l10n.averageLevelValue(
+                  LocalizedFormat.decimal(context, session.averageLevel!),
+                )
               : null;
       }
     }
@@ -2239,14 +2280,17 @@ void _showRecordWeightBottomSheetHelper(
 
   if (editEntry != null) {
     weightController.text = isWeightMetric
-        ? editEntry.weightKg.toStringAsFixed(1)
-        : (editEntry.weightKg * 2.20462).toStringAsFixed(1);
+        ? LocalizedFormat.decimal(context, editEntry.weightKg)
+        : LocalizedFormat.decimal(context, editEntry.weightKg * 2.20462);
   } else {
     final currentWeight = provider.currentWeight;
     if (currentWeight != null) {
       weightController.text = isWeightMetric
-          ? currentWeight.weightKg.toStringAsFixed(1)
-          : (currentWeight.weightKg * 2.20462).toStringAsFixed(1);
+          ? LocalizedFormat.decimal(context, currentWeight.weightKg)
+          : LocalizedFormat.decimal(
+              context,
+              currentWeight.weightKg * 2.20462,
+            );
     }
   }
 
@@ -2279,11 +2323,13 @@ class _WeightSummaryCard extends StatelessWidget {
         final appColors = theme.extension<AppColors>()!;
         final isDark = theme.brightness == Brightness.dark;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
+        final localeName = LocalizedFormat.localeName(context);
 
         final currentWeight = provider.currentWeight;
         final weightChange = provider.getWeightChange();
         final goalWeight = provider.goalWeight;
         final toGoal = provider.getWeightToGoal();
+        final l10n = AppLocalizations.of(context)!;
 
         // Empty state - should not happen as we handle it at tab level, but return empty widget as fallback
         if (currentWeight == null) {
@@ -2341,7 +2387,10 @@ class _WeightSummaryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          currentWeight.formatWeight(isWeightMetric),
+                          currentWeight.formatWeight(
+                            isWeightMetric,
+                            localeName: localeName,
+                          ),
                           style: TextStyle(
                             fontSize: 56,
                             fontWeight: FontWeight.w700,
@@ -2370,7 +2419,7 @@ class _WeightSummaryCard extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric)}',
+                                    '${weightChange > 0 ? '+' : ''}${WeightEntry(dateTime: DateTime.now(), weightKg: weightChange.abs()).formatWeight(isWeightMetric, localeName: localeName)}',
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
@@ -2434,7 +2483,10 @@ class _WeightSummaryCard extends StatelessWidget {
                                           ? WeightEntry(
                                               dateTime: DateTime.now(),
                                               weightKg: goalWeight,
-                                            ).formatWeight(isWeightMetric)
+                                            ).formatWeight(
+                                              isWeightMetric,
+                                              localeName: localeName,
+                                            )
                                           : AppLocalizations.of(context)!
                                               .setGoal,
                                       style: TextStyle(
@@ -2469,9 +2521,24 @@ class _WeightSummaryCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        toGoal.abs() < 0.1
-                            ? '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${AppLocalizations.of(context)!.goalAchieved}'
-                            : '${AppLocalizations.of(context)!.goal} ${WeightEntry(dateTime: DateTime.now(), weightKg: goalWeight).formatWeight(isWeightMetric)} • ${WeightEntry(dateTime: DateTime.now(), weightKg: toGoal.abs()).formatWeight(isWeightMetric)} ${toGoal > 0 ? AppLocalizations.of(context)!.toGo : AppLocalizations.of(context)!.over}',
+                        _goalSummary(
+                          l10n: l10n,
+                          goalWeight: WeightEntry(
+                            dateTime: DateTime.now(),
+                            weightKg: goalWeight,
+                          ).formatWeight(
+                            isWeightMetric,
+                            localeName: localeName,
+                          ),
+                          difference: WeightEntry(
+                            dateTime: DateTime.now(),
+                            weightKg: toGoal.abs(),
+                          ).formatWeight(
+                            isWeightMetric,
+                            localeName: localeName,
+                          ),
+                          toGoal: toGoal,
+                        ),
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -2518,8 +2585,11 @@ class _WeightSummaryCard extends StatelessWidget {
     final goalWeightController = TextEditingController(
       text: provider.goalWeight != null
           ? (isWeightMetric
-              ? provider.goalWeight!.toStringAsFixed(1)
-              : (provider.goalWeight! * 2.20462).toStringAsFixed(1))
+              ? LocalizedFormat.decimal(context, provider.goalWeight!)
+              : LocalizedFormat.decimal(
+                  context,
+                  provider.goalWeight! * 2.20462,
+                ))
           : '',
     );
 
@@ -2534,6 +2604,21 @@ class _WeightSummaryCard extends StatelessWidget {
         currentWeight: provider.currentWeight,
       ),
     );
+  }
+
+  String _goalSummary({
+    required AppLocalizations l10n,
+    required String goalWeight,
+    required String difference,
+    required double toGoal,
+  }) {
+    if (toGoal.abs() < 0.1) {
+      return l10n.goalAchievedSummary(goalWeight);
+    }
+    if (toGoal > 0) {
+      return l10n.goalRemainingSummary(goalWeight, difference);
+    }
+    return l10n.goalExceededSummary(goalWeight, difference);
   }
 }
 
@@ -2591,7 +2676,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
     final leftPos =
         (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
 
-    final formattedDate = DateFormat('MM/dd').format(entry.dateTime);
+    final formattedDate = LocalizedFormat.monthDay(context, entry.dateTime);
 
     return Positioned(
       left: leftPos,
@@ -2620,7 +2705,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${entry.weightKg.toStringAsFixed(1)} kg',
+              '${LocalizedFormat.decimal(context, entry.weightKg)} kg',
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
@@ -2665,7 +2750,7 @@ class _WeightTrendChartState extends State<_WeightTrendChart> {
               ),
               Flexible(
                 child: Align(
-                  alignment: Alignment.centerRight,
+                  alignment: AlignmentDirectional.centerEnd,
                   child: PlatformInfo.isIOS
                       ? ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 240),
@@ -2895,7 +2980,7 @@ class _TimeframeSelector extends StatelessWidget {
           return GestureDetector(
             onTap: () => onSelect(index),
             child: Container(
-              margin: const EdgeInsets.only(left: 4),
+              margin: const EdgeInsetsDirectional.only(start: 4),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color:
@@ -3159,9 +3244,7 @@ class _WeightHistoryList extends StatelessWidget {
                 } else if (dateOnly == yesterday) {
                   return AppLocalizations.of(context)!.yesterday;
                 } else {
-                  final locale = Localizations.localeOf(context);
-                  // Use locale-appropriate date format
-                  return DateFormat.yMMMd(locale.toString()).format(dateTime);
+                  return LocalizedFormat.mediumDate(context, dateTime);
                 }
               }
 
@@ -3198,7 +3281,10 @@ class _WeightHistoryList extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            entry.formatWeight(isWeightMetric),
+                            entry.formatWeight(
+                              isWeightMetric,
+                              localeName: LocalizedFormat.localeName(context),
+                            ),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -3269,7 +3355,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
 
   void _validateInput() {
     final text = _controller.text.trim();
-    final weight = double.tryParse(text);
+    final weight = LocalizedFormat.tryParseDecimal(context, text);
     setState(() {
       _isValid =
           text.isNotEmpty && weight != null && weight > 0 && weight < 500;
@@ -3277,10 +3363,11 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
   }
 
   void _addQuickValue(double value) {
-    final current = double.tryParse(_controller.text.trim()) ?? 0;
+    final current =
+        LocalizedFormat.tryParseDecimal(context, _controller.text) ?? 0;
     final newValue = (current + value).clamp(0.0, 500.0);
     setState(() {
-      _controller.text = newValue.toStringAsFixed(1);
+      _controller.text = LocalizedFormat.decimal(context, newValue);
     });
   }
 
@@ -3385,7 +3472,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
         Provider.of<AppSettingsProvider>(context, listen: false);
     final isMetric = settingsProvider.weightUnit == 'kg';
     final weightText = _controller.text.trim();
-    final weight = double.tryParse(weightText);
+    final weight = LocalizedFormat.tryParseDecimal(context, weightText);
     if (weight != null && weight > 0) {
       final weightKg = isMetric ? weight : weight / 2.20462;
       final provider =
@@ -3426,9 +3513,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
     } else if (dateOnly == today.subtract(const Duration(days: 1))) {
       return l10n.yesterday;
     } else {
-      final locale = Localizations.localeOf(context);
-      // Use locale-appropriate date format
-      return DateFormat.yMMMd(locale.toString()).format(dateTime);
+      return LocalizedFormat.mediumDate(context, dateTime);
     }
   }
 
@@ -3438,7 +3523,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
 
     final lastWeight = provider.entries[1].weightKg;
     final currentText = _controller.text.trim();
-    final currentWeight = double.tryParse(currentText);
+    final currentWeight = LocalizedFormat.tryParseDecimal(context, currentText);
 
     if (currentWeight == null || currentText.isEmpty) return null;
 
@@ -3447,9 +3532,9 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
 
     String formatWeight(double kg, bool isMetric) {
       if (isMetric) {
-        return '${kg.toStringAsFixed(1)} kg';
+        return '${LocalizedFormat.decimal(context, kg)} kg';
       } else {
-        return '${(kg * 2.20462).toStringAsFixed(1)} lbs';
+        return '${LocalizedFormat.decimal(context, kg * 2.20462)} lbs';
       }
     }
 
@@ -3494,7 +3579,7 @@ class _RecordWeightBottomSheetState extends State<_RecordWeightBottomSheet> {
               ),
               // Header with title and close button
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 20, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -3884,7 +3969,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
 
   void _validateInput() {
     final text = _controller.text.trim();
-    final weight = double.tryParse(text);
+    final weight = LocalizedFormat.tryParseDecimal(context, text);
     setState(() {
       _isValid =
           text.isNotEmpty && weight != null && weight > 0 && weight < 500;
@@ -3893,7 +3978,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
 
   void _setPreset(double value) {
     setState(() {
-      _controller.text = value.toStringAsFixed(1);
+      _controller.text = LocalizedFormat.decimal(context, value);
     });
   }
 
@@ -3905,7 +3990,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
     final weightText = _controller.text.trim();
 
     if (weightText.isNotEmpty) {
-      final weight = double.tryParse(weightText);
+      final weight = LocalizedFormat.tryParseDecimal(context, weightText);
       if (weight != null && weight > 0) {
         final weightKg = isMetric ? weight : weight / 2.20462;
         HapticFeedback.mediumImpact();
@@ -3929,7 +4014,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
     if (widget.currentWeight == null) return null;
 
     final currentText = _controller.text.trim();
-    final goalWeight = double.tryParse(currentText);
+    final goalWeight = LocalizedFormat.tryParseDecimal(context, currentText);
 
     if (goalWeight == null || currentText.isEmpty) return null;
 
@@ -3938,9 +4023,9 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
 
     String formatWeight(double kg) {
       if (isMetric) {
-        return '${kg.toStringAsFixed(1)} kg';
+        return '${LocalizedFormat.decimal(context, kg)} kg';
       } else {
-        return '${(kg * 2.20462).toStringAsFixed(1)} lbs';
+        return '${LocalizedFormat.decimal(context, kg * 2.20462)} lbs';
       }
     }
 
@@ -4007,7 +4092,7 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
               ),
               // Header with title and close button
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 20, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -4139,10 +4224,22 @@ class _SetGoalBottomSheetState extends State<_SetGoalBottomSheet> {
 
                                 String formatLabel(double diff, double preset) {
                                   final l10n = AppLocalizations.of(context)!;
+                                  final displayedDiff =
+                                      isMetric ? diff : diff * 2.20462;
+                                  final value = LocalizedFormat.decimal(
+                                    context,
+                                    displayedDiff.abs(),
+                                    decimalDigits: 0,
+                                  );
+                                  final sign = diff > 0
+                                      ? '+'
+                                      : diff < 0
+                                          ? '-'
+                                          : '';
                                   if (isMetric) {
-                                    return '${l10n.current} ${diff > 0 ? '+' : ''}${diff.toStringAsFixed(0)} kg';
+                                    return '${l10n.current} $sign$value kg';
                                   } else {
-                                    return '${l10n.current} ${diff > 0 ? '+' : ''}${(diff * 2.20462).toStringAsFixed(0)} lbs';
+                                    return '${l10n.current} $sign$value lbs';
                                   }
                                 }
 
@@ -4290,17 +4387,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
   DateTime _currentMonth = DateTime.now();
 
   String _getWeightCalendarTitle(BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
-    switch (locale) {
-      case 'ko':
-        return '체중 캘린더';
-      case 'ja':
-        return '体重カレンダー';
-      case 'zh':
-        return '体重日历';
-      default:
-        return 'Weight Calendar';
-    }
+    return AppLocalizations.of(context)!.weightCalendar;
   }
 
   @override
@@ -4370,9 +4457,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        DateFormat.yMMMM(
-                                Localizations.localeOf(context).toString())
-                            .format(_currentMonth),
+                        LocalizedFormat.yearMonth(context, _currentMonth),
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -4548,7 +4633,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '$day',
+              LocalizedFormat.decimal(context, day, decimalDigits: 0),
               style: TextStyle(
                 fontSize: 13,
                 fontWeight:
@@ -4568,8 +4653,11 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   isWeightMetric
-                      ? entry.weightKg.toStringAsFixed(1)
-                      : (entry.weightKg * 2.20462).toStringAsFixed(1),
+                      ? LocalizedFormat.decimal(context, entry.weightKg)
+                      : LocalizedFormat.decimal(
+                          context,
+                          entry.weightKg * 2.20462,
+                        ),
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -4620,8 +4708,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text(
-                    DateFormat.yMMMd(Localizations.localeOf(context).toString())
-                        .format(entry.dateTime),
+                    LocalizedFormat.mediumDate(context, entry.dateTime),
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -4797,7 +4884,7 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                           ),
                         ),
                         Text(
-                          '${(completionRate * 100).round()}%',
+                          LocalizedFormat.percent(context, completionRate),
                           style: GoogleFonts.outfit(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -4825,8 +4912,16 @@ class _AchievementsTabState extends State<_AchievementsTab> {
                               'unlocked_x_of_y',
                               langCode,
                               {
-                                'unlocked': '$unlockedCount',
-                                'total': '$totalCount'
+                                'unlocked': LocalizedFormat.decimal(
+                                  context,
+                                  unlockedCount,
+                                  decimalDigits: 0,
+                                ),
+                                'total': LocalizedFormat.decimal(
+                                  context,
+                                  totalCount,
+                                  decimalDigits: 0,
+                                ),
                               },
                             ),
                             style: TextStyle(
@@ -5106,11 +5201,7 @@ class _AchievementsTabState extends State<_AchievementsTab> {
   }
 
   String _formatUnlockDateSimple(DateTime dt, String langCode) {
-    try {
-      return DateFormat.MMMd(langCode).format(dt);
-    } catch (_) {
-      return DateFormat.MMMd('en').format(dt);
-    }
+    return LocalizedFormat.abbreviatedMonthDay(context, dt);
   }
 
   void _showAchievementDetails(
@@ -5131,163 +5222,163 @@ class _AchievementsTabState extends State<_AchievementsTab> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              const SizedBox(height: 28),
-              // Big icon with gradient glow
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: ach.isUnlocked
-                        ? ach.gradientColors
-                        : [Colors.grey.shade300, Colors.grey.shade400],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                const SizedBox(height: 28),
+                // Big icon with gradient glow
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: ach.isUnlocked
+                          ? ach.gradientColors
+                          : [Colors.grey.shade300, Colors.grey.shade400],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: ach.isUnlocked
+                        ? [
+                            BoxShadow(
+                              color: ach.gradientColors[0].withOpacity(0.4),
+                              blurRadius: 20,
+                              offset: const Offset(0, 6),
+                            )
+                          ]
+                        : null,
                   ),
-                  boxShadow: ach.isUnlocked
-                      ? [
-                          BoxShadow(
-                            color: ach.gradientColors[0].withOpacity(0.4),
-                            blurRadius: 20,
-                            offset: const Offset(0, 6),
-                          )
-                        ]
-                      : null,
+                  child: Icon(
+                    ach.isUnlocked ? ach.icon : Icons.lock_outline,
+                    color: Colors.white,
+                    size: 48,
+                  ),
                 ),
-                child: Icon(
-                  ach.isUnlocked ? ach.icon : Icons.lock_outline,
-                  color: Colors.white,
-                  size: 48,
+                const SizedBox(height: 24),
+                // Title
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.outfit(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              // Title
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: theme.colorScheme.onSurface,
+                const SizedBox(height: 10),
+                // Description
+                Text(
+                  desc,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: appColors.mutedText,
+                    height: 1.4,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              // Description
-              Text(
-                desc,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: appColors.mutedText,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 28),
-              // Unlock detail card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: appColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: appColors.border),
-                ),
-                child: Column(
-                  children: [
-                    if (ach.isUnlocked && ach.unlockedAt != null) ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AchievementTranslations.getUiString(
-                                'unlock_date', langCode),
-                            style: TextStyle(
-                                color: appColors.mutedText, fontSize: 13),
-                          ),
-                          Text(
-                            _formatUnlockDateDetailed(
-                                ach.unlockedAt!, langCode),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 13),
-                          ),
-                        ],
-                      ),
-                    ] else ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AchievementTranslations.getUiString(
-                                'progress_label', langCode),
-                            style: TextStyle(
-                                color: appColors.mutedText, fontSize: 13),
-                          ),
-                          Text(
-                            '${(ach.progress * 100).round()}%',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: theme.colorScheme.primary,
+                const SizedBox(height: 28),
+                // Unlock detail card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: appColors.surfaceElevated,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: appColors.border),
+                  ),
+                  child: Column(
+                    children: [
+                      if (ach.isUnlocked && ach.unlockedAt != null) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AchievementTranslations.getUiString(
+                                  'unlock_date', langCode),
+                              style: TextStyle(
+                                  color: appColors.mutedText, fontSize: 13),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: ach.progress,
-                          minHeight: 6,
-                          backgroundColor:
-                              theme.colorScheme.primary.withOpacity(0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              theme.colorScheme.primary),
+                            Text(
+                              _formatUnlockDateDetailed(
+                                  ach.unlockedAt!, langCode),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AchievementTranslations.getUiString(
-                                'current_value_label', langCode),
-                            style: TextStyle(
-                                color: appColors.mutedText, fontSize: 12),
+                      ] else ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AchievementTranslations.getUiString(
+                                  'progress_label', langCode),
+                              style: TextStyle(
+                                  color: appColors.mutedText, fontSize: 13),
+                            ),
+                            Text(
+                              LocalizedFormat.percent(context, ach.progress),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: ach.progress,
+                            minHeight: 6,
+                            backgroundColor:
+                                theme.colorScheme.primary.withOpacity(0.1),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                theme.colorScheme.primary),
                           ),
-                          Text(
-                            _formatProgressTextDetailed(ach, langCode),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12),
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AchievementTranslations.getUiString(
+                                  'current_value_label', langCode),
+                              style: TextStyle(
+                                  color: appColors.mutedText, fontSize: 12),
+                            ),
+                            Text(
+                              _formatProgressTextDetailed(ach, langCode),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 28),
-              // Close button
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999),
+                const SizedBox(height: 28),
+                // Close button
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AchievementTranslations.getUiString('close', langCode),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    AchievementTranslations.getUiString('close', langCode),
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
                 ),
-              ),
               ],
             ),
           ),
@@ -5297,11 +5388,17 @@ class _AchievementsTabState extends State<_AchievementsTab> {
   }
 
   String _formatUnlockDateDetailed(DateTime dt, String langCode) {
-    try {
-      return DateFormat.yMMMd(langCode).format(dt);
-    } catch (_) {
-      return DateFormat.yMMMd('en').format(dt);
-    }
+    return LocalizedFormat.mediumDate(context, dt);
+  }
+
+  String _achievementValueWithUnit(
+    String value,
+    String unit,
+    String langCode,
+  ) {
+    return const {'ja', 'ko', 'zh'}.contains(langCode)
+        ? '$value$unit'
+        : '$value $unit';
   }
 
   String _formatProgressShort(Achievement ach, String langCode) {
@@ -5311,32 +5408,50 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         id.startsWith('cycle_dist_')) {
       final cur = ach.currentValue.toDouble();
       final target = ach.targetValue.toDouble();
-      return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
+      return '${LocalizedFormat.decimal(context, cur)} / ${LocalizedFormat.decimal(context, target, decimalDigits: 0)} km';
     }
     if (id.startsWith('treadmill_5k') ||
         id.startsWith('treadmill_10k') ||
         id.startsWith('treadmill_half_marathon')) {
       final cur = ach.currentValue.toDouble();
       final target = ach.targetValue.toDouble();
-      return '${cur.toStringAsFixed(1)}/${target.toStringAsFixed(0)}km';
+      return '${LocalizedFormat.decimal(context, cur)} / ${LocalizedFormat.decimal(context, target, decimalDigits: 0)} km';
     }
     if (id.startsWith('treadmill_speed_')) {
-      return '${ach.currentValue.toStringAsFixed(1)}/${ach.targetValue.toStringAsFixed(0)}km/h';
+      return '${LocalizedFormat.decimal(context, ach.currentValue)} / ${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)} km/h';
     }
     if (id.startsWith('cycle_rpm')) {
-      return '${ach.currentValue.round()}/${ach.targetValue.round()}';
+      return '${LocalizedFormat.decimal(context, ach.currentValue, decimalDigits: 0)}/${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)}';
     }
     if (id.startsWith('stairmaster_level')) {
-      return 'L${ach.currentValue.round()}/${ach.targetValue.round()}';
+      return '${LocalizedFormat.decimal(context, ach.currentValue, decimalDigits: 0)}/${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)}';
     }
     if (id.startsWith('duration_')) {
-      return '${ach.currentValue.round()}/${ach.targetValue.round()}${AchievementTranslations.getUiString('min', langCode)}';
+      final current = LocalizedFormat.decimal(
+        context,
+        ach.currentValue,
+        decimalDigits: 0,
+      );
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      final unit = AchievementTranslations.getUiString('min', langCode);
+      return '$current/${_achievementValueWithUnit(target, unit, langCode)}';
     }
     if (id.startsWith('total_duration_') ||
         id.startsWith('stairmaster_time_')) {
-      return '${ach.currentValue.toStringAsFixed(1)}/${ach.targetValue.toStringAsFixed(0)}${AchievementTranslations.getUiString('hours', langCode)}';
+      final current = LocalizedFormat.decimal(context, ach.currentValue);
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      final unit = AchievementTranslations.getUiString('hours', langCode);
+      return '$current / ${_achievementValueWithUnit(target, unit, langCode)}';
     }
-    return '${ach.currentValue.round()}/${ach.targetValue.round()}';
+    return '${LocalizedFormat.decimal(context, ach.currentValue, decimalDigits: 0)}/${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)}';
   }
 
   String _formatProgressTextDetailed(Achievement ach, String langCode) {
@@ -5347,26 +5462,76 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         id.startsWith('treadmill_5k') ||
         id.startsWith('treadmill_10k') ||
         id.startsWith('treadmill_half_marathon')) {
-      final cur = ach.currentValue.toDouble().toStringAsFixed(2);
-      final target = ach.targetValue.toDouble().toStringAsFixed(0);
+      final cur = LocalizedFormat.decimal(
+        context,
+        ach.currentValue,
+        decimalDigits: 2,
+      );
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
       return '$cur km / $target km';
     }
     if (id.startsWith('treadmill_speed_')) {
-      return '${ach.currentValue.toStringAsFixed(2)} km/h / ${ach.targetValue.toStringAsFixed(0)} km/h';
+      return '${LocalizedFormat.decimal(context, ach.currentValue, decimalDigits: 2)} km/h / ${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)} km/h';
     }
     if (id.startsWith('cycle_rpm')) {
-      return '${ach.currentValue.round()} RPM / ${ach.targetValue.round()} RPM';
+      final l10n = AppLocalizations.of(context)!;
+      final current = LocalizedFormat.decimal(
+        context,
+        ach.currentValue,
+        decimalDigits: 0,
+      );
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      return '${l10n.rpmValue(current)} / ${l10n.rpmValue(target)}';
     }
     if (id.startsWith('stairmaster_level')) {
-      return 'Level ${ach.currentValue.round()} / Level ${ach.targetValue.round()}';
+      final l10n = AppLocalizations.of(context)!;
+      final current = LocalizedFormat.decimal(
+        context,
+        ach.currentValue,
+        decimalDigits: 0,
+      );
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      return '${l10n.levelColon(current)} / ${l10n.levelColon(target)}';
     }
     if (id.startsWith('duration_')) {
-      return '${ach.currentValue.round()} ${AchievementTranslations.getUiString('min', langCode)} / ${ach.targetValue.round()} ${AchievementTranslations.getUiString('min', langCode)}';
+      final current = LocalizedFormat.decimal(
+        context,
+        ach.currentValue,
+        decimalDigits: 0,
+      );
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      final unit = AchievementTranslations.getUiString('min', langCode);
+      return '${_achievementValueWithUnit(current, unit, langCode)} / '
+          '${_achievementValueWithUnit(target, unit, langCode)}';
     }
     if (id.startsWith('total_duration_') ||
         id.startsWith('stairmaster_time_')) {
-      return '${ach.currentValue.toStringAsFixed(1)} ${AchievementTranslations.getUiString('hours', langCode)} / ${ach.targetValue.toStringAsFixed(0)} ${AchievementTranslations.getUiString('hours', langCode)}';
+      final current = LocalizedFormat.decimal(context, ach.currentValue);
+      final target = LocalizedFormat.decimal(
+        context,
+        ach.targetValue,
+        decimalDigits: 0,
+      );
+      final unit = AchievementTranslations.getUiString('hours', langCode);
+      return '${_achievementValueWithUnit(current, unit, langCode)} / '
+          '${_achievementValueWithUnit(target, unit, langCode)}';
     }
-    return '${ach.currentValue.round()} / ${ach.targetValue.round()}';
+    return '${LocalizedFormat.decimal(context, ach.currentValue, decimalDigits: 0)} / ${LocalizedFormat.decimal(context, ach.targetValue, decimalDigits: 0)}';
   }
 }

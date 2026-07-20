@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/material.dart' hide Interval;
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
 import '../../../app_settings/app_settings_provider.dart';
@@ -86,7 +87,16 @@ class RoutineHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '$durationText · $intervalCount ${l10n.interval} · $localizedDifficulty',
+                  l10n.routineHeaderSummary(
+                    durationText,
+                    intervalCount,
+                    LocalizedFormat.decimal(
+                      context,
+                      intervalCount,
+                      decimalDigits: 0,
+                    ),
+                    localizedDifficulty,
+                  ),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -144,15 +154,34 @@ class IntervalRow extends StatelessWidget {
     switch (machineType) {
       case MachineType.treadmill:
         value1 = settingsProvider.formatSpeed(interval.speedKmh ?? 0.0);
-        value2 =
-            '${interval.grade?.toStringAsFixed(1) ?? '0.0'}% ${l10n.incline}';
+        value2 = l10n.inclineValue(
+          LocalizedFormat.decimal(context, interval.grade ?? 0),
+        );
         break;
       case MachineType.cycle:
-        value1 = '${interval.rpm ?? 0} ${l10n.rpm}';
-        value2 = 'Level ${interval.resistance ?? 0}';
+        value1 = l10n.rpmValue(
+          LocalizedFormat.decimal(
+            context,
+            interval.rpm ?? 0,
+            decimalDigits: 0,
+          ),
+        );
+        value2 = l10n.resistanceColon(
+          LocalizedFormat.decimal(
+            context,
+            interval.resistance ?? 0,
+            decimalDigits: 0,
+          ),
+        );
         break;
       case MachineType.stairmaster:
-        value1 = 'Level ${interval.level ?? 0}';
+        value1 = l10n.levelColon(
+          LocalizedFormat.decimal(
+            context,
+            interval.level ?? 0,
+            decimalDigits: 0,
+          ),
+        );
         value2 = '';
         break;
     }
@@ -243,7 +272,8 @@ class IntervalList extends StatelessWidget {
   final Function(int)? onIntervalDelete;
   final int? selectedIndex;
   final VoidCallback? onAddInterval;
-  final VoidCallback? onAddRepeatBlock; // Optional callback for repeat block button
+  final VoidCallback?
+      onAddRepeatBlock; // Optional callback for repeat block button
 
   const IntervalList({
     super.key,
@@ -261,16 +291,24 @@ class IntervalList extends StatelessWidget {
   Widget _buildGroupCard(BuildContext context, _IntervalGroupItem group) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     final repeatCount = group.repeatCount ?? 1;
-    final uniqueCount = (group.intervals.length / repeatCount).ceil().clamp(1, group.intervals.length);
-    
+    final uniqueCount = (group.intervals.length / repeatCount)
+        .ceil()
+        .clamp(1, group.intervals.length);
+
     final uniqueIntervals = group.intervals.sublist(0, uniqueCount);
     final uniqueIndices = group.originalIndices.sublist(0, uniqueCount);
 
     final l10n = AppLocalizations.of(context)!;
     final sessionLabel = l10n.sessionRepeatBlock;
-    final repeatLabel = l10n.repeatTimes(repeatCount);
+    final repeatLabel = l10n.repeatTimes(
+      LocalizedFormat.decimal(
+        context,
+        repeatCount,
+        decimalDigits: 0,
+      ),
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -314,7 +352,9 @@ class IntervalList extends StatelessWidget {
                 if (isEditable && onIntervalDelete != null)
                   GestureDetector(
                     onTap: () {
-                      for (int i = group.originalIndices.length - 1; i >= 0; i--) {
+                      for (int i = group.originalIndices.length - 1;
+                          i >= 0;
+                          i--) {
                         onIntervalDelete!(group.originalIndices[i]);
                       }
                     },
@@ -334,13 +374,15 @@ class IntervalList extends StatelessWidget {
             itemBuilder: (context, idx) {
               final interval = uniqueIntervals[idx];
               final originalIndex = uniqueIndices[idx];
-              
+
               Widget row = IntervalRow(
                 interval: interval,
                 machineType: machineType,
                 settingsProvider: settingsProvider,
                 isEditable: isEditable,
-                onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                onTap: onIntervalTap != null
+                    ? () => onIntervalTap!(originalIndex)
+                    : null,
                 isSelected: selectedIndex == originalIndex,
               );
 
@@ -424,7 +466,9 @@ class IntervalList extends StatelessWidget {
                       machineType: machineType,
                       settingsProvider: settingsProvider,
                       isEditable: isEditable,
-                      onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                      onTap: onIntervalTap != null
+                          ? () => onIntervalTap!(originalIndex)
+                          : null,
                       isSelected: selectedIndex == originalIndex,
                     ),
                   );
@@ -434,7 +478,9 @@ class IntervalList extends StatelessWidget {
                     machineType: machineType,
                     settingsProvider: settingsProvider,
                     isEditable: isEditable,
-                    onTap: onIntervalTap != null ? () => onIntervalTap!(originalIndex) : null,
+                    onTap: onIntervalTap != null
+                        ? () => onIntervalTap!(originalIndex)
+                        : null,
                     isSelected: selectedIndex == originalIndex,
                   );
                 }
@@ -552,8 +598,9 @@ class _IntervalSwipeDeleteState extends State<_IntervalSwipeDelete> {
       _openItemId.value = widget.itemId;
     }
 
-    final nextOffset =
-        (_dragOffset + details.delta.dx).clamp(-_actionWidth, 0.0);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final logicalDelta = isRtl ? -details.delta.dx : details.delta.dx;
+    final nextOffset = (_dragOffset + logicalDelta).clamp(-_actionWidth, 0.0);
     setState(() {
       _dragOffset = nextOffset;
     });
@@ -588,7 +635,7 @@ class _IntervalSwipeDeleteState extends State<_IntervalSwipeDelete> {
         children: [
           Positioned.fill(
             child: Align(
-              alignment: Alignment.centerRight,
+              alignment: AlignmentDirectional.centerEnd,
               child: Container(
                 width: _actionWidth,
                 color: CupertinoColors.destructiveRed,
@@ -606,7 +653,12 @@ class _IntervalSwipeDeleteState extends State<_IntervalSwipeDelete> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeOutCubic,
-            transform: Matrix4.translationValues(_dragOffset, 0, 0),
+            transform: Matrix4.translationValues(
+              _dragOffset *
+                  (Directionality.of(context) == TextDirection.rtl ? -1 : 1),
+              0,
+              0,
+            ),
             child: widget.child,
           ),
         ],

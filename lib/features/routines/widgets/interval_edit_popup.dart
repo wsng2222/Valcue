@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
 import '../../../app_settings/app_settings_provider.dart';
@@ -104,7 +105,8 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -290,7 +292,7 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
             children: items.map((speed) {
               return Center(
                 child: Text(
-                  '${speed.toStringAsFixed(1)} ${isMph ? "mph" : "km/h"}',
+                  '${LocalizedFormat.decimal(context, speed)} ${isMph ? "mph" : "km/h"}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontFeatures: [ui.FontFeature.tabularFigures()],
@@ -325,7 +327,7 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
             children: items.map((incline) {
               return Center(
                 child: Text(
-                  '${incline.toStringAsFixed(1)}%',
+                  '${LocalizedFormat.decimal(context, incline)}%',
                   style: const TextStyle(
                     fontSize: 20,
                     fontFeatures: [ui.FontFeature.tabularFigures()],
@@ -388,7 +390,13 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
               final level = index + 1;
               return Center(
                 child: Text(
-                  'Level $level',
+                  l10n.levelColon(
+                    LocalizedFormat.decimal(
+                      context,
+                      level,
+                      decimalDigits: 0,
+                    ),
+                  ),
                   style: const TextStyle(
                     fontSize: 20,
                     fontFeatures: [ui.FontFeature.tabularFigures()],
@@ -416,7 +424,13 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
               final level = index + 1;
               return Center(
                 child: Text(
-                  'Level $level',
+                  l10n.levelColon(
+                    LocalizedFormat.decimal(
+                      context,
+                      level,
+                      decimalDigits: 0,
+                    ),
+                  ),
                   style: const TextStyle(
                     fontSize: 20,
                     fontFeatures: [ui.FontFeature.tabularFigures()],
@@ -441,9 +455,9 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
       case IntervalEditField.rpm:
         return l10n.rpm;
       case IntervalEditField.resistance:
-        return 'Level';
+        return l10n.level;
       case IntervalEditField.level:
-        return 'Level';
+        return l10n.level;
     }
   }
 }

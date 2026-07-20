@@ -281,7 +281,7 @@ class _CompareChoiceCard extends StatelessWidget {
             child: Column(
               children: [
                 Align(
-                  alignment: Alignment.topRight,
+                  alignment: AlignmentDirectional.topEnd,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
                     width: 23,
@@ -369,7 +369,9 @@ class _CompareChoiceCard extends StatelessWidget {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 180),
                         height: 7,
-                        margin: EdgeInsets.only(right: index == 4 ? 0 : 4),
+                        margin: EdgeInsetsDirectional.only(
+                          end: index == 4 ? 0 : 4,
+                        ),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? (isActive

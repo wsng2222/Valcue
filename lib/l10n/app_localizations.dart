@@ -466,7 +466,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Level {level}'**
-  String levelColon(int level);
+  String levelColon(String level);
 
   /// RPM label
   ///
@@ -496,7 +496,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Resistance {resistance}'**
-  String resistanceColon(int resistance);
+  String resistanceColon(String resistance);
 
   /// SPM label
   ///
@@ -790,7 +790,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Interval {current}/{total}'**
-  String liveActivityIntervalFormat(int current, int total);
+  String liveActivityIntervalFormat(String current, String total);
 
   /// Live Activity label describing how long the current interval lasts
   ///
@@ -1053,8 +1053,8 @@ abstract class AppLocalizations {
   /// Save percentage badge
   ///
   /// In en, this message translates to:
-  /// **'Save {percent}%'**
-  String savePercent(int percent);
+  /// **'Save {percent}'**
+  String savePercent(String percent);
 
   /// Best value badge
   ///
@@ -1905,14 +1905,14 @@ abstract class AppLocalizations {
   /// Workout days count in calendar statistics
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{Workout 1 day 🔥} other{Workout {count} days 🔥}}'**
-  String workoutDays(int count);
+  /// **'Workout days: {count} 🔥'**
+  String workoutDays(String count);
 
   /// Rest days count in calendar statistics
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{Rest 1 day 🛏️} other{Rest {count} days 🛏️}}'**
-  String restDays(int count);
+  /// **'Rest days: {count} 🛏️'**
+  String restDays(String count);
 
   /// No description provided for @workoutReminderTitle.
   ///
@@ -2074,37 +2074,37 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{minutes} min'**
-  String durationMinutes(int minutes);
+  String durationMinutes(String minutes);
 
   /// Floor count for the custom routine builder
   ///
   /// In en, this message translates to:
-  /// **'{count} floors'**
-  String floorCount(int count);
+  /// **'Floors: {count}'**
+  String floorCount(String count);
 
   /// Generated treadmill routine name
   ///
   /// In en, this message translates to:
   /// **'Custom Run {distance} km ({calories} kcal)'**
-  String customRunName(String distance, int calories);
+  String customRunName(String distance, String calories);
 
   /// Generated cycle routine name
   ///
   /// In en, this message translates to:
   /// **'Custom Cycle {distance} km ({calories} kcal)'**
-  String customCycleName(String distance, int calories);
+  String customCycleName(String distance, String calories);
 
   /// Generated stair routine name
   ///
   /// In en, this message translates to:
   /// **'Custom Stairs {floors}F ({calories} kcal)'**
-  String customStairsName(int floors, int calories);
+  String customStairsName(String floors, String calories);
 
   /// Voice message played after a custom routine is generated
   ///
   /// In en, this message translates to:
   /// **'Your custom routine is ready. Aim for about {calories} calories!'**
-  String customRoutineSpeech(int calories);
+  String customRoutineSpeech(String calories);
 
   /// No description provided for @weightDeleteTitle.
   ///
@@ -2194,14 +2194,14 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'A routine was detected in the scanned QR code.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?'**
-  String importQrRoutinePrompt(String name, String difficulty, int count);
+  String importQrRoutinePrompt(String name, String difficulty, String count);
 
   /// Confirmation shown when a shared routine is found in the clipboard
   ///
   /// In en, this message translates to:
   /// **'A shared routine was detected in your clipboard.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?'**
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count);
+      String name, String difficulty, String count);
 
   /// Shown after a shared routine is imported
   ///
@@ -2249,7 +2249,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{seconds}s'**
-  String secondsShort(int seconds);
+  String secondsShort(String seconds);
 
   /// No description provided for @selectCountdownTimings.
   ///
@@ -2266,8 +2266,8 @@ abstract class AppLocalizations {
   /// Countdown timing option
   ///
   /// In en, this message translates to:
-  /// **'{seconds} seconds left'**
-  String secondsLeft(int seconds);
+  /// **'{seconds}s left'**
+  String secondsLeft(String seconds);
 
   /// No description provided for @qrShareInstruction.
   ///
@@ -2290,8 +2290,8 @@ abstract class AppLocalizations {
   /// Number of repetitions for a repeated interval block
   ///
   /// In en, this message translates to:
-  /// **'{count} repeats'**
-  String repeatTimes(int count);
+  /// **'Repeats: {count}'**
+  String repeatTimes(String count);
 
   /// No description provided for @addRepeatBlock.
   ///
@@ -2310,6 +2310,91 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to open privacy policy'**
   String get unableToOpenPrivacyPolicy;
+
+  /// No description provided for @less.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get less;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// Localized incline metric
+  ///
+  /// In en, this message translates to:
+  /// **'Incline {value}%'**
+  String inclineValue(String value);
+
+  /// Localized cadence metric
+  ///
+  /// In en, this message translates to:
+  /// **'{value} RPM'**
+  String rpmValue(String value);
+
+  /// Label for the next interval metric
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {value}'**
+  String nextMetric(String value);
+
+  /// Weight tracking calendar title
+  ///
+  /// In en, this message translates to:
+  /// **'Weight calendar'**
+  String get weightCalendar;
+
+  /// Routine header metadata with localized interval pluralization
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{duration} · {countText} interval · {difficulty}} other{{duration} · {countText} intervals · {difficulty}}}'**
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty);
+
+  /// Weight goal summary after reaching the goal
+  ///
+  /// In en, this message translates to:
+  /// **'Goal {goalWeight} • Goal achieved!'**
+  String goalAchievedSummary(String goalWeight);
+
+  /// Weight goal summary while progress remains
+  ///
+  /// In en, this message translates to:
+  /// **'Goal {goalWeight} • {difference} to go'**
+  String goalRemainingSummary(String goalWeight, String difference);
+
+  /// Weight goal summary after passing the goal
+  ///
+  /// In en, this message translates to:
+  /// **'Goal {goalWeight} • {difference} over'**
+  String goalExceededSummary(String goalWeight, String difference);
+
+  /// Average speed in kilometers per hour
+  ///
+  /// In en, this message translates to:
+  /// **'Avg {value} km/h'**
+  String averageSpeedKmh(String value);
+
+  /// Average speed in miles per hour
+  ///
+  /// In en, this message translates to:
+  /// **'Avg {value} mph'**
+  String averageSpeedMph(String value);
+
+  /// Average cycling cadence
+  ///
+  /// In en, this message translates to:
+  /// **'Avg {value} RPM'**
+  String averageRpmValue(String value);
+
+  /// Average stair machine level
+  ///
+  /// In en, this message translates to:
+  /// **'Avg level {value}'**
+  String averageLevelValue(String value);
 }
 
 class _AppLocalizationsDelegate

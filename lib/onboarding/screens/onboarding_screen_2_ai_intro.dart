@@ -460,7 +460,9 @@ class _GeneratedRoutineCard extends StatelessWidget {
                   return Expanded(
                     flex: isRun ? 3 : 2,
                     child: Container(
-                      margin: EdgeInsets.only(right: index == 11 ? 0 : 2),
+                      margin: EdgeInsetsDirectional.only(
+                        end: index == 11 ? 0 : 2,
+                      ),
                       color: isRun
                           ? OnboardingTheme.primaryRed
                           : (isDark

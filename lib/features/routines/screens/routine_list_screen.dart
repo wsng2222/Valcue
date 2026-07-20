@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/routine.dart';
 import '../models/interval.dart' as interval_model;
@@ -186,8 +187,12 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         title: l10n.importSharedRoutine,
         message: l10n.importQrRoutinePrompt(
           routine.name,
-          routine.difficulty,
-          routine.intervals.length,
+          _getLocalizedDifficulty(context, routine.difficulty),
+          LocalizedFormat.decimal(
+            context,
+            routine.intervals.length,
+            decimalDigits: 0,
+          ),
         ),
         actions: [
           AppDialogAction(
@@ -587,9 +592,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       context,
       title: l10n.premiumMembership,
       bulletItems: [
-        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
-        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
-        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+        l10n.routineLimitBenefit1,
+        l10n.routineLimitBenefit2,
+        l10n.routineLimitBenefit3,
       ],
     );
   }
@@ -1037,59 +1042,41 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     try {
       switch (template.titleKey) {
         case 'template_treadmill_beginner_1_title':
-          return (l10n as dynamic).templateTreadmillBeginner1Title ??
-              'Easy Start 20';
+          return l10n.templateTreadmillBeginner1Title;
         case 'template_treadmill_beginner_2_title':
-          return (l10n as dynamic).templateTreadmillBeginner2Title ??
-              'Incline Walk 25';
+          return l10n.templateTreadmillBeginner2Title;
         case 'template_treadmill_intermediate_1_title':
-          return (l10n as dynamic).templateTreadmillIntermediate1Title ??
-              'Classic 1:1 24';
+          return l10n.templateTreadmillIntermediate1Title;
         case 'template_treadmill_intermediate_2_title':
-          return (l10n as dynamic).templateTreadmillIntermediate2Title ??
-              'Speed Ladder 20';
+          return l10n.templateTreadmillIntermediate2Title;
         case 'template_treadmill_advanced_1_title':
-          return (l10n as dynamic).templateTreadmillAdvanced1Title ??
-              '2:1 Burner 21';
+          return l10n.templateTreadmillAdvanced1Title;
         case 'template_treadmill_advanced_2_title':
-          return (l10n as dynamic).templateTreadmillAdvanced2Title ??
-              'Sprint Pop 18';
+          return l10n.templateTreadmillAdvanced2Title;
         case 'template_cycle_beginner_1_title':
-          return (l10n as dynamic).templateCycleBeginner1Title ??
-              'Cadence Builder 20';
+          return l10n.templateCycleBeginner1Title;
         case 'template_cycle_beginner_2_title':
-          return (l10n as dynamic).templateCycleBeginner2Title ??
-              'Steady Ride 25';
+          return l10n.templateCycleBeginner2Title;
         case 'template_cycle_intermediate_1_title':
-          return (l10n as dynamic).templateCycleIntermediate1Title ??
-              'Spin 1:1 24';
+          return l10n.templateCycleIntermediate1Title;
         case 'template_cycle_intermediate_2_title':
-          return (l10n as dynamic).templateCycleIntermediate2Title ??
-              'Hill Simulation 22';
+          return l10n.templateCycleIntermediate2Title;
         case 'template_cycle_advanced_1_title':
-          return (l10n as dynamic).templateCycleAdvanced1Title ??
-              'Power Intervals 20';
+          return l10n.templateCycleAdvanced1Title;
         case 'template_cycle_advanced_2_title':
-          return (l10n as dynamic).templateCycleAdvanced2Title ??
-              'Tabata Mix 16';
+          return l10n.templateCycleAdvanced2Title;
         case 'template_stairmaster_beginner_1_title':
-          return (l10n as dynamic).templateStairmasterBeginner1Title ??
-              'Easy Steps 20';
+          return l10n.templateStairmasterBeginner1Title;
         case 'template_stairmaster_beginner_2_title':
-          return (l10n as dynamic).templateStairmasterBeginner2Title ??
-              'Long Easy 25';
+          return l10n.templateStairmasterBeginner2Title;
         case 'template_stairmaster_intermediate_1_title':
-          return (l10n as dynamic).templateStairmasterIntermediate1Title ??
-              '2:1 Climb 21';
+          return l10n.templateStairmasterIntermediate1Title;
         case 'template_stairmaster_intermediate_2_title':
-          return (l10n as dynamic).templateStairmasterIntermediate2Title ??
-              'Strong 1:1 24';
+          return l10n.templateStairmasterIntermediate2Title;
         case 'template_stairmaster_advanced_1_title':
-          return (l10n as dynamic).templateStairmasterAdvanced1Title ??
-              'Hard Blocks 20';
+          return l10n.templateStairmasterAdvanced1Title;
         case 'template_stairmaster_advanced_2_title':
-          return (l10n as dynamic).templateStairmasterAdvanced2Title ??
-              'Sprint Steps 18';
+          return l10n.templateStairmasterAdvanced2Title;
         default:
           return l10n.unnamedRoutine;
       }
@@ -1102,64 +1089,46 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     try {
       switch (template.subtitleKey) {
         case 'template_treadmill_beginner_1_subtitle':
-          return (l10n as dynamic).templateTreadmillBeginner1Subtitle ??
-              'Perfect for beginners';
+          return l10n.templateTreadmillBeginner1Subtitle;
         case 'template_treadmill_beginner_2_subtitle':
-          return (l10n as dynamic).templateTreadmillBeginner2Subtitle ??
-              'Steady pace maintain';
+          return l10n.templateTreadmillBeginner2Subtitle;
         case 'template_treadmill_intermediate_1_subtitle':
-          return (l10n as dynamic).templateTreadmillIntermediate1Subtitle ??
-              'Build endurance';
+          return l10n.templateTreadmillIntermediate1Subtitle;
         case 'template_treadmill_intermediate_2_subtitle':
-          return (l10n as dynamic).templateTreadmillIntermediate2Subtitle ??
-              'Progressive intensity';
+          return l10n.templateTreadmillIntermediate2Subtitle;
         case 'template_treadmill_advanced_1_subtitle':
-          return (l10n as dynamic).templateTreadmillAdvanced1Subtitle ??
-              'High intensity workout';
+          return l10n.templateTreadmillAdvanced1Subtitle;
         case 'template_treadmill_advanced_2_subtitle':
-          return (l10n as dynamic).templateTreadmillAdvanced2Subtitle ??
-              'Maximum burst intensity';
+          return l10n.templateTreadmillAdvanced2Subtitle;
         case 'template_cycle_beginner_1_subtitle':
-          return (l10n as dynamic).templateCycleBeginner1Subtitle ??
-              '4 min warm-up + 1:1 cadence';
+          return l10n.templateCycleBeginner1Subtitle;
         case 'template_cycle_beginner_2_subtitle':
-          return (l10n as dynamic).templateCycleBeginner2Subtitle ??
-              'Long steady block';
+          return l10n.templateCycleBeginner2Subtitle;
         case 'template_cycle_intermediate_1_subtitle':
-          return (l10n as dynamic).templateCycleIntermediate1Subtitle ??
-              'Classic 1:1 spin intervals';
+          return l10n.templateCycleIntermediate1Subtitle;
         case 'template_cycle_intermediate_2_subtitle':
-          return (l10n as dynamic).templateCycleIntermediate2Subtitle ??
-              'Climb repeats';
+          return l10n.templateCycleIntermediate2Subtitle;
         case 'template_cycle_advanced_1_subtitle':
-          return (l10n as dynamic).templateCycleAdvanced1Subtitle ??
-              '30s power bursts';
+          return l10n.templateCycleAdvanced1Subtitle;
         case 'template_cycle_advanced_2_subtitle':
-          return (l10n as dynamic).templateCycleAdvanced2Subtitle ??
-              '20s on / 10s off mix';
+          return l10n.templateCycleAdvanced2Subtitle;
         case 'template_stairmaster_beginner_1_subtitle':
-          return (l10n as dynamic).templateStairmasterBeginner1Subtitle ??
-              '4 min warm-up + 1:1 steps';
+          return l10n.templateStairmasterBeginner1Subtitle;
         case 'template_stairmaster_beginner_2_subtitle':
-          return (l10n as dynamic).templateStairmasterBeginner2Subtitle ??
-              'Long easy climb blocks';
+          return l10n.templateStairmasterBeginner2Subtitle;
         case 'template_stairmaster_intermediate_1_subtitle':
-          return (l10n as dynamic).templateStairmasterIntermediate1Subtitle ??
-              '2:1 climb repeats';
+          return l10n.templateStairmasterIntermediate1Subtitle;
         case 'template_stairmaster_intermediate_2_subtitle':
-          return (l10n as dynamic).templateStairmasterIntermediate2Subtitle ??
-              'Strong 1:1 intervals';
+          return l10n.templateStairmasterIntermediate2Subtitle;
         case 'template_stairmaster_advanced_1_subtitle':
-          return (l10n as dynamic).templateStairmasterAdvanced1Subtitle ??
-              '2-min hard blocks';
+          return l10n.templateStairmasterAdvanced1Subtitle;
         case 'template_stairmaster_advanced_2_subtitle':
-          return (l10n as dynamic).templateStairmasterAdvanced2Subtitle ??
-              '30s sprints + 60s recoveries';
+          return l10n.templateStairmasterAdvanced2Subtitle;
         default:
-          return 'Efficient intervals';
+          return l10n.templateTreadmillBeginner1Subtitle;
       }
     } catch (e) {
-      return 'Efficient intervals';
+      return l10n.templateTreadmillBeginner1Subtitle;
     }
   }
 
@@ -1280,112 +1249,119 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         ],
       ),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    routine.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.4,
-                    ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  routine.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.onSurface,
+                    letterSpacing: -0.4,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              _MetaPill(
+                icon: Icons.bolt,
+                text: localizedDifficulty,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          // Big duration text (always LTR for timers)
+          BidiSafeText(
+            routine.totalDurationFormatted,
+            style: TextStyle(
+              fontSize: 46,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
+              letterSpacing: -1.0,
+            ),
+            forceLTR: true, // Timers must always be LTR
+          ),
+          const SizedBox(height: 14),
+          _buildIntervalPatternBar(context, routine),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              if (routine.machineType == MachineType.cycle) ...[
+                _MetaPill(
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (routine.machineType == MachineType.stairmaster) ...[
+                _MetaPill(
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (routine.machineType == MachineType.treadmill) ...[
+                _MetaPill(
+                  icon: Icons.straighten,
+                  text: _buildTotalDistanceText(
+                    context,
+                    routine,
+                    settingsProvider,
                   ),
                 ),
                 const SizedBox(width: 8),
                 _MetaPill(
-                  icon: Icons.bolt,
-                  text: localizedDifficulty,
+                  icon: Icons.repeat,
+                  text: '${routine.intervals.length} ${l10n.sessions}',
                 ),
+                const SizedBox(width: 8),
               ],
-            ),
-            const SizedBox(height: 14),
-            // Big duration text (always LTR for timers)
-            BidiSafeText(
-              routine.totalDurationFormatted,
-              style: TextStyle(
-                fontSize: 46,
-                fontWeight: FontWeight.w800,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -1.0,
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                RoutineBottomSheet.show(context, routine: routine);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(vertical: 19),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                elevation: 0,
               ),
-              forceLTR: true, // Timers must always be LTR
-            ),
-            const SizedBox(height: 14),
-            _buildIntervalPatternBar(context, routine),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                if (routine.machineType == MachineType.cycle) ...[
-                  _MetaPill(
-                    icon: Icons.repeat,
-                    text: '${routine.intervals.length} ${l10n.sessions}',
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                if (routine.machineType == MachineType.stairmaster) ...[
-                  _MetaPill(
-                    icon: Icons.repeat,
-                    text: '${routine.intervals.length} ${l10n.sessions}',
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                if (routine.machineType == MachineType.treadmill) ...[
-                  _MetaPill(
-                    icon: Icons.straighten,
-                    text: _buildTotalDistanceText(routine, settingsProvider),
-                  ),
-                  const SizedBox(width: 8),
-                  _MetaPill(
-                    icon: Icons.repeat,
-                    text: '${routine.intervals.length} ${l10n.sessions}',
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ],
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  RoutineBottomSheet.show(context, routine: routine);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 19),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.checkRoutineStart,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.lato(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w900,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: -0.3,
-                  ),
+              child: Text(
+                AppLocalizations.of(context)!.checkRoutineStart,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.lato(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  letterSpacing: -0.3,
                 ),
               ),
             ),
-          ],
+          ),
+        ],
       ),
     );
   }
 
   String _buildTotalDistanceText(
-      Routine routine, AppSettingsProvider settings) {
+    BuildContext context,
+    Routine routine,
+    AppSettingsProvider settings,
+  ) {
     double totalKm = 0;
     for (final interval in routine.intervals) {
       if (interval.speedKmh != null) {
@@ -1393,9 +1369,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       }
     }
     if (settings.measurement == 'kmh') {
-      return '${totalKm.toStringAsFixed(2)} km';
+      return '${LocalizedFormat.decimal(context, totalKm, decimalDigits: 2)} km';
     } else {
-      return '${(totalKm / 1.609344).toStringAsFixed(2)} mi';
+      return '${LocalizedFormat.decimal(context, totalKm / 1.609344, decimalDigits: 2)} mi';
     }
   }
 

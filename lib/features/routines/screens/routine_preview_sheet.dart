@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../models/routine_template.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
@@ -56,15 +57,7 @@ class RoutinePreviewSheet {
 
       if (result == _RoutinePreviewResult.saved) {
         final l10n = AppLocalizations.of(context)!;
-        String routineSavedMessage() {
-          try {
-            return (l10n as dynamic).routineSaved ?? 'Routine saved';
-          } catch (e) {
-            return 'Routine saved';
-          }
-        }
-
-        _showSnack(context, routineSavedMessage());
+        _showSnack(context, l10n.routineSaved);
       }
 
       if (closeParentOnSave && Navigator.of(context).canPop()) {
@@ -220,89 +213,62 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
       switch (template.titleKey) {
         // Treadmill
         case 'template_treadmill_beginner_1_title':
-          return (l10n as dynamic).templateTreadmillBeginner1Title ??
-              'Easy Start 20';
+          return l10n.templateTreadmillBeginner1Title;
         case 'template_treadmill_beginner_2_title':
-          return (l10n as dynamic).templateTreadmillBeginner2Title ??
-              'Incline Walk 25';
+          return l10n.templateTreadmillBeginner2Title;
         case 'template_treadmill_intermediate_1_title':
-          return (l10n as dynamic).templateTreadmillIntermediate1Title ??
-              'Classic 1:1 24';
+          return l10n.templateTreadmillIntermediate1Title;
         case 'template_treadmill_intermediate_2_title':
-          return (l10n as dynamic).templateTreadmillIntermediate2Title ??
-              'Speed Ladder 20';
+          return l10n.templateTreadmillIntermediate2Title;
         case 'template_treadmill_advanced_1_title':
-          return (l10n as dynamic).templateTreadmillAdvanced1Title ??
-              '2:1 Burner 21';
+          return l10n.templateTreadmillAdvanced1Title;
         case 'template_treadmill_advanced_2_title':
-          return (l10n as dynamic).templateTreadmillAdvanced2Title ??
-              'Sprint Pop 18';
+          return l10n.templateTreadmillAdvanced2Title;
         // Cycle
         case 'template_cycle_beginner_1_title':
-          return (l10n as dynamic).templateCycleBeginner1Title ??
-              'Cadence Builder 20';
+          return l10n.templateCycleBeginner1Title;
         case 'template_cycle_beginner_2_title':
-          return (l10n as dynamic).templateCycleBeginner2Title ??
-              'Steady Ride 25';
+          return l10n.templateCycleBeginner2Title;
         case 'template_cycle_intermediate_1_title':
-          return (l10n as dynamic).templateCycleIntermediate1Title ??
-              'Spin 1:1 24';
+          return l10n.templateCycleIntermediate1Title;
         case 'template_cycle_intermediate_2_title':
-          return (l10n as dynamic).templateCycleIntermediate2Title ??
-              'Hill Simulation 22';
+          return l10n.templateCycleIntermediate2Title;
         case 'template_cycle_advanced_1_title':
-          return (l10n as dynamic).templateCycleAdvanced1Title ??
-              'Power Intervals 20';
+          return l10n.templateCycleAdvanced1Title;
         case 'template_cycle_advanced_2_title':
-          return (l10n as dynamic).templateCycleAdvanced2Title ??
-              'Tabata Mix 16';
+          return l10n.templateCycleAdvanced2Title;
         // Stairmaster
         case 'template_stairmaster_beginner_1_title':
-          return (l10n as dynamic).templateStairmasterBeginner1Title ??
-              'Easy Steps 20';
+          return l10n.templateStairmasterBeginner1Title;
         case 'template_stairmaster_beginner_2_title':
-          return (l10n as dynamic).templateStairmasterBeginner2Title ??
-              'Long Easy 25';
+          return l10n.templateStairmasterBeginner2Title;
         case 'template_stairmaster_intermediate_1_title':
-          return (l10n as dynamic).templateStairmasterIntermediate1Title ??
-              '2:1 Climb 21';
+          return l10n.templateStairmasterIntermediate1Title;
         case 'template_stairmaster_intermediate_2_title':
-          return (l10n as dynamic).templateStairmasterIntermediate2Title ??
-              'Strong 1:1 24';
+          return l10n.templateStairmasterIntermediate2Title;
         case 'template_stairmaster_advanced_1_title':
-          return (l10n as dynamic).templateStairmasterAdvanced1Title ??
-              'Hard Blocks 20';
+          return l10n.templateStairmasterAdvanced1Title;
         case 'template_stairmaster_advanced_2_title':
-          return (l10n as dynamic).templateStairmasterAdvanced2Title ??
-              'Sprint Steps 18';
+          return l10n.templateStairmasterAdvanced2Title;
         // Legacy support (backward compatibility)
         case 'template_treadmill_beginner_title':
-          return (l10n as dynamic).templateTreadmillBeginner1Title ??
-              'Easy Start 20';
+          return l10n.templateTreadmillBeginner1Title;
         case 'template_treadmill_intermediate_title':
-          return (l10n as dynamic).templateTreadmillIntermediate1Title ??
-              'Classic 1:1 24';
+          return l10n.templateTreadmillIntermediate1Title;
         case 'template_treadmill_advanced_title':
-          return (l10n as dynamic).templateTreadmillAdvanced1Title ??
-              '2:1 Burner 21';
+          return l10n.templateTreadmillAdvanced1Title;
         case 'template_cycle_beginner_title':
-          return (l10n as dynamic).templateCycleBeginner1Title ??
-              'Cadence Builder 20';
+          return l10n.templateCycleBeginner1Title;
         case 'template_cycle_intermediate_title':
-          return (l10n as dynamic).templateCycleIntermediate1Title ??
-              'Spin 1:1 24';
+          return l10n.templateCycleIntermediate1Title;
         case 'template_cycle_advanced_title':
-          return (l10n as dynamic).templateCycleAdvanced1Title ??
-              'Power Intervals 20';
+          return l10n.templateCycleAdvanced1Title;
         case 'template_stairmaster_beginner_title':
-          return (l10n as dynamic).templateStairmasterBeginner1Title ??
-              'Easy Steps 20';
+          return l10n.templateStairmasterBeginner1Title;
         case 'template_stairmaster_intermediate_title':
-          return (l10n as dynamic).templateStairmasterIntermediate1Title ??
-              '2:1 Climb 21';
+          return l10n.templateStairmasterIntermediate1Title;
         case 'template_stairmaster_advanced_title':
-          return (l10n as dynamic).templateStairmasterAdvanced1Title ??
-              'Hard Blocks 20';
+          return l10n.templateStairmasterAdvanced1Title;
         default:
           return l10n.unnamedRoutine;
       }
@@ -316,89 +282,62 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
       switch (template.subtitleKey) {
         // Treadmill
         case 'template_treadmill_beginner_1_subtitle':
-          return (l10n as dynamic).templateTreadmillBeginner1Subtitle ??
-              'Perfect for beginners';
+          return l10n.templateTreadmillBeginner1Subtitle;
         case 'template_treadmill_beginner_2_subtitle':
-          return (l10n as dynamic).templateTreadmillBeginner2Subtitle ??
-              'Steady pace maintain';
+          return l10n.templateTreadmillBeginner2Subtitle;
         case 'template_treadmill_intermediate_1_subtitle':
-          return (l10n as dynamic).templateTreadmillIntermediate1Subtitle ??
-              'Build endurance';
+          return l10n.templateTreadmillIntermediate1Subtitle;
         case 'template_treadmill_intermediate_2_subtitle':
-          return (l10n as dynamic).templateTreadmillIntermediate2Subtitle ??
-              'Progressive intensity';
+          return l10n.templateTreadmillIntermediate2Subtitle;
         case 'template_treadmill_advanced_1_subtitle':
-          return (l10n as dynamic).templateTreadmillAdvanced1Subtitle ??
-              'High intensity workout';
+          return l10n.templateTreadmillAdvanced1Subtitle;
         case 'template_treadmill_advanced_2_subtitle':
-          return (l10n as dynamic).templateTreadmillAdvanced2Subtitle ??
-              'Maximum burst intensity';
+          return l10n.templateTreadmillAdvanced2Subtitle;
         // Cycle
         case 'template_cycle_beginner_1_subtitle':
-          return (l10n as dynamic).templateCycleBeginner1Subtitle ??
-              '4 min warm-up + 1:1 cadence';
+          return l10n.templateCycleBeginner1Subtitle;
         case 'template_cycle_beginner_2_subtitle':
-          return (l10n as dynamic).templateCycleBeginner2Subtitle ??
-              'Long steady block';
+          return l10n.templateCycleBeginner2Subtitle;
         case 'template_cycle_intermediate_1_subtitle':
-          return (l10n as dynamic).templateCycleIntermediate1Subtitle ??
-              'Classic 1:1 spin intervals';
+          return l10n.templateCycleIntermediate1Subtitle;
         case 'template_cycle_intermediate_2_subtitle':
-          return (l10n as dynamic).templateCycleIntermediate2Subtitle ??
-              'Climb repeats';
+          return l10n.templateCycleIntermediate2Subtitle;
         case 'template_cycle_advanced_1_subtitle':
-          return (l10n as dynamic).templateCycleAdvanced1Subtitle ??
-              '30s power bursts';
+          return l10n.templateCycleAdvanced1Subtitle;
         case 'template_cycle_advanced_2_subtitle':
-          return (l10n as dynamic).templateCycleAdvanced2Subtitle ??
-              '20s on / 10s off mix';
+          return l10n.templateCycleAdvanced2Subtitle;
         // Stairmaster
         case 'template_stairmaster_beginner_1_subtitle':
-          return (l10n as dynamic).templateStairmasterBeginner1Subtitle ??
-              '4 min warm-up + 1:1 steps';
+          return l10n.templateStairmasterBeginner1Subtitle;
         case 'template_stairmaster_beginner_2_subtitle':
-          return (l10n as dynamic).templateStairmasterBeginner2Subtitle ??
-              'Long easy climb blocks';
+          return l10n.templateStairmasterBeginner2Subtitle;
         case 'template_stairmaster_intermediate_1_subtitle':
-          return (l10n as dynamic).templateStairmasterIntermediate1Subtitle ??
-              '2:1 climb repeats';
+          return l10n.templateStairmasterIntermediate1Subtitle;
         case 'template_stairmaster_intermediate_2_subtitle':
-          return (l10n as dynamic).templateStairmasterIntermediate2Subtitle ??
-              'Strong 1:1 intervals';
+          return l10n.templateStairmasterIntermediate2Subtitle;
         case 'template_stairmaster_advanced_1_subtitle':
-          return (l10n as dynamic).templateStairmasterAdvanced1Subtitle ??
-              '2-min hard blocks';
+          return l10n.templateStairmasterAdvanced1Subtitle;
         case 'template_stairmaster_advanced_2_subtitle':
-          return (l10n as dynamic).templateStairmasterAdvanced2Subtitle ??
-              '30s sprints + 60s recoveries';
+          return l10n.templateStairmasterAdvanced2Subtitle;
         // Legacy support (backward compatibility)
         case 'template_treadmill_beginner_subtitle':
-          return (l10n as dynamic).templateTreadmillBeginner1Subtitle ??
-              'Perfect for beginners';
+          return l10n.templateTreadmillBeginner1Subtitle;
         case 'template_treadmill_intermediate_subtitle':
-          return (l10n as dynamic).templateTreadmillIntermediate1Subtitle ??
-              'Build endurance';
+          return l10n.templateTreadmillIntermediate1Subtitle;
         case 'template_treadmill_advanced_subtitle':
-          return (l10n as dynamic).templateTreadmillAdvanced1Subtitle ??
-              'High intensity workout';
+          return l10n.templateTreadmillAdvanced1Subtitle;
         case 'template_cycle_beginner_subtitle':
-          return (l10n as dynamic).templateCycleBeginner1Subtitle ??
-              '4 min warm-up + 1:1 cadence';
+          return l10n.templateCycleBeginner1Subtitle;
         case 'template_cycle_intermediate_subtitle':
-          return (l10n as dynamic).templateCycleIntermediate1Subtitle ??
-              'Classic 1:1 spin intervals';
+          return l10n.templateCycleIntermediate1Subtitle;
         case 'template_cycle_advanced_subtitle':
-          return (l10n as dynamic).templateCycleAdvanced1Subtitle ??
-              '30s power bursts';
+          return l10n.templateCycleAdvanced1Subtitle;
         case 'template_stairmaster_beginner_subtitle':
-          return (l10n as dynamic).templateStairmasterBeginner1Subtitle ??
-              '4 min warm-up + 1:1 steps';
+          return l10n.templateStairmasterBeginner1Subtitle;
         case 'template_stairmaster_intermediate_subtitle':
-          return (l10n as dynamic).templateStairmasterIntermediate1Subtitle ??
-              '2:1 climb repeats';
+          return l10n.templateStairmasterIntermediate1Subtitle;
         case 'template_stairmaster_advanced_subtitle':
-          return (l10n as dynamic).templateStairmasterAdvanced1Subtitle ??
-              '2-min hard blocks';
+          return l10n.templateStairmasterAdvanced1Subtitle;
         default:
           return '';
       }
@@ -408,24 +347,13 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
   }
 
   String _getDifficultyText(AppLocalizations l10n, Difficulty difficulty) {
-    try {
-      switch (difficulty) {
-        case Difficulty.beginner:
-          return (l10n as dynamic).beginner ?? 'Beginner';
-        case Difficulty.intermediate:
-          return (l10n as dynamic).intermediate ?? 'Intermediate';
-        case Difficulty.advanced:
-          return (l10n as dynamic).advanced ?? 'Advanced';
-      }
-    } catch (e) {
-      switch (difficulty) {
-        case Difficulty.beginner:
-          return 'Beginner';
-        case Difficulty.intermediate:
-          return 'Intermediate';
-        case Difficulty.advanced:
-          return 'Advanced';
-      }
+    switch (difficulty) {
+      case Difficulty.beginner:
+        return l10n.beginner;
+      case Difficulty.intermediate:
+        return l10n.intermediate;
+      case Difficulty.advanced:
+        return l10n.advanced;
     }
   }
 
@@ -453,9 +381,9 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
       context,
       title: l10n.premiumMembership,
       bulletItems: [
-        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
-        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
-        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+        l10n.routineLimitBenefit1,
+        l10n.routineLimitBenefit2,
+        l10n.routineLimitBenefit3,
       ],
       onPrimary: () {
         // Close premium sheet first
@@ -474,20 +402,12 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
     final provider = Provider.of<RoutineProvider>(context, listen: false);
     final l10n = AppLocalizations.of(context)!;
 
-    String routineAlreadySavedMessage() {
-      try {
-        return (l10n as dynamic).routineAlreadySaved ?? 'Routine already saved';
-      } catch (e) {
-        return 'Routine already saved';
-      }
-    }
-
     // Check if already saved
     if (_isTemplateSaved(provider)) {
       if (context.mounted) {
         RoutinePreviewSheet._showSnack(
           context,
-          routineAlreadySavedMessage(),
+          l10n.routineAlreadySaved,
           duration: const Duration(seconds: 1),
         );
         Navigator.pop(context);
@@ -587,18 +507,38 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
       case MachineType.treadmill:
         if (interval.speedKmh != null && interval.grade != null) {
           pill1Text = settingsProvider.formatSpeed(interval.speedKmh!);
-          pill2Text = '${interval.grade!.toStringAsFixed(1)}% ${l10n.incline}';
+          pill2Text = l10n.inclineValue(
+            LocalizedFormat.decimal(context, interval.grade!),
+          );
         }
         break;
       case MachineType.cycle:
         if (interval.rpm != null && interval.resistance != null) {
-          pill1Text = '${interval.rpm} ${l10n.rpm}';
-          pill2Text = 'Level ${interval.resistance!}';
+          pill1Text = l10n.rpmValue(
+            LocalizedFormat.decimal(
+              context,
+              interval.rpm!,
+              decimalDigits: 0,
+            ),
+          );
+          pill2Text = l10n.resistanceColon(
+            LocalizedFormat.decimal(
+              context,
+              interval.resistance!,
+              decimalDigits: 0,
+            ),
+          );
         }
         break;
       case MachineType.stairmaster:
         if (interval.level != null) {
-          pill1Text = 'Level ${interval.level!}';
+          pill1Text = l10n.levelColon(
+            LocalizedFormat.decimal(
+              context,
+              interval.level!,
+              decimalDigits: 0,
+            ),
+          );
           pill2Text = null;
         }
         break;
@@ -657,6 +597,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
                       ),
+                      forceLTR: true,
                     ),
                   ),
                 ],
@@ -676,6 +617,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
                       ),
+                      forceLTR: true,
                     ),
                   ),
                 ],
@@ -791,15 +733,7 @@ class _RoutinePreviewSheetContent extends StatelessWidget {
             ),
           ),
           BottomSheetPrimaryActionBar(
-            label: (() {
-              try {
-                return isSaved
-                    ? (l10n as dynamic).saved ?? 'Saved'
-                    : (l10n as dynamic).saveRoutine ?? 'Save Routine';
-              } catch (e) {
-                return isSaved ? 'Saved' : 'Save Routine';
-              }
-            })(),
+            label: isSaved ? l10n.saved : l10n.saveRoutine,
             onPressed: isSaved ? null : () => _saveTemplate(context),
           ),
         ],

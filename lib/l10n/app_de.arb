@@ -74,19 +74,19 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
   "rpm": "RPM",
-  "rpmInfoDescription": "RPM zeigt an, wie oft sich deine Pedale in einer Minute drehen. Ein höherer RPM-Wert bedeutet, dass du mit einer schnelleren Trittfrequenz pedalierst.",
+  "rpmInfoDescription": "RPM zeigt an, wie oft sich deine Pedale pro Minute drehen. Je höher der Wert, desto schneller ist deine Trittfrequenz.",
   "resistance": "Widerstand",
   "resistanceLevel": "Widerstand (Stufe)",
   "resistanceColon": "Widerstand {resistance}",
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -95,9 +95,9 @@
   "saved": "Gespeichert",
   "deleted": "Gelöscht",
   "deleteRoutineTitle": "Routine Löschen",
-  "deleteRoutineMessage": "Möchten Sie diese Routine wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "deleteRoutineMessage": "Möchtest du diese Routine wirklich löschen? Das kann nicht rückgängig gemacht werden.",
   "deleteError": "Beim Löschen ist ein Fehler aufgetreten",
-  "nameRequired": "Bitte geben Sie einen Namen ein",
+  "nameRequired": "Bitte gib einen Namen ein",
   "nameMaxLength": "Der Name muss 50 Zeichen oder weniger haben",
   "minIntervalsRequired": "Mindestens ein Intervall ist erforderlich",
   "intervalMinDuration": "Die Intervall-Dauer muss mindestens 1 Sekunde betragen",
@@ -110,21 +110,21 @@
   "spmRange": "SPM muss im Bereich 50-200 liegen",
   "noRoutinesSaved": "Keine Routinen gespeichert",
   "tapToCreate": "Tippen zum Erstellen",
-  "tapButtonToCreate": "Tippen Sie auf die Schaltfläche zum Erstellen",
+  "tapButtonToCreate": "Tippe zum Erstellen auf die Schaltfläche",
   "premiumRoutineSettings": "Premium-Routinen-Einstellungen",
   "viewMembership": "Premium ansehen",
   "freeLimitTitle": "2 Gratis-Routinen",
   "freeLimitMessage": "Mit Premium unbegrenzt Routinen nutzen",
   "treadmill": "Laufband",
   "cycle": "Fahrrad",
-  "stairmaster": "Stepper",
+  "stairmaster": "Treppensteiger",
   "selectLanguage": "Sprachen",
   "selectTheme": "Thema Auswählen",
   "selectDifficulty": "Schwierigkeit Auswählen",
   "pause": "Pause",
   "resume": "Fortsetzen",
   "endWorkout": "Training Beenden",
-  "endWorkoutConfirm": "Möchten Sie das Training beenden?",
+  "endWorkoutConfirm": "Möchtest du das Training beenden?",
   "end": "Beenden",
   "share": "Teilen",
   "@share": {
@@ -133,8 +133,8 @@
   "rotate": "Drehen",
   "paused": "PAUSIERT",
   "pausedTitle": "Pausiert",
-  "pausedSubtitle": "Sie können fortfahren oder das Training beenden",
-  "endWorkoutConfirmationMessage": "Wenn Sie jetzt beenden, wird das aktuelle Training beendet und Sie gelangen zum Zusammenfassungsbildschirm.",
+  "pausedSubtitle": "Du kannst fortfahren oder das Training beenden",
+  "endWorkoutConfirmationMessage": "Wenn du jetzt aufhörst, wird das Training beendet und die Zusammenfassung geöffnet.",
   "workoutComplete": "Training abgeschlossen",
   "backgroundIntervalNotificationTitle": "Neues Intervall",
   "backgroundIntervalNotificationsTitle": "Hinweise bei ausgeschaltetem Display",
@@ -153,7 +153,7 @@
   "averageLevel": "Durchschnittliches Level",
   "holdToStop": "Gedrückt halten zum Stoppen",
   "continueWorkout": "Fortsetzen",
-  "endWorkoutQuestion": "Möchten Sie das Training beenden?",
+  "endWorkoutQuestion": "Möchtest du das Training beenden?",
   "workoutPaused": "Das Training wurde pausiert",
   "lvlIncline": "Steigung",
   "lvlResistance": "Stufe Widerstand",
@@ -198,7 +198,7 @@
   "routineTab": "Routine",
   "settingsTab": "Einstellungen",
   "myTab": "Ich",
-  "premiumSubheadline": "Schalten Sie Sprachführung, Fahrrad- und Stepper-Workouts und unbegrenzte Routinen frei",
+  "premiumSubheadline": "Schalte Sprachführung, Fahrrad- und StairMaster-Workouts sowie unbegrenzte Routinen frei",
   "@premiumSubheadline": {
     "description": "Beschreibung des Premium-Freischaltungsinhalts"
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Einmalige Zahlungs-Suffix"
   },
-  "savePercent": "Sparen Sie {percent}%",
+  "savePercent": "Spare {percent}",
   "@savePercent": {
     "description": "Prozent-Ersparnis-Badge",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -293,7 +293,7 @@
   "advanced": "Experte",
   "recommendedRoutinesTreadmill": "Laufband-Tipps",
   "recommendedRoutinesCycle": "Rad-Tipps",
-  "recommendedRoutinesStairmaster": "Stepper-Tipps",
+  "recommendedRoutinesStairmaster": "Empfohlene Treppensteiger-Trainings",
   "alreadySaved": "Bereits gespeichert",
   "checkRoutine": "Vorschau",
   "saveRoutine": "Routine Speichern",
@@ -351,7 +351,7 @@
   "today": "Heute",
   "yesterday": "Gestern",
   "noWorkoutsYet": "Noch keine Trainings",
-  "startYourFirstWorkout": "Beginnen Sie Ihr erstes Training, um Ihren Verlauf hier zu sehen",
+  "startYourFirstWorkout": "Starte dein erstes Training, um hier deinen Verlauf zu sehen",
   "goToRoutines": "Zu Routinen gehen",
   "weightRecorded": "Gewicht aufgezeichnet",
   "workout": "Training",
@@ -361,7 +361,7 @@
   "over": "überschritten",
   "last": "Letzte",
   "newLabel": "Neu",
-  "youNeed": "Sie benötigen {amount}, um {goal} zu erreichen",
+  "youNeed": "Dir fehlen {amount} bis {goal}",
   "@youNeed": {
     "placeholders": {
       "amount": {
@@ -372,7 +372,7 @@
       }
     }
   },
-  "youNeedPlus": "Sie benötigen +{amount}, um {goal} zu erreichen",
+  "youNeedPlus": "Dir fehlen +{amount} bis {goal}",
   "@youNeedPlus": {
     "placeholders": {
       "amount": {
@@ -404,10 +404,10 @@
   "startTrackingYourWeight": "Gewicht erfassen, Fortschritt sehen",
   "treadmillSession": "Laufband-Session",
   "bikeSession": "Fahrrad-Session",
-  "stairmasterSession": "Stepper-Session",
+  "stairmasterSession": "Treppensteiger-Einheit",
   "treadmillWorkout": "Laufband-Training",
   "bikeWorkout": "Fahrrad-Training",
-  "stairmasterWorkout": "Stepper-Training",
+  "stairmasterWorkout": "Treppensteiger-Training",
   "startAWorkoutToSeeItHere": "Deine Trainings erscheinen hier",
   "mon": "Mo",
   "tue": "Di",
@@ -422,7 +422,7 @@
   "@premiumHeadline": {
     "description": "Premium screen strong headline"
   },
-  "premiumSubheadlineNew": "Laufen Sie nicht einfach, trainieren Sie fettverbrennend",
+  "premiumSubheadlineNew": "Trainiere gezielt statt einfach nur zu laufen",
   "@premiumSubheadlineNew": {
     "description": "Premium screen subheadline"
   },
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Training 1 Tag 🔥} other{Training {count} Tage 🔥}}",
+  "workoutDays": "Trainingstage: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Ruhe 1 Tag 🛏️} other{Ruhe {count} Tage 🛏️}}",
+  "restDays": "Ruhetage: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -506,7 +506,7 @@
   "workoutReminderTimeLabel": "Uhrzeit",
   "shareRoutineMessage": "Probiere dieses Intervall-Workout in Valcue aus!\n\nRoutine: {routineName}\n\nKopiere oder tippe auf den Link, um es zu importieren:\n{shareLink}",
   "scanQrCode": "QR-Code scannen",
-  "placeQrInside": "Platzieren Sie den QR-Code innerhalb des Rahmens.",
+  "placeQrInside": "Platziere den QR-Code innerhalb des Rahmens.",
   "customRoutineBuilder": "Individuelles Training erstellen",
   "customRoutineGenerating": "Dein individuelles Training wird erstellt…",
   "customRoutineLoadingTarget": "Intensitätsziel wird festgelegt…",
@@ -525,7 +525,7 @@
   "includeIncline": "Steigung einbeziehen",
   "generateCustomRoutine": "Individuelles Training erstellen",
   "durationMinutes": "{minutes} Min.",
-  "floorCount": "{count} Etagen",
+  "floorCount": "Etagen: {count}",
   "customRunName": "Individueller Lauf {distance} km ({calories} kcal)",
   "customCycleName": "Individuelles Radtraining {distance} km ({calories} kcal)",
   "customStairsName": "Individuelles Treppentraining {floors} Etagen ({calories} kcal)",
@@ -556,12 +556,26 @@
   "secondsShort": "{seconds} s vorher",
   "selectCountdownTimings": "Countdown-Zeiten auswählen",
   "countdownTimingMessage": "Wähle, wann vor einem Intervallwechsel die Restzeit angesagt werden soll.",
-  "secondsLeft": "Noch {seconds} Sekunden",
+  "secondsLeft": "Noch {seconds} Sek.",
   "qrShareInstruction": "Scanne diesen QR-Code mit einer anderen Valcue-App,\num das Training sofort zu importieren.",
   "quickStart": "Schnellstart",
   "sessionRepeatBlock": "Wiederholungsblock",
-  "repeatTimes": "{count} Wiederholungen",
+  "repeatTimes": "Wiederholungen: {count}",
   "addRepeatBlock": "Wiederholungsblock hinzufügen",
   "unableToShareWorkout": "Training konnte nicht geteilt werden.",
-  "unableToOpenPrivacyPolicy": "Datenschutzerklärung konnte nicht geöffnet werden."
+  "unableToOpenPrivacyPolicy": "Datenschutzerklärung konnte nicht geöffnet werden.",
+  "less": "Weniger",
+  "more": "Mehr",
+  "inclineValue": "Steigung: {value} %",
+  "rpmValue": "{value} U/min",
+  "nextMetric": "Als Nächstes: {value}",
+  "weightCalendar": "Gewichtskalender",
+  "routineHeaderSummary": "{count, plural, =1{{duration} · {countText} Intervall · {difficulty}} other{{duration} · {countText} Intervalle · {difficulty}}}",
+  "goalAchievedSummary": "Ziel: {goalWeight} • Ziel erreicht!",
+  "goalRemainingSummary": "Ziel: {goalWeight} • Noch {difference}",
+  "goalExceededSummary": "Ziel: {goalWeight} • Um {difference} überschritten",
+  "averageSpeedKmh": "Ø {value} km/h",
+  "averageSpeedMph": "Ø {value} mph",
+  "averageRpmValue": "Ø {value} U/min",
+  "averageLevelValue": "Ø Stufe {value}"
 }

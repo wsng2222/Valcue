@@ -10,6 +10,7 @@ import '../models/machine_type.dart';
 import '../models/interval.dart';
 import '../../../services/workout_live_activity_firebase_runtime.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../../../services/analytics_service.dart';
 import '../../../widgets/app_dialog.dart';
 import '../../../widgets/app_message.dart';
@@ -348,8 +349,12 @@ class RoutineSharing {
         title: l10n.importSharedRoutine,
         message: l10n.importClipboardRoutinePrompt(
           routine.name,
-          routine.difficulty,
-          routine.intervals.length,
+          _localizedDifficulty(l10n, routine.difficulty),
+          LocalizedFormat.decimal(
+            context,
+            routine.intervals.length,
+            decimalDigits: 0,
+          ),
         ),
         actions: [
           AppDialogAction(
@@ -382,5 +387,17 @@ class RoutineSharing {
         ],
       ),
     );
+  }
+
+  static String _localizedDifficulty(
+    AppLocalizations l10n,
+    String storedDifficulty,
+  ) {
+    return switch (storedDifficulty) {
+      '쉬움' || 'beginner' => l10n.easy,
+      '중간' || 'intermediate' => l10n.medium,
+      '높음' || 'advanced' => l10n.hard,
+      _ => storedDifficulty,
+    };
   }
 }

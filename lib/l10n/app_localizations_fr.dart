@@ -183,7 +183,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get level => 'Niveau';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'Niveau $level';
   }
 
@@ -201,7 +201,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resistanceLevel => 'Résistance (Niveau)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return 'Résistance $resistance';
   }
 
@@ -292,7 +292,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cycle => 'Vélo';
 
   @override
-  String get stairmaster => 'Stepper';
+  String get stairmaster => 'Simulateur d’escalier';
 
   @override
   String get selectLanguage => 'Langues';
@@ -358,7 +358,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get liveActivityInProgress => 'Entraînement en cours';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'Intervalle $current/$total';
   }
 
@@ -451,7 +451,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get routineLimitBenefit2 => 'Routines personnalisées par objectif';
 
   @override
-  String get routineLimitBenefit3 => 'Support pour tapis, vélo et escalateur';
+  String get routineLimitBenefit3 => 'Tapis, vélo et StairMaster inclus';
 
   @override
   String get premium_benefit_1 => 'Support pour <red>vélo et StairMaster</red>';
@@ -478,7 +478,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumSubheadline =>
-      'Débloquez le guide vocal, les entraînements vélo et stepper, et les routines illimitées';
+      'Profitez du guide vocal, des entraînements vélo et simulateur d’escalier, et de séances enregistrées en illimité';
 
   @override
   String get monthly => 'Mensuel';
@@ -502,8 +502,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get oneTime => 'Paiement unique';
 
   @override
-  String savePercent(int percent) {
-    return 'Économisez $percent%';
+  String savePercent(String percent) {
+    return 'Économisez $percent';
   }
 
   @override
@@ -572,7 +572,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recommendedRoutinesCycle => 'Sélection vélo';
 
   @override
-  String get recommendedRoutinesStairmaster => 'Sélection stepper';
+  String get recommendedRoutinesStairmaster =>
+      'Sélection simulateur d’escalier';
 
   @override
   String get alreadySaved => 'Déjà enregistré';
@@ -632,14 +633,14 @@ class AppLocalizationsFr extends AppLocalizations {
       'Course progressive en pyramide de vitesse';
 
   @override
-  String get templateTreadmillAdvanced1Title => 'Tapis Hors-pair 1';
+  String get templateTreadmillAdvanced1Title => 'Tapis avancé 1';
 
   @override
   String get templateTreadmillAdvanced1Subtitle =>
       'Intervalle cardio de haute intensité';
 
   @override
-  String get templateTreadmillAdvanced2Title => 'Tapis Hors-pair 2 (Sprint)';
+  String get templateTreadmillAdvanced2Title => 'Tapis avancé 2 (sprint)';
 
   @override
   String get templateTreadmillAdvanced2Subtitle =>
@@ -675,29 +676,29 @@ class AppLocalizationsFr extends AppLocalizations {
       'Montée de colline à haute résistance';
 
   @override
-  String get templateCycleAdvanced1Title => 'Vélo Hors-pair 1';
+  String get templateCycleAdvanced1Title => 'Vélo avancé 1';
 
   @override
   String get templateCycleAdvanced1Subtitle =>
       'Intervalles de force de 30s à haute résistance';
 
   @override
-  String get templateCycleAdvanced2Title => 'Vélo Hors-pair 2 (Tabata)';
+  String get templateCycleAdvanced2Title => 'Vélo avancé 2 (Tabata)';
 
   @override
   String get templateCycleAdvanced2Subtitle =>
       'Circuit Tabata 20s/10s pour brûler les graisses';
 
   @override
-  String get templateStairmasterBeginner1Title => 'Escalateur Débutant 1';
+  String get templateStairmasterBeginner1Title => 'StairMaster débutant 1';
 
   @override
   String get templateStairmasterBeginner1Subtitle =>
-      'Marche sécurisée d\'adaptation à l\'escalateur';
+      'Allure progressive pour s’habituer aux marches';
 
   @override
   String get templateStairmasterBeginner2Title =>
-      'Escalateur Débutant 2 (Continu)';
+      'StairMaster débutant 2 (Régulier)';
 
   @override
   String get templateStairmasterBeginner2Subtitle =>
@@ -705,7 +706,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get templateStairmasterIntermediate1Title =>
-      'Escalateur Intermédiaire 1 (Montée)';
+      'StairMaster intermédiaire 1 (Montée)';
 
   @override
   String get templateStairmasterIntermediate1Subtitle =>
@@ -713,14 +714,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get templateStairmasterIntermediate2Title =>
-      'Escalateur Intermédiaire 2';
+      'StairMaster intermédiaire 2';
 
   @override
   String get templateStairmasterIntermediate2Subtitle =>
       'Intervalles alternant rythmes rapide et lent';
 
   @override
-  String get templateStairmasterAdvanced1Title => 'Escalateur Hors-pair 1';
+  String get templateStairmasterAdvanced1Title => 'StairMaster avancé 1';
 
   @override
   String get templateStairmasterAdvanced1Subtitle =>
@@ -728,7 +729,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get templateStairmasterAdvanced2Title =>
-      'Escalateur Hors-pair 2 (Sprint)';
+      'StairMaster avancé 2 (Sprint)';
 
   @override
   String get templateStairmasterAdvanced2Subtitle =>
@@ -825,7 +826,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bikeSession => 'Session Vélo';
 
   @override
-  String get stairmasterSession => 'Session Stepper';
+  String get stairmasterSession => 'Séance sur simulateur d’escalier';
 
   @override
   String get treadmillWorkout => 'Entraînement Tapis de Course';
@@ -834,7 +835,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bikeWorkout => 'Entraînement Vélo';
 
   @override
-  String get stairmasterWorkout => 'Entraînement Stepper';
+  String get stairmasterWorkout => 'Entraînement sur simulateur d’escalier';
 
   @override
   String get startAWorkoutToSeeItHere => 'Vos séances apparaîtront ici';
@@ -974,25 +975,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Annulez quand vous voulez, gardez l\'accès';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Entraînement $count jours 🔥',
-      one: 'Entraînement 1 jour 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'Jours d’entraînement : $count 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Repos $count jours 🛏️',
-      one: 'Repos 1 jour 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'Jours de repos : $count 🛏️';
   }
 
   @override
@@ -1083,32 +1072,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generateCustomRoutine => 'Créer une séance personnalisée';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes min';
   }
 
   @override
-  String floorCount(int count) {
-    return '$count étages';
+  String floorCount(String count) {
+    return 'Étages : $count';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'Course personnalisée $distance km ($calories kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'Vélo personnalisé $distance km ($calories kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'Escaliers personnalisés $floors étages ($calories kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'Votre séance personnalisée est prête. Visez environ $calories calories !';
   }
 
@@ -1158,13 +1147,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get importSharedRoutine => 'Importer la séance partagée';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'Une séance a été détectée dans le code QR.\n\n• Nom : $name\n• Difficulté : $difficulty\n• Intervalles : $count\n\nVoulez-vous l’enregistrer dans votre bibliothèque ?';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'Une séance partagée a été détectée dans le presse-papiers.\n\n• Nom : $name\n• Difficulté : $difficulty\n• Intervalles : $count\n\nVoulez-vous l’enregistrer dans votre bibliothèque ?';
   }
 
@@ -1192,7 +1181,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noAnnouncements => 'Aucune annonce';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '$seconds s avant';
   }
 
@@ -1204,8 +1193,8 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez quand entendre le temps restant avant le changement d’intervalle.';
 
   @override
-  String secondsLeft(int seconds) {
-    return '$seconds secondes restantes';
+  String secondsLeft(String seconds) {
+    return 'Encore $seconds s';
   }
 
   @override
@@ -1219,8 +1208,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sessionRepeatBlock => 'Bloc de séance répété';
 
   @override
-  String repeatTimes(int count) {
-    return '$count répétitions';
+  String repeatTimes(String count) {
+    return 'Répétitions : $count';
   }
 
   @override
@@ -1232,4 +1221,75 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get unableToOpenPrivacyPolicy =>
       'Impossible d’ouvrir la politique de confidentialité.';
+
+  @override
+  String get less => 'Moins';
+
+  @override
+  String get more => 'Plus';
+
+  @override
+  String inclineValue(String value) {
+    return 'Inclinaison : $value %';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value tr/min';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'À suivre : $value';
+  }
+
+  @override
+  String get weightCalendar => 'Calendrier du poids';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText intervalles · $difficulty',
+      one: '$duration · $countText intervalle · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'Objectif : $goalWeight • Objectif atteint !';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'Objectif : $goalWeight • Encore $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'Objectif : $goalWeight • Dépassé de $difference';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'Moy. : $value km/h';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'Moy. : $value mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'Cadence moy. : $value tr/min';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'Niveau moy. : $value';
+  }
 }

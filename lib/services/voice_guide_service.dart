@@ -40,7 +40,7 @@ class VoiceGuideService {
   bool _initialized = false;
   int _stopGeneration = 0;
 
-  // ---- Templates (11 languages) ----
+  // ---- Templates (all supported languages) ----
   // Keys:
   // - countdown_left: "{n}초 남았습니다"
   // - speed: "속도 {x}"
@@ -49,115 +49,99 @@ class VoiceGuideService {
   // - level: "레벨 {n}"
   static const Map<String, Map<String, String>> _templates = {
     'en': {
-      'countdown_left': '{n} seconds left',
-      'speed': 'Speed {x}',
+      'speed': 'Speed {x} {unit}',
       'incline': 'Incline {x} percent',
-      'rpm': '{n} RPM',
+      'rpm': '{n} revolutions per minute',
       'level': 'Level {n}',
     },
     'nl': {
-      'countdown_left': 'Nog {n} seconden',
-      'speed': 'Snelheid {x}',
+      'speed': 'Snelheid {x} {unit}',
       'incline': 'Helling {x} procent',
-      'rpm': '{n} RPM',
+      'rpm': '{n} omwentelingen per minuut',
       'level': 'Niveau {n}',
     },
     'nb': {
-      'countdown_left': '{n} sekunder igjen',
-      'speed': 'Hastighet {x}',
+      'speed': 'Hastighet {x} {unit}',
       'incline': 'Stigning {x} prosent',
-      'rpm': '{n} RPM',
+      'rpm': '{n} omdreininger per minutt',
       'level': 'Nivå {n}',
     },
     'da': {
-      'countdown_left': '{n} sekunder tilbage',
-      'speed': 'Hastighed {x}',
+      'speed': 'Hastighed {x} {unit}',
       'incline': 'Hældning {x} procent',
-      'rpm': '{n} RPM',
+      'rpm': '{n} omdrejninger i minuttet',
       'level': 'Niveau {n}',
     },
     'it': {
-      'countdown_left': 'Mancano {n} secondi',
-      'speed': 'Velocità {x}',
+      'speed': 'Velocità {x} {unit}',
       'incline': 'Inclinazione {x} percento',
-      'rpm': '{n} RPM',
+      'rpm': '{n} giri al minuto',
       'level': 'Livello {n}',
     },
     'th': {
-      'countdown_left': 'เหลืออีก {n} วินาที',
-      'speed': 'ความเร็ว {x}',
+      'speed': 'ความเร็ว {x} {unit}',
       'incline': 'ความชัน {x} เปอร์เซ็นต์',
-      'rpm': '{n} RPM',
+      'rpm': '{n} รอบต่อนาที',
       'level': 'ระดับ {n}',
     },
     'ko': {
-      'countdown_left': '{n}초 남았습니다',
-      'speed': '속도 {x}',
+      'speed': '시속 {x}{unit}',
       'incline': '경사도 {x}%',
-      'rpm': '{n} RPM',
+      'rpm': '분당 {n}회전',
       'level': '레벨 {n}',
     },
     'ja': {
-      'countdown_left': '{n}秒残りです',
-      'speed': '速度 {x}',
+      'speed': '時速{x}{unit}',
       'incline': '傾斜 {x}%',
-      'rpm': '{n} RPM',
+      'rpm': '1分あたり{n}回転',
       'level': 'レベル {n}',
     },
     'zh': {
-      'countdown_left': '还剩{n}秒',
-      'speed': '速度 {x}',
+      'speed': '时速{x}{unit}',
       'incline': '坡度 {x}%',
-      'rpm': '{n} RPM',
+      'rpm': '每分钟{n}转',
       'level': '等级 {n}',
     },
     'vi': {
-      'countdown_left': 'Còn {n} giây',
-      'speed': 'Tốc độ {x}',
+      'speed': 'Tốc độ {x} {unit}',
       'incline': 'Độ dốc {x}%',
-      'rpm': '{n} RPM',
+      'rpm': '{n} vòng mỗi phút',
       'level': 'Cấp {n}',
     },
     'ar': {
-      'countdown_left': 'تبقّى {n} ثانية',
-      'speed': 'السرعة {x}',
-      'incline': 'الميل {x}%',
-      'rpm': '{n} RPM',
+      'speed': 'السرعة {x} {unit}',
+      'incline': 'الميل {x} بالمئة',
+      'rpm': '{n} دورة في الدقيقة',
       'level': 'المستوى {n}',
     },
     'de': {
-      'countdown_left': 'Noch {n} Sekunden',
-      'speed': 'Geschwindigkeit {x}',
+      'speed': 'Geschwindigkeit {x} {unit}',
       'incline': 'Steigung {x} %',
-      'rpm': '{n} U/min',
+      'rpm': '{n} Umdrehungen pro Minute',
       'level': 'Stufe {n}',
     },
     'fr': {
-      'countdown_left': 'Il reste {n} secondes',
-      'speed': 'Vitesse {x}',
-      'incline': 'Inclinaison {x} %',
-      'rpm': '{n} RPM',
+      'speed': 'Vitesse {x} {unit}',
+      'incline': 'Inclinaison {x} pour cent',
+      'rpm': '{n} tours par minute',
       'level': 'Niveau {n}',
     },
     'es': {
-      'countdown_left': 'Quedan {n} segundos',
-      'speed': 'Velocidad {x}',
-      'incline': 'Inclinación {x}%',
-      'rpm': '{n} RPM',
+      'speed': 'Velocidad {x} {unit}',
+      'incline': 'Inclinación {x} por ciento',
+      'rpm': '{n} revoluciones por minuto',
       'level': 'Nivel {n}',
     },
     'pt': {
-      'countdown_left': 'Faltam {n} segundos',
-      'speed': 'Velocidade {x}',
-      'incline': 'Inclinação {x}%',
-      'rpm': '{n} RPM',
+      'speed': 'Velocidade {x} {unit}',
+      'incline': 'Inclinação {x} por cento',
+      'rpm': '{n} rotações por minuto',
       'level': 'Nível {n}',
     },
     'ru': {
-      'countdown_left': 'Осталось {n} секунд',
-      'speed': 'Скорость {x}',
-      'incline': 'Наклон {x}%',
-      'rpm': '{n} об/мин',
+      'speed': 'Скорость {x} {unit}',
+      'incline': 'Наклон {x} процентов',
+      'rpm': '{n} оборотов в минуту',
       'level': 'Уровень {n}',
     },
   };
@@ -173,7 +157,7 @@ class VoiceGuideService {
     'de': ['de-DE', 'de'],
     'fr': ['fr-FR', 'fr'],
     'es': ['es-ES', 'es'],
-    'pt': ['pt-PT', 'pt-BR', 'pt'],
+    'pt': ['pt-BR', 'pt-PT', 'pt'],
     'ru': ['ru-RU', 'ru'],
     'nl': ['nl-NL', 'nl-BE', 'nl'],
     'nb': ['nb-NO', 'no-NO', 'nb', 'no'],
@@ -211,7 +195,8 @@ class VoiceGuideService {
             contentType: AndroidAudioContentType.speech,
             usage: AndroidAudioUsage.assistant,
           ),
-          androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
+          androidAudioFocusGainType:
+              AndroidAudioFocusGainType.gainTransientMayDuck,
         ));
 
         // iOS setup:
@@ -224,7 +209,7 @@ class VoiceGuideService {
           ],
           IosTextToSpeechAudioMode.spokenAudio,
         );
-        
+
         // iOS: awaitSpeakCompletion causes speech truncation issues
         await _tts.awaitSpeakCompletion(false);
       });
@@ -275,16 +260,16 @@ class VoiceGuideService {
   }
 
   Future<void> speakCountdown(int seconds) async {
-    await _speak(
-      key: 'countdown_left',
-      placeholders: {
-        'n': seconds.toString(),
-      },
+    await _speakDirect(
+      text: _countdownText(seconds),
       cacheKeySuffix: 'countdown:$seconds',
     );
   }
 
-  Future<void> speakSpeed(double speed) async {
+  Future<void> speakSpeed(
+    double speed, {
+    String measurement = 'kmh',
+  }) async {
     final x = NumberSpeech.numberToSpeechString(
       _locale,
       speed,
@@ -292,8 +277,15 @@ class VoiceGuideService {
     );
     await _speak(
       key: 'speed',
-      placeholders: {'x': x},
-      cacheKeySuffix: 'speed:${speed.toStringAsFixed(1)}',
+      placeholders: {
+        'x': x,
+        'unit': _speedUnit(
+          _resolveLanguageCode(_locale),
+          measurement,
+          speed,
+        ),
+      },
+      cacheKeySuffix: 'speed:$measurement:${speed.toStringAsFixed(1)}',
     );
   }
 
@@ -311,23 +303,29 @@ class VoiceGuideService {
   }
 
   Future<void> speakRpm(int rpm) async {
+    final value = NumberSpeech.numberToSpeechString(_locale, rpm);
     await _speak(
       key: 'rpm',
-      placeholders: {'n': rpm.toString()},
+      placeholders: {'n': value},
       cacheKeySuffix: 'rpm:$rpm',
     );
   }
 
   Future<void> speakLevel(int level) async {
+    final value = NumberSpeech.numberToSpeechString(_locale, level);
     await _speak(
       key: 'level',
-      placeholders: {'n': level.toString()},
+      placeholders: {'n': value},
       cacheKeySuffix: 'level:$level',
     );
   }
 
   // Combined speeches for multiple parameters
-  Future<void> speakSpeedAndIncline(double speed, double incline) async {
+  Future<void> speakSpeedAndIncline(
+    double speed,
+    double incline, {
+    String measurement = 'kmh',
+  }) async {
     final speedStr = NumberSpeech.numberToSpeechString(
       _locale,
       speed,
@@ -338,37 +336,51 @@ class VoiceGuideService {
       incline,
       fixedFractionDigits: 1,
     );
-    
+
     // Build combined text with a short pause between metrics.
     final lang = _resolveLanguageCode(_locale);
-    final speedTemplate = _templates[lang]?['speed'] ?? _templates['en']!['speed'] ?? 'Speed {x}';
-    final inclineTemplate = _templates[lang]?['incline'] ?? _templates['en']!['incline'] ?? 'Incline {x}%';
-    
-    final speedText = speedTemplate.replaceAll('{x}', speedStr);
+    final speedTemplate =
+        _templates[lang]?['speed'] ?? _templates['en']!['speed'] ?? 'Speed {x}';
+    final inclineTemplate = _templates[lang]?['incline'] ??
+        _templates['en']!['incline'] ??
+        'Incline {x}%';
+
+    final speedText = speedTemplate
+        .replaceAll('{x}', speedStr)
+        .replaceAll('{unit}', _speedUnit(lang, measurement, speed));
     final inclineText = inclineTemplate.replaceAll('{x}', inclineStr);
     final combinedText = _joinWithShortPause(
       first: speedText,
       second: inclineText,
     );
-    
+
     await _speakDirect(
       text: combinedText,
-      cacheKeySuffix: 'speed_incline:${speed.toStringAsFixed(1)}_${incline.toStringAsFixed(1)}',
+      cacheKeySuffix:
+          'speed_incline:$measurement:${speed.toStringAsFixed(1)}_${incline.toStringAsFixed(1)}',
     );
   }
 
   Future<void> speakLevelAndRpm(int level, int rpm) async {
     final lang = _resolveLanguageCode(_locale);
-    final levelTemplate = _templates[lang]?['level'] ?? _templates['en']!['level'] ?? 'Level {n}';
-    final rpmTemplate = _templates[lang]?['rpm'] ?? _templates['en']!['rpm'] ?? '{n} RPM';
-    
-    final levelText = levelTemplate.replaceAll('{n}', level.toString());
-    final rpmText = rpmTemplate.replaceAll('{n}', rpm.toString());
+    final levelTemplate =
+        _templates[lang]?['level'] ?? _templates['en']!['level'] ?? 'Level {n}';
+    final rpmTemplate =
+        _templates[lang]?['rpm'] ?? _templates['en']!['rpm'] ?? '{n} RPM';
+
+    final levelText = levelTemplate.replaceAll(
+      '{n}',
+      NumberSpeech.numberToSpeechString(_locale, level),
+    );
+    final rpmText = rpmTemplate.replaceAll(
+      '{n}',
+      NumberSpeech.numberToSpeechString(_locale, rpm),
+    );
     final combinedText = _joinWithShortPause(
       first: levelText,
       second: rpmText,
     );
-    
+
     await _speakDirect(
       text: combinedText,
       cacheKeySuffix: 'level_rpm:${level}_$rpm',
@@ -401,7 +413,7 @@ class VoiceGuideService {
     await _mutex.synchronized(() async {
       if (!_voiceEnabled) return;
       if (!_initialized) return;
-      
+
       final gen = ++_stopGeneration;
 
       // Stop any current speech
@@ -431,7 +443,7 @@ class VoiceGuideService {
     await _mutex.synchronized(() async {
       if (!_voiceEnabled) return;
       if (!_initialized) return;
-      
+
       final gen = ++_stopGeneration;
 
       await _safe(() async {
@@ -466,7 +478,7 @@ class VoiceGuideService {
     await _mutex.synchronized(() async {
       if (!_voiceEnabled) return;
       if (!_initialized) return;
-      
+
       final gen = ++_stopGeneration;
 
       // Stop any current speech
@@ -491,7 +503,7 @@ class VoiceGuideService {
 
   String _buildText(String key, Map<String, String> placeholders) {
     final lang = _resolveLanguageCode(_locale);
-    
+
     // Fallback logic
     String? template = _templates[lang]?[key];
     template ??= _templates['en']?[key];
@@ -511,6 +523,125 @@ class VoiceGuideService {
     final lang = _resolveLanguageCode(_locale);
     final separator = _shortPauseSeparator(lang);
     return '$first$separator$second';
+  }
+
+  String _countdownText(int seconds) {
+    final safeSeconds = seconds < 0 ? 0 : seconds;
+    final lang = _resolveLanguageCode(_locale);
+    final n = NumberSpeech.numberToSpeechString(_locale, safeSeconds);
+    switch (lang) {
+      case 'ko':
+        return '$n초 남았습니다';
+      case 'ja':
+        return '残り$n秒です';
+      case 'zh':
+        return '还剩$n秒';
+      case 'vi':
+        return 'Còn $n giây';
+      case 'th':
+        return 'เหลืออีก $n วินาที';
+      case 'ar':
+        if (safeSeconds == 1) return 'تبقّت ثانية واحدة';
+        if (safeSeconds == 2) return 'تبقّت ثانيتان';
+        final lastTwo = safeSeconds % 100;
+        if (lastTwo >= 3 && lastTwo <= 10) return 'تبقّت $n ثوانٍ';
+        return 'تبقّت $n ثانية';
+      case 'ru':
+        final lastTwo = safeSeconds % 100;
+        final last = safeSeconds % 10;
+        if (lastTwo < 11 || lastTwo > 14) {
+          if (last == 1) return 'Осталась $n секунда';
+          if (last >= 2 && last <= 4) return 'Осталось $n секунды';
+        }
+        return 'Осталось $n секунд';
+      case 'es':
+        return safeSeconds == 1 ? 'Queda 1 segundo' : 'Quedan $n segundos';
+      case 'pt':
+        return safeSeconds == 1 ? 'Falta 1 segundo' : 'Faltam $n segundos';
+      case 'it':
+        return safeSeconds == 1 ? 'Manca 1 secondo' : 'Mancano $n secondi';
+      case 'fr':
+        return safeSeconds == 1
+            ? 'Il reste une seconde'
+            : 'Il reste $n secondes';
+      case 'de':
+        return safeSeconds == 1 ? 'Noch eine Sekunde' : 'Noch $n Sekunden';
+      case 'nl':
+        return safeSeconds == 1 ? 'Nog één seconde' : 'Nog $n seconden';
+      case 'nb':
+        return safeSeconds == 1 ? '1 sekund igjen' : '$n sekunder igjen';
+      case 'da':
+        return safeSeconds == 1 ? '1 sekund tilbage' : '$n sekunder tilbage';
+      default:
+        return safeSeconds == 1 ? '1 second left' : '$n seconds left';
+    }
+  }
+
+  String _speedUnit(String lang, String measurement, num speed) {
+    final usesMiles = measurement == 'mph';
+    final isOne = speed.abs() == 1;
+    switch (lang) {
+      case 'ko':
+        return usesMiles ? '마일' : '킬로미터';
+      case 'ja':
+        return usesMiles ? 'マイル' : 'キロメートル';
+      case 'zh':
+        return usesMiles ? '英里' : '公里';
+      case 'vi':
+        return usesMiles ? 'dặm mỗi giờ' : 'ki-lô-mét mỗi giờ';
+      case 'th':
+        return usesMiles ? 'ไมล์ต่อชั่วโมง' : 'กิโลเมตรต่อชั่วโมง';
+      case 'ar':
+        return usesMiles ? 'ميلًا في الساعة' : 'كيلومترًا في الساعة';
+      case 'ru':
+        return _russianSpeedUnit(usesMiles, speed);
+      case 'es':
+        return usesMiles
+            ? '${isOne ? 'milla' : 'millas'} por hora'
+            : '${isOne ? 'kilómetro' : 'kilómetros'} por hora';
+      case 'pt':
+        return usesMiles
+            ? '${isOne ? 'milha' : 'milhas'} por hora'
+            : '${isOne ? 'quilômetro' : 'quilômetros'} por hora';
+      case 'it':
+        return usesMiles
+            ? '${isOne ? 'miglio' : 'miglia'} orarie'
+            : '${isOne ? 'chilometro' : 'chilometri'} orari';
+      case 'fr':
+        return usesMiles
+            ? '${isOne ? 'mile' : 'miles'} par heure'
+            : '${isOne ? 'kilomètre' : 'kilomètres'} par heure';
+      case 'de':
+        return usesMiles
+            ? '${isOne ? 'Meile' : 'Meilen'} pro Stunde'
+            : 'Kilometer pro Stunde';
+      case 'nl':
+        return usesMiles ? 'mijl per uur' : 'kilometer per uur';
+      case 'nb':
+        return usesMiles ? 'miles per time' : 'kilometer i timen';
+      case 'da':
+        return usesMiles ? 'miles i timen' : 'kilometer i timen';
+      default:
+        return usesMiles
+            ? '${isOne ? 'mile' : 'miles'} per hour'
+            : '${isOne ? 'kilometer' : 'kilometers'} per hour';
+    }
+  }
+
+  String _russianSpeedUnit(bool usesMiles, num speed) {
+    if (speed != speed.roundToDouble()) {
+      return usesMiles ? 'мили в час' : 'километра в час';
+    }
+    final value = speed.abs().round();
+    final lastTwo = value % 100;
+    final last = value % 10;
+    if (lastTwo < 11 || lastTwo > 14) {
+      if (last == 1) return usesMiles ? 'миля в час' : 'километр в час';
+      if (last >= 2 && last <= 4) {
+        return usesMiles ? 'мили в час' : 'километра в час';
+      }
+    }
+    return usesMiles ? 'миль в час' : 'километров в час';
   }
 
   String _shortPauseSeparator(String lang) {
@@ -579,7 +710,10 @@ class VoiceGuideService {
 
     // Countdown: 30, 20, 10
     for (final s in const [30, 20, 10]) {
-      put('countdown_left', 'countdown:$s', {'n': s.toString()});
+      _textCache.put(
+        '$langTag|direct|countdown:$s',
+        _countdownText(s),
+      );
       if (++batchCount % batchSize == 0) {
         await Future<void>.delayed(Duration.zero);
       }
@@ -593,9 +727,22 @@ class VoiceGuideService {
         v,
         fixedFractionDigits: 1,
       );
-      put('speed', 'speed:${v.toStringAsFixed(1)}', {'x': x});
-      if (++batchCount % batchSize == 0) {
-        await Future<void>.delayed(Duration.zero);
+      for (final measurement in const ['kmh', 'mph']) {
+        put(
+          'speed',
+          'speed:$measurement:${v.toStringAsFixed(1)}',
+          {
+            'x': x,
+            'unit': _speedUnit(
+              _resolveLanguageCode(_locale),
+              measurement,
+              v,
+            ),
+          },
+        );
+        if (++batchCount % batchSize == 0) {
+          await Future<void>.delayed(Duration.zero);
+        }
       }
     }
 
@@ -615,7 +762,11 @@ class VoiceGuideService {
 
     // RPM 30..200 step 5
     for (int rpm = 30; rpm <= 200; rpm += 5) {
-      put('rpm', 'rpm:$rpm', {'n': rpm.toString()});
+      put(
+        'rpm',
+        'rpm:$rpm',
+        {'n': NumberSpeech.numberToSpeechString(_locale, rpm)},
+      );
       if (++batchCount % batchSize == 0) {
         await Future<void>.delayed(Duration.zero);
       }
@@ -623,7 +774,11 @@ class VoiceGuideService {
 
     // Level 1..20
     for (int level = 1; level <= 20; level++) {
-      put('level', 'level:$level', {'n': level.toString()});
+      put(
+        'level',
+        'level:$level',
+        {'n': NumberSpeech.numberToSpeechString(_locale, level)},
+      );
       if (++batchCount % batchSize == 0) {
         await Future<void>.delayed(Duration.zero);
       }

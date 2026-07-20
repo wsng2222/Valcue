@@ -48,7 +48,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get dark => 'Donker';
 
   @override
-  String get smartwatchSync => 'Smartwatch Sync';
+  String get smartwatchSync => 'Smartwatch synchroniseren';
 
   @override
   String get connectSmartwatch => 'Koppel met smartwatch';
@@ -183,7 +183,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get level => 'Niveau';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'Niveau $level';
   }
 
@@ -201,7 +201,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resistanceLevel => 'Weerstand (niveau)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return 'Weerstand $resistance';
   }
 
@@ -354,7 +354,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get liveActivityInProgress => 'Training bezig';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'Interval $current/$total';
   }
 
@@ -499,8 +499,8 @@ class AppLocalizationsNl extends AppLocalizations {
   String get oneTime => 'Eenmalig';
 
   @override
-  String savePercent(int percent) {
-    return 'Bespaar $percent%';
+  String savePercent(String percent) {
+    return 'Bespaar $percent';
   }
 
   @override
@@ -963,25 +963,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cancelAnytimeKeepAccess => 'Altijd opzegbaar, toegang blijft';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Training $count dagen 🔥',
-      one: 'Training 1 dag 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'Trainingsdagen: $count 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Rust $count dagen 🛏️',
-      one: 'Rust 1 dag 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'Rustdagen: $count 🛏️';
   }
 
   @override
@@ -1070,32 +1058,32 @@ class AppLocalizationsNl extends AppLocalizations {
   String get generateCustomRoutine => 'Persoonlijke routine maken';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes min';
   }
 
   @override
-  String floorCount(int count) {
-    return '$count verdiepingen';
+  String floorCount(String count) {
+    return 'Verdiepingen: $count';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'Persoonlijke hardlooptraining $distance km ($calories kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'Persoonlijke fietstraining $distance km ($calories kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'Persoonlijke traptraining $floors verdiepingen ($calories kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'Je persoonlijke routine is klaar. Richt je op ongeveer $calories calorieën!';
   }
 
@@ -1145,13 +1133,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get importSharedRoutine => 'Gedeelde routine importeren';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'Er is een routine gevonden in de QR-code.\n\n• Naam: $name\n• Moeilijkheid: $difficulty\n• Intervallen: $count\n\nWil je deze in je bibliotheek opslaan?';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'Er is een gedeelde routine gevonden op het klembord.\n\n• Naam: $name\n• Moeilijkheid: $difficulty\n• Intervallen: $count\n\nWil je deze in je bibliotheek opslaan?';
   }
 
@@ -1179,7 +1167,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get noAnnouncements => 'Geen meldingen';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '$seconds s vooraf';
   }
 
@@ -1191,8 +1179,8 @@ class AppLocalizationsNl extends AppLocalizations {
       'Kies wanneer je de resterende tijd wilt horen voordat het interval verandert.';
 
   @override
-  String secondsLeft(int seconds) {
-    return 'Nog $seconds seconden';
+  String secondsLeft(String seconds) {
+    return 'Nog $seconds sec.';
   }
 
   @override
@@ -1206,8 +1194,8 @@ class AppLocalizationsNl extends AppLocalizations {
   String get sessionRepeatBlock => 'Herhaald sessieblok';
 
   @override
-  String repeatTimes(int count) {
-    return '$count herhalingen';
+  String repeatTimes(String count) {
+    return 'Herhalingen: $count';
   }
 
   @override
@@ -1219,4 +1207,75 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get unableToOpenPrivacyPolicy =>
       'Privacybeleid kan niet worden geopend.';
+
+  @override
+  String get less => 'Minder';
+
+  @override
+  String get more => 'Meer';
+
+  @override
+  String inclineValue(String value) {
+    return 'Helling: $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value RPM';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'Hierna: $value';
+  }
+
+  @override
+  String get weightCalendar => 'Gewichtskalender';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText intervallen · $difficulty',
+      one: '$duration · $countText interval · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'Doel: $goalWeight • Doel bereikt!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'Doel: $goalWeight • Nog $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'Doel: $goalWeight • $difference erboven';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'Gem. $value km/u';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'Gem. $value mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'Gem. $value omw/min';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'Gem. niveau $value';
+  }
 }

@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/supported_app_language.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'app_shell/app_shell.dart';
 import 'app_settings/app_settings_provider.dart';
@@ -135,7 +136,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RoutineProvider()),
         ChangeNotifierProvider(create: (_) => WorkoutHistoryProvider()),
         ChangeNotifierProvider(create: (_) => WeightTrackerProvider()),
-        ChangeNotifierProxyProvider<WorkoutHistoryProvider, AchievementProvider>(
+        ChangeNotifierProxyProvider<WorkoutHistoryProvider,
+            AchievementProvider>(
           create: (context) => AchievementProvider(
             Provider.of<WorkoutHistoryProvider>(context, listen: false),
           ),
@@ -156,24 +158,15 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ];
-          const supportedLocales = [
-            Locale('en'),
-            Locale('es'),
-            Locale('fr'),
-            Locale('de'),
-            Locale('it'),
-            Locale('nl'),
-            Locale('da'),
-            Locale('nb'),
-            Locale('ru'),
-            Locale('pt'),
-            Locale('ja'),
-            Locale('zh'),
-            Locale('ko'),
-            Locale('vi'),
-            Locale('ar'),
-            Locale('th'),
-          ];
+          final supportedLocales = SupportedAppLanguage.locales;
+          final lightTheme = AppTheme.forLocale(
+            AppTheme.lightTheme,
+            settingsProvider.locale,
+          );
+          final darkTheme = AppTheme.forLocale(
+            AppTheme.darkTheme,
+            settingsProvider.locale,
+          );
           final home = OnboardingGate(
             home: AppShell(key: AppShell.globalKey),
           );
@@ -184,8 +177,7 @@ class MyApp extends StatelessWidget {
             final isDark = themeMode == ThemeMode.dark ||
                 (themeMode == ThemeMode.system &&
                     platformBrightness == Brightness.dark);
-            final materialTheme =
-                isDark ? AppTheme.darkTheme : AppTheme.lightTheme;
+            final materialTheme = isDark ? darkTheme : lightTheme;
 
             // IMPORTANT: This builder runs under Localizations, so we can safely
             // read locale and react to runtime changes.
@@ -195,20 +187,24 @@ class MyApp extends StatelessWidget {
 
             // baseline 가로 해상도 (기기 너비가 375보다 작으면 비율 축소)
             const double baselineWidth = 375.0;
-            final double scale = (actualWidth > 0 && actualWidth < baselineWidth)
-                ? actualWidth / baselineWidth
-                : 1.0;
-
-            final clampedTextScaler = TextScaler.linear(
-              originalMediaQuery.textScaler.scale(1.0).clamp(1.0, 1.20),
-            );
+            final double scale =
+                (actualWidth > 0 && actualWidth < baselineWidth)
+                    ? actualWidth / baselineWidth
+                    : 1.0;
 
             final mediaQueryData = originalMediaQuery.copyWith(
-              textScaler: clampedTextScaler,
-              size: scale < 1.0 ? Size(baselineWidth, actualHeight / scale) : originalMediaQuery.size,
-              padding: scale < 1.0 ? originalMediaQuery.padding * (1 / scale) : originalMediaQuery.padding,
-              viewInsets: scale < 1.0 ? originalMediaQuery.viewInsets * (1 / scale) : originalMediaQuery.viewInsets,
-              viewPadding: scale < 1.0 ? originalMediaQuery.viewPadding * (1 / scale) : originalMediaQuery.viewPadding,
+              size: scale < 1.0
+                  ? Size(baselineWidth, actualHeight / scale)
+                  : originalMediaQuery.size,
+              padding: scale < 1.0
+                  ? originalMediaQuery.padding * (1 / scale)
+                  : originalMediaQuery.padding,
+              viewInsets: scale < 1.0
+                  ? originalMediaQuery.viewInsets * (1 / scale)
+                  : originalMediaQuery.viewInsets,
+              viewPadding: scale < 1.0
+                  ? originalMediaQuery.viewPadding * (1 / scale)
+                  : originalMediaQuery.viewPadding,
             );
 
             Widget mainContent = Theme(
@@ -228,10 +224,10 @@ class MyApp extends StatelessWidget {
               mainContent = FractionallySizedBox(
                 widthFactor: 1 / scale,
                 heightFactor: 1 / scale,
-                alignment: Alignment.topLeft,
+                alignment: AlignmentDirectional.topStart,
                 child: Transform.scale(
                   scale: scale,
-                  alignment: Alignment.topLeft,
+                  alignment: AlignmentDirectional.topStart,
                   child: mainContent,
                 ),
               );
@@ -247,8 +243,8 @@ class MyApp extends StatelessWidget {
             return AdaptiveApp(
               title: _appDisplayName,
               themeMode: settingsProvider.themeModeEnum,
-              materialLightTheme: AppTheme.lightTheme,
-              materialDarkTheme: AppTheme.darkTheme,
+              materialLightTheme: lightTheme,
+              materialDarkTheme: darkTheme,
               cupertinoLightTheme: const CupertinoThemeData(
                 brightness: Brightness.light,
               ),
@@ -266,8 +262,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: _appDisplayName,
             themeMode: settingsProvider.themeModeEnum,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+            theme: lightTheme,
+            darkTheme: darkTheme,
             builder: (context, child) => appBuilder(child: child),
             localizationsDelegates: localizationsDelegates,
             supportedLocales: supportedLocales,

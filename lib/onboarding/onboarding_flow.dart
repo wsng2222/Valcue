@@ -138,15 +138,18 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     if (storedSpeed != null) {
       _controller.selectSpeedUnit(storedSpeed);
     } else {
-      _controller.selectSpeedUnit(SpeedUnit.kmh);
+      _controller.selectSpeedUnit(
+        locale.countryCode == 'US' ? SpeedUnit.mph : SpeedUnit.kmh,
+      );
     }
 
     if (storedWeight != null) {
       _controller.selectWeightUnit(storedWeight);
     } else {
-      // Auto-preselect based on locale (Korea -> km/h + kg).
+      // The supported English locale is explicitly en-US. Every other
+      // supported regional locale uses metric defaults.
       _controller.selectWeightUnit(
-        locale.languageCode == 'ko' ? WeightUnit.kg : WeightUnit.lbs,
+        locale.countryCode == 'US' ? WeightUnit.lbs : WeightUnit.kg,
       );
     }
 

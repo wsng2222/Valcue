@@ -2,6 +2,7 @@ import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +25,11 @@ const _privacyPolicyUri =
 Future<void> _openPrivacyPolicy(BuildContext context) async {
   final messenger = ScaffoldMessenger.maybeOf(context);
   final errorMessage = AppLocalizations.of(context)!.unableToOpenPrivacyPolicy;
-  final uri = Uri.parse(_privacyPolicyUri);
+  final uri = Uri.parse(_privacyPolicyUri).replace(
+    queryParameters: {
+      'lang': Localizations.localeOf(context).languageCode,
+    },
+  );
   final launched = await launchUrl(uri);
 
   if (!launched) {
@@ -34,108 +39,6 @@ Future<void> _openPrivacyPolicy(BuildContext context) async {
         duration: const Duration(seconds: 2),
       ),
     );
-  }
-}
-
-// Extension to provide fallback for new localization keys until code generation runs
-extension AppLocalizationsExtension on AppLocalizations {
-  String get premiumHeadline {
-    try {
-      return (this as dynamic).premiumHeadline ?? '같은 30분, 결과는 다르게';
-    } catch (_) {
-      return '같은 30분, 결과는 다르게';
-    }
-  }
-
-  String get premiumSubheadlineNew {
-    try {
-      return (this as dynamic).premiumSubheadlineNew ??
-          '그냥 뛰지 말고, 살 빠지는 방식으로 운동해';
-    } catch (_) {
-      return '그냥 뛰지 말고, 살 빠지는 방식으로 운동해';
-    }
-  }
-
-  String get mostPopular {
-    try {
-      return (this as dynamic).mostPopular ?? '가장 인기';
-    } catch (_) {
-      return '가장 인기';
-    }
-  }
-
-  String get benefitVoiceCoaching {
-    try {
-      return (this as dynamic).benefitVoiceCoaching ?? '운동 중 자동 음성 코칭';
-    } catch (_) {
-      return '운동 중 자동 음성 코칭';
-    }
-  }
-
-  String get benefitCycleStairmasterRoutines {
-    try {
-      return (this as dynamic).benefitCycleStairmasterRoutines ??
-          '사이클 & 천국의 계단 루틴 사용';
-    } catch (_) {
-      return '사이클 & 천국의 계단 루틴 사용';
-    }
-  }
-
-  String get benefitUnlimitedRoutinesNew {
-    try {
-      return (this as dynamic).benefitUnlimitedRoutinesNew ?? '루틴 무제한 저장';
-    } catch (_) {
-      return '루틴 무제한 저장';
-    }
-  }
-
-  String get benefitNoAdsFocus {
-    try {
-      return (this as dynamic).benefitNoAdsFocus ?? '광고 없이 집중';
-    } catch (_) {
-      return '광고 없이 집중';
-    }
-  }
-
-  String get benefitFutureFeaturesNew {
-    try {
-      return (this as dynamic).benefitFutureFeaturesNew ?? '추후 프리미엄 기능 전체 포함';
-    } catch (_) {
-      return '추후 프리미엄 기능 전체 포함';
-    }
-  }
-
-  String get mostChosen {
-    try {
-      return (this as dynamic).mostChosen ?? '가장 많이 선택됨';
-    } catch (_) {
-      return '가장 많이 선택됨';
-    }
-  }
-
-  String get canChangeAnytime {
-    try {
-      return (this as dynamic).canChangeAnytime ?? '언제든지 변경 가능';
-    } catch (_) {
-      return '언제든지 변경 가능';
-    }
-  }
-
-  String get startPremium {
-    try {
-      return (this as dynamic).startPremium ?? '프리미엄 시작하기';
-    } catch (_) {
-      return '프리미엄 시작하기';
-    }
-  }
-
-  String get cancelAnytimeKeepAccess {
-    try {
-      return (this as dynamic).cancelAnytimeKeepAccess ??
-          '결제 후 바로 해지해도 기간 끝까지 이용 가능';
-    } catch (_) {
-      return '결제 후 바로 해지해도 기간 끝까지 이용 가능';
-    }
   }
 }
 
@@ -730,8 +633,6 @@ class _PlanSelector extends StatefulWidget {
 class _PlanSelectorState extends State<_PlanSelector> {
   late _PlanSelectionNotifier _notifier;
   late PlanType _selectedPlan;
-  static final _priceFormatter = intl.NumberFormat('#,###');
-
   @override
   void initState() {
     super.initState();
@@ -771,7 +672,14 @@ class _PlanSelectorState extends State<_PlanSelector> {
     return ((monthlyTotal - lifetimePrice) / monthlyTotal * 100).round();
   }
 
-  String _formatPrice(double price) => _priceFormatter.format(price.round());
+  String _formatPrice(BuildContext context, double price) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return intl.NumberFormat.simpleCurrency(
+      locale: locale,
+      name: 'KRW',
+      decimalDigits: 0,
+    ).format(price);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -782,7 +690,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
         // Monthly plan (first option)
         _PlanCard(
           title: l10n.monthly,
-          price: _formatPrice(monthlyPrice),
+          price: _formatPrice(context, monthlyPrice),
           period: l10n.perMonth,
           isSelected: _selectedPlan == PlanType.monthly,
           isPrimary: false,
@@ -797,7 +705,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
           children: [
             _PlanCard(
               title: l10n.yearly,
-              price: _formatPrice(yearlyPrice),
+              price: _formatPrice(context, yearlyPrice),
               period: l10n.perYear,
               isSelected: _selectedPlan == PlanType.yearly,
               savingsPercent: _savingsPercent,
@@ -815,7 +723,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
           children: [
             _PlanCard(
               title: l10n.lifetime,
-              price: _formatPrice(lifetimePrice),
+              price: _formatPrice(context, lifetimePrice),
               period: l10n.oneTime,
               isSelected: _selectedPlan == PlanType.lifetime,
               savingsPercent: _lifetimeSavingsPercent,
@@ -948,7 +856,12 @@ class _PlanCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                l10n.savePercent(savingsPercent!),
+                                l10n.savePercent(
+                                  LocalizedFormat.percent(
+                                    context,
+                                    savingsPercent! / 100,
+                                  ),
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -977,18 +890,6 @@ class _PlanCard extends StatelessWidget {
                           fontStyle: FontStyle.italic,
                           color: theme.colorScheme.onSurface,
                           letterSpacing: -0.8,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'KRW',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.52)
-                              : appColors.mutedText,
-                          letterSpacing: -0.2,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -1044,7 +945,7 @@ class _BenefitsList extends StatelessWidget {
       ),
       _BenefitItem(
         icon: Icons.monitor_weight,
-        text: (l10n as dynamic).benefitWeightFeature ?? 'Weight tracking',
+        text: l10n.benefitWeightFeature,
       ),
       _BenefitItem(
         icon: Icons.do_not_disturb_alt,

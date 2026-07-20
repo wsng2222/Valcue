@@ -48,7 +48,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get dark => 'Mørk';
 
   @override
-  String get smartwatchSync => 'Smartwatch Sync';
+  String get smartwatchSync => 'Synkronisering af smartwatch';
 
   @override
   String get connectSmartwatch => 'Forbind til smartwatch';
@@ -183,7 +183,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get level => 'Niveau';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'Niveau $level';
   }
 
@@ -201,7 +201,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get resistanceLevel => 'Modstand (niveau)';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return 'Modstand $resistance';
   }
 
@@ -355,7 +355,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get liveActivityInProgress => 'Træning i gang';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'Interval $current/$total';
   }
 
@@ -499,8 +499,8 @@ class AppLocalizationsDa extends AppLocalizations {
   String get oneTime => 'Engangsbetalin';
 
   @override
-  String savePercent(int percent) {
-    return 'Spar $percent%';
+  String savePercent(String percent) {
+    return 'Spar $percent';
   }
 
   @override
@@ -964,25 +964,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get cancelAnytimeKeepAccess => 'Annuller når som helst, behold adgang';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Træning $count dage 🔥',
-      one: 'Træning 1 dag 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'Træningsdage: $count 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Hvil $count dage 🛏️',
-      one: 'Hvil 1 dag 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'Hviledage: $count 🛏️';
   }
 
   @override
@@ -1069,32 +1057,32 @@ class AppLocalizationsDa extends AppLocalizations {
   String get generateCustomRoutine => 'Lav personlig rutine';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes min.';
   }
 
   @override
-  String floorCount(int count) {
-    return '$count etager';
+  String floorCount(String count) {
+    return 'Etager: $count';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'Personligt løb $distance km ($calories kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'Personlig cykling $distance km ($calories kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'Personlig trappetræning $floors etager ($calories kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'Din personlige rutine er klar. Sigt efter cirka $calories kalorier!';
   }
 
@@ -1144,13 +1132,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get importSharedRoutine => 'Importér delt rutine';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'Der blev fundet en rutine i QR-koden.\n\n• Navn: $name\n• Sværhedsgrad: $difficulty\n• Intervaller: $count\n\nVil du gemme den i dit bibliotek?';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'Der blev fundet en delt rutine i udklipsholderen.\n\n• Navn: $name\n• Sværhedsgrad: $difficulty\n• Intervaller: $count\n\nVil du gemme den i dit bibliotek?';
   }
 
@@ -1178,7 +1166,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get noAnnouncements => 'Ingen beskeder';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '$seconds sek. før';
   }
 
@@ -1190,8 +1178,8 @@ class AppLocalizationsDa extends AppLocalizations {
       'Vælg, hvornår resttiden skal læses op før et intervalskift.';
 
   @override
-  String secondsLeft(int seconds) {
-    return '$seconds sekunder tilbage';
+  String secondsLeft(String seconds) {
+    return '$seconds sek. tilbage';
   }
 
   @override
@@ -1205,8 +1193,8 @@ class AppLocalizationsDa extends AppLocalizations {
   String get sessionRepeatBlock => 'Gentaget sessionsblok';
 
   @override
-  String repeatTimes(int count) {
-    return '$count gentagelser';
+  String repeatTimes(String count) {
+    return 'Gentagelser: $count';
   }
 
   @override
@@ -1218,4 +1206,75 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get unableToOpenPrivacyPolicy =>
       'Privatlivspolitikken kunne ikke åbnes.';
+
+  @override
+  String get less => 'Mindre';
+
+  @override
+  String get more => 'Mere';
+
+  @override
+  String inclineValue(String value) {
+    return 'Stigning: $value %';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value o/min';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'Næste: $value';
+  }
+
+  @override
+  String get weightCalendar => 'Vægtkalender';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText intervaller · $difficulty',
+      one: '$duration · $countText interval · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'Mål: $goalWeight • Mål nået!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'Mål: $goalWeight • $difference tilbage';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'Mål: $goalWeight • $difference over';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'Gns. $value km/t';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'Gns. $value mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'Gns. $value o/min';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'Gns. niveau $value';
+  }
 }

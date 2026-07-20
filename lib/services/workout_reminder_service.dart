@@ -17,18 +17,117 @@ class WorkoutReminderService {
 
   static const int _notificationIdBase = 7100;
   static const String _channelId = 'valcue_workout_reminder';
-  static const String _channelName = 'Workout reminders';
-  static const String _channelDescription =
-      'Scheduled workout reminder notifications';
   static const int _workoutNotificationIdBase = 7200;
 
   // iOS keeps 64 pending local notifications for the entire app. Reserve the
   // seven weekly reminder slots plus one spare slot.
   static const int _maxWorkoutNotifications = 56;
   static const String _workoutChannelId = 'valcue_workout_intervals_v1';
-  static const String _workoutChannelName = 'Workout interval alerts';
-  static const String _workoutChannelDescription =
-      'Alerts when a new workout interval starts';
+  static const Map<
+      String,
+      ({
+        String reminderName,
+        String reminderDescription,
+        String intervalName,
+        String intervalDescription
+      })> _channelCopy = {
+    'en': (
+      reminderName: 'Workout reminders',
+      reminderDescription: 'Scheduled workout reminders',
+      intervalName: 'Workout interval alerts',
+      intervalDescription: 'Alerts when a new workout interval starts',
+    ),
+    'es': (
+      reminderName: 'Recordatorios de entrenamiento',
+      reminderDescription: 'Recordatorios de entrenamientos programados',
+      intervalName: 'Avisos de intervalos',
+      intervalDescription: 'Avisos al comenzar un nuevo intervalo',
+    ),
+    'fr': (
+      reminderName: 'Rappels d’entraînement',
+      reminderDescription: 'Rappels des entraînements programmés',
+      intervalName: 'Alertes d’intervalle',
+      intervalDescription: 'Alertes au début d’un nouvel intervalle',
+    ),
+    'de': (
+      reminderName: 'Trainingserinnerungen',
+      reminderDescription: 'Erinnerungen an geplante Trainings',
+      intervalName: 'Intervallhinweise',
+      intervalDescription: 'Hinweise beim Start eines neuen Intervalls',
+    ),
+    'it': (
+      reminderName: 'Promemoria allenamento',
+      reminderDescription: 'Promemoria per gli allenamenti programmati',
+      intervalName: 'Avvisi intervallo',
+      intervalDescription: 'Avvisi all’inizio di un nuovo intervallo',
+    ),
+    'nl': (
+      reminderName: 'Trainingsherinneringen',
+      reminderDescription: 'Herinneringen voor geplande trainingen',
+      intervalName: 'Intervalmeldingen',
+      intervalDescription: 'Meldingen wanneer een nieuw interval begint',
+    ),
+    'da': (
+      reminderName: 'Træningspåmindelser',
+      reminderDescription: 'Påmindelser om planlagte træninger',
+      intervalName: 'Intervalbeskeder',
+      intervalDescription: 'Beskeder når et nyt interval starter',
+    ),
+    'nb': (
+      reminderName: 'Treningspåminnelser',
+      reminderDescription: 'Påminnelser om planlagte treningsøkter',
+      intervalName: 'Intervallvarsler',
+      intervalDescription: 'Varsler når et nytt intervall starter',
+    ),
+    'ru': (
+      reminderName: 'Напоминания о тренировках',
+      reminderDescription: 'Напоминания о запланированных тренировках',
+      intervalName: 'Оповещения об интервалах',
+      intervalDescription: 'Оповещения о начале нового интервала',
+    ),
+    'pt': (
+      reminderName: 'Lembretes de treino',
+      reminderDescription: 'Lembretes de treinos programados',
+      intervalName: 'Alertas de intervalo',
+      intervalDescription: 'Alertas quando um novo intervalo começa',
+    ),
+    'ja': (
+      reminderName: 'ワークアウトのリマインダー',
+      reminderDescription: '設定したワークアウト予定のお知らせ',
+      intervalName: 'インターバルのお知らせ',
+      intervalDescription: '新しいインターバル開始時のお知らせ',
+    ),
+    'zh': (
+      reminderName: '训练提醒',
+      reminderDescription: '按计划提醒训练',
+      intervalName: '间歇提醒',
+      intervalDescription: '新间歇开始时提醒',
+    ),
+    'ko': (
+      reminderName: '운동 알림',
+      reminderDescription: '예정된 운동 시간 알림',
+      intervalName: '운동 구간 알림',
+      intervalDescription: '새 운동 구간이 시작될 때 알림',
+    ),
+    'vi': (
+      reminderName: 'Nhắc lịch tập',
+      reminderDescription: 'Nhắc các buổi tập đã lên lịch',
+      intervalName: 'Thông báo quãng tập',
+      intervalDescription: 'Thông báo khi bắt đầu quãng mới',
+    ),
+    'ar': (
+      reminderName: 'تذكيرات التمرين',
+      reminderDescription: 'تذكيرات بالتمارين المجدولة',
+      intervalName: 'تنبيهات فترات التمرين',
+      intervalDescription: 'تنبيه عند بدء فترة تمرين جديدة',
+    ),
+    'th': (
+      reminderName: 'แจ้งเตือนออกกำลังกาย',
+      reminderDescription: 'แจ้งเตือนการออกกำลังกายที่ตั้งเวลาไว้',
+      intervalName: 'แจ้งเตือนช่วงฝึก',
+      intervalDescription: 'แจ้งเตือนเมื่อเริ่มช่วงฝึกใหม่',
+    ),
+  };
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -65,7 +164,7 @@ class WorkoutReminderService {
     'es': (
       title: 'Recordatorio de horario de entrenamiento',
       body:
-          'Es la hora de entrenamiento programada. Puede iniciar la rutina de hoy a un ritmo cómodo.',
+          'Es la hora de entrenamiento programada. Puedes empezar la rutina de hoy a un ritmo cómodo.',
     ),
     'fr': (
       title: 'Rappel de planning d’entraînement',
@@ -75,7 +174,7 @@ class WorkoutReminderService {
     'de': (
       title: 'Trainingsplan-Erinnerung',
       body:
-          'Es ist Ihre geplante Trainingszeit. Sie können die heutige Routine in einem angenehmen Tempo beginnen.',
+          'Es ist Zeit für dein geplantes Training. Starte die heutige Routine in einem angenehmen Tempo.',
     ),
     'it': (
       title: 'Promemoria programma di allenamento',
@@ -218,6 +317,7 @@ class WorkoutReminderService {
   Future<void> scheduleWorkoutIntervalNotifications({
     required List<PlannedWorkoutNotification> notifications,
     required String routineId,
+    required String languageCode,
   }) async {
     await init();
     final scheduleBase = tz.TZDateTime.now(tz.local);
@@ -258,6 +358,7 @@ class WorkoutReminderService {
           body: notification.body,
           scheduledDate: scheduledDate,
           payload: payload,
+          languageCode: languageCode,
         );
       } catch (error) {
         if (kDebugMode) {
@@ -328,6 +429,7 @@ class WorkoutReminderService {
     required String body,
     required tz.TZDateTime scheduledDate,
     required String payload,
+    required String languageCode,
   }) async {
     try {
       await _plugin.zonedSchedule(
@@ -335,7 +437,7 @@ class WorkoutReminderService {
         title,
         body,
         scheduledDate,
-        _workoutNotificationDetails,
+        _workoutNotificationDetails(languageCode),
         payload: payload,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -347,7 +449,7 @@ class WorkoutReminderService {
         title,
         body,
         scheduledDate,
-        _workoutNotificationDetails,
+        _workoutNotificationDetails(languageCode),
         payload: payload,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -356,27 +458,29 @@ class WorkoutReminderService {
     }
   }
 
-  NotificationDetails get _workoutNotificationDetails =>
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _workoutChannelId,
-          _workoutChannelName,
-          channelDescription: _workoutChannelDescription,
-          importance: Importance.high,
-          priority: Priority.high,
-          playSound: true,
-          enableVibration: true,
-          category: AndroidNotificationCategory.alarm,
-        ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentSound: true,
-        ),
-        macOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentSound: true,
-        ),
-      );
+  NotificationDetails _workoutNotificationDetails(String languageCode) {
+    final copy = _channelCopyFor(languageCode);
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        _workoutChannelId,
+        copy.intervalName,
+        channelDescription: copy.intervalDescription,
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+        category: AndroidNotificationCategory.alarm,
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentSound: true,
+      ),
+      macOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentSound: true,
+      ),
+    );
+  }
 
   Future<void> syncSchedule({
     required bool enabled,
@@ -386,6 +490,7 @@ class WorkoutReminderService {
     required String languageCode,
   }) async {
     await init();
+    _foregroundLanguageCode = languageCode;
     await _cancelAllReminderNotifications();
 
     if (!enabled) {
@@ -452,18 +557,30 @@ class WorkoutReminderService {
     }
   }
 
-  NotificationDetails get _defaultNotificationDetails =>
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
-          channelDescription: _channelDescription,
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-        macOS: DarwinNotificationDetails(),
-      );
+  NotificationDetails get _defaultNotificationDetails {
+    final copy = _channelCopyFor(_foregroundLanguageCode);
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        _channelId,
+        copy.reminderName,
+        channelDescription: copy.reminderDescription,
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: const DarwinNotificationDetails(),
+      macOS: const DarwinNotificationDetails(),
+    );
+  }
+
+  ({
+    String reminderName,
+    String reminderDescription,
+    String intervalName,
+    String intervalDescription
+  }) _channelCopyFor(String languageCode) {
+    final base = languageCode.toLowerCase().split(RegExp('[-_]')).first;
+    return _channelCopy[base] ?? _channelCopy['en']!;
+  }
 
   void _startForegroundTicker({
     required Set<int> weekdays,

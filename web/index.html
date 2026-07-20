@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -19,9 +19,38 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta
+    id="app-description"
     name="description"
     content="Valcue workout timer for treadmill, bike, and stair workouts."
   >
+  <script>
+    (function () {
+      const descriptions = {
+        en: 'Interval workout timer for treadmill, stationary bike, and stair machine.',
+        es: 'Temporizador de entrenamiento por intervalos para cinta, bicicleta estática y máquina de escaleras.',
+        fr: 'Minuteur d’entraînement fractionné pour tapis de course, vélo d’intérieur et simulateur d’escalier.',
+        de: 'Intervalltrainings-Timer für Laufband, Ergometer und Treppensteiger.',
+        it: 'Timer per allenamenti a intervalli su tapis roulant, cyclette e stepper.',
+        nl: 'Intervaltimer voor loopband, hometrainer en trapmachine.',
+        da: 'Intervaltimer til løbebånd, motionscykel og trappemaskine.',
+        nb: 'Intervalltimer for tredemølle, ergometersykkel og trappemaskin.',
+        ru: 'Таймер интервальных тренировок для беговой дорожки, велотренажёра и степпера.',
+        pt: 'Cronômetro de treino intervalado para esteira, bicicleta ergométrica e simulador de escada.',
+        ja: 'トレッドミル、フィットネスバイク、ステアクライマー向けのインターバルトレーニングタイマー。',
+        zh: '适用于跑步机、健身车和登阶机的间歇训练计时器。',
+        ko: '트레드밀, 실내 자전거, 스텝밀을 위한 인터벌 운동 타이머.',
+        vi: 'Đồng hồ tập ngắt quãng cho máy chạy bộ, xe đạp tại chỗ và máy leo cầu thang.',
+        ar: 'مؤقت للتمارين المتقطعة على جهاز المشي والدراجة الثابتة وجهاز صعود الدرج.',
+        th: 'ตัวจับเวลาการฝึกแบบเป็นช่วงสำหรับลู่วิ่ง จักรยานอยู่กับที่ และเครื่องขึ้นบันได'
+      };
+      const browserCode = (navigator.language || 'en').toLowerCase().split('-')[0];
+      const code = browserCode === 'no' ? 'nb' : browserCode;
+      const active = descriptions[code] ? code : 'en';
+      document.documentElement.lang = active;
+      document.documentElement.dir = active === 'ar' ? 'rtl' : 'ltr';
+      document.getElementById('app-description').content = descriptions[active];
+    }());
+  </script>
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">

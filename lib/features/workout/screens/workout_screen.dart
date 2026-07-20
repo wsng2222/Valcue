@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../../app_settings/app_settings_provider.dart';
@@ -326,11 +327,16 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         resistance: l10n.resistance,
         level: l10n.level,
         duration: l10n.duration,
+        inclineValueTemplate: l10n.inclineValue('{value}'),
+        rpmValueTemplate: l10n.rpmValue('{value}'),
+        resistanceValueTemplate: l10n.resistanceColon('{value}'),
+        levelValueTemplate: l10n.levelColon('{value}'),
       ),
     );
     await service.scheduleWorkoutIntervalNotifications(
       notifications: notifications,
       routineId: widget.routine.id,
+      languageCode: settingsProvider.language,
     );
   }
 
@@ -551,29 +557,17 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         countdownRemaining: state.countdownRemainingDuration,
         progress: state.totalWorkoutProgress,
         measurement: settingsProvider.measurement,
+        locale: settingsProvider.locale.toLanguageTag(),
         capturedAt: capturedAt,
         labels: WorkoutLiveActivityScheduleLabels(
           machineName: machineName,
           preparingStatusText: l10n.liveActivityPreparing,
           runningStatusText: l10n.liveActivityInProgress,
           finishedStatusText: l10n.workoutComplete,
-          intervalText: (current, total) {
-            final locale = Localizations.localeOf(context).languageCode;
-            final sessionWord = switch (locale) {
-              'ko' => '세션',
-              'es' => 'Sesión',
-              'fr' => 'Session',
-              'de' => 'Session',
-              'ru' => 'Сессия',
-              'pt' => 'Sessão',
-              'ja' => 'セッション',
-              'zh' => '阶段',
-              'vi' => 'Phiên',
-              'ar' => 'الجلسة',
-              _ => 'Session',
-            };
-            return '$sessionWord $current/$total';
-          },
+          intervalText: (current, total) => l10n.liveActivityIntervalFormat(
+            LocalizedFormat.decimal(context, current, decimalDigits: 0),
+            LocalizedFormat.decimal(context, total, decimalDigits: 0),
+          ),
           durationText: (durationSeconds) {
             final formatted = WorkoutIntervalNotificationPlanner.formatDuration(
               durationSeconds,
@@ -585,6 +579,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
           inclineLabel: l10n.incline,
           resistanceLabel: l10n.resistance,
           levelLabel: l10n.level,
+          inclineValueTemplate: l10n.inclineValue('{value}'),
+          rpmValueTemplate: l10n.rpmValue('{value}'),
+          resistanceValueTemplate: l10n.resistanceColon('{value}'),
+          levelValueTemplate: l10n.levelColon('{value}'),
         ),
       ),
     );
@@ -829,31 +827,31 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         countdownRemaining: state.countdownRemainingDuration,
         progress: state.totalWorkoutProgress,
         measurement: settingsProvider.measurement,
+        locale: settingsProvider.locale.toLanguageTag(),
         now: _now(),
         machineName: machineName,
         statusText: statusText,
-        intervalText: (() {
-          final locale = Localizations.localeOf(context).languageCode;
-          final sessionWord = switch (locale) {
-            'ko' => '세션',
-            'es' => 'Sesión',
-            'fr' => 'Session',
-            'de' => 'Session',
-            'ru' => 'Сессия',
-            'pt' => 'Sessão',
-            'ja' => 'セッション',
-            'zh' => '阶段',
-            'vi' => 'Phiên',
-            'ar' => 'الجلسة',
-            _ => 'Session',
-          };
-          return '$sessionWord ${state.currentIntervalIndex + 1}/${state.totalIntervals}';
-        })(),
+        intervalText: l10n.liveActivityIntervalFormat(
+          LocalizedFormat.decimal(
+            context,
+            state.currentIntervalIndex + 1,
+            decimalDigits: 0,
+          ),
+          LocalizedFormat.decimal(
+            context,
+            state.totalIntervals,
+            decimalDigits: 0,
+          ),
+        ),
         durationText: l10n.liveActivityDurationFormat(formattedDuration),
         speedLabel: l10n.speed,
         inclineLabel: l10n.incline,
         resistanceLabel: l10n.resistance,
         levelLabel: l10n.level,
+        inclineValueTemplate: l10n.inclineValue('{value}'),
+        rpmValueTemplate: l10n.rpmValue('{value}'),
+        resistanceValueTemplate: l10n.resistanceColon('{value}'),
+        levelValueTemplate: l10n.levelColon('{value}'),
       ),
       'workoutSessionId': _workoutSessionId,
     };
@@ -869,7 +867,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       'statusText': statusText ??
           _finishedLiveActivityStatusText ??
           source?['statusText'] ??
-          'Workout complete',
+          '',
       'timerEndAtMs': 0,
       'workoutEndAtMs': 0,
       'progress': _workoutState.status == WorkoutStatus.finished
@@ -1028,7 +1026,11 @@ class _WorkoutScreenState extends State<WorkoutScreen>
           // Speak speed and incline together in one sentence
           _isSpeakingIntervalInfo = true;
           VoiceGuideService.instance
-              .speakSpeedAndIncline(speed, incline)
+              .speakSpeedAndIncline(
+            speed,
+            incline,
+            measurement: settingsProvider.measurement,
+          )
               .then((_) {
             Future.delayed(const Duration(milliseconds: 300), () {
               _isSpeakingIntervalInfo = false;
@@ -1426,12 +1428,8 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     final detailChips = _getDetailChips(context, state, settingsProvider);
     final primaryMetricLabel = _getPrimaryMetricLabel(context);
 
-    // Clamp text scaling to prevent UI breaking
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(
-            MediaQuery.of(context).textScaler.scale(1.0).clamp(1.0, 1.15)),
-      ),
+      data: MediaQuery.of(context),
       child: SafeArea(
         left: false, // No left padding in landscape
         right: false, // No right padding in landscape
@@ -1585,14 +1583,27 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
   String _getMainValueText(BuildContext context, WorkoutState state,
       AppSettingsProvider settingsProvider) {
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.routine.machineType) {
       case MachineType.treadmill:
         return settingsProvider
             .formatSpeed(state.currentInterval.speedKmh ?? 0.0);
       case MachineType.cycle:
-        return 'Level ${state.currentInterval.resistance ?? 0}';
+        return l10n.resistanceColon(
+          LocalizedFormat.decimal(
+            context,
+            state.currentInterval.resistance ?? 0,
+            decimalDigits: 0,
+          ),
+        );
       case MachineType.stairmaster:
-        return 'Level ${state.currentInterval.level ?? 0}';
+        return l10n.levelColon(
+          LocalizedFormat.decimal(
+            context,
+            state.currentInterval.level ?? 0,
+            decimalDigits: 0,
+          ),
+        );
     }
   }
 
@@ -1611,12 +1622,16 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       case MachineType.treadmill:
         final l10n = AppLocalizations.of(context)!;
         final grade = state.currentInterval.grade ?? 0.0;
-        return '${grade.toStringAsFixed(1)}% ${l10n.incline}';
+        return l10n.inclineValue(
+          LocalizedFormat.decimal(context, grade),
+        );
       case MachineType.cycle:
         // Show current session RPM when there's no next session, or show current RPM in secondary area
         final l10n = AppLocalizations.of(context)!;
         final currentRpm = state.currentInterval.rpm ?? 0;
-        return '${l10n.rpm} $currentRpm';
+        return l10n.rpmValue(
+          LocalizedFormat.decimal(context, currentRpm, decimalDigits: 0),
+        );
       case MachineType.stairmaster:
         return ''; // No secondary value for stairmaster
     }
@@ -1624,17 +1639,36 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
   String _getNextValueText(BuildContext context, WorkoutState state,
       AppSettingsProvider settingsProvider) {
+    final l10n = AppLocalizations.of(context)!;
     // Get next interval if available
     if (state.currentIntervalIndex < widget.routine.intervals.length - 1) {
       final nextInterval =
           widget.routine.intervals[state.currentIntervalIndex + 1];
       switch (widget.routine.machineType) {
         case MachineType.treadmill:
-          return 'Next ${settingsProvider.formatSpeed(nextInterval.speedKmh ?? 0.0)}';
+          return l10n.nextMetric(
+            settingsProvider.formatSpeed(nextInterval.speedKmh ?? 0.0),
+          );
         case MachineType.cycle:
-          return 'Next Level ${nextInterval.resistance ?? 0}';
+          return l10n.nextMetric(
+            l10n.resistanceColon(
+              LocalizedFormat.decimal(
+                context,
+                nextInterval.resistance ?? 0,
+                decimalDigits: 0,
+              ),
+            ),
+          );
         case MachineType.stairmaster:
-          return 'Next Level ${nextInterval.level ?? 0}';
+          return l10n.nextMetric(
+            l10n.levelColon(
+              LocalizedFormat.decimal(
+                context,
+                nextInterval.level ?? 0,
+                decimalDigits: 0,
+              ),
+            ),
+          );
       }
     }
     return ''; // No next interval
@@ -1649,13 +1683,21 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     // For first session (index 0), show current session RPM instead of next
     if (state.currentIntervalIndex == 0) {
       final currentRpm = state.currentInterval.rpm ?? 0;
-      return '${l10n.rpm} $currentRpm';
+      return l10n.rpmValue(
+        LocalizedFormat.decimal(context, currentRpm, decimalDigits: 0),
+      );
     }
     // Get next interval if available
     if (state.currentIntervalIndex < widget.routine.intervals.length - 1) {
       final nextInterval =
           widget.routine.intervals[state.currentIntervalIndex + 1];
-      return '${l10n.rpm} ${nextInterval.rpm ?? 0}';
+      return l10n.rpmValue(
+        LocalizedFormat.decimal(
+          context,
+          nextInterval.rpm ?? 0,
+          decimalDigits: 0,
+        ),
+      );
     }
     return ''; // No next interval
   }

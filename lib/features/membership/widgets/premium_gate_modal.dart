@@ -12,9 +12,9 @@ class PremiumGateModal {
     switch (feature) {
       case PremiumFeature.voiceGuide:
         benefits = [
-          (l10n as dynamic).voiceGuideBenefit1 ?? '운동 중 음성 안내',
-          (l10n as dynamic).voiceGuideBenefit2 ?? '세션 전환 자동 안내',
-          (l10n as dynamic).voiceGuideBenefit3 ?? '핸즈프리로 루틴 집중',
+          l10n.voiceGuideBenefit1,
+          l10n.voiceGuideBenefit2,
+          l10n.voiceGuideBenefit3,
         ];
         break;
       case PremiumFeature.backgroundIntervalNotifications:

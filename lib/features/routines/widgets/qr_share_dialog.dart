@@ -49,10 +49,10 @@ class _QrShareDialogState extends State<QrShareDialog> {
           _isLoading = false;
         });
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() {
-          _errorMessage = e.toString();
+          _errorMessage = AppLocalizations.of(context)!.unableToShareWorkout;
           _isLoading = false;
         });
       }
@@ -90,7 +90,7 @@ class _QrShareDialogState extends State<QrShareDialog> {
               height: 200,
               child: Center(
                 child: Text(
-                  'Error: $_errorMessage',
+                  l10n.unableToShareWorkout,
                   style: TextStyle(color: theme.colorScheme.error),
                   textAlign: TextAlign.center,
                 ),

@@ -1,5 +1,8 @@
+import 'package:intl/intl.dart';
+
 import '../features/routines/models/machine_type.dart';
 import '../features/routines/models/routine.dart';
+import '../l10n/supported_app_language.dart';
 
 class WorkoutNotificationLabels {
   const WorkoutNotificationLabels({
@@ -10,6 +13,10 @@ class WorkoutNotificationLabels {
     required this.resistance,
     required this.level,
     required this.duration,
+    this.inclineValueTemplate,
+    this.rpmValueTemplate,
+    this.resistanceValueTemplate,
+    this.levelValueTemplate,
   });
 
   final String newInterval;
@@ -19,6 +26,10 @@ class WorkoutNotificationLabels {
   final String resistance;
   final String level;
   final String duration;
+  final String? inclineValueTemplate;
+  final String? rpmValueTemplate;
+  final String? resistanceValueTemplate;
+  final String? levelValueTemplate;
 }
 
 class PlannedWorkoutNotification {
@@ -71,8 +82,9 @@ class WorkoutIntervalNotificationPlanner {
       planned.add(
         PlannedWorkoutNotification(
           delay: delay,
-          title:
-              '${labels.newInterval} · ${index + 1}/${routine.intervals.length}',
+          title: '${labels.newInterval} · '
+              '${_formatNumber(index + 1, languageCode)}/'
+              '${_formatNumber(routine.intervals.length, languageCode)}',
           body: _buildIntervalBody(
             routine: routine,
             intervalIndex: index,
@@ -113,18 +125,45 @@ class WorkoutIntervalNotificationPlanner {
         final useMiles = measurement == 'mph';
         final speed = (interval.speedKmh ?? 0) * (useMiles ? 0.621371 : 1);
         parts.add(
-          '${labels.speed} ${speed.toStringAsFixed(1)} ${useMiles ? 'mph' : 'km/h'}',
+          '${labels.speed} ${_formatNumber(speed, languageCode, decimalDigits: 1)} ${useMiles ? 'mph' : 'km/h'}',
         );
         parts.add(
-          '${labels.incline} ${_formatMetric(interval.grade ?? 0)}%',
+          _metricPhrase(
+            template: labels.inclineValueTemplate,
+            fallbackLabel: labels.incline,
+            value: _formatMetric(interval.grade ?? 0, languageCode),
+            suffix: _percentSymbol(languageCode),
+          ),
         );
         break;
       case MachineType.cycle:
-        parts.add('${labels.resistance} ${interval.resistance ?? 0}');
-        parts.add('${interval.rpm ?? 0} RPM');
+        parts.add(
+          _metricPhrase(
+            template: labels.resistanceValueTemplate,
+            fallbackLabel: labels.resistance,
+            value: _formatNumber(
+              interval.resistance ?? 0,
+              languageCode,
+            ),
+          ),
+        );
+        parts.add(
+          _metricPhrase(
+            template: labels.rpmValueTemplate,
+            fallbackLabel: '',
+            value: _formatNumber(interval.rpm ?? 0, languageCode),
+            suffix: ' RPM',
+          ),
+        );
         break;
       case MachineType.stairmaster:
-        parts.add('${labels.level} ${interval.level ?? 0}');
+        parts.add(
+          _metricPhrase(
+            template: labels.levelValueTemplate,
+            fallbackLabel: labels.level,
+            value: _formatNumber(interval.level ?? 0, languageCode),
+          ),
+        );
         break;
     }
 
@@ -139,10 +178,47 @@ class WorkoutIntervalNotificationPlanner {
     return parts.join(' · ');
   }
 
-  static String _formatMetric(double value) {
-    return value == value.roundToDouble()
-        ? value.toStringAsFixed(0)
-        : value.toStringAsFixed(1);
+  static String _formatMetric(double value, String languageCode) {
+    return _formatNumber(
+      value,
+      languageCode,
+      decimalDigits: value == value.roundToDouble() ? 0 : 1,
+    );
+  }
+
+  static String _metricPhrase({
+    required String? template,
+    required String fallbackLabel,
+    required String value,
+    String suffix = '',
+  }) {
+    if (template != null) return template.replaceAll('{value}', value);
+    final metric = [fallbackLabel, value]
+        .where((part) => part.isNotEmpty)
+        .join(' ');
+    return '$metric$suffix';
+  }
+
+  static String _percentSymbol(String languageCode) {
+    final locale = _localeName(languageCode);
+    return NumberFormat.percentPattern(locale).symbols.PERCENT;
+  }
+
+  static String _formatNumber(
+    num value,
+    String languageCode, {
+    int decimalDigits = 0,
+  }) {
+    final formatter = NumberFormat.decimalPattern(_localeName(languageCode))
+      ..minimumFractionDigits = decimalDigits
+      ..maximumFractionDigits = decimalDigits;
+    return formatter.format(value);
+  }
+
+  static String _localeName(String languageCode) {
+    return SupportedAppLanguage.fromCode(
+      _baseLanguage(languageCode),
+    ).locale.toLanguageTag();
   }
 
   static String _durationPhrase({
@@ -171,9 +247,15 @@ class WorkoutIntervalNotificationPlanner {
         _durationUnits[_baseLanguage(languageCode)] ?? _durationUnits['en']!;
     final parts = <String>[];
 
-    if (hours > 0) parts.add('$hours${units.hour}');
-    if (minutes > 0) parts.add('$minutes${units.minute}');
-    if (seconds > 0 || parts.isEmpty) parts.add('$seconds${units.second}');
+    if (hours > 0) {
+      parts.add('${_formatNumber(hours, languageCode)}${units.hour}');
+    }
+    if (minutes > 0) {
+      parts.add('${_formatNumber(minutes, languageCode)}${units.minute}');
+    }
+    if (seconds > 0 || parts.isEmpty) {
+      parts.add('${_formatNumber(seconds, languageCode)}${units.second}');
+    }
     return parts.join(units.separator);
   }
 

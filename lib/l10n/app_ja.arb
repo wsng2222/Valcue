@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -117,7 +117,7 @@
   "freeLimitMessage": "Premiumでルーティン使い放題",
   "treadmill": "ランニングマシン",
   "cycle": "サイクル",
-  "stairmaster": "ステアマスター",
+  "stairmaster": "ステアクライマー",
   "selectLanguage": "言語",
   "selectTheme": "テーマを選択",
   "selectDifficulty": "難易度を選択",
@@ -198,7 +198,7 @@
   "routineTab": "ルーティン",
   "settingsTab": "設定",
   "myTab": "マイ",
-  "premiumSubheadline": "音声ガイド、バイクとステアマスターのワークアウト、無制限のルーティンのロック解除",
+  "premiumSubheadline": "音声ガイド、バイクとステアクライマーのワークアウト、ルーティンの無制限保存を利用できます",
   "@premiumSubheadline": {
     "description": "プレミアムのロック解除内容の説明"
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "1回限りの支払い接尾辞"
   },
-  "savePercent": "{percent}% 節約",
+  "savePercent": "{percent}お得",
   "@savePercent": {
     "description": "節約パーセントバッジ",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -404,10 +404,10 @@
   "startTrackingYourWeight": "体重を記録して変化を追跡",
   "treadmillSession": "ランニングマシンセッション",
   "bikeSession": "サイクルセッション",
-  "stairmasterSession": "ステアマスターセッション",
+  "stairmasterSession": "ステアクライマーのセッション",
   "treadmillWorkout": "ランニングマシン運動",
   "bikeWorkout": "サイクル運動",
-  "stairmasterWorkout": "ステアマスター運動",
+  "stairmasterWorkout": "ステアクライマーのワークアウト",
   "startAWorkoutToSeeItHere": "運動履歴はここに表示されます",
   "mon": "月",
   "tue": "火",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{トレーニング 1 日 🔥} other{トレーニング {count} 日 🔥}}",
+  "workoutDays": "トレーニング日数：{count}日 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{休息 1 日 🛏️} other{休息 {count} 日 🛏️}}",
+  "restDays": "休息日数：{count}日 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -504,7 +504,7 @@
   "workoutReminderSelectTime": "時刻を選択",
   "workoutReminderPermissionRequired": "通知権限が必要です。",
   "workoutReminderTimeLabel": "時刻",
-  "shareRoutineMessage": "Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: {routineName}\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n{shareLink}",
+  "shareRoutineMessage": "Valcueでこのインターバルトレーニングを試してみませんか？\n\nメニュー名：{routineName}\n\nリンクをコピーするか、タップして取り込んでください：\n{shareLink}",
   "scanQrCode": "QRコードスキャン",
   "placeQrInside": "ガイド枠の中にQRコードを合わせてください。",
   "customRoutineBuilder": "カスタムルーティン作成",
@@ -563,5 +563,19 @@
   "repeatTimes": "{count}回繰り返し",
   "addRepeatBlock": "繰り返しブロックを追加",
   "unableToShareWorkout": "ワークアウトを共有できません。",
-  "unableToOpenPrivacyPolicy": "プライバシーポリシーを開けません。"
+  "unableToOpenPrivacyPolicy": "プライバシーポリシーを開けません。",
+  "less": "少ない",
+  "more": "多い",
+  "inclineValue": "傾斜 {value}%",
+  "rpmValue": "{value} RPM",
+  "nextMetric": "次：{value}",
+  "weightCalendar": "体重カレンダー",
+  "routineHeaderSummary": "{count, plural, other{{duration} · {countText}インターバル · {difficulty}}}",
+  "goalAchievedSummary": "目標 {goalWeight} • 達成！",
+  "goalRemainingSummary": "目標 {goalWeight} • あと {difference}",
+  "goalExceededSummary": "目標 {goalWeight} • {difference}超過",
+  "averageSpeedKmh": "平均 {value} km/h",
+  "averageSpeedMph": "平均 {value} mph",
+  "averageRpmValue": "平均 {value} RPM",
+  "averageLevelValue": "平均レベル {value}"
 }

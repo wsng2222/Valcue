@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import 'package:valcue/utils/responsive.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
@@ -598,7 +599,11 @@ class _RoutineDetailSheetContentState
                         children: patternLengths.map((length) {
                           return Center(
                             child: Text(
-                              length.toString(),
+                              LocalizedFormat.decimal(
+                                context,
+                                length,
+                                decimalDigits: 0,
+                              ),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -621,7 +626,11 @@ class _RoutineDetailSheetContentState
                         children: repeatCounts.map((count) {
                           return Center(
                             child: Text(
-                              count.toString(),
+                              LocalizedFormat.decimal(
+                                context,
+                                count,
+                                decimalDigits: 0,
+                              ),
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -708,9 +717,9 @@ class _RoutineDetailSheetContentState
       context,
       title: l10n.premiumMembership,
       bulletItems: [
-        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
-        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
-        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+        l10n.routineLimitBenefit1,
+        l10n.routineLimitBenefit2,
+        l10n.routineLimitBenefit3,
       ],
     );
   }
@@ -773,8 +782,7 @@ class _RoutineDetailSheetContentState
           if (interval.rpm == null ||
               interval.rpm! < 30 ||
               interval.rpm! > 200) {
-            showAppMessage(context, l10n.rpmRange,
-                type: AppMessageType.error);
+            showAppMessage(context, l10n.rpmRange, type: AppMessageType.error);
             return;
           }
           if (interval.resistance == null ||
@@ -1929,48 +1937,45 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
   }
 
   String _getPill1Text() {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      // Fallback if localization not available
-      switch (widget.machineType) {
-        case MachineType.treadmill:
-          return widget.settingsProvider
-              .formatSpeed(widget.interval.speedKmh ?? 0.0);
-        case MachineType.cycle:
-          return '${widget.interval.rpm ?? 0} RPM';
-        case MachineType.stairmaster:
-          return 'Level ${widget.interval.level ?? 0}';
-      }
-    }
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.machineType) {
       case MachineType.treadmill:
         return widget.settingsProvider
             .formatSpeed(widget.interval.speedKmh ?? 0.0);
       case MachineType.cycle:
-        return '${widget.interval.rpm ?? 0} ${l10n.rpm}';
+        return l10n.rpmValue(
+          LocalizedFormat.decimal(
+            context,
+            widget.interval.rpm ?? 0,
+            decimalDigits: 0,
+          ),
+        );
       case MachineType.stairmaster:
-        return 'Level ${widget.interval.level ?? 0}';
+        return l10n.levelColon(
+          LocalizedFormat.decimal(
+            context,
+            widget.interval.level ?? 0,
+            decimalDigits: 0,
+          ),
+        );
     }
   }
 
   String _getPill2Text() {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      // Fallback if localization not available
-      switch (widget.machineType) {
-        case MachineType.treadmill:
-          return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}%';
-        case MachineType.cycle:
-          return 'Level ${widget.interval.resistance ?? 0}';
-        case MachineType.stairmaster:
-          return ''; // SPM removed
-      }
-    }
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.machineType) {
       case MachineType.treadmill:
-        return '${widget.interval.grade?.toStringAsFixed(1) ?? '0.0'}%';
+        return l10n.inclineValue(
+          LocalizedFormat.decimal(context, widget.interval.grade ?? 0),
+        );
       case MachineType.cycle:
-        return 'Level ${widget.interval.resistance ?? 0}';
+        return l10n.resistanceColon(
+          LocalizedFormat.decimal(
+            context,
+            widget.interval.resistance ?? 0,
+            decimalDigits: 0,
+          ),
+        );
       case MachineType.stairmaster:
         return ''; // SPM removed
     }
@@ -2165,7 +2170,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                   children: speedValues.map((speed) {
                     return Center(
                       child: Text(
-                        speed.toStringAsFixed(1),
+                        LocalizedFormat.decimal(context, speed),
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -2261,7 +2266,7 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                   children: gradeValues.map((grade) {
                     return Center(
                       child: Text(
-                        grade.toStringAsFixed(1),
+                        LocalizedFormat.decimal(context, grade),
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -2388,7 +2393,11 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                   children: rpms.map((rpm) {
                     return Center(
                       child: Text(
-                        rpm.toString(),
+                        LocalizedFormat.decimal(
+                          context,
+                          rpm,
+                          decimalDigits: 0,
+                        ),
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -2496,7 +2505,11 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                   children: resistances.map((resistance) {
                     return Center(
                       child: Text(
-                        resistance.toString(),
+                        LocalizedFormat.decimal(
+                          context,
+                          resistance,
+                          decimalDigits: 0,
+                        ),
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -2585,7 +2598,11 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
                   children: levels.map((level) {
                     return Center(
                       child: Text(
-                        level.toString(),
+                        LocalizedFormat.decimal(
+                          context,
+                          level,
+                          decimalDigits: 0,
+                        ),
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -2604,98 +2621,40 @@ class _EditableIntervalRowState extends State<_EditableIntervalRow>
 
   // _showSpmPicker removed - SPM feature removed
 
-  String _getField1Suffix() {
-    switch (widget.machineType) {
-      case MachineType.treadmill:
-        // Return suffix based on user's unit setting
-        return widget.settingsProvider.measurement == 'mph' ? ' mph' : ' km/h';
-      case MachineType.cycle:
-        return ' RPM';
-      case MachineType.stairmaster:
-        return '';
-    }
-  }
-
-  String _getField2Suffix() {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      // Fallback if localization not available
-      switch (widget.machineType) {
-        case MachineType.treadmill:
-          return '%';
-        case MachineType.cycle:
-          return '';
-        case MachineType.stairmaster:
-          return ''; // SPM removed
-      }
-    }
-    switch (widget.machineType) {
-      case MachineType.treadmill:
-        return '%';
-      case MachineType.cycle:
-        return '';
-      case MachineType.stairmaster:
-        return ''; // SPM removed
-    }
-  }
-
   String _getEditableField1Text() {
-    final value = widget.machineType == MachineType.treadmill
-        ? _speedKmh.toStringAsFixed(1)
-        : widget.machineType == MachineType.cycle
-            ? _rpm.toString()
-            : _level.toString();
-    return '${_getField1Prefix()}$value${_getField1Suffix()}';
+    final l10n = AppLocalizations.of(context)!;
+    switch (widget.machineType) {
+      case MachineType.treadmill:
+        final value = LocalizedFormat.decimal(context, _speedKmh);
+        final unit =
+            widget.settingsProvider.measurement == 'mph' ? 'mph' : 'km/h';
+        return '$value $unit';
+      case MachineType.cycle:
+        return l10n.rpmValue(
+          LocalizedFormat.decimal(context, _rpm, decimalDigits: 0),
+        );
+      case MachineType.stairmaster:
+        return l10n.levelColon(
+          LocalizedFormat.decimal(context, _level, decimalDigits: 0),
+        );
+    }
   }
 
   String _getEditableField2Text() {
-    final value = widget.machineType == MachineType.treadmill
-        ? _grade.toStringAsFixed(1)
-        : _resistance.toString();
-    return '${_getField2Prefix()}$value${_getField2Suffix()}';
-  }
-
-  String _getField1Prefix() {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      // Fallback if localization not available
-      switch (widget.machineType) {
-        case MachineType.treadmill:
-          return '';
-        case MachineType.cycle:
-          return '';
-        case MachineType.stairmaster:
-          return 'Level ';
-      }
-    }
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.machineType) {
       case MachineType.treadmill:
-        return '';
+        return l10n.inclineValue(
+          LocalizedFormat.decimal(context, _grade),
+        );
       case MachineType.cycle:
-        return '';
-      case MachineType.stairmaster:
-        return 'Level ';
-    }
-  }
-
-  String _getField2Prefix() {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) {
-      // Fallback if localization not available
-      switch (widget.machineType) {
-        case MachineType.treadmill:
-          return '';
-        case MachineType.cycle:
-          return 'Level ';
-        case MachineType.stairmaster:
-          return '';
-      }
-    }
-    switch (widget.machineType) {
-      case MachineType.treadmill:
-        return '';
-      case MachineType.cycle:
-        return 'Level ';
+        return l10n.resistanceColon(
+          LocalizedFormat.decimal(
+            context,
+            _resistance,
+            decimalDigits: 0,
+          ),
+        );
       case MachineType.stairmaster:
         return '';
     }

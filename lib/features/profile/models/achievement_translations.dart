@@ -30,7 +30,7 @@ class AchievementTranslations {
       'treadmill_dist_10k': 'جهاز الجري 10 كم',
       'treadmill_marathon': 'عداء الماراثون',
       'treadmill_dist_100k': 'جهاز الجري 100 كم',
-      'treadmill_dist_500k': 'عداء ألتروا',
+      'treadmill_dist_500k': 'عداء ألترا',
       'treadmill_dist_1000k': 'مسافر حول العالم',
       'treadmill_5k': 'جري 5 كم',
       'treadmill_10k': 'جري 10 كم',
@@ -74,12 +74,12 @@ class AchievementTranslations {
       'streak_30': '30-dages stime',
       'streak_60': '60-dages stime',
       'streak_90': '90-dages stime',
-      'duration_30': '30m afslutter',
-      'duration_60': '60m afslutter',
-      'duration_90': '90m afslutter',
-      'total_duration_10h': 'Tidsakkumulator',
-      'total_duration_50h': 'Jernakkumulering',
-      'total_duration_100h': 'Century Hour',
+      'duration_30': '30 minutter gennemført',
+      'duration_60': '60 minutter gennemført',
+      'duration_90': '90 minutter gennemført',
+      'total_duration_10h': '10-timersklubben',
+      'total_duration_50h': '50-timersklubben',
+      'total_duration_100h': '100-timersklubben',
       'total_duration_500h': 'Tidsmester',
       'treadmill_first': 'Første løb',
       'treadmill_runs_10': 'Løbebåndsfan',
@@ -100,9 +100,9 @@ class AchievementTranslations {
       'cycle_rides_10': 'Cykelentusiast',
       'cycle_rides_50': 'Vejens erobrer',
       'cycle_rides_100': 'Guldpedalist',
-      'cycle_rpm': 'RPM Master',
-      'cycle_rpm_100': 'Kadence motor',
-      'cycle_rpm_110': 'Hyper Rotator',
+      'cycle_rpm': 'RPM-mester',
+      'cycle_rpm_100': 'Kadencemotor',
+      'cycle_rpm_110': 'Kadenceelite',
       'cycle_dist_50k': 'Cykling 50k',
       'cycle_dist_200k': 'Cykling 200k',
       'cycle_dist_500k': 'Langtursrytter',
@@ -119,8 +119,8 @@ class AchievementTranslations {
     'de': {
       'first_workout': 'Erste Schritte',
       'workouts_5': 'Regelmäßige Gewohnheit',
-      'workouts_10': 'Workout Bronze',
-      'workouts_25': 'Workout Silber',
+      'workouts_10': 'Trainingsbronze',
+      'workouts_25': 'Trainingssilber',
       'workouts_50': 'Aktiver Enthusiast',
       'workouts_100': 'Century Club',
       'workouts_250': 'Fitness-Handwerker',
@@ -169,7 +169,7 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Kletterlehrling',
       'stairmaster_climbs_50': 'Everest-Expedition',
       'stairmaster_climbs_100': 'Meister der Treppen',
-      'stairmaster_level': 'Everest-Level',
+      'stairmaster_level': 'Everest-Stufe',
       'stairmaster_level_12': 'Große Höhe',
       'stairmaster_level_15': 'Wolkenkletterer',
       'stairmaster_time_10h': '10 Std. Stairmaster',
@@ -193,10 +193,10 @@ class AchievementTranslations {
       'duration_30': '30m Finisher',
       'duration_60': '60m Finisher',
       'duration_90': '90m Finisher',
-      'total_duration_10h': 'Time Accumulator',
-      'total_duration_50h': 'Iron Accumulation',
-      'total_duration_100h': 'Century Hour',
-      'total_duration_500h': 'Master of Time',
+      'total_duration_10h': '10-Hour Club',
+      'total_duration_50h': '50-Hour Club',
+      'total_duration_100h': '100-Hour Club',
+      'total_duration_500h': '500-Hour Club',
       'treadmill_first': 'First Run',
       'treadmill_runs_10': 'Treadmill Fan',
       'treadmill_runs_50': 'Belt Tamer',
@@ -209,19 +209,19 @@ class AchievementTranslations {
       'treadmill_5k': '5K Run',
       'treadmill_10k': '10K Run',
       'treadmill_half_marathon': 'Half Marathon',
-      'treadmill_speed_12': 'Pace Runner',
+      'treadmill_speed_12': 'Pace Setter',
       'treadmill_speed_16': 'Wind Rider',
       'treadmill_speed_20': 'Sonic Boom',
       'cycle_first': 'First Ride',
       'cycle_rides_10': 'Cycle Enthusiast',
       'cycle_rides_50': 'Road Conqueror',
-      'cycle_rides_100': 'Golden Pedalist',
-      'cycle_rpm': 'RPM Master',
-      'cycle_rpm_100': 'Cadence Engine',
-      'cycle_rpm_110': 'Hyper Rotator',
+      'cycle_rides_100': 'Golden Pedals',
+      'cycle_rpm': 'RPM Pro',
+      'cycle_rpm_100': 'Cadence Pro',
+      'cycle_rpm_110': 'Cadence Elite',
       'cycle_dist_50k': 'Cycling 50k',
       'cycle_dist_200k': 'Cycling 200k',
-      'cycle_dist_500k': 'Long Tourer',
+      'cycle_dist_500k': 'Long-Haul Rider',
       'cycle_dist_1000k': 'Million Meter Rider',
       'stairmaster_first': 'First Step',
       'stairmaster_climbs_10': 'Climber Apprentice',
@@ -564,7 +564,7 @@ class AchievementTranslations {
       'cycle_rides_10': 'Sykkelentusiast',
       'cycle_rides_50': 'Veiens erobrer',
       'cycle_rides_100': 'Gullpedalist',
-      'cycle_rpm': 'RPM Master',
+      'cycle_rpm': 'RPM-mester',
       'cycle_rpm_100': 'Kadensmotor',
       'cycle_rpm_110': 'Hyper Rotator',
       'cycle_dist_50k': 'Sykling 50k',
@@ -583,8 +583,8 @@ class AchievementTranslations {
     'nl': {
       'first_workout': 'Eerste stappen',
       'workouts_5': 'Regelmatige gewoonte',
-      'workouts_10': 'Workout Brons',
-      'workouts_25': 'Workout Zilver',
+      'workouts_10': 'Trainingsbrons',
+      'workouts_25': 'Trainingszilver',
       'workouts_50': 'Actieve enthousiast',
       'workouts_100': 'Century Club',
       'workouts_250': 'Fitness vakman',
@@ -712,9 +712,9 @@ class AchievementTranslations {
       'streak_30': 'Серия 30 дней',
       'streak_60': 'Серия 60 дней',
       'streak_90': 'Серия 90 дней',
-      'duration_30': '30 минут на вылет',
-      'duration_60': '60 минут на вылет',
-      'duration_90': '90 минут на вылет',
+      'duration_30': '30 минут без остановки',
+      'duration_60': 'Час без остановки',
+      'duration_90': '90 минут без остановки',
       'total_duration_10h': 'Накопитель времени',
       'total_duration_50h': 'Железное время',
       'total_duration_100h': 'Век тренировок',
@@ -950,22 +950,27 @@ class AchievementTranslations {
       'duration_30': 'أكملت تمرينًا لمدة لا تقل عن 30 دقيقة.',
       'duration_60': 'أكملت تمرينًا لمدة لا تقل عن 60 دقيقة.',
       'duration_90': 'أكملت تمرينًا لمدة لا تقل عن 90 دقيقة.',
-      'total_duration_10h': 'بلغت 10 ساعات من 누적 تمرين.',
-      'total_duration_50h': 'بلغت 50 ساعة من 누적 تمرين.',
-      'total_duration_100h': 'بلغت 100 ساعة من 누적 تمرين.',
-      'total_duration_500h': 'بلغت 500 ساعة من 누적 تمرين.',
+      'total_duration_10h': 'بلغ إجمالي وقت التمرين 10 ساعات.',
+      'total_duration_50h': 'بلغ إجمالي وقت التمرين 50 ساعة.',
+      'total_duration_100h': 'بلغ إجمالي وقت التمرين 100 ساعة.',
+      'total_duration_500h': 'بلغ إجمالي وقت التمرين 500 ساعة.',
       'treadmill_first': 'أكملت جلسة جري واحدة على جهاز الجري.',
       'treadmill_runs_10': 'أكملت 10 جلسات جري على جهاز الجري.',
       'treadmill_runs_50': 'أكملت 50 جلسة جري على جهاز الجري.',
       'treadmill_runs_100': 'أكملت 100 جلسة جري على جهاز الجري.',
       'treadmill_dist_10k': 'وصلت المسافة التراكمية على جهاز الجري إلى 10 كم.',
-      'treadmill_marathon': 'وصلت المسافة التراكمية على جهاز الجري إلى 42.195 كم.',
-      'treadmill_dist_100k': 'وصلت المسافة التراكمية على جهاز الجري إلى 100 كم.',
-      'treadmill_dist_500k': 'وصلت المسافة التراكمية على جهاز الجري إلى 500 كم.',
-      'treadmill_dist_1000k': 'وصلت المسافة التراكمية على جهاز الجري إلى 1000 كم.',
+      'treadmill_marathon':
+          'وصلت المسافة التراكمية على جهاز الجري إلى 42.195 كم.',
+      'treadmill_dist_100k':
+          'وصلت المسافة التراكمية على جهاز الجري إلى 100 كم.',
+      'treadmill_dist_500k':
+          'وصلت المسافة التراكمية على جهاز الجري إلى 500 كم.',
+      'treadmill_dist_1000k':
+          'وصلت المسافة التراكمية على جهاز الجري إلى 1000 كم.',
       'treadmill_5k': 'أكملت جريًا فرديًا لمسافة لا تقل عن 5 كم.',
       'treadmill_10k': 'أكملت جريًا فرديًا لمسافة لا تقل عن 10 كم.',
-      'treadmill_half_marathon': 'أكملت جريًا فرديًا لمسافة لا تقل عن 21.0975 كم.',
+      'treadmill_half_marathon':
+          'أكملت جريًا فرديًا لمسافة لا تقل عن 21.0975 كم.',
       'treadmill_speed_12': 'سجلت متوسط سرعة يبلغ 12 كم/ساعة أو أكثر.',
       'treadmill_speed_16': 'سجلت متوسط سرعة يبلغ 16 كم/ساعة أو أكثر.',
       'treadmill_speed_20': 'سجلت متوسط سرعة يبلغ 20 كم/ساعة أو أكثر.',
@@ -984,13 +989,17 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'أكملت 10 جلسات على جهاز السلالم.',
       'stairmaster_climbs_50': 'أكملت 50 جلسة على جهاز السلالم.',
       'stairmaster_climbs_100': 'أكملت 100 جلسة على جهاز السلالم.',
-      'stairmaster_level': 'أكملت جلسة على جهاز السلالم بمتوسط مستوى 10 أو أكثر.',
-      'stairmaster_level_12': 'أكملت جلسة على جهاز السلالم بمتوسط مستوى 12 أو أكثر.',
-      'stairmaster_level_15': 'أكملت جلسة على جهاز السلالم بمتوسط مستوى 15 أو أكثر.',
-      'stairmaster_time_10h': 'وصل الوقت التراكمي على جهاز السلالم إلى 10 ساعات.',
+      'stairmaster_level':
+          'أكملت جلسة على جهاز السلالم بمتوسط مستوى 10 أو أكثر.',
+      'stairmaster_level_12':
+          'أكملت جلسة على جهاز السلالم بمتوسط مستوى 12 أو أكثر.',
+      'stairmaster_level_15':
+          'أكملت جلسة على جهاز السلالم بمتوسط مستوى 15 أو أكثر.',
+      'stairmaster_time_10h':
+          'وصل الوقت التراكمي على جهاز السلالم إلى 10 ساعات.',
     },
     'da': {
-      'first_workout': 'Gennemførte din eerste træningssession.',
+      'first_workout': 'Gennemførte din første træningssession.',
       'workouts_5': 'Gennemførte 5 træningssessioner.',
       'workouts_10': 'Gennemførte 10 træningssessioner.',
       'workouts_25': 'Gennemførte 25 træningssessioner.',
@@ -1023,17 +1032,24 @@ class AchievementTranslations {
       'treadmill_dist_1000k': 'Akkumuleret løbebåndsdistance nåede 1000 km.',
       'treadmill_5k': 'Gennemførte et enkelt løb på mindst 5 km.',
       'treadmill_10k': 'Gennemførte et enkelt løb på mindst 10 km.',
-      'treadmill_half_marathon': 'Gennemførte et enkelt løb på mindst 21,0975 km.',
-      'treadmill_speed_12': 'Registrerede en gennemsnitshastighed på 12 km/t eller derover.',
-      'treadmill_speed_16': 'Registrerede en gennemsnitshastighed på 16 km/t eller derover.',
-      'treadmill_speed_20': 'Registrerede en gennemsnitshastighed på 20 km/t eller derover.',
+      'treadmill_half_marathon':
+          'Gennemførte et enkelt løb på mindst 21,0975 km.',
+      'treadmill_speed_12':
+          'Registrerede en gennemsnitshastighed på 12 km/t eller derover.',
+      'treadmill_speed_16':
+          'Registrerede en gennemsnitshastighed på 16 km/t eller derover.',
+      'treadmill_speed_20':
+          'Registrerede en gennemsnitshastighed på 20 km/t eller derover.',
       'cycle_first': 'Gennemførte én cykelsession.',
       'cycle_rides_10': 'Gennemførte 10 cykelsessioner.',
       'cycle_rides_50': 'Gennemførte 50 cykelsessioner.',
       'cycle_rides_100': 'Gennemførte 100 cykelsessioner.',
-      'cycle_rpm': 'Gennemførte en cykelsession med gennemsnitligt 90 RPM eller derover.',
-      'cycle_rpm_100': 'Gennemførte en cykelsession med gennemsnitligt 100 RPM eller derover.',
-      'cycle_rpm_110': 'Gennemførte en cykelsession med gennemsnitligt 110 RPM eller derover.',
+      'cycle_rpm':
+          'Gennemførte en cykelsession med gennemsnitligt 90 RPM eller derover.',
+      'cycle_rpm_100':
+          'Gennemførte en cykelsession med gennemsnitligt 100 RPM eller derover.',
+      'cycle_rpm_110':
+          'Gennemførte en cykelsession med gennemsnitligt 110 RPM eller derover.',
       'cycle_dist_50k': 'Akkumuleret cykelafstand nåede 50 km.',
       'cycle_dist_200k': 'Akkumuleret cykelafstand nåede 200 km.',
       'cycle_dist_500k': 'Akkumuleret cykelafstand nåede 500 km.',
@@ -1042,10 +1058,14 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Gennemførte 10 sessioner på trappemaskine.',
       'stairmaster_climbs_50': 'Gennemførte 50 sessioner på trappemaskine.',
       'stairmaster_climbs_100': 'Gennemførte 100 sessioner på trappemaskine.',
-      'stairmaster_level': 'Gennemførte en trappemaskinesession med gennemsnitligt niveau 10 eller derover.',
-      'stairmaster_level_12': 'Gennemførte en trappemaskinesession med gennemsnitligt niveau 12 eller derover.',
-      'stairmaster_level_15': 'Gennemførte en trappemaskinesession med gennemsnitligt niveau 15 eller derover.',
-      'stairmaster_time_10h': 'Akkumuleret tid på trappemaskine nåede 10 timer.',
+      'stairmaster_level':
+          'Gennemførte en trappemaskinesession med gennemsnitligt niveau 10 eller derover.',
+      'stairmaster_level_12':
+          'Gennemførte en trappemaskinesession med gennemsnitligt niveau 12 eller derover.',
+      'stairmaster_level_15':
+          'Gennemførte en trappemaskinesession med gennemsnitligt niveau 15 eller derover.',
+      'stairmaster_time_10h':
+          'Akkumuleret tid på trappemaskine nåede 10 timer.',
     },
     'de': {
       'first_workout': 'Erste Trainingseinheit abgeschlossen.',
@@ -1075,35 +1095,51 @@ class AchievementTranslations {
       'treadmill_runs_50': '50 Laufeinheiten auf dem Laufband abgeschlossen.',
       'treadmill_runs_100': '100 Laufeinheiten auf dem Laufband abgeschlossen.',
       'treadmill_dist_10k': 'Kumulierte Laufband-Distanz von 10 km erreicht.',
-      'treadmill_marathon': 'Kumulierte Laufband-Distanz von 42,195 km erreicht.',
+      'treadmill_marathon':
+          'Kumulierte Laufband-Distanz von 42,195 km erreicht.',
       'treadmill_dist_100k': 'Kumulierte Laufband-Distanz von 100 km erreicht.',
       'treadmill_dist_500k': 'Kumulierte Laufband-Distanz von 500 km erreicht.',
-      'treadmill_dist_1000k': 'Kumulierte Laufband-Distanz von 1000 km erreicht.',
+      'treadmill_dist_1000k':
+          'Kumulierte Laufband-Distanz von 1000 km erreicht.',
       'treadmill_5k': 'Einzelnen Lauf von mindestens 5 km abgeschlossen.',
       'treadmill_10k': 'Einzelnen Lauf von mindestens 10 km abgeschlossen.',
-      'treadmill_half_marathon': 'Einzelnen Lauf von mindestens 21,0975 km abgeschlossen.',
-      'treadmill_speed_12': 'Eine Durchschnittsgeschwindigkeit von 12 km/h oder mehr aufgezeichnet.',
-      'treadmill_speed_16': 'Eine Durchschnittsgeschwindigkeit von 16 km/h oder mehr aufgezeichnet.',
-      'treadmill_speed_20': 'Eine Durchschnittsgeschwindigkeit von 20 km/h oder mehr aufgezeichnet.',
+      'treadmill_half_marathon':
+          'Einzelnen Lauf von mindestens 21,0975 km abgeschlossen.',
+      'treadmill_speed_12':
+          'Eine Durchschnittsgeschwindigkeit von 12 km/h oder mehr aufgezeichnet.',
+      'treadmill_speed_16':
+          'Eine Durchschnittsgeschwindigkeit von 16 km/h oder mehr aufgezeichnet.',
+      'treadmill_speed_20':
+          'Eine Durchschnittsgeschwindigkeit von 20 km/h oder mehr aufgezeichnet.',
       'cycle_first': 'Erste Radeinheit abgeschlossen.',
       'cycle_rides_10': '10 Radeinheiten abgeschlossen.',
       'cycle_rides_50': '50 Radeinheiten abgeschlossen.',
       'cycle_rides_100': '100 Radeinheiten abgeschlossen.',
-      'cycle_rpm': 'Radeinheit mit durchschnittlich 90 RPM oder mehr abgeschlossen.',
-      'cycle_rpm_100': 'Radeinheit mit durchschnittlich 100 RPM oder mehr abgeschlossen.',
-      'cycle_rpm_110': 'Radeinheit mit durchschnittlich 110 RPM oder mehr abgeschlossen.',
+      'cycle_rpm':
+          'Radeinheit mit durchschnittlich 90 RPM oder mehr abgeschlossen.',
+      'cycle_rpm_100':
+          'Radeinheit mit durchschnittlich 100 RPM oder mehr abgeschlossen.',
+      'cycle_rpm_110':
+          'Radeinheit mit durchschnittlich 110 RPM oder mehr abgeschlossen.',
       'cycle_dist_50k': 'Kumulierte Rad-Distanz von 50 km erreicht.',
       'cycle_dist_200k': 'Kumulierte Rad-Distanz von 200 km erreicht.',
       'cycle_dist_500k': 'Kumulierte Rad-Distanz von 500 km erreicht.',
       'cycle_dist_1000k': 'Kumulierte Rad-Distanz von 1000 km erreicht.',
-      'stairmaster_first': 'Erste Einheit auf der Rolltreppe abgeschlossen.',
-      'stairmaster_climbs_10': '10 Einheiten auf der Rolltreppe abgeschlossen.',
-      'stairmaster_climbs_50': '50 Einheiten auf der Rolltreppe abgeschlossen.',
-      'stairmaster_climbs_100': '100 Einheiten auf der Rolltreppe abgeschlossen.',
-      'stairmaster_level': 'Einheit auf der Rolltreppe mit durchschnittlich Level 10 oder mehr abgeschlossen.',
-      'stairmaster_level_12': 'Einheit auf der Rolltreppe mit durchschnittlich Level 12 oder mehr abgeschlossen.',
-      'stairmaster_level_15': 'Einheit auf der Rolltreppe mit durchschnittlich Level 15 oder mehr abgeschlossen.',
-      'stairmaster_time_10h': 'Kumulierte Zeit auf der Rolltreppe von 10 Stunden erreicht.',
+      'stairmaster_first': 'Erste Einheit auf dem StairMaster abgeschlossen.',
+      'stairmaster_climbs_10':
+          '10 Einheiten auf dem StairMaster abgeschlossen.',
+      'stairmaster_climbs_50':
+          '50 Einheiten auf dem StairMaster abgeschlossen.',
+      'stairmaster_climbs_100':
+          '100 Einheiten auf dem StairMaster abgeschlossen.',
+      'stairmaster_level':
+          'Eine Einheit auf dem Treppensteiger mit durchschnittlich Stufe 10 oder höher abgeschlossen.',
+      'stairmaster_level_12':
+          'Eine Einheit auf dem Treppensteiger mit durchschnittlich Stufe 12 oder höher abgeschlossen.',
+      'stairmaster_level_15':
+          'Eine Einheit auf dem Treppensteiger mit durchschnittlich Stufe 15 oder höher abgeschlossen.',
+      'stairmaster_time_10h':
+          '10 Stunden Gesamtzeit auf dem StairMaster erreicht.',
     },
     'en': {
       'first_workout': 'Completed your first workout session.',
@@ -1126,8 +1162,10 @@ class AchievementTranslations {
       'duration_90': 'Completed a workout of at least 90 minutes.',
       'total_duration_10h': 'Reached 10 hours of cumulative workout duration.',
       'total_duration_50h': 'Reached 50 hours of cumulative workout duration.',
-      'total_duration_100h': 'Reached 100 hours of cumulative workout duration.',
-      'total_duration_500h': 'Reached 500 hours of cumulative workout duration.',
+      'total_duration_100h':
+          'Reached 100 hours of cumulative workout duration.',
+      'total_duration_500h':
+          'Reached 500 hours of cumulative workout duration.',
       'treadmill_first': 'Completed a treadmill running session.',
       'treadmill_runs_10': 'Completed 10 treadmill running sessions.',
       'treadmill_runs_50': 'Completed 50 treadmill running sessions.',
@@ -1139,7 +1177,8 @@ class AchievementTranslations {
       'treadmill_dist_1000k': 'Cumulative treadmill distance reached 1000 km.',
       'treadmill_5k': 'Completed a single run of at least 5 km.',
       'treadmill_10k': 'Completed a single run of at least 10 km.',
-      'treadmill_half_marathon': 'Completed a single run of at least 21.0975 km.',
+      'treadmill_half_marathon':
+          'Completed a single run of at least 21.0975 km.',
       'treadmill_speed_12': 'Recorded an average speed of 12 km/h or more.',
       'treadmill_speed_16': 'Recorded an average speed of 16 km/h or more.',
       'treadmill_speed_20': 'Recorded an average speed of 20 km/h or more.',
@@ -1148,8 +1187,10 @@ class AchievementTranslations {
       'cycle_rides_50': 'Completed 50 cycling sessions.',
       'cycle_rides_100': 'Completed 100 cycling sessions.',
       'cycle_rpm': 'Completed a cycling session with an average RPM of 90+.',
-      'cycle_rpm_100': 'Completed a cycling session with an average RPM of 100+.',
-      'cycle_rpm_110': 'Completed a cycling session with an average RPM of 110+.',
+      'cycle_rpm_100':
+          'Completed a cycling session with an average RPM of 100+.',
+      'cycle_rpm_110':
+          'Completed a cycling session with an average RPM of 110+.',
       'cycle_dist_50k': 'Cumulative cycling distance reached 50 km.',
       'cycle_dist_200k': 'Cumulative cycling distance reached 200 km.',
       'cycle_dist_500k': 'Cumulative cycling distance reached 500 km.',
@@ -1158,10 +1199,14 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Completed 10 Stairmaster sessions.',
       'stairmaster_climbs_50': 'Completed 50 Stairmaster sessions.',
       'stairmaster_climbs_100': 'Completed 100 Stairmaster sessions.',
-      'stairmaster_level': 'Completed a Stairmaster session with an average level of 10+.',
-      'stairmaster_level_12': 'Completed a Stairmaster session with an average level of 12+.',
-      'stairmaster_level_15': 'Completed a Stairmaster session with an average level of 15+.',
-      'stairmaster_time_10h': 'Cumulative Stairmaster duration reached 10 hours.',
+      'stairmaster_level':
+          'Completed a Stairmaster session with an average level of 10+.',
+      'stairmaster_level_12':
+          'Completed a Stairmaster session with an average level of 12+.',
+      'stairmaster_level_15':
+          'Completed a Stairmaster session with an average level of 15+.',
+      'stairmaster_time_10h':
+          'Cumulative Stairmaster duration reached 10 hours.',
     },
     'es': {
       'first_workout': 'Completaste tu primera sesión de entrenamiento.',
@@ -1190,14 +1235,20 @@ class AchievementTranslations {
       'treadmill_runs_10': 'Completaste 10 sesiones de carrera en cinta.',
       'treadmill_runs_50': 'Completaste 50 sesiones de carrera en cinta.',
       'treadmill_runs_100': 'Completaste 100 sesiones de carrera en cinta.',
-      'treadmill_dist_10k': 'La distancia acumulada en cinta alcanzó los 10 km.',
-      'treadmill_marathon': 'La distancia acumulada en cinta alcanzó los 42.195 km.',
-      'treadmill_dist_100k': 'La distancia acumulada en cinta alcanzó los 100 km.',
-      'treadmill_dist_500k': 'La distancia acumulada en cinta alcanzó los 500 km.',
-      'treadmill_dist_1000k': 'La distancia acumulada en cinta alcanzó los 1000 km.',
+      'treadmill_dist_10k':
+          'La distancia acumulada en cinta alcanzó los 10 km.',
+      'treadmill_marathon':
+          'La distancia acumulada en cinta alcanzó los 42.195 km.',
+      'treadmill_dist_100k':
+          'La distancia acumulada en cinta alcanzó los 100 km.',
+      'treadmill_dist_500k':
+          'La distancia acumulada en cinta alcanzó los 500 km.',
+      'treadmill_dist_1000k':
+          'La distancia acumulada en cinta alcanzó los 1000 km.',
       'treadmill_5k': 'Completaste una carrera de al menos 5 km.',
       'treadmill_10k': 'Completaste una carrera de al menos 10 km.',
-      'treadmill_half_marathon': 'Completaste una carrera de al menos 21.0975 km.',
+      'treadmill_half_marathon':
+          'Completaste una carrera de al menos 21.0975 km.',
       'treadmill_speed_12': 'Registraste una velocidad media de 12 km/h o más.',
       'treadmill_speed_16': 'Registraste una velocidad media de 16 km/h o más.',
       'treadmill_speed_20': 'Registraste una velocidad media de 20 km/h o más.',
@@ -1209,9 +1260,12 @@ class AchievementTranslations {
       'cycle_rpm_100': 'Ciclismo con media de 100 RPM o más.',
       'cycle_rpm_110': 'Ciclismo con media de 110 RPM o más.',
       'cycle_dist_50k': 'La distancia acumulada de ciclismo alcanzó los 50 km.',
-      'cycle_dist_200k': 'La distancia acumulada de ciclismo alcanzó los 200 km.',
-      'cycle_dist_500k': 'La distancia acumulada de ciclismo alcanzó los 500 km.',
-      'cycle_dist_1000k': 'La distancia acumulada de ciclismo alcanzó los 1000 km.',
+      'cycle_dist_200k':
+          'La distancia acumulada de ciclismo alcanzó los 200 km.',
+      'cycle_dist_500k':
+          'La distancia acumulada de ciclismo alcanzó los 500 km.',
+      'cycle_dist_1000k':
+          'La distancia acumulada de ciclismo alcanzó los 1000 km.',
       'stairmaster_first': 'Completaste una sesión en escaladora.',
       'stairmaster_climbs_10': 'Completaste 10 sesiones en escaladora.',
       'stairmaster_climbs_50': 'Completaste 50 sesiones en escaladora.',
@@ -1219,7 +1273,8 @@ class AchievementTranslations {
       'stairmaster_level': 'Escaladora con nivel medio de 10 o más.',
       'stairmaster_level_12': 'Escaladora con nivel medio de 12 o más.',
       'stairmaster_level_15': 'Escaladora con nivel medio de 15 o más.',
-      'stairmaster_time_10h': 'La duración acumulada en escaladora alcanzó las 10 horas.',
+      'stairmaster_time_10h':
+          'La duración acumulada en escaladora alcanzó las 10 horas.',
     },
     'fr': {
       'first_workout': 'Vous avez terminé votre première séance.',
@@ -1249,13 +1304,16 @@ class AchievementTranslations {
       'treadmill_runs_50': 'Vous avez fait 50 séances de tapis.',
       'treadmill_runs_100': 'Vous avez fait 100 séances de tapis.',
       'treadmill_dist_10k': 'La distance cumulée sur tapis a atteint 10 km.',
-      'treadmill_marathon': 'La distance cumulée sur tapis a atteint 42,195 km.',
+      'treadmill_marathon':
+          'La distance cumulée sur tapis a atteint 42,195 km.',
       'treadmill_dist_100k': 'La distance cumulée sur tapis a atteint 100 km.',
       'treadmill_dist_500k': 'La distance cumulée sur tapis a atteint 500 km.',
-      'treadmill_dist_1000k': 'La distance cumulée sur tapis a atteint 1000 km.',
+      'treadmill_dist_1000k':
+          'La distance cumulée sur tapis a atteint 1000 km.',
       'treadmill_5k': 'Vous avez fait une course d\'au moins 5 km.',
       'treadmill_10k': 'Vous avez fait une course d\'au moins 10 km.',
-      'treadmill_half_marathon': 'Vous avez fait une course d\'au moins 21,0975 km.',
+      'treadmill_half_marathon':
+          'Vous avez fait une course d\'au moins 21,0975 km.',
       'treadmill_speed_12': 'Vitesse moyenne de 12 km/h ou plus.',
       'treadmill_speed_16': 'Vitesse moyenne de 16 km/h ou plus.',
       'treadmill_speed_20': 'Vitesse moyenne de 20 km/h ou plus.',
@@ -1274,10 +1332,14 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Vous avez fait 10 séances d\'escalier.',
       'stairmaster_climbs_50': 'Vous avez fait 50 séances d\'escalier.',
       'stairmaster_climbs_100': 'Vous avez fait 100 séances d\'escalier.',
-      'stairmaster_level': 'Séance d\'escalier avec niveau moyen de 10 ou plus.',
-      'stairmaster_level_12': 'Séance d\'escalier avec niveau moyen de 12 ou plus.',
-      'stairmaster_level_15': 'Séance d\'escalier avec niveau moyen de 15 ou plus.',
-      'stairmaster_time_10h': 'La durée cumulée d\'escalier a atteint 10 heures.',
+      'stairmaster_level':
+          'Séance d\'escalier avec niveau moyen de 10 ou plus.',
+      'stairmaster_level_12':
+          'Séance d\'escalier avec niveau moyen de 12 ou plus.',
+      'stairmaster_level_15':
+          'Séance d\'escalier avec niveau moyen de 15 ou plus.',
+      'stairmaster_time_10h':
+          'La durée cumulée d\'escalier a atteint 10 heures.',
     },
     'it': {
       'first_workout': 'Hai completato il tuo primo allenamento.',
@@ -1306,14 +1368,20 @@ class AchievementTranslations {
       'treadmill_runs_10': 'Hai completato 10 corse sul tapis roulant.',
       'treadmill_runs_50': 'Hai completato 50 corse sul tapis roulant.',
       'treadmill_runs_100': 'Hai completato 100 corse sul tapis roulant.',
-      'treadmill_dist_10k': 'La distanza totale sul tapis roulant ha raggiunto i 10 km.',
-      'treadmill_marathon': 'La distanza totale sul tapis roulant ha raggiunto i 42.195 km.',
-      'treadmill_dist_100k': 'La distanza totale sul tapis roulant ha raggiunto i 100 km.',
-      'treadmill_dist_500k': 'La distanza totale sul tapis roulant ha raggiunto i 500 km.',
-      'treadmill_dist_1000k': 'La distanza totale sul tapis roulant ha raggiunto i 1000 km.',
+      'treadmill_dist_10k':
+          'La distanza totale sul tapis roulant ha raggiunto i 10 km.',
+      'treadmill_marathon':
+          'La distanza totale sul tapis roulant ha raggiunto i 42.195 km.',
+      'treadmill_dist_100k':
+          'La distanza totale sul tapis roulant ha raggiunto i 100 km.',
+      'treadmill_dist_500k':
+          'La distanza totale sul tapis roulant ha raggiunto i 500 km.',
+      'treadmill_dist_1000k':
+          'La distanza totale sul tapis roulant ha raggiunto i 1000 km.',
       'treadmill_5k': 'Corsa singola di almeno 5 km completata.',
       'treadmill_10k': 'Corsa singola di almeno 10 km completata.',
-      'treadmill_half_marathon': 'Corsa singola di almeno 21.0975 km completata.',
+      'treadmill_half_marathon':
+          'Corsa singola di almeno 21.0975 km completata.',
       'treadmill_speed_12': 'Velocità media registrata di 12 km/h o superiore.',
       'treadmill_speed_16': 'Velocità media registrata di 16 km/h o superiore.',
       'treadmill_speed_20': 'Velocità media registrata di 20 km/h o superiore.',
@@ -1332,10 +1400,14 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Hai completato 10 sessioni sullo stepper.',
       'stairmaster_climbs_50': 'Hai completato 50 sessioni sullo stepper.',
       'stairmaster_climbs_100': 'Hai completato 100 sessioni sullo stepper.',
-      'stairmaster_level': 'Sessione sullo stepper con livello medio 10 o superiore.',
-      'stairmaster_level_12': 'Sessione sullo stepper con livello medio 12 o superiore.',
-      'stairmaster_level_15': 'Sessione sullo stepper con livello medio 15 o superiore.',
-      'stairmaster_time_10h': 'La durata totale sullo stepper ha raggiunto le 10 ore.',
+      'stairmaster_level':
+          'Sessione sullo stepper con livello medio 10 o superiore.',
+      'stairmaster_level_12':
+          'Sessione sullo stepper con livello medio 12 o superiore.',
+      'stairmaster_level_15':
+          'Sessione sullo stepper con livello medio 15 o superiore.',
+      'stairmaster_time_10h':
+          'La durata totale sullo stepper ha raggiunto le 10 ore.',
     },
     'ja': {
       'first_workout': '初めてのワークアウトセッションを完了しました。',
@@ -1487,10 +1559,14 @@ class AchievementTranslations {
       'treadmill_dist_1000k': 'Kumulativ løpebåndsdistanse nådde 1000 km.',
       'treadmill_5k': 'Fullførte en enkelt løpetur på minst 5 km.',
       'treadmill_10k': 'Fullførte en enkelt løpetur på minst 10 km.',
-      'treadmill_half_marathon': 'Fullførte en enkelt løpetur på minst 21,0975 km.',
-      'treadmill_speed_12': 'Registrerte en gjennomsnittshastighet på 12 km/t eller mer.',
-      'treadmill_speed_16': 'Registrerte en gjennomsnittshastighet på 16 km/t eller mer.',
-      'treadmill_speed_20': 'Registrerte en gjennomsnittshastighet på 20 km/t eller mer.',
+      'treadmill_half_marathon':
+          'Fullførte en enkelt løpetur på minst 21,0975 km.',
+      'treadmill_speed_12':
+          'Registrerte en gjennomsnittshastighet på 12 km/t eller mer.',
+      'treadmill_speed_16':
+          'Registrerte en gjennomsnittshastighet på 16 km/t eller mer.',
+      'treadmill_speed_20':
+          'Registrerte en gjennomsnittshastighet på 20 km/t eller mer.',
       'cycle_first': 'Fullførte én sykkelsession.',
       'cycle_rides_10': 'Fullførte 10 sykkelsessioner.',
       'cycle_rides_50': 'Fullførte 50 sykkelsessioner.',
@@ -1506,9 +1582,12 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Fullførte 10 økter på trappemaskin.',
       'stairmaster_climbs_50': 'Fullførte 50 økter på trappemaskin.',
       'stairmaster_climbs_100': 'Fullførte 100 økter på trappemaskin.',
-      'stairmaster_level': 'Trappemaskinøkt med gjennomsnittlig nivå 10 eller mer.',
-      'stairmaster_level_12': 'Trappemaskinøkt med gjennomsnittlig nivå 12 eller mer.',
-      'stairmaster_level_15': 'Trappemaskinøkt med gjennomsnittlig nivå 15 eller mer.',
+      'stairmaster_level':
+          'Trappemaskinøkt med gjennomsnittlig nivå 10 eller mer.',
+      'stairmaster_level_12':
+          'Trappemaskinøkt med gjennomsnittlig nivå 12 eller mer.',
+      'stairmaster_level_15':
+          'Trappemaskinøkt med gjennomsnittlig nivå 15 eller mer.',
       'stairmaster_time_10h': 'Kumulativ tid på trappemaskin nådde 10 timer.',
     },
     'nl': {
@@ -1545,10 +1624,14 @@ class AchievementTranslations {
       'treadmill_dist_1000k': 'Cumulatieve loopbandafstand bereikte 1000 km.',
       'treadmill_5k': 'Eén hardloopsessie van minstens 5 km voltooid.',
       'treadmill_10k': 'Eén hardloopsessie van minstens 10 km voltooid.',
-      'treadmill_half_marathon': 'Eén hardloopsessie van minstens 21,0975 km voltooid.',
-      'treadmill_speed_12': 'Gemiddelde snelheid van 12 km/u of meer geregistreerd.',
-      'treadmill_speed_16': 'Gemiddelde snelheid van 16 km/u of meer geregistreerd.',
-      'treadmill_speed_20': 'Gemiddelde snelheid van 20 km/u of meer geregistreerd.',
+      'treadmill_half_marathon':
+          'Eén hardloopsessie van minstens 21,0975 km voltooid.',
+      'treadmill_speed_12':
+          'Gemiddelde snelheid van 12 km/u of meer geregistreerd.',
+      'treadmill_speed_16':
+          'Gemiddelde snelheid van 16 km/u of meer geregistreerd.',
+      'treadmill_speed_20':
+          'Gemiddelde snelheid van 20 km/u of meer geregistreerd.',
       'cycle_first': 'Eén fietssessie voltooid.',
       'cycle_rides_10': '10 fietssessies voltooid.',
       'cycle_rides_50': '50 fietssessies voltooid.',
@@ -1560,14 +1643,18 @@ class AchievementTranslations {
       'cycle_dist_200k': 'Cumulatieve fietsafstand bereikte 200 km.',
       'cycle_dist_500k': 'Cumulatieve fietsafstand bereikte 500 km.',
       'cycle_dist_1000k': 'Cumulatieve fietsafstand bereikte 1000 km.',
-      'stairmaster_first': 'Erefase op de Stairmaster voltooid.',
+      'stairmaster_first': 'Eerste sessie op de StairMaster voltooid.',
       'stairmaster_climbs_10': '10 sessies op de Stairmaster voltooid.',
       'stairmaster_climbs_50': '50 sessies op de Stairmaster voltooid.',
       'stairmaster_climbs_100': '100 sessies op de Stairmaster voltooid.',
-      'stairmaster_level': 'Stairmastersessie met gemiddeld niveau 10 of meer voltooid.',
-      'stairmaster_level_12': 'Stairmastersessie met gemiddeld niveau 12 of meer voltooid.',
-      'stairmaster_level_15': 'Stairmastersessie met gemiddeld niveau 15 of meer voltooid.',
-      'stairmaster_time_10h': 'Cumulatieve duur op de Stairmaster bereikte 10 uur.',
+      'stairmaster_level':
+          'Stairmastersessie met gemiddeld niveau 10 of meer voltooid.',
+      'stairmaster_level_12':
+          'Stairmastersessie met gemiddeld niveau 12 of meer voltooid.',
+      'stairmaster_level_15':
+          'Stairmastersessie met gemiddeld niveau 15 of meer voltooid.',
+      'stairmaster_time_10h':
+          'Cumulatieve duur op de Stairmaster bereikte 10 uur.',
     },
     'pt': {
       'first_workout': 'Concluiu sua primeira sessão de treino.',
@@ -1590,23 +1677,31 @@ class AchievementTranslations {
       'duration_90': 'Concluiu um treino de pelo menos 90 minutos.',
       'total_duration_10h': 'Alcançou 10 horas de duração acumulada de treino.',
       'total_duration_50h': 'Alcançou 50 horas de duração acumulada de treino.',
-      'total_duration_100h': 'Alcançou 100 horas de duração acumulada de treino.',
-      'total_duration_500h': 'Alcançou 500 horas de duração acumulada de treino.',
+      'total_duration_100h':
+          'Alcançou 100 horas de duração acumulada de treino.',
+      'total_duration_500h':
+          'Alcançou 500 horas de duração acumulada de treino.',
       'treadmill_first': 'Concluiu uma corrida na esteira.',
       'treadmill_runs_10': 'Concluiu 10 sessões de corrida na esteira.',
       'treadmill_runs_50': 'Concluiu 50 sessões de corrida na esteira.',
       'treadmill_runs_100': 'Concluiu 100 sessões de corrida na esteira.',
       'treadmill_dist_10k': 'Distância acumulada na esteira alcançou 10 km.',
-      'treadmill_marathon': 'Distância acumulada na esteira alcançou 42,195 km.',
+      'treadmill_marathon':
+          'Distância acumulada na esteira alcançou 42,195 km.',
       'treadmill_dist_100k': 'Distância acumulada na esteira alcançou 100 km.',
       'treadmill_dist_500k': 'Distância acumulada na esteira alcançou 500 km.',
-      'treadmill_dist_1000k': 'Distância acumulada na esteira alcançou 1000 km.',
+      'treadmill_dist_1000k':
+          'Distância acumulada na esteira alcançou 1000 km.',
       'treadmill_5k': 'Concluiu uma corrida individual de pelo menos 5 km.',
       'treadmill_10k': 'Concluiu uma corrida individual de pelo menos 10 km.',
-      'treadmill_half_marathon': 'Concluiu uma corrida individual de pelo menos 21,0975 km.',
-      'treadmill_speed_12': 'Registrou uma velocidade média de 12 km/h ou mais.',
-      'treadmill_speed_16': 'Registrou uma velocidade média de 16 km/h ou mais.',
-      'treadmill_speed_20': 'Registrou uma velocidade média de 20 km/h ou mais.',
+      'treadmill_half_marathon':
+          'Concluiu uma corrida individual de pelo menos 21,0975 km.',
+      'treadmill_speed_12':
+          'Registrou uma velocidade média de 12 km/h ou mais.',
+      'treadmill_speed_16':
+          'Registrou uma velocidade média de 16 km/h ou mais.',
+      'treadmill_speed_20':
+          'Registrou uma velocidade média de 20 km/h ou mais.',
       'cycle_first': 'Concluiu uma sessão de ciclismo.',
       'cycle_rides_10': 'Concluiu 10 sessões de ciclismo.',
       'cycle_rides_50': 'Concluiu 50 sessões de ciclismo.',
@@ -1622,13 +1717,17 @@ class AchievementTranslations {
       'stairmaster_climbs_10': 'Concluiu 10 sessões no Stairmaster.',
       'stairmaster_climbs_50': 'Concluiu 50 sessões no Stairmaster.',
       'stairmaster_climbs_100': 'Concluiu 100 sessões no Stairmaster.',
-      'stairmaster_level': 'Sessão no Stairmaster com nível médio de 10 ou mais.',
-      'stairmaster_level_12': 'Sessão no Stairmaster com nível médio de 12 ou mais.',
-      'stairmaster_level_15': 'Sessão no Stairmaster com nível médio de 15 ou mais.',
-      'stairmaster_time_10h': 'Duração acumulada no Stairmaster alcançou 10 horas.',
+      'stairmaster_level':
+          'Sessão no Stairmaster com nível médio de 10 ou mais.',
+      'stairmaster_level_12':
+          'Sessão no Stairmaster com nível médio de 12 ou mais.',
+      'stairmaster_level_15':
+          'Sessão no Stairmaster com nível médio de 15 ou mais.',
+      'stairmaster_time_10h':
+          'Duração acumulada no Stairmaster alcançou 10 horas.',
     },
     'ru': {
-      'first_workout': 'Вы выполнили свою первую тренировку.',
+      'first_workout': 'Первая тренировка завершена.',
       'workouts_5': 'Выполнили 5 тренировок.',
       'workouts_10': 'Выполнили 10 тренировок.',
       'workouts_25': 'Выполнили 25 тренировок.',
@@ -1643,25 +1742,37 @@ class AchievementTranslations {
       'streak_30': 'Тренировки завершены 30 дней подряд.',
       'streak_60': 'Тренировки завершены 60 дней подряд.',
       'streak_90': 'Тренировки завершены 90 дней подряд.',
-      'duration_30': 'Выполнили тренировку продолжительностью не менее 30 минут.',
-      'duration_60': 'Выполнили тренировку продолжительностью не менее 60 минут.',
-      'duration_90': 'Выполнили тренировку продолжительностью не менее 90 минут.',
+      'duration_30':
+          'Выполнили тренировку продолжительностью не менее 30 минут.',
+      'duration_60':
+          'Выполнили тренировку продолжительностью не менее 60 минут.',
+      'duration_90':
+          'Выполнили тренировку продолжительностью не менее 90 минут.',
       'total_duration_10h': 'Накопительное время тренировок достигло 10 часов.',
       'total_duration_50h': 'Накопительное время тренировок достигло 50 часов.',
-      'total_duration_100h': 'Накопительное время тренировок достигло 100 часов.',
-      'total_duration_500h': 'Накопительное время тренировок достигло 500 часов.',
+      'total_duration_100h':
+          'Накопительное время тренировок достигло 100 часов.',
+      'total_duration_500h':
+          'Накопительное время тренировок достигло 500 часов.',
       'treadmill_first': 'Выполнили одну беговую сессию на дорожке.',
       'treadmill_runs_10': 'Выполнили 10 беговых сессий на дорожке.',
       'treadmill_runs_50': 'Выполнили 50 беговых сессий на дорожке.',
       'treadmill_runs_100': 'Выполнили 100 беговых сессий на дорожке.',
-      'treadmill_dist_10k': 'Накопленная дистанция на беговой дорожке достигла 10 км.',
-      'treadmill_marathon': 'Накопленная дистанция на беговой дорожке достигла 42,195 км.',
-      'treadmill_dist_100k': 'Накопленная дистанция на беговой дорожке достигла 100 км.',
-      'treadmill_dist_500k': 'Накопленная дистанция на беговой дорожке достигла 500 км.',
-      'treadmill_dist_1000k': 'Накопленная дистанция на беговой дорожке достигла 1000 км.',
+      'treadmill_dist_10k':
+          'Накопленная дистанция на беговой дорожке достигла 10 км.',
+      'treadmill_marathon':
+          'Накопленная дистанция на беговой дорожке достигла 42,195 км.',
+      'treadmill_dist_100k':
+          'Накопленная дистанция на беговой дорожке достигла 100 км.',
+      'treadmill_dist_500k':
+          'Накопленная дистанция на беговой дорожке достигла 500 км.',
+      'treadmill_dist_1000k':
+          'Накопленная дистанция на беговой дорожке достигла 1000 км.',
       'treadmill_5k': 'Выполнили одиночный забег на расстояние не менее 5 км.',
-      'treadmill_10k': 'Выполнили одиночный забег на расстояние не менее 10 км.',
-      'treadmill_half_marathon': 'Выполнили одиночный забег на расстояние не менее 21,0975 км.',
+      'treadmill_10k':
+          'Выполнили одиночный забег на расстояние не менее 10 км.',
+      'treadmill_half_marathon':
+          'Выполнили одиночный забег на расстояние не менее 21,0975 км.',
       'treadmill_speed_12': 'Зафиксирована средняя скорость 12 км/ч или более.',
       'treadmill_speed_16': 'Зафиксирована средняя скорость 16 км/ч или более.',
       'treadmill_speed_20': 'Зафиксирована средняя скорость 20 км/ч или более.',
@@ -1673,17 +1784,24 @@ class AchievementTranslations {
       'cycle_rpm_100': 'Велотренировка со средним значением 100 RPM или более.',
       'cycle_rpm_110': 'Велотренировка со средним значением 110 RPM или более.',
       'cycle_dist_50k': 'Накопленная дистанция велотренировок достигла 50 км.',
-      'cycle_dist_200k': 'Накопленная дистанция велотренировок достигла 200 км.',
-      'cycle_dist_500k': 'Накопленная дистанция велотренировок достигла 500 км.',
-      'cycle_dist_1000k': 'Накопленная дистанция велотренировок достигла 1000 км.',
+      'cycle_dist_200k':
+          'Накопленная дистанция велотренировок достигла 200 км.',
+      'cycle_dist_500k':
+          'Накопленная дистанция велотренировок достигла 500 км.',
+      'cycle_dist_1000k':
+          'Накопленная дистанция велотренировок достигла 1000 км.',
       'stairmaster_first': 'Выполнили одну тренировку на степпере.',
       'stairmaster_climbs_10': 'Выполнили 10 тренировок на степпере.',
       'stairmaster_climbs_50': 'Выполнили 50 тренировок на степпере.',
       'stairmaster_climbs_100': 'Выполнили 100 тренировок на степпере.',
-      'stairmaster_level': 'Тренировка на степпере со средним уровнем 10 или более.',
-      'stairmaster_level_12': 'Тренировка на степпере со средним уровнем 12 или более.',
-      'stairmaster_level_15': 'Тренировка на степпере со средним уровнем 15 или более.',
-      'stairmaster_time_10h': 'Накопленное время на степпере достигло 10 часов.',
+      'stairmaster_level':
+          'Тренировка на степпере со средним уровнем 10 или более.',
+      'stairmaster_level_12':
+          'Тренировка на степпере со средним уровнем 12 или более.',
+      'stairmaster_level_15':
+          'Тренировка на степпере со средним уровнем 15 или более.',
+      'stairmaster_time_10h':
+          'Накопленное время на степпере достигло 10 часов.',
     },
     'th': {
       'first_workout': 'เสร็จสิ้นการออกกำลังกายครั้งแรกของคุณ',
@@ -1719,7 +1837,8 @@ class AchievementTranslations {
       'treadmill_dist_1000k': 'ระยะทางสะสมบนลู่วิ่งถึง 1000 กม.',
       'treadmill_5k': 'เสร็จสิ้นการวิ่งระยะทางอย่างน้อย 5 กม. ในครั้งเดียว',
       'treadmill_10k': 'เสร็จสิ้นการวิ่งระยะทางอย่างน้อย 10 กม. ในครั้งเดียว',
-      'treadmill_half_marathon': 'เสร็จสิ้นการวิ่งระยะทางอย่างน้อย 21.0975 กม. ในครั้งเดียว',
+      'treadmill_half_marathon':
+          'เสร็จสิ้นการวิ่งระยะทางอย่างน้อย 21.0975 กม. ในครั้งเดียว',
       'treadmill_speed_12': 'บันทึกความเร็วเฉลี่ย 12 กม./ชม. ขึ้นไป',
       'treadmill_speed_16': 'บันทึกความเร็วเฉลี่ย 16 กม./ชม. ขึ้นไป',
       'treadmill_speed_20': 'บันทึกความเร็วเฉลี่ย 20 กม./ชม. ขึ้นไป',
@@ -1797,12 +1916,15 @@ class AchievementTranslations {
       'stairmaster_climbs_50': 'Hoàn thành 50 buổi tập trên máy leo thang.',
       'stairmaster_climbs_100': 'Hoàn thành 100 buổi tập trên máy leo thang.',
       'stairmaster_level': 'Buổi leo thang với cấp độ trung bình 10 trở lên.',
-      'stairmaster_level_12': 'Buổi leo thang với cấp độ trung bình 12 trở lên.',
-      'stairmaster_level_15': 'Buổi leo thang với cấp độ trung bình 15 trở lên.',
-      'stairmaster_time_10h': 'Thời lượng tích lũy trên máy leo thang đạt 10 giờ.',
+      'stairmaster_level_12':
+          'Buổi leo thang với cấp độ trung bình 12 trở lên.',
+      'stairmaster_level_15':
+          'Buổi leo thang với cấp độ trung bình 15 trở lên.',
+      'stairmaster_time_10h':
+          'Thời lượng tích lũy trên máy leo thang đạt 10 giờ.',
     },
     'zh': {
-      'first_workout': '完成了您的首次运动训练。',
+      'first_workout': '完成了首次训练。',
       'workouts_5': '完成了 5 次运动训练。',
       'workouts_10': '完成了 10 次运动训练。',
       'workouts_25': '完成了 25 次运动训练。',
@@ -1856,18 +1978,18 @@ class AchievementTranslations {
       'stairmaster_climbs_100': '完成了 100 次登山机训练。',
       'stairmaster_level': '完成了单次平均难度在 10 级或以上的登山。',
       'stairmaster_level_12': '完成了单次平均难度在 12 级或以上的登山。',
-      'stairmaster_level_15': '完成了单次平均难度在 15 级 or 以上的登山。',
+      'stairmaster_level_15': '完成一次平均等级达到 15 级或以上的登阶机训练。',
       'stairmaster_time_10h': '登山机累计时间达到 10 小时。',
     },
   };
 
   static const Map<String, Map<String, String>> _uiStrings = {
     'ar': {
-      'grand_master': '그랜드 마스터 👑', // Let's keep icons but translate text
-      'pace_master': '페이스 마스터 ⚡',
-      'pro_runner': '프로 러너 🏃',
-      'active_beginner': '열정적인 비기너 🌱',
-      'trainee': '러너 훈련생 🏃',
+      'grand_master': 'الأستاذ الأكبر 👑',
+      'pace_master': 'خبير الوتيرة ⚡',
+      'pro_runner': 'عدّاء محترف 🏃',
+      'active_beginner': 'مبتدئ نشيط 🌱',
+      'trainee': 'عدّاء متدرّب 🏃',
       'unlocked_x_of_y': 'تم إلغاء قفل {unlocked} من أصل {total} من الإنجازات',
       'collect_desc': 'اجمع شارات مشرفة عبر جميع التمارين!',
       'filter_all': 'الكل',
@@ -1884,11 +2006,11 @@ class AchievementTranslations {
       'status_locked': 'مغلق',
     },
     'da': {
-      'grand_master': 'Grand Master 👑',
-      'pace_master': 'Pace Master ⚡',
-      'pro_runner': 'Pro Runner 🏃',
+      'grand_master': 'Stormester 👑',
+      'pace_master': 'Tempomester ⚡',
+      'pro_runner': 'Professionel løber 🏃',
       'active_beginner': 'Aktiv begynder 🌱',
-      'trainee': 'Runner Trainee 🏃',
+      'trainee': 'Løberaspirant 🏃',
       'unlocked_x_of_y': 'Låst op for {unlocked} af {total} præstationer',
       'collect_desc': 'Saml hæderlige badges på tværs af alle rutiner!',
       'filter_all': 'Alle',
@@ -1921,7 +2043,8 @@ class AchievementTranslations {
       'unlocked_at': 'Freigeschaltet am: {date}',
       'awesome': 'Großartig!',
       'celebration_title': 'Neuer Erfolg freigeschaltet!',
-      'celebration_desc': 'Herzlichen Glückwunsch! Du hast ein neues Abzeichen freigeschaltet.',
+      'celebration_desc':
+          'Herzlichen Glückwunsch! Du hast ein neues Abzeichen freigeschaltet.',
       'status_unlocked': 'Freigeschaltet',
       'status_locked': 'Gesperrt',
     },
@@ -1974,7 +2097,8 @@ class AchievementTranslations {
       'active_beginner': 'Débutant Actif 🌱',
       'trainee': 'Athlète Stagiaire 🏃',
       'unlocked_x_of_y': '{unlocked} sur {total} succès déverrouillés',
-      'collect_desc': 'Collectionnez des badges honorables pour toutes vos routines !',
+      'collect_desc':
+          'Collectionnez des badges honorables pour toutes vos routines !',
       'filter_all': 'Tous',
       'filter_unlocked': 'Déverrouillés',
       'filter_locked': 'Verrouillés',
@@ -1984,7 +2108,8 @@ class AchievementTranslations {
       'unlocked_at': 'Déverrouillé le: {date}',
       'awesome': 'Super !',
       'celebration_title': 'Nouveau succès déverrouillé !',
-      'celebration_desc': 'Félicitations ! Vous avez débloqué un nouveau badge.',
+      'celebration_desc':
+          'Félicitations ! Vous avez débloqué un nouveau badge.',
       'status_unlocked': 'Débloqué',
       'status_locked': 'Verrouillé',
     },
@@ -1995,7 +2120,8 @@ class AchievementTranslations {
       'active_beginner': 'Principiante Attivo 🌱',
       'trainee': 'Atleta Apprendista 🏃',
       'unlocked_x_of_y': 'Sbloccati {unlocked} di {total} obiettivi',
-      'collect_desc': 'Colleziona distintivi d\'onore in tutti i tuoi allenamenti!',
+      'collect_desc':
+          'Colleziona distintivi d\'onore in tutti i tuoi allenamenti!',
       'filter_all': 'Tutti',
       'filter_unlocked': 'Sbloccati',
       'filter_locked': 'Bloccati',
@@ -2052,11 +2178,11 @@ class AchievementTranslations {
       'status_locked': '미달성',
     },
     'nb': {
-      'grand_master': 'Grand Master 👑',
-      'pace_master': 'Pace Master ⚡',
-      'pro_runner': 'Pro Runner 🏃',
+      'grand_master': 'Stormester 👑',
+      'pace_master': 'Tempomester ⚡',
+      'pro_runner': 'Profesjonell løper 🏃',
       'active_beginner': 'Aktiv nybegynner 🌱',
-      'trainee': 'Løpe-lærling 🏃',
+      'trainee': 'Løperaspirant 🏃',
       'unlocked_x_of_y': 'Låst opp {unlocked} av {total} prestasjoner',
       'collect_desc': 'Samle ærefulle merker på tvers av alle rutiner!',
       'filter_all': 'Alle',
@@ -2089,7 +2215,8 @@ class AchievementTranslations {
       'unlocked_at': 'Ontgrendeld op: {date}',
       'awesome': 'Geweldig!',
       'celebration_title': 'Nieuwe prestatie ontgrendeld!',
-      'celebration_desc': 'Gefeliciteerd! Je hebt een nieuwe badge ontgrendeld.',
+      'celebration_desc':
+          'Gefeliciteerd! Je hebt een nieuwe badge ontgrendeld.',
       'status_unlocked': 'Ontgrendeld',
       'status_locked': 'Vergrendeld',
     },
@@ -2131,7 +2258,7 @@ class AchievementTranslations {
       'unlocked_at': 'Разблокировано: {date}',
       'awesome': 'Отлично!',
       'celebration_title': 'Новое достижение разблокировано!',
-      'celebration_desc': 'Поздравляем! Вы разблокировали новый значок.',
+      'celebration_desc': 'Поздравляем! Открыт новый значок.',
       'status_unlocked': 'Достигнуто',
       'status_locked': 'Заблокировано',
     },
@@ -2163,7 +2290,8 @@ class AchievementTranslations {
       'active_beginner': 'Người Mới Năng Động 🌱',
       'trainee': 'Học Viên Chạy Bộ 🏃',
       'unlocked_x_of_y': 'Đã mở khóa {unlocked} trên {total} thành tựu',
-      'collect_desc': 'Thu thập các huy hiệu danh giá trong tất cả các bài tập!',
+      'collect_desc':
+          'Thu thập các huy hiệu danh giá trong tất cả các bài tập!',
       'filter_all': 'Tất cả',
       'filter_unlocked': 'Đã mở',
       'filter_locked': 'Đang khóa',
@@ -2194,7 +2322,7 @@ class AchievementTranslations {
       'unlocked_at': '解锁时间: {date}',
       'awesome': '太棒了！',
       'celebration_title': '解锁新成就！',
-      'celebration_desc': '恭喜！您已解锁一个新徽章。',
+      'celebration_desc': '恭喜！已解锁新徽章。',
       'status_unlocked': '已解锁',
       'status_locked': '未解锁',
     },
@@ -2206,8 +2334,8 @@ class AchievementTranslations {
       'progress_label': 'التقدم',
       'current_value_label': 'القيمة الحالية',
       'close': 'إغلاق',
-      'min': 'دقيقة',
-      'hours': 'ساعة',
+      'min': 'د',
+      'hours': 'س',
       'tab_achievements': 'الإنجازات',
     },
     'da': {
@@ -2234,7 +2362,7 @@ class AchievementTranslations {
       'current_value_label': 'Current Value',
       'close': 'Close',
       'min': 'min',
-      'hours': 'hours',
+      'hours': 'h',
       'tab_achievements': 'Achievements',
     },
     'es': {
@@ -2357,10 +2485,16 @@ class AchievementTranslations {
     return dict[id] ?? _descs['en']![id] ?? '';
   }
 
-  static String getUiString(String key, String langCode, [Map<String, String>? params]) {
+  static String getUiString(String key, String langCode,
+      [Map<String, String>? params]) {
     final Map<String, String> dict = _uiStrings[langCode] ?? _uiStrings['en']!;
-    final Map<String, String> modalDict = _modalStrings[langCode] ?? _modalStrings['en']!;
-    var str = dict[key] ?? modalDict[key] ?? _uiStrings['en']![key] ?? _modalStrings['en']![key] ?? key;
+    final Map<String, String> modalDict =
+        _modalStrings[langCode] ?? _modalStrings['en']!;
+    var str = dict[key] ??
+        modalDict[key] ??
+        _uiStrings['en']![key] ??
+        _modalStrings['en']![key] ??
+        key;
     if (params != null) {
       params.forEach((k, v) {
         str = str.replaceAll('{$k}', v);

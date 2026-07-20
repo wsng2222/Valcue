@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
@@ -385,9 +386,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Level',
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      l10n.level,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -409,9 +410,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Level',
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      l10n.level,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -432,12 +433,12 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Text(
-                      '취소',
+                      l10n.cancel,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF666666),
@@ -581,7 +582,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                           final count = index + 2;
                           return Center(
                             child: Text(
-                              l10n.repeatTimes(count),
+                              l10n.repeatTimes(
+                                LocalizedFormat.decimal(
+                                  context,
+                                  count,
+                                  decimalDigits: 0,
+                                ),
+                              ),
                               style: const TextStyle(fontSize: 20),
                             ),
                           );
@@ -861,9 +868,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       context,
       title: l10n.premiumMembership,
       bulletItems: [
-        (l10n as dynamic).routineLimitBenefit1 ?? l10n.benefitUnlimitedRoutines,
-        (l10n as dynamic).routineLimitBenefit2 ?? '여러 목표별 루틴 저장',
-        (l10n as dynamic).routineLimitBenefit3 ?? '러닝머신/사이클/천국의 계단 루틴 모두 사용',
+        l10n.routineLimitBenefit1,
+        l10n.routineLimitBenefit2,
+        l10n.routineLimitBenefit3,
       ],
     );
   }
@@ -938,7 +945,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                                   ? theme.colorScheme.error
                                   : theme.colorScheme.onSurface,
                             ),
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.end,
                             maxLength: 50,
                             maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             inputFormatters: [

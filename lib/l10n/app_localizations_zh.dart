@@ -92,16 +92,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get start => '开始';
 
   @override
-  String get editRoutine => '编辑例行程序';
+  String get editRoutine => '编辑训练计划';
 
   @override
-  String get routineEdit => '编辑例行程序';
+  String get routineEdit => '编辑训练计划';
 
   @override
   String get name => '名称';
 
   @override
-  String get unnamedRoutine => '未命名例行程序';
+  String get unnamedRoutine => '未命名训练计划';
 
   @override
   String get difficulty => '难度';
@@ -145,7 +145,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reorderMode => '顺序调整模式';
 
   @override
-  String get reorderModeHint => '长按卡片并拖动到你想要的位置。';
+  String get reorderModeHint => '长按卡片并拖到你想要的位置。';
 
   @override
   String get patternLength => '模式长度';
@@ -181,7 +181,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get level => '级别';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return '级别 $level';
   }
 
@@ -198,7 +198,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resistanceLevel => '阻力（级别）';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return '阻力 $resistance';
   }
 
@@ -215,10 +215,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleted => '已删除';
 
   @override
-  String get deleteRoutineTitle => '删除例行程序';
+  String get deleteRoutineTitle => '删除训练计划';
 
   @override
-  String get deleteRoutineMessage => '您确定要删除此例行程序吗？此操作无法撤销。';
+  String get deleteRoutineMessage => '确定要删除这个训练计划吗？此操作无法撤销。';
 
   @override
   String get deleteError => '删除时发生错误';
@@ -257,7 +257,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get spmRange => 'SPM必须在50-200范围内';
 
   @override
-  String get noRoutinesSaved => '没有保存的例行程序';
+  String get noRoutinesSaved => '还没有保存训练计划';
 
   @override
   String get tapToCreate => '点击创建';
@@ -266,7 +266,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tapButtonToCreate => '点击按钮创建';
 
   @override
-  String get premiumRoutineSettings => '高级例行程序设置';
+  String get premiumRoutineSettings => 'Premium 训练计划设置';
 
   @override
   String get viewMembership => '查看高级版';
@@ -305,7 +305,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get endWorkout => '结束训练';
 
   @override
-  String get endWorkoutConfirm => '您要结束训练吗？';
+  String get endWorkoutConfirm => '要结束训练吗？';
 
   @override
   String get end => '结束';
@@ -323,10 +323,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pausedTitle => '已暂停';
 
   @override
-  String get pausedSubtitle => '您可以继续或结束训练';
+  String get pausedSubtitle => '你可以继续或结束训练';
 
   @override
-  String get endWorkoutConfirmationMessage => '如果现在结束，当前训练将完成，您将转到摘要屏幕。';
+  String get endWorkoutConfirmationMessage => '如果现在结束，当前训练将停止并进入总结页面。';
 
   @override
   String get workoutComplete => '锻炼完成';
@@ -347,7 +347,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get liveActivityInProgress => '锻炼中';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return '第 $current/$total 个间歇';
   }
 
@@ -378,7 +378,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get continueWorkout => '继续';
 
   @override
-  String get endWorkoutQuestion => '您要结束训练吗？';
+  String get endWorkoutQuestion => '要结束训练吗？';
 
   @override
   String get workoutPaused => '训练已暂停';
@@ -414,7 +414,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get benefitVoiceGuide => '分段语音指导引导';
 
   @override
-  String get benefitUnlimitedRoutines => '例程保存数量无限制';
+  String get benefitUnlimitedRoutines => '无限保存训练计划';
 
   @override
   String get noAds => '无广告';
@@ -432,10 +432,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get voiceGuideBenefit3 => '无需看屏幕，专注运动本身';
 
   @override
-  String get routineLimitBenefit1 => '例程保存数量无限制';
+  String get routineLimitBenefit1 => '无限保存训练计划';
 
   @override
-  String get routineLimitBenefit2 => '保存针对不同目标的定制例程';
+  String get routineLimitBenefit2 => '按不同目标保存训练计划';
 
   @override
   String get routineLimitBenefit3 => '跑步机/动感单车/爬楼机完美支持';
@@ -447,7 +447,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premium_benefit_2 => '运动时的<red>分段语音指导</red>';
 
   @override
-  String get premium_benefit_3 => '任意保存的例程数<red>无限制</red>';
+  String get premium_benefit_3 => '<red>无限</red>保存训练计划';
 
   @override
   String get premium_benefit_4 => '包含未来所有高级功能<red>永久免费使用</red>';
@@ -463,7 +463,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get premiumSubheadline => '解锁语音指导、自行车和爬楼机训练，以及无限例程';
+  String get premiumSubheadline => '解锁语音指导、单车和爬楼机训练，以及无限训练计划';
 
   @override
   String get monthly => '月度';
@@ -487,8 +487,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get oneTime => '一次性支付';
 
   @override
-  String savePercent(int percent) {
-    return '节省 $percent%';
+  String savePercent(String percent) {
+    return '节省 $percent';
   }
 
   @override
@@ -513,7 +513,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumTab => '高级版';
 
   @override
-  String get routineTab => '例行程序';
+  String get routineTab => '训练计划';
 
   @override
   String get settingsTab => '设置';
@@ -563,16 +563,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get alreadySaved => '已保存';
 
   @override
-  String get routineSaved => '例程已保存';
+  String get routineSaved => '训练计划已保存';
 
   @override
   String get checkRoutine => '预览';
 
   @override
-  String get saveRoutine => '保存例程';
+  String get saveRoutine => '保存训练计划';
 
   @override
-  String get routineAlreadySaved => '例程已保存';
+  String get routineAlreadySaved => '这个训练计划已保存';
 
   @override
   String get noTemplatesFound => '未找到模板';
@@ -833,10 +833,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noWorkoutsYet => '还没有训练记录';
 
   @override
-  String get startYourFirstWorkout => '开始您的第一次训练以在此查看您的记录';
+  String get startYourFirstWorkout => '开始第一次训练，便可在这里查看记录';
 
   @override
-  String get goToRoutines => '前往例程';
+  String get goToRoutines => '前往训练计划';
 
   @override
   String get weightRecorded => '体重已记录';
@@ -864,12 +864,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String youNeed(String amount, String goal) {
-    return '您需要$amount才能达到$goal';
+    return '距离$goal还差$amount';
   }
 
   @override
   String youNeedPlus(String amount, String goal) {
-    return '您需要+$amount才能达到$goal';
+    return '距离$goal还差+$amount';
   }
 
   @override
@@ -923,25 +923,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancelAnytimeKeepAccess => '随时取消，仍可用到期';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '运动 $count 天 🔥',
-      one: '运动 1 天 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return '训练天数：$count 天 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '休息 $count 天 🛏️',
-      one: '休息 1 天 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return '休息天数：$count 天 🛏️';
   }
 
   @override
@@ -1025,32 +1013,32 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generateCustomRoutine => '生成定制训练';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes 分钟';
   }
 
   @override
-  String floorCount(int count) {
+  String floorCount(String count) {
     return '$count 层';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return '定制跑步 $distance公里（$calories千卡）';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return '定制骑行 $distance公里（$calories千卡）';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return '定制爬楼 $floors层（$calories千卡）';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return '定制训练已准备好。开始挑战约$calories卡路里吧！';
   }
 
@@ -1097,13 +1085,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importSharedRoutine => '导入分享的训练';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return '扫描的二维码中发现训练。\n\n• 名称：$name\n• 难度：$difficulty\n• 阶段数：$count\n\n要保存到训练库吗？';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return '剪贴板中发现分享的训练。\n\n• 名称：$name\n• 难度：$difficulty\n• 阶段数：$count\n\n要保存到训练库吗？';
   }
 
@@ -1131,7 +1119,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noAnnouncements => '无提醒';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '提前$seconds秒';
   }
 
@@ -1142,7 +1130,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get countdownTimingMessage => '请选择在训练阶段切换前多久播放语音提醒。';
 
   @override
-  String secondsLeft(int seconds) {
+  String secondsLeft(String seconds) {
     return '剩余$seconds秒';
   }
 
@@ -1156,7 +1144,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sessionRepeatBlock => '训练阶段重复组';
 
   @override
-  String repeatTimes(int count) {
+  String repeatTimes(String count) {
     return '重复 $count 次';
   }
 
@@ -1168,4 +1156,74 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get unableToOpenPrivacyPolicy => '无法打开隐私政策。';
+
+  @override
+  String get less => '少';
+
+  @override
+  String get more => '多';
+
+  @override
+  String inclineValue(String value) {
+    return '坡度 $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value RPM';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return '下一项：$value';
+  }
+
+  @override
+  String get weightCalendar => '体重日历';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText 个间歇 · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return '目标 $goalWeight • 已达成！';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return '目标 $goalWeight • 还差 $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return '目标 $goalWeight • 超出 $difference';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return '平均 $value 公里/小时';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return '平均 $value 英里/小时';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return '平均 $value 转/分钟';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return '平均等级 $value';
+  }
 }

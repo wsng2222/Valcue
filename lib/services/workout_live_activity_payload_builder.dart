@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../features/routines/models/machine_type.dart';
 import '../features/routines/models/routine.dart';
 
@@ -33,6 +35,11 @@ class WorkoutLiveActivityPayloadBuilder {
     required String inclineLabel,
     required String resistanceLabel,
     required String levelLabel,
+    String? inclineValueTemplate,
+    String? rpmValueTemplate,
+    String? resistanceValueTemplate,
+    String? levelValueTemplate,
+    String locale = 'en_US',
   }) {
     if (routine.intervals.isEmpty) {
       throw ArgumentError.value(
@@ -52,6 +59,11 @@ class WorkoutLiveActivityPayloadBuilder {
       inclineLabel: inclineLabel,
       resistanceLabel: resistanceLabel,
       levelLabel: levelLabel,
+      inclineValueTemplate: inclineValueTemplate,
+      rpmValueTemplate: rpmValueTemplate,
+      resistanceValueTemplate: resistanceValueTemplate,
+      levelValueTemplate: levelValueTemplate,
+      locale: locale,
     );
     final activeTimerRemaining = switch (phase) {
       WorkoutLiveActivityPhase.preparing => countdownRemaining,
@@ -103,6 +115,11 @@ class WorkoutLiveActivityPayloadBuilder {
     required String inclineLabel,
     required String resistanceLabel,
     required String levelLabel,
+    required String? inclineValueTemplate,
+    required String? rpmValueTemplate,
+    required String? resistanceValueTemplate,
+    required String? levelValueTemplate,
+    required String locale,
   }) {
     final interval = routine.intervals[intervalIndex];
     switch (routine.machineType) {
@@ -110,16 +127,37 @@ class WorkoutLiveActivityPayloadBuilder {
         final useMiles = measurement == 'mph';
         final speed = (interval.speedKmh ?? 0) * (useMiles ? 0.621371 : 1);
         return (
-          '$speedLabel ${speed.toStringAsFixed(1)} ${useMiles ? 'mph' : 'km/h'}',
-          '$inclineLabel ${_formatMetric(interval.grade ?? 0)}%',
+          '$speedLabel ${_formatNumber(speed, locale, decimalDigits: 1)} ${useMiles ? 'mph' : 'km/h'}',
+          _metricPhrase(
+            template: inclineValueTemplate,
+            fallbackLabel: inclineLabel,
+            value: _formatMetric(interval.grade ?? 0, locale),
+            suffix: NumberFormat.percentPattern(locale).symbols.PERCENT,
+          ),
         );
       case MachineType.cycle:
         return (
-          '$resistanceLabel ${interval.resistance ?? 0}',
-          '${interval.rpm ?? 0} RPM',
+          _metricPhrase(
+            template: resistanceValueTemplate,
+            fallbackLabel: resistanceLabel,
+            value: _formatNumber(interval.resistance ?? 0, locale),
+          ),
+          _metricPhrase(
+            template: rpmValueTemplate,
+            fallbackLabel: '',
+            value: _formatNumber(interval.rpm ?? 0, locale),
+            suffix: ' RPM',
+          ),
         );
       case MachineType.stairmaster:
-        return ('$levelLabel ${interval.level ?? 0}', '');
+        return (
+          _metricPhrase(
+            template: levelValueTemplate,
+            fallbackLabel: levelLabel,
+            value: _formatNumber(interval.level ?? 0, locale),
+          ),
+          '',
+        );
     }
   }
 
@@ -134,10 +172,36 @@ class WorkoutLiveActivityPayloadBuilder {
     }
   }
 
-  static String _formatMetric(double value) {
-    return value == value.roundToDouble()
-        ? value.toStringAsFixed(0)
-        : value.toStringAsFixed(1);
+  static String _formatMetric(double value, String locale) {
+    return _formatNumber(
+      value,
+      locale,
+      decimalDigits: value == value.roundToDouble() ? 0 : 1,
+    );
+  }
+
+  static String _metricPhrase({
+    required String? template,
+    required String fallbackLabel,
+    required String value,
+    String suffix = '',
+  }) {
+    if (template != null) return template.replaceAll('{value}', value);
+    final metric = [fallbackLabel, value]
+        .where((part) => part.isNotEmpty)
+        .join(' ');
+    return '$metric$suffix';
+  }
+
+  static String _formatNumber(
+    num value,
+    String locale, {
+    int decimalDigits = 0,
+  }) {
+    final formatter = NumberFormat.decimalPattern(locale)
+      ..minimumFractionDigits = decimalDigits
+      ..maximumFractionDigits = decimalDigits;
+    return formatter.format(value);
   }
 
   static int _ceilSeconds(Duration duration) {

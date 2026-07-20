@@ -181,7 +181,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get level => 'レベル';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'レベル $level';
   }
 
@@ -199,7 +199,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resistanceLevel => '抵抗（レベル）';
 
   @override
-  String resistanceColon(int resistance) {
+  String resistanceColon(String resistance) {
     return '抵抗 $resistance';
   }
 
@@ -285,7 +285,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cycle => 'サイクル';
 
   @override
-  String get stairmaster => 'ステアマスター';
+  String get stairmaster => 'ステアクライマー';
 
   @override
   String get selectLanguage => '言語';
@@ -349,7 +349,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get liveActivityInProgress => 'ワークアウト中';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'インターバル $current/$total';
   }
 
@@ -465,7 +465,8 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get premiumSubheadline => '音声ガイド、バイクとステアマスターのワークアウト、無制限のルーティンのロック解除';
+  String get premiumSubheadline =>
+      '音声ガイド、バイクとステアクライマーのワークアウト、ルーティンの無制限保存を利用できます';
 
   @override
   String get monthly => '月額';
@@ -489,8 +490,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get oneTime => '1回限りの支払い';
 
   @override
-  String savePercent(int percent) {
-    return '$percent% 節約';
+  String savePercent(String percent) {
+    return '$percentお得';
   }
 
   @override
@@ -784,7 +785,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bikeSession => 'サイクルセッション';
 
   @override
-  String get stairmasterSession => 'ステアマスターセッション';
+  String get stairmasterSession => 'ステアクライマーのセッション';
 
   @override
   String get treadmillWorkout => 'ランニングマシン運動';
@@ -793,7 +794,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bikeWorkout => 'サイクル運動';
 
   @override
-  String get stairmasterWorkout => 'ステアマスター運動';
+  String get stairmasterWorkout => 'ステアクライマーのワークアウト';
 
   @override
   String get startAWorkoutToSeeItHere => '運動履歴はここに表示されます';
@@ -925,25 +926,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cancelAnytimeKeepAccess => 'いつでも解約可、期間中は利用可';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'トレーニング $count 日 🔥',
-      one: 'トレーニング 1 日 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'トレーニング日数：$count日 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '休息 $count 日 🛏️',
-      one: '休息 1 日 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return '休息日数：$count日 🛏️';
   }
 
   @override
@@ -966,7 +955,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String shareRoutineMessage(String routineName, String shareLink) {
-    return 'Valcueでこのインターバルトレーニングを試してみましょう！\n\nメニュー名: $routineName\n\n以下のリンクをコピー 또는 タップして取り込むことができます:\n$shareLink';
+    return 'Valcueでこのインターバルトレーニングを試してみませんか？\n\nメニュー名：$routineName\n\nリンクをコピーするか、タップして取り込んでください：\n$shareLink';
   }
 
   @override
@@ -1027,32 +1016,32 @@ class AppLocalizationsJa extends AppLocalizations {
   String get generateCustomRoutine => 'カスタムルーティンを作成';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes分';
   }
 
   @override
-  String floorCount(int count) {
+  String floorCount(String count) {
     return '$count階';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'カスタムラン ${distance}km（${calories}kcal）';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'カスタムサイクル ${distance}km（${calories}kcal）';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'カスタム階段 $floors階（${calories}kcal）';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'カスタムルーティンが完成しました。約$caloriesカロリーを目標に始めましょう！';
   }
 
@@ -1100,13 +1089,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get importSharedRoutine => '共有ルーティンを読み込む';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'スキャンしたQRコードからルーティンが見つかりました。\n\n• 名前：$name\n• 難易度：$difficulty\n• インターバル：$count\n\nライブラリに保存しますか？';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'クリップボードから共有ルーティンが見つかりました。\n\n• 名前：$name\n• 難易度：$difficulty\n• インターバル：$count\n\nライブラリに保存しますか？';
   }
 
@@ -1134,7 +1123,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noAnnouncements => '通知なし';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return '$seconds秒前';
   }
 
@@ -1145,7 +1134,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get countdownTimingMessage => 'インターバルが変わる何秒前に音声案内を受けるか選択してください。';
 
   @override
-  String secondsLeft(int seconds) {
+  String secondsLeft(String seconds) {
     return '残り$seconds秒';
   }
 
@@ -1160,7 +1149,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sessionRepeatBlock => 'セッション繰り返しブロック';
 
   @override
-  String repeatTimes(int count) {
+  String repeatTimes(String count) {
     return '$count回繰り返し';
   }
 
@@ -1172,4 +1161,74 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get unableToOpenPrivacyPolicy => 'プライバシーポリシーを開けません。';
+
+  @override
+  String get less => '少ない';
+
+  @override
+  String get more => '多い';
+
+  @override
+  String inclineValue(String value) {
+    return '傾斜 $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value RPM';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return '次：$value';
+  }
+
+  @override
+  String get weightCalendar => '体重カレンダー';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countTextインターバル · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return '目標 $goalWeight • 達成！';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return '目標 $goalWeight • あと $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return '目標 $goalWeight • $difference超過';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return '平均 $value km/h';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return '平均 $value mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return '平均 $value RPM';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return '平均レベル $value';
+  }
 }

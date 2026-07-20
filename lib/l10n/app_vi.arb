@@ -34,10 +34,10 @@
   "save": "Lưu",
   "edit": "Chỉnh sửa",
   "start": "Bắt đầu",
-  "editRoutine": "Chỉnh sửa Thói quen",
-  "routineEdit": "Chỉnh sửa Thói quen",
+  "editRoutine": "Chỉnh sửa chương trình",
+  "routineEdit": "Chỉnh sửa chương trình",
   "name": "Tên",
-  "unnamedRoutine": "Thói quen Không tên",
+  "unnamedRoutine": "Chương trình chưa đặt tên",
   "difficulty": "Độ khó",
   "difficultyColon": "Độ khó : {difficulty}",
   "@difficultyColon": {
@@ -50,8 +50,8 @@
   "easy": "Dễ",
   "medium": "Trung bình",
   "hard": "Khó",
-  "interval": "Khoảng thời gian",
-  "addInterval": "Thêm Khoảng thời gian",
+  "interval": "Quãng",
+  "addInterval": "Thêm quãng",
   "quickTools": "Tác vụ nhanh",
   "addDefault": "Thêm mặc định",
   "duplicateLast": "Sao chép cuối",
@@ -61,9 +61,9 @@
   "reorderModeHint": "Nhấn và giữ một thẻ để di chuyển thẻ đến vị trí bạn muốn.",
   "patternLength": "Độ dài mẫu",
   "repeatCount": "Số lần lặp",
-  "noIntervals": "Không có khoảng thời gian",
-  "addIntervalPrompt": "Thêm một khoảng thời gian",
-  "intervalEdit": "Chỉnh sửa Khoảng thời gian",
+  "noIntervals": "Chưa có quãng nào",
+  "addIntervalPrompt": "Thêm một quãng",
+  "intervalEdit": "Chỉnh sửa quãng",
   "timeMinutes": "Thời gian (phút)",
   "duration": "Thời lượng",
   "speed": "Tốc độ",
@@ -74,19 +74,19 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
   "rpm": "RPM",
   "rpmInfoDescription": "RPM cho biết bàn đạp quay bao nhiêu vòng trong một phút. RPM càng cao nghĩa là bạn đang đạp với nhịp nhanh hơn.",
-  "resistance": "Kháng cự",
-  "resistanceLevel": "Kháng cự (Cấp độ)",
-  "resistanceColon": "Kháng cự {resistance}",
+  "resistance": "Lực cản",
+  "resistanceLevel": "Lực cản (Mức)",
+  "resistanceColon": "Lực cản {resistance}",
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -94,24 +94,24 @@
   "spmSteps": "SPM (bước/phút)",
   "saved": "Đã lưu",
   "deleted": "Đã xóa",
-  "deleteRoutineTitle": "Xóa Thói quen",
-  "deleteRoutineMessage": "Bạn có chắc chắn muốn xóa thói quen này không? Hành động này không thể hoàn tác.",
+  "deleteRoutineTitle": "Xóa chương trình",
+  "deleteRoutineMessage": "Bạn có chắc muốn xóa chương trình này không? Thao tác này không thể hoàn tác.",
   "deleteError": "Đã xảy ra lỗi khi xóa",
   "nameRequired": "Vui lòng nhập tên",
   "nameMaxLength": "Tên phải có 50 ký tự trở xuống",
-  "minIntervalsRequired": "Cần ít nhất một khoảng thời gian",
-  "intervalMinDuration": "Thời lượng khoảng thời gian phải ít nhất 1 giây",
-  "intervalMaxDuration": "Thời lượng khoảng thời gian tối đa là 3 giờ (10800 giây)",
+  "minIntervalsRequired": "Cần ít nhất một quãng",
+  "intervalMinDuration": "Mỗi quãng phải dài ít nhất 1 giây",
+  "intervalMaxDuration": "Mỗi quãng không được dài quá 3 giờ (10.800 giây)",
   "speedRange": "Tốc độ phải lớn hơn 0 (0.5-25.0 km/h)",
   "inclineRange": "Độ dốc phải trong khoảng 0-15.0",
   "rpmRange": "RPM phải trong khoảng 30-200",
-  "resistanceRange": "Kháng cự phải trong khoảng 1-20",
+  "resistanceRange": "Lực cản phải trong khoảng 1–20",
   "levelRange": "Cấp độ phải trong khoảng 1-20",
   "spmRange": "SPM phải trong khoảng 50-200",
-  "noRoutinesSaved": "Không có thói quen đã lưu",
+  "noRoutinesSaved": "Chưa lưu chương trình nào",
   "tapToCreate": "Chạm để tạo",
   "tapButtonToCreate": "Chạm vào nút để tạo",
-  "premiumRoutineSettings": "Cài đặt Thói quen Cao cấp",
+  "premiumRoutineSettings": "Cài đặt chương trình Premium",
   "viewMembership": "Xem Premium",
   "freeLimitTitle": "Miễn phí 2 bài",
   "freeLimitMessage": "Nâng cấp Premium để dùng không giới hạn",
@@ -123,8 +123,8 @@
   "selectDifficulty": "Chọn Độ khó",
   "pause": "Tạm dừng",
   "resume": "Tiếp tục",
-  "endWorkout": "Kết thúc Thói quen",
-  "endWorkoutConfirm": "Bạn có muốn kết thúc thói quen không?",
+  "endWorkout": "Kết thúc buổi tập",
+  "endWorkoutConfirm": "Bạn có muốn kết thúc buổi tập không?",
   "end": "Kết thúc",
   "share": "Chia sẻ",
   "@share": {
@@ -133,8 +133,8 @@
   "rotate": "Xoay",
   "paused": "ĐÃ TẠM DỪNG",
   "pausedTitle": "Đã tạm dừng",
-  "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc thói quen",
-  "endWorkoutConfirmationMessage": "Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.",
+  "pausedSubtitle": "Bạn có thể tiếp tục hoặc kết thúc buổi tập",
+  "endWorkoutConfirmationMessage": "Nếu kết thúc bây giờ, buổi tập sẽ dừng và màn hình tóm tắt sẽ mở ra.",
   "workoutComplete": "Hoàn thành bài tập",
   "backgroundIntervalNotificationTitle": "Bắt đầu hiệp mới",
   "backgroundIntervalNotificationsTitle": "Thông báo khi tắt màn hình",
@@ -153,10 +153,10 @@
   "averageLevel": "Mức Trung Bình",
   "holdToStop": "Giữ để dừng",
   "continueWorkout": "Tiếp tục",
-  "endWorkoutQuestion": "Bạn có muốn kết thúc thói quen không?",
-  "workoutPaused": "Thói quen đã được tạm dừng",
+  "endWorkoutQuestion": "Bạn có muốn kết thúc buổi tập không?",
+  "workoutPaused": "Buổi tập đã tạm dừng",
   "lvlIncline": "Độ dốc",
-  "lvlResistance": "Cấp độ Kháng cự",
+  "lvlResistance": "Mức lực cản",
   "premium": "Cao cấp",
   "upgradeNow": "Nâng cấp Ngay",
   "purchase": "Mua",
@@ -195,10 +195,10 @@
     }
   },
   "premiumTab": "Cao cấp",
-  "routineTab": "Thói quen",
+  "routineTab": "Chương trình",
   "settingsTab": "Cài đặt",
   "myTab": "Tôi",
-  "premiumSubheadline": "Mở khóa hướng dẫn bằng giọng nói, bài tập xe đạp và máy leo cầu thang, và thói quen không giới hạn",
+  "premiumSubheadline": "Mở khóa hướng dẫn bằng giọng nói, bài tập xe đạp, máy leo cầu thang và lưu chương trình không giới hạn",
   "@premiumSubheadline": {
     "description": "Mô tả nội dung mở khóa cao cấp"
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Hậu tố thanh toán một lần"
   },
-  "savePercent": "Tiết kiệm {percent}%",
+  "savePercent": "Tiết kiệm {percent}",
   "@savePercent": {
     "description": "Huy hiệu phần trăm tiết kiệm",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -296,9 +296,9 @@
   "recommendedRoutinesStairmaster": "Gợi ý cầu thang",
   "alreadySaved": "Đã lưu",
   "checkRoutine": "Xem",
-  "saveRoutine": "Lưu Thói quen",
-  "routineSaved": "Thói quen đã được lưu",
-  "routineAlreadySaved": "Thói quen đã được lưu",
+  "saveRoutine": "Lưu chương trình",
+  "routineSaved": "Đã lưu chương trình",
+  "routineAlreadySaved": "Chương trình này đã được lưu",
   "noTemplatesFound": "Không tìm thấy mẫu",
   "templateTreadmillBeginner1Title": "Máy Chạy Bộ Sơ Cấp 1",
   "templateTreadmillBeginner1Subtitle": "1:1 đi bộ và chạy sau 3 phút khởi động",
@@ -352,7 +352,7 @@
   "yesterday": "Hôm qua",
   "noWorkoutsYet": "Chưa có bài tập nào",
   "startYourFirstWorkout": "Bắt đầu bài tập đầu tiên của bạn để xem lịch sử ở đây",
-  "goToRoutines": "Đi đến Thói quen",
+  "goToRoutines": "Đến Chương trình",
   "weightRecorded": "Cân nặng đã được ghi lại",
   "workout": "bài tập",
   "workouts": "bài tập",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Tập luyện 1 ngày 🔥} other{Tập luyện {count} ngày 🔥}}",
+  "workoutDays": "Số ngày tập: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Ngày nghỉ 1 ngày 🛏️} other{Ngày nghỉ {count} ngày 🛏️}}",
+  "restDays": "Số ngày nghỉ: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -563,5 +563,19 @@
   "repeatTimes": "Lặp lại {count} lần",
   "addRepeatBlock": "Thêm khối lặp lại",
   "unableToShareWorkout": "Không thể chia sẻ bài tập.",
-  "unableToOpenPrivacyPolicy": "Không thể mở chính sách quyền riêng tư."
+  "unableToOpenPrivacyPolicy": "Không thể mở chính sách quyền riêng tư.",
+  "less": "Ít",
+  "more": "Nhiều",
+  "inclineValue": "Độ dốc: {value}%",
+  "rpmValue": "{value} vòng/phút",
+  "nextMetric": "Tiếp theo: {value}",
+  "weightCalendar": "Lịch cân nặng",
+  "routineHeaderSummary": "{count, plural, other{{duration} · {countText} quãng · {difficulty}}}",
+  "goalAchievedSummary": "Mục tiêu: {goalWeight} • Đã đạt!",
+  "goalRemainingSummary": "Mục tiêu: {goalWeight} • Còn {difference}",
+  "goalExceededSummary": "Mục tiêu: {goalWeight} • Vượt {difference}",
+  "averageSpeedKmh": "TB {value} km/h",
+  "averageSpeedMph": "TB {value} mph",
+  "averageRpmValue": "TB {value} vòng/phút",
+  "averageLevelValue": "Cấp độ TB: {value}"
 }

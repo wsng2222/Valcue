@@ -74,19 +74,19 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
   "rpm": "об/мин",
-  "rpmInfoDescription": "об/мин показывает, сколько раз педали совершают оборот за одну минуту. Чем выше значение, тем быстрее ваш каденс при педалировании.",
+  "rpmInfoDescription": "об/мин показывает, сколько оборотов педали совершают за минуту. Чем выше значение, тем выше темп вращения педалей.",
   "resistance": "Сопротивление",
   "resistanceLevel": "Сопротивление (Уровень)",
   "resistanceColon": "Сопротивление {resistance}",
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -95,7 +95,7 @@
   "saved": "Сохранено",
   "deleted": "Удалено",
   "deleteRoutineTitle": "Удалить программу",
-  "deleteRoutineMessage": "Вы уверены, что хотите удалить эту программу? Это действие нельзя отменить.",
+  "deleteRoutineMessage": "Удалить эту программу? Это действие нельзя отменить.",
   "deleteError": "Произошла ошибка при удалении",
   "nameRequired": "Пожалуйста, введите название",
   "nameMaxLength": "Название должно содержать не более 50 символов",
@@ -124,7 +124,7 @@
   "pause": "Пауза",
   "resume": "Продолжить",
   "endWorkout": "Завершить Тренировку",
-  "endWorkoutConfirm": "Вы хотите завершить тренировку?",
+  "endWorkoutConfirm": "Завершить тренировку?",
   "end": "Завершить",
   "share": "Поделиться",
   "@share": {
@@ -133,8 +133,8 @@
   "rotate": "Повернуть",
   "paused": "ПАУЗА",
   "pausedTitle": "Приостановлено",
-  "pausedSubtitle": "Вы можете продолжить или завершить тренировку",
-  "endWorkoutConfirmationMessage": "Если вы завершите сейчас, текущая тренировка закончится и вы перейдете на экран сводки.",
+  "pausedSubtitle": "Тренировку можно продолжить или завершить",
+  "endWorkoutConfirmationMessage": "Если завершить сейчас, текущая тренировка закончится и откроется экран итогов.",
   "workoutComplete": "Тренировка завершена",
   "backgroundIntervalNotificationTitle": "Новый интервал",
   "backgroundIntervalNotificationsTitle": "Оповещения при выключенном экране",
@@ -153,7 +153,7 @@
   "averageLevel": "Средний Уровень",
   "holdToStop": "Удержите для остановки",
   "continueWorkout": "Продолжить",
-  "endWorkoutQuestion": "Вы хотите завершить тренировку?",
+  "endWorkoutQuestion": "Завершить тренировку?",
   "workoutPaused": "Тренировка приостановлена",
   "lvlIncline": "Наклон",
   "lvlResistance": "Уровень Сопротивление",
@@ -174,7 +174,7 @@
   "routineLimitBenefit1": "Неограниченное сохранение программ",
   "routineLimitBenefit2": "Программы под различные фитнес-цели",
   "routineLimitBenefit3": "Полная поддержка беговых дорожек, велосипедов и степперов",
-  "premium_benefit_1": "Поддержка <red>велосипеда и StairMaster</red>",
+  "premium_benefit_1": "Поддержка <red>велотренажёра и лестничного тренажёра</red>",
   "premium_benefit_2": "<red>Голосовой гид</red> во время тренировок",
   "premium_benefit_3": "Сохранение программ <red>без ограничений</red>",
   "premium_benefit_4": "Все новые функции <red>включены навсегда</red>",
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "Суффикс одноразового платежа"
   },
-  "savePercent": "Сэкономьте {percent}%",
+  "savePercent": "Экономия {percent}",
   "@savePercent": {
     "description": "Значок процента экономии",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -361,7 +361,7 @@
   "over": "превышено",
   "last": "Последний",
   "newLabel": "Новый",
-  "youNeed": "Вам нужно {amount}, чтобы достичь {goal}",
+  "youNeed": "До цели {goal} осталось {amount}",
   "@youNeed": {
     "placeholders": {
       "amount": {
@@ -372,7 +372,7 @@
       }
     }
   },
-  "youNeedPlus": "Вам нужно +{amount}, чтобы достичь {goal}",
+  "youNeedPlus": "До цели {goal} осталось +{amount}",
   "@youNeedPlus": {
     "placeholders": {
       "amount": {
@@ -408,7 +408,7 @@
   "treadmillWorkout": "Тренировка Беговой Дорожки",
   "bikeWorkout": "Тренировка Велосипеда",
   "stairmasterWorkout": "Тренировка Степпера",
-  "startAWorkoutToSeeItHere": "Ваши тренировки появятся здесь",
+  "startAWorkoutToSeeItHere": "Здесь появятся завершённые тренировки",
   "mon": "Пн",
   "tue": "Вт",
   "wed": "Ср",
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{Тренировка 1 день 🔥} other{Тренировка {count} дней 🔥}}",
+  "workoutDays": "Дней с тренировками: {count} 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{Отдых 1 день 🛏️} other{Отдых {count} дней 🛏️}}",
+  "restDays": "Дней отдыха: {count} 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -525,7 +525,7 @@
   "includeIncline": "Добавить наклон",
   "generateCustomRoutine": "Создать персональную тренировку",
   "durationMinutes": "{minutes} мин",
-  "floorCount": "{count} этажей",
+  "floorCount": "Этажей: {count}",
   "customRunName": "Персональный бег {distance} км ({calories} ккал)",
   "customCycleName": "Персональный велозаезд {distance} км ({calories} ккал)",
   "customStairsName": "Персональная лестница {floors} этажей ({calories} ккал)",
@@ -533,7 +533,7 @@
   "weightDeleteTitle": "Удалить запись",
   "weightDeleteConfirm": "Удалить эту запись о весе?",
   "achievementUnlocked": "🏆 Достижение открыто!",
-  "achievementCongratulations": "Поздравляем! Вы получили новый значок.",
+  "achievementCongratulations": "Поздравляем! Получен новый значок.",
   "awesome": "Отлично!",
   "shareCardDefault": "9:14 (Обычный)",
   "shareCardStory": "9:16 (История)",
@@ -542,26 +542,40 @@
   "shareRoutine": "Поделиться тренировкой",
   "shareViaQrCode": "Поделиться QR-кодом",
   "routineLimitReached": "Достигнут лимит тренировок",
-  "routineLimitMessage": "Бесплатные пользователи могут сохранить до 2 тренировок на дорожке. Перейдите на Premium или удалите существующую тренировку.",
+  "routineLimitMessage": "В бесплатной версии можно сохранить до 2 тренировок на дорожке. Для новой тренировки нужна подписка Premium или удаление одной из сохранённых тренировок.",
   "importSharedRoutine": "Импорт общей тренировки",
   "importQrRoutinePrompt": "В QR-коде найдена тренировка.\n\n• Название: {name}\n• Сложность: {difficulty}\n• Интервалы: {count}\n\nСохранить её в библиотеку?",
   "importClipboardRoutinePrompt": "В буфере обмена найдена общая тренировка.\n\n• Название: {name}\n• Сложность: {difficulty}\n• Интервалы: {count}\n\nСохранить её в библиотеку?",
   "importRoutineSuccess": "«{name}» успешно импортирована!",
   "importAction": "Импортировать",
-  "addRoutineOption": "Выберите способ добавления",
+  "addRoutineOption": "Выбери способ добавления",
   "createCustomRoutine": "Создать свою тренировку",
   "importFromClipboard": "Импорт из буфера обмена",
   "countdownTiming": "Обратный отсчёт",
   "noAnnouncements": "Без подсказок",
   "secondsShort": "за {seconds} с",
-  "selectCountdownTimings": "Выберите время подсказок",
-  "countdownTimingMessage": "Выберите, когда озвучивать оставшееся время перед сменой интервала.",
-  "secondsLeft": "Осталось {seconds} секунд",
+  "selectCountdownTimings": "Выбери время подсказок",
+  "countdownTimingMessage": "Выбери, когда озвучивать оставшееся время перед сменой интервала.",
+  "secondsLeft": "Осталось: {seconds} с",
   "qrShareInstruction": "Отсканируйте этот QR-код в другом приложении Valcue,\nчтобы сразу импортировать тренировку.",
   "quickStart": "Быстрый старт",
   "sessionRepeatBlock": "Повторяющийся блок",
   "repeatTimes": "Повторов: {count}",
   "addRepeatBlock": "Добавить блок повторов",
   "unableToShareWorkout": "Не удалось поделиться тренировкой.",
-  "unableToOpenPrivacyPolicy": "Не удалось открыть политику конфиденциальности."
+  "unableToOpenPrivacyPolicy": "Не удалось открыть политику конфиденциальности.",
+  "less": "Меньше",
+  "more": "Больше",
+  "inclineValue": "Наклон: {value} %",
+  "rpmValue": "{value} об/мин",
+  "nextMetric": "Далее: {value}",
+  "weightCalendar": "Календарь веса",
+  "routineHeaderSummary": "{count, plural, one{{duration} · {countText} интервал · {difficulty}} few{{duration} · {countText} интервала · {difficulty}} many{{duration} · {countText} интервалов · {difficulty}} other{{duration} · {countText} интервала · {difficulty}}}",
+  "goalAchievedSummary": "Цель: {goalWeight} • Цель достигнута!",
+  "goalRemainingSummary": "Цель: {goalWeight} • Осталось {difference}",
+  "goalExceededSummary": "Цель: {goalWeight} • Превышение на {difference}",
+  "averageSpeedKmh": "Ср. скорость: {value} км/ч",
+  "averageSpeedMph": "Ср. скорость: {value} миль/ч",
+  "averageRpmValue": "Ср. темп: {value} об/мин",
+  "averageLevelValue": "Ср. уровень: {value}"
 }

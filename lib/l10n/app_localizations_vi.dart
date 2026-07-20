@@ -93,16 +93,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get start => 'Bắt đầu';
 
   @override
-  String get editRoutine => 'Chỉnh sửa Thói quen';
+  String get editRoutine => 'Chỉnh sửa chương trình';
 
   @override
-  String get routineEdit => 'Chỉnh sửa Thói quen';
+  String get routineEdit => 'Chỉnh sửa chương trình';
 
   @override
   String get name => 'Tên';
 
   @override
-  String get unnamedRoutine => 'Thói quen Không tên';
+  String get unnamedRoutine => 'Chương trình chưa đặt tên';
 
   @override
   String get difficulty => 'Độ khó';
@@ -122,10 +122,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hard => 'Khó';
 
   @override
-  String get interval => 'Khoảng thời gian';
+  String get interval => 'Quãng';
 
   @override
-  String get addInterval => 'Thêm Khoảng thời gian';
+  String get addInterval => 'Thêm quãng';
 
   @override
   String get quickTools => 'Tác vụ nhanh';
@@ -156,13 +156,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get repeatCount => 'Số lần lặp';
 
   @override
-  String get noIntervals => 'Không có khoảng thời gian';
+  String get noIntervals => 'Chưa có quãng nào';
 
   @override
-  String get addIntervalPrompt => 'Thêm một khoảng thời gian';
+  String get addIntervalPrompt => 'Thêm một quãng';
 
   @override
-  String get intervalEdit => 'Chỉnh sửa Khoảng thời gian';
+  String get intervalEdit => 'Chỉnh sửa quãng';
 
   @override
   String get timeMinutes => 'Thời gian (phút)';
@@ -183,7 +183,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get level => 'Cấp độ';
 
   @override
-  String levelColon(int level) {
+  String levelColon(String level) {
     return 'Cấp độ $level';
   }
 
@@ -195,14 +195,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'RPM cho biết bàn đạp quay bao nhiêu vòng trong một phút. RPM càng cao nghĩa là bạn đang đạp với nhịp nhanh hơn.';
 
   @override
-  String get resistance => 'Kháng cự';
+  String get resistance => 'Lực cản';
 
   @override
-  String get resistanceLevel => 'Kháng cự (Cấp độ)';
+  String get resistanceLevel => 'Lực cản (Mức)';
 
   @override
-  String resistanceColon(int resistance) {
-    return 'Kháng cự $resistance';
+  String resistanceColon(String resistance) {
+    return 'Lực cản $resistance';
   }
 
   @override
@@ -218,11 +218,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get deleted => 'Đã xóa';
 
   @override
-  String get deleteRoutineTitle => 'Xóa Thói quen';
+  String get deleteRoutineTitle => 'Xóa chương trình';
 
   @override
   String get deleteRoutineMessage =>
-      'Bạn có chắc chắn muốn xóa thói quen này không? Hành động này không thể hoàn tác.';
+      'Bạn có chắc muốn xóa chương trình này không? Thao tác này không thể hoàn tác.';
 
   @override
   String get deleteError => 'Đã xảy ra lỗi khi xóa';
@@ -234,15 +234,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nameMaxLength => 'Tên phải có 50 ký tự trở xuống';
 
   @override
-  String get minIntervalsRequired => 'Cần ít nhất một khoảng thời gian';
+  String get minIntervalsRequired => 'Cần ít nhất một quãng';
 
   @override
-  String get intervalMinDuration =>
-      'Thời lượng khoảng thời gian phải ít nhất 1 giây';
+  String get intervalMinDuration => 'Mỗi quãng phải dài ít nhất 1 giây';
 
   @override
   String get intervalMaxDuration =>
-      'Thời lượng khoảng thời gian tối đa là 3 giờ (10800 giây)';
+      'Mỗi quãng không được dài quá 3 giờ (10.800 giây)';
 
   @override
   String get speedRange => 'Tốc độ phải lớn hơn 0 (0.5-25.0 km/h)';
@@ -254,7 +253,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get rpmRange => 'RPM phải trong khoảng 30-200';
 
   @override
-  String get resistanceRange => 'Kháng cự phải trong khoảng 1-20';
+  String get resistanceRange => 'Lực cản phải trong khoảng 1–20';
 
   @override
   String get levelRange => 'Cấp độ phải trong khoảng 1-20';
@@ -263,7 +262,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get spmRange => 'SPM phải trong khoảng 50-200';
 
   @override
-  String get noRoutinesSaved => 'Không có thói quen đã lưu';
+  String get noRoutinesSaved => 'Chưa lưu chương trình nào';
 
   @override
   String get tapToCreate => 'Chạm để tạo';
@@ -272,7 +271,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get tapButtonToCreate => 'Chạm vào nút để tạo';
 
   @override
-  String get premiumRoutineSettings => 'Cài đặt Thói quen Cao cấp';
+  String get premiumRoutineSettings => 'Cài đặt chương trình Premium';
 
   @override
   String get viewMembership => 'Xem Premium';
@@ -308,10 +307,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resume => 'Tiếp tục';
 
   @override
-  String get endWorkout => 'Kết thúc Thói quen';
+  String get endWorkout => 'Kết thúc buổi tập';
 
   @override
-  String get endWorkoutConfirm => 'Bạn có muốn kết thúc thói quen không?';
+  String get endWorkoutConfirm => 'Bạn có muốn kết thúc buổi tập không?';
 
   @override
   String get end => 'Kết thúc';
@@ -329,11 +328,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get pausedTitle => 'Đã tạm dừng';
 
   @override
-  String get pausedSubtitle => 'Bạn có thể tiếp tục hoặc kết thúc thói quen';
+  String get pausedSubtitle => 'Bạn có thể tiếp tục hoặc kết thúc buổi tập';
 
   @override
   String get endWorkoutConfirmationMessage =>
-      'Nếu bạn kết thúc ngay bây giờ, thói quen hiện tại sẽ kết thúc và bạn sẽ chuyển sang màn hình tóm tắt.';
+      'Nếu kết thúc bây giờ, buổi tập sẽ dừng và màn hình tóm tắt sẽ mở ra.';
 
   @override
   String get workoutComplete => 'Hoàn thành bài tập';
@@ -355,7 +354,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get liveActivityInProgress => 'Đang tập luyện';
 
   @override
-  String liveActivityIntervalFormat(int current, int total) {
+  String liveActivityIntervalFormat(String current, String total) {
     return 'Hiệp $current/$total';
   }
 
@@ -386,16 +385,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get continueWorkout => 'Tiếp tục';
 
   @override
-  String get endWorkoutQuestion => 'Bạn có muốn kết thúc thói quen không?';
+  String get endWorkoutQuestion => 'Bạn có muốn kết thúc buổi tập không?';
 
   @override
-  String get workoutPaused => 'Thói quen đã được tạm dừng';
+  String get workoutPaused => 'Buổi tập đã tạm dừng';
 
   @override
   String get lvlIncline => 'Độ dốc';
 
   @override
-  String get lvlResistance => 'Cấp độ Kháng cự';
+  String get lvlResistance => 'Mức lực cản';
 
   @override
   String get premium => 'Cao cấp';
@@ -475,7 +474,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get premiumSubheadline =>
-      'Mở khóa hướng dẫn bằng giọng nói, bài tập xe đạp và máy leo cầu thang, và thói quen không giới hạn';
+      'Mở khóa hướng dẫn bằng giọng nói, bài tập xe đạp, máy leo cầu thang và lưu chương trình không giới hạn';
 
   @override
   String get monthly => 'Hàng tháng';
@@ -499,8 +498,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get oneTime => 'Thanh toán một lần';
 
   @override
-  String savePercent(int percent) {
-    return 'Tiết kiệm $percent%';
+  String savePercent(String percent) {
+    return 'Tiết kiệm $percent';
   }
 
   @override
@@ -525,7 +524,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumTab => 'Cao cấp';
 
   @override
-  String get routineTab => 'Thói quen';
+  String get routineTab => 'Chương trình';
 
   @override
   String get settingsTab => 'Cài đặt';
@@ -575,16 +574,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get alreadySaved => 'Đã lưu';
 
   @override
-  String get routineSaved => 'Thói quen đã được lưu';
+  String get routineSaved => 'Đã lưu chương trình';
 
   @override
   String get checkRoutine => 'Xem';
 
   @override
-  String get saveRoutine => 'Lưu Thói quen';
+  String get saveRoutine => 'Lưu chương trình';
 
   @override
-  String get routineAlreadySaved => 'Thói quen đã được lưu';
+  String get routineAlreadySaved => 'Chương trình này đã được lưu';
 
   @override
   String get noTemplatesFound => 'Không tìm thấy mẫu';
@@ -873,7 +872,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bắt đầu bài tập đầu tiên của bạn để xem lịch sử ở đây';
 
   @override
-  String get goToRoutines => 'Đi đến Thói quen';
+  String get goToRoutines => 'Đến Chương trình';
 
   @override
   String get weightRecorded => 'Cân nặng đã được ghi lại';
@@ -966,25 +965,13 @@ class AppLocalizationsVi extends AppLocalizations {
       'Hủy bất cứ lúc nào, vẫn dùng đến hết kỳ';
 
   @override
-  String workoutDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Tập luyện $count ngày 🔥',
-      one: 'Tập luyện 1 ngày 🔥',
-    );
-    return '$_temp0';
+  String workoutDays(String count) {
+    return 'Số ngày tập: $count 🔥';
   }
 
   @override
-  String restDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ngày nghỉ $count ngày 🛏️',
-      one: 'Ngày nghỉ 1 ngày 🛏️',
-    );
-    return '$_temp0';
+  String restDays(String count) {
+    return 'Số ngày nghỉ: $count 🛏️';
   }
 
   @override
@@ -1071,32 +1058,32 @@ class AppLocalizationsVi extends AppLocalizations {
   String get generateCustomRoutine => 'Tạo bài tập tùy chỉnh';
 
   @override
-  String durationMinutes(int minutes) {
+  String durationMinutes(String minutes) {
     return '$minutes phút';
   }
 
   @override
-  String floorCount(int count) {
+  String floorCount(String count) {
     return '$count tầng';
   }
 
   @override
-  String customRunName(String distance, int calories) {
+  String customRunName(String distance, String calories) {
     return 'Chạy bộ tùy chỉnh $distance km ($calories kcal)';
   }
 
   @override
-  String customCycleName(String distance, int calories) {
+  String customCycleName(String distance, String calories) {
     return 'Đạp xe tùy chỉnh $distance km ($calories kcal)';
   }
 
   @override
-  String customStairsName(int floors, int calories) {
+  String customStairsName(String floors, String calories) {
     return 'Leo cầu thang tùy chỉnh $floors tầng ($calories kcal)';
   }
 
   @override
-  String customRoutineSpeech(int calories) {
+  String customRoutineSpeech(String calories) {
     return 'Bài tập tùy chỉnh đã sẵn sàng. Hãy đặt mục tiêu khoảng $calories calo!';
   }
 
@@ -1146,13 +1133,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get importSharedRoutine => 'Nhập bài tập được chia sẻ';
 
   @override
-  String importQrRoutinePrompt(String name, String difficulty, int count) {
+  String importQrRoutinePrompt(String name, String difficulty, String count) {
     return 'Đã tìm thấy bài tập trong mã QR.\n\n• Tên: $name\n• Độ khó: $difficulty\n• Quãng: $count\n\nBạn có muốn lưu vào thư viện không?';
   }
 
   @override
   String importClipboardRoutinePrompt(
-      String name, String difficulty, int count) {
+      String name, String difficulty, String count) {
     return 'Đã tìm thấy bài tập được chia sẻ trong bộ nhớ tạm.\n\n• Tên: $name\n• Độ khó: $difficulty\n• Quãng: $count\n\nBạn có muốn lưu vào thư viện không?';
   }
 
@@ -1180,7 +1167,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get noAnnouncements => 'Không thông báo';
 
   @override
-  String secondsShort(int seconds) {
+  String secondsShort(String seconds) {
     return 'trước $seconds giây';
   }
 
@@ -1192,7 +1179,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Chọn thời điểm nghe thời gian còn lại trước khi chuyển quãng.';
 
   @override
-  String secondsLeft(int seconds) {
+  String secondsLeft(String seconds) {
     return 'Còn $seconds giây';
   }
 
@@ -1207,7 +1194,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sessionRepeatBlock => 'Khối bài tập lặp lại';
 
   @override
-  String repeatTimes(int count) {
+  String repeatTimes(String count) {
     return 'Lặp lại $count lần';
   }
 
@@ -1220,4 +1207,74 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get unableToOpenPrivacyPolicy =>
       'Không thể mở chính sách quyền riêng tư.';
+
+  @override
+  String get less => 'Ít';
+
+  @override
+  String get more => 'Nhiều';
+
+  @override
+  String inclineValue(String value) {
+    return 'Độ dốc: $value%';
+  }
+
+  @override
+  String rpmValue(String value) {
+    return '$value vòng/phút';
+  }
+
+  @override
+  String nextMetric(String value) {
+    return 'Tiếp theo: $value';
+  }
+
+  @override
+  String get weightCalendar => 'Lịch cân nặng';
+
+  @override
+  String routineHeaderSummary(
+      String duration, int count, String countText, String difficulty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$duration · $countText quãng · $difficulty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalAchievedSummary(String goalWeight) {
+    return 'Mục tiêu: $goalWeight • Đã đạt!';
+  }
+
+  @override
+  String goalRemainingSummary(String goalWeight, String difference) {
+    return 'Mục tiêu: $goalWeight • Còn $difference';
+  }
+
+  @override
+  String goalExceededSummary(String goalWeight, String difference) {
+    return 'Mục tiêu: $goalWeight • Vượt $difference';
+  }
+
+  @override
+  String averageSpeedKmh(String value) {
+    return 'TB $value km/h';
+  }
+
+  @override
+  String averageSpeedMph(String value) {
+    return 'TB $value mph';
+  }
+
+  @override
+  String averageRpmValue(String value) {
+    return 'TB $value vòng/phút';
+  }
+
+  @override
+  String averageLevelValue(String value) {
+    return 'Cấp độ TB: $value';
+  }
 }

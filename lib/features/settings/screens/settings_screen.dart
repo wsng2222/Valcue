@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
@@ -20,6 +21,7 @@ import '../../../widgets/app_segmented_control.dart';
 import '../../../widgets/app_bottom_sheet.dart';
 import '../../../widgets/app_message.dart';
 import '../../../widgets/bottom_sheet_action_bar.dart';
+import '../../../l10n/supported_app_language.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   return appSegmentedSelectedBackground(context);
@@ -86,85 +88,6 @@ Widget _buildPlatformSwitch({
     onChanged: onChanged,
     activeTrackColor: Theme.of(context).colorScheme.primary,
   );
-}
-
-// Language helper class
-class LanguageHelper {
-  static const Map<String, String> languageNames = {
-    'en': 'English',
-    'es': 'Español',
-    'fr': 'Français',
-    'de': 'Deutsch',
-    'ru': 'Русский',
-    'pt': 'Português',
-    'ja': '日本語',
-    'zh': '中文',
-    'ko': '한국어',
-    'vi': 'Tiếng Việt',
-    'ar': 'العربية',
-    'nl': 'Nederlands',
-    'nb': 'Norsk',
-    'da': 'Dansk',
-    'it': 'Italiano',
-    'th': 'ไทย',
-  };
-
-  static const Map<String, String> languageFlags = {
-    'en': '🇬🇧',
-    'es': '🇪🇸',
-    'fr': '🇫🇷',
-    'de': '🇩🇪',
-    'ru': '🇷🇺',
-    'pt': '🇵🇹',
-    'ja': '🇯🇵',
-    'zh': '🇨🇳',
-    'ko': '🇰🇷',
-    'vi': '🇻🇳',
-    'ar': '🇸🇦',
-    'nl': '🇳🇱',
-    'nb': '🇳🇴',
-    'da': '🇩🇰',
-    'it': '🇮🇹',
-    'th': '🇹🇭',
-  };
-
-  // Fixed order (curated): West EU -> North EU -> East EU -> Asia -> MENA
-  static const List<String> _orderedLanguageCodes = [
-    'en',
-    'es',
-    'fr',
-    'de',
-    'it',
-    'nl',
-    'da',
-    'nb',
-    'ru',
-    'pt',
-    'ja',
-    'zh',
-    'ko',
-    'vi',
-    'ar',
-    'th',
-  ];
-
-  static String getLanguageName(String code) {
-    return languageNames[code] ?? code;
-  }
-
-  static String getLanguageFlag(String code) {
-    return languageFlags[code] ?? '';
-  }
-
-  static String getLanguageDisplayName(String code) {
-    final name = getLanguageName(code);
-    final flag = getLanguageFlag(code);
-    return '$name $flag';
-  }
-
-  static List<String> get supportedLanguages => _orderedLanguageCodes;
-  // All supported languages are now implemented via ARB files.
-  static List<String> get implementedLanguages => supportedLanguages;
 }
 
 /// iOS-like grouped settings section container
@@ -359,7 +282,7 @@ class UnitSegmentRow extends StatelessWidget {
         ),
         // Segmented control
         Padding(
-          padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
+          padding: const EdgeInsetsDirectional.fromSTEB(72, 0, 16, 12),
           child: _buildSegmentedControl(
             context: context,
             value: value,
@@ -576,7 +499,7 @@ class ThemeSegmentRow extends StatelessWidget {
         ),
         PlatformInfo.isIOS
             ? Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
+                padding: const EdgeInsetsDirectional.fromSTEB(72, 0, 16, 12),
                 child: _buildSegmentedControl(
                   context: context,
                   value: value,
@@ -584,7 +507,7 @@ class ThemeSegmentRow extends StatelessWidget {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.fromLTRB(72, 0, 16, 12),
+                padding: const EdgeInsetsDirectional.fromSTEB(72, 0, 16, 12),
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
@@ -902,7 +825,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 56),
+            padding: const EdgeInsetsDirectional.only(start: 56),
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -1071,7 +994,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           // Weight Unit Setting (options only, same section)
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              72,
+                              0,
+                              16,
+                              16,
+                            ),
                             child: UnitSegmentRow._buildSegmentedControlStatic(
                               context: context,
                               value: provider.weightUnit,
@@ -1122,9 +1050,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 subtitle:
                                     provider.voiceGuideCountdownTriggers.isEmpty
                                         ? l10n.noAnnouncements
-                                        : provider.voiceGuideCountdownTriggers
-                                            .map(l10n.secondsShort)
-                                            .join(', '),
+                                        : LocalizedFormat.compactList(
+                                            context,
+                                            provider.voiceGuideCountdownTriggers
+                                                .map(
+                                              (seconds) => l10n.secondsShort(
+                                                LocalizedFormat.decimal(
+                                                  context,
+                                                  seconds,
+                                                  decimalDigits: 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                 onTap: () => _showCountdownTriggersPicker(
                                     context, provider),
                               );
@@ -1326,7 +1264,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   String _getLanguageDisplayName(BuildContext context, String languageCode) {
-    return LanguageHelper.getLanguageName(languageCode);
+    return SupportedAppLanguage.fromCode(languageCode).nativeName;
   }
 
   void _showLanguageSelector(
@@ -1334,7 +1272,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    final languageOptions = LanguageHelper.supportedLanguages;
+    final languageOptions = SupportedAppLanguage.codesInDisplayOrder;
 
     // Index 0 = System, 1..N = specific languages
     final isSystem = provider.settings.language == null;
@@ -1396,7 +1334,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           ...languageOptions.map((langCode) {
                             final displayName =
-                                LanguageHelper.getLanguageDisplayName(langCode);
+                                SupportedAppLanguage.fromCode(langCode)
+                                    .nativeName;
                             return Center(
                               child: Text(
                                 displayName,
@@ -1463,7 +1402,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    l10n.secondsLeft(sec),
+                    l10n.secondsLeft(
+                      LocalizedFormat.decimal(
+                        context,
+                        sec,
+                        decimalDigits: 0,
+                      ),
+                    ),
                     style: TextStyle(
                       color: isSelected
                           ? theme.colorScheme.primary
@@ -1560,7 +1505,7 @@ class SettingsSliderRow extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 56, top: 4),
+            padding: const EdgeInsetsDirectional.only(start: 56, top: 4),
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 4.0,
@@ -1581,7 +1526,7 @@ class SettingsSliderRow extends StatelessWidget {
           ),
           if (showDivider)
             Padding(
-              padding: const EdgeInsets.only(left: 56, top: 12),
+              padding: const EdgeInsetsDirectional.only(start: 56, top: 12),
               child: Divider(
                   height: 0.5, thickness: 0.5, color: theme.dividerColor),
             ),

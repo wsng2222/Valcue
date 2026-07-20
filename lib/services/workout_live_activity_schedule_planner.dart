@@ -22,6 +22,10 @@ class WorkoutLiveActivityScheduleLabels {
     required this.inclineLabel,
     required this.resistanceLabel,
     required this.levelLabel,
+    this.inclineValueTemplate,
+    this.rpmValueTemplate,
+    this.resistanceValueTemplate,
+    this.levelValueTemplate,
   });
 
   final String machineName;
@@ -34,6 +38,10 @@ class WorkoutLiveActivityScheduleLabels {
   final String inclineLabel;
   final String resistanceLabel;
   final String levelLabel;
+  final String? inclineValueTemplate;
+  final String? rpmValueTemplate;
+  final String? resistanceValueTemplate;
+  final String? levelValueTemplate;
 }
 
 class WorkoutLiveActivityScheduleSnapshot {
@@ -46,6 +54,7 @@ class WorkoutLiveActivityScheduleSnapshot {
     required this.countdownRemaining,
     required this.progress,
     required this.measurement,
+    this.locale = 'en_US',
     required this.capturedAt,
     required this.labels,
   });
@@ -58,6 +67,7 @@ class WorkoutLiveActivityScheduleSnapshot {
   final Duration countdownRemaining;
   final double progress;
   final String measurement;
+  final String locale;
   final DateTime capturedAt;
   final WorkoutLiveActivityScheduleLabels labels;
 }
@@ -258,6 +268,7 @@ class WorkoutLiveActivitySchedulePlanner {
       countdownRemaining: countdownRemaining,
       progress: progress,
       measurement: snapshot.measurement,
+      locale: snapshot.locale,
       now: at,
       machineName: labels.machineName,
       statusText: statusText,
@@ -270,6 +281,10 @@ class WorkoutLiveActivitySchedulePlanner {
       inclineLabel: labels.inclineLabel,
       resistanceLabel: labels.resistanceLabel,
       levelLabel: labels.levelLabel,
+      inclineValueTemplate: labels.inclineValueTemplate,
+      rpmValueTemplate: labels.rpmValueTemplate,
+      resistanceValueTemplate: labels.resistanceValueTemplate,
+      levelValueTemplate: labels.levelValueTemplate,
     );
   }
 

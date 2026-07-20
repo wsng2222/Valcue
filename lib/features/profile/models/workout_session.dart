@@ -59,22 +59,4 @@ class WorkoutSession {
       routineId: json['routineId'] as String,
     );
   }
-
-  /// Get the key metric for this machine type
-  String? getKeyMetric() {
-    switch (machineType) {
-      case MachineType.treadmill:
-        return distanceMeters != null
-            ? '${distanceMeters!.toStringAsFixed(2)} m'
-            : null;
-      case MachineType.cycle:
-        return averageRpm != null
-            ? '${averageRpm!.toStringAsFixed(1)} RPM'
-            : null;
-      case MachineType.stairmaster:
-        return averageLevel != null
-            ? 'Level ${averageLevel!.toStringAsFixed(1)}'
-            : null;
-    }
-  }
 }

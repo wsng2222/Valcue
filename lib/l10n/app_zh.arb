@@ -34,10 +34,10 @@
   "save": "保存",
   "edit": "编辑",
   "start": "开始",
-  "editRoutine": "编辑例行程序",
-  "routineEdit": "编辑例行程序",
+  "editRoutine": "编辑训练计划",
+  "routineEdit": "编辑训练计划",
   "name": "名称",
-  "unnamedRoutine": "未命名例行程序",
+  "unnamedRoutine": "未命名训练计划",
   "difficulty": "难度",
   "difficultyColon": "难度 : {difficulty}",
   "@difficultyColon": {
@@ -58,7 +58,7 @@
   "repeatPattern": "重复模式",
   "reorderIntervals": "调整顺序",
   "reorderMode": "顺序调整模式",
-  "reorderModeHint": "长按卡片并拖动到你想要的位置。",
+  "reorderModeHint": "长按卡片并拖到你想要的位置。",
   "patternLength": "模式长度",
   "repeatCount": "重复次数",
   "noIntervals": "没有间隔",
@@ -74,7 +74,7 @@
   "@levelColon": {
     "placeholders": {
       "level": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -86,7 +86,7 @@
   "@resistanceColon": {
     "placeholders": {
       "resistance": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -94,8 +94,8 @@
   "spmSteps": "SPM（步/分钟）",
   "saved": "已保存",
   "deleted": "已删除",
-  "deleteRoutineTitle": "删除例行程序",
-  "deleteRoutineMessage": "您确定要删除此例行程序吗？此操作无法撤销。",
+  "deleteRoutineTitle": "删除训练计划",
+  "deleteRoutineMessage": "确定要删除这个训练计划吗？此操作无法撤销。",
   "deleteError": "删除时发生错误",
   "nameRequired": "请输入名称",
   "nameMaxLength": "名称必须为50个字符或更少",
@@ -108,10 +108,10 @@
   "resistanceRange": "阻力必须在1-20范围内",
   "levelRange": "级别必须在1-20范围内",
   "spmRange": "SPM必须在50-200范围内",
-  "noRoutinesSaved": "没有保存的例行程序",
+  "noRoutinesSaved": "还没有保存训练计划",
   "tapToCreate": "点击创建",
   "tapButtonToCreate": "点击按钮创建",
-  "premiumRoutineSettings": "高级例行程序设置",
+  "premiumRoutineSettings": "Premium 训练计划设置",
   "viewMembership": "查看高级版",
   "freeLimitTitle": "免费仅 2 个训练",
   "freeLimitMessage": "升级高级版即可不限量使用",
@@ -124,7 +124,7 @@
   "pause": "暂停",
   "resume": "继续",
   "endWorkout": "结束训练",
-  "endWorkoutConfirm": "您要结束训练吗？",
+  "endWorkoutConfirm": "要结束训练吗？",
   "end": "结束",
   "share": "分享",
   "@share": {
@@ -133,8 +133,8 @@
   "rotate": "旋转",
   "paused": "已暂停",
   "pausedTitle": "已暂停",
-  "pausedSubtitle": "您可以继续或结束训练",
-  "endWorkoutConfirmationMessage": "如果现在结束，当前训练将完成，您将转到摘要屏幕。",
+  "pausedSubtitle": "你可以继续或结束训练",
+  "endWorkoutConfirmationMessage": "如果现在结束，当前训练将停止并进入总结页面。",
   "workoutComplete": "锻炼完成",
   "backgroundIntervalNotificationTitle": "新间歇开始",
   "backgroundIntervalNotificationsTitle": "屏幕熄灭时也接收通知",
@@ -153,7 +153,7 @@
   "averageLevel": "平均等级",
   "holdToStop": "长按停止",
   "continueWorkout": "继续",
-  "endWorkoutQuestion": "您要结束训练吗？",
+  "endWorkoutQuestion": "要结束训练吗？",
   "workoutPaused": "训练已暂停",
   "lvlIncline": "坡度",
   "lvlResistance": "级别阻力",
@@ -165,18 +165,18 @@
   "premiumMembership": "高级版",
   "benefitCycleStairmaster": "动感单车及爬楼机运动",
   "benefitVoiceGuide": "分段语音指导引导",
-  "benefitUnlimitedRoutines": "例程保存数量无限制",
+  "benefitUnlimitedRoutines": "无限保存训练计划",
   "benefitFutureFeatures": "包含未来增加的所有功能",
   "noAds": "无广告",
   "voiceGuideBenefit1": "运动中的语音教练指导",
   "voiceGuideBenefit2": "转换阶段时的自动提示",
   "voiceGuideBenefit3": "无需看屏幕，专注运动本身",
-  "routineLimitBenefit1": "例程保存数量无限制",
-  "routineLimitBenefit2": "保存针对不同目标的定制例程",
+  "routineLimitBenefit1": "无限保存训练计划",
+  "routineLimitBenefit2": "按不同目标保存训练计划",
   "routineLimitBenefit3": "跑步机/动感单车/爬楼机完美支持",
   "premium_benefit_1": "支持<red>动感单车和爬楼机</red>训练",
   "premium_benefit_2": "运动时的<red>分段语音指导</red>",
-  "premium_benefit_3": "任意保存的例程数<red>无限制</red>",
+  "premium_benefit_3": "<red>无限</red>保存训练计划",
   "premium_benefit_4": "包含未来所有高级功能<red>永久免费使用</red>",
   "originalPrice": "{price}",
   "@originalPrice": {
@@ -195,10 +195,10 @@
     }
   },
   "premiumTab": "高级版",
-  "routineTab": "例行程序",
+  "routineTab": "训练计划",
   "settingsTab": "设置",
   "myTab": "我的",
-  "premiumSubheadline": "解锁语音指导、自行车和爬楼机训练，以及无限例程",
+  "premiumSubheadline": "解锁语音指导、单车和爬楼机训练，以及无限训练计划",
   "@premiumSubheadline": {
     "description": "高级版解锁内容描述"
   },
@@ -230,12 +230,12 @@
   "@oneTime": {
     "description": "一次性支付后缀"
   },
-  "savePercent": "节省 {percent}%",
+  "savePercent": "节省 {percent}",
   "@savePercent": {
     "description": "节省百分比徽章",
     "placeholders": {
       "percent": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -296,9 +296,9 @@
   "recommendedRoutinesStairmaster": "爬楼机推荐",
   "alreadySaved": "已保存",
   "checkRoutine": "预览",
-  "saveRoutine": "保存例程",
-  "routineSaved": "例程已保存",
-  "routineAlreadySaved": "例程已保存",
+  "saveRoutine": "保存训练计划",
+  "routineSaved": "训练计划已保存",
+  "routineAlreadySaved": "这个训练计划已保存",
   "noTemplatesFound": "未找到模板",
   "templateTreadmillBeginner1Title": "初级跑步机 1",
   "templateTreadmillBeginner1Subtitle": "3分钟热身后 1:1步行与跑步",
@@ -351,8 +351,8 @@
   "today": "今天",
   "yesterday": "昨天",
   "noWorkoutsYet": "还没有训练记录",
-  "startYourFirstWorkout": "开始您的第一次训练以在此查看您的记录",
-  "goToRoutines": "前往例程",
+  "startYourFirstWorkout": "开始第一次训练，便可在这里查看记录",
+  "goToRoutines": "前往训练计划",
   "weightRecorded": "体重已记录",
   "workout": "训练",
   "workouts": "训练",
@@ -361,7 +361,7 @@
   "over": "超过",
   "last": "上次",
   "newLabel": "新的",
-  "youNeed": "您需要{amount}才能达到{goal}",
+  "youNeed": "距离{goal}还差{amount}",
   "@youNeed": {
     "placeholders": {
       "amount": {
@@ -372,7 +372,7 @@
       }
     }
   },
-  "youNeedPlus": "您需要+{amount}才能达到{goal}",
+  "youNeedPlus": "距离{goal}还差+{amount}",
   "@youNeedPlus": {
     "placeholders": {
       "amount": {
@@ -480,21 +480,21 @@
   "@cancelAnytimeKeepAccess": {
     "description": "Cancellation trust copy"
   },
-  "workoutDays": "{count, plural, one{运动 1 天 🔥} other{运动 {count} 天 🔥}}",
+  "workoutDays": "训练天数：{count} 天 🔥",
   "@workoutDays": {
     "description": "Workout days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
-  "restDays": "{count, plural, one{休息 1 天 🛏️} other{休息 {count} 天 🛏️}}",
+  "restDays": "休息天数：{count} 天 🛏️",
   "@restDays": {
     "description": "Rest days count in calendar statistics",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -563,5 +563,19 @@
   "repeatTimes": "重复 {count} 次",
   "addRepeatBlock": "添加重复组",
   "unableToShareWorkout": "无法分享训练。",
-  "unableToOpenPrivacyPolicy": "无法打开隐私政策。"
+  "unableToOpenPrivacyPolicy": "无法打开隐私政策。",
+  "less": "少",
+  "more": "多",
+  "inclineValue": "坡度 {value}%",
+  "rpmValue": "{value} RPM",
+  "nextMetric": "下一项：{value}",
+  "weightCalendar": "体重日历",
+  "routineHeaderSummary": "{count, plural, other{{duration} · {countText} 个间歇 · {difficulty}}}",
+  "goalAchievedSummary": "目标 {goalWeight} • 已达成！",
+  "goalRemainingSummary": "目标 {goalWeight} • 还差 {difference}",
+  "goalExceededSummary": "目标 {goalWeight} • 超出 {difference}",
+  "averageSpeedKmh": "平均 {value} 公里/小时",
+  "averageSpeedMph": "平均 {value} 英里/小时",
+  "averageRpmValue": "平均 {value} 转/分钟",
+  "averageLevelValue": "平均等级 {value}"
 }

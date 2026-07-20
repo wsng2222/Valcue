@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
+import 'package:valcue/l10n/localized_format.dart';
 import '../models/routine.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
@@ -295,18 +296,34 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     String name = '';
     if (_machineType == MachineType.treadmill) {
       name = l10n.customRunName(
-        _distanceTargetKm.toStringAsFixed(1),
-        _caloriesTarget,
+        LocalizedFormat.decimal(context, _distanceTargetKm),
+        LocalizedFormat.decimal(
+          context,
+          _caloriesTarget,
+          decimalDigits: 0,
+        ),
       );
     } else if (_machineType == MachineType.cycle) {
       name = l10n.customCycleName(
-        _distanceTargetKm.toStringAsFixed(1),
-        _caloriesTarget,
+        LocalizedFormat.decimal(context, _distanceTargetKm),
+        LocalizedFormat.decimal(
+          context,
+          _caloriesTarget,
+          decimalDigits: 0,
+        ),
       );
     } else {
       name = l10n.customStairsName(
-        _stairsTargetFloors,
-        _caloriesTarget,
+        LocalizedFormat.decimal(
+          context,
+          _stairsTargetFloors,
+          decimalDigits: 0,
+        ),
+        LocalizedFormat.decimal(
+          context,
+          _caloriesTarget,
+          decimalDigits: 0,
+        ),
       );
     }
 
@@ -327,7 +344,13 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     unawaited(SoundService().playFinished());
     unawaited(
       VoiceGuideService.instance.speakCustom(
-        l10n.customRoutineSpeech(_caloriesTarget),
+        l10n.customRoutineSpeech(
+          LocalizedFormat.decimal(
+            context,
+            _caloriesTarget,
+            decimalDigits: 0,
+          ),
+        ),
       ),
     );
   }
@@ -581,19 +604,38 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           case MachineType.treadmill:
             if (interval.speedKmh != null && interval.grade != null) {
               pill1Text = settingsProvider.formatSpeed(interval.speedKmh!);
-              pill2Text =
-                  '${interval.grade!.toStringAsFixed(1)}% ${l10n.incline}';
+              pill2Text = l10n.inclineValue(
+                LocalizedFormat.decimal(context, interval.grade!),
+              );
             }
             break;
           case MachineType.cycle:
             if (interval.rpm != null && interval.resistance != null) {
-              pill1Text = '${interval.rpm} ${l10n.rpm}';
-              pill2Text = 'Level ${interval.resistance!}';
+              pill1Text = l10n.rpmValue(
+                LocalizedFormat.decimal(
+                  context,
+                  interval.rpm!,
+                  decimalDigits: 0,
+                ),
+              );
+              pill2Text = l10n.resistanceColon(
+                LocalizedFormat.decimal(
+                  context,
+                  interval.resistance!,
+                  decimalDigits: 0,
+                ),
+              );
             }
             break;
           case MachineType.stairmaster:
             if (interval.level != null) {
-              pill1Text = 'Level ${interval.level!}';
+              pill1Text = l10n.levelColon(
+                LocalizedFormat.decimal(
+                  context,
+                  interval.level!,
+                  decimalDigits: 0,
+                ),
+              );
               pill2Text = null;
             }
             break;
@@ -769,7 +811,13 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       ],
                     ),
                     Text(
-                      l10n.durationMinutes(_durationMinutes),
+                      l10n.durationMinutes(
+                        LocalizedFormat.decimal(
+                          context,
+                          _durationMinutes,
+                          decimalDigits: 0,
+                        ),
+                      ),
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -846,8 +894,14 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     ),
                     Text(
                       isStairMaster
-                          ? l10n.floorCount(_stairsTargetFloors)
-                          : '${_distanceTargetKm.toStringAsFixed(1)} km',
+                          ? l10n.floorCount(
+                              LocalizedFormat.decimal(
+                                context,
+                                _stairsTargetFloors,
+                                decimalDigits: 0,
+                              ),
+                            )
+                          : '${LocalizedFormat.decimal(context, _distanceTargetKm)} km',
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -919,11 +973,17 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                 SizedBox(
                   width: 64,
                   child: TextFormField(
-                    initialValue: '70',
+                    initialValue: LocalizedFormat.decimal(
+                      context,
+                      70,
+                      decimalDigits: 0,
+                    ),
                     keyboardType: TextInputType.number,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.end,
                     inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'[0-9٠-٩۰-۹]'),
+                      ),
                       LengthLimitingTextInputFormatter(3),
                     ],
                     decoration: const InputDecoration(
@@ -937,7 +997,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       color: theme.colorScheme.primary,
                     ),
                     onChanged: (value) {
-                      final weight = double.tryParse(value);
+                      final weight =
+                          LocalizedFormat.tryParseDecimal(context, value);
                       if (weight != null && weight > 0) {
                         _bodyWeightKg = weight;
                       }
