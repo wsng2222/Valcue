@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
@@ -10,6 +9,7 @@ import '../models/routine.dart';
 import '../models/interval.dart';
 import '../models/machine_type.dart';
 import '../storage/routine_provider.dart';
+import '../utils/custom_routine_generator.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../theme/app_theme.dart';
 import '../../../services/sound_service.dart';
@@ -51,8 +51,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   // Workout Goal Variables
   double _distanceTargetKm = 5.0; // 1.0 to 10.0 km
   int _stairsTargetFloors = 50; // 10 to 200 floors (StairMaster only)
-  int _caloriesTarget = 250; // 50 to 1000 kcal
-  double _bodyWeightKg = 70.0;
+  String _difficulty = 'medium';
   bool _includeIncline = true;
 
   bool _isGenerating = false;
@@ -97,200 +96,15 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
 
   void _finalizeGeneration() {
     final l10n = AppLocalizations.of(context)!;
-    final random = Random();
-    final List<Interval> intervals = [];
-
-    // 1. Common Time Config
-    final totalSeconds = _durationMinutes * 60;
-    int remainingSeconds =
-        totalSeconds - 180 - 120; // 3 min warmup, 2 min cooldown
-    if (remainingSeconds < 120) remainingSeconds = 120; // safety fallback
-
-    if (_machineType == MachineType.treadmill) {
-      // 2. Treadmill Math
-      double avgSpeed = _distanceTargetKm / (_durationMinutes / 60.0);
-      avgSpeed = avgSpeed.clamp(4.0, 15.0);
-
-      double baseWarmupSpeed = (avgSpeed - 1.5).clamp(3.5, 6.0);
-      double cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
-
-      double speedMMin = avgSpeed * 16.67;
-      double baseCaloriesPerMin =
-          (3.5 + 0.2 * speedMMin) * _bodyWeightKg / 200.0;
-      double baseKcal = baseCaloriesPerMin * _durationMinutes;
-
-      double avgGrade = 0.0;
-      double workGrade = 0.0;
-      double restGrade = 0.0;
-      double warmupGrade = 0.0;
-
-      if (_includeIncline) {
-        // Adjust average incline (grade %) to match target calories
-        if (_caloriesTarget > baseKcal) {
-          double diff =
-              (_caloriesTarget * 200.0 / _bodyWeightKg) / _durationMinutes -
-                  (3.5 + 0.2 * speedMMin);
-          if (diff > 0) {
-            avgGrade = (diff / (0.9 * speedMMin)) * 100.0;
-          }
-        }
-        avgGrade = avgGrade.clamp(0.0, 12.0);
-        workGrade = (avgGrade * 1.4).clamp(0.0, 15.0);
-        restGrade = (avgGrade * 0.6).clamp(0.0, 8.0);
-        warmupGrade = 1.0;
-      } else {
-        // No Incline: recalculate speed to match calories
-        if (_caloriesTarget > baseKcal) {
-          double targetPerMin =
-              (_caloriesTarget * 200.0) / (_bodyWeightKg * _durationMinutes);
-          double neededSpeedMMin = (targetPerMin - 3.5) / 0.2;
-          avgSpeed = neededSpeedMMin / 16.67;
-          avgSpeed = avgSpeed.clamp(4.0, 16.0);
-          baseWarmupSpeed = (avgSpeed - 1.5).clamp(3.5, 6.0);
-          cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
-        }
-      }
-
-      double workSpeed = (avgSpeed + 1.5).clamp(4.5, 16.0);
-      double restSpeed = (avgSpeed - 1.0).clamp(3.0, 10.0);
-
-      // Warm up
-      intervals.add(Interval.treadmill(
-        durationSeconds: 180,
-        speedKmh: double.parse(baseWarmupSpeed.toStringAsFixed(1)),
-        grade: warmupGrade,
-      ));
-
-      // Intervals (2 min cycles)
-      int cycleDuration = 120;
-      int cycles = remainingSeconds ~/ cycleDuration;
-      if (cycles < 1) cycles = 1;
-
-      String groupId = 'ai_group_${random.nextInt(10000)}';
-      for (int i = 0; i < cycles; i++) {
-        intervals.add(Interval.treadmill(
-          durationSeconds: 60,
-          speedKmh: double.parse(workSpeed.toStringAsFixed(1)),
-          grade: double.parse(workGrade.toStringAsFixed(1)),
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-        intervals.add(Interval.treadmill(
-          durationSeconds: 60,
-          speedKmh: double.parse(restSpeed.toStringAsFixed(1)),
-          grade: double.parse(restGrade.toStringAsFixed(1)),
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-      }
-
-      // Cool down
-      intervals.add(Interval.treadmill(
-        durationSeconds: 120,
-        speedKmh: double.parse(cooldownSpeed.toStringAsFixed(1)),
-        grade: 0.0,
-      ));
-    } else if (_machineType == MachineType.cycle) {
-      // 3. Cycle Math
-      double avgSpeed = _distanceTargetKm / (_durationMinutes / 60.0);
-      double avgRpm = (avgSpeed * 2.8).clamp(50.0, 110.0);
-
-      double avgRes = _caloriesTarget /
-          (avgRpm * _durationMinutes * 0.002 * (_bodyWeightKg / 200.0));
-      avgRes = avgRes.clamp(2.0, 18.0);
-
-      // Warm up
-      intervals.add(Interval.cycle(
-        durationSeconds: 180,
-        rpm: (avgRpm - 10).clamp(50, 90).toInt(),
-        resistance: (avgRes - 2).clamp(1, 15).toInt(),
-      ));
-
-      // Intervals (2 min cycles)
-      int cycleDuration = 120;
-      int cycles = remainingSeconds ~/ cycleDuration;
-      if (cycles < 1) cycles = 1;
-
-      int workRpm = (avgRpm + 12).clamp(60, 120).toInt();
-      int restRpm = (avgRpm - 8).clamp(45, 95).toInt();
-      int workRes = (avgRes + 2).clamp(2, 20).toInt();
-      int restRes = (avgRes - 1).clamp(1, 16).toInt();
-
-      String groupId = 'ai_group_${random.nextInt(10000)}';
-      for (int i = 0; i < cycles; i++) {
-        intervals.add(Interval.cycle(
-          durationSeconds: 60,
-          rpm: workRpm,
-          resistance: workRes,
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-        intervals.add(Interval.cycle(
-          durationSeconds: 60,
-          rpm: restRpm,
-          resistance: restRes,
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-      }
-
-      // Cool down
-      intervals.add(Interval.cycle(
-        durationSeconds: 120,
-        rpm: (avgRpm - 15).clamp(45, 80).toInt(),
-        resistance: (avgRes - 3).clamp(1, 12).toInt(),
-      ));
-    } else {
-      // 4. StairMaster Math
-      double floorsPerMin = _stairsTargetFloors / _durationMinutes;
-      double stepsPerMin = floorsPerMin * 16.0;
-      double avgLevel = (stepsPerMin / 6.0).clamp(3.0, 15.0);
-
-      double baseCaloriesPerMin = avgLevel * _bodyWeightKg * 0.05;
-      double baseKcal = baseCaloriesPerMin * _durationMinutes;
-      double levelDelta = 0.0;
-      if (_caloriesTarget > baseKcal) {
-        levelDelta = ((_caloriesTarget - baseKcal) /
-                (_bodyWeightKg * _durationMinutes * 0.05))
-            .clamp(0.0, 4.0);
-      }
-
-      // Warm up
-      intervals.add(Interval.stairmaster(
-        durationSeconds: 180,
-        level: (avgLevel - 2).clamp(2, 12).toInt(),
-      ));
-
-      // Intervals (2 min cycles)
-      int cycleDuration = 120;
-      int cycles = remainingSeconds ~/ cycleDuration;
-      if (cycles < 1) cycles = 1;
-
-      int workLevel = (avgLevel + levelDelta).clamp(4, 20).toInt();
-      int restLevel = (avgLevel - (levelDelta / 2)).clamp(2, 14).toInt();
-
-      String groupId = 'ai_group_${random.nextInt(10000)}';
-      for (int i = 0; i < cycles; i++) {
-        intervals.add(Interval.stairmaster(
-          durationSeconds: 60,
-          level: workLevel,
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-        intervals.add(Interval.stairmaster(
-          durationSeconds: 60,
-          level: restLevel,
-          groupId: groupId,
-          repeatCount: cycles,
-        ));
-      }
-
-      // Cool down
-      intervals.add(Interval.stairmaster(
-        durationSeconds: 120,
-        level: (avgLevel - 3).clamp(1, 10).toInt(),
-      ));
-    }
+    final intervals = buildCustomRoutineIntervals(
+      machineType: _machineType,
+      durationMinutes: _durationMinutes,
+      distanceTargetKm: _distanceTargetKm,
+      caloriesTarget: _difficultyToCaloriesTarget(),
+      bodyWeightKg: _difficultyToBodyWeightKg(),
+      includeIncline: _includeIncline,
+      difficulty: _difficulty,
+    );
 
     // Name formatting
     String name = '';
@@ -299,7 +113,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         LocalizedFormat.decimal(context, _distanceTargetKm),
         LocalizedFormat.decimal(
           context,
-          _caloriesTarget,
+          _difficultyToCaloriesTarget(),
           decimalDigits: 0,
         ),
       );
@@ -308,7 +122,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         LocalizedFormat.decimal(context, _distanceTargetKm),
         LocalizedFormat.decimal(
           context,
-          _caloriesTarget,
+          _difficultyToCaloriesTarget(),
           decimalDigits: 0,
         ),
       );
@@ -321,7 +135,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         ),
         LocalizedFormat.decimal(
           context,
-          _caloriesTarget,
+          _difficultyToCaloriesTarget(),
           decimalDigits: 0,
         ),
       );
@@ -332,9 +146,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       _generatedRoutine = Routine(
         id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
         name: name,
-        difficulty: _caloriesTarget > 350
+        difficulty: _difficulty == 'hard'
             ? l10n.hard
-            : (_caloriesTarget > 200 ? l10n.medium : l10n.easy),
+            : (_difficulty == 'easy' ? l10n.easy : l10n.medium),
         intervals: intervals,
         machineType: _machineType,
       );
@@ -347,12 +161,91 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         l10n.customRoutineSpeech(
           LocalizedFormat.decimal(
             context,
-            _caloriesTarget,
+            _difficultyToCaloriesTarget(),
             decimalDigits: 0,
           ),
         ),
       ),
     );
+  }
+
+  int _difficultyToCaloriesTarget() {
+    switch (_difficulty) {
+      case 'easy':
+        return 180;
+      case 'hard':
+        return 350;
+      case 'medium':
+      default:
+        return 250;
+    }
+  }
+
+  double _difficultyToBodyWeightKg() {
+    switch (_difficulty) {
+      case 'easy':
+        return 65.0;
+      case 'hard':
+        return 75.0;
+      case 'medium':
+      default:
+        return 70.0;
+    }
+  }
+
+  Widget _buildDifficultyChip(String value, String label, IconData icon) {
+    final isSelected = _difficulty == value;
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: () => setState(() => _difficulty = value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant.withValues(alpha: 0.45),
+            width: isSelected ? 1.4 : 1.0,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getDifficultyLabel(AppLocalizations l10n) {
+    switch (_difficulty) {
+      case 'easy':
+        return l10n.easy;
+      case 'hard':
+        return l10n.hard;
+      case 'medium':
+      default:
+        return l10n.medium;
+    }
   }
 
   Future<void> _saveRoutine() async {
@@ -542,12 +435,23 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.caloriesEstimateByWeight,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: appColors.mutedText,
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          '${l10n.targetDistance}: ${LocalizedFormat.decimal(context, _distanceTargetKm)} km • ${l10n.difficulty}: ${_getDifficultyLabel(l10n)}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.primary,
+                          ),
                         ),
                       ),
                     ],
@@ -561,6 +465,40 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
             ),
           ),
           const Divider(height: 0.5, thickness: 0.5),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: theme.colorScheme.outlineVariant.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.insights_outlined,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${l10n.targetDistance}: ${LocalizedFormat.decimal(context, _distanceTargetKm)} km • ${l10n.difficulty}: ${_getDifficultyLabel(l10n)}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
 
           // Scrollable Preview List
           Expanded(
@@ -948,78 +886,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           ),
           const SizedBox(height: 14),
 
-          // Used only for this calculation and never saved to weight history.
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            decoration: BoxDecoration(
-              color: cardBgColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: borderColor, width: 1),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.monitor_weight_outlined, color: iconColor, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    l10n.currentWeight,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 64,
-                  child: TextFormField(
-                    initialValue: LocalizedFormat.decimal(
-                      context,
-                      70,
-                      decimalDigits: 0,
-                    ),
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.end,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'[0-9٠-٩۰-۹]'),
-                      ),
-                      LengthLimitingTextInputFormatter(3),
-                    ],
-                    decoration: const InputDecoration(
-                      isDense: true,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
-                      color: theme.colorScheme.primary,
-                    ),
-                    onChanged: (value) {
-                      final weight =
-                          LocalizedFormat.tryParseDecimal(context, value);
-                      if (weight != null && weight > 0) {
-                        _bodyWeightKg = weight;
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'kg',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: appColors.mutedText,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Calories Card
+          // Difficulty Card
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
@@ -1031,57 +898,27 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Icon(Icons.local_fire_department_outlined,
-                            color: iconColor, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          l10n.targetCalories,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ],
-                    ),
+                    Icon(Icons.speed_outlined, color: iconColor, size: 20),
+                    const SizedBox(width: 8),
                     Text(
-                      '$_caloriesTarget kcal',
+                      l10n.difficulty,
                       style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w900,
-                        color: theme.colorScheme.primary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    trackHeight: 6,
-                    activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor:
-                        theme.colorScheme.primary.withValues(alpha: 0.08),
-                    thumbColor: theme.colorScheme.primary,
-                    overlayColor:
-                        theme.colorScheme.primary.withValues(alpha: 0.12),
-                    thumbShape:
-                        const RoundSliderThumbShape(enabledThumbRadius: 9),
-                    overlayShape:
-                        const RoundSliderOverlayShape(overlayRadius: 18),
-                  ),
-                  child: Slider(
-                    value: _caloriesTarget.toDouble(),
-                    min: 50,
-                    max: 1000,
-                    divisions: 19,
-                    onChanged: (val) =>
-                        setState(() => _caloriesTarget = val.toInt()),
-                  ),
+                Wrap(
+                  spacing: 10,
+                  children: [
+                    _buildDifficultyChip('easy', l10n.easy, Icons.slow_motion_video_outlined),
+                    _buildDifficultyChip('medium', l10n.medium, Icons.speed_outlined),
+                    _buildDifficultyChip('hard', l10n.hard, Icons.local_fire_department_outlined),
+                  ],
                 ),
               ],
             ),
