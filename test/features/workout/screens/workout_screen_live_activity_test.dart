@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:valcue/app_settings/app_settings_model.dart';
 import 'package:valcue/app_settings/app_settings_provider.dart';
 import 'package:valcue/features/routines/models/interval.dart' as workout;
 import 'package:valcue/features/routines/models/routine.dart';
@@ -14,8 +15,15 @@ import 'package:valcue/features/workout/state/workout_state.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/services/workout_live_activity_schedule_backend.dart';
 import 'package:valcue/services/workout_live_activity_schedule_models.dart';
+import 'package:valcue/theme/app_theme.dart';
 
 class _TestSettingsProvider extends AppSettingsProvider {
+  _TestSettingsProvider({
+    this.displaySize = WorkoutDisplaySize.standard,
+  });
+
+  final WorkoutDisplaySize displaySize;
+
   @override
   Future<void> loadSettings() async {}
 
@@ -30,6 +38,9 @@ class _TestSettingsProvider extends AppSettingsProvider {
 
   @override
   String get measurement => 'kmh';
+
+  @override
+  WorkoutDisplaySize get workoutDisplaySize => displaySize;
 }
 
 void main() {
@@ -91,8 +102,10 @@ void main() {
     DateTime Function()? nowProvider,
     Routine? workoutRoutine,
     bool backgroundNotificationsAuthorized = false,
+    Size viewportSize = const Size(1400, 1200),
+    WorkoutDisplaySize displaySize = WorkoutDisplaySize.standard,
   }) async {
-    tester.view.physicalSize = const Size(1400, 1200);
+    tester.view.physicalSize = viewportSize;
     tester.view.devicePixelRatio = 1;
     addTearDown(() {
       tester.view.resetPhysicalSize();
@@ -100,8 +113,19 @@ void main() {
     });
     await tester.pumpWidget(
       ChangeNotifierProvider<AppSettingsProvider>.value(
-        value: _TestSettingsProvider(),
+        value: _TestSettingsProvider(displaySize: displaySize),
         child: MaterialApp(
+          theme: ThemeData(
+            extensions: const [
+              AppColors(
+                surfaceElevated: Colors.white,
+                border: Color(0xFFE5E5EA),
+                mutedText: Color(0xFF8E8E93),
+                danger: Color(0xFFFF3B30),
+                dangerText: Color(0xFFFF3B30),
+              ),
+            ],
+          ),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -121,6 +145,22 @@ void main() {
     );
     await tester.pump();
   }
+
+  testWidgets('largest display preset fits common portrait and landscape sizes',
+      (tester) async {
+    for (final viewport in const [Size(393, 852), Size(844, 390)]) {
+      await pumpWorkout(
+        tester,
+        viewportSize: viewport,
+        displaySize: WorkoutDisplaySize.extraLarge,
+      );
+
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+    await tester.pump();
+    debugDefaultTargetPlatformOverride = null;
+  });
 
   Future<void> pumpUntil(
     WidgetTester tester,

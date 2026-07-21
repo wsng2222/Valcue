@@ -1,5 +1,10 @@
 {
   "@@locale": "es",
+  "workoutDisplaySizeTitle": "Tamaño de la pantalla de entrenamiento",
+  "workoutDisplaySizeSubtitle": "Amplía los datos principales y el temporizador.",
+  "workoutDisplaySizeStandard": "Normal",
+  "workoutDisplaySizeLarge": "Grande",
+  "workoutDisplaySizeExtraLarge": "Máximo",
   "appTitle": "Valcue",
   "settingsTitle": "Configuración",
   "language": "Idioma",

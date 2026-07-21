@@ -1,3 +1,20 @@
+enum WorkoutDisplaySize {
+  standard(1.0),
+  large(1.15),
+  extraLarge(1.30);
+
+  const WorkoutDisplaySize(this.scale);
+
+  final double scale;
+
+  static WorkoutDisplaySize fromStorage(Object? value) {
+    return WorkoutDisplaySize.values.firstWhere(
+      (size) => size.name == value,
+      orElse: () => WorkoutDisplaySize.standard,
+    );
+  }
+}
+
 class AppSettings {
   final String? language; // null means System
   final String measurement;
@@ -13,6 +30,7 @@ class AppSettings {
   final int workoutReminderHour;
   final int workoutReminderMinute;
   final String workoutReminderMessage;
+  final WorkoutDisplaySize workoutDisplaySize;
 
   // Countdown timing setting
   final List<int> voiceGuideCountdownTriggers; // e.g. [10, 20, 30]
@@ -32,6 +50,7 @@ class AppSettings {
     required this.workoutReminderHour,
     required this.workoutReminderMinute,
     required this.workoutReminderMessage,
+    this.workoutDisplaySize = WorkoutDisplaySize.standard,
     this.voiceGuideCountdownTriggers = const [10, 20, 30],
   });
 
@@ -50,6 +69,7 @@ class AppSettings {
     int? workoutReminderHour,
     int? workoutReminderMinute,
     String? workoutReminderMessage,
+    WorkoutDisplaySize? workoutDisplaySize,
     List<int>? voiceGuideCountdownTriggers,
   }) {
     return AppSettings(
@@ -73,6 +93,7 @@ class AppSettings {
           workoutReminderMinute ?? this.workoutReminderMinute,
       workoutReminderMessage:
           workoutReminderMessage ?? this.workoutReminderMessage,
+      workoutDisplaySize: workoutDisplaySize ?? this.workoutDisplaySize,
       voiceGuideCountdownTriggers:
           voiceGuideCountdownTriggers ?? this.voiceGuideCountdownTriggers,
     );
@@ -95,6 +116,7 @@ class AppSettings {
       'workoutReminderHour': workoutReminderHour,
       'workoutReminderMinute': workoutReminderMinute,
       'workoutReminderMessage': workoutReminderMessage,
+      'workoutDisplaySize': workoutDisplaySize.name,
       'voiceGuideCountdownTriggers': voiceGuideCountdownTriggers,
     };
   }
@@ -144,6 +166,8 @@ class AppSettings {
       workoutReminderHour: json['workoutReminderHour'] as int? ?? 9,
       workoutReminderMinute: json['workoutReminderMinute'] as int? ?? 0,
       workoutReminderMessage: json['workoutReminderMessage'] as String? ?? '',
+      workoutDisplaySize:
+          WorkoutDisplaySize.fromStorage(json['workoutDisplaySize']),
       voiceGuideCountdownTriggers: parsedCountdownTriggers,
     );
   }
@@ -163,6 +187,7 @@ class AppSettings {
         workoutReminderHour: 9,
         workoutReminderMinute: 0,
         workoutReminderMessage: '',
+        workoutDisplaySize: WorkoutDisplaySize.standard,
         voiceGuideCountdownTriggers: const [10, 20, 30],
       );
 }

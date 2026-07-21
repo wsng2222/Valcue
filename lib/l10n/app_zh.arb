@@ -1,5 +1,10 @@
 {
   "@@locale": "zh",
+  "workoutDisplaySizeTitle": "训练画面大小",
+  "workoutDisplaySizeSubtitle": "放大主要训练数据和计时器。",
+  "workoutDisplaySizeStandard": "默认",
+  "workoutDisplaySizeLarge": "大",
+  "workoutDisplaySizeExtraLarge": "特大",
   "appTitle": "Valcue",
   "settingsTitle": "设置",
   "language": "语言",

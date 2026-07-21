@@ -9,6 +9,21 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => '训练画面大小';
+
+  @override
+  String get workoutDisplaySizeSubtitle => '放大主要训练数据和计时器。';
+
+  @override
+  String get workoutDisplaySizeStandard => '默认';
+
+  @override
+  String get workoutDisplaySizeLarge => '大';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => '特大';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

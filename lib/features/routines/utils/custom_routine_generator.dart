@@ -21,8 +21,12 @@ List<Interval> buildCustomRoutineIntervals({
     double avgSpeed = distanceTargetKm / (durationMinutes / 60.0);
     avgSpeed = avgSpeed.clamp(4.0, 15.0);
 
-    double baseWarmupSpeed = (avgSpeed - 1.5).clamp(3.5, 6.0);
-    double cooldownSpeed = (avgSpeed - 2.0).clamp(3.0, 5.0);
+    final speedSpread = difficulty == 'easy'
+        ? 0.4
+        : (difficulty == 'hard' ? 1.2 : 0.8);
+
+    double baseWarmupSpeed = (avgSpeed - 0.5).clamp(3.5, 6.0);
+    double cooldownSpeed = (avgSpeed - 0.8).clamp(3.0, 5.0);
 
     double speedMMin = avgSpeed * 16.67;
     double baseCaloriesPerMin =
@@ -59,8 +63,8 @@ List<Interval> buildCustomRoutineIntervals({
       }
     }
 
-    double workSpeed = (avgSpeed + 1.5).clamp(4.5, 16.0);
-    double restSpeed = (avgSpeed - 1.0).clamp(3.0, 10.0);
+    double workSpeed = (avgSpeed + speedSpread).clamp(4.5, 16.0);
+    double restSpeed = (avgSpeed - speedSpread).clamp(3.0, 10.0);
 
     intervals.add(Interval.treadmill(
       durationSeconds: 180,
@@ -74,27 +78,34 @@ List<Interval> buildCustomRoutineIntervals({
     final recoveryBlockDuration = difficulty == 'easy'
         ? 90
         : (difficulty == 'hard' ? 60 : 120);
-    final cycleCount = ((remainingSeconds) /
-            (workBlockDuration + recoveryBlockDuration))
-        .ceil()
-        .clamp(1, 8);
     final groupId = 'ai_group_${random.nextInt(10000)}';
 
-    for (int i = 0; i < cycleCount; i++) {
+    var mainSecondsLeft = remainingSeconds;
+    while (mainSecondsLeft > 0) {
+      final workDuration = mainSecondsLeft >= workBlockDuration
+          ? workBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.treadmill(
-        durationSeconds: workBlockDuration,
+        durationSeconds: workDuration,
         speedKmh: double.parse(workSpeed.toStringAsFixed(1)),
         grade: double.parse(workGrade.toStringAsFixed(1)),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= workDuration;
+      if (mainSecondsLeft <= 0) break;
+
+      final recoveryDuration = mainSecondsLeft >= recoveryBlockDuration
+          ? recoveryBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.treadmill(
-        durationSeconds: recoveryBlockDuration,
+        durationSeconds: recoveryDuration,
         speedKmh: double.parse(restSpeed.toStringAsFixed(1)),
         grade: double.parse(restGrade.toStringAsFixed(1)),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= recoveryDuration;
     }
 
     intervals.add(Interval.treadmill(
@@ -122,27 +133,34 @@ List<Interval> buildCustomRoutineIntervals({
     final recoveryBlockDuration = difficulty == 'easy'
         ? 90
         : (difficulty == 'hard' ? 60 : 120);
-    final cycleCount = ((remainingSeconds) /
-            (workBlockDuration + recoveryBlockDuration))
-        .ceil()
-        .clamp(1, 8);
     final groupId = 'ai_group_${random.nextInt(10000)}';
 
-    for (int i = 0; i < cycleCount; i++) {
+    var mainSecondsLeft = remainingSeconds;
+    while (mainSecondsLeft > 0) {
+      final workDuration = mainSecondsLeft >= workBlockDuration
+          ? workBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.cycle(
-        durationSeconds: workBlockDuration,
+        durationSeconds: workDuration,
         rpm: (avgRpm + 12).clamp(60, 120).toInt(),
         resistance: (avgRes + 2).clamp(2, 20).toInt(),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= workDuration;
+      if (mainSecondsLeft <= 0) break;
+
+      final recoveryDuration = mainSecondsLeft >= recoveryBlockDuration
+          ? recoveryBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.cycle(
-        durationSeconds: recoveryBlockDuration,
+        durationSeconds: recoveryDuration,
         rpm: (avgRpm - 8).clamp(45, 95).toInt(),
         resistance: (avgRes - 1).clamp(1, 16).toInt(),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= recoveryDuration;
     }
 
     intervals.add(Interval.cycle(
@@ -178,25 +196,32 @@ List<Interval> buildCustomRoutineIntervals({
     final recoveryBlockDuration = difficulty == 'easy'
         ? 90
         : (difficulty == 'hard' ? 60 : 120);
-    final cycleCount = ((remainingSeconds) /
-            (workBlockDuration + recoveryBlockDuration))
-        .ceil()
-        .clamp(1, 8);
     final groupId = 'ai_group_${random.nextInt(10000)}';
 
-    for (int i = 0; i < cycleCount; i++) {
+    var mainSecondsLeft = remainingSeconds;
+    while (mainSecondsLeft > 0) {
+      final workDuration = mainSecondsLeft >= workBlockDuration
+          ? workBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.stairmaster(
-        durationSeconds: workBlockDuration,
+        durationSeconds: workDuration,
         level: (avgLevel + levelDelta).clamp(4, 20).toInt(),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= workDuration;
+      if (mainSecondsLeft <= 0) break;
+
+      final recoveryDuration = mainSecondsLeft >= recoveryBlockDuration
+          ? recoveryBlockDuration
+          : mainSecondsLeft;
       intervals.add(Interval.stairmaster(
-        durationSeconds: recoveryBlockDuration,
+        durationSeconds: recoveryDuration,
         level: (avgLevel - (levelDelta / 2)).clamp(2, 14).toInt(),
         groupId: groupId,
-        repeatCount: cycleCount,
+        repeatCount: 1,
       ));
+      mainSecondsLeft -= recoveryDuration;
     }
 
     intervals.add(Interval.stairmaster(

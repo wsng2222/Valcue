@@ -1,5 +1,10 @@
 {
   "@@locale": "nl",
+  "workoutDisplaySizeTitle": "Grootte van trainingsscherm",
+  "workoutDisplaySizeSubtitle": "Vergroot belangrijke trainingswaarden en de timer.",
+  "workoutDisplaySizeStandard": "Standaard",
+  "workoutDisplaySizeLarge": "Groot",
+  "workoutDisplaySizeExtraLarge": "Maximaal",
   "about": "Over",
   "addInterval": "Interval toevoegen",
   "quickTools": "Snelle acties",

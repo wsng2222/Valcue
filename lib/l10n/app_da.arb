@@ -1,5 +1,10 @@
 {
   "@@locale": "da",
+  "workoutDisplaySizeTitle": "Størrelse på træningsvisning",
+  "workoutDisplaySizeSubtitle": "Forstørrer vigtige træningstal og timeren.",
+  "workoutDisplaySizeStandard": "Standard",
+  "workoutDisplaySizeLarge": "Stor",
+  "workoutDisplaySizeExtraLarge": "Maks.",
   "about": "Om",
   "addInterval": "Tilføj interval",
   "quickTools": "Hurtige værktøjer",

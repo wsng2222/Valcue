@@ -1,5 +1,10 @@
 {
   "@@locale": "th",
+  "workoutDisplaySizeTitle": "ขนาดหน้าจอออกกำลังกาย",
+  "workoutDisplaySizeSubtitle": "ขยายข้อมูลสำคัญและตัวจับเวลาให้ใหญ่ขึ้น",
+  "workoutDisplaySizeStandard": "ปกติ",
+  "workoutDisplaySizeLarge": "ใหญ่",
+  "workoutDisplaySizeExtraLarge": "ใหญ่มาก",
   "about": "เกี่ยวกับ",
   "addInterval": "เพิ่มอินเทอร์วัล",
   "quickTools": "เครื่องมือด่วน",

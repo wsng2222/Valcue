@@ -9,6 +9,22 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'Размер экрана тренировки';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'Увеличивает основные показатели и таймер.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'Обычный';
+
+  @override
+  String get workoutDisplaySizeLarge => 'Крупный';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'Макс.';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

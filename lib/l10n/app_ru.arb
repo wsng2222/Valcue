@@ -1,5 +1,10 @@
 {
   "@@locale": "ru",
+  "workoutDisplaySizeTitle": "Размер экрана тренировки",
+  "workoutDisplaySizeSubtitle": "Увеличивает основные показатели и таймер.",
+  "workoutDisplaySizeStandard": "Обычный",
+  "workoutDisplaySizeLarge": "Крупный",
+  "workoutDisplaySizeExtraLarge": "Макс.",
   "appTitle": "Valcue",
   "settingsTitle": "Настройки",
   "language": "Язык",

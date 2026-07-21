@@ -1,5 +1,10 @@
 {
   "@@locale": "ar",
+  "workoutDisplaySizeTitle": "حجم شاشة التمرين",
+  "workoutDisplaySizeSubtitle": "يكبّر أرقام التمرين الأساسية والمؤقت.",
+  "workoutDisplaySizeStandard": "افتراضي",
+  "workoutDisplaySizeLarge": "كبير",
+  "workoutDisplaySizeExtraLarge": "الأكبر",
   "appTitle": "Valcue",
   "settingsTitle": "إعدادات",
   "language": "اللغة",

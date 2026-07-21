@@ -9,6 +9,21 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'ワークアウト画面のサイズ';
+
+  @override
+  String get workoutDisplaySizeSubtitle => '主な運動データとタイマーを大きく表示します。';
+
+  @override
+  String get workoutDisplaySizeStandard => '標準';
+
+  @override
+  String get workoutDisplaySizeLarge => '大';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => '特大';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

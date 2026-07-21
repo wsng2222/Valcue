@@ -61,4 +61,35 @@ void main() {
       expect(restored.backgroundIntervalNotificationsEnabled, isFalse);
     });
   });
+
+  group('workout display size setting', () {
+    test('defaults legacy and invalid values to standard', () {
+      expect(
+        AppSettings.defaultSettings.workoutDisplaySize,
+        WorkoutDisplaySize.standard,
+      );
+      expect(
+        AppSettings.fromJson(const {}).workoutDisplaySize,
+        WorkoutDisplaySize.standard,
+      );
+      expect(
+        AppSettings.fromJson(
+          const {'workoutDisplaySize': 'unsupported'},
+        ).workoutDisplaySize,
+        WorkoutDisplaySize.standard,
+      );
+    });
+
+    test('persists every supported preset', () {
+      for (final size in WorkoutDisplaySize.values) {
+        final restored = AppSettings.fromJson(
+          AppSettings.defaultSettings
+              .copyWith(workoutDisplaySize: size)
+              .toJson(),
+        );
+
+        expect(restored.workoutDisplaySize, size);
+      }
+    });
+  });
 }

@@ -1,5 +1,10 @@
 {
   "@@locale": "vi",
+  "workoutDisplaySizeTitle": "Kích thước màn hình tập luyện",
+  "workoutDisplaySizeSubtitle": "Phóng to số liệu chính và đồng hồ bấm giờ.",
+  "workoutDisplaySizeStandard": "Mặc định",
+  "workoutDisplaySizeLarge": "Lớn",
+  "workoutDisplaySizeExtraLarge": "Tối đa",
   "appTitle": "Valcue",
   "settingsTitle": "Cài đặt",
   "language": "Ngôn ngữ",

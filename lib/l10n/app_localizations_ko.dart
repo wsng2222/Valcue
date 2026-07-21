@@ -9,6 +9,21 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => '운동 화면 표시 크기';
+
+  @override
+  String get workoutDisplaySizeSubtitle => '운동 중 핵심 수치와 타이머를 크게 표시해요.';
+
+  @override
+  String get workoutDisplaySizeStandard => '기본';
+
+  @override
+  String get workoutDisplaySizeLarge => '크게';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => '매우 크게';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

@@ -126,6 +126,36 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
+  /// Setting label for the size of key information on the active workout screen
+  ///
+  /// In en, this message translates to:
+  /// **'Workout Screen Size'**
+  String get workoutDisplaySizeTitle;
+
+  /// Explanation of the active workout screen size setting
+  ///
+  /// In en, this message translates to:
+  /// **'Enlarges key workout numbers and the timer.'**
+  String get workoutDisplaySizeSubtitle;
+
+  /// Default workout display size option
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get workoutDisplaySizeStandard;
+
+  /// Large workout display size option
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get workoutDisplaySizeLarge;
+
+  /// Largest workout display size option
+  ///
+  /// In en, this message translates to:
+  /// **'Largest'**
+  String get workoutDisplaySizeExtraLarge;
+
   /// Application title
   ///
   /// In en, this message translates to:

@@ -1,5 +1,25 @@
 {
   "@@locale": "en",
+  "workoutDisplaySizeTitle": "Workout Screen Size",
+  "@workoutDisplaySizeTitle": {
+    "description": "Setting label for the size of key information on the active workout screen"
+  },
+  "workoutDisplaySizeSubtitle": "Enlarges key workout numbers and the timer.",
+  "@workoutDisplaySizeSubtitle": {
+    "description": "Explanation of the active workout screen size setting"
+  },
+  "workoutDisplaySizeStandard": "Default",
+  "@workoutDisplaySizeStandard": {
+    "description": "Default workout display size option"
+  },
+  "workoutDisplaySizeLarge": "Large",
+  "@workoutDisplaySizeLarge": {
+    "description": "Large workout display size option"
+  },
+  "workoutDisplaySizeExtraLarge": "Largest",
+  "@workoutDisplaySizeExtraLarge": {
+    "description": "Largest workout display size option"
+  },
   "appTitle": "Valcue",
   "@appTitle": {
     "description": "Application title"

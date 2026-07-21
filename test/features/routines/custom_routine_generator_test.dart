@@ -22,5 +22,27 @@ void main() {
       expect(intervals.where((interval) => interval.durationSeconds == 120).length,
           greaterThan(0));
     });
+
+    test('matches the requested time and distance for easy treadmill routines', () {
+      final intervals = buildCustomRoutineIntervals(
+        machineType: MachineType.treadmill,
+        durationMinutes: 60,
+        distanceTargetKm: 8.0,
+        caloriesTarget: 180,
+        bodyWeightKg: 70.0,
+        includeIncline: false,
+        difficulty: 'easy',
+      );
+
+      final totalSeconds = intervals.fold<int>(0, (sum, interval) => sum + interval.durationSeconds);
+      final totalDistanceKm = intervals.fold<double>(0.0, (sum, interval) {
+        final speed = interval.speedKmh;
+        if (speed == null) return sum;
+        return sum + (speed * interval.durationSeconds / 3600.0);
+      });
+
+      expect(totalSeconds, equals(3600));
+      expect(totalDistanceKm, inInclusiveRange(7.8, 8.2));
+    });
   });
 }

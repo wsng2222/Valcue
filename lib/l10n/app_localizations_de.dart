@@ -9,6 +9,22 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'Größe der Trainingsanzeige';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'Vergrößert wichtige Trainingswerte und den Timer.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'Standard';
+
+  @override
+  String get workoutDisplaySizeLarge => 'Groß';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'Maximal';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

@@ -9,6 +9,22 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'Størrelse på træningsvisning';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'Forstørrer vigtige træningstal og timeren.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'Standard';
+
+  @override
+  String get workoutDisplaySizeLarge => 'Stor';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'Maks.';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

@@ -36,6 +36,7 @@ class AppSettingsProvider with ChangeNotifier {
   String get themeMode => _settings.themeMode;
   bool get soundEffectsEnabled => _settings.soundEffectsEnabled;
   bool get workoutReminderEnabled => _settings.workoutReminderEnabled;
+  WorkoutDisplaySize get workoutDisplaySize => _settings.workoutDisplaySize;
   List<int> get workoutReminderWeekdays =>
       List<int>.unmodifiable(_settings.workoutReminderWeekdays);
   TimeOfDay get workoutReminderTime => TimeOfDay(
@@ -136,6 +137,9 @@ class AppSettingsProvider with ChangeNotifier {
       workoutReminderHour: _settings.workoutReminderHour,
       workoutReminderMinute: _settings.workoutReminderMinute,
       workoutReminderMessage: _settings.workoutReminderMessage,
+      workoutDisplaySize: _settings.workoutDisplaySize,
+      voiceGuideCountdownTriggers:
+          List<int>.from(_settings.voiceGuideCountdownTriggers),
     );
     await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
@@ -152,6 +156,13 @@ class AppSettingsProvider with ChangeNotifier {
     _settings = _settings.copyWith(weightUnit: weightUnit);
     await _saveSettingsInOrder(_settings);
     notifyListeners();
+  }
+
+  Future<void> updateWorkoutDisplaySize(WorkoutDisplaySize size) async {
+    if (_settings.workoutDisplaySize == size) return;
+    _settings = _settings.copyWith(workoutDisplaySize: size);
+    notifyListeners();
+    await _saveSettingsInOrder(_settings);
   }
 
   Future<void> updatePremium(bool isPremium) async {

@@ -9,6 +9,22 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'Workout Screen Size';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'Enlarges key workout numbers and the timer.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'Default';
+
+  @override
+  String get workoutDisplaySizeLarge => 'Large';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'Largest';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

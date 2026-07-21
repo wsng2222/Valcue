@@ -272,6 +272,43 @@ void main() {
       expect(store.persisted.themeMode, 'dark');
     });
   });
+
+  group('workout display size setting', () {
+    test('updates listeners and persists the selected preset', () async {
+      final store = _FakeAppSettingsStore(AppSettings.defaultSettings);
+      final provider = _buildProvider(
+        store: store,
+        requestNotifications: () async => false,
+        liveActivitiesEnabled: () async => false,
+      );
+      addTearDown(provider.dispose);
+      var notificationCount = 0;
+      provider.addListener(() => notificationCount++);
+
+      await provider.updateWorkoutDisplaySize(WorkoutDisplaySize.extraLarge);
+
+      expect(provider.workoutDisplaySize, WorkoutDisplaySize.extraLarge);
+      expect(store.persisted.workoutDisplaySize, WorkoutDisplaySize.extraLarge);
+      expect(notificationCount, 1);
+    });
+
+    test('does not write or notify when the preset is unchanged', () async {
+      final store = _FakeAppSettingsStore(AppSettings.defaultSettings);
+      final provider = _buildProvider(
+        store: store,
+        requestNotifications: () async => false,
+        liveActivitiesEnabled: () async => false,
+      );
+      addTearDown(provider.dispose);
+      var notificationCount = 0;
+      provider.addListener(() => notificationCount++);
+
+      await provider.updateWorkoutDisplaySize(WorkoutDisplaySize.standard);
+
+      expect(notificationCount, 0);
+      expect(store.saveCount, 0);
+    });
+  });
 }
 
 AppSettings _premiumSettings({required bool enabled}) {
@@ -321,12 +358,14 @@ class _FakeAppSettingsStore extends AppSettingsStore {
   _FakeAppSettingsStore(this.persisted);
 
   AppSettings persisted;
+  int saveCount = 0;
 
   @override
   Future<AppSettings> loadSettings() async => persisted;
 
   @override
   Future<void> saveSettings(AppSettings settings) async {
+    saveCount++;
     persisted = AppSettings.fromJson(settings.toJson());
   }
 }

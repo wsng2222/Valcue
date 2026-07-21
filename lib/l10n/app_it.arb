@@ -1,5 +1,10 @@
 {
   "@@locale": "it",
+  "workoutDisplaySizeTitle": "Dimensioni schermata allenamento",
+  "workoutDisplaySizeSubtitle": "Ingrandisce i dati principali e il timer.",
+  "workoutDisplaySizeStandard": "Normale",
+  "workoutDisplaySizeLarge": "Grande",
+  "workoutDisplaySizeExtraLarge": "Massimo",
   "about": "Informazioni",
   "addInterval": "Aggiungi intervallo",
   "quickTools": "Azioni rapide",

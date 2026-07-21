@@ -9,6 +9,22 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'حجم شاشة التمرين';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'يكبّر أرقام التمرين الأساسية والمؤقت.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'افتراضي';
+
+  @override
+  String get workoutDisplaySizeLarge => 'كبير';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'الأكبر';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

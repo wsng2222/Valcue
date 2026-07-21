@@ -1,5 +1,10 @@
 {
   "@@locale": "ja",
+  "workoutDisplaySizeTitle": "ワークアウト画面のサイズ",
+  "workoutDisplaySizeSubtitle": "主な運動データとタイマーを大きく表示します。",
+  "workoutDisplaySizeStandard": "標準",
+  "workoutDisplaySizeLarge": "大",
+  "workoutDisplaySizeExtraLarge": "特大",
   "appTitle": "Valcue",
   "settingsTitle": "設定",
   "language": "言語",

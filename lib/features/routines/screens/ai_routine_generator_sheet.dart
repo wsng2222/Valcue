@@ -466,40 +466,6 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           ),
           const Divider(height: 0.5, thickness: 0.5),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: theme.colorScheme.outlineVariant.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.insights_outlined,
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      '${l10n.targetDistance}: ${LocalizedFormat.decimal(context, _distanceTargetKm)} km • ${l10n.difficulty}: ${_getDifficultyLabel(l10n)}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           // Scrollable Preview List
           Expanded(
             child: SingleChildScrollView(

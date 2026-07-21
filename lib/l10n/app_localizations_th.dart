@@ -9,6 +9,22 @@ class AppLocalizationsTh extends AppLocalizations {
   AppLocalizationsTh([String locale = 'th']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'ขนาดหน้าจอออกกำลังกาย';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'ขยายข้อมูลสำคัญและตัวจับเวลาให้ใหญ่ขึ้น';
+
+  @override
+  String get workoutDisplaySizeStandard => 'ปกติ';
+
+  @override
+  String get workoutDisplaySizeLarge => 'ใหญ่';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'ใหญ่มาก';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

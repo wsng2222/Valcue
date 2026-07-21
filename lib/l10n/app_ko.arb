@@ -1,5 +1,10 @@
 {
   "@@locale": "ko",
+  "workoutDisplaySizeTitle": "운동 화면 표시 크기",
+  "workoutDisplaySizeSubtitle": "운동 중 핵심 수치와 타이머를 크게 표시해요.",
+  "workoutDisplaySizeStandard": "기본",
+  "workoutDisplaySizeLarge": "크게",
+  "workoutDisplaySizeExtraLarge": "매우 크게",
   "appTitle": "Valcue",
   "settingsTitle": "설정",
   "language": "언어",

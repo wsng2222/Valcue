@@ -9,6 +9,22 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get workoutDisplaySizeTitle => 'Kích thước màn hình tập luyện';
+
+  @override
+  String get workoutDisplaySizeSubtitle =>
+      'Phóng to số liệu chính và đồng hồ bấm giờ.';
+
+  @override
+  String get workoutDisplaySizeStandard => 'Mặc định';
+
+  @override
+  String get workoutDisplaySizeLarge => 'Lớn';
+
+  @override
+  String get workoutDisplaySizeExtraLarge => 'Tối đa';
+
+  @override
   String get appTitle => 'Valcue';
 
   @override

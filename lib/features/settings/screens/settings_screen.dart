@@ -10,6 +10,7 @@ import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
+import '../../../app_settings/app_settings_model.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
 import '../../../theme/app_theme.dart';
@@ -22,6 +23,7 @@ import '../../../widgets/app_bottom_sheet.dart';
 import '../../../widgets/app_message.dart';
 import '../../../widgets/bottom_sheet_action_bar.dart';
 import '../../../l10n/supported_app_language.dart';
+import 'workout_display_size_preview_screen.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   return appSegmentedSelectedBackground(context);
@@ -798,6 +800,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         '${_formatReminderTime(context, provider.workoutReminderTime)}';
   }
 
+  String _workoutDisplaySizeLabel(
+    BuildContext context,
+    WorkoutDisplaySize size,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (size) {
+      WorkoutDisplaySize.standard => l10n.workoutDisplaySizeStandard,
+      WorkoutDisplaySize.large => l10n.workoutDisplaySizeLarge,
+      WorkoutDisplaySize.extraLarge => l10n.workoutDisplaySizeExtraLarge,
+    };
+  }
+
   Future<void> _pickReminderTime(
     BuildContext context,
     AppSettingsProvider provider,
@@ -1008,6 +1022,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               options: const ['kg', 'lbs'],
                               labels: const ['kg', 'lbs'],
                             ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      SettingsSection(
+                        children: [
+                          SettingsRow(
+                            icon: Icons.text_increase_rounded,
+                            iconColor: Colors.teal,
+                            title: AppLocalizations.of(context)!
+                                .workoutDisplaySizeTitle,
+                            subtitle: _workoutDisplaySizeLabel(
+                              context,
+                              provider.workoutDisplaySize,
+                            ),
+                            trailing: Icon(
+                              Icons.chevron_right,
+                              size: 20,
+                              color: context.appColors.mutedText,
+                            ),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const WorkoutDisplaySizePreviewScreen(),
+                              ),
+                            ),
+                            showDivider: false,
                           ),
                         ],
                       ),

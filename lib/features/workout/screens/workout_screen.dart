@@ -1229,7 +1229,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: widget.previewElapsed != null,
       child: ChangeNotifierProvider.value(
         value: _workoutState,
         child: Scaffold(
@@ -1287,9 +1287,21 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         screenHeight > 0 ? screenHeight / basePortraitHeight : 1.0;
     final double scaleFactor =
         math.min(widthScale, heightScale).clamp(0.75, 1.15);
+    final displayScale = settingsProvider.workoutDisplaySize.scale;
+    final contentScaleFactor = scaleFactor * displayScale;
+    final headerScaleFactor = scaleFactor * math.min(displayScale, 1.15);
 
     final portraitMainFontSize =
-        (screenWidth * 0.14 * scaleFactor).clamp(48.0, 78.0);
+        (screenWidth * 0.14 * scaleFactor * displayScale)
+            .clamp(48.0, 102.0)
+            .toDouble();
+    final portraitTimerSize = math
+        .min(
+          154 * contentScaleFactor,
+          screenWidth - (48 * scaleFactor),
+        )
+        .clamp(112 * scaleFactor, 214 * scaleFactor)
+        .toDouble();
 
     return Column(
       children: [
@@ -1310,7 +1322,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                       state.formatTime(state.totalRemainingSeconds),
                   currentIntervalIndex: state.currentIntervalIndex,
                   totalIntervals: widget.routine.intervals.length,
-                  scaleFactor: scaleFactor,
+                  scaleFactor: headerScaleFactor,
                 ),
                 SizedBox(height: 10 * scaleFactor),
                 // Total routine remaining progress bar
@@ -1345,7 +1357,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                     detailChips: detailChips,
                     mainFontSize: portraitMainFontSize,
                     currentIntervalIndex: state.currentIntervalIndex,
-                    scaleFactor: scaleFactor,
+                    scaleFactor: contentScaleFactor,
                     alignCenter: true,
                   ),
                   timerSection: SizedBox(
@@ -1357,9 +1369,9 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                         timeText: countdownLabel,
                         progress: 1.0 - state.currentIntervalProgress,
                         isPaused: state.status == WorkoutStatus.paused,
-                        size: 154 * scaleFactor,
+                        size: portraitTimerSize,
                         currentIntervalIndex: state.currentIntervalIndex,
-                        scaleFactor: scaleFactor,
+                        scaleFactor: contentScaleFactor,
                       ),
                     ),
                   ),
@@ -1456,20 +1468,28 @@ class _WorkoutScreenState extends State<WorkoutScreen>
               // Reduce scale more aggressively for small screens
               scaleFactor = (shortestSide / baseShortestSide).clamp(0.75, 1.0);
             }
+            final displayScale = settingsProvider.workoutDisplaySize.scale;
+            final contentScaleFactor = scaleFactor * displayScale;
+            final headerScaleFactor =
+                scaleFactor * math.min(displayScale, 1.15);
 
             // Helper function to scale values
             double scaled(double base) => base * scaleFactor;
 
             // Calculate responsive sizes
-            final circleSize = math
+            final baseCircleSize = math
                 .min(
                   scaled(availableHeight * 0.52),
                   scaled(availableWidth * 0.26),
                 )
                 .clamp(scaled(112.0), scaled(170.0));
+            final circleSize = math
+                .min(baseCircleSize * displayScale, availableHeight * 0.68)
+                .toDouble();
 
             final mainFontSize = (availableHeight * 0.17 * scaleFactor)
-                .clamp(scaled(46.0), scaled(88.0));
+                    .clamp(scaled(46.0), scaled(88.0)) *
+                displayScale;
             final panelMaxWidth = math.max(
               scaled(600),
               math.min(availableWidth - scaled(56), scaled(940)),
@@ -1487,7 +1507,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                       progress: state.totalRemainingProgress,
                       currentIntervalIndex: state.currentIntervalIndex,
                       totalIntervals: widget.routine.intervals.length,
-                      scaleFactor: scaleFactor,
+                      scaleFactor: headerScaleFactor,
                     ),
                     // Main content: Two columns layout
                     Expanded(
@@ -1513,7 +1533,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                                 mainFontSize: mainFontSize,
                                 currentIntervalIndex:
                                     state.currentIntervalIndex,
-                                scaleFactor: scaleFactor,
+                                scaleFactor: contentScaleFactor,
                                 alignCenter: false,
                               ),
                               timerSection: SizedBox(
@@ -1533,7 +1553,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                                     size: circleSize,
                                     currentIntervalIndex:
                                         state.currentIntervalIndex,
-                                    scaleFactor: scaleFactor,
+                                    scaleFactor: contentScaleFactor,
                                   ),
                                 ),
                               ),
@@ -2727,7 +2747,7 @@ class _CurrentValueSectionState extends State<_CurrentValueSection>
             fontSize: widget._scaled(13),
             fontWeight: FontWeight.w700,
             color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.42),
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.56),
             letterSpacing: 1.3,
           ),
           textAlign: widget.alignCenter ? TextAlign.center : TextAlign.start,
@@ -2913,6 +2933,7 @@ class _CircularSessionTimerState extends State<_CircularSessionTimer>
       children: [
         // Circular timer
         SizedBox(
+          key: const ValueKey('workout-session-timer'),
           width: widget.size,
           height: widget.size,
           child: Stack(
