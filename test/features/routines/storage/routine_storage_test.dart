@@ -12,7 +12,6 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    RoutineStorage.diagnosticsEnabled = false;
     storage = RoutineStorage();
   });
 
@@ -63,19 +62,90 @@ void main() {
       ),
     ];
 
-    await storage.saveRoutines(routines);
+    for (final routine in routines) {
+      await storage.addRoutine(routine);
+    }
+
+    final loaded = await storage.loadRoutines();
+    Routine byId(String id) => loaded.firstWhere((r) => r.id == id);
+
+    expect(loaded, hasLength(3));
+    expect(byId('treadmill-routine').intervals.single.speedKmh,
+        closeTo(8.5, 0.0001));
+    expect(byId('treadmill-routine').intervals.single.grade,
+        closeTo(1.5, 0.0001));
+    expect(byId('cycle-routine').intervals.single.rpm, 82);
+    expect(byId('cycle-routine').intervals.single.resistance, 7);
+    expect(byId('stair-routine').intervals.single.level, 9);
+  });
+
+  test('keeps routines in the order they were created', () async {
+    // Ids carry the creation time, and the list has always shown oldest
+    // first. Storing one routine per key must not scramble that.
+    for (final id in ['1700000000003', '1700000000001', '1700000000002']) {
+      await storage.addRoutine(_routine(id));
+    }
 
     final loaded = await storage.loadRoutines();
 
-    expect(loaded, hasLength(3));
-    expect(loaded[0].machineType, MachineType.treadmill);
-    expect(loaded[0].intervals.single.speedKmh, closeTo(8.5, 0.0001));
-    expect(loaded[0].intervals.single.grade, closeTo(1.5, 0.0001));
-    expect(loaded[1].machineType, MachineType.cycle);
-    expect(loaded[1].intervals.single.rpm, 82);
-    expect(loaded[1].intervals.single.resistance, 7);
-    expect(loaded[2].machineType, MachineType.stairmaster);
-    expect(loaded[2].intervals.single.level, 9);
+    expect(
+      loaded.map((r) => r.id),
+      ['1700000000001', '1700000000002', '1700000000003'],
+    );
+  });
+
+  test('imported routines are ordered by their creation time too', () async {
+    await storage.addRoutine(_routine('imported_1700000000002'));
+    await storage.addRoutine(_routine('1700000000001'));
+
+    final loaded = await storage.loadRoutines();
+
+    expect(loaded.map((r) => r.id), ['1700000000001', 'imported_1700000000002']);
+  });
+
+  test('an id with no timestamp still loads, ordered last', () async {
+    await storage.addRoutine(_routine('legacy-routine'));
+    await storage.addRoutine(_routine('1700000000001'));
+
+    final loaded = await storage.loadRoutines();
+
+    expect(loaded.map((r) => r.id), ['1700000000001', 'legacy-routine']);
+  });
+
+  test('deleting a routine is remembered for backup', () async {
+    await storage.addRoutine(_routine('1700000000001'));
+
+    await storage.deleteRoutine('1700000000001');
+
+    expect(await storage.deletedRoutineIds(), contains('1700000000001'));
+    expect(await storage.loadRoutines(), isEmpty);
+  });
+
+  test('deleting one routine leaves the others readable', () async {
+    await storage.addRoutine(_routine('1700000000001'));
+    await storage.addRoutine(_routine('1700000000002'));
+
+    await storage.deleteRoutine('1700000000001');
+
+    expect((await storage.loadRoutines()).map((r) => r.id),
+        ['1700000000002']);
+  });
+
+  test('routines saved by the old version are migrated once', () async {
+    SharedPreferences.setMockInitialValues({
+      'routines': jsonEncode([
+        _routine('1700000000001').toJson(),
+        _routine('1700000000002').toJson(),
+      ]),
+    });
+
+    expect(await storage.loadRoutines(), hasLength(2));
+
+    await storage.deleteRoutine('1700000000001');
+
+    // The old blob must be gone, or the delete would be undone next read.
+    expect((await storage.loadRoutines()).map((r) => r.id),
+        ['1700000000002']);
   });
 
   test('add, update, and delete mutate persisted routines by id', () async {
@@ -161,4 +231,21 @@ void main() {
     expect(loaded.single.id, 'valid-routine');
     expect(loaded.single.intervals.single.speedKmh, 7.5);
   });
+}
+
+Routine _routine(String id) {
+  return Routine(
+    id: id,
+    name: 'Routine $id',
+    difficulty: '중간',
+    machineType: MachineType.treadmill,
+    intervals: [
+      Interval.treadmill(
+        id: 'interval-$id',
+        durationSeconds: 60,
+        speedKmh: 8,
+        grade: 1,
+      ),
+    ],
+  );
 }

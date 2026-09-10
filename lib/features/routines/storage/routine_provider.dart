@@ -36,7 +36,8 @@ class RoutineProvider with ChangeNotifier {
     await _ensureLoaded();
     _routines = [..._routines, routine];
     notifyListeners();
-    await _storage.saveRoutines(_routines);
+    // One key per routine, so this never rewrites the others.
+    await _storage.addRoutine(routine);
   }
 
   Future<void> updateRoutine(Routine routine) async {
@@ -49,13 +50,13 @@ class RoutineProvider with ChangeNotifier {
     updated[index] = routine;
     _routines = updated;
     notifyListeners();
-    await _storage.saveRoutines(_routines);
+    await _storage.updateRoutine(routine);
   }
 
   Future<void> deleteRoutine(String id) async {
     await _ensureLoaded();
     _routines = _routines.where((r) => r.id != id).toList();
     notifyListeners();
-    await _storage.saveRoutines(_routines);
+    await _storage.deleteRoutine(id);
   }
 }

@@ -7,12 +7,17 @@ class WeightStorage {
   /// Kept for one-time migration of entries saved by older versions.
   static const String legacyStorageKey = 'weight_entries';
   static const String keyPrefix = 'weight_entry:';
+
+  /// Where deletions are noted. Kept outside [keyPrefix] so a note
+  /// can never be scanned back in as a record.
+  static const String deletedKeyPrefix = 'deleted:weight_entry:';
   static const String _goalWeightKey = 'goal_weight_kg';
 
   final RecordStore<WeightEntry> _records = RecordStore<WeightEntry>(
     label: 'WeightStorage',
     keyPrefix: keyPrefix,
     legacyListKey: legacyStorageKey,
+    tombstonePrefix: deletedKeyPrefix,
     idOf: (entry) => entry.id,
     toJson: (entry) => entry.toJson(),
     fromJson: WeightEntry.fromJson,
@@ -28,6 +33,12 @@ class WeightStorage {
   Future<void> addEntry(WeightEntry entry) => _records.put(entry);
 
   Future<void> deleteEntry(String id) => _records.remove(id);
+
+  /// Entries deleted on this device, for backup to delete remotely too.
+  Future<Map<String, int>> deletedEntryIds() => _records.deletedIds();
+
+  /// Called once a deletion has been applied to the backup.
+  Future<void> forgetDeletedEntry(String id) => _records.clearDeletion(id);
 
   /// Replaces the entry stored under [id]. When the edit also changes the id,
   /// the old record is dropped so an edit never leaves a duplicate behind.

@@ -22,13 +22,25 @@ class RecordStore<T> {
     required this.idOf,
     required this.toJson,
     required this.fromJson,
-  });
+    String? tombstonePrefix,
+  })  :
+        // Must not start with keyPrefix, or the record scan would read
+        // tombstones back as records.
+        assert(
+          tombstonePrefix == null || !tombstonePrefix.startsWith(keyPrefix),
+          'A tombstone prefix inside keyPrefix would be scanned as a record',
+        ),
+        tombstonePrefix = tombstonePrefix ?? 'deleted:$keyPrefix';
 
   /// Name used in debug logs.
   final String label;
 
   /// Every record key starts with this.
   final String keyPrefix;
+
+  /// Where deletions are noted. Deliberately not a [keyPrefix] key, so a
+  /// tombstone can never be read back as a record.
+  final String tombstonePrefix;
 
   /// The old single-blob key, read once and then deleted.
   final String legacyListKey;
@@ -38,6 +50,7 @@ class RecordStore<T> {
   final T Function(Map<String, dynamic> json) fromJson;
 
   String _keyFor(String id) => '$keyPrefix$id';
+  String _tombstoneKeyFor(String id) => '$tombstonePrefix$id';
 
   /// Every stored record. Malformed records are skipped rather than failing
   /// the whole read, so one bad entry can never hide a person's history.
@@ -49,7 +62,16 @@ class RecordStore<T> {
       final records = <T>[];
       for (final key in prefs.getKeys()) {
         if (!key.startsWith(keyPrefix)) continue;
-        final record = _decode(prefs.getString(key));
+        // Read per key: a value of the wrong type throws, and letting that
+        // escape would return an empty history for one bad entry.
+        String? raw;
+        try {
+          raw = prefs.getString(key);
+        } catch (e) {
+          debugLog('[$label] Skipping unreadable key $key: $e');
+          continue;
+        }
+        final record = _decode(raw);
         if (record != null) records.add(record);
       }
       return records;
@@ -61,27 +83,65 @@ class RecordStore<T> {
 
   /// Writes one record, leaving every other record untouched. Also used for
   /// updates - a record with an existing id replaces just that entry.
+  ///
+  /// Writing an id clears any deletion noted for it: a deliberate write is a
+  /// later decision than the delete it replaces.
   Future<void> put(T record) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await _migrateLegacyList(prefs);
-      await prefs.setString(
-        _keyFor(idOf(record)),
-        jsonEncode(toJson(record)),
-      );
+      final id = idOf(record);
+      await prefs.setString(_keyFor(id), jsonEncode(toJson(record)));
+      await prefs.remove(_tombstoneKeyFor(id));
     } catch (e) {
       debugLog('[$label] Failed to save record: $e');
     }
   }
 
-  /// Deletes one record. Deleting something already gone is not an error.
+  /// Deletes one record and notes that it was deleted.
+  ///
+  /// The note is what stops a backup from handing the record straight back on
+  /// the next sync. Deleting something already gone is not an error.
   Future<void> remove(String id) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await _migrateLegacyList(prefs);
       await prefs.remove(_keyFor(id));
+      await prefs.setInt(
+        _tombstoneKeyFor(id),
+        DateTime.now().millisecondsSinceEpoch,
+      );
     } catch (e) {
       debugLog('[$label] Failed to delete record: $e');
+    }
+  }
+
+  /// Ids deleted on this device, mapped to when. Backup uses these to delete
+  /// the same records remotely, and to ignore them when pulling.
+  Future<Map<String, int>> deletedIds() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final deleted = <String, int>{};
+      for (final key in prefs.getKeys()) {
+        if (!key.startsWith(tombstonePrefix)) continue;
+        final id = key.substring(tombstonePrefix.length);
+        if (id.isEmpty) continue;
+        deleted[id] = prefs.getInt(key) ?? 0;
+      }
+      return deleted;
+    } catch (e) {
+      debugLog('[$label] Failed to read deletions: $e');
+      return <String, int>{};
+    }
+  }
+
+  /// Forgets a deletion, once it has been applied to the backup.
+  Future<void> clearDeletion(String id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_tombstoneKeyFor(id));
+    } catch (e) {
+      debugLog('[$label] Failed to clear a deletion: $e');
     }
   }
 

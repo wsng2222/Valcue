@@ -159,6 +159,108 @@ void main() {
     });
   });
 
+  group('remembering what was deleted', () {
+    // Without this, backup would hand a deleted workout straight back on the
+    // next sync and it would look like the delete never happened.
+    test('a delete is remembered so a sync can repeat it', () async {
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('gone', DateTime(2026, 1, 1)));
+
+      await storage.deleteSession('gone');
+
+      expect(await storage.deletedSessionIds(), contains('gone'));
+    });
+
+    test('a deletion note is not readable as a record', () async {
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('gone', DateTime(2026, 1, 1)));
+      await storage.deleteSession('gone');
+
+      expect(await storage.loadSessions(), isEmpty);
+    });
+
+    test('adding the same id back cancels the deletion', () async {
+      // Re-adding is a later decision than the delete, so the record must
+      // not be wiped again by the next sync.
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('back', DateTime(2026, 1, 1)));
+      await storage.deleteSession('back');
+
+      await storage.addSession(_session('back', DateTime(2026, 1, 2)));
+
+      expect(await storage.deletedSessionIds(), isNot(contains('back')));
+      expect(await storage.loadSessions(), hasLength(1));
+    });
+
+    test('a deletion can be forgotten once it has been applied', () async {
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('gone', DateTime(2026, 1, 1)));
+      await storage.deleteSession('gone');
+
+      await storage.forgetDeletedSession('gone');
+
+      expect(await storage.deletedSessionIds(), isEmpty);
+    });
+
+    test('weight deletions are remembered the same way', () async {
+      final storage = WeightStorage();
+      await storage.addEntry(_weight('w1', DateTime(2026, 1, 1), 70));
+
+      await storage.deleteEntry('w1');
+
+      expect(await storage.deletedEntryIds(), contains('w1'));
+    });
+
+    test('nothing is remembered when nothing was deleted', () async {
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('kept', DateTime(2026, 1, 1)));
+
+      expect(await storage.deletedSessionIds(), isEmpty);
+    });
+  });
+
+  group('deletion notes never look like records', () {
+    test('a deletion note is stored outside the record namespace', () {
+      // The first version defaulted the tombstone prefix to
+      // "<keyPrefix>deleted:", which still started with keyPrefix. Every
+      // scan then tried to read a timestamp as a record, threw, and returned
+      // an empty history - deleting one workout wiped the lot.
+      expect(
+        WorkoutSessionStorage.deletedKeyPrefix
+            .startsWith(WorkoutSessionStorage.keyPrefix),
+        isFalse,
+      );
+      expect(
+        WeightStorage.deletedKeyPrefix.startsWith(WeightStorage.keyPrefix),
+        isFalse,
+      );
+    });
+
+    test('deleting one workout leaves the others readable', () async {
+      final storage = WorkoutSessionStorage();
+      await storage.addSession(_session('keep-1', DateTime(2026, 1, 1)));
+      await storage.addSession(_session('keep-2', DateTime(2026, 1, 2)));
+      await storage.addSession(_session('gone', DateTime(2026, 1, 3)));
+
+      await storage.deleteSession('gone');
+
+      final loaded = await storage.loadSessions();
+      expect(loaded.map((s) => s.id), ['keep-2', 'keep-1']);
+    });
+
+    test('a wrong-typed key does not empty the whole history', () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{
+        '${WorkoutSessionStorage.keyPrefix}broken': 42,
+        '${WorkoutSessionStorage.keyPrefix}fine':
+            jsonEncode(_session('fine', DateTime(2026, 1, 1)).toJson()),
+      });
+
+      final loaded = await WorkoutSessionStorage().loadSessions();
+
+      expect(loaded.map((s) => s.id), ['fine']);
+    });
+  });
+
   group('weight entry edits', () {
     test('editing an entry replaces it in place', () async {
       final storage = WeightStorage();
