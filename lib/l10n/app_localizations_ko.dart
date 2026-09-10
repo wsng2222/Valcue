@@ -1368,4 +1368,23 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get signInMergeNotice => '이 계정에 이미 기록이 있습니다. 이 폰의 기록과 합쳐집니다.';
+
+  @override
+  String get backupFailed => '지금은 백업하지 못했습니다. 나중에 다시 시도합니다.';
+
+  @override
+  String get deleteAccount => '계정 삭제';
+
+  @override
+  String get deleteAccountConfirmTitle => '계정을 삭제할까요?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      '계정과 백업된 기록이 영구히 삭제됩니다. 이 폰의 기록은 그대로 남습니다. 되돌릴 수 없습니다.';
+
+  @override
+  String get deleteAccountFailed => '계정을 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn => '안전을 위해 계정을 삭제하기 전에 다시 로그인해주세요.';
 }

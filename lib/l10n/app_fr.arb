@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "Se déconnecter ?",
   "signOutConfirmBody": "Les données de ce téléphone restent ici. Reconnectez-vous quand vous voulez pour retrouver votre sauvegarde.",
   "signInFailed": "Connexion impossible. Réessayez dans un instant.",
-  "signInMergeNotice": "Ce compte avait déjà des données. Elles seront fusionnées avec celles de ce téléphone."
+  "signInMergeNotice": "Ce compte avait déjà des données. Elles seront fusionnées avec celles de ce téléphone.",
+  "backupFailed": "Sauvegarde impossible pour le moment. Nouvel essai plus tard.",
+  "deleteAccount": "Supprimer mon compte",
+  "deleteAccountConfirmTitle": "Supprimer votre compte ?",
+  "deleteAccountConfirmBody": "Votre compte et tout ce qui y est sauvegardé sont définitivement supprimés. Les données de ce téléphone restent ici. Action irréversible.",
+  "deleteAccountFailed": "Impossible de supprimer le compte. Réessayez dans un instant.",
+  "deleteAccountNeedsRecentSignIn": "Par sécurité, reconnectez-vous avant de supprimer votre compte."
 }

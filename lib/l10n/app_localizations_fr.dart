@@ -1440,4 +1440,26 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Ce compte avait déjà des données. Elles seront fusionnées avec celles de ce téléphone.';
+
+  @override
+  String get backupFailed =>
+      'Sauvegarde impossible pour le moment. Nouvel essai plus tard.';
+
+  @override
+  String get deleteAccount => 'Supprimer mon compte';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Supprimer votre compte ?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Votre compte et tout ce qui y est sauvegardé sont définitivement supprimés. Les données de ce téléphone restent ici. Action irréversible.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Impossible de supprimer le compte. Réessayez dans un instant.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Par sécurité, reconnectez-vous avant de supprimer votre compte.';
 }

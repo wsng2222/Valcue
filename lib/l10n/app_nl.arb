@@ -427,5 +427,11 @@
   "signOutConfirmTitle": "Uitloggen?",
   "signOutConfirmBody": "De gegevens op deze telefoon blijven hier. Log altijd opnieuw in om je back-up terug te halen.",
   "signInFailed": "Inloggen is niet gelukt. Probeer het zo nog eens.",
-  "signInMergeNotice": "Dit account had al gegevens. Ze worden samengevoegd met die op deze telefoon."
+  "signInMergeNotice": "Dit account had al gegevens. Ze worden samengevoegd met die op deze telefoon.",
+  "backupFailed": "Back-up lukt nu niet. We proberen het later opnieuw.",
+  "deleteAccount": "Mijn account verwijderen",
+  "deleteAccountConfirmTitle": "Account verwijderen?",
+  "deleteAccountConfirmBody": "Je account en alles wat erin staat worden definitief verwijderd. De gegevens op deze telefoon blijven hier. Dit kan niet ongedaan worden gemaakt.",
+  "deleteAccountFailed": "Kon het account niet verwijderen. Probeer het zo nog eens.",
+  "deleteAccountNeedsRecentSignIn": "Log voor de zekerheid opnieuw in voordat je je account verwijdert."
 }

@@ -1632,5 +1632,29 @@
   "signInMergeNotice": "This account already had records. They will be combined with the ones on this phone.",
   "@signInMergeNotice": {
     "description": "Message when an existing account already had records"
+  },
+  "backupFailed": "Could not back up right now. It will try again later.",
+  "@backupFailed": {
+    "description": "Message when a backup sync could not finish"
+  },
+  "deleteAccount": "Delete my account",
+  "@deleteAccount": {
+    "description": "Delete account row label"
+  },
+  "deleteAccountConfirmTitle": "Delete your account?",
+  "@deleteAccountConfirmTitle": {
+    "description": "Title of the delete account confirmation"
+  },
+  "deleteAccountConfirmBody": "Your account and everything backed up to it are permanently deleted. Records on this phone stay here. This cannot be undone.",
+  "@deleteAccountConfirmBody": {
+    "description": "Warning shown before deleting an account"
+  },
+  "deleteAccountFailed": "Could not delete the account. Please try again in a moment.",
+  "@deleteAccountFailed": {
+    "description": "Message when account deletion could not finish"
+  },
+  "deleteAccountNeedsRecentSignIn": "For your safety, sign in again before deleting your account.",
+  "@deleteAccountNeedsRecentSignIn": {
+    "description": "Message when deletion needs the person to sign in again first"
   }
 }

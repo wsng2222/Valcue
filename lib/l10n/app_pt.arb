@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "Deseja sair?",
   "signOutConfirmBody": "Os registros deste celular continuam aqui. Entre de novo quando quiser para recuperar o backup.",
   "signInFailed": "Não foi possível entrar. Tente novamente daqui a pouco.",
-  "signInMergeNotice": "Esta conta já tinha registros. Eles serão combinados com os deste celular."
+  "signInMergeNotice": "Esta conta já tinha registros. Eles serão combinados com os deste celular.",
+  "backupFailed": "Não foi possível fazer backup agora. Tentaremos de novo depois.",
+  "deleteAccount": "Excluir minha conta",
+  "deleteAccountConfirmTitle": "Excluir sua conta?",
+  "deleteAccountConfirmBody": "Sua conta e tudo que foi salvo nela são excluídos permanentemente. Os registros deste celular continuam aqui. Não dá para desfazer.",
+  "deleteAccountFailed": "Não foi possível excluir a conta. Tente novamente daqui a pouco.",
+  "deleteAccountNeedsRecentSignIn": "Por segurança, entre novamente antes de excluir sua conta."
 }

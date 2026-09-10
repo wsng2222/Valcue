@@ -2641,6 +2641,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This account already had records. They will be combined with the ones on this phone.'**
   String get signInMergeNotice;
+
+  /// Message when a backup sync could not finish
+  ///
+  /// In en, this message translates to:
+  /// **'Could not back up right now. It will try again later.'**
+  String get backupFailed;
+
+  /// Delete account row label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteAccount;
+
+  /// Title of the delete account confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountConfirmTitle;
+
+  /// Warning shown before deleting an account
+  ///
+  /// In en, this message translates to:
+  /// **'Your account and everything backed up to it are permanently deleted. Records on this phone stay here. This cannot be undone.'**
+  String get deleteAccountConfirmBody;
+
+  /// Message when account deletion could not finish
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete the account. Please try again in a moment.'**
+  String get deleteAccountFailed;
+
+  /// Message when deletion needs the person to sign in again first
+  ///
+  /// In en, this message translates to:
+  /// **'For your safety, sign in again before deleting your account.'**
+  String get deleteAccountNeedsRecentSignIn;
 }
 
 class _AppLocalizationsDelegate

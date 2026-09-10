@@ -29,6 +29,7 @@ import 'services/workout_live_activity_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'services/analytics_service.dart';
 import 'features/account/account_service.dart';
+import 'features/account/backup_service.dart';
 import 'onboarding/onboarding_flow.dart';
 import 'firebase_options.dart';
 
@@ -114,7 +115,12 @@ Future<void> _bootstrapApp() async {
     await AnalyticsService.instance.init();
     // Everyone gets an identity up front, even guests, so records made before
     // anyone signs in still belong to someone and survive the upgrade.
-    await AccountService.instance.ensureSignedIn();
+    final user = await AccountService.instance.ensureSignedIn();
+    if (user != null && user.canBackUp) {
+      // Catches up whatever changed on another phone. Deliberately not
+      // awaited: a slow or failed sync must never hold up the app opening.
+      unawaited(BackupService.instance.syncNow());
+    }
   } catch (error, stack) {
     await AppErrorService.instance.recordError(
       error,

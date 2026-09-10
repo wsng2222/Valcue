@@ -427,5 +427,11 @@
   "signOutConfirmTitle": "Vil du logge ud?",
   "signOutConfirmBody": "Data på denne telefon bliver her. Log ind igen når som helst for at hente din sikkerhedskopi.",
   "signInFailed": "Kunne ikke logge ind. Prøv igen om lidt.",
-  "signInMergeNotice": "Denne konto havde allerede data. De bliver lagt sammen med dem på denne telefon."
+  "signInMergeNotice": "Denne konto havde allerede data. De bliver lagt sammen med dem på denne telefon.",
+  "backupFailed": "Kunne ikke sikkerhedskopiere nu. Vi prøver igen senere.",
+  "deleteAccount": "Slet min konto",
+  "deleteAccountConfirmTitle": "Vil du slette din konto?",
+  "deleteAccountConfirmBody": "Din konto og alt, der er sikkerhedskopieret til den, slettes permanent. Data på denne telefon bliver her. Det kan ikke fortrydes.",
+  "deleteAccountFailed": "Kunne ikke slette kontoen. Prøv igen om lidt.",
+  "deleteAccountNeedsRecentSignIn": "Af sikkerhedshensyn skal du logge ind igen, før du sletter din konto."
 }

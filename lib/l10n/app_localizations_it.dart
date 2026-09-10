@@ -1431,4 +1431,25 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Questo account aveva già dei dati. Verranno uniti a quelli di questo telefono.';
+
+  @override
+  String get backupFailed => 'Backup non riuscito ora. Riproveremo più tardi.';
+
+  @override
+  String get deleteAccount => 'Elimina il mio account';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Vuoi eliminare l\'account?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'L\'account e tutto ciò che vi è salvato vengono eliminati definitivamente. I dati su questo telefono restano qui. L\'operazione è irreversibile.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Impossibile eliminare l\'account. Riprova tra poco.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Per sicurezza, accedi di nuovo prima di eliminare l\'account.';
 }

@@ -1425,4 +1425,26 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Dit account had al gegevens. Ze worden samengevoegd met die op deze telefoon.';
+
+  @override
+  String get backupFailed =>
+      'Back-up lukt nu niet. We proberen het later opnieuw.';
+
+  @override
+  String get deleteAccount => 'Mijn account verwijderen';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Account verwijderen?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Je account en alles wat erin staat worden definitief verwijderd. De gegevens op deze telefoon blijven hier. Dit kan niet ongedaan worden gemaakt.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Kon het account niet verwijderen. Probeer het zo nog eens.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Log voor de zekerheid opnieuw in voordat je je account verwijdert.';
 }

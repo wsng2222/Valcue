@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../services/purchase_service.dart';
 import '../../utils/debug_log.dart';
 import 'account_models.dart';
 
@@ -23,7 +24,13 @@ class AccountService {
     GoogleSignIn? google,
     AppleCredentialProvider? apple,
     bool Function()? isIOS,
+    Future<void> Function(String accountId)? linkPurchases,
+    Future<void> Function()? unlinkPurchases,
   })  : _injectedAuth = auth,
+        _linkPurchases =
+            linkPurchases ?? PurchaseService.instance.linkToAccount,
+        _unlinkPurchases =
+            unlinkPurchases ?? PurchaseService.instance.unlinkFromAccount,
         _google = google ?? GoogleSignIn.instance,
         _apple = apple ?? const _RealAppleCredentialProvider(),
         _isIOS = isIOS ?? (() => Platform.isIOS);
@@ -34,6 +41,8 @@ class AccountService {
   final GoogleSignIn _google;
   final AppleCredentialProvider _apple;
   final bool Function() _isIOS;
+  final Future<void> Function(String accountId) _linkPurchases;
+  final Future<void> Function() _unlinkPurchases;
 
   bool _googleInitialized = false;
 
@@ -164,10 +173,45 @@ class AccountService {
     if (auth == null) return;
     try {
       await _signOutOfGoogle();
+      await _unlinkPurchases();
       await auth.signOut();
       await ensureSignedIn();
     } catch (e) {
       debugLog('[AccountService] Sign-out failed: $e');
+    }
+  }
+
+  /// Permanently deletes the signed-in account.
+  ///
+  /// Apple requires an in-app way to do this for any app that can create an
+  /// account. Deleting the credential is the last step, after the caller has
+  /// removed whatever the account owned, so a failure part-way leaves an
+  /// account that can still be signed in to and retried.
+  ///
+  /// Returns [DeleteAccountStatus] so a caller can tell a stale login - which
+  /// Firebase refuses for safety - from a real failure.
+  Future<DeleteAccountStatus> deleteAccount() async {
+    final auth = _authOrNull;
+    final user = auth?.currentUser;
+    if (auth == null || user == null) return DeleteAccountStatus.notSignedIn;
+
+    try {
+      await _signOutOfGoogle();
+      await _unlinkPurchases();
+      await user.delete();
+      // Never leave the app with nobody attached to the local records.
+      await ensureSignedIn();
+      return DeleteAccountStatus.deleted;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        debugLog('[AccountService] Delete needs a fresh sign-in');
+        return DeleteAccountStatus.needsRecentSignIn;
+      }
+      debugLog('[AccountService] Delete failed: ${e.code}');
+      return DeleteAccountStatus.failed;
+    } catch (e) {
+      debugLog('[AccountService] Delete failed: $e');
+      return DeleteAccountStatus.failed;
     }
   }
 
@@ -190,6 +234,7 @@ class AccountService {
       try {
         final linked = await guest.linkWithCredential(credential);
         await _saveDisplayName(linked.user, displayName);
+        await _attachPurchases(linked.user);
         return SignInResult(
           SignInStatus.upgradedGuest,
           user: _toAccountUser(linked.user),
@@ -213,6 +258,7 @@ class AccountService {
     try {
       final signedIn = await auth.signInWithCredential(credential);
       await _saveDisplayName(signedIn.user, displayName);
+      await _attachPurchases(signedIn.user);
       return SignInResult(
         guest != null && guest.isAnonymous
             ? SignInStatus.switchedToExistingAccount
@@ -222,6 +268,18 @@ class AccountService {
     } on FirebaseAuthException catch (e) {
       debugLog('[AccountService] Sign-in failed: ${e.code}');
       return SignInResult(SignInStatus.failed, errorCode: e.code);
+    }
+  }
+
+  /// Ties purchases to the account, so a subscription bought on one phone is
+  /// still there on the next one. Never allowed to fail a sign-in: being
+  /// signed in without the link is recoverable, being locked out is not.
+  Future<void> _attachPurchases(User? user) async {
+    if (user == null) return;
+    try {
+      await _linkPurchases(user.uid);
+    } catch (e) {
+      debugLog('[AccountService] Could not link purchases: $e');
     }
   }
 

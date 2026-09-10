@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "要退出登录吗？",
   "signOutConfirmBody": "这台手机上的记录会保留。随时重新登录即可找回备份。",
   "signInFailed": "无法登录，请稍后再试。",
-  "signInMergeNotice": "该账号已有记录，将与这台手机上的记录合并。"
+  "signInMergeNotice": "该账号已有记录，将与这台手机上的记录合并。",
+  "backupFailed": "暂时无法备份，稍后会再试。",
+  "deleteAccount": "删除我的账号",
+  "deleteAccountConfirmTitle": "要删除账号吗？",
+  "deleteAccountConfirmBody": "账号及其备份的记录将被永久删除。这台手机上的记录会保留。此操作无法撤销。",
+  "deleteAccountFailed": "无法删除账号，请稍后再试。",
+  "deleteAccountNeedsRecentSignIn": "为了安全，请在删除账号前重新登录。"
 }

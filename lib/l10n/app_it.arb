@@ -427,5 +427,11 @@
   "signOutConfirmTitle": "Vuoi uscire?",
   "signOutConfirmBody": "I dati su questo telefono restano qui. Accedi di nuovo quando vuoi per recuperare il backup.",
   "signInFailed": "Impossibile accedere. Riprova tra poco.",
-  "signInMergeNotice": "Questo account aveva già dei dati. Verranno uniti a quelli di questo telefono."
+  "signInMergeNotice": "Questo account aveva già dei dati. Verranno uniti a quelli di questo telefono.",
+  "backupFailed": "Backup non riuscito ora. Riproveremo più tardi.",
+  "deleteAccount": "Elimina il mio account",
+  "deleteAccountConfirmTitle": "Vuoi eliminare l'account?",
+  "deleteAccountConfirmBody": "L'account e tutto ciò che vi è salvato vengono eliminati definitivamente. I dati su questo telefono restano qui. L'operazione è irreversibile.",
+  "deleteAccountFailed": "Impossibile eliminare l'account. Riprova tra poco.",
+  "deleteAccountNeedsRecentSignIn": "Per sicurezza, accedi di nuovo prima di eliminare l'account."
 }

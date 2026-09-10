@@ -1358,4 +1358,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get signInMergeNotice => '该账号已有记录，将与这台手机上的记录合并。';
+
+  @override
+  String get backupFailed => '暂时无法备份，稍后会再试。';
+
+  @override
+  String get deleteAccount => '删除我的账号';
+
+  @override
+  String get deleteAccountConfirmTitle => '要删除账号吗？';
+
+  @override
+  String get deleteAccountConfirmBody => '账号及其备份的记录将被永久删除。这台手机上的记录会保留。此操作无法撤销。';
+
+  @override
+  String get deleteAccountFailed => '无法删除账号，请稍后再试。';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn => '为了安全，请在删除账号前重新登录。';
 }

@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "Abmelden?",
   "signOutConfirmBody": "Die Daten auf diesem Handy bleiben hier. Melde dich jederzeit wieder an, um deine Sicherung zurückzuholen.",
   "signInFailed": "Anmeldung nicht möglich. Bitte versuche es gleich noch einmal.",
-  "signInMergeNotice": "Dieses Konto hatte bereits Daten. Sie werden mit denen auf diesem Handy zusammengeführt."
+  "signInMergeNotice": "Dieses Konto hatte bereits Daten. Sie werden mit denen auf diesem Handy zusammengeführt.",
+  "backupFailed": "Sicherung gerade nicht möglich. Wird später erneut versucht.",
+  "deleteAccount": "Konto löschen",
+  "deleteAccountConfirmTitle": "Konto löschen?",
+  "deleteAccountConfirmBody": "Dein Konto und alles darin Gesicherte werden endgültig gelöscht. Die Daten auf diesem Handy bleiben hier. Das lässt sich nicht rückgängig machen.",
+  "deleteAccountFailed": "Konto konnte nicht gelöscht werden. Bitte versuche es gleich noch einmal.",
+  "deleteAccountNeedsRecentSignIn": "Melde dich zur Sicherheit erneut an, bevor du dein Konto löschst."
 }

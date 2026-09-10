@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "Đăng xuất?",
   "signOutConfirmBody": "Dữ liệu trên điện thoại này vẫn còn. Đăng nhập lại bất cứ lúc nào để lấy lại bản sao lưu.",
   "signInFailed": "Không đăng nhập được. Vui lòng thử lại sau giây lát.",
-  "signInMergeNotice": "Tài khoản này đã có dữ liệu. Chúng sẽ được gộp với dữ liệu trên điện thoại này."
+  "signInMergeNotice": "Tài khoản này đã có dữ liệu. Chúng sẽ được gộp với dữ liệu trên điện thoại này.",
+  "backupFailed": "Hiện chưa sao lưu được. Sẽ thử lại sau.",
+  "deleteAccount": "Xoá tài khoản của tôi",
+  "deleteAccountConfirmTitle": "Xoá tài khoản?",
+  "deleteAccountConfirmBody": "Tài khoản và mọi thứ đã sao lưu sẽ bị xoá vĩnh viễn. Dữ liệu trên điện thoại này vẫn còn. Không thể hoàn tác.",
+  "deleteAccountFailed": "Không xoá được tài khoản. Vui lòng thử lại sau giây lát.",
+  "deleteAccountNeedsRecentSignIn": "Vì lý do an toàn, hãy đăng nhập lại trước khi xoá tài khoản."
 }

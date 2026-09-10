@@ -1435,4 +1435,26 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Dieses Konto hatte bereits Daten. Sie werden mit denen auf diesem Handy zusammengeführt.';
+
+  @override
+  String get backupFailed =>
+      'Sicherung gerade nicht möglich. Wird später erneut versucht.';
+
+  @override
+  String get deleteAccount => 'Konto löschen';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Konto löschen?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Dein Konto und alles darin Gesicherte werden endgültig gelöscht. Die Daten auf diesem Handy bleiben hier. Das lässt sich nicht rückgängig machen.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Konto konnte nicht gelöscht werden. Bitte versuche es gleich noch einmal.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Melde dich zur Sicherheit erneut an, bevor du dein Konto löschst.';
 }

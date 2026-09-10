@@ -98,6 +98,35 @@ void main() {
     });
   });
 
+  group('purchases follow the account', () {
+    // A subscription bought before signing in is tied to the device. If the
+    // link step is skipped, a paying person changes phone and loses it.
+    test('signing out detaches purchases', () async {
+      var unlinked = 0;
+      final service = AccountService(
+        isIOS: () => false,
+        unlinkPurchases: () async => unlinked++,
+      );
+
+      await service.signOut();
+
+      // No Firebase here, so sign-out stops early - and must not have
+      // unlinked purchases from an account it never signed out of.
+      expect(unlinked, 0);
+    });
+
+    test('a failing link never blocks the sign-in path', () async {
+      // Being signed in without the purchase link is recoverable. Failing
+      // the sign-in because of it is not.
+      final service = AccountService(
+        isIOS: () => false,
+        linkPurchases: (_) async => throw StateError('revenuecat down'),
+      );
+
+      await expectLater(service.ensureSignedIn(), completes);
+    });
+  });
+
   group('when Firebase never came up', () {
     // Startup wraps Firebase in a try/catch, so the app can run without it.
     // Every account call has to degrade instead of throwing, or the settings

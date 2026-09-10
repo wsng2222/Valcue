@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "¿Cerrar sesión?",
   "signOutConfirmBody": "Los registros de este teléfono se quedan aquí. Inicia sesión cuando quieras para recuperar tu copia.",
   "signInFailed": "No se pudo iniciar sesión. Inténtalo de nuevo en un momento.",
-  "signInMergeNotice": "Esta cuenta ya tenía registros. Se combinarán con los de este teléfono."
+  "signInMergeNotice": "Esta cuenta ya tenía registros. Se combinarán con los de este teléfono.",
+  "backupFailed": "No se pudo hacer la copia ahora. Se intentará más tarde.",
+  "deleteAccount": "Eliminar mi cuenta",
+  "deleteAccountConfirmTitle": "¿Eliminar tu cuenta?",
+  "deleteAccountConfirmBody": "Tu cuenta y todo lo respaldado en ella se eliminan permanentemente. Los registros de este teléfono se quedan aquí. Esto no se puede deshacer.",
+  "deleteAccountFailed": "No se pudo eliminar la cuenta. Inténtalo de nuevo en un momento.",
+  "deleteAccountNeedsRecentSignIn": "Por seguridad, inicia sesión de nuevo antes de eliminar tu cuenta."
 }

@@ -1428,4 +1428,26 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'В этом аккаунте уже есть записи. Они объединятся с записями на этом телефоне.';
+
+  @override
+  String get backupFailed =>
+      'Сейчас не удалось создать копию. Попробуем позже.';
+
+  @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Удалить аккаунт?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Аккаунт и всё, что в нём сохранено, будут удалены навсегда. Записи на этом телефоне останутся. Отменить нельзя.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Не удалось удалить аккаунт. Повторите попытку чуть позже.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'В целях безопасности войдите снова, прежде чем удалять аккаунт.';
 }

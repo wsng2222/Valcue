@@ -1410,4 +1410,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'هذا الحساب لديه سجلات بالفعل. سيتم دمجها مع سجلات هذا الهاتف.';
+
+  @override
+  String get backupFailed =>
+      'تعذّر النسخ الاحتياطي الآن. ستتم إعادة المحاولة لاحقًا.';
+
+  @override
+  String get deleteAccount => 'حذف حسابي';
+
+  @override
+  String get deleteAccountConfirmTitle => 'حذف حسابك؟';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'سيتم حذف حسابك وكل ما تم نسخه احتياطيًا نهائيًا. تبقى سجلات هذا الهاتف كما هي. لا يمكن التراجع عن ذلك.';
+
+  @override
+  String get deleteAccountFailed => 'تعذّر حذف الحساب. يرجى المحاولة بعد قليل.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'لأمانك، سجّل الدخول مرة أخرى قبل حذف حسابك.';
 }

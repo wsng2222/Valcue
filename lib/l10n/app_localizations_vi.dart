@@ -1425,4 +1425,25 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Tài khoản này đã có dữ liệu. Chúng sẽ được gộp với dữ liệu trên điện thoại này.';
+
+  @override
+  String get backupFailed => 'Hiện chưa sao lưu được. Sẽ thử lại sau.';
+
+  @override
+  String get deleteAccount => 'Xoá tài khoản của tôi';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Xoá tài khoản?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Tài khoản và mọi thứ đã sao lưu sẽ bị xoá vĩnh viễn. Dữ liệu trên điện thoại này vẫn còn. Không thể hoàn tác.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Không xoá được tài khoản. Vui lòng thử lại sau giây lát.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Vì lý do an toàn, hãy đăng nhập lại trước khi xoá tài khoản.';
 }

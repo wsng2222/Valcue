@@ -618,5 +618,11 @@
   "signOutConfirmTitle": "ログアウトしますか？",
   "signOutConfirmBody": "この端末の記録はそのまま残ります。いつでも再ログインでバックアップを取り戻せます。",
   "signInFailed": "ログインできませんでした。しばらくしてからもう一度お試しください。",
-  "signInMergeNotice": "このアカウントには既に記録があります。この端末の記録と統合されます。"
+  "signInMergeNotice": "このアカウントには既に記録があります。この端末の記録と統合されます。",
+  "backupFailed": "今はバックアップできませんでした。後でもう一度試します。",
+  "deleteAccount": "アカウントを削除",
+  "deleteAccountConfirmTitle": "アカウントを削除しますか？",
+  "deleteAccountConfirmBody": "アカウントとバックアップされた記録が完全に削除されます。この端末の記録はそのまま残ります。取り消せません。",
+  "deleteAccountFailed": "アカウントを削除できませんでした。しばらくしてからもう一度お試しください。",
+  "deleteAccountNeedsRecentSignIn": "安全のため、アカウントを削除する前にもう一度ログインしてください。"
 }

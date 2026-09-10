@@ -95,6 +95,34 @@ class PurchaseService {
     }
   }
 
+  /// Ties purchases to a signed-in account, so a subscription follows the
+  /// person to a new phone instead of staying on the old device.
+  ///
+  /// Anything already bought anonymously on this device is carried into the
+  /// account by RevenueCat, so nobody loses a subscription by signing in.
+  Future<void> linkToAccount(String accountId) async {
+    if (!_configured || accountId.isEmpty) return;
+    try {
+      final result = await Purchases.logIn(accountId);
+      _handleCustomerInfo(result.customerInfo);
+    } catch (e) {
+      _debugLog('PurchaseService: could not link purchases to account: $e');
+    }
+  }
+
+  /// Detaches purchases from the account again, back to a device-only
+  /// identity. The entitlement is deliberately left as whatever RevenueCat
+  /// reports afterwards rather than assumed to be gone.
+  Future<void> unlinkFromAccount() async {
+    if (!_configured) return;
+    try {
+      final info = await Purchases.logOut();
+      _handleCustomerInfo(info);
+    } catch (e) {
+      _debugLog('PurchaseService: could not unlink purchases: $e');
+    }
+  }
+
   /// Restores previous purchases. Returns true if the premium entitlement is
   /// active afterwards.
   Future<bool> restorePurchases() async {

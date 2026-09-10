@@ -6,14 +6,16 @@ import '../../widgets/app_message.dart';
 import '../settings/widgets/settings_section.dart';
 import 'account_models.dart';
 import 'account_service.dart';
+import 'backup_service.dart';
 import 'sign_in_sheet.dart';
 
 /// The settings entry point for backup: signs people in, shows who is signed
 /// in, and signs them out again.
 class BackupSettingsRow extends StatefulWidget {
-  const BackupSettingsRow({super.key, this.service});
+  const BackupSettingsRow({super.key, this.service, this.backup});
 
   final AccountService? service;
+  final BackupService? backup;
 
   @override
   State<BackupSettingsRow> createState() => _BackupSettingsRowState();
@@ -21,6 +23,9 @@ class BackupSettingsRow extends StatefulWidget {
 
 class _BackupSettingsRowState extends State<BackupSettingsRow> {
   AccountService get _service => widget.service ?? AccountService.instance;
+  BackupService get _backup => widget.backup ?? BackupService.instance;
+
+  bool _isSyncing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +49,29 @@ class _BackupSettingsRowState extends State<BackupSettingsRow> {
               subtitle: isBackedUp
                   ? (user?.email ?? l10n.backupSignedInSubtitle)
                   : l10n.backupGuestSubtitle,
-              onTap: isBackedUp ? _confirmSignOut : _signIn,
-              trailing: isBackedUp
+              onTap: _isSyncing
                   ? null
-                  : const Icon(Icons.chevron_right, size: 20),
+                  : (isBackedUp ? _confirmSignOut : _signIn),
+              trailing: _isSyncing
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : (isBackedUp
+                      ? null
+                      : const Icon(Icons.chevron_right, size: 20)),
             ),
+            // Apple requires an in-app way to delete an account, so this
+            // appears as soon as there is one to delete.
+            if (isBackedUp)
+              SettingsRow(
+                icon: Icons.person_remove_outlined,
+                iconColor: Theme.of(context).colorScheme.error,
+                title: l10n.deleteAccount,
+                onTap: _isSyncing ? null : _confirmDeleteAccount,
+                showDivider: false,
+              ),
           ],
         );
       },
@@ -70,6 +93,73 @@ class _BackupSettingsRowState extends State<BackupSettingsRow> {
     if (result.needsMerge) {
       showAppMessage(context, l10n.signInMergeNotice);
     }
+
+    await _sync();
+  }
+
+  /// Runs a sync and reports only failure - a successful sync should feel
+  /// like nothing happened, because the records are simply all there.
+  Future<void> _sync() async {
+    if (_isSyncing) return;
+    setState(() => _isSyncing = true);
+
+    final result = await _backup.syncNow();
+
+    if (!mounted) return;
+    setState(() => _isSyncing = false);
+
+    if (result.status == BackupStatus.failed ||
+        result.status == BackupStatus.unavailable) {
+      final l10n = AppLocalizations.of(context)!;
+      showAppMessage(context, l10n.backupFailed, type: AppMessageType.error);
+    }
+  }
+
+  Future<void> _confirmDeleteAccount() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showAppDialog<bool>(
+      context: context,
+      builder: (context) => AppDialog(
+        title: l10n.deleteAccountConfirmTitle,
+        message: l10n.deleteAccountConfirmBody,
+        icon: Icons.warning_amber_rounded,
+        iconColor: Theme.of(context).colorScheme.error,
+        actions: [
+          AppDialogAction(
+            label: l10n.deleteAccount,
+            style: AppDialogActionStyle.destructive,
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+          AppDialogAction(
+            label: MaterialLocalizations.of(context).cancelButtonLabel,
+            style: AppDialogActionStyle.secondary,
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isSyncing = true);
+
+    // The backup goes first. Deleting the credential first would leave the
+    // records behind with nobody able to reach or remove them.
+    final clearedBackup = await _backup.deleteEverythingBackedUp();
+    final status = clearedBackup
+        ? await _service.deleteAccount()
+        : DeleteAccountStatus.failed;
+
+    if (!mounted) return;
+    setState(() => _isSyncing = false);
+
+    if (status == DeleteAccountStatus.deleted) return;
+    showAppMessage(
+      context,
+      status == DeleteAccountStatus.needsRecentSignIn
+          ? l10n.deleteAccountNeedsRecentSignIn
+          : l10n.deleteAccountFailed,
+      type: AppMessageType.error,
+    );
   }
 
   Future<void> _confirmSignOut() async {

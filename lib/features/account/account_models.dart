@@ -76,3 +76,18 @@ class SignInResult {
   /// records need merging rather than simply uploading.
   bool get needsMerge => status == SignInStatus.switchedToExistingAccount;
 }
+
+/// What happened when someone asked to delete their account.
+enum DeleteAccountStatus {
+  deleted,
+
+  /// Nobody was signed in - nothing to delete.
+  notSignedIn,
+
+  /// Firebase refuses to delete an account whose sign-in is old, as a guard
+  /// against someone acting on a phone left unlocked. Signing in again fixes
+  /// it, so this is worth telling the person apart from a plain failure.
+  needsRecentSignIn,
+
+  failed,
+}

@@ -1414,4 +1414,25 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'บัญชีนี้มีข้อมูลอยู่แล้ว ระบบจะรวมเข้ากับข้อมูลในเครื่องนี้';
+
+  @override
+  String get backupFailed => 'ตอนนี้สำรองข้อมูลไม่ได้ จะลองใหม่ภายหลัง';
+
+  @override
+  String get deleteAccount => 'ลบบัญชีของฉัน';
+
+  @override
+  String get deleteAccountConfirmTitle => 'ลบบัญชีไหม';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'บัญชีและทุกอย่างที่สำรองไว้จะถูกลบถาวร ข้อมูลในเครื่องนี้จะยังอยู่ การกระทำนี้ย้อนกลับไม่ได้';
+
+  @override
+  String get deleteAccountFailed =>
+      'ลบบัญชีไม่สำเร็จ กรุณาลองอีกครั้งในอีกสักครู่';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'เพื่อความปลอดภัย กรุณาลงชื่อเข้าใช้อีกครั้งก่อนลบบัญชี';
 }

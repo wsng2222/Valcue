@@ -1364,4 +1364,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get signInMergeNotice => 'このアカウントには既に記録があります。この端末の記録と統合されます。';
+
+  @override
+  String get backupFailed => '今はバックアップできませんでした。後でもう一度試します。';
+
+  @override
+  String get deleteAccount => 'アカウントを削除';
+
+  @override
+  String get deleteAccountConfirmTitle => 'アカウントを削除しますか？';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'アカウントとバックアップされた記録が完全に削除されます。この端末の記録はそのまま残ります。取り消せません。';
+
+  @override
+  String get deleteAccountFailed => 'アカウントを削除できませんでした。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      '安全のため、アカウントを削除する前にもう一度ログインしてください。';
 }

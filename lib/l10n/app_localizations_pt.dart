@@ -1428,4 +1428,26 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Esta conta já tinha registros. Eles serão combinados com os deste celular.';
+
+  @override
+  String get backupFailed =>
+      'Não foi possível fazer backup agora. Tentaremos de novo depois.';
+
+  @override
+  String get deleteAccount => 'Excluir minha conta';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Excluir sua conta?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Sua conta e tudo que foi salvo nela são excluídos permanentemente. Os registros deste celular continuam aqui. Não dá para desfazer.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Não foi possível excluir a conta. Tente novamente daqui a pouco.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Por segurança, entre novamente antes de excluir sua conta.';
 }

@@ -1422,4 +1422,26 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get signInMergeNotice =>
       'Denne kontoen hadde allerede data. De slås sammen med dem på denne telefonen.';
+
+  @override
+  String get backupFailed =>
+      'Kunne ikke sikkerhetskopiere nå. Vi prøver igjen senere.';
+
+  @override
+  String get deleteAccount => 'Slett kontoen min';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Vil du slette kontoen?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Kontoen din og alt som er sikkerhetskopiert til den slettes permanent. Dataene på denne telefonen blir her. Dette kan ikke angres.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Kunne ikke slette kontoen. Prøv igjen om litt.';
+
+  @override
+  String get deleteAccountNeedsRecentSignIn =>
+      'Av sikkerhetshensyn må du logge inn på nytt før du sletter kontoen.';
 }
