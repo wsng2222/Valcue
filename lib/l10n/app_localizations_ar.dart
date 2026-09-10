@@ -1367,4 +1367,47 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'لم يتم منح الوصول إلى الصحة. يمكنك السماح به من إعدادات هاتفك.';
+
+  @override
+  String get backupSectionTitle => 'نسخ احتياطي لسجلاتي';
+
+  @override
+  String get backupGuestSubtitle => 'سجّل الدخول لتبقى سجلاتك عند تغيير الهاتف';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'تم تسجيل الدخول - يتم نسخ سجلاتك احتياطيًا';
+
+  @override
+  String get signInTitle => 'نسخ احتياطي لسجلاتي';
+
+  @override
+  String get signInDescription =>
+      'سجّل الدخول لحفظ تمارينك ووزنك وبرامجك. استعدها على أي هاتف.';
+
+  @override
+  String get signInWithApple => 'المتابعة باستخدام Apple';
+
+  @override
+  String get signInWithGoogle => 'المتابعة باستخدام Google';
+
+  @override
+  String get signInAsGuest => 'الاستخدام دون تسجيل الدخول';
+
+  @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String get signOutConfirmTitle => 'تسجيل الخروج؟';
+
+  @override
+  String get signOutConfirmBody =>
+      'تبقى سجلات هذا الهاتف كما هي. سجّل الدخول مرة أخرى في أي وقت لاستعادة النسخة الاحتياطية.';
+
+  @override
+  String get signInFailed => 'تعذّر تسجيل الدخول. يرجى المحاولة بعد قليل.';
+
+  @override
+  String get signInMergeNotice =>
+      'هذا الحساب لديه سجلات بالفعل. سيتم دمجها مع سجلات هذا الهاتف.';
 }

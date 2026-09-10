@@ -47,6 +47,8 @@ dependencies:
   firebase_crashlytics: ^5.3.0
   in_app_review: ^2.0.12
   health: ^13.3.1
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
 
 dev_dependencies:
   flutter_test:

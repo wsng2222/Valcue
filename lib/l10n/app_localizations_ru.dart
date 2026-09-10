@@ -1385,4 +1385,47 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Доступ к здоровью не предоставлен. Вы можете разрешить его в настройках телефона.';
+
+  @override
+  String get backupSectionTitle => 'Резервная копия записей';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Войдите, чтобы записи сохранились при смене телефона';
+
+  @override
+  String get backupSignedInSubtitle => 'Вход выполнен - записи копируются';
+
+  @override
+  String get signInTitle => 'Резервная копия записей';
+
+  @override
+  String get signInDescription =>
+      'Войдите, и тренировки, вес и программы сохранятся. Вернёте их на любом телефоне.';
+
+  @override
+  String get signInWithApple => 'Продолжить с Apple';
+
+  @override
+  String get signInWithGoogle => 'Продолжить с Google';
+
+  @override
+  String get signInAsGuest => 'Пользоваться без входа';
+
+  @override
+  String get signOut => 'Выйти';
+
+  @override
+  String get signOutConfirmTitle => 'Выйти из аккаунта?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Записи на этом телефоне останутся. Войдите снова в любой момент, чтобы вернуть копию.';
+
+  @override
+  String get signInFailed => 'Не удалось войти. Повторите попытку чуть позже.';
+
+  @override
+  String get signInMergeNotice =>
+      'В этом аккаунте уже есть записи. Они объединятся с записями на этом телефоне.';
 }

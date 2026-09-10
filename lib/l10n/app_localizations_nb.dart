@@ -1378,4 +1378,48 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Helsetilgang ble ikke gitt. Du kan tillate det i innstillingene på telefonen.';
+
+  @override
+  String get backupSectionTitle => 'Sikkerhetskopier dataene mine';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Logg inn så dataene overlever en ny telefon';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Logget inn - dataene dine sikkerhetskopieres';
+
+  @override
+  String get signInTitle => 'Sikkerhetskopier dataene mine';
+
+  @override
+  String get signInDescription =>
+      'Logg inn, så lagres øktene, vekten og rutinene dine. Hent dem tilbake på hvilken som helst telefon.';
+
+  @override
+  String get signInWithApple => 'Fortsett med Apple';
+
+  @override
+  String get signInWithGoogle => 'Fortsett med Google';
+
+  @override
+  String get signInAsGuest => 'Bruk uten å logge inn';
+
+  @override
+  String get signOut => 'Logg ut';
+
+  @override
+  String get signOutConfirmTitle => 'Vil du logge ut?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Dataene på denne telefonen blir her. Logg inn igjen når som helst for å hente sikkerhetskopien.';
+
+  @override
+  String get signInFailed => 'Kunne ikke logge inn. Prøv igjen om litt.';
+
+  @override
+  String get signInMergeNotice =>
+      'Denne kontoen hadde allerede data. De slås sammen med dem på denne telefonen.';
 }

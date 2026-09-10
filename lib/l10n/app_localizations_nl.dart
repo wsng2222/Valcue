@@ -1380,4 +1380,49 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Toegang tot gezondheid is niet verleend. Je kunt dit toestaan in de instellingen van je telefoon.';
+
+  @override
+  String get backupSectionTitle => 'Mijn gegevens back-uppen';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Log in zodat je gegevens een nieuwe telefoon overleven';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Ingelogd - je gegevens worden geback-upt';
+
+  @override
+  String get signInTitle => 'Mijn gegevens back-uppen';
+
+  @override
+  String get signInDescription =>
+      'Log in en je workouts, gewicht en routines worden bewaard. Haal ze op elke telefoon terug.';
+
+  @override
+  String get signInWithApple => 'Doorgaan met Apple';
+
+  @override
+  String get signInWithGoogle => 'Doorgaan met Google';
+
+  @override
+  String get signInAsGuest => 'Gebruiken zonder in te loggen';
+
+  @override
+  String get signOut => 'Uitloggen';
+
+  @override
+  String get signOutConfirmTitle => 'Uitloggen?';
+
+  @override
+  String get signOutConfirmBody =>
+      'De gegevens op deze telefoon blijven hier. Log altijd opnieuw in om je back-up terug te halen.';
+
+  @override
+  String get signInFailed =>
+      'Inloggen is niet gelukt. Probeer het zo nog eens.';
+
+  @override
+  String get signInMergeNotice =>
+      'Dit account had al gegevens. Ze worden samengevoegd met die op deze telefoon.';
 }

@@ -1580,5 +1580,57 @@
   "healthSyncPermissionDenied": "Health access was not granted. You can allow it in your phone's settings.",
   "@healthSyncPermissionDenied": {
     "description": "Message shown when the health store refuses write access"
+  },
+  "backupSectionTitle": "Back up my records",
+  "@backupSectionTitle": {
+    "description": "Settings row label for record backup"
+  },
+  "backupGuestSubtitle": "Sign in so your records survive a new phone",
+  "@backupGuestSubtitle": {
+    "description": "Subtitle shown under backup row when not signed in"
+  },
+  "backupSignedInSubtitle": "Signed in - your records are backed up",
+  "@backupSignedInSubtitle": {
+    "description": "Subtitle shown under backup row when signed in"
+  },
+  "signInTitle": "Back up my records",
+  "@signInTitle": {
+    "description": "Title of the sign-in bottom sheet"
+  },
+  "signInDescription": "Sign in and your workouts, weight and routines are saved. Get them back on any phone.",
+  "@signInDescription": {
+    "description": "Explanation of what signing in does"
+  },
+  "signInWithApple": "Continue with Apple",
+  "@signInWithApple": {
+    "description": "Apple sign-in button label"
+  },
+  "signInWithGoogle": "Continue with Google",
+  "@signInWithGoogle": {
+    "description": "Google sign-in button label"
+  },
+  "signInAsGuest": "Use without signing in",
+  "@signInAsGuest": {
+    "description": "Continue without signing in"
+  },
+  "signOut": "Sign out",
+  "@signOut": {
+    "description": "Sign out button label"
+  },
+  "signOutConfirmTitle": "Sign out?",
+  "@signOutConfirmTitle": {
+    "description": "Title of the sign-out confirmation dialog"
+  },
+  "signOutConfirmBody": "Records on this phone stay here. Sign in again any time to get your backup back.",
+  "@signOutConfirmBody": {
+    "description": "Body of the sign-out confirmation dialog"
+  },
+  "signInFailed": "Could not sign in. Please try again in a moment.",
+  "@signInFailed": {
+    "description": "Message when sign-in could not complete"
+  },
+  "signInMergeNotice": "This account already had records. They will be combined with the ones on this phone.",
+  "@signInMergeNotice": {
+    "description": "Message when an existing account already had records"
   }
 }

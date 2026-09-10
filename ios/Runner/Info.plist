@@ -69,5 +69,18 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>GIDClientID</key>
+	<string>983884926304-u7t4jkp9f873vr13mf930pi01698uit2.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.983884926304-u7t4jkp9f873vr13mf930pi01698uit2</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

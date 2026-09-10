@@ -28,6 +28,7 @@ import 'services/voice_guide_service.dart';
 import 'services/workout_live_activity_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'services/analytics_service.dart';
+import 'features/account/account_service.dart';
 import 'onboarding/onboarding_flow.dart';
 import 'firebase_options.dart';
 
@@ -111,6 +112,9 @@ Future<void> _bootstrapApp() async {
     await FirebaseCrashlytics.instance
         .setCrashlyticsCollectionEnabled(!kDebugMode);
     await AnalyticsService.instance.init();
+    // Everyone gets an identity up front, even guests, so records made before
+    // anyone signs in still belong to someone and survive the upgrade.
+    await AccountService.instance.ensureSignedIn();
   } catch (error, stack) {
     await AppErrorService.instance.recordError(
       error,

@@ -1390,4 +1390,49 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Der Gesundheitszugriff wurde nicht erteilt. Du kannst ihn in den Telefoneinstellungen erlauben.';
+
+  @override
+  String get backupSectionTitle => 'Meine Daten sichern';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Melde dich an, damit deine Daten den Handywechsel überstehen';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Angemeldet - deine Daten werden gesichert';
+
+  @override
+  String get signInTitle => 'Meine Daten sichern';
+
+  @override
+  String get signInDescription =>
+      'Melde dich an und deine Workouts, dein Gewicht und deine Routinen werden gespeichert. Hol sie dir auf jedem Handy zurück.';
+
+  @override
+  String get signInWithApple => 'Weiter mit Apple';
+
+  @override
+  String get signInWithGoogle => 'Weiter mit Google';
+
+  @override
+  String get signInAsGuest => 'Ohne Anmeldung nutzen';
+
+  @override
+  String get signOut => 'Abmelden';
+
+  @override
+  String get signOutConfirmTitle => 'Abmelden?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Die Daten auf diesem Handy bleiben hier. Melde dich jederzeit wieder an, um deine Sicherung zurückzuholen.';
+
+  @override
+  String get signInFailed =>
+      'Anmeldung nicht möglich. Bitte versuche es gleich noch einmal.';
+
+  @override
+  String get signInMergeNotice =>
+      'Dieses Konto hatte bereits Daten. Sie werden mit denen auf diesem Handy zusammengeführt.';
 }

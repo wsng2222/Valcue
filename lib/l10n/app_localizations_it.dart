@@ -1387,4 +1387,48 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'L\'accesso a salute non è stato concesso. Puoi consentirlo nelle impostazioni del telefono.';
+
+  @override
+  String get backupSectionTitle => 'Backup dei miei dati';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Accedi per conservare i dati anche cambiando telefono';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Accesso eseguito - i tuoi dati sono salvati';
+
+  @override
+  String get signInTitle => 'Backup dei miei dati';
+
+  @override
+  String get signInDescription =>
+      'Accedi e i tuoi allenamenti, il peso e le routine vengono salvati. Li ritrovi su qualsiasi telefono.';
+
+  @override
+  String get signInWithApple => 'Continua con Apple';
+
+  @override
+  String get signInWithGoogle => 'Continua con Google';
+
+  @override
+  String get signInAsGuest => 'Usa senza accedere';
+
+  @override
+  String get signOut => 'Esci';
+
+  @override
+  String get signOutConfirmTitle => 'Vuoi uscire?';
+
+  @override
+  String get signOutConfirmBody =>
+      'I dati su questo telefono restano qui. Accedi di nuovo quando vuoi per recuperare il backup.';
+
+  @override
+  String get signInFailed => 'Impossibile accedere. Riprova tra poco.';
+
+  @override
+  String get signInMergeNotice =>
+      'Questo account aveva già dei dati. Verranno uniti a quelli di questo telefono.';
 }

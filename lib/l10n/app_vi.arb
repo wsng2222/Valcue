@@ -605,5 +605,18 @@
   "plansUnavailable": "Không thể tải các gói. Vui lòng thử lại sau.",
   "healthSync": "Apple Health",
   "healthSyncSubtitle": "Lưu các buổi tập đã hoàn thành vào ứng dụng sức khỏe trên điện thoại",
-  "healthSyncPermissionDenied": "Chưa được cấp quyền truy cập sức khỏe. Bạn có thể cho phép trong cài đặt điện thoại."
+  "healthSyncPermissionDenied": "Chưa được cấp quyền truy cập sức khỏe. Bạn có thể cho phép trong cài đặt điện thoại.",
+  "backupSectionTitle": "Sao lưu dữ liệu của tôi",
+  "backupGuestSubtitle": "Đăng nhập để dữ liệu còn nguyên khi đổi điện thoại",
+  "backupSignedInSubtitle": "Đã đăng nhập - dữ liệu đang được sao lưu",
+  "signInTitle": "Sao lưu dữ liệu của tôi",
+  "signInDescription": "Đăng nhập để lưu các buổi tập, cân nặng và lịch tập. Lấy lại trên bất kỳ điện thoại nào.",
+  "signInWithApple": "Tiếp tục với Apple",
+  "signInWithGoogle": "Tiếp tục với Google",
+  "signInAsGuest": "Dùng mà không đăng nhập",
+  "signOut": "Đăng xuất",
+  "signOutConfirmTitle": "Đăng xuất?",
+  "signOutConfirmBody": "Dữ liệu trên điện thoại này vẫn còn. Đăng nhập lại bất cứ lúc nào để lấy lại bản sao lưu.",
+  "signInFailed": "Không đăng nhập được. Vui lòng thử lại sau giây lát.",
+  "signInMergeNotice": "Tài khoản này đã có dữ liệu. Chúng sẽ được gộp với dữ liệu trên điện thoại này."
 }

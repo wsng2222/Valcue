@@ -605,5 +605,18 @@
   "plansUnavailable": "プランを読み込めませんでした。後でもう一度お試しください。",
   "healthSync": "ヘルスケア",
   "healthSyncSubtitle": "完了したワークアウトをスマホのヘルスアプリに保存します",
-  "healthSyncPermissionDenied": "ヘルスケアへのアクセスが許可されませんでした。スマホの設定から許可できます。"
+  "healthSyncPermissionDenied": "ヘルスケアへのアクセスが許可されませんでした。スマホの設定から許可できます。",
+  "backupSectionTitle": "記録のバックアップ",
+  "backupGuestSubtitle": "ログインすると機種変更しても記録が残ります",
+  "backupSignedInSubtitle": "ログイン済み - 記録はバックアップされています",
+  "signInTitle": "記録をバックアップ",
+  "signInDescription": "ログインするとワークアウト・体重・ルーティンが保存されます。どの端末でも取り戻せます。",
+  "signInWithApple": "Appleで続ける",
+  "signInWithGoogle": "Googleで続ける",
+  "signInAsGuest": "ログインせずに使う",
+  "signOut": "ログアウト",
+  "signOutConfirmTitle": "ログアウトしますか？",
+  "signOutConfirmBody": "この端末の記録はそのまま残ります。いつでも再ログインでバックアップを取り戻せます。",
+  "signInFailed": "ログインできませんでした。しばらくしてからもう一度お試しください。",
+  "signInMergeNotice": "このアカウントには既に記録があります。この端末の記録と統合されます。"
 }

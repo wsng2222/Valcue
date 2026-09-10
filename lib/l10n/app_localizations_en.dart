@@ -1375,4 +1375,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Health access was not granted. You can allow it in your phone\'s settings.';
+
+  @override
+  String get backupSectionTitle => 'Back up my records';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Sign in so your records survive a new phone';
+
+  @override
+  String get backupSignedInSubtitle => 'Signed in - your records are backed up';
+
+  @override
+  String get signInTitle => 'Back up my records';
+
+  @override
+  String get signInDescription =>
+      'Sign in and your workouts, weight and routines are saved. Get them back on any phone.';
+
+  @override
+  String get signInWithApple => 'Continue with Apple';
+
+  @override
+  String get signInWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInAsGuest => 'Use without signing in';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get signOutConfirmTitle => 'Sign out?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Records on this phone stay here. Sign in again any time to get your backup back.';
+
+  @override
+  String get signInFailed => 'Could not sign in. Please try again in a moment.';
+
+  @override
+  String get signInMergeNotice =>
+      'This account already had records. They will be combined with the ones on this phone.';
 }

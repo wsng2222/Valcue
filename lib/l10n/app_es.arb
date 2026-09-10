@@ -605,5 +605,18 @@
   "plansUnavailable": "No se pudieron cargar los planes. Inténtalo de nuevo más tarde.",
   "healthSync": "Apple Health",
   "healthSyncSubtitle": "Guarda los entrenamientos terminados en la app de salud del teléfono",
-  "healthSyncPermissionDenied": "No se concedió el acceso a salud. Puedes permitirlo en los ajustes del teléfono."
+  "healthSyncPermissionDenied": "No se concedió el acceso a salud. Puedes permitirlo en los ajustes del teléfono.",
+  "backupSectionTitle": "Copia de mis registros",
+  "backupGuestSubtitle": "Inicia sesión para conservar tus registros al cambiar de teléfono",
+  "backupSignedInSubtitle": "Sesión iniciada: tus registros están respaldados",
+  "signInTitle": "Copia de mis registros",
+  "signInDescription": "Inicia sesión y tus entrenamientos, peso y rutinas quedan guardados. Recupéralos en cualquier teléfono.",
+  "signInWithApple": "Continuar con Apple",
+  "signInWithGoogle": "Continuar con Google",
+  "signInAsGuest": "Usar sin iniciar sesión",
+  "signOut": "Cerrar sesión",
+  "signOutConfirmTitle": "¿Cerrar sesión?",
+  "signOutConfirmBody": "Los registros de este teléfono se quedan aquí. Inicia sesión cuando quieras para recuperar tu copia.",
+  "signInFailed": "No se pudo iniciar sesión. Inténtalo de nuevo en un momento.",
+  "signInMergeNotice": "Esta cuenta ya tenía registros. Se combinarán con los de este teléfono."
 }

@@ -1319,4 +1319,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get healthSyncPermissionDenied => '未获得健康访问权限。你可以在手机设置中允许。';
+
+  @override
+  String get backupSectionTitle => '备份我的记录';
+
+  @override
+  String get backupGuestSubtitle => '登录后换手机也能保留记录';
+
+  @override
+  String get backupSignedInSubtitle => '已登录 - 记录正在备份';
+
+  @override
+  String get signInTitle => '备份我的记录';
+
+  @override
+  String get signInDescription => '登录后锻炼记录、体重和routine都会保存，在任何手机上都能找回。';
+
+  @override
+  String get signInWithApple => '通过 Apple 继续';
+
+  @override
+  String get signInWithGoogle => '通过 Google 继续';
+
+  @override
+  String get signInAsGuest => '不登录直接使用';
+
+  @override
+  String get signOut => '退出登录';
+
+  @override
+  String get signOutConfirmTitle => '要退出登录吗？';
+
+  @override
+  String get signOutConfirmBody => '这台手机上的记录会保留。随时重新登录即可找回备份。';
+
+  @override
+  String get signInFailed => '无法登录，请稍后再试。';
+
+  @override
+  String get signInMergeNotice => '该账号已有记录，将与这台手机上的记录合并。';
 }

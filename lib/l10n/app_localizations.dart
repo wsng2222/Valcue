@@ -2563,6 +2563,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Health access was not granted. You can allow it in your phone\'s settings.'**
   String get healthSyncPermissionDenied;
+
+  /// Settings row label for record backup
+  ///
+  /// In en, this message translates to:
+  /// **'Back up my records'**
+  String get backupSectionTitle;
+
+  /// Subtitle shown under backup row when not signed in
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in so your records survive a new phone'**
+  String get backupGuestSubtitle;
+
+  /// Subtitle shown under backup row when signed in
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in - your records are backed up'**
+  String get backupSignedInSubtitle;
+
+  /// Title of the sign-in bottom sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Back up my records'**
+  String get signInTitle;
+
+  /// Explanation of what signing in does
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in and your workouts, weight and routines are saved. Get them back on any phone.'**
+  String get signInDescription;
+
+  /// Apple sign-in button label
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get signInWithApple;
+
+  /// Google sign-in button label
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get signInWithGoogle;
+
+  /// Continue without signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Use without signing in'**
+  String get signInAsGuest;
+
+  /// Sign out button label
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// Title of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get signOutConfirmTitle;
+
+  /// Body of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Records on this phone stay here. Sign in again any time to get your backup back.'**
+  String get signOutConfirmBody;
+
+  /// Message when sign-in could not complete
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign in. Please try again in a moment.'**
+  String get signInFailed;
+
+  /// Message when an existing account already had records
+  ///
+  /// In en, this message translates to:
+  /// **'This account already had records. They will be combined with the ones on this phone.'**
+  String get signInMergeNotice;
 }
 
 class _AppLocalizationsDelegate

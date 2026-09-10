@@ -414,5 +414,18 @@
   "plansUnavailable": "Kunne ikke laste inn planer. Prøv igjen senere.",
   "healthSync": "Apple Health",
   "healthSyncSubtitle": "Lagre fullførte økter i helseappen på telefonen",
-  "healthSyncPermissionDenied": "Helsetilgang ble ikke gitt. Du kan tillate det i innstillingene på telefonen."
+  "healthSyncPermissionDenied": "Helsetilgang ble ikke gitt. Du kan tillate det i innstillingene på telefonen.",
+  "backupSectionTitle": "Sikkerhetskopier dataene mine",
+  "backupGuestSubtitle": "Logg inn så dataene overlever en ny telefon",
+  "backupSignedInSubtitle": "Logget inn - dataene dine sikkerhetskopieres",
+  "signInTitle": "Sikkerhetskopier dataene mine",
+  "signInDescription": "Logg inn, så lagres øktene, vekten og rutinene dine. Hent dem tilbake på hvilken som helst telefon.",
+  "signInWithApple": "Fortsett med Apple",
+  "signInWithGoogle": "Fortsett med Google",
+  "signInAsGuest": "Bruk uten å logge inn",
+  "signOut": "Logg ut",
+  "signOutConfirmTitle": "Vil du logge ut?",
+  "signOutConfirmBody": "Dataene på denne telefonen blir her. Logg inn igjen når som helst for å hente sikkerhetskopien.",
+  "signInFailed": "Kunne ikke logge inn. Prøv igjen om litt.",
+  "signInMergeNotice": "Denne kontoen hadde allerede data. De slås sammen med dem på denne telefonen."
 }

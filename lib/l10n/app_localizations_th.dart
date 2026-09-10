@@ -1369,4 +1369,49 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'ยังไม่ได้รับอนุญาตให้เข้าถึงสุขภาพ คุณสามารถอนุญาตได้ในการตั้งค่าโทรศัพท์';
+
+  @override
+  String get backupSectionTitle => 'สำรองข้อมูลของฉัน';
+
+  @override
+  String get backupGuestSubtitle =>
+      'ลงชื่อเข้าใช้เพื่อให้ข้อมูลอยู่ต่อแม้เปลี่ยนเครื่อง';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'ลงชื่อเข้าใช้แล้ว - ข้อมูลกำลังถูกสำรอง';
+
+  @override
+  String get signInTitle => 'สำรองข้อมูลของฉัน';
+
+  @override
+  String get signInDescription =>
+      'ลงชื่อเข้าใช้แล้วการออกกำลังกาย น้ำหนัก และรูทีนจะถูกบันทึกไว้ ดึงกลับมาได้ทุกเครื่อง';
+
+  @override
+  String get signInWithApple => 'ดำเนินการต่อด้วย Apple';
+
+  @override
+  String get signInWithGoogle => 'ดำเนินการต่อด้วย Google';
+
+  @override
+  String get signInAsGuest => 'ใช้งานโดยไม่ลงชื่อเข้าใช้';
+
+  @override
+  String get signOut => 'ออกจากระบบ';
+
+  @override
+  String get signOutConfirmTitle => 'ออกจากระบบไหม';
+
+  @override
+  String get signOutConfirmBody =>
+      'ข้อมูลในเครื่องนี้จะยังอยู่ ลงชื่อเข้าใช้อีกครั้งเมื่อไรก็ได้เพื่อดึงข้อมูลสำรองกลับมา';
+
+  @override
+  String get signInFailed =>
+      'ลงชื่อเข้าใช้ไม่สำเร็จ กรุณาลองอีกครั้งในอีกสักครู่';
+
+  @override
+  String get signInMergeNotice =>
+      'บัญชีนี้มีข้อมูลอยู่แล้ว ระบบจะรวมเข้ากับข้อมูลในเครื่องนี้';
 }

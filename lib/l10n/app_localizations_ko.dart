@@ -1327,4 +1327,45 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       '건강 앱 접근이 허용되지 않았습니다. 휴대폰 설정에서 허용할 수 있습니다.';
+
+  @override
+  String get backupSectionTitle => '기록 백업';
+
+  @override
+  String get backupGuestSubtitle => '로그인하면 폰을 바꿔도 기록이 남습니다';
+
+  @override
+  String get backupSignedInSubtitle => '로그인됨 - 기록이 백업되고 있습니다';
+
+  @override
+  String get signInTitle => '기록 백업하기';
+
+  @override
+  String get signInDescription =>
+      '로그인하면 운동 기록·체중·루틴이 저장됩니다. 어느 폰에서나 다시 받을 수 있어요.';
+
+  @override
+  String get signInWithApple => 'Apple로 계속하기';
+
+  @override
+  String get signInWithGoogle => 'Google로 계속하기';
+
+  @override
+  String get signInAsGuest => '로그인 없이 사용하기';
+
+  @override
+  String get signOut => '로그아웃';
+
+  @override
+  String get signOutConfirmTitle => '로그아웃할까요?';
+
+  @override
+  String get signOutConfirmBody =>
+      '이 폰의 기록은 그대로 남습니다. 언제든 다시 로그인하면 백업을 되찾을 수 있어요.';
+
+  @override
+  String get signInFailed => '로그인하지 못했습니다. 잠시 후 다시 시도해주세요.';
+
+  @override
+  String get signInMergeNotice => '이 계정에 이미 기록이 있습니다. 이 폰의 기록과 합쳐집니다.';
 }

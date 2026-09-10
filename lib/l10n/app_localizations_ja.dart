@@ -1325,4 +1325,43 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'ヘルスケアへのアクセスが許可されませんでした。スマホの設定から許可できます。';
+
+  @override
+  String get backupSectionTitle => '記録のバックアップ';
+
+  @override
+  String get backupGuestSubtitle => 'ログインすると機種変更しても記録が残ります';
+
+  @override
+  String get backupSignedInSubtitle => 'ログイン済み - 記録はバックアップされています';
+
+  @override
+  String get signInTitle => '記録をバックアップ';
+
+  @override
+  String get signInDescription => 'ログインするとワークアウト・体重・ルーティンが保存されます。どの端末でも取り戻せます。';
+
+  @override
+  String get signInWithApple => 'Appleで続ける';
+
+  @override
+  String get signInWithGoogle => 'Googleで続ける';
+
+  @override
+  String get signInAsGuest => 'ログインせずに使う';
+
+  @override
+  String get signOut => 'ログアウト';
+
+  @override
+  String get signOutConfirmTitle => 'ログアウトしますか？';
+
+  @override
+  String get signOutConfirmBody => 'この端末の記録はそのまま残ります。いつでも再ログインでバックアップを取り戻せます。';
+
+  @override
+  String get signInFailed => 'ログインできませんでした。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get signInMergeNotice => 'このアカウントには既に記録があります。この端末の記録と統合されます。';
 }

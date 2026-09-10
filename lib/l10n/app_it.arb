@@ -414,5 +414,18 @@
   "plansUnavailable": "Impossibile caricare i piani. Riprova più tardi.",
   "healthSync": "Apple Salute",
   "healthSyncSubtitle": "Salva gli allenamenti completati nell'app salute del telefono",
-  "healthSyncPermissionDenied": "L'accesso a salute non è stato concesso. Puoi consentirlo nelle impostazioni del telefono."
+  "healthSyncPermissionDenied": "L'accesso a salute non è stato concesso. Puoi consentirlo nelle impostazioni del telefono.",
+  "backupSectionTitle": "Backup dei miei dati",
+  "backupGuestSubtitle": "Accedi per conservare i dati anche cambiando telefono",
+  "backupSignedInSubtitle": "Accesso eseguito - i tuoi dati sono salvati",
+  "signInTitle": "Backup dei miei dati",
+  "signInDescription": "Accedi e i tuoi allenamenti, il peso e le routine vengono salvati. Li ritrovi su qualsiasi telefono.",
+  "signInWithApple": "Continua con Apple",
+  "signInWithGoogle": "Continua con Google",
+  "signInAsGuest": "Usa senza accedere",
+  "signOut": "Esci",
+  "signOutConfirmTitle": "Vuoi uscire?",
+  "signOutConfirmBody": "I dati su questo telefono restano qui. Accedi di nuovo quando vuoi per recuperare il backup.",
+  "signInFailed": "Impossibile accedere. Riprova tra poco.",
+  "signInMergeNotice": "Questo account aveva già dei dati. Verranno uniti a quelli di questo telefono."
 }

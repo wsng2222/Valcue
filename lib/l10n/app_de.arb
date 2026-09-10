@@ -605,5 +605,18 @@
   "plansUnavailable": "Pläne konnten nicht geladen werden. Bitte versuche es später erneut.",
   "healthSync": "Apple Health",
   "healthSyncSubtitle": "Beendete Workouts in der Gesundheits-App des Telefons speichern",
-  "healthSyncPermissionDenied": "Der Gesundheitszugriff wurde nicht erteilt. Du kannst ihn in den Telefoneinstellungen erlauben."
+  "healthSyncPermissionDenied": "Der Gesundheitszugriff wurde nicht erteilt. Du kannst ihn in den Telefoneinstellungen erlauben.",
+  "backupSectionTitle": "Meine Daten sichern",
+  "backupGuestSubtitle": "Melde dich an, damit deine Daten den Handywechsel überstehen",
+  "backupSignedInSubtitle": "Angemeldet - deine Daten werden gesichert",
+  "signInTitle": "Meine Daten sichern",
+  "signInDescription": "Melde dich an und deine Workouts, dein Gewicht und deine Routinen werden gespeichert. Hol sie dir auf jedem Handy zurück.",
+  "signInWithApple": "Weiter mit Apple",
+  "signInWithGoogle": "Weiter mit Google",
+  "signInAsGuest": "Ohne Anmeldung nutzen",
+  "signOut": "Abmelden",
+  "signOutConfirmTitle": "Abmelden?",
+  "signOutConfirmBody": "Die Daten auf diesem Handy bleiben hier. Melde dich jederzeit wieder an, um deine Sicherung zurückzuholen.",
+  "signInFailed": "Anmeldung nicht möglich. Bitte versuche es gleich noch einmal.",
+  "signInMergeNotice": "Dieses Konto hatte bereits Daten. Sie werden mit denen auf diesem Handy zusammengeführt."
 }

@@ -1380,4 +1380,49 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'Chưa được cấp quyền truy cập sức khỏe. Bạn có thể cho phép trong cài đặt điện thoại.';
+
+  @override
+  String get backupSectionTitle => 'Sao lưu dữ liệu của tôi';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Đăng nhập để dữ liệu còn nguyên khi đổi điện thoại';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Đã đăng nhập - dữ liệu đang được sao lưu';
+
+  @override
+  String get signInTitle => 'Sao lưu dữ liệu của tôi';
+
+  @override
+  String get signInDescription =>
+      'Đăng nhập để lưu các buổi tập, cân nặng và lịch tập. Lấy lại trên bất kỳ điện thoại nào.';
+
+  @override
+  String get signInWithApple => 'Tiếp tục với Apple';
+
+  @override
+  String get signInWithGoogle => 'Tiếp tục với Google';
+
+  @override
+  String get signInAsGuest => 'Dùng mà không đăng nhập';
+
+  @override
+  String get signOut => 'Đăng xuất';
+
+  @override
+  String get signOutConfirmTitle => 'Đăng xuất?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Dữ liệu trên điện thoại này vẫn còn. Đăng nhập lại bất cứ lúc nào để lấy lại bản sao lưu.';
+
+  @override
+  String get signInFailed =>
+      'Không đăng nhập được. Vui lòng thử lại sau giây lát.';
+
+  @override
+  String get signInMergeNotice =>
+      'Tài khoản này đã có dữ liệu. Chúng sẽ được gộp với dữ liệu trên điện thoại này.';
 }

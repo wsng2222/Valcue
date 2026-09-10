@@ -605,5 +605,18 @@
   "plansUnavailable": "Impossible de charger les offres. Veuillez réessayer plus tard.",
   "healthSync": "Apple Santé",
   "healthSyncSubtitle": "Enregistrer les séances terminées dans l'app santé du téléphone",
-  "healthSyncPermissionDenied": "L'accès à la santé n'a pas été accordé. Vous pouvez l'autoriser dans les réglages du téléphone."
+  "healthSyncPermissionDenied": "L'accès à la santé n'a pas été accordé. Vous pouvez l'autoriser dans les réglages du téléphone.",
+  "backupSectionTitle": "Sauvegarder mes données",
+  "backupGuestSubtitle": "Connectez-vous pour garder vos données en changeant de téléphone",
+  "backupSignedInSubtitle": "Connecté - vos données sont sauvegardées",
+  "signInTitle": "Sauvegarder mes données",
+  "signInDescription": "Connectez-vous et vos séances, votre poids et vos routines sont enregistrés. Récupérez-les sur n'importe quel téléphone.",
+  "signInWithApple": "Continuer avec Apple",
+  "signInWithGoogle": "Continuer avec Google",
+  "signInAsGuest": "Utiliser sans se connecter",
+  "signOut": "Se déconnecter",
+  "signOutConfirmTitle": "Se déconnecter ?",
+  "signOutConfirmBody": "Les données de ce téléphone restent ici. Reconnectez-vous quand vous voulez pour retrouver votre sauvegarde.",
+  "signInFailed": "Connexion impossible. Réessayez dans un instant.",
+  "signInMergeNotice": "Ce compte avait déjà des données. Elles seront fusionnées avec celles de ce téléphone."
 }

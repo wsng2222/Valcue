@@ -1389,4 +1389,49 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get healthSyncPermissionDenied =>
       'No se concedió el acceso a salud. Puedes permitirlo en los ajustes del teléfono.';
+
+  @override
+  String get backupSectionTitle => 'Copia de mis registros';
+
+  @override
+  String get backupGuestSubtitle =>
+      'Inicia sesión para conservar tus registros al cambiar de teléfono';
+
+  @override
+  String get backupSignedInSubtitle =>
+      'Sesión iniciada: tus registros están respaldados';
+
+  @override
+  String get signInTitle => 'Copia de mis registros';
+
+  @override
+  String get signInDescription =>
+      'Inicia sesión y tus entrenamientos, peso y rutinas quedan guardados. Recupéralos en cualquier teléfono.';
+
+  @override
+  String get signInWithApple => 'Continuar con Apple';
+
+  @override
+  String get signInWithGoogle => 'Continuar con Google';
+
+  @override
+  String get signInAsGuest => 'Usar sin iniciar sesión';
+
+  @override
+  String get signOut => 'Cerrar sesión';
+
+  @override
+  String get signOutConfirmTitle => '¿Cerrar sesión?';
+
+  @override
+  String get signOutConfirmBody =>
+      'Los registros de este teléfono se quedan aquí. Inicia sesión cuando quieras para recuperar tu copia.';
+
+  @override
+  String get signInFailed =>
+      'No se pudo iniciar sesión. Inténtalo de nuevo en un momento.';
+
+  @override
+  String get signInMergeNotice =>
+      'Esta cuenta ya tenía registros. Se combinarán con los de este teléfono.';
 }

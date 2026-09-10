@@ -12,7 +12,36 @@
           "package_name": "com.nogic.valcue"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "983884926304-7jio9gcu3uf1m4mbjahnph1vdb47dftc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nogic.valcue",
+            "certificate_hash": "d1d7a90f3bae75e4e505e70d04824872d64d6312"
+          }
+        },
+        {
+          "client_id": "983884926304-atd86giti6o3sditpnjjscgkhrq5em16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nogic.valcue",
+            "certificate_hash": "a552869b8781eca39e8afa3aaefd31c84d294a6f"
+          }
+        },
+        {
+          "client_id": "983884926304-o1bbalm43g4e7gksdafh0r6scpkpbqgm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nogic.valcue",
+            "certificate_hash": "59eca66ef0de7b8b997c37a8b7b5062820dd231a"
+          }
+        },
+        {
+          "client_id": "983884926304-07madilrshr2eic05c6ripejc5rosbe8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDuB3WaHk9uNRFQgkDwJOHMVZU2-1nAuAE"
@@ -20,7 +49,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983884926304-07madilrshr2eic05c6ripejc5rosbe8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983884926304-u7t4jkp9f873vr13mf930pi01698uit2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nogic.valcue"
+              }
+            }
+          ]
         }
       }
     }

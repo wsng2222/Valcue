@@ -414,5 +414,18 @@
   "plansUnavailable": "Kan abonnementen niet laden. Probeer het later opnieuw.",
   "healthSync": "Apple Health",
   "healthSyncSubtitle": "Voltooide workouts opslaan in de gezondheidsapp van je telefoon",
-  "healthSyncPermissionDenied": "Toegang tot gezondheid is niet verleend. Je kunt dit toestaan in de instellingen van je telefoon."
+  "healthSyncPermissionDenied": "Toegang tot gezondheid is niet verleend. Je kunt dit toestaan in de instellingen van je telefoon.",
+  "backupSectionTitle": "Mijn gegevens back-uppen",
+  "backupGuestSubtitle": "Log in zodat je gegevens een nieuwe telefoon overleven",
+  "backupSignedInSubtitle": "Ingelogd - je gegevens worden geback-upt",
+  "signInTitle": "Mijn gegevens back-uppen",
+  "signInDescription": "Log in en je workouts, gewicht en routines worden bewaard. Haal ze op elke telefoon terug.",
+  "signInWithApple": "Doorgaan met Apple",
+  "signInWithGoogle": "Doorgaan met Google",
+  "signInAsGuest": "Gebruiken zonder in te loggen",
+  "signOut": "Uitloggen",
+  "signOutConfirmTitle": "Uitloggen?",
+  "signOutConfirmBody": "De gegevens op deze telefoon blijven hier. Log altijd opnieuw in om je back-up terug te halen.",
+  "signInFailed": "Inloggen is niet gelukt. Probeer het zo nog eens.",
+  "signInMergeNotice": "Dit account had al gegevens. Ze worden samengevoegd met die op deze telefoon."
 }

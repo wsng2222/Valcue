@@ -605,5 +605,18 @@
   "plansUnavailable": "无法加载套餐,请稍后重试。",
   "healthSync": "Apple 健康",
   "healthSyncSubtitle": "将完成的锻炼保存到手机的健康应用",
-  "healthSyncPermissionDenied": "未获得健康访问权限。你可以在手机设置中允许。"
+  "healthSyncPermissionDenied": "未获得健康访问权限。你可以在手机设置中允许。",
+  "backupSectionTitle": "备份我的记录",
+  "backupGuestSubtitle": "登录后换手机也能保留记录",
+  "backupSignedInSubtitle": "已登录 - 记录正在备份",
+  "signInTitle": "备份我的记录",
+  "signInDescription": "登录后锻炼记录、体重和routine都会保存，在任何手机上都能找回。",
+  "signInWithApple": "通过 Apple 继续",
+  "signInWithGoogle": "通过 Google 继续",
+  "signInAsGuest": "不登录直接使用",
+  "signOut": "退出登录",
+  "signOutConfirmTitle": "要退出登录吗？",
+  "signOutConfirmBody": "这台手机上的记录会保留。随时重新登录即可找回备份。",
+  "signInFailed": "无法登录，请稍后再试。",
+  "signInMergeNotice": "该账号已有记录，将与这台手机上的记录合并。"
 }
