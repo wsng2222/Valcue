@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "يحتاج Valcue إلى الوصول إلى الكاميرا لمسح رموز QR لبرامج التمرين والتقاط صور توثّق التمارين.";
 "NSUserTrackingUsageDescription" = "يستخدم Valcue هذا لعرض إعلانات أكثر ملاءمة لك وقياس أداء الإعلانات.";
+"NSHealthUpdateUsageDescription" = "يحفظ Valcue تمارينك المتقطعة المكتملة في تطبيق الصحة لتُحتسب ضمن حلقات النشاط والإجماليات الأسبوعية.";
+"NSHealthShareUsageDescription" = "لا يقرأ Valcue بيانات صحتك. يطلب النظام ذلك قبل أن يتمكن أي تطبيق من حفظ التمارين.";

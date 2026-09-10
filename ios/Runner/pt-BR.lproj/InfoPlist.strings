@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "O Valcue precisa acessar a câmera para escanear códigos QR de rotinas e tirar fotos que comprovem seus treinos.";
 "NSUserTrackingUsageDescription" = "O Valcue usa isso para mostrar anúncios mais relevantes para você e medir o desempenho dos anúncios.";
+"NSHealthUpdateUsageDescription" = "O Valcue salva seus treinos intervalados concluídos na Saúde para que contem nos seus anéis de atividade e totais semanais.";
+"NSHealthShareUsageDescription" = "O Valcue não lê seus dados de saúde. O sistema pede isso antes que um app possa salvar treinos.";

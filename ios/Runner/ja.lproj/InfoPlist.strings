@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "ルーティンのQRコードのスキャンとワークアウト記録用の写真撮影のため、Valcueがカメラへのアクセスを求めています。";
 "NSUserTrackingUsageDescription" = "Valcueはこれを使用して、より関連性の高い広告を表示し、広告の効果を測定します。";
+"NSHealthUpdateUsageDescription" = "完了したインターバルワークアウトをヘルスケアに保存し、アクティビティリングや週間記録に反映します。";
+"NSHealthShareUsageDescription" = "Valcueはヘルスケアのデータを読み取りません。ワークアウトを保存するためにシステムが必要とする項目です。";

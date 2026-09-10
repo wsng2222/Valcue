@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue ต้องใช้กล้องเพื่อสแกนคิวอาร์โค้ดโปรแกรมฝึกและถ่ายภาพยืนยันการออกกำลังกาย";
 "NSUserTrackingUsageDescription" = "Valcue ใช้ข้อมูลนี้เพื่อแสดงโฆษณาที่เกี่ยวข้องกับคุณมากขึ้นและวัดผลประสิทธิภาพของโฆษณา";
+"NSHealthUpdateUsageDescription" = "Valcue บันทึกการฝึกแบบอินเทอร์วัลที่เสร็จสิ้นลงในสุขภาพ เพื่อให้นับรวมในวงแหวนกิจกรรมและยอดรวมรายสัปดาห์ของคุณ";
+"NSHealthShareUsageDescription" = "Valcue ไม่อ่านข้อมูลสุขภาพของคุณ ระบบขอสิ่งนี้ก่อนที่แอปจะบันทึกการออกกำลังกายได้";

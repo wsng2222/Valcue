@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue benötigt Kamerazugriff, um QR-Codes für Routinen zu scannen und Trainingsnachweise zu fotografieren.";
 "NSUserTrackingUsageDescription" = "Valcue verwendet dies, um dir relevantere Werbung zu zeigen und die Anzeigenleistung zu messen.";
+"NSHealthUpdateUsageDescription" = "Valcue speichert deine abgeschlossenen Intervall-Workouts in Health, damit sie zu deinen Aktivitätsringen und Wochenwerten zählen.";
+"NSHealthShareUsageDescription" = "Valcue liest deine Gesundheitsdaten nicht. Das System fragt danach, bevor eine App Workouts sichern darf.";

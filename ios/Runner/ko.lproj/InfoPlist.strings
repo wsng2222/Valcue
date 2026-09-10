@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "루틴 QR 코드를 스캔하고 운동 인증 사진을 촬영하기 위해 Valcue에 카메라 접근이 필요합니다.";
 "NSUserTrackingUsageDescription" = "Valcue는 이를 활용해 더 관련성 높은 광고를 보여주고 광고 성과를 측정합니다.";
+"NSHealthUpdateUsageDescription" = "완료한 인터벌 운동을 건강 앱에 저장해 활동 링과 주간 기록에 반영되도록 합니다.";
+"NSHealthShareUsageDescription" = "Valcue는 건강 데이터를 읽지 않습니다. 운동을 저장하려면 시스템이 이 항목을 요구합니다.";

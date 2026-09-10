@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue a besoin d’accéder à l’appareil photo pour scanner les codes QR des séances et prendre des photos attestant vos entraînements.";
 "NSUserTrackingUsageDescription" = "Valcue utilise ces informations pour vous proposer des publicités plus pertinentes et mesurer leur performance.";
+"NSHealthUpdateUsageDescription" = "Valcue enregistre vos séances fractionnées terminées dans Santé afin qu'elles comptent dans vos anneaux d'activité et vos totaux hebdomadaires.";
+"NSHealthShareUsageDescription" = "Valcue ne lit pas vos données de santé. Le système le demande avant qu'une app puisse enregistrer des séances.";

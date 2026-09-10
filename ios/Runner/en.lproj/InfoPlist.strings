@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue needs camera access to scan routine QR codes and take workout proof photos.";
 "NSUserTrackingUsageDescription" = "Valcue uses this to show you more relevant ads and measure ad performance.";
+"NSHealthUpdateUsageDescription" = "Valcue saves your finished interval workouts to Apple Health so they count towards your activity rings and weekly totals.";
+"NSHealthShareUsageDescription" = "Valcue does not read your health data. The system asks for this before an app may save workouts.";

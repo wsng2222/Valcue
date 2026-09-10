@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue cần quyền truy cập camera để quét mã QR của chương trình tập và chụp ảnh xác nhận buổi tập.";
 "NSUserTrackingUsageDescription" = "Valcue sử dụng thông tin này để hiển thị quảng cáo phù hợp hơn với bạn và đo lường hiệu quả quảng cáo.";
+"NSHealthUpdateUsageDescription" = "Valcue lưu các buổi tập biến tốc đã hoàn thành vào Sức khỏe để chúng được tính vào vòng hoạt động và tổng kết tuần của bạn.";
+"NSHealthShareUsageDescription" = "Valcue không đọc dữ liệu sức khỏe của bạn. Hệ thống yêu cầu mục này trước khi ứng dụng có thể lưu buổi tập.";

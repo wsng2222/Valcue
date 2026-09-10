@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue richiede l’accesso alla fotocamera per scansionare i codici QR delle routine e scattare foto come prova degli allenamenti.";
 "NSUserTrackingUsageDescription" = "Valcue utilizza questi dati per mostrarti annunci più pertinenti e misurarne le prestazioni.";
+"NSHealthUpdateUsageDescription" = "Valcue salva i tuoi allenamenti a intervalli completati in Salute così da contare negli anelli attività e nei totali settimanali.";
+"NSHealthShareUsageDescription" = "Valcue non legge i tuoi dati sulla salute. Il sistema lo richiede prima che un'app possa salvare allenamenti.";

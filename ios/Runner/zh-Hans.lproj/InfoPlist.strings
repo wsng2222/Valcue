@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "Valcue";
 "NSCameraUsageDescription" = "Valcue 需要访问相机，以扫描训练计划二维码并拍摄训练记录照片。";
 "NSUserTrackingUsageDescription" = "Valcue 将使用此数据为您展示更相关的广告并衡量广告效果。";
+"NSHealthUpdateUsageDescription" = "将完成的间歇训练保存到「健康」，以计入你的活动圆环和每周统计。";
+"NSHealthShareUsageDescription" = "Valcue 不会读取你的健康数据。系统在应用保存锻炼前会要求此项。";
