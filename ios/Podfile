@@ -29,6 +29,11 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   pod 'MLKitVision', :podspec => 'MLKitVision.podspec.json'
   pod 'MLKitCommon', :podspec => 'MLKitCommon.podspec.json'
+  # Precompiled Firestore. Built from source it drags in ~2,000 C++ files
+  # (gRPC, BoringSSL, abseil) and takes 30+ minutes on this machine. The tag
+  # must match the Firebase iOS SDK version in Podfile.lock - bump it together
+  # with the FlutterFire packages or pod install will refuse to resolve.
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '12.18.0'
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

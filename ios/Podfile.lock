@@ -19,6 +19,10 @@ PODS:
     - Flutter
   - audioplayers (0.0.1):
     - Flutter
+  - cloud_firestore (6.9.0):
+    - Firebase/Firestore (= 12.18.0)
+    - firebase_core
+    - Flutter
   - cloud_functions (6.4.0):
     - Firebase/Functions (= 12.18.0)
     - firebase_core
@@ -33,6 +37,9 @@ PODS:
   - Firebase/Crashlytics (12.18.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 12.18.0)
+  - Firebase/Firestore (12.18.0):
+    - Firebase/CoreOnly
+    - FirebaseFirestore (~> 12.18.0)
   - Firebase/Functions (12.18.0):
     - Firebase/CoreOnly
     - FirebaseFunctions (~> 12.18.0)
@@ -108,6 +115,27 @@ PODS:
     - GoogleUtilities/Environment (~> 8.1)
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
+  - FirebaseFirestore (12.18.0):
+    - FirebaseFirestoreBinary (= 12.18.0)
+  - FirebaseFirestoreAbseilBinary (1.2024072200.0)
+  - FirebaseFirestoreBinary (12.18.0):
+    - FirebaseCore (= 12.18.0)
+    - FirebaseCoreExtension (= 12.18.0)
+    - FirebaseFirestoreInternalBinary (= 12.18.0)
+    - FirebaseSharedSwift (= 12.18.0)
+  - FirebaseFirestoreGRPCBoringSSLBinary (1.69.0)
+  - FirebaseFirestoreGRPCCoreBinary (1.69.0):
+    - FirebaseFirestoreAbseilBinary (= 1.2024072200.0)
+    - FirebaseFirestoreGRPCBoringSSLBinary (= 1.69.0)
+  - FirebaseFirestoreGRPCCPPBinary (1.69.0):
+    - FirebaseFirestoreAbseilBinary (= 1.2024072200.0)
+    - FirebaseFirestoreGRPCCoreBinary (= 1.69.0)
+  - FirebaseFirestoreInternalBinary (12.18.0):
+    - FirebaseCore (= 12.18.0)
+    - FirebaseFirestoreAbseilBinary (= 1.2024072200.0)
+    - FirebaseFirestoreGRPCCPPBinary (= 1.69.0)
+    - leveldb-library (~> 1.22)
+    - nanopb (~> 3.30910.0)
   - FirebaseFunctions (12.18.0):
     - FirebaseAppCheckInterop (~> 12.18.0)
     - FirebaseAuthInterop (~> 12.18.0)
@@ -247,6 +275,7 @@ PODS:
     - Flutter
   - in_app_review (2.0.0):
     - Flutter
+  - leveldb-library (1.22.6)
   - MLImage (1.0.0-beta4)
   - MLKitBarcodeScanning (3.0.0):
     - MLKitCommon (~> 9.0)
@@ -316,6 +345,7 @@ DEPENDENCIES:
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
+  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -323,6 +353,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `12.18.0`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
@@ -360,6 +391,12 @@ SPEC REPOS:
     - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseCrashlytics
+    - FirebaseFirestoreAbseilBinary
+    - FirebaseFirestoreBinary
+    - FirebaseFirestoreGRPCBoringSSLBinary
+    - FirebaseFirestoreGRPCCoreBinary
+    - FirebaseFirestoreGRPCCPPBinary
+    - FirebaseFirestoreInternalBinary
     - FirebaseFunctions
     - FirebaseInstallations
     - FirebaseMessagingInterop
@@ -378,6 +415,7 @@ SPEC REPOS:
     - GoogleUtilitiesComponents
     - GTMAppAuth
     - GTMSessionFetcher
+    - leveldb-library
     - MLImage
     - MLKitBarcodeScanning
     - nanopb
@@ -398,6 +436,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   audioplayers:
     :path: ".symlinks/plugins/audioplayers/ios"
+  cloud_firestore:
+    :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
   device_info_plus:
@@ -412,6 +452,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 12.18.0
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -457,6 +500,11 @@ EXTERNAL SOURCES:
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
+CHECKOUT OPTIONS:
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 12.18.0
+
 SPEC CHECKSUMS:
   adaptive_platform_ui: f54f620666d1797636f9ef06f49137ef2cc13611
   app_tracking_transparency: 3d84f147f67ca82d3c15355c36b1fa6b66ca7c92
@@ -464,6 +512,7 @@ SPEC CHECKSUMS:
   AppCheckCore: e215d35177a9cf469927863e69c13e220df32a8b
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
   audioplayers: ac95143012b6f1f19f4adcb72cc1a60d6f98ddab
+  cloud_firestore: 3f0a8af2d865cade8f7db11bc2a419bd66a7237e
   cloud_functions: 15154e139688f19b75ac4d7b254f16583f3b9a0f
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: 5523dd53ebe603451b4e1befcd99fa20a5c015cd
@@ -481,6 +530,13 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: a86bab02524ca2bff95dddab7a3fcad505c2ddeb
   FirebaseCoreInternal: 93b2d5f9e184c6818a04433891c358b0720a6a38
   FirebaseCrashlytics: bd160cfa074ad21ed708a466e15d1928ded1642a
+  FirebaseFirestore: 67ba5bc0ff819ced1e50b5353d08d0e8f3d9d869
+  FirebaseFirestoreAbseilBinary: 4cfa8823cedc1b774843e04fe578ad279b387f97
+  FirebaseFirestoreBinary: 45faa3144925fa95f91b47e81d1d4d055115b100
+  FirebaseFirestoreGRPCBoringSSLBinary: c3dfef3ff448ae2c1c85f9baf9fac5afc4db99fa
+  FirebaseFirestoreGRPCCoreBinary: 565534e160a0415d12185f7f171c52a567382fbd
+  FirebaseFirestoreGRPCCPPBinary: 6c0134e8d230ee58b9d51dec2a30a48efd6d5dc7
+  FirebaseFirestoreInternalBinary: c8a7b9e876a74e42a25d3a21662585dc63ca7d41
   FirebaseFunctions: 1b8bc185cb14cc10f6244b2430bcd806ec1a8e7e
   FirebaseInstallations: 933b2747e8594084c9117b65e8358fce29d7ced7
   FirebaseMessagingInterop: 2bc0ddbf26a3552c61a2efbecc8b8a3b68d383e4
@@ -508,6 +564,7 @@ SPEC CHECKSUMS:
   health: 4decf5d74e8f54c58a8c07a385fc72f629a831d9
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   in_app_review: 7dd1ea365263f834b8464673f9df72c80c17c937
+  leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   MLImage: 7bb7c4264164ade9bf64f679b40fb29c8f33ee9b
   MLKitBarcodeScanning: 04e264482c5f3810cb89ebc134ef6b61e67db505
   MLKitCommon: bd685f4150c73b00f25deb05620fa9c33d4a8592
@@ -532,6 +589,6 @@ SPEC CHECKSUMS:
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
 
-PODFILE CHECKSUM: d24c615ee0c75478bda169eabf4eb16384d2fae8
+PODFILE CHECKSUM: eb3f09438abf6fd982909eab4f6d7a3aa3db6526
 
 COCOAPODS: 1.16.2
