@@ -6,6 +6,7 @@ import ObjectiveC
 @main
 @objc class AppDelegate: FlutterAppDelegate {
   private var liveActivityBridge: LiveActivityBridge?
+  private var healthWorkoutBridge: HealthWorkoutBridge?
 
   override func application(
     _ application: UIApplication,
@@ -31,6 +32,9 @@ import ObjectiveC
     GeneratedPluginRegistrant.register(with: self)
     if let flutterViewController = window?.rootViewController as? FlutterViewController {
       liveActivityBridge = LiveActivityBridge(
+        messenger: flutterViewController.binaryMessenger
+      )
+      healthWorkoutBridge = HealthWorkoutBridge(
         messenger: flutterViewController.binaryMessenger
       )
     }

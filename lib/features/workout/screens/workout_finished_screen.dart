@@ -18,6 +18,7 @@ import '../../../services/review_prompt_service.dart';
 import '../../../utils/debug_log.dart';
 import '../../profile/models/workout_session.dart';
 import '../../profile/providers/workout_history_provider.dart';
+import '../../profile/providers/weight_tracker_provider.dart';
 import '../../profile/models/achievement.dart';
 import '../../profile/providers/achievement_provider.dart';
 import '../widgets/confetti_animation.dart';
@@ -173,11 +174,16 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     historyProvider.addSession(session);
 
     // Best effort: a health store that is missing or denied must never get in
-    // the way of the workout being saved here.
+    // the way of the workout being saved here. The latest recorded weight
+    // makes the energy estimate personal; without one it falls back to an
+    // assumed weight rather than skipping the rings entirely.
     unawaited(
       HealthSyncService.instance.writeWorkout(
         session,
         enabled: settingsProvider.healthSyncEnabled,
+        bodyWeightKg: Provider.of<WeightTrackerProvider>(context, listen: false)
+            .currentWeight
+            ?.weightKg,
       ),
     );
 

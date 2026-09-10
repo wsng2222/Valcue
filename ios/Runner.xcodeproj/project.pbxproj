@@ -16,6 +16,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		A1100001A1100001A1100001 /* LiveActivityBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200001A1200001A1200001 /* LiveActivityBridge.swift */; };
+		A1900001A1900001A1900001 /* HealthWorkoutBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1900002A1900002A1900002 /* HealthWorkoutBridge.swift */; };
 		A1100002A1100002A1100002 /* WorkoutActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200002A1200002A1200002 /* WorkoutActivityAttributes.swift */; };
 		A1100003A1100003A1100003 /* WorkoutActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200002A1200002A1200002 /* WorkoutActivityAttributes.swift */; };
 		A1100004A1100004A1100004 /* WorkoutLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1200003A1200003A1200003 /* WorkoutLiveActivityBundle.swift */; };
@@ -89,6 +90,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1200001A1200001A1200001 /* LiveActivityBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityBridge.swift; sourceTree = "<group>"; };
+		A1900002A1900002A1900002 /* HealthWorkoutBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthWorkoutBridge.swift; sourceTree = "<group>"; };
 		A1200002A1200002A1200002 /* WorkoutActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutActivityAttributes.swift; sourceTree = "<group>"; };
 		A1200003A1200003A1200003 /* WorkoutLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityBundle.swift; sourceTree = "<group>"; };
 		A1200004A1200004A1200004 /* WorkoutLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityWidget.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				A1200001A1200001A1200001 /* LiveActivityBridge.swift */,
+				A1900002A1900002A1900002 /* HealthWorkoutBridge.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -494,6 +497,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				A1100001A1100001A1100001 /* LiveActivityBridge.swift in Sources */,
+				A1900001A1900001A1900001 /* HealthWorkoutBridge.swift in Sources */,
 				A1100002A1100002A1100002 /* WorkoutActivityAttributes.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);

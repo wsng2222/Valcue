@@ -5,6 +5,8 @@ import 'package:health/health.dart';
 import '../features/profile/models/workout_session.dart';
 import '../features/routines/models/machine_type.dart';
 import '../utils/debug_log.dart';
+import 'ios_health_workout_channel.dart';
+import 'workout_energy_estimate.dart';
 
 /// What happened when a workout was handed to the platform health store.
 enum HealthSyncOutcome {
@@ -33,29 +35,43 @@ enum HealthSyncOutcome {
 class HealthSyncService {
   HealthSyncService({
     Health? health,
+    IosHealthWorkoutChannel? iosChannel,
     bool Function()? isAndroid,
     bool Function()? isIOS,
   })  : _health = health ?? Health(),
+        _iosChannel = iosChannel ?? IosHealthWorkoutChannel(),
         _isAndroid = isAndroid ?? (() => Platform.isAndroid),
         _isIOS = isIOS ?? (() => Platform.isIOS);
 
   static final HealthSyncService instance = HealthSyncService();
 
   final Health _health;
+  final IosHealthWorkoutChannel _iosChannel;
   final bool Function() _isAndroid;
   final bool Function() _isIOS;
 
   bool _configured = false;
 
-  /// Only workouts are written. Reading health data is never requested, so
-  /// the permission prompt stays narrow and easy to say yes to.
-  static const List<HealthDataType> writeTypes = <HealthDataType>[
-    HealthDataType.WORKOUT,
-  ];
+  /// Types this app writes. Energy and distance need their own grants: a
+  /// workout-only permission saves the session but silently drops its
+  /// calories and distance, which is what made the rings stay empty.
+  ///
+  /// Reading is never requested, so the prompt stays easy to say yes to.
+  static List<HealthDataType> writeTypesFor({required bool isAndroid}) {
+    return <HealthDataType>[
+      HealthDataType.WORKOUT,
+      HealthDataType.ACTIVE_ENERGY_BURNED,
+      // The two stores name the same measurement differently, and each
+      // rejects the other's name.
+      if (isAndroid)
+        HealthDataType.DISTANCE_DELTA
+      else
+        HealthDataType.DISTANCE_WALKING_RUNNING,
+    ];
+  }
 
-  static const List<HealthDataAccess> writeAccess = <HealthDataAccess>[
-    HealthDataAccess.WRITE,
-  ];
+  List<HealthDataType> get _writeTypes =>
+      writeTypesFor(isAndroid: _isAndroid());
 
   bool get isSupportedPlatform => _isIOS() || _isAndroid();
 
@@ -65,9 +81,13 @@ class HealthSyncService {
     if (!isSupportedPlatform) return false;
     try {
       await _ensureConfigured();
+      final types = _writeTypes;
       return await _health.requestAuthorization(
-        writeTypes,
-        permissions: writeAccess,
+        types,
+        permissions: List<HealthDataAccess>.filled(
+          types.length,
+          HealthDataAccess.WRITE,
+        ),
       );
     } catch (e) {
       debugLog('[HealthSyncService] Permission request failed: $e');
@@ -80,9 +100,13 @@ class HealthSyncService {
     if (!isSupportedPlatform) return false;
     try {
       await _ensureConfigured();
+      final types = _writeTypes;
       return await _health.hasPermissions(
-            writeTypes,
-            permissions: writeAccess,
+            types,
+            permissions: List<HealthDataAccess>.filled(
+              types.length,
+              HealthDataAccess.WRITE,
+            ),
           ) ??
           false;
     } catch (e) {
@@ -98,24 +122,47 @@ class HealthSyncService {
   Future<HealthSyncOutcome> writeWorkout(
     WorkoutSession session, {
     required bool enabled,
+    double? bodyWeightKg,
   }) async {
     if (!enabled) return HealthSyncOutcome.disabled;
     if (!isSupportedPlatform) return HealthSyncOutcome.unavailable;
 
+    // Deliberately not gated on a permission check: HealthKit does not report
+    // write authorization reliably, so asking first would refuse every
+    // workout on iOS. An unauthorized write simply fails below instead.
     try {
-      await _ensureConfigured();
+      final distance = distanceMetersFor(session);
+      final energy = WorkoutEnergyEstimate.kilocaloriesFor(
+        session,
+        bodyWeightKg: bodyWeightKg,
+      );
 
-      // Deliberately not gated on hasPermission: HealthKit does not report
-      // write authorization reliably, so asking first would refuse every
-      // workout on iOS. An unauthorized write simply fails below instead.
+      final (start, end) = intervalFor(session);
+
+      // iOS goes through the app's own bridge so the workout can be marked
+      // indoors and carry active energy; the plugin can do neither.
+      if (_isIOS()) {
+        final written = await _iosChannel.writeWorkout(
+          start: start,
+          end: end,
+          machineType: session.machineType,
+          title: session.routineName,
+          distanceMeters: distance,
+          activeEnergyKcal: energy,
+        );
+        return written ? HealthSyncOutcome.written : HealthSyncOutcome.failed;
+      }
+
+      await _ensureConfigured();
       final written = await _health.writeWorkoutData(
         activityType: activityTypeFor(
           session.machineType,
           isAndroid: _isAndroid(),
         ),
-        start: session.dateTime,
-        end: session.dateTime.add(Duration(seconds: session.durationSeconds)),
-        totalDistance: distanceMetersFor(session),
+        start: start,
+        end: end,
+        totalDistance: distance,
+        totalEnergyBurned: energy,
         title: session.routineName.isEmpty ? null : session.routineName,
       );
       return written ? HealthSyncOutcome.written : HealthSyncOutcome.failed;
@@ -154,6 +201,17 @@ class HealthSyncService {
             ? HealthWorkoutActivityType.STAIR_CLIMBING_MACHINE
             : HealthWorkoutActivityType.STAIR_CLIMBING;
     }
+  }
+
+  /// The wall-clock span the workout actually occupied.
+  ///
+  /// [WorkoutSession.dateTime] is the moment the workout *ended*, so treating
+  /// it as the start would file every session one full duration into the
+  /// future - a 07:00-07:30 run would show up as 07:30-08:00.
+  static (DateTime, DateTime) intervalFor(WorkoutSession session) {
+    final end = session.dateTime;
+    final seconds = session.durationSeconds > 0 ? session.durationSeconds : 0;
+    return (end.subtract(Duration(seconds: seconds)), end);
   }
 
   /// Distance in whole metres, or null when the machine does not measure it.

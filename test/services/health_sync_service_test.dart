@@ -52,6 +52,67 @@ void main() {
     });
   });
 
+  group('what permission is asked for', () {
+    test('covers energy and distance, not just the workout', () {
+      // Asking only for WORKOUT saves the session but silently drops its
+      // calories and distance, leaving the activity rings empty.
+      final ios = HealthSyncService.writeTypesFor(isAndroid: false);
+
+      expect(ios, contains(HealthDataType.WORKOUT));
+      expect(ios, contains(HealthDataType.ACTIVE_ENERGY_BURNED));
+      expect(ios, contains(HealthDataType.DISTANCE_WALKING_RUNNING));
+    });
+
+    test('uses the distance name each store accepts', () {
+      final android = HealthSyncService.writeTypesFor(isAndroid: true);
+
+      expect(android, contains(HealthDataType.DISTANCE_DELTA));
+      expect(android, isNot(contains(HealthDataType.DISTANCE_WALKING_RUNNING)));
+    });
+
+    test('never asks to read anything', () {
+      for (final isAndroid in [true, false]) {
+        final types = HealthSyncService.writeTypesFor(isAndroid: isAndroid);
+        expect(types.toSet(), hasLength(types.length));
+      }
+    });
+  });
+
+  group('when the workout actually happened', () {
+    test('ends at the recorded time and starts a duration earlier', () {
+      // A session records when it *finished*. Treating that as the start
+      // would file a 07:00-07:30 run as 07:30-08:00.
+      final session = _session(); // ended 07:30, ran 30 minutes
+      final (start, end) = HealthSyncService.intervalFor(session);
+
+      expect(end, DateTime(2026, 5, 1, 7, 30));
+      expect(start, DateTime(2026, 5, 1, 7, 0));
+    });
+
+    test('never reaches into the future', () {
+      final (start, end) = HealthSyncService.intervalFor(_session());
+
+      expect(start.isBefore(end), isTrue);
+      expect(end.isAfter(DateTime(2026, 5, 1, 7, 29)), isTrue);
+    });
+
+    test('a zero-length session collapses instead of inverting', () {
+      final (start, end) = HealthSyncService.intervalFor(
+        _session(durationSeconds: 0),
+      );
+
+      expect(start, end);
+    });
+
+    test('a negative duration cannot flip the interval', () {
+      final (start, end) = HealthSyncService.intervalFor(
+        _session(durationSeconds: -600),
+      );
+
+      expect(start, end);
+    });
+  });
+
   group('distance', () {
     test('is passed through as whole metres', () {
       expect(
@@ -102,12 +163,12 @@ void main() {
   });
 }
 
-WorkoutSession _session({double? distanceMeters}) {
+WorkoutSession _session({double? distanceMeters, int durationSeconds = 1800}) {
   return WorkoutSession(
     id: 'session-1',
     machineType: MachineType.treadmill,
-    dateTime: DateTime(2026, 5, 1, 7, 30),
-    durationSeconds: 1800,
+    dateTime: DateTime(2026, 5, 1, 7, 30), // when it finished
+    durationSeconds: durationSeconds,
     distanceMeters: distanceMeters,
     routineName: 'Intervals',
     routineId: 'routine-1',

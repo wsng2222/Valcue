@@ -4,6 +4,8 @@ import '../../routines/models/machine_type.dart';
 class WorkoutSession {
   final String id;
   final MachineType machineType;
+  /// When the workout *ended*. Set from `DateTime.now()` on the finished
+  /// screen, so the start is this minus [durationSeconds].
   final DateTime dateTime;
   final int durationSeconds;
   final int? elapsedMilliseconds;
