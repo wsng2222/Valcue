@@ -411,5 +411,8 @@
   "purchaseFailed": "Købet mislykkedes. Prøv igen.",
   "restoreSuccess": "Dine køb er blevet gendannet.",
   "restoreNothingToRestore": "Der blev ikke fundet tidligere køb.",
-  "plansUnavailable": "Kunne ikke indlæse planer. Prøv igen senere."
+  "plansUnavailable": "Kunne ikke indlæse planer. Prøv igen senere.",
+  "healthSync": "Apple Health",
+  "healthSyncSubtitle": "Gem færdige træninger i telefonens sundhedsapp",
+  "healthSyncPermissionDenied": "Der blev ikke givet adgang til sundhed. Du kan tillade det i telefonens indstillinger."
 }

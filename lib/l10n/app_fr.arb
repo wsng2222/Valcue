@@ -602,5 +602,8 @@
   "purchaseFailed": "L'achat a échoué. Veuillez réessayer.",
   "restoreSuccess": "Vos achats ont été restaurés.",
   "restoreNothingToRestore": "Aucun achat précédent n'a été trouvé.",
-  "plansUnavailable": "Impossible de charger les offres. Veuillez réessayer plus tard."
+  "plansUnavailable": "Impossible de charger les offres. Veuillez réessayer plus tard.",
+  "healthSync": "Apple Santé",
+  "healthSyncSubtitle": "Enregistrer les séances terminées dans l'app santé du téléphone",
+  "healthSyncPermissionDenied": "L'accès à la santé n'a pas été accordé. Vous pouvez l'autoriser dans les réglages du téléphone."
 }

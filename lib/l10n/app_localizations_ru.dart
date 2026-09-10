@@ -1374,4 +1374,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'Не удалось загрузить тарифы. Повторите попытку позже.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Сохранять завершённые тренировки в приложении здоровья на телефоне';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Доступ к здоровью не предоставлен. Вы можете разрешить его в настройках телефона.';
 }

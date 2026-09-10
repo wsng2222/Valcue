@@ -1385,4 +1385,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'Impossible de charger les offres. Veuillez réessayer plus tard.';
+
+  @override
+  String get healthSync => 'Apple Santé';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Enregistrer les séances terminées dans l\'app santé du téléphone';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'L\'accès à la santé n\'a pas été accordé. Vous pouvez l\'autoriser dans les réglages du téléphone.';
 }

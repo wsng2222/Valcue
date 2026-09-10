@@ -46,6 +46,7 @@ dependencies:
   app_tracking_transparency: ^2.0.7
   firebase_crashlytics: ^5.3.0
   in_app_review: ^2.0.12
+  health: ^13.3.1
 
 dev_dependencies:
   flutter_test:

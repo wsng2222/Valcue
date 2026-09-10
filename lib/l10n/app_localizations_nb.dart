@@ -1367,4 +1367,15 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'Kunne ikke laste inn planer. Prøv igjen senere.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Lagre fullførte økter i helseappen på telefonen';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Helsetilgang ble ikke gitt. Du kan tillate det i innstillingene på telefonen.';
 }

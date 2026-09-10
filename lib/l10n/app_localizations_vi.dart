@@ -1369,4 +1369,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get plansUnavailable => 'Không thể tải các gói. Vui lòng thử lại sau.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Lưu các buổi tập đã hoàn thành vào ứng dụng sức khỏe trên điện thoại';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Chưa được cấp quyền truy cập sức khỏe. Bạn có thể cho phép trong cài đặt điện thoại.';
 }

@@ -602,5 +602,8 @@
   "purchaseFailed": "购买失败,请重试。",
   "restoreSuccess": "你的购买已恢复。",
   "restoreNothingToRestore": "未找到以前的购买记录。",
-  "plansUnavailable": "无法加载套餐,请稍后重试。"
+  "plansUnavailable": "无法加载套餐,请稍后重试。",
+  "healthSync": "Apple 健康",
+  "healthSyncSubtitle": "将完成的锻炼保存到手机的健康应用",
+  "healthSyncPermissionDenied": "未获得健康访问权限。你可以在手机设置中允许。"
 }

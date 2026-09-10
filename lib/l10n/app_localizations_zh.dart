@@ -1310,4 +1310,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get plansUnavailable => '无法加载套餐,请稍后重试。';
+
+  @override
+  String get healthSync => 'Apple 健康';
+
+  @override
+  String get healthSyncSubtitle => '将完成的锻炼保存到手机的健康应用';
+
+  @override
+  String get healthSyncPermissionDenied => '未获得健康访问权限。你可以在手机设置中允许。';
 }

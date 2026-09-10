@@ -1177,11 +1177,17 @@
   },
   "scanQrCode": "Scan QR Code",
   "invalidQrCode": "This QR code isn't a Valcue routine.",
-  "@invalidQrCode": {"description":"Shown when a scanned QR code isn't a recognized Valcue routine share link"},
+  "@invalidQrCode": {
+    "description": "Shown when a scanned QR code isn't a recognized Valcue routine share link"
+  },
   "previousMonth": "Previous month",
-  "@previousMonth": {"description":"Accessibility label for the button that navigates the history calendar back one month"},
+  "@previousMonth": {
+    "description": "Accessibility label for the button that navigates the history calendar back one month"
+  },
   "nextMonth": "Next month",
-  "@nextMonth": {"description":"Accessibility label for the button that navigates the history calendar forward one month"},
+  "@nextMonth": {
+    "description": "Accessibility label for the button that navigates the history calendar forward one month"
+  },
   "placeQrInside": "Place the QR code inside the target area.",
   "@scanQrCode": {
     "description": "Title for QR code scanner screen"
@@ -1216,25 +1222,122 @@
   },
   "generateCustomRoutine": "Generate Custom Routine",
   "durationMinutes": "{minutes} min",
-  "@durationMinutes": {"description":"Duration in minutes for the custom routine builder","placeholders":{"minutes":{"type":"String"}}},
+  "@durationMinutes": {
+    "description": "Duration in minutes for the custom routine builder",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
   "floorCount": "Floors: {count}",
-  "@floorCount": {"description":"Floor count for the custom routine builder","placeholders":{"count":{"type":"String"}}},
+  "@floorCount": {
+    "description": "Floor count for the custom routine builder",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "customRunName": "Custom Run {distance} {distanceUnit} ({calories} kcal)",
-  "@customRunName": {"description":"Generated treadmill routine name","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"},"calories":{"type":"String"}}},
+  "@customRunName": {
+    "description": "Generated treadmill routine name",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
   "customCycleName": "Custom Cycle {distance} {distanceUnit} ({calories} kcal)",
-  "@customCycleName": {"description":"Generated cycle routine name","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"},"calories":{"type":"String"}}},
+  "@customCycleName": {
+    "description": "Generated cycle routine name",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
   "buildUpRunName": "Build-Up Run {distance} {distanceUnit}",
-  "@buildUpRunName": {"description":"Generated treadmill routine name for the build-up speed pattern","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"}}},
+  "@buildUpRunName": {
+    "description": "Generated treadmill routine name for the build-up speed pattern",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      }
+    }
+  },
   "pyramidRunName": "Pyramid Run {distance} {distanceUnit}",
-  "@pyramidRunName": {"description":"Generated treadmill routine name for the pyramid speed pattern","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"}}},
+  "@pyramidRunName": {
+    "description": "Generated treadmill routine name for the pyramid speed pattern",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      }
+    }
+  },
   "buildUpCycleName": "Build-Up Cycle {distance} {distanceUnit}",
-  "@buildUpCycleName": {"description":"Generated cycle routine name for the build-up speed pattern","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"}}},
+  "@buildUpCycleName": {
+    "description": "Generated cycle routine name for the build-up speed pattern",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      }
+    }
+  },
   "pyramidCycleName": "Pyramid Cycle {distance} {distanceUnit}",
-  "@pyramidCycleName": {"description":"Generated cycle routine name for the pyramid speed pattern","placeholders":{"distance":{"type":"String"},"distanceUnit":{"type":"String"}}},
+  "@pyramidCycleName": {
+    "description": "Generated cycle routine name for the pyramid speed pattern",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      },
+      "distanceUnit": {
+        "type": "String"
+      }
+    }
+  },
   "customStairsName": "Custom Stairs {floors}F ({calories} kcal)",
-  "@customStairsName": {"description":"Generated stair routine name","placeholders":{"floors":{"type":"String"},"calories":{"type":"String"}}},
+  "@customStairsName": {
+    "description": "Generated stair routine name",
+    "placeholders": {
+      "floors": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
   "customRoutineSpeech": "Your custom routine is ready. Aim for about {calories} calories!",
-  "@customRoutineSpeech": {"description":"Voice message played after a custom routine is generated","placeholders":{"calories":{"type":"String"}}},
+  "@customRoutineSpeech": {
+    "description": "Voice message played after a custom routine is generated",
+    "placeholders": {
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
   "weightDeleteTitle": "Delete Entry",
   "weightDeleteConfirm": "Are you sure you want to delete this weight entry?",
   "achievementUnlocked": "🏆 Achievement Unlocked!",
@@ -1250,11 +1353,44 @@
   "routineLimitMessage": "Free users can save up to 2 treadmill routines. Upgrade to Premium or delete an existing routine.",
   "importSharedRoutine": "Import Shared Routine",
   "importQrRoutinePrompt": "A routine was detected in the scanned QR code.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?",
-  "@importQrRoutinePrompt": {"description":"Confirmation shown after scanning a shared routine QR code","placeholders":{"name":{"type":"String"},"difficulty":{"type":"String"},"count":{"type":"String"}}},
+  "@importQrRoutinePrompt": {
+    "description": "Confirmation shown after scanning a shared routine QR code",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "difficulty": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "importClipboardRoutinePrompt": "A shared routine was detected in your clipboard.\n\n• Name: {name}\n• Difficulty: {difficulty}\n• Intervals: {count}\n\nWould you like to save this routine to your library?",
-  "@importClipboardRoutinePrompt": {"description":"Confirmation shown when a shared routine is found in the clipboard","placeholders":{"name":{"type":"String"},"difficulty":{"type":"String"},"count":{"type":"String"}}},
+  "@importClipboardRoutinePrompt": {
+    "description": "Confirmation shown when a shared routine is found in the clipboard",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "difficulty": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "importRoutineSuccess": "Successfully imported '{name}'!",
-  "@importRoutineSuccess": {"description":"Shown after a shared routine is imported","placeholders":{"name":{"type":"String"}}},
+  "@importRoutineSuccess": {
+    "description": "Shown after a shared routine is imported",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "importAction": "Import",
   "addRoutineOption": "Choose How to Add a Routine",
   "createCustomRoutine": "Create Custom Routine",
@@ -1262,16 +1398,37 @@
   "countdownTiming": "Countdown Timing",
   "noAnnouncements": "No announcements",
   "secondsShort": "{seconds}s",
-  "@secondsShort": {"description":"Compact countdown timing label","placeholders":{"seconds":{"type":"String"}}},
+  "@secondsShort": {
+    "description": "Compact countdown timing label",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "selectCountdownTimings": "Select Countdown Timings",
   "countdownTimingMessage": "Select when to hear remaining-time announcements before intervals change.",
   "secondsLeft": "{seconds}s left",
-  "@secondsLeft": {"description":"Countdown timing option","placeholders":{"seconds":{"type":"String"}}},
+  "@secondsLeft": {
+    "description": "Countdown timing option",
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
   "qrShareInstruction": "Scan this QR code from another Valcue app\nto import this routine instantly.",
   "quickStart": "Quick start",
   "sessionRepeatBlock": "Session Repeat Block",
   "repeatTimes": "Repeats: {count}",
-  "@repeatTimes": {"description":"Number of repetitions for a repeated interval block","placeholders":{"count":{"type":"String"}}},
+  "@repeatTimes": {
+    "description": "Number of repetitions for a repeated interval block",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "addRepeatBlock": "Add Repeat Block",
   "unableToShareWorkout": "Unable to share workout",
   "unableToOpenPrivacyPolicy": "Unable to open privacy policy",
@@ -1279,35 +1436,149 @@
   "less": "Less",
   "more": "More",
   "inclineValue": "Incline {value}%",
-  "@inclineValue": {"description":"Localized incline metric","placeholders":{"value":{"type":"String"}}},
+  "@inclineValue": {
+    "description": "Localized incline metric",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "rpmValue": "{value} RPM",
-  "@rpmValue": {"description":"Localized cadence metric","placeholders":{"value":{"type":"String"}}},
+  "@rpmValue": {
+    "description": "Localized cadence metric",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "nextMetric": "Next: {value}",
-  "@nextMetric": {"description":"Label for the next interval metric","placeholders":{"value":{"type":"String"}}},
+  "@nextMetric": {
+    "description": "Label for the next interval metric",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "weightCalendar": "Weight calendar",
-  "@weightCalendar": {"description":"Weight tracking calendar title"},
+  "@weightCalendar": {
+    "description": "Weight tracking calendar title"
+  },
   "routineHeaderSummary": "{count, plural, =1{{duration} · {countText} interval · {difficulty}} other{{duration} · {countText} intervals · {difficulty}}}",
-  "@routineHeaderSummary": {"description":"Routine header metadata with localized interval pluralization","placeholders":{"duration":{"type":"String"},"count":{"type":"int"},"countText":{"type":"String"},"difficulty":{"type":"String"}}},
+  "@routineHeaderSummary": {
+    "description": "Routine header metadata with localized interval pluralization",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      },
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
   "goalAchievedSummary": "Goal {goalWeight} • Goal achieved!",
-  "@goalAchievedSummary": {"description":"Weight goal summary after reaching the goal","placeholders":{"goalWeight":{"type":"String"}}},
+  "@goalAchievedSummary": {
+    "description": "Weight goal summary after reaching the goal",
+    "placeholders": {
+      "goalWeight": {
+        "type": "String"
+      }
+    }
+  },
   "goalRemainingSummary": "Goal {goalWeight} • {difference} to go",
-  "@goalRemainingSummary": {"description":"Weight goal summary while progress remains","placeholders":{"goalWeight":{"type":"String"},"difference":{"type":"String"}}},
+  "@goalRemainingSummary": {
+    "description": "Weight goal summary while progress remains",
+    "placeholders": {
+      "goalWeight": {
+        "type": "String"
+      },
+      "difference": {
+        "type": "String"
+      }
+    }
+  },
   "goalExceededSummary": "Goal {goalWeight} • {difference} over",
-  "@goalExceededSummary": {"description":"Weight goal summary after passing the goal","placeholders":{"goalWeight":{"type":"String"},"difference":{"type":"String"}}},
+  "@goalExceededSummary": {
+    "description": "Weight goal summary after passing the goal",
+    "placeholders": {
+      "goalWeight": {
+        "type": "String"
+      },
+      "difference": {
+        "type": "String"
+      }
+    }
+  },
   "averageSpeedKmh": "Avg {value} km/h",
-  "@averageSpeedKmh": {"description":"Average speed in kilometers per hour","placeholders":{"value":{"type":"String"}}},
+  "@averageSpeedKmh": {
+    "description": "Average speed in kilometers per hour",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "averageSpeedMph": "Avg {value} mph",
-  "@averageSpeedMph": {"description":"Average speed in miles per hour","placeholders":{"value":{"type":"String"}}},
+  "@averageSpeedMph": {
+    "description": "Average speed in miles per hour",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "averageRpmValue": "Avg {value} RPM",
-  "@averageRpmValue": {"description":"Average cycling cadence","placeholders":{"value":{"type":"String"}}},
+  "@averageRpmValue": {
+    "description": "Average cycling cadence",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "averageLevelValue": "Avg level {value}",
-  "@averageLevelValue": {"description":"Average stair machine level","placeholders":{"value":{"type":"String"}}},
+  "@averageLevelValue": {
+    "description": "Average stair machine level",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "purchaseFailed": "Purchase failed. Please try again.",
-  "@purchaseFailed": {"description":"Message shown when a RevenueCat purchase fails"},
+  "@purchaseFailed": {
+    "description": "Message shown when a RevenueCat purchase fails"
+  },
   "restoreSuccess": "Your purchases have been restored.",
-  "@restoreSuccess": {"description":"Message shown when restoring purchases finds an active entitlement"},
+  "@restoreSuccess": {
+    "description": "Message shown when restoring purchases finds an active entitlement"
+  },
   "restoreNothingToRestore": "No previous purchases were found.",
-  "@restoreNothingToRestore": {"description":"Message shown when restoring purchases finds nothing to restore"},
+  "@restoreNothingToRestore": {
+    "description": "Message shown when restoring purchases finds nothing to restore"
+  },
   "plansUnavailable": "Unable to load plans. Please try again later.",
-  "@plansUnavailable": {"description":"Message shown when RevenueCat offerings fail to load"}
+  "@plansUnavailable": {
+    "description": "Message shown when RevenueCat offerings fail to load"
+  },
+  "healthSync": "Apple Health",
+  "@healthSync": {
+    "description": "Settings row label for mirroring workouts into the platform health app"
+  },
+  "healthSyncSubtitle": "Save finished workouts to your phone's health app",
+  "@healthSyncSubtitle": {
+    "description": "Explanation under the health app settings row"
+  },
+  "healthSyncPermissionDenied": "Health access was not granted. You can allow it in your phone's settings.",
+  "@healthSyncPermissionDenied": {
+    "description": "Message shown when the health store refuses write access"
+  }
 }

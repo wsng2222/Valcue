@@ -1364,4 +1364,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'Unable to load plans. Please try again later.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Save finished workouts to your phone\'s health app';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Health access was not granted. You can allow it in your phone\'s settings.';
 }

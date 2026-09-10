@@ -32,6 +32,9 @@ class AppSettings {
   final String workoutReminderMessage;
   final WorkoutDisplaySize workoutDisplaySize;
 
+  /// Mirror finished workouts into Apple Health / Health Connect.
+  final bool healthSyncEnabled;
+
   // Countdown timing setting
   final List<int> voiceGuideCountdownTriggers; // e.g. [10, 20, 30]
 
@@ -52,6 +55,7 @@ class AppSettings {
     required this.workoutReminderMessage,
     this.workoutDisplaySize = WorkoutDisplaySize.standard,
     this.voiceGuideCountdownTriggers = const [10, 20, 30],
+    this.healthSyncEnabled = false,
   });
 
   AppSettings copyWith({
@@ -71,6 +75,7 @@ class AppSettings {
     String? workoutReminderMessage,
     WorkoutDisplaySize? workoutDisplaySize,
     List<int>? voiceGuideCountdownTriggers,
+    bool? healthSyncEnabled,
   }) {
     return AppSettings(
       language: language ?? this.language,
@@ -96,6 +101,7 @@ class AppSettings {
       workoutDisplaySize: workoutDisplaySize ?? this.workoutDisplaySize,
       voiceGuideCountdownTriggers:
           voiceGuideCountdownTriggers ?? this.voiceGuideCountdownTriggers,
+      healthSyncEnabled: healthSyncEnabled ?? this.healthSyncEnabled,
     );
   }
 
@@ -118,6 +124,7 @@ class AppSettings {
       'workoutReminderMessage': workoutReminderMessage,
       'workoutDisplaySize': workoutDisplaySize.name,
       'voiceGuideCountdownTriggers': voiceGuideCountdownTriggers,
+      'healthSyncEnabled': healthSyncEnabled,
     };
   }
 
@@ -169,6 +176,7 @@ class AppSettings {
       workoutDisplaySize:
           WorkoutDisplaySize.fromStorage(json['workoutDisplaySize']),
       voiceGuideCountdownTriggers: parsedCountdownTriggers,
+      healthSyncEnabled: json['healthSyncEnabled'] as bool? ?? false,
     );
   }
 

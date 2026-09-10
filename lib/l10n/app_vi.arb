@@ -602,5 +602,8 @@
   "purchaseFailed": "Giao dịch mua không thành công. Vui lòng thử lại.",
   "restoreSuccess": "Đã khôi phục giao dịch mua của bạn.",
   "restoreNothingToRestore": "Không tìm thấy giao dịch mua trước đó.",
-  "plansUnavailable": "Không thể tải các gói. Vui lòng thử lại sau."
+  "plansUnavailable": "Không thể tải các gói. Vui lòng thử lại sau.",
+  "healthSync": "Apple Health",
+  "healthSyncSubtitle": "Lưu các buổi tập đã hoàn thành vào ứng dụng sức khỏe trên điện thoại",
+  "healthSyncPermissionDenied": "Chưa được cấp quyền truy cập sức khỏe. Bạn có thể cho phép trong cài đặt điện thoại."
 }

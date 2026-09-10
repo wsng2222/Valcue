@@ -13,6 +13,7 @@ import '../../../widgets/app_message.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../services/workout_ad_gate.dart';
+import '../../../services/health_sync_service.dart';
 import '../../../services/review_prompt_service.dart';
 import '../../../utils/debug_log.dart';
 import '../../profile/models/workout_session.dart';
@@ -96,6 +97,8 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
 
     final historyProvider =
         Provider.of<WorkoutHistoryProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
 
     // Calculate averages
     double? avgRpm;
@@ -168,6 +171,15 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
     );
 
     historyProvider.addSession(session);
+
+    // Best effort: a health store that is missing or denied must never get in
+    // the way of the workout being saved here.
+    unawaited(
+      HealthSyncService.instance.writeWorkout(
+        session,
+        enabled: settingsProvider.healthSyncEnabled,
+      ),
+    );
 
     final completedWorkoutCount = historyProvider.sessions.length;
 

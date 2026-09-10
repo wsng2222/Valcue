@@ -602,5 +602,8 @@
   "purchaseFailed": "購入に失敗しました。もう一度お試しください。",
   "restoreSuccess": "購入内容を復元しました。",
   "restoreNothingToRestore": "復元できる購入履歴が見つかりませんでした。",
-  "plansUnavailable": "プランを読み込めませんでした。後でもう一度お試しください。"
+  "plansUnavailable": "プランを読み込めませんでした。後でもう一度お試しください。",
+  "healthSync": "ヘルスケア",
+  "healthSyncSubtitle": "完了したワークアウトをスマホのヘルスアプリに保存します",
+  "healthSyncPermissionDenied": "ヘルスケアへのアクセスが許可されませんでした。スマホの設定から許可できます。"
 }

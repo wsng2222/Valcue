@@ -1356,4 +1356,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get plansUnavailable => 'تعذر تحميل الخطط. يرجى المحاولة لاحقًا.';
+
+  @override
+  String get healthSync => 'تطبيق الصحة';
+
+  @override
+  String get healthSyncSubtitle =>
+      'حفظ التمارين المكتملة في تطبيق الصحة على هاتفك';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'لم يتم منح الوصول إلى الصحة. يمكنك السماح به من إعدادات هاتفك.';
 }

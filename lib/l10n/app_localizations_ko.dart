@@ -1317,4 +1317,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get plansUnavailable => '요금제를 불러올 수 없습니다. 나중에 다시 시도해주세요.';
+
+  @override
+  String get healthSync => '건강 앱에 저장';
+
+  @override
+  String get healthSyncSubtitle => '운동을 마치면 휴대폰 건강 앱에도 기록을 남깁니다';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      '건강 앱 접근이 허용되지 않았습니다. 휴대폰 설정에서 허용할 수 있습니다.';
 }

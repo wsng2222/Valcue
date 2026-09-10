@@ -2545,6 +2545,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to load plans. Please try again later.'**
   String get plansUnavailable;
+
+  /// Settings row label for mirroring workouts into the platform health app
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Health'**
+  String get healthSync;
+
+  /// Explanation under the health app settings row
+  ///
+  /// In en, this message translates to:
+  /// **'Save finished workouts to your phone\'s health app'**
+  String get healthSyncSubtitle;
+
+  /// Message shown when the health store refuses write access
+  ///
+  /// In en, this message translates to:
+  /// **'Health access was not granted. You can allow it in your phone\'s settings.'**
+  String get healthSyncPermissionDenied;
 }
 
 class _AppLocalizationsDelegate

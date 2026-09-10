@@ -602,5 +602,8 @@
   "purchaseFailed": "فشلت عملية الشراء. يرجى المحاولة مرة أخرى.",
   "restoreSuccess": "تمت استعادة مشترياتك.",
   "restoreNothingToRestore": "لم يتم العثور على مشتريات سابقة.",
-  "plansUnavailable": "تعذر تحميل الخطط. يرجى المحاولة لاحقًا."
+  "plansUnavailable": "تعذر تحميل الخطط. يرجى المحاولة لاحقًا.",
+  "healthSync": "تطبيق الصحة",
+  "healthSyncSubtitle": "حفظ التمارين المكتملة في تطبيق الصحة على هاتفك",
+  "healthSyncPermissionDenied": "لم يتم منح الوصول إلى الصحة. يمكنك السماح به من إعدادات هاتفك."
 }

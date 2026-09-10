@@ -1366,4 +1366,15 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get plansUnavailable => 'Kunne ikke indlæse planer. Prøv igen senere.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Gem færdige træninger i telefonens sundhedsapp';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Der blev ikke givet adgang til sundhed. Du kan tillade det i telefonens indstillinger.';
 }

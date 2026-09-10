@@ -1358,4 +1358,15 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'ไม่สามารถโหลดแพ็กเกจได้ โปรดลองใหม่อีกครั้งในภายหลัง';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'บันทึกการออกกำลังกายที่เสร็จสิ้นลงในแอปสุขภาพของโทรศัพท์';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'ยังไม่ได้รับอนุญาตให้เข้าถึงสุขภาพ คุณสามารถอนุญาตได้ในการตั้งค่าโทรศัพท์';
 }

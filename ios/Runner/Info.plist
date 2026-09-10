@@ -34,6 +34,10 @@
 	<true/>
 	<key>ValcueAPNsEnvironment</key>
 	<string>$(APS_ENVIRONMENT)</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Valcue does not read your health data. This is required by the system before an app may save workouts.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Valcue saves your finished interval workouts to Apple Health so they count towards your activity rings and weekly totals.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires camera access to scan QR codes for importing routines and to take workout proof photos.</string>
 	<key>NSMicrophoneUsageDescription</key>

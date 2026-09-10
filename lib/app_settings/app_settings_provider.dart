@@ -7,6 +7,7 @@ import '../services/purchase_service.dart';
 import '../services/sound_service.dart';
 import '../services/workout_live_activity_service.dart';
 import '../services/workout_reminder_service.dart';
+import '../services/health_sync_service.dart';
 import '../l10n/supported_app_language.dart';
 
 class AppSettingsProvider with ChangeNotifier {
@@ -15,6 +16,7 @@ class AppSettingsProvider with ChangeNotifier {
   final Future<bool> Function() _areLiveActivitiesEnabled;
   final Future<void> Function() _cancelWorkoutIntervalNotifications;
   final Future<void> Function() _cleanupLiveActivities;
+  final Future<bool> Function() _requestHealthPermission;
 
   AppSettings _settings;
   bool _isLoading = false;
@@ -29,6 +31,7 @@ class AppSettingsProvider with ChangeNotifier {
   String get measurement => _settings.measurement;
   String get weightUnit => _settings.weightUnit;
   bool get isPremium => _settings.isPremium;
+  bool get healthSyncEnabled => _settings.healthSyncEnabled;
   bool get voiceGuideEnabled =>
       _settings.isPremium ? _settings.voiceGuideEnabled : false;
   bool get backgroundIntervalNotificationsEnabled => _settings.isPremium
@@ -81,6 +84,7 @@ class AppSettingsProvider with ChangeNotifier {
     Future<bool> Function()? areLiveActivitiesEnabled,
     Future<void> Function()? cancelWorkoutIntervalNotifications,
     Future<void> Function()? cleanupLiveActivities,
+    Future<bool> Function()? requestHealthPermission,
   })  : _store = store ?? AppSettingsStore(),
         _settings = initialSettings ?? AppSettings.defaultSettings,
         _requestWorkoutNotificationPermissions =
@@ -93,7 +97,9 @@ class AppSettingsProvider with ChangeNotifier {
                 WorkoutReminderService
                     .instance.cancelWorkoutIntervalNotifications,
         _cleanupLiveActivities = cleanupLiveActivities ??
-            WorkoutLiveActivityService.instance.cleanup {
+            WorkoutLiveActivityService.instance.cleanup,
+        _requestHealthPermission = requestHealthPermission ??
+            HealthSyncService.instance.requestPermission {
     PurchaseService.instance.isPremiumListenable.addListener(
       _onEntitlementChanged,
     );
@@ -233,6 +239,22 @@ class AppSettingsProvider with ChangeNotifier {
       return;
     }
     await save;
+  }
+
+  /// Turns Apple Health / Health Connect mirroring on or off.
+  ///
+  /// Switching on only sticks once the health store has actually granted
+  /// write access, so the setting never claims to be syncing when it isn't.
+  /// Returns whether the setting is on afterwards.
+  Future<bool> updateHealthSync(bool enabled) async {
+    if (enabled && !await _requestHealthPermission()) {
+      return false;
+    }
+    if (_settings.healthSyncEnabled == enabled) return enabled;
+    _settings = _settings.copyWith(healthSyncEnabled: enabled);
+    notifyListeners();
+    await _saveSettingsInOrder(_settings);
+    return enabled;
   }
 
   Future<void> updateVoiceGuide(bool enabled) async {

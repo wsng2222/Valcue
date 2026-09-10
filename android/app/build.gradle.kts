@@ -35,7 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "com.nogic.valcue"
-        minSdk = flutter.minSdkVersion
+        // Health Connect requires API 26. Raising this drops Android 7.x.
+        minSdk = maxOf(flutter.minSdkVersion, 26)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

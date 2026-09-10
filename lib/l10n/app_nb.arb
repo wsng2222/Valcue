@@ -411,5 +411,8 @@
   "purchaseFailed": "Kjøpet mislyktes. Prøv igjen.",
   "restoreSuccess": "Kjøpene dine er gjenopprettet.",
   "restoreNothingToRestore": "Fant ingen tidligere kjøp.",
-  "plansUnavailable": "Kunne ikke laste inn planer. Prøv igjen senere."
+  "plansUnavailable": "Kunne ikke laste inn planer. Prøv igjen senere.",
+  "healthSync": "Apple Health",
+  "healthSyncSubtitle": "Lagre fullførte økter i helseappen på telefonen",
+  "healthSyncPermissionDenied": "Helsetilgang ble ikke gitt. Du kan tillate det i innstillingene på telefonen."
 }

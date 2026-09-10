@@ -602,5 +602,8 @@
   "purchaseFailed": "Kauf fehlgeschlagen. Bitte versuche es erneut.",
   "restoreSuccess": "Deine Käufe wurden wiederhergestellt.",
   "restoreNothingToRestore": "Es wurden keine früheren Käufe gefunden.",
-  "plansUnavailable": "Pläne konnten nicht geladen werden. Bitte versuche es später erneut."
+  "plansUnavailable": "Pläne konnten nicht geladen werden. Bitte versuche es später erneut.",
+  "healthSync": "Apple Health",
+  "healthSyncSubtitle": "Beendete Workouts in der Gesundheits-App des Telefons speichern",
+  "healthSyncPermissionDenied": "Der Gesundheitszugriff wurde nicht erteilt. Du kannst ihn in den Telefoneinstellungen erlauben."
 }

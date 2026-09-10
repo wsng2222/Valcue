@@ -602,5 +602,8 @@
   "purchaseFailed": "A compra falhou. Tente novamente.",
   "restoreSuccess": "Suas compras foram restauradas.",
   "restoreNothingToRestore": "Nenhuma compra anterior foi encontrada.",
-  "plansUnavailable": "Não foi possível carregar os planos. Tente novamente mais tarde."
+  "plansUnavailable": "Não foi possível carregar os planos. Tente novamente mais tarde.",
+  "healthSync": "Apple Saúde",
+  "healthSyncSubtitle": "Salvar treinos concluídos no app de saúde do telefone",
+  "healthSyncPermissionDenied": "O acesso à saúde não foi concedido. Você pode permitir nas configurações do telefone."
 }

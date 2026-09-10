@@ -411,5 +411,8 @@
   "purchaseFailed": "Aankoop mislukt. Probeer het opnieuw.",
   "restoreSuccess": "Je aankopen zijn hersteld.",
   "restoreNothingToRestore": "Er zijn geen eerdere aankopen gevonden.",
-  "plansUnavailable": "Kan abonnementen niet laden. Probeer het later opnieuw."
+  "plansUnavailable": "Kan abonnementen niet laden. Probeer het later opnieuw.",
+  "healthSync": "Apple Health",
+  "healthSyncSubtitle": "Voltooide workouts opslaan in de gezondheidsapp van je telefoon",
+  "healthSyncPermissionDenied": "Toegang tot gezondheid is niet verleend. Je kunt dit toestaan in de instellingen van je telefoon."
 }

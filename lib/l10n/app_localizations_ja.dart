@@ -1315,4 +1315,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get plansUnavailable => 'プランを読み込めませんでした。後でもう一度お試しください。';
+
+  @override
+  String get healthSync => 'ヘルスケア';
+
+  @override
+  String get healthSyncSubtitle => '完了したワークアウトをスマホのヘルスアプリに保存します';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'ヘルスケアへのアクセスが許可されませんでした。スマホの設定から許可できます。';
 }

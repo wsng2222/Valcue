@@ -411,5 +411,8 @@
   "purchaseFailed": "Acquisto non riuscito. Riprova.",
   "restoreSuccess": "I tuoi acquisti sono stati ripristinati.",
   "restoreNothingToRestore": "Non è stato trovato alcun acquisto precedente.",
-  "plansUnavailable": "Impossibile caricare i piani. Riprova più tardi."
+  "plansUnavailable": "Impossibile caricare i piani. Riprova più tardi.",
+  "healthSync": "Apple Salute",
+  "healthSyncSubtitle": "Salva gli allenamenti completati nell'app salute del telefono",
+  "healthSyncPermissionDenied": "L'accesso a salute non è stato concesso. Puoi consentirlo nelle impostazioni del telefono."
 }

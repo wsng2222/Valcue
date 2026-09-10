@@ -1369,4 +1369,15 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get plansUnavailable =>
       'Kan abonnementen niet laden. Probeer het later opnieuw.';
+
+  @override
+  String get healthSync => 'Apple Health';
+
+  @override
+  String get healthSyncSubtitle =>
+      'Voltooide workouts opslaan in de gezondheidsapp van je telefoon';
+
+  @override
+  String get healthSyncPermissionDenied =>
+      'Toegang tot gezondheid is niet verleend. Je kunt dit toestaan in de instellingen van je telefoon.';
 }

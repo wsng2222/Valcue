@@ -541,6 +541,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
+                      // Health app section
+                      SettingsSection(
+                        children: [
+                          SettingsRow(
+                            icon: Icons.favorite_outline,
+                            iconColor: Colors.pink,
+                            title: AppLocalizations.of(context)!.healthSync,
+                            subtitle:
+                                AppLocalizations.of(context)!.healthSyncSubtitle,
+                            trailing: _buildPlatformSwitch(
+                              context: context,
+                              value: provider.healthSyncEnabled,
+                              onChanged: (value) =>
+                                  _toggleHealthSync(context, provider, value),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
                       // Workout reminder section
                       SettingsSection(
                         children: [
@@ -793,6 +812,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
     );
+  }
+
+  /// Switching on can be refused by the health store, so the toggle only
+  /// moves once access is actually granted, and says so when it is not.
+  Future<void> _toggleHealthSync(
+    BuildContext context,
+    AppSettingsProvider provider,
+    bool value,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final enabled = await provider.updateHealthSync(value);
+    if (!context.mounted) return;
+    if (value && !enabled) {
+      showAppMessage(
+        context,
+        l10n.healthSyncPermissionDenied,
+        type: AppMessageType.error,
+      );
+    }
   }
 
   void _showCountdownTriggersPicker(
