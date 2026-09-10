@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -62,9 +61,6 @@ Finder _aboutRow() {
 }
 
 Future<void> _pumpSettings(WidgetTester tester) async {
-  debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-  addTearDown(() => debugDefaultTargetPlatformOverride = null);
-
   SharedPreferences.setMockInitialValues(<String, Object>{});
   tester.view.physicalSize = const Size(393, 852);
   tester.view.devicePixelRatio = 1;
