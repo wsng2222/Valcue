@@ -1379,11 +1379,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'تم تسجيل الدخول - يتم نسخ سجلاتك احتياطيًا';
 
   @override
-  String get signInTitle => 'نسخ احتياطي لسجلاتي';
+  String get signInTitle => 'تسجيل الدخول';
 
   @override
-  String get signInDescription =>
-      'سجّل الدخول لحفظ تمارينك ووزنك وبرامجك. استعدها على أي هاتف.';
+  String get signInDescription => 'اختر حسابًا لتسجيل الدخول.';
 
   @override
   String get signInWithApple => 'المتابعة باستخدام Apple';

@@ -1593,13 +1593,13 @@
   "@backupSignedInSubtitle": {
     "description": "Subtitle shown under backup row when signed in"
   },
-  "signInTitle": "Back up my records",
+  "signInTitle": "Sign in",
   "@signInTitle": {
     "description": "Title of the sign-in bottom sheet"
   },
-  "signInDescription": "Sign in and your workouts, weight and routines are saved. Get them back on any phone.",
+  "signInDescription": "Choose an account to sign in with.",
   "@signInDescription": {
-    "description": "Explanation of what signing in does"
+    "description": "Asks the user to pick an account to sign in with"
   },
   "signInWithApple": "Continue with Apple",
   "@signInWithApple": {

@@ -1402,11 +1402,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Sesión iniciada: tus registros están respaldados';
 
   @override
-  String get signInTitle => 'Copia de mis registros';
+  String get signInTitle => 'Iniciar sesión';
 
   @override
-  String get signInDescription =>
-      'Inicia sesión y tus entrenamientos, peso y rutinas quedan guardados. Recupéralos en cualquier teléfono.';
+  String get signInDescription => 'Elige una cuenta para iniciar sesión.';
 
   @override
   String get signInWithApple => 'Continuar con Apple';

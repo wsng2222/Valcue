@@ -1403,11 +1403,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Angemeldet - deine Daten werden gesichert';
 
   @override
-  String get signInTitle => 'Meine Daten sichern';
+  String get signInTitle => 'Anmelden';
 
   @override
-  String get signInDescription =>
-      'Melde dich an und deine Workouts, dein Gewicht und deine Routinen werden gespeichert. Hol sie dir auf jedem Handy zurück.';
+  String get signInDescription => 'Wähle ein Konto für die Anmeldung.';
 
   @override
   String get signInWithApple => 'Weiter mit Apple';

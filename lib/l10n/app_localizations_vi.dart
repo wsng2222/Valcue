@@ -1393,11 +1393,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Đã đăng nhập - dữ liệu đang được sao lưu';
 
   @override
-  String get signInTitle => 'Sao lưu dữ liệu của tôi';
+  String get signInTitle => 'Đăng nhập';
 
   @override
-  String get signInDescription =>
-      'Đăng nhập để lưu các buổi tập, cân nặng và lịch tập. Lấy lại trên bất kỳ điện thoại nào.';
+  String get signInDescription => 'Chọn tài khoản để đăng nhập.';
 
   @override
   String get signInWithApple => 'Tiếp tục với Apple';

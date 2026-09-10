@@ -1391,11 +1391,10 @@ class AppLocalizationsNb extends AppLocalizations {
       'Logget inn - dataene dine sikkerhetskopieres';
 
   @override
-  String get signInTitle => 'Sikkerhetskopier dataene mine';
+  String get signInTitle => 'Logg inn';
 
   @override
-  String get signInDescription =>
-      'Logg inn, så lagres øktene, vekten og rutinene dine. Hent dem tilbake på hvilken som helst telefon.';
+  String get signInDescription => 'Velg en konto å logge inn med.';
 
   @override
   String get signInWithApple => 'Fortsett med Apple';

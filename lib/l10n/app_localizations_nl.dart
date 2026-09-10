@@ -1393,11 +1393,10 @@ class AppLocalizationsNl extends AppLocalizations {
       'Ingelogd - je gegevens worden geback-upt';
 
   @override
-  String get signInTitle => 'Mijn gegevens back-uppen';
+  String get signInTitle => 'Inloggen';
 
   @override
-  String get signInDescription =>
-      'Log in en je workouts, gewicht en routines worden bewaard. Haal ze op elke telefoon terug.';
+  String get signInDescription => 'Kies een account om mee in te loggen.';
 
   @override
   String get signInWithApple => 'Doorgaan met Apple';

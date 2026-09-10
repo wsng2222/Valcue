@@ -1336,10 +1336,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backupSignedInSubtitle => 'ログイン済み - 記録はバックアップされています';
 
   @override
-  String get signInTitle => '記録をバックアップ';
+  String get signInTitle => 'ログイン';
 
   @override
-  String get signInDescription => 'ログインするとワークアウト・体重・ルーティンが保存されます。どの端末でも取り戻せます。';
+  String get signInDescription => 'ログインに使うアカウントを選んでください。';
 
   @override
   String get signInWithApple => 'Appleで続ける';

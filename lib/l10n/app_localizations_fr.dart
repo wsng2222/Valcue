@@ -1409,11 +1409,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Connecté - vos données sont sauvegardées';
 
   @override
-  String get signInTitle => 'Sauvegarder mes données';
+  String get signInTitle => 'Se connecter';
 
   @override
-  String get signInDescription =>
-      'Connectez-vous et vos séances, votre poids et vos routines sont enregistrés. Récupérez-les sur n\'importe quel téléphone.';
+  String get signInDescription => 'Choisissez un compte pour vous connecter.';
 
   @override
   String get signInWithApple => 'Continuer avec Apple';

@@ -1390,11 +1390,10 @@ class AppLocalizationsDa extends AppLocalizations {
       'Logget ind - dine data sikkerhedskopieres';
 
   @override
-  String get signInTitle => 'Sikkerhedskopiér mine data';
+  String get signInTitle => 'Log ind';
 
   @override
-  String get signInDescription =>
-      'Log ind, så dine træninger, din vægt og dine rutiner bliver gemt. Hent dem på enhver telefon.';
+  String get signInDescription => 'Vælg en konto at logge ind med.';
 
   @override
   String get signInWithApple => 'Fortsæt med Apple';

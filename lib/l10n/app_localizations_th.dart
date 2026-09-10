@@ -1382,11 +1382,10 @@ class AppLocalizationsTh extends AppLocalizations {
       'ลงชื่อเข้าใช้แล้ว - ข้อมูลกำลังถูกสำรอง';
 
   @override
-  String get signInTitle => 'สำรองข้อมูลของฉัน';
+  String get signInTitle => 'ลงชื่อเข้าใช้';
 
   @override
-  String get signInDescription =>
-      'ลงชื่อเข้าใช้แล้วการออกกำลังกาย น้ำหนัก และรูทีนจะถูกบันทึกไว้ ดึงกลับมาได้ทุกเครื่อง';
+  String get signInDescription => 'เลือกบัญชีที่จะใช้ลงชื่อเข้าใช้';
 
   @override
   String get signInWithApple => 'ดำเนินการต่อด้วย Apple';

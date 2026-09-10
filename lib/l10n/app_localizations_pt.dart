@@ -1396,11 +1396,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Conectado - seus registros estão salvos';
 
   @override
-  String get signInTitle => 'Backup dos meus registros';
+  String get signInTitle => 'Entrar';
 
   @override
-  String get signInDescription =>
-      'Entre e seus treinos, peso e rotinas ficam salvos. Recupere em qualquer celular.';
+  String get signInDescription => 'Escolha uma conta para entrar.';
 
   @override
   String get signInWithApple => 'Continuar com a Apple';

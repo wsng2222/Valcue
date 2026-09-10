@@ -1400,11 +1400,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Accesso eseguito - i tuoi dati sono salvati';
 
   @override
-  String get signInTitle => 'Backup dei miei dati';
+  String get signInTitle => 'Accedi';
 
   @override
-  String get signInDescription =>
-      'Accedi e i tuoi allenamenti, il peso e le routine vengono salvati. Li ritrovi su qualsiasi telefono.';
+  String get signInDescription => 'Scegli un account con cui accedere.';
 
   @override
   String get signInWithApple => 'Continua con Apple';

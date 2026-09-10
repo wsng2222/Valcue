@@ -1330,10 +1330,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupSignedInSubtitle => '已登录 - 记录正在备份';
 
   @override
-  String get signInTitle => '备份我的记录';
+  String get signInTitle => '登录';
 
   @override
-  String get signInDescription => '登录后锻炼记录、体重和routine都会保存，在任何手机上都能找回。';
+  String get signInDescription => '选择要登录的账号。';
 
   @override
   String get signInWithApple => '通过 Apple 继续';

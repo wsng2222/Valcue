@@ -1338,11 +1338,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupSignedInSubtitle => '로그인됨 - 기록이 백업되고 있습니다';
 
   @override
-  String get signInTitle => '기록 백업하기';
+  String get signInTitle => '로그인';
 
   @override
-  String get signInDescription =>
-      '로그인하면 운동 기록·체중·루틴이 저장됩니다. 어느 폰에서나 다시 받을 수 있어요.';
+  String get signInDescription => '사용하실 계정을 선택하세요.';
 
   @override
   String get signInWithApple => 'Apple로 계속하기';

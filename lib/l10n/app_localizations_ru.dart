@@ -1397,11 +1397,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backupSignedInSubtitle => 'Вход выполнен - записи копируются';
 
   @override
-  String get signInTitle => 'Резервная копия записей';
+  String get signInTitle => 'Вход';
 
   @override
-  String get signInDescription =>
-      'Войдите, и тренировки, вес и программы сохранятся. Вернёте их на любом телефоне.';
+  String get signInDescription => 'Выберите аккаунт для входа.';
 
   @override
   String get signInWithApple => 'Продолжить с Apple';

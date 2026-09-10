@@ -1387,11 +1387,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backupSignedInSubtitle => 'Signed in - your records are backed up';
 
   @override
-  String get signInTitle => 'Back up my records';
+  String get signInTitle => 'Sign in';
 
   @override
-  String get signInDescription =>
-      'Sign in and your workouts, weight and routines are saved. Get them back on any phone.';
+  String get signInDescription => 'Choose an account to sign in with.';
 
   @override
   String get signInWithApple => 'Continue with Apple';

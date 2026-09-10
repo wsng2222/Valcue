@@ -78,7 +78,7 @@ class _SignInSheetState extends State<_SignInSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Icon(
-              Icons.cloud_upload_outlined,
+              Icons.account_circle_outlined,
               size: 40,
               color: theme.colorScheme.primary,
             ),

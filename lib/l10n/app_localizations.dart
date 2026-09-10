@@ -2585,13 +2585,13 @@ abstract class AppLocalizations {
   /// Title of the sign-in bottom sheet
   ///
   /// In en, this message translates to:
-  /// **'Back up my records'**
+  /// **'Sign in'**
   String get signInTitle;
 
-  /// Explanation of what signing in does
+  /// Asks the user to pick an account to sign in with
   ///
   /// In en, this message translates to:
-  /// **'Sign in and your workouts, weight and routines are saved. Get them back on any phone.'**
+  /// **'Choose an account to sign in with.'**
   String get signInDescription;
 
   /// Apple sign-in button label
