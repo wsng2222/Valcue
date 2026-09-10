@@ -1,78 +1,40 @@
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/weight_entry.dart';
 import '../../../utils/debug_log.dart';
+import 'record_store.dart';
 
 class WeightStorage {
-  static const String _storageKey = 'weight_entries';
+  /// Kept for one-time migration of entries saved by older versions.
+  static const String legacyStorageKey = 'weight_entries';
+  static const String keyPrefix = 'weight_entry:';
   static const String _goalWeightKey = 'goal_weight_kg';
 
+  final RecordStore<WeightEntry> _records = RecordStore<WeightEntry>(
+    label: 'WeightStorage',
+    keyPrefix: keyPrefix,
+    legacyListKey: legacyStorageKey,
+    idOf: (entry) => entry.id,
+    toJson: (entry) => entry.toJson(),
+    fromJson: WeightEntry.fromJson,
+  );
+
+  /// Newest first.
   Future<List<WeightEntry>> loadEntries() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final jsonString = prefs.getString(_storageKey);
-      if (jsonString == null || jsonString.isEmpty) {
-        return [];
-      }
-      final decoded = jsonDecode(jsonString);
-      if (decoded is! List) {
-        debugLog('[WeightStorage] Expected a list payload');
-        return [];
-      }
-
-      final entries = <WeightEntry>[];
-      for (final item in decoded) {
-        if (item is! Map) {
-          debugLog('[WeightStorage] Skipping malformed weight entry');
-          continue;
-        }
-
-        try {
-          entries.add(WeightEntry.fromJson(Map<String, dynamic>.from(item)));
-        } catch (e) {
-          debugLog('[WeightStorage] Failed to parse weight entry: $e');
-        }
-      }
-
-      entries.sort((a, b) => b.dateTime.compareTo(a.dateTime));
-      return entries;
-    } catch (e) {
-      debugLog('[WeightStorage] Failed to load entries: $e');
-      return [];
-    }
-  }
-
-  Future<void> saveEntries(List<WeightEntry> entries) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final jsonList = entries.map((e) => e.toJson()).toList();
-      final jsonString = jsonEncode(jsonList);
-      await prefs.setString(_storageKey, jsonString);
-    } catch (e) {
-      debugLog('[WeightStorage] Failed to save entries: $e');
-    }
-  }
-
-  Future<void> addEntry(WeightEntry entry) async {
-    final entries = await loadEntries();
-    entries.add(entry);
+    final entries = await _records.loadAll();
     entries.sort((a, b) => b.dateTime.compareTo(a.dateTime));
-    await saveEntries(entries);
+    return entries;
   }
 
-  Future<void> deleteEntry(String id) async {
-    final entries = await loadEntries();
-    entries.removeWhere((e) => e.id == id);
-    await saveEntries(entries);
-  }
+  Future<void> addEntry(WeightEntry entry) => _records.put(entry);
 
+  Future<void> deleteEntry(String id) => _records.remove(id);
+
+  /// Replaces the entry stored under [id]. When the edit also changes the id,
+  /// the old record is dropped so an edit never leaves a duplicate behind.
   Future<void> updateEntry(String id, WeightEntry updatedEntry) async {
-    final entries = await loadEntries();
-    final index = entries.indexWhere((e) => e.id == id);
-    if (index != -1) {
-      entries[index] = updatedEntry;
-      entries.sort((a, b) => b.dateTime.compareTo(a.dateTime));
-      await saveEntries(entries);
+    await _records.put(updatedEntry);
+    if (updatedEntry.id != id) {
+      await _records.remove(id);
     }
   }
 
