@@ -29,6 +29,7 @@ import 'services/workout_live_activity_service.dart';
 import 'services/workout_reminder_service.dart';
 import 'services/analytics_service.dart';
 import 'features/account/account_service.dart';
+import 'features/account/backup_auto_sync.dart';
 import 'features/account/backup_service.dart';
 import 'onboarding/onboarding_flow.dart';
 import 'firebase_options.dart';
@@ -226,8 +227,10 @@ class MyApp extends StatelessWidget {
             AppTheme.darkTheme,
             settingsProvider.locale,
           );
-          final home = OnboardingGate(
-            home: AppShell(key: AppShell.globalKey),
+          final home = BackupAutoSync(
+            child: OnboardingGate(
+              home: AppShell(key: AppShell.globalKey),
+            ),
           );
 
           Widget appBuilder({required Widget? child}) {

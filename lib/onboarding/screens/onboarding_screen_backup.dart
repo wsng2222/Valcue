@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../features/account/account_service.dart';
+import '../../features/account/backup_service.dart';
 import '../../features/account/sign_in_sheet.dart';
+import '../../l10n/app_localizations.dart';
+import '../../widgets/app_message.dart';
 import '../onboarding_strings.dart';
 import '../widgets/onboarding_theme.dart';
 import 'onboarding_action_screen.dart';
@@ -15,10 +20,12 @@ class OnboardingScreenBackup extends StatefulWidget {
     super.key,
     required this.onNext,
     this.service,
+    this.backup,
   });
 
   final VoidCallback onNext;
   final AccountService? service;
+  final BackupService? backup;
 
   @override
   State<OnboardingScreenBackup> createState() => _OnboardingScreenBackupState();
@@ -28,6 +35,7 @@ class _OnboardingScreenBackupState extends State<OnboardingScreenBackup> {
   bool _isSigningIn = false;
 
   AccountService get _service => widget.service ?? AccountService.instance;
+  BackupService get _backup => widget.backup ?? BackupService.instance;
 
   Future<void> _signIn() async {
     if (_isSigningIn) return;
@@ -41,6 +49,21 @@ class _OnboardingScreenBackupState extends State<OnboardingScreenBackup> {
     // Dismissing the sheet leaves them here to decide, rather than pushing
     // them forward as if they had chosen something.
     if (result == null) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    if (!result.isSuccess) {
+      // Staying put lets them try again; moving on would read as success.
+      showAppMessage(context, l10n.signInFailed, type: AppMessageType.error);
+      return;
+    }
+
+    if (result.needsMerge) {
+      showAppMessage(context, l10n.signInMergeNotice);
+    }
+
+    // Someone reinstalling expects their records back right away, not on the
+    // next launch. Not awaited: onboarding should not wait on the network.
+    unawaited(_backup.syncAfterSignIn());
     widget.onNext();
   }
 
@@ -49,7 +72,7 @@ class _OnboardingScreenBackupState extends State<OnboardingScreenBackup> {
     final s = OnboardingStrings.of(context);
 
     return OnboardingActionScreen(
-      icon: Icons.cloud_upload_outlined,
+      icon: Icons.account_circle_outlined,
       iconColor: OnboardingTheme.primaryRed,
       title: s.backupTitle(),
       body: s.backupBody(),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -94,16 +95,16 @@ class _BackupSettingsRowState extends State<BackupSettingsRow> {
       showAppMessage(context, l10n.signInMergeNotice);
     }
 
-    await _sync();
+    await _sync(_backup.syncAfterSignIn);
   }
 
   /// Runs a sync and reports only failure - a successful sync should feel
   /// like nothing happened, because the records are simply all there.
-  Future<void> _sync() async {
+  Future<void> _sync(Future<BackupResult> Function() run) async {
     if (_isSyncing) return;
     setState(() => _isSyncing = true);
 
-    final result = await _backup.syncNow();
+    final result = await run();
 
     if (!mounted) return;
     setState(() => _isSyncing = false);
@@ -111,7 +112,12 @@ class _BackupSettingsRowState extends State<BackupSettingsRow> {
     if (result.status == BackupStatus.failed ||
         result.status == BackupStatus.unavailable) {
       final l10n = AppLocalizations.of(context)!;
-      showAppMessage(context, l10n.backupFailed, type: AppMessageType.error);
+      // Debug builds name the cause, so a failure can be diagnosed from the
+      // screen instead of only from a console nobody is watching.
+      final reason = kDebugMode && result.errorCode != null
+          ? '${l10n.backupFailed} (${result.errorCode})'
+          : l10n.backupFailed;
+      showAppMessage(context, reason, type: AppMessageType.error);
     }
   }
 
@@ -186,6 +192,9 @@ class _BackupSettingsRowState extends State<BackupSettingsRow> {
     );
 
     if (shouldSignOut != true) return;
+    // Whatever was recorded since the last sync goes up first. Signing out
+    // without it strands those records outside the backup.
+    await _sync(_backup.syncNow);
     await _service.signOut();
   }
 }

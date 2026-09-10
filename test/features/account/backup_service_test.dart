@@ -283,6 +283,88 @@ void main() {
     });
   });
 
+  group('signing back in', () {
+    test('restores records deleted while signed out', () async {
+      // Sign in, record, sign out, delete everything, sign in again: the
+      // deletions were made outside the account, so the backup must win.
+      await workouts.addSession(_session('w1'));
+      await routines.addRoutine(_routine('1700000000001'));
+      final service = serviceFor(AccountKind.google);
+      await service.syncNow();
+
+      await workouts.deleteSession('w1');
+      await routines.deleteRoutine('1700000000001');
+      final result = await service.syncAfterSignIn();
+
+      expect(result.deletedRemotely, 0);
+      expect((await workouts.loadSessions()).map((s) => s.id), ['w1']);
+      expect(
+        (await routines.loadRoutines()).map((r) => r.id),
+        ['1700000000001'],
+      );
+      expect(await remoteIds(BackupService.workoutsCollection), ['w1']);
+    });
+
+    test('an ordinary sync still applies deletions made while signed in',
+        () async {
+      await workouts.addSession(_session('w1'));
+      final service = serviceFor(AccountKind.google);
+      await service.syncNow();
+
+      await workouts.deleteSession('w1');
+      await service.syncNow();
+
+      expect(await remoteIds(BackupService.workoutsCollection), isEmpty);
+    });
+  });
+
+  group('telling the screens to reload', () {
+    test('ticks when a sync brings records down', () async {
+      await _seedRemote(firestore, BackupService.workoutsCollection, {
+        'w1': _session('w1').toJson(),
+      });
+      final service = serviceFor(AccountKind.google);
+
+      await service.syncNow();
+
+      expect(service.localRecordsChanged.value, 1);
+    });
+
+    test('stays quiet when nothing new arrived', () async {
+      await workouts.addSession(_session('w1'));
+      final service = serviceFor(AccountKind.google);
+
+      await service.syncNow();
+
+      expect(service.localRecordsChanged.value, 0);
+    });
+  });
+
+  group('overlapping syncs', () {
+    test('a call made mid-sync joins it instead of racing it', () async {
+      // Launch and sign-in can both start a sync within moments of each
+      // other; two at once would download the same records twice.
+      final service = serviceFor(AccountKind.google);
+
+      final first = service.syncNow();
+      final second = service.syncNow();
+
+      expect(identical(first, second), isTrue);
+      await first;
+    });
+
+    test('a call after the sync finished starts a fresh one', () async {
+      final service = serviceFor(AccountKind.google);
+
+      final first = service.syncNow();
+      await first;
+      final second = service.syncNow();
+
+      expect(identical(first, second), isFalse);
+      await second;
+    });
+  });
+
   group('when Firebase is not there', () {
     test('sync reports it instead of throwing', () async {
       final service = BackupService(

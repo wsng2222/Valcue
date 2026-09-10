@@ -25,6 +25,8 @@ class WorkoutHistoryProvider with ChangeNotifier {
   }
 
   Future<void> loadSessions() async {
+    // Screenshot data is not in storage; reloading would wipe it.
+    if (_inMemoryOnly) return;
     _isLoading = true;
     notifyListeners();
     _sessions = await _storage.loadSessions();

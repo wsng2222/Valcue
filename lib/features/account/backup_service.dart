@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../utils/debug_log.dart';
 import '../profile/models/weight_entry.dart';
@@ -31,12 +32,18 @@ class BackupResult {
     this.uploaded = 0,
     this.downloaded = 0,
     this.deletedRemotely = 0,
+    this.errorCode,
   });
 
   final BackupStatus status;
   final int uploaded;
   final int downloaded;
   final int deletedRemotely;
+
+  /// Why a sync failed, for logs and debug builds. A sync can fail for
+  /// reasons only the server knows - denied rules, App Check, no network -
+  /// and without this the app can only say "it did not work".
+  final String? errorCode;
 
   bool get isSuccess => status == BackupStatus.synced;
 }
@@ -75,6 +82,14 @@ class BackupService {
   final WeightStorage _weights;
   final RoutineStorage _routines;
 
+  /// Ticks whenever a sync writes records onto this device.
+  ///
+  /// The screens hold their records in memory, so without this a backup
+  /// restored after sign-in would stay invisible until the app restarts.
+  final ValueNotifier<int> localRecordsChanged = ValueNotifier<int>(0);
+
+  Future<BackupResult>? _inFlight;
+
   FirebaseFirestore? get _firestoreOrNull {
     if (_injectedFirestore != null) return _injectedFirestore;
     try {
@@ -88,8 +103,37 @@ class BackupService {
   /// Pushes local changes up and pulls the account's records down.
   ///
   /// Safe to call whenever - it is a no-op for guests, and doing nothing is
-  /// reported rather than treated as a failure.
-  Future<BackupResult> syncNow() async {
+  /// reported rather than treated as a failure. A call made while a sync is
+  /// already running joins that sync instead of racing it.
+  Future<BackupResult> syncNow() {
+    return _inFlight ??= _sync().whenComplete(() => _inFlight = null);
+  }
+
+  /// The first sync after signing in.
+  ///
+  /// Deletions noted before this point were made by a guest, or after
+  /// signing out, so they are not the account's to apply - replaying them
+  /// would wipe the very records someone signed back in to restore.
+  Future<BackupResult> syncAfterSignIn() async {
+    // A sync started before sign-in would still be running as the guest.
+    await _inFlight;
+    await forgetLocalDeletions();
+    return syncNow();
+  }
+
+  Future<void> forgetLocalDeletions() async {
+    for (final id in (await _workouts.deletedSessionIds()).keys) {
+      await _workouts.forgetDeletedSession(id);
+    }
+    for (final id in (await _weights.deletedEntryIds()).keys) {
+      await _weights.forgetDeletedEntry(id);
+    }
+    for (final id in (await _routines.deletedRoutineIds()).keys) {
+      await _routines.forgetDeletedRoutine(id);
+    }
+  }
+
+  Future<BackupResult> _sync() async {
     final user = _account.currentUser;
     if (user == null || !user.canBackUp) {
       return const BackupResult(BackupStatus.notSignedIn);
@@ -136,18 +180,26 @@ class BackupService {
         forgetDeletion: _routines.forgetDeletedRoutine,
       );
 
+      final downloaded =
+          workouts.downloaded + weights.downloaded + routines.downloaded;
+      if (downloaded > 0) {
+        localRecordsChanged.value++;
+      }
+
       return BackupResult(
         BackupStatus.synced,
         uploaded: workouts.uploaded + weights.uploaded + routines.uploaded,
-        downloaded:
-            workouts.downloaded + weights.downloaded + routines.downloaded,
+        downloaded: downloaded,
         deletedRemotely: workouts.deletedRemotely +
             weights.deletedRemotely +
             routines.deletedRemotely,
       );
+    } on FirebaseException catch (e) {
+      debugLog('[BackupService] Sync failed: ${e.code} ${e.message}');
+      return BackupResult(BackupStatus.failed, errorCode: e.code);
     } catch (e) {
       debugLog('[BackupService] Sync failed: $e');
-      return const BackupResult(BackupStatus.failed);
+      return BackupResult(BackupStatus.failed, errorCode: e.runtimeType.toString());
     }
   }
 
@@ -227,6 +279,9 @@ class BackupService {
       }
       await root.delete();
       return true;
+    } on FirebaseException catch (e) {
+      debugLog('[BackupService] Could not delete the backup: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       debugLog('[BackupService] Could not delete the backup: $e');
       return false;
