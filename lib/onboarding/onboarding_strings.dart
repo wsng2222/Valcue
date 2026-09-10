@@ -13,6 +13,14 @@ class OnboardingStrings {
 
   const OnboardingStrings._(this.code);
 
+  /// Strings for one language, without needing a widget tree. Falls back to
+  /// English for anything unsupported, exactly like [of].
+  static OnboardingStrings forLanguage(String code) {
+    return OnboardingStrings._(
+      SupportedAppLanguage.supports(code) ? code : 'en',
+    );
+  }
+
   static OnboardingStrings of(BuildContext context) {
     final code = Localizations.localeOf(context).languageCode;
     return OnboardingStrings._(
@@ -2677,6 +2685,140 @@ class OnboardingStrings {
         'vi': 'Tiếp tục với bản miễn phí',
         'ar': 'المتابعة بالإصدار المجاني',
         'th': 'ใช้เวอร์ชันฟรีต่อ',
+      });
+
+  // ---- Health app and backup screens ----
+  String healthTitle() => _t({
+        'ko': '운동 기록, 건강 앱에도 남기기',
+        'en': 'Keep your workouts in your health app',
+        'es': 'Guarda tus entrenamientos en la app de salud',
+        'fr': 'Gardez vos séances dans votre app santé',
+        'de': 'Deine Workouts in der Gesundheits-App',
+        'it': 'Tieni gli allenamenti nell’app salute',
+        'nl': 'Bewaar je workouts in je gezondheidsapp',
+        'da': 'Gem dine træninger i sundhedsappen',
+        'nb': 'Ta vare på øktene i helseappen',
+        'ru': 'Тренировки — и в приложении здоровья',
+        'pt': 'Guarde seus treinos no app de saúde',
+        'ja': 'ワークアウトをヘルスアプリにも',
+        'zh': '把锻炼也留在健康应用里',
+        'vi': 'Lưu buổi tập vào ứng dụng sức khỏe',
+        'ar': 'احتفظ بتمارينك في تطبيق الصحة',
+        'th': 'เก็บการออกกำลังกายไว้ในแอปสุขภาพ',
+      });
+
+  String healthBody() => _t({
+        'ko': '운동을 마치면 시간과 거리가 휴대폰 건강 앱에도 자동으로 저장됩니다. 한 주 운동량을 한눈에 볼 수 있어요.',
+        'en': 'When a workout ends, its time and distance are saved to your phone’s health app too. Your weekly totals stay in one place.',
+        'es': 'Al terminar, el tiempo y la distancia también se guardan en la app de salud del teléfono. Tus totales semanales en un solo sitio.',
+        'fr': 'À la fin d’une séance, sa durée et sa distance sont aussi enregistrées dans l’app santé du téléphone. Vos totaux hebdomadaires au même endroit.',
+        'de': 'Nach dem Workout landen Dauer und Distanz auch in der Gesundheits-App deines Telefons. Deine Wochenwerte an einem Ort.',
+        'it': 'A fine allenamento, durata e distanza finiscono anche nell’app salute del telefono. I totali settimanali in un unico posto.',
+        'nl': 'Na een workout gaan tijd en afstand ook naar de gezondheidsapp van je telefoon. Je weektotalen op één plek.',
+        'da': 'Når en træning slutter, gemmes tid og distance også i telefonens sundhedsapp. Dine ugetal ét sted.',
+        'nb': 'Når en økt er ferdig, lagres tid og distanse også i helseappen på telefonen. Ukesummene dine på ett sted.',
+        'ru': 'После тренировки её время и дистанция сохраняются и в приложении здоровья. Итоги недели — в одном месте.',
+        'pt': 'Ao terminar, o tempo e a distância também vão para o app de saúde do celular. Seus totais da semana em um só lugar.',
+        'ja': 'ワークアウトが終わると、時間と距離がスマホのヘルスアプリにも保存されます。週の合計をまとめて確認できます。',
+        'zh': '锻炼结束后，时长和距离也会保存到手机的健康应用，一周的总量一目了然。',
+        'vi': 'Khi kết thúc buổi tập, thời gian và quãng đường cũng được lưu vào ứng dụng sức khỏe. Tổng kết tuần gọn trong một nơi.',
+        'ar': 'عند انتهاء التمرين، يُحفظ وقته ومسافته في تطبيق الصحة أيضًا. إجمالياتك الأسبوعية في مكان واحد.',
+        'th': 'เมื่อจบการออกกำลังกาย เวลาและระยะทางจะถูกบันทึกลงแอปสุขภาพด้วย ดูยอดรวมรายสัปดาห์ได้ในที่เดียว',
+      });
+
+  String ctaConnectHealth() => _t({
+        'ko': '건강 앱에 연결하기',
+        'en': 'Connect my health app',
+        'es': 'Conectar la app de salud',
+        'fr': 'Connecter mon app santé',
+        'de': 'Gesundheits-App verbinden',
+        'it': 'Collega l’app salute',
+        'nl': 'Gezondheidsapp koppelen',
+        'da': 'Forbind sundhedsappen',
+        'nb': 'Koble til helseappen',
+        'ru': 'Подключить приложение здоровья',
+        'pt': 'Conectar o app de saúde',
+        'ja': 'ヘルスアプリに接続',
+        'zh': '连接健康应用',
+        'vi': 'Kết nối ứng dụng sức khỏe',
+        'ar': 'ربط تطبيق الصحة',
+        'th': 'เชื่อมต่อแอปสุขภาพ',
+      });
+
+  String backupTitle() => _t({
+        'ko': '기록이 사라지지 않게',
+        'en': 'So your records never disappear',
+        'es': 'Para que tus registros no desaparezcan',
+        'fr': 'Pour que vos données ne disparaissent jamais',
+        'de': 'Damit deine Daten nie verschwinden',
+        'it': 'Perché i tuoi dati non spariscano',
+        'nl': 'Zodat je gegevens nooit verdwijnen',
+        'da': 'Så dine data aldrig forsvinder',
+        'nb': 'Slik at dataene aldri forsvinner',
+        'ru': 'Чтобы записи не пропали',
+        'pt': 'Para seus registros nunca sumirem',
+        'ja': '記録が消えないように',
+        'zh': '让你的记录不会消失',
+        'vi': 'Để dữ liệu không bao giờ mất',
+        'ar': 'حتى لا تختفي سجلاتك',
+        'th': 'เพื่อไม่ให้ข้อมูลของคุณหายไป',
+      });
+
+  String backupBody() => _t({
+        'ko': '지금은 기록이 이 폰에만 있습니다. 로그인하면 운동·체중·루틴이 저장돼서, 폰을 바꿔도 그대로 돌아옵니다.',
+        'en': 'Right now your records live only on this phone. Sign in and your workouts, weight and routines come back on any phone.',
+        'es': 'Ahora mismo tus registros solo están en este teléfono. Inicia sesión y tus entrenamientos, peso y rutinas vuelven en cualquier teléfono.',
+        'fr': 'Pour l’instant, vos données n’existent que sur ce téléphone. Connectez-vous et vos séances, votre poids et vos routines reviennent sur n’importe quel téléphone.',
+        'de': 'Deine Daten liegen bisher nur auf diesem Handy. Melde dich an, und Workouts, Gewicht und Routinen sind auf jedem Handy wieder da.',
+        'it': 'Per ora i tuoi dati esistono solo su questo telefono. Accedi e allenamenti, peso e routine tornano su qualsiasi telefono.',
+        'nl': 'Nu staan je gegevens alleen op deze telefoon. Log in en je workouts, gewicht en routines komen op elke telefoon terug.',
+        'da': 'Lige nu findes dine data kun på denne telefon. Log ind, så kommer træninger, vægt og rutiner tilbage på enhver telefon.',
+        'nb': 'Akkurat nå finnes dataene bare på denne telefonen. Logg inn, så kommer økter, vekt og rutiner tilbake på hvilken som helst telefon.',
+        'ru': 'Сейчас записи есть только на этом телефоне. Войдите — и тренировки, вес и программы вернутся на любом телефоне.',
+        'pt': 'Por enquanto seus registros só existem neste celular. Entre e seus treinos, peso e rotinas voltam em qualquer celular.',
+        'ja': '今は記録がこの端末にしかありません。ログインすれば、ワークアウト・体重・ルーティンがどの端末でも戻ります。',
+        'zh': '现在你的记录只存在这台手机上。登录后，锻炼、体重和routine在任何手机上都能找回。',
+        'vi': 'Hiện dữ liệu chỉ nằm trên điện thoại này. Đăng nhập để buổi tập, cân nặng và lịch tập quay lại trên mọi điện thoại.',
+        'ar': 'سجلاتك الآن موجودة على هذا الهاتف فقط. سجّل الدخول لتعود تمارينك ووزنك وبرامجك على أي هاتف.',
+        'th': 'ตอนนี้ข้อมูลของคุณอยู่แค่ในเครื่องนี้ ลงชื่อเข้าใช้แล้วการออกกำลังกาย น้ำหนัก และรูทีนจะกลับมาได้ทุกเครื่อง',
+      });
+
+  String ctaSkipForNow() => _t({
+        'ko': '나중에 하기',
+        'en': 'Not now',
+        'es': 'Ahora no',
+        'fr': 'Pas maintenant',
+        'de': 'Jetzt nicht',
+        'it': 'Non ora',
+        'nl': 'Niet nu',
+        'da': 'Ikke nu',
+        'nb': 'Ikke nå',
+        'ru': 'Не сейчас',
+        'pt': 'Agora não',
+        'ja': 'あとで',
+        'zh': '暂不',
+        'vi': 'Để sau',
+        'ar': 'ليس الآن',
+        'th': 'ไว้ทีหลัง',
+      });
+
+  String ctaSignInToBackUp() => _t({
+        'ko': '로그인하고 백업하기',
+        'en': 'Sign in and back up',
+        'es': 'Iniciar sesión y respaldar',
+        'fr': 'Se connecter et sauvegarder',
+        'de': 'Anmelden und sichern',
+        'it': 'Accedi ed esegui il backup',
+        'nl': 'Inloggen en back-uppen',
+        'da': 'Log ind og sikkerhedskopiér',
+        'nb': 'Logg inn og sikkerhetskopier',
+        'ru': 'Войти и сохранить копию',
+        'pt': 'Entrar e fazer backup',
+        'ja': 'ログインしてバックアップ',
+        'zh': '登录并备份',
+        'vi': 'Đăng nhập và sao lưu',
+        'ar': 'سجّل الدخول وانسخ احتياطيًا',
+        'th': 'ลงชื่อเข้าใช้และสำรองข้อมูล',
       });
 
   // ---- helpers ----

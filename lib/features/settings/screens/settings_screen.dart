@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_settings/app_settings_model.dart';
+import '../../../onboarding/onboarding_flow.dart';
 import '../../account/backup_settings_row.dart';
 import '../../membership/widgets/premium_gate_modal.dart';
 import '../../membership/models/premium_feature.dart';
@@ -101,6 +102,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Hidden entry point for store screenshots: 30 taps on the "About" row.
+  /// Replays the first-run walkthrough.
+  ///
+  /// [OnboardingGate] already knows how to show it on top of an existing
+  /// screen and pop itself when it finishes, so the home it wraps is never
+  /// built here.
+  void _showOnboarding() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const OnboardingGate(
+          home: SizedBox.shrink(),
+          forceShowOnboarding: true,
+        ),
+      ),
+    );
+  }
+
+  /// The store-screenshot tool used to sit behind 30 taps on this row. Now
+  /// that a single tap replays onboarding, the counter could never get
+  /// there, so it moved to a long press.
   void _registerAboutTap() {
     _aboutTapCount++;
     _aboutTapResetTimer?.cancel();
@@ -111,7 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
 
-    // Stop tapping for a moment and the count starts over.
+    // Stop pressing for a moment and the count starts over.
     _aboutTapResetTimer = Timer(const Duration(seconds: 1), () {
       _aboutTapCount = 0;
       _aboutTapResetTimer = null;
@@ -340,8 +360,78 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
-                      // Record backup section
-                      const BackupSettingsRow(),
+                      // Theme Mode section (with segmented control)
+                      SettingsSection(
+                        children: [
+                          ThemeSegmentRow(
+                            icon: Icons.palette,
+                            iconColor: Colors.indigo,
+                            title: AppLocalizations.of(context)!.themeMode,
+                            value: provider.themeMode,
+                            onChanged: (value) =>
+                                provider.updateThemeMode(value),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      // Unit Setting section (with segmented control)
+                      SettingsSection(
+                        children: [
+                          UnitSegmentRow(
+                            icon: Icons.speed,
+                            iconColor: Colors.purple,
+                            title: AppLocalizations.of(context)!.unitSetting,
+                            value: provider.measurement,
+                            onChanged: (value) =>
+                                provider.updateMeasurement(value),
+                          ),
+                          // Weight Unit Setting (options only, same section)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              72,
+                              0,
+                              16,
+                              16,
+                            ),
+                            child: UnitSegmentRow.buildSegmentedControl(
+                              context: context,
+                              value: provider.weightUnit,
+                              onChanged: (value) =>
+                                  provider.updateWeightUnit(value),
+                              options: const ['kg', 'lbs'],
+                              labels: const ['kg', 'lbs'],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      SettingsSection(
+                        children: [
+                          SettingsRow(
+                            icon: Icons.text_increase_rounded,
+                            iconColor: Colors.teal,
+                            title: AppLocalizations.of(context)!
+                                .workoutDisplaySizeTitle,
+                            subtitle: _workoutDisplaySizeLabel(
+                              context,
+                              provider.workoutDisplaySize,
+                            ),
+                            trailing: PlatformIcon(
+                              cupertino: CupertinoIcons.chevron_right,
+                              material: Icons.chevron_right,
+                              size: 20,
+                              color: context.appColors.mutedText,
+                            ),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const WorkoutDisplaySizePreviewScreen(),
+                              ),
+                            ),
+                            showDivider: false,
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 4),
                       // Voice Guide section
                       SettingsSection(
@@ -472,30 +562,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
+                      // Record backup section
+                      const BackupSettingsRow(),
+                      const SizedBox(height: 4),
+                      // Health app section
                       SettingsSection(
                         children: [
                           SettingsRow(
-                            icon: Icons.text_increase_rounded,
-                            iconColor: Colors.teal,
-                            title: AppLocalizations.of(context)!
-                                .workoutDisplaySizeTitle,
-                            subtitle: _workoutDisplaySizeLabel(
-                              context,
-                              provider.workoutDisplaySize,
+                            icon: Icons.favorite_outline,
+                            iconColor: Colors.pink,
+                            title: AppLocalizations.of(context)!.healthSync,
+                            subtitle:
+                                AppLocalizations.of(context)!.healthSyncSubtitle,
+                            trailing: _buildPlatformSwitch(
+                              context: context,
+                              value: provider.healthSyncEnabled,
+                              onChanged: (value) =>
+                                  _toggleHealthSync(context, provider, value),
                             ),
-                            trailing: PlatformIcon(
-                              cupertino: CupertinoIcons.chevron_right,
-                              material: Icons.chevron_right,
-                              size: 20,
-                              color: context.appColors.mutedText,
-                            ),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    const WorkoutDisplaySizePreviewScreen(),
-                              ),
-                            ),
-                            showDivider: false,
                           ),
                         ],
                       ),
@@ -559,70 +643,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      // Health app section
-                      SettingsSection(
-                        children: [
-                          SettingsRow(
-                            icon: Icons.favorite_outline,
-                            iconColor: Colors.pink,
-                            title: AppLocalizations.of(context)!.healthSync,
-                            subtitle:
-                                AppLocalizations.of(context)!.healthSyncSubtitle,
-                            trailing: _buildPlatformSwitch(
-                              context: context,
-                              value: provider.healthSyncEnabled,
-                              onChanged: (value) =>
-                                  _toggleHealthSync(context, provider, value),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      // Theme Mode section (with segmented control)
-                      SettingsSection(
-                        children: [
-                          ThemeSegmentRow(
-                            icon: Icons.palette,
-                            iconColor: Colors.indigo,
-                            title: AppLocalizations.of(context)!.themeMode,
-                            value: provider.themeMode,
-                            onChanged: (value) =>
-                                provider.updateThemeMode(value),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      // Unit Setting section (with segmented control)
-                      SettingsSection(
-                        children: [
-                          UnitSegmentRow(
-                            icon: Icons.speed,
-                            iconColor: Colors.purple,
-                            title: AppLocalizations.of(context)!.unitSetting,
-                            value: provider.measurement,
-                            onChanged: (value) =>
-                                provider.updateMeasurement(value),
-                          ),
-                          // Weight Unit Setting (options only, same section)
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                              72,
-                              0,
-                              16,
-                              16,
-                            ),
-                            child: UnitSegmentRow.buildSegmentedControl(
-                              context: context,
-                              value: provider.weightUnit,
-                              onChanged: (value) =>
-                                  provider.updateWeightUnit(value),
-                              options: const ['kg', 'lbs'],
-                              labels: const ['kg', 'lbs'],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
                       // Language section
                       SettingsSection(
                         children: [
@@ -670,7 +690,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: 4),
                       // About section
                       GestureDetector(
-                        onTap: _registerAboutTap,
+                        onTap: _showOnboarding,
+                        onLongPress: _registerAboutTap,
                         child: Container(
                           margin: const EdgeInsets.fromLTRB(20, 6, 20, 0),
                           decoration: BoxDecoration(

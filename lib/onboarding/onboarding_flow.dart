@@ -16,6 +16,8 @@ import 'screens/onboarding_screen_4_reminder.dart';
 import 'screens/onboarding_screen_5_level.dart';
 import 'screens/onboarding_screen_6_units.dart';
 import 'screens/onboarding_screen_7_start.dart';
+import 'screens/onboarding_screen_backup.dart';
+import 'screens/onboarding_screen_health.dart';
 import 'widgets/onboarding_cta_button.dart';
 import 'widgets/onboarding_theme.dart';
 
@@ -101,6 +103,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   int _intervalExplainerStep = 0; // internal steps for screen 2
   int? _quizSelectedOption;
 
+  // Page positions the flow has to know about by name. Screens are inserted
+  // before the closing screen, so the earlier indices stay put.
+  static const int _intervalExplainerPageIndex = 1;
+  static const int _reminderPageIndex = 6;
+  static const int _healthPageIndex = 9;
+  static const int _backupPageIndex = 10;
+  static const int _lastPageIndex = 11;
+
   @override
   void initState() {
     super.initState();
@@ -173,7 +183,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   void _handleBack() {
     final pageIndex = _controller.currentPage;
-    if (pageIndex == 1 && _intervalExplainerStep > 0) {
+    if (pageIndex == _intervalExplainerPageIndex &&
+        _intervalExplainerStep > 0) {
       setState(() {
         _intervalExplainerStep--;
       });
@@ -185,8 +196,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Future<void> _next() async {
-    // Pages are fixed at 11 (0..10). Keep this in sync with `pages` below.
-    final nextPage = (_controller.currentPage + 1).clamp(0, 10);
+    final nextPage = (_controller.currentPage + 1).clamp(0, _lastPageIndex);
     AnalyticsService.instance.logEvent(
       'onboarding_next_tapped',
       {'pageIndex': _controller.currentPage},
@@ -203,18 +213,36 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   String _ctaLabelForPage(int page) {
     final s = OnboardingStrings.of(context);
-    switch (page) {
-      case 0:
-        return s.ctaStart();
-      default:
-        // Last page (index 10) uses finish label.
-        return page == 10 ? s.ctaFinish() : s.ctaNext();
-    }
+    if (page == 0) return s.ctaStart();
+    return page == _lastPageIndex ? s.ctaFinish() : s.ctaNext();
   }
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
+    final pages = _buildPages();
+    assert(
+      pages.length - 1 == _lastPageIndex &&
+          pages[_intervalExplainerPageIndex]
+              is OnboardingScreen2IntervalExplainer &&
+          pages[_reminderPageIndex] is OnboardingScreen4Reminder &&
+          pages[_healthPageIndex] is OnboardingScreenHealth &&
+          pages[_backupPageIndex] is OnboardingScreenBackup,
+      'Onboarding page indices no longer match the page list',
+    );
+
+    return _buildScaffold(pages, pages.length - 1);
+  }
+
+  /// Screens that bring up their own primary button, so the shared one below
+  /// would be a second, conflicting call to action.
+  bool _hasOwnCta(int pageIndex) {
+    return pageIndex == _reminderPageIndex ||
+        pageIndex == _healthPageIndex ||
+        pageIndex == _backupPageIndex;
+  }
+
+  List<Widget> _buildPages() {
+    return [
       const OnboardingScreen1Welcome(),
       OnboardingScreen2IntervalExplainer(
         step: _intervalExplainerStep,
@@ -232,11 +260,13 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       OnboardingScreen4Reminder(onNext: _next),
       OnboardingScreen5Level(controller: _controller),
       OnboardingScreen6Units(controller: _controller),
+      OnboardingScreenHealth(onNext: _next),
+      OnboardingScreenBackup(onNext: _next),
       const OnboardingScreen7Start(),
     ];
+  }
 
-    final lastIndex = pages.length - 1;
-
+  Widget _buildScaffold(List<Widget> pages, int lastIndex) {
     return PopScope(
       canPop: _controller.currentPage == 0,
       onPopInvokedWithResult: (didPop, result) {
@@ -295,7 +325,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 ],
               ),
             ),
-            bottomNavigationBar: (pageIndex == 6)
+            bottomNavigationBar: _hasOwnCta(pageIndex)
                 ? null
                 : OnboardingCtaButton(
                     text: _ctaLabelForPage(pageIndex),
@@ -305,7 +335,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                         ? null
                         : () {
                             // Screen 2 has internal steps (tap-through) before moving on.
-                            if (pageIndex == 1 && _intervalExplainerStep < 7) {
+                            if (pageIndex == _intervalExplainerPageIndex &&
+                                _intervalExplainerStep < 7) {
                               setState(() {
                                 _intervalExplainerStep =
                                     (_intervalExplainerStep + 1).clamp(0, 7);
