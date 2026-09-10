@@ -12,7 +12,7 @@ import '../../workout/screens/workout_screen.dart';
 import 'routine_edit_screen.dart';
 import '../widgets/routine_shared_widgets.dart';
 import '../widgets/qr_share_dialog.dart';
-import '../../../services/ad_service.dart';
+import '../../../services/workout_ad_gate.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../widgets/secondary_outlined_button.dart';
@@ -240,79 +240,52 @@ class _RoutineDetailSheetContent extends StatelessWidget {
                         _lastStartTapAt = tapTime;
                         HapticFeedback.lightImpact();
 
-                        // Check if user is premium - premium users don't see ads
                         final isPremium = settingsProvider.isPremium;
 
-                        if (isPremium) {
-                          final navigator = Navigator.of(context);
-                          var notificationsAuthorized = false;
-                          if (settingsProvider
-                              .backgroundIntervalNotificationsEnabled) {
-                            notificationsAuthorized =
-                                await WorkoutReminderService.instance
-                                    .requestPermissions();
-                            if (!notificationsAuthorized) {
-                              final liveActivitiesEnabled =
-                                  await WorkoutLiveActivityService.instance
-                                      .areActivitiesEnabled();
-                              if (!liveActivitiesEnabled) {
-                                await settingsProvider
-                                    .updateBackgroundIntervalNotifications(
-                                  false,
-                                );
-                              }
+                        // Background coaching is premium-only, so only a
+                        // subscriber has permissions to settle first.
+                        var notificationsAuthorized = false;
+                        if (isPremium &&
+                            settingsProvider
+                                .backgroundIntervalNotificationsEnabled) {
+                          notificationsAuthorized = await WorkoutReminderService
+                              .instance
+                              .requestPermissions();
+                          if (!notificationsAuthorized) {
+                            final liveActivitiesEnabled =
+                                await WorkoutLiveActivityService.instance
+                                    .areActivitiesEnabled();
+                            if (!liveActivitiesEnabled) {
+                              await settingsProvider
+                                  .updateBackgroundIntervalNotifications(false);
                             }
                           }
                           if (!context.mounted) return;
-                          // Premium user: close bottom sheet and navigate directly without ads
-                          navigator.pop();
-                          navigator.push(
-                            MaterialPageRoute(
-                              builder: (context) => WorkoutScreen(
-                                routine: routine,
-                                backgroundNotificationsAuthorized:
-                                    notificationsAuthorized,
-                              ),
-                            ),
-                          );
-                          return;
                         }
 
-                        // Save navigator context before closing bottom sheet
+                        // Captured before the sheet closes, so the push still
+                        // has a navigator.
                         final navigatorContext =
                             Navigator.of(context, rootNavigator: true);
 
-                        // Show interstitial ad if available, then navigate to workout
-                        // Don't close bottom sheet yet - close it when ad is dismissed
-                        final adService = AdService();
-                        final wasAdShown = adService.showAd(
-                          onAdClosed: () {
-                            // Close bottom sheet and navigate to workout screen
+                        await WorkoutAdGate.instance.run(
+                          isPremium: isPremium,
+                          placement: WorkoutAdPlacement.beforeWorkout,
+                          onContinue: () {
                             if (context.mounted) {
                               Navigator.pop(context); // Close bottom sheet
                             }
-                            // Use root navigator to push workout screen
                             navigatorContext.push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    WorkoutScreen(routine: routine),
+                                builder: (context) => WorkoutScreen(
+                                  routine: routine,
+                                  backgroundNotificationsAuthorized:
+                                      notificationsAuthorized,
+                                ),
                               ),
                             );
                           },
                         );
-
-                        // If ad wasn't shown, close bottom sheet and navigate immediately
-                        if (!wasAdShown) {
-                          if (context.mounted) {
-                            Navigator.pop(context); // Close bottom sheet
-                          }
-                          navigatorContext.push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  WorkoutScreen(routine: routine),
-                            ),
-                          );
-                        }
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
