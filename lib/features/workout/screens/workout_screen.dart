@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -10,13 +9,8 @@ import 'package:valcue/l10n/localized_format.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../../app_settings/app_settings_provider.dart';
-import '../../../utils/app_shadows.dart';
-import '../../../widgets/bidi_safe_text.dart';
-import '../../../theme/app_theme.dart';
 import '../state/workout_state.dart';
-import '../widgets/flashing_metric_text.dart';
 import 'workout_finished_screen.dart';
-import '../../../widgets/secondary_outlined_button.dart';
 import '../../../services/voice_guide_service.dart';
 import '../../../services/firebase_workout_live_activity_schedule_backend.dart';
 import '../../../services/workout_interval_notification_planner.dart';
@@ -28,6 +22,16 @@ import '../../../services/workout_live_activity_schedule_planner.dart';
 import '../../../services/workout_live_activity_service.dart';
 import '../../../services/workout_reminder_service.dart';
 import '../../../services/analytics_service.dart';
+import '../widgets/bottom_control_bar.dart';
+import '../widgets/circular_session_timer.dart';
+import '../widgets/countdown_overlay.dart';
+import '../widgets/current_value_section.dart';
+import '../widgets/interval_pulse_overlay.dart';
+import '../widgets/top_pill_progress_bar.dart';
+import '../widgets/workout_action_buttons.dart';
+import '../widgets/workout_control_sheets.dart';
+import '../widgets/workout_hero_panel.dart';
+import '../widgets/workout_progress_header.dart';
 
 class WorkoutScreen extends StatefulWidget {
   final Routine routine;
@@ -1137,7 +1141,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
       builder: (context) => PopScope(
         canPop: false,
-        child: _PauseBottomSheet(
+        child: PauseBottomSheet(
           onResume: () {
             // Close bottom sheet immediately
             if (mounted) {
@@ -1189,7 +1193,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
       barrierColor: theme.colorScheme.shadow.withValues(alpha: 0.4),
       builder: (context) => PopScope(
         canPop: false,
-        child: _EndWorkoutConfirmationBottomSheet(
+        child: EndWorkoutConfirmationBottomSheet(
           onCancel: () {
             // Cancel: close bottom sheet and reopen pause sheet
             Navigator.pop(context);
@@ -1244,7 +1248,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                         orientation == Orientation.portrait
                             ? _buildPortraitLayout(state, settingsProvider)
                             : _buildLandscapeLayout(state, settingsProvider),
-                        _IntervalPulseOverlay(
+                        IntervalPulseOverlay(
                           triggerKey: state.currentIntervalIndex,
                           enabled: state.status == WorkoutStatus.running,
                         ),
@@ -1316,7 +1320,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
             ),
             child: Column(
               children: [
-                _HeaderTimeSummary(
+                HeaderTimeSummary(
                   totalRemainingTimeFormatted:
                       state.formatTime(state.totalRemainingSeconds),
                   currentIntervalIndex: state.currentIntervalIndex,
@@ -1325,7 +1329,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                 ),
                 SizedBox(height: 10 * scaleFactor),
                 // Total routine remaining progress bar
-                _TopPillProgressBar(
+                TopPillProgressBar(
                   progress: state.totalRemainingProgress,
                   height: 12 * scaleFactor,
                 ),
@@ -1346,10 +1350,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
               alignment: const Alignment(0, -0.08),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 560 * scaleFactor),
-                child: _WorkoutHeroPanel(
+                child: WorkoutHeroPanel(
                   isPortrait: true,
                   scaleFactor: scaleFactor,
-                  mainSection: _CurrentValueSection(
+                  mainSection: CurrentValueSection(
                     metricLabel: primaryMetricLabel,
                     mainValueText:
                         _getMainValueText(context, state, settingsProvider),
@@ -1361,10 +1365,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                   ),
                   timerSection: SizedBox(
                     width: double.infinity,
-                    child: _TimerSurface(
+                    child: TimerSurface(
                       isPortrait: true,
                       scaleFactor: scaleFactor,
-                      child: _CircularSessionTimer(
+                      child: CircularSessionTimer(
                         timeText: countdownLabel,
                         progress: 1.0 - state.currentIntervalProgress,
                         isPaused: state.status == WorkoutStatus.paused,
@@ -1392,7 +1396,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _PrimaryButton(
+                WorkoutPrimaryButton(
                   width: 200 * scaleFactor,
                   label: state.status == WorkoutStatus.paused
                       ? AppLocalizations.of(context)!.resume
@@ -1414,7 +1418,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                   scaleFactor: scaleFactor,
                 ),
                 SizedBox(width: 12 * scaleFactor),
-                _SecondaryButton(
+                WorkoutSecondaryButton(
                   onPressed: state.status == WorkoutStatus.resumingCountdown
                       ? () {} // Disabled during countdown
                       : _toggleOrientation,
@@ -1500,7 +1504,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                 Column(
                   children: [
                     // Top section: Total routine remaining time and progress bar (full width)
-                    _TopRoutineProgressHeader(
+                    TopRoutineProgressHeader(
                       totalRemainingTimeFormatted:
                           state.formatTime(state.totalRemainingSeconds),
                       progress: state.totalRemainingProgress,
@@ -1521,10 +1525,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                           child: ConstrainedBox(
                             constraints:
                                 BoxConstraints(maxWidth: panelMaxWidth),
-                            child: _WorkoutHeroPanel(
+                            child: WorkoutHeroPanel(
                               isPortrait: false,
                               scaleFactor: scaleFactor,
-                              mainSection: _CurrentValueSection(
+                              mainSection: CurrentValueSection(
                                 metricLabel: primaryMetricLabel,
                                 mainValueText: _getMainValueText(
                                     context, state, settingsProvider),
@@ -1540,10 +1544,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                                   circleSize + scaled(28),
                                   scaled(198),
                                 ),
-                                child: _TimerSurface(
+                                child: TimerSurface(
                                   isPortrait: false,
                                   scaleFactor: scaleFactor,
-                                  child: _CircularSessionTimer(
+                                  child: CircularSessionTimer(
                                     timeText: countdownLabel,
                                     progress:
                                         1.0 - state.currentIntervalProgress,
@@ -1567,7 +1571,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  child: _BottomControlBar(
+                  child: BottomControlBar(
                     isPaused: state.status == WorkoutStatus.paused,
                     isResumingCountdown:
                         state.status == WorkoutStatus.resumingCountdown,
@@ -1721,19 +1725,19 @@ class _WorkoutScreenState extends State<WorkoutScreen>
     return ''; // No next interval
   }
 
-  List<_WorkoutDetailChipData> _getDetailChips(
+  List<WorkoutDetailChipData> _getDetailChips(
     BuildContext context,
     WorkoutState state,
     AppSettingsProvider settingsProvider,
   ) {
-    final chips = <_WorkoutDetailChipData>[];
+    final chips = <WorkoutDetailChipData>[];
     final nextValueText = _getNextValueText(context, state, settingsProvider);
     final nextRpmText = _getNextRpmText(context, state);
     final secondaryValueText = _getSecondaryValueText(context, state);
 
     if (nextValueText.isNotEmpty) {
       chips.add(
-        _WorkoutDetailChipData(
+        WorkoutDetailChipData(
           icon: Icons.arrow_outward_rounded,
           text: nextValueText,
           isAccent: true,
@@ -1743,7 +1747,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
     if (nextRpmText.isNotEmpty) {
       chips.add(
-        _WorkoutDetailChipData(
+        WorkoutDetailChipData(
           icon: Icons.speed_rounded,
           text: nextRpmText,
         ),
@@ -1752,7 +1756,7 @@ class _WorkoutScreenState extends State<WorkoutScreen>
 
     if (nextRpmText.isEmpty && secondaryValueText.isNotEmpty) {
       chips.add(
-        _WorkoutDetailChipData(
+        WorkoutDetailChipData(
           icon: _secondaryMetricIcon(),
           text: secondaryValueText,
         ),
@@ -1774,1468 +1778,8 @@ class _WorkoutScreenState extends State<WorkoutScreen>
   }
 
   Widget _buildCountdownOverlay(WorkoutState state) {
-    return _CountdownOverlay(countdownNumber: state.countdownNumber);
+    return CountdownOverlay(countdownNumber: state.countdownNumber);
   }
 }
 
 // Top pill progress bar with white container and red fill
-class _TopPillProgressBar extends StatefulWidget {
-  final double progress;
-  final double? height;
-
-  const _TopPillProgressBar({
-    required this.progress,
-    this.height,
-  });
-
-  @override
-  State<_TopPillProgressBar> createState() => _TopPillProgressBarState();
-}
-
-class _TopPillProgressBarState extends State<_TopPillProgressBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  double _previousProgress = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _previousProgress = widget.progress;
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-    _animation = Tween<double>(
-      begin: widget.progress,
-      end: widget.progress,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-    ));
-    _controller.value = 1.0; // Start at the end
-  }
-
-  @override
-  void didUpdateWidget(_TopPillProgressBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.progress != widget.progress) {
-      _previousProgress = _animation.value;
-
-      // If progress decreased (session ended, resetting to 0), skip animation and reset immediately
-      if (widget.progress < _previousProgress) {
-        _animation = Tween<double>(
-          begin: widget.progress,
-          end: widget.progress,
-        ).animate(CurvedAnimation(
-          parent: _controller,
-          curve: Curves.linear,
-        ));
-        _controller.value = 1.0; // Set immediately without animation
-      } else {
-        // Progress increased (new session starting), animate normally
-        _animation = Tween<double>(
-          begin: _previousProgress,
-          end: widget.progress,
-        ).animate(CurvedAnimation(
-          parent: _controller,
-          curve: Curves.linear,
-        ));
-        _controller.reset();
-        _controller.forward();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final trackColor = isDark
-        ? Colors.white.withValues(alpha: 0.08)
-        : theme.colorScheme.onSurface.withValues(alpha: 0.06);
-    return Container(
-      height: widget.height ?? 12,
-      decoration: BoxDecoration(
-        color: trackColor,
-        borderRadius: BorderRadius.circular(999),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.08),
-            blurRadius: 14,
-            spreadRadius: 0,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(999),
-        // Force LTR direction so progress bar always goes left to right, even in RTL mode
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: Stack(
-            children: [
-              // Background
-              Container(
-                width: double.infinity,
-                color: trackColor,
-              ),
-              // Primary fill bar with smooth animation (always left to right)
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return FractionallySizedBox(
-                    widthFactor: _animation.value.clamp(0.0, 1.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.colorScheme.primary,
-                            Color.lerp(
-                                  theme.colorScheme.primary,
-                                  Colors.white,
-                                  isDark ? 0.08 : 0.18,
-                                ) ??
-                                theme.colorScheme.primary,
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Painter for progress ring: gray background + primary arc
-class _ProgressRingPainter extends CustomPainter {
-  final double strokeWidth;
-  final double progress; // 0.0 to 1.0
-  final Color trackColor;
-  final Color progressColor;
-
-  final Paint _trackPaint;
-  final Paint _progressPaint;
-
-  _ProgressRingPainter({
-    required this.strokeWidth,
-    required this.progress,
-    required this.trackColor,
-    required this.progressColor,
-  })  : _trackPaint = Paint()
-          ..color = trackColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round,
-        _progressPaint = Paint()
-          ..color = progressColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-
-    // Draw background ring (full circle)
-    canvas.drawCircle(center, radius, _trackPaint);
-
-    // Draw progress arc (clockwise from top)
-    if (progress > 0) {
-      // Start from top (-90 degrees) and draw clockwise
-      // Progress arc: sweepAngle = progress * 360 degrees (2π radians)
-      // Positive sweepAngle = clockwise direction in Flutter
-      final sweepAngle = progress * 2 * math.pi;
-      const startAngle = -math.pi / 2; // Start from top (-90 degrees)
-
-      final rect = Rect.fromCircle(center: center, radius: radius);
-
-      // Draw main progress arc
-      canvas.drawArc(
-        rect,
-        startAngle,
-        sweepAngle,
-        false,
-        _progressPaint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_ProgressRingPainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.strokeWidth != strokeWidth ||
-        oldDelegate.trackColor != trackColor ||
-        oldDelegate.progressColor != progressColor;
-  }
-}
-
-// Primary button (red) - for Pause/Resume
-class _PrimaryButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final double width;
-  final double scaleFactor;
-
-  const _PrimaryButton({
-    required this.label,
-    required this.onPressed,
-    this.width = 150,
-    this.scaleFactor = 1.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: 56 * scaleFactor,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppTheme.buttonRadius),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 16 * scaleFactor,
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.3 * scaleFactor,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Secondary button (neutral/gray) - for Rotate
-class _SecondaryButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final double scaleFactor;
-
-  const _SecondaryButton({
-    required this.onPressed,
-    this.scaleFactor = 1.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final appColors = theme.extension<AppColors>()!;
-    // Default colors
-    final bgColor = isDark
-        ? appColors.surfaceElevated.withValues(alpha: 0.5)
-        : theme.colorScheme.surface;
-    final borderColor = appColors.border;
-
-    return Opacity(
-      opacity: onPressed == null ? 0.5 : 1.0,
-      child: Container(
-        width: 56 * scaleFactor,
-        height: 56 * scaleFactor,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14 * scaleFactor),
-          color: bgColor,
-          border: Border.all(
-            color: borderColor,
-            width: 1.0,
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            borderRadius: BorderRadius.circular(14 * scaleFactor),
-            splashColor: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-            highlightColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
-            child: Icon(
-              Icons.rotate_right,
-              color: theme.colorScheme.onSurface,
-              size: 24 * scaleFactor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WorkoutHeroPanel extends StatelessWidget {
-  final bool isPortrait;
-  final double scaleFactor;
-  final Widget mainSection;
-  final Widget timerSection;
-
-  const _WorkoutHeroPanel({
-    required this.isPortrait,
-    required this.scaleFactor,
-    required this.mainSection,
-    required this.timerSection,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: _scaled(isPortrait ? 4 : 8),
-        vertical: _scaled(isPortrait ? 12 : 6),
-      ),
-      child: isPortrait
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                mainSection,
-                SizedBox(height: _scaled(34)),
-                timerSection,
-              ],
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: _scaled(560)),
-                  child: mainSection,
-                ),
-                SizedBox(width: _scaled(18)),
-                timerSection,
-              ],
-            ),
-    );
-  }
-}
-
-class _TimerSurface extends StatelessWidget {
-  final bool isPortrait;
-  final double scaleFactor;
-  final Widget child;
-
-  const _TimerSurface({
-    required this.isPortrait,
-    required this.scaleFactor,
-    required this.child,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: _scaled(isPortrait ? 0 : 8)),
-      child: child,
-    );
-  }
-}
-
-class _WorkoutDetailChipData {
-  final IconData icon;
-  final String text;
-  final bool isAccent;
-
-  const _WorkoutDetailChipData({
-    required this.icon,
-    required this.text,
-    this.isAccent = false,
-  });
-}
-
-class _WorkoutDetailChip extends StatelessWidget {
-  final _WorkoutDetailChipData chip;
-  final double scaleFactor;
-
-  const _WorkoutDetailChip({
-    required this.chip,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final chipColor = chip.isAccent
-        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.08 : 0.04)
-        : isDark
-            ? Colors.white.withValues(alpha: 0.03)
-            : Colors.black.withValues(alpha: 0.02);
-    final borderColor = chip.isAccent
-        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.55 : 0.28)
-        : isDark
-            ? Colors.white.withValues(alpha: 0.08)
-            : Colors.black.withValues(alpha: 0.10);
-
-    return Container(
-      constraints: BoxConstraints(minHeight: _scaled(40)),
-      padding: EdgeInsets.symmetric(
-        horizontal: _scaled(14),
-        vertical: _scaled(9),
-      ),
-      decoration: BoxDecoration(
-        color: chipColor,
-        borderRadius: BorderRadius.circular(_scaled(999)),
-        border: Border.all(
-          color: borderColor,
-          width: 1,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            chip.icon,
-            size: _scaled(15),
-            color: chip.isAccent
-                ? theme.colorScheme.primary
-                : theme.colorScheme.onSurface.withValues(alpha: 0.56),
-          ),
-          SizedBox(width: _scaled(10)),
-          Flexible(
-            child: Text(
-              chip.text,
-              style: TextStyle(
-                fontSize: _scaled(15),
-                fontWeight: FontWeight.w600,
-                color: chip.isAccent
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.84),
-                letterSpacing: -0.1,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _IntervalPulseOverlay extends StatefulWidget {
-  final int triggerKey;
-  final bool enabled;
-
-  const _IntervalPulseOverlay({
-    required this.triggerKey,
-    required this.enabled,
-  });
-
-  @override
-  State<_IntervalPulseOverlay> createState() => _IntervalPulseOverlayState();
-}
-
-class _IntervalPulseOverlayState extends State<_IntervalPulseOverlay>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    );
-    _controller.value = 1.0;
-  }
-
-  @override
-  void didUpdateWidget(_IntervalPulseOverlay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!widget.enabled) return;
-    if (oldWidget.triggerKey != widget.triggerKey) {
-      HapticFeedback.lightImpact();
-      _controller.forward(from: 0);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          final decay = Curves.easeOutQuad.transform(_controller.value);
-          final intensity = 1 - decay;
-          final flashOpacity = intensity * (isDark ? 0.16 : 0.10);
-          final borderOpacity = intensity * (isDark ? 0.50 : 0.34);
-          final glowOpacity = intensity * (isDark ? 0.28 : 0.16);
-          final borderWidth = 1.0 + (intensity * 5.5);
-
-          if (flashOpacity <= 0.001 &&
-              borderOpacity <= 0.001 &&
-              glowOpacity <= 0.001) {
-            return const SizedBox.shrink();
-          }
-
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: const Alignment(0, -0.05),
-                    radius: 1.0,
-                    colors: [
-                      theme.colorScheme.primary.withValues(
-                        alpha: flashOpacity,
-                      ),
-                      theme.colorScheme.primary.withValues(alpha: 0),
-                    ],
-                    stops: const [0.0, 1.0],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(
-                    color: theme.colorScheme.primary.withValues(
-                      alpha: borderOpacity,
-                    ),
-                    width: borderWidth,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(
-                        alpha: glowOpacity,
-                      ),
-                      blurRadius: 28,
-                      spreadRadius: 6,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-// Bottom control bar widget (landscape mode)
-class _BottomControlBar extends StatelessWidget {
-  final bool isPaused;
-  final bool isResumingCountdown;
-  final VoidCallback onPauseResume;
-  final VoidCallback onRotate;
-  final double scaleFactor;
-
-  const _BottomControlBar({
-    required this.isPaused,
-    required this.isResumingCountdown,
-    required this.onPauseResume,
-    required this.onRotate,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Padding(
-      padding: EdgeInsetsDirectional.only(
-        top: _scaled(4),
-        bottom: 0,
-        start: _scaled(32),
-        end: _scaled(32),
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: _scaled(320)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Center: Primary pause/resume button (pill shape)
-              Container(
-                height: _scaled(48),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                      _scaled(24)), // >= 20 for premium look
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
-                      blurRadius: _scaled(8),
-                      spreadRadius: 0,
-                      offset: Offset(0, _scaled(2)),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton(
-                  onPressed: isResumingCountdown ? null : onPauseResume,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: _scaled(32),
-                      vertical: _scaled(12),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(_scaled(24)),
-                    ),
-                  ),
-                  child: Text(
-                    isPaused ? l10n.resume : l10n.pause,
-                    style: TextStyle(
-                      fontSize: _scaled(17),
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: _scaled(10)),
-              // Right: Rotate button (right of pause button)
-              SecondaryOutlinedIconButton(
-                onPressed: isResumingCountdown
-                    ? null
-                    : () {
-                        HapticFeedback.lightImpact();
-                        onRotate();
-                      },
-                size: _scaled(44),
-                iconColor: theme.colorScheme.onSurface,
-                icon: Icon(
-                  Icons.rotate_right,
-                  size: _scaled(20),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Countdown overlay widget with persistent background
-class _CountdownOverlay extends StatefulWidget {
-  final int countdownNumber;
-
-  const _CountdownOverlay({
-    required this.countdownNumber,
-  });
-
-  @override
-  State<_CountdownOverlay> createState() => _CountdownOverlayState();
-}
-
-class _CountdownOverlayState extends State<_CountdownOverlay> {
-  @override
-  Widget build(BuildContext context) {
-    // Persistent background that never flickers - stays mounted for entire countdown
-    return Container(
-      color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.35),
-      child: Stack(
-        children: [
-          // Animated number in center - only this part changes
-          Center(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.5, end: 1.0).animate(
-                      CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeOut,
-                      ),
-                    ),
-                    child: child,
-                  ),
-                );
-              },
-              child: Text(
-                '${widget.countdownNumber}',
-                key: ValueKey(widget.countdownNumber),
-                style: const TextStyle(
-                  fontSize: 120,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: -3.0,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderTimeSummary extends StatelessWidget {
-  final String totalRemainingTimeFormatted;
-  final int currentIntervalIndex;
-  final int totalIntervals;
-  final double scaleFactor;
-
-  const _HeaderTimeSummary({
-    required this.totalRemainingTimeFormatted,
-    required this.currentIntervalIndex,
-    required this.totalIntervals,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SizedBox(
-      width: double.infinity,
-      height: _scaled(40),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          BidiSafeText(
-            totalRemainingTimeFormatted,
-            style: TextStyle(
-              fontSize: _scaled(28),
-              fontWeight: FontWeight.w700,
-              color: theme.colorScheme.onSurface,
-              letterSpacing: -0.7,
-              height: 1.0,
-              fontFeatures: const [ui.FontFeature.tabularFigures()],
-            ),
-            forceLTR: true,
-          ),
-          PositionedDirectional(
-            end: 0,
-            child: _HeaderIntervalIndicator(
-              currentIntervalIndex: currentIntervalIndex,
-              totalIntervals: totalIntervals,
-              scaleFactor: scaleFactor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderIntervalIndicator extends StatelessWidget {
-  final int currentIntervalIndex;
-  final int totalIntervals;
-  final double scaleFactor;
-
-  const _HeaderIntervalIndicator({
-    required this.currentIntervalIndex,
-    required this.totalIntervals,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final safeTotal = totalIntervals < 1 ? 1 : totalIntervals;
-    final currentStep =
-        math.min(math.max(currentIntervalIndex + 1, 1), safeTotal);
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _scaled(10),
-        vertical: _scaled(6),
-      ),
-      decoration: BoxDecoration(
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.05)
-            : Colors.black.withValues(alpha: 0.035),
-        borderRadius: BorderRadius.circular(_scaled(999)),
-        border: Border.all(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-          width: 1,
-        ),
-      ),
-      child: BidiSafeText(
-        '$currentStep/$safeTotal',
-        style: TextStyle(
-          fontSize: _scaled(14),
-          fontWeight: FontWeight.w700,
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
-          letterSpacing: -0.2,
-          fontFeatures: const [ui.FontFeature.tabularFigures()],
-        ),
-        forceLTR: true,
-      ),
-    );
-  }
-}
-
-// Top routine progress header widget (reusable for landscape)
-class _TopRoutineProgressHeader extends StatelessWidget {
-  final String totalRemainingTimeFormatted;
-  final double progress;
-  final int currentIntervalIndex;
-  final int totalIntervals;
-  final double scaleFactor;
-
-  const _TopRoutineProgressHeader({
-    required this.totalRemainingTimeFormatted,
-    required this.progress,
-    required this.currentIntervalIndex,
-    required this.totalIntervals,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(
-            _scaled(32),
-            _scaled(8),
-            _scaled(32),
-            _scaled(6),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _HeaderTimeSummary(
-                totalRemainingTimeFormatted: totalRemainingTimeFormatted,
-                currentIntervalIndex: currentIntervalIndex,
-                totalIntervals: totalIntervals,
-                scaleFactor: scaleFactor,
-              ),
-              SizedBox(height: _scaled(10)),
-              // Total routine remaining progress bar (thinner)
-              Padding(
-                padding:
-                    EdgeInsetsDirectional.symmetric(horizontal: _scaled(8)),
-                child: _TopPillProgressBar(
-                  progress: progress,
-                  height: _scaled(10), // Reduced from 22 to 10 (10~12px range)
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Subtle divider line under header
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: theme.dividerColor.withValues(alpha: 0.3),
-          indent: _scaled(32),
-          endIndent: _scaled(32),
-        ),
-      ],
-    );
-  }
-}
-
-// Current value section widget (left column in landscape)
-class _CurrentValueSection extends StatefulWidget {
-  final String metricLabel;
-  final String mainValueText;
-  final List<_WorkoutDetailChipData> detailChips;
-  final double mainFontSize;
-  final int currentIntervalIndex;
-  final double scaleFactor;
-  final bool alignCenter;
-
-  const _CurrentValueSection({
-    required this.metricLabel,
-    required this.mainValueText,
-    required this.detailChips,
-    required this.mainFontSize,
-    required this.currentIntervalIndex,
-    required this.scaleFactor,
-    required this.alignCenter,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  State<_CurrentValueSection> createState() => _CurrentValueSectionState();
-}
-
-class _CurrentValueSectionState extends State<_CurrentValueSection>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _pulseController;
-  int _previousIntervalIndex = -1;
-
-  @override
-  void initState() {
-    super.initState();
-    _previousIntervalIndex = widget.currentIntervalIndex;
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-  }
-
-  @override
-  void didUpdateWidget(_CurrentValueSection oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Pulse animation when interval changes
-    if (oldWidget.currentIntervalIndex != widget.currentIntervalIndex &&
-        _previousIntervalIndex != widget.currentIntervalIndex) {
-      _previousIntervalIndex = widget.currentIntervalIndex;
-      _pulseController.reset();
-      _pulseController.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: widget.alignCenter
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.metricLabel,
-          style: TextStyle(
-            fontSize: widget._scaled(13),
-            fontWeight: FontWeight.w700,
-            color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.56),
-            letterSpacing: 1.3,
-          ),
-          textAlign: widget.alignCenter ? TextAlign.center : TextAlign.start,
-        ),
-        SizedBox(height: widget._scaled(12)),
-        // Current session value (large primary text) with pulse animation
-        Align(
-          alignment: widget.alignCenter
-              ? Alignment.center
-              : AlignmentDirectional.centerStart,
-          widthFactor: widget.alignCenter ? null : 1,
-          child: AnimatedBuilder(
-            animation: _pulseController,
-            builder: (context, child) {
-              final scale = 1.0 + (_pulseController.value * 0.1);
-              return Transform.scale(
-                scale: scale,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: widget.alignCenter
-                      ? Alignment.center
-                      : AlignmentDirectional.centerStart,
-                  child: FlashingMetricText(
-                    text: widget.mainValueText,
-                    style: TextStyle(
-                      fontSize: widget.mainFontSize,
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      letterSpacing: -1.8,
-                    ),
-                    defaultColor: Theme.of(context).colorScheme.onSurface,
-                    flashColor: Theme.of(context).colorScheme.primary,
-                    enableScalePulse: true,
-                    triggerKey: widget.currentIntervalIndex,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        if (widget.detailChips.isNotEmpty) ...[
-          SizedBox(height: widget._scaled(16)),
-          Align(
-            alignment: widget.alignCenter
-                ? Alignment.center
-                : AlignmentDirectional.centerStart,
-            widthFactor: widget.alignCenter ? null : 1,
-            child: Wrap(
-              alignment: widget.alignCenter
-                  ? WrapAlignment.center
-                  : WrapAlignment.start,
-              spacing: widget._scaled(10),
-              runSpacing: widget._scaled(10),
-              children: [
-                for (final chip in widget.detailChips)
-                  _WorkoutDetailChip(
-                    chip: chip,
-                    scaleFactor: widget.scaleFactor,
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-// Circular session timer widget (right column in landscape)
-class _CircularSessionTimer extends StatefulWidget {
-  final String timeText;
-  final double progress; // 0.0 to 1.0, where 1.0 = full ring, 0.0 = empty
-  final bool isPaused;
-  final double size;
-  final int currentIntervalIndex;
-  final double scaleFactor;
-
-  const _CircularSessionTimer({
-    required this.timeText,
-    required this.progress,
-    required this.isPaused,
-    required this.size,
-    required this.currentIntervalIndex,
-    required this.scaleFactor,
-  });
-
-  double _scaled(double base) => base * scaleFactor;
-
-  @override
-  State<_CircularSessionTimer> createState() => _CircularSessionTimerState();
-}
-
-class _CircularSessionTimerState extends State<_CircularSessionTimer>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late AnimationController _pulseController;
-  late Animation<double> _animation;
-  late Animation<double> _pulseAnimation;
-  double _previousProgress = 0.0;
-  int _previousIntervalIndex = -1;
-
-  @override
-  void initState() {
-    super.initState();
-    _previousProgress = widget.progress;
-    _previousIntervalIndex = widget.currentIntervalIndex;
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _animation = Tween<double>(
-      begin: widget.progress,
-      end: widget.progress,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-    ));
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.15,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
-    _controller.value = 1.0; // Start at the end
-  }
-
-  @override
-  void didUpdateWidget(_CircularSessionTimer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.progress != widget.progress) {
-      _previousProgress = _animation.value;
-      _animation = Tween<double>(
-        begin: _previousProgress,
-        end: widget.progress,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: Curves.linear,
-      ));
-      _controller.reset();
-      _controller.forward();
-    }
-    // Pulse animation when interval changes
-    if (oldWidget.currentIntervalIndex != widget.currentIntervalIndex &&
-        _previousIntervalIndex != widget.currentIntervalIndex) {
-      _previousIntervalIndex = widget.currentIntervalIndex;
-      _pulseController.reset();
-      _pulseController.forward().then((_) {
-        // Ensure animation returns to original state after completion
-        if (mounted) {
-          _pulseController.reset();
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _pulseController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = theme.colorScheme.surface;
-    final textColor = theme.colorScheme.onSurface;
-    final trackColor =
-        theme.colorScheme.onSurface.withValues(alpha: isDark ? 0.08 : 0.06);
-    final strokeWidth =
-        (widget.size * 0.07).clamp(widget._scaled(10.0), widget._scaled(14.0));
-    final fontSize =
-        (widget.size * 0.18).clamp(widget._scaled(24.0), widget._scaled(36.0));
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Circular timer
-        SizedBox(
-          key: const ValueKey('workout-session-timer'),
-          width: widget.size,
-          height: widget.size,
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              // Background circle with shadow (always rendered, outside AnimatedBuilder)
-              Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: backgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: isDark ? 0.28 : 0.1),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-              ),
-              // Progress ring with smooth animation and pulse effect
-              AnimatedBuilder(
-                animation: Listenable.merge([_animation, _pulseAnimation]),
-                builder: (context, child) {
-                  final pulseScale = _pulseAnimation.value;
-                  return Transform.scale(
-                    scale: pulseScale,
-                    child: SizedBox(
-                      width: widget.size,
-                      height: widget.size,
-                      child: CustomPaint(
-                        painter: _ProgressRingPainter(
-                          strokeWidth: strokeWidth,
-                          progress: _animation.value,
-                          trackColor: trackColor,
-                          progressColor: theme.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              // Time text (always LTR for timers) with tabular digits
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  BidiSafeText(
-                    widget.timeText,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                      letterSpacing: -0.5,
-                      fontFeatures: const [
-                        ui.FontFeature.tabularFigures()
-                      ], // Tabular/monospaced digits
-                    ),
-                    forceLTR: true, // Timers must always be LTR
-                  ),
-                  if (widget.isPaused) ...[
-                    SizedBox(height: widget.size * 0.03),
-                    Text(
-                      AppLocalizations.of(context)!.paused,
-                      style: TextStyle(
-                        fontSize: fontSize * 0.33,
-                        fontWeight: FontWeight.w600,
-                        color: textColor.withValues(alpha: 0.6),
-                        letterSpacing: widget._scaled(0.2),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Premium pause bottom sheet widget
-class _PauseBottomSheet extends StatelessWidget {
-  final VoidCallback onResume;
-  final VoidCallback onEndWorkout;
-
-  const _PauseBottomSheet({
-    required this.onResume,
-    required this.onEndWorkout,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final l10n = AppLocalizations.of(context)!;
-
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Pause icon in circular background
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.pause_rounded,
-                      size: 32,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Title
-                  Text(
-                    l10n.pausedTitle,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  // Subtitle
-                  Text(
-                    l10n.pausedSubtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: appColors.mutedText,
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-                  // Primary button: Continue
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: onResume,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        l10n.resume,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Secondary button: End workout
-                  SecondaryOutlinedButton(
-                    onPressed: onEndWorkout,
-                    borderRadius: AppTheme.buttonRadius,
-                    borderColor: theme.colorScheme.outlineVariant,
-                    child: Text(
-                      l10n.endWorkout,
-                      style: const TextStyle(fontSize: 17),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Premium end workout confirmation bottom sheet
-class _EndWorkoutConfirmationBottomSheet extends StatelessWidget {
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
-
-  const _EndWorkoutConfirmationBottomSheet({
-    required this.onConfirm,
-    required this.onCancel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final l10n = AppLocalizations.of(context)!;
-
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Warning/Stop icon in circular background
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.error.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.stop_circle_outlined,
-                      size: 32,
-                      color: theme.colorScheme.error,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Title
-                  Text(
-                    l10n.endWorkoutQuestion,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  // Body text
-                  Text(
-                    l10n.endWorkoutConfirmationMessage,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: appColors.mutedText,
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-                  // Buttons row
-                  Row(
-                    children: [
-                      // Cancel button (secondary)
-                      Expanded(
-                        child: SecondaryOutlinedButton(
-                          onPressed: onCancel,
-                          borderRadius: 999,
-                          borderColor: theme.colorScheme.outlineVariant,
-                          child: Text(
-                            l10n.cancel,
-                            style: const TextStyle(fontSize: 17),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // End button (destructive primary)
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: onConfirm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.error,
-                            foregroundColor: theme.colorScheme.onError,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: Text(
-                            l10n.end,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
