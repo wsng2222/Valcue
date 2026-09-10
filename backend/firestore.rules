@@ -8,6 +8,49 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Someone's backup: readable and writable only by them.
+    //
+    // Ownership is the whole protection here. An earlier draft also refused
+    // anonymous tokens, to keep guests from filling the database with
+    // backups nobody can sign back in to - but a guest who signs in is
+    // *linked* rather than re-signed-in, and it is not settled whether the
+    // refreshed token then reports the new provider or still says
+    // "anonymous". Getting that wrong would silently break backup for
+    // exactly the people who just signed up, so the check is left out until
+    // it can be confirmed on a real device.
+    match /users/{userId} {
+      function isOwner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      // Caps how large a single document can be, so a bug or a bad actor
+      // cannot push arbitrary payloads into a backup.
+      function isReasonableSize() {
+        return request.resource.data.size() <= 40;
+      }
+
+      // Reads and deletes carry no request.resource, so folding them into
+      // one `write` rule alongside a size check would refuse every deletion.
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && isReasonableSize();
+
+      match /workouts/{workoutId} {
+        allow read, delete: if isOwner();
+        allow create, update: if isOwner() && isReasonableSize();
+      }
+
+      match /weights/{weightId} {
+        allow read, delete: if isOwner();
+        allow create, update: if isOwner() && isReasonableSize();
+      }
+
+      match /routines/{routineId} {
+        allow read, delete: if isOwner();
+        allow create, update: if isOwner() && isReasonableSize();
+      }
+    }
+
+    // Anything not named above stays closed.
     match /{document=**} {
       allow read, write: if false;
     }
