@@ -13,16 +13,16 @@
 
 ## English (en)
 
-**Subtitle:** Voice-Guided Cardio Coach
+**Subtitle:** Structured Interval Cardio
 
-**Promotional Text:** Voice-guided interval routines for running, cycling & stairmaster workouts. Real-time coaching, live tracking, and progress history — all in one app.
+**Promotional Text:** Structured interval routines for treadmill, cycling & stairmaster workouts. Plan every interval, follow it step by step, and track your progress — all in one app.
 
 **Keywords:** interval training,cardio,treadmill,voice coach,workout timer,running,cycling,stairmaster,HIIT,fitness
 
-**Play Short:** Voice-guided interval cardio: custom routines, live tracking & coaching.
+**Play Short:** Structured interval cardio: plan routines, follow each interval, track progress.
 
 **Description:**
-Valcue is a voice-guided interval cardio app that keeps your eyes up and your feet moving.
+Valcue is an interval cardio app that turns every treadmill, bike, and stairmaster session into a structured plan.
 
 • Custom Interval Routines — Build your own workouts for running, treadmill, cycling, or stairmaster, or start from ready-made templates.
 • Real-Time Voice Coaching — Hear exactly when to push, recover, and finish, without checking your phone.
@@ -38,16 +38,16 @@ Lace up, hit start, and let Valcue guide every interval.
 
 ## 한국어 (ko)
 
-**Subtitle:** 음성 가이드 인터벌 러닝
+**Subtitle:** 체계적인 인터벌 유산소
 
-**Promotional Text:** 러닝, 사이클, 스텝퍼까지! 나만의 인터벌 루틴과 실시간 음성 코칭으로 완벽한 운동을 완성하세요.
+**Promotional Text:** 러닝머신, 사이클, 천국의 계단까지! 구간별 속도·경사·레벨을 짜고 그대로 따라가며 체계적으로 운동하세요.
 
 **Keywords:** 인터벌트레이닝,유산소,러닝머신,음성코칭,운동타이머,러닝,사이클,스텝퍼,HIIT,피트니스
 
-**Play Short:** 음성 코칭 인터벌 유산소 운동: 맞춤 루틴, 실시간 트래킹과 코칭
+**Play Short:** 체계적인 인터벌 유산소: 루틴 짜고, 구간대로 따라가고, 기록으로 성장
 
 **Description:**
-Valcue는 화면을 계속 보지 않아도 되는 음성 가이드 인터벌 유산소 운동 앱입니다.
+Valcue는 러닝머신·사이클·천국의 계단 운동을 계획대로 해내는 체계적인 인터벌 유산소 운동 앱입니다.
 
 • 맞춤 인터벌 루틴 — 러닝, 러닝머신, 사이클, 스텝퍼 운동을 직접 구성하거나 준비된 템플릿으로 바로 시작하세요.
 • 실시간 음성 코칭 — 언제 강하게, 언제 회복해야 하는지 음성으로 안내받아 폰을 확인할 필요가 없습니다.

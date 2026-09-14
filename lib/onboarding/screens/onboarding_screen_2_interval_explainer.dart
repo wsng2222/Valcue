@@ -413,53 +413,83 @@ class _IntervalsStep extends StatelessWidget {
     // 7: show "이게 더 잘 빠집니다" (in addition to line 1)
     final showCount = step.clamp(1, 4);
     final lines = strings.ex2IntervalLines();
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Stay top-anchored (revealing a line must not shove the earlier ones
-        // around), but pick the top gap so the *finished* block lands centred
-        // instead of hugging the header with a hole underneath.
-        const finalBlockHeight = 340.0;
-        final topGap =
-            ((constraints.maxHeight - finalBlockHeight) / 2).clamp(40.0, 150.0);
 
-        return Column(
-          children: [
-            SizedBox(height: topGap),
-
-            // Staggered reveal: each line animates in when it becomes visible.
-            // Walk lines stay dark, run lines are red, so the alternating
-            // slow/fast rhythm is visible at a glance. Line order is identical
-            // in every language: 0 and 2 walk, 1 and 3 run.
-            for (int i = 0; i < 4; i++) ...[
-              _Reveal(
-                visible: i < showCount,
-                child: _Line(
-                  text: lines[i],
-                  isRunLine: i.isOdd,
-                ),
-              ),
-              const SizedBox(height: 8),
-            ],
-
-            _Reveal(
-              // Keep dots visible after they appear (do not disappear on next tap).
-              visible: step >= 5,
-              child: const _AnimatedDots(),
-            ),
-            // Extra breathing room so the answer reads as a conclusion rather
-            // than a fifth item in the list.
-            const SizedBox(height: 26),
-            _Reveal(
-              visible: step >= 6,
-              child: _Final(
-                line1: strings.ex2FinalLine1Spans(),
-                line2: strings.ex2FinalLine2Spans(),
-                showSecondLine: step >= 7,
+    // The block grows as steps are revealed, but must not shift the lines that
+    // are already on screen. So: an invisible copy of the *finished* block
+    // reserves its exact height and gets centred, and the real block is drawn
+    // top-anchored inside that box. No hand-tuned height constant needed.
+    return Center(
+      child: Stack(
+        children: [
+          TickerMode(
+            enabled: false,
+            child: Opacity(
+              opacity: 0.0,
+              child: _block(
+                lines: lines,
+                showCount: 4,
+                showDots: true,
+                showFinal: true,
+                showFinalSecondLine: true,
               ),
             ),
-          ],
-        );
-      },
+          ),
+          Positioned.fill(
+            child: _block(
+              lines: lines,
+              showCount: showCount,
+              showDots: step >= 5,
+              showFinal: step >= 6,
+              showFinalSecondLine: step >= 7,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _block({
+    required List<String> lines,
+    required int showCount,
+    required bool showDots,
+    required bool showFinal,
+    required bool showFinalSecondLine,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Staggered reveal: each line animates in when it becomes visible.
+        // Walk lines stay dark, run lines are red, so the alternating
+        // slow/fast rhythm is visible at a glance. Line order is identical
+        // in every language: 0 and 2 walk, 1 and 3 run.
+        for (int i = 0; i < 4; i++) ...[
+          _Reveal(
+            visible: i < showCount,
+            child: _Line(
+              text: lines[i],
+              isRunLine: i.isOdd,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+
+        _Reveal(
+          // Keep dots visible after they appear (do not disappear on next tap).
+          visible: showDots,
+          child: const _AnimatedDots(),
+        ),
+        // Extra breathing room so the answer reads as a conclusion rather
+        // than a fifth item in the list.
+        const SizedBox(height: 26),
+        _Reveal(
+          visible: showFinal,
+          child: _Final(
+            line1: strings.ex2FinalLine1Spans(),
+            line2: strings.ex2FinalLine2Spans(),
+            showSecondLine: showFinalSecondLine,
+          ),
+        ),
+      ],
     );
   }
 }
