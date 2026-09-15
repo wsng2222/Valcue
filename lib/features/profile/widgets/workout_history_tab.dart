@@ -1,4 +1,3 @@
-import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
@@ -7,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
-import '../../../utils/app_shadows.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../models/workout_session.dart';
 import '../providers/workout_history_provider.dart';
 import '../../routines/models/machine_type.dart';
@@ -58,7 +57,7 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
             children: [
               // Machine type pill chips
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                padding: const EdgeInsets.fromLTRB(22, 18, 22, 0),
                 child: _buildMachineTypePills(context, provider, machineTypes),
               ),
               // Content area
@@ -77,162 +76,33 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
 
   Widget _buildMachineTypePills(BuildContext context,
       WorkoutHistoryProvider provider, List<MachineType> machineTypes) {
-    if (PlatformInfo.isIOS) {
-      final titles = [
-        AppLocalizations.of(context)!.treadmill,
-        AppLocalizations.of(context)!.bike,
-        AppLocalizations.of(context)!.stairmaster,
-      ];
-      final selectedIndex = _selectedMachineTab.clamp(0, titles.length - 1);
-      final selectedBg = appSegmentedSelectedBackground(context);
-      final brightnessKey = Theme.of(context).brightness;
-      final localeKey = Localizations.localeOf(context).toLanguageTag();
-
-      return SegmentedButtonTheme(
-        data: appSegmentedThemeData(context, selectedBg),
-        child: SizedBox(
-          width: double.infinity,
-          child: AppSegmentedControl(
-            key: ValueKey(
-                'profile_machine_segment_${brightnessKey.name}_$localeKey'),
-            labels: titles,
-            selectedIndex: selectedIndex,
-            onValueChanged: (index) {
-              setState(() => _selectedMachineTab = index);
-              widget.onMachineTabChanged(index);
-            },
-            height: 44,
-            color: selectedBg,
-          ),
-        ),
-      );
-    }
-
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
     final titles = [
       AppLocalizations.of(context)!.treadmill,
       AppLocalizations.of(context)!.bike,
       AppLocalizations.of(context)!.stairmaster,
     ];
-    final items = [
-      _MachineTabItem(icon: Icons.directions_run, label: titles[0]),
-      _MachineTabItem(icon: Icons.pedal_bike, label: titles[1]),
-      _MachineTabItem(icon: Icons.stairs, label: titles[2]),
-    ];
+    final selectedIndex = _selectedMachineTab.clamp(0, titles.length - 1);
+    final selectedBg = appSegmentedSelectedBackground(context);
+    final brightnessKey = Theme.of(context).brightness;
+    final localeKey = Localizations.localeOf(context).toLanguageTag();
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const outerPadding = 4.0;
-        final innerWidth = (constraints.maxWidth - (outerPadding * 2))
-            .clamp(0.0, double.infinity)
-            .toDouble();
-        final segmentWidth = innerWidth / items.length;
-
-        return Container(
-          padding: const EdgeInsets.all(outerPadding),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.08)
-                  : appColors.border,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeInOutCubic,
-                left: segmentWidth * _selectedMachineTab,
-                top: 0,
-                bottom: 0,
-                width: segmentWidth,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: appColors.surfaceElevated,
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.04)
-                          : Colors.black.withValues(alpha: 0.04),
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Row(
-                children: List.generate(items.length, (index) {
-                  final item = items[index];
-                  final isSelected = _selectedMachineTab == index;
-                  final iconColor = isSelected
-                      ? theme.colorScheme.primary
-                      : appColors.mutedText;
-                  final textColor = isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.5);
-                  final fontWeight =
-                      isSelected ? FontWeight.w700 : FontWeight.w600;
-
-                  return Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        setState(() => _selectedMachineTab = index);
-                        widget.onMachineTabChanged(index);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 11),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              item.icon,
-                              size: 17,
-                              color: iconColor,
-                            ),
-                            const SizedBox(width: 7),
-                            Flexible(
-                              child: Text(
-                                item.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 13.5,
-                                  fontWeight: fontWeight,
-                                  color: textColor,
-                                  letterSpacing: -0.25,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ],
-          ),
-        );
-      },
+    return SegmentedButtonTheme(
+      data: appSegmentedThemeData(context, selectedBg),
+      child: SizedBox(
+        width: double.infinity,
+        child: AppSegmentedControl(
+          key: ValueKey(
+              'profile_machine_segment_${brightnessKey.name}_$localeKey'),
+          labels: titles,
+          selectedIndex: selectedIndex,
+          onValueChanged: (index) {
+            setState(() => _selectedMachineTab = index);
+            widget.onMachineTabChanged(index);
+          },
+          height: 44,
+          color: selectedBg,
+        ),
+      ),
     );
   }
 
@@ -242,7 +112,6 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
       MachineType machineType,
       List<WorkoutSession> sessions) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     // Group sessions by date
     final groupedSessions = <DateTime, List<WorkoutSession>>{};
@@ -267,13 +136,13 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
     }).toList();
 
     return Container(
-      color: isDark ? Colors.black : Colors.white,
+      color: theme.scaffoldBackgroundColor,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        padding: const EdgeInsets.fromLTRB(22, 18, 22, 24),
         children: [
           // This week summary card
           _buildWeekSummaryCard(context, thisWeekSessions, machineType),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           // Grouped history
           ...sortedDates.map((date) {
             final dateSessions = groupedSessions[date]!;
@@ -281,22 +150,17 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 4,
-                    bottom: 6,
-                  ),
+                  padding: const EdgeInsetsDirectional.only(bottom: 10),
                   child: Text(
                     _formatDateHeader(date),
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                       color: theme.extension<AppColors>()!.mutedText,
-                      letterSpacing: 0.2,
                     ),
                   ),
                 ),
                 ...dateSessions.map((session) => Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: SwipeRevealDelete(
                         key: Key(session.id),
                         itemId: 'session_${session.id}',
@@ -318,7 +182,6 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
   Widget _buildWeekSummaryCard(BuildContext context,
       List<WorkoutSession> sessions, MachineType machineType) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
     final isMetric = settingsProvider.measurement == 'kmh';
@@ -367,30 +230,20 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
         machineType == MachineType.treadmill && totalDistance > 0;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : context.appColors.border,
-          width: 1,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
+      padding: const EdgeInsets.all(18),
+      decoration: valcueCardDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             AppLocalizations.of(context)!.thisWeek,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Row(
             children: [
               Expanded(
@@ -436,29 +289,23 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
 
   Widget _buildEmptyState(BuildContext context, MachineType machineType) {
     final theme = Theme.of(context);
-    final appColors = theme.extension<AppColors>()!;
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(22),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.fitness_center_outlined,
-              size: 48,
-              color: appColors.mutedText,
-            ),
-            const SizedBox(height: 16),
             Text(
               AppLocalizations.of(context)!.noWorkoutsYet,
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontSize: 19,
+                fontWeight: FontWeight.w800,
                 color: theme.colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Navigate to Routine tab with specific machine type
@@ -466,11 +313,12 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
               },
               style: ElevatedButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               ),
               child: Text(
                 AppLocalizations.of(context)!.goToRoutines,
                 style: GoogleFonts.lato(
+                  fontSize: 16,
                   fontWeight: FontWeight.w900,
                   fontStyle: FontStyle.italic,
                 ),
@@ -500,17 +348,22 @@ class _SummaryStat extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 13,
             color: appColors.mutedText,
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: AlignmentDirectional.centerStart,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 27,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
           ),
         ),
       ],
@@ -544,7 +397,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
       case MachineType.treadmill:
         return Icons.directions_run;
       case MachineType.cycle:
-        return Icons.pedal_bike;
+        return Icons.directions_bike;
       case MachineType.stairmaster:
         return Icons.stairs;
     }
@@ -642,25 +495,17 @@ class _WorkoutHistoryCard extends StatelessWidget {
     final avgSpeed = formatAverageSpeed();
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: appColors.border,
-          width: 1,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: valcueCardDecoration(context),
       child: Row(
         children: [
           // Leading icon
           Container(
-            width: 40,
-            height: 40,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              color: appColors.tint,
+              borderRadius: BorderRadius.circular(13),
             ),
             child: Icon(
               _getMachineIcon(session.machineType),
@@ -668,7 +513,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           // Content
           Expanded(
             child: Column(
@@ -677,12 +522,12 @@ class _WorkoutHistoryCard extends StatelessWidget {
                 Text(
                   friendlyName,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Wrap(
                   spacing: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
@@ -690,7 +535,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
                     Text(
                       formatDuration(session.durationSeconds),
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: appColors.mutedText,
                       ),
                     ),
@@ -702,7 +547,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
                       Text(
                         formatMetric()!,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: appColors.mutedText,
                         ),
                       ),
@@ -715,7 +560,7 @@ class _WorkoutHistoryCard extends StatelessWidget {
                       Text(
                         avgSpeed,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: appColors.mutedText,
                         ),
                       ),
@@ -729,16 +574,4 @@ class _WorkoutHistoryCard extends StatelessWidget {
       ),
     );
   }
-}
-
-// Heatmap of workouts for the last 20 weeks
-
-class _MachineTabItem {
-  final IconData icon;
-  final String label;
-
-  const _MachineTabItem({
-    required this.icon,
-    required this.label,
-  });
 }

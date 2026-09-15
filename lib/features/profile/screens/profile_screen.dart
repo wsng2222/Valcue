@@ -10,6 +10,7 @@ import '../widgets/workout_history_tab.dart';
 import '../widgets/calendar_tab.dart';
 import '../widgets/achievements_tab.dart';
 import '../widgets/weight_tab.dart';
+import '../../../widgets/valcue_ui.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -50,40 +51,11 @@ class _ProfileScreenState extends State<ProfileScreen>
           children: [
             // Header - same style as Settings screen
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(
-                        alpha: 0.10,
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      size: 22,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      AppLocalizations.of(context)!.myTab,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.lato(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w900,
-                        fontStyle: FontStyle.italic,
-                        color: theme.colorScheme.onSurface,
-                        letterSpacing: -0.9,
-                      ),
-                    ),
-                  ),
-                ],
+              padding:
+                  const EdgeInsets.fromLTRB(kScreenGutter, 10, kScreenGutter, 0),
+              child: TabTitleHeader(
+                icon: Icons.person,
+                title: AppLocalizations.of(context)!.myTab,
               ),
             ),
             const SizedBox(height: 20),
@@ -123,9 +95,26 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                 ),
               ],
+              padding: const EdgeInsets.symmetric(horizontal: kScreenGutter),
+              labelPadding: EdgeInsets.zero,
               labelColor: theme.colorScheme.primary,
               unselectedLabelColor: theme.extension<AppColors>()!.mutedText,
-              indicatorColor: theme.colorScheme.primary,
+              labelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 3,
+                ),
+              ),
+              dividerColor: theme.extension<AppColors>()!.border,
               overlayColor: const WidgetStatePropertyAll(Colors.transparent),
               splashFactory: NoSplash.splashFactory,
             ),
