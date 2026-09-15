@@ -22,6 +22,7 @@ import '../widgets/platform_icon.dart';
 import '../services/analytics_service.dart';
 import '../services/purchase_service.dart';
 import '../widgets/app_message.dart';
+import '../widgets/valcue_ui.dart';
 
 const _privacyPolicyUri =
     'https://wsng2222.github.io/Valcue/privacy-policy.html';
@@ -396,18 +397,18 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
       bottom: false,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          padding: const EdgeInsets.fromLTRB(kScreenGutter, 0, kScreenGutter, 0),
           child: Column(
             children: [
               const _PremiumHeroCard(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
               _PlanSelector(
                 selectionNotifier: _selectionNotifier,
                 offering: _offering,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
               const _BenefitsList(),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
               _SupportingLine(selectionNotifier: _selectionNotifier),
               Builder(
                 builder: (context) {
@@ -491,7 +492,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                             fontSize: 19,
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
-                            letterSpacing: -0.4,
+                            letterSpacing: -0.3,
                             color: theme.colorScheme.onPrimary,
                           ),
                         );
@@ -505,10 +506,9 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                         boxShadow: [
                           BoxShadow(
                             color: theme.colorScheme.primary.withValues(
-                              alpha: 0.28,
+                              alpha: 0.30,
                             ),
-                            blurRadius: 24,
-                            offset: const Offset(0, 10),
+                            blurRadius: 22,
                           ),
                         ],
                       ),
@@ -520,7 +520,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                                   onPressed: () {},
                                   color: theme.colorScheme.primary,
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                      const EdgeInsets.symmetric(vertical: 18),
                                   borderRadius: BorderRadius.circular(
                                       AppTheme.buttonRadius),
                                   child: Center(child: buttonLabel),
@@ -528,9 +528,8 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                               : ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                    ),
+                                    minimumSize: const Size.fromHeight(58),
+                                    padding: EdgeInsets.zero,
                                   ),
                                   child: Center(child: buttonLabel),
                                 ),
@@ -540,14 +539,12 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                   );
                 },
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 10),
               Builder(
                 builder: (context) {
                   final l10n = AppLocalizations.of(context)!;
                   final isDark = theme.brightness == Brightness.dark;
-                  final secondaryText = isDark
-                      ? Colors.white.withValues(alpha: 0.72)
-                      : theme.extension<AppColors>()!.mutedText;
+                  final secondaryText = theme.colorScheme.onSurface;
                   final tertiaryText = isDark
                       ? Colors.white.withValues(alpha: 0.42)
                       : theme.extension<AppColors>()!.mutedText.withValues(
@@ -560,7 +557,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                           color: secondaryText,
                           letterSpacing: -0.1,
                         ),
@@ -572,7 +569,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: secondaryText,
+                          color: theme.extension<AppColors>()!.mutedText,
                           letterSpacing: -0.1,
                           height: 1.35,
                         ),
@@ -592,7 +589,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                   );
                 },
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               Builder(
                 builder: (context) {
                   final l10n = AppLocalizations.of(context)!;
@@ -613,9 +610,9 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                         },
                       ),
                       Text(
-                        ' • ',
+                        ' · ',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                           color: separatorColor,
                         ),
                       ),
@@ -626,9 +623,9 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                         },
                       ),
                       Text(
-                        ' • ',
+                        ' · ',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                           color: separatorColor,
                         ),
                       ),
@@ -653,7 +650,7 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 28),
             ],
           ),
         ),
@@ -667,40 +664,12 @@ class _PremiumHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
-      child: Row(
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(
-                alpha: 0.10,
-              ),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.local_fire_department,
-              size: 22,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            l10n.premiumTab,
-            style: GoogleFonts.lato(
-              fontSize: 30,
-              fontWeight: FontWeight.w900,
-              fontStyle: FontStyle.italic,
-              color: theme.colorScheme.onSurface,
-              letterSpacing: -0.9,
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.only(top: 10),
+      child: TabTitleHeader(
+        icon: Icons.local_fire_department,
+        title: l10n.premiumTab,
       ),
     );
   }
@@ -716,7 +685,6 @@ class _SupportingLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final appColors = theme.extension<AppColors>()!;
 
     return ValueListenableBuilder<PlanType>(
@@ -731,9 +699,7 @@ class _SupportingLine extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.72)
-                  : appColors.mutedText,
+              color: appColors.mutedText,
               letterSpacing: -0.1,
             ),
             textAlign: TextAlign.center,
@@ -858,7 +824,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
             _notifier.value = PlanType.monthly;
           },
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         // Yearly plan (second option)
         Stack(
           clipBehavior: Clip.none,
@@ -880,7 +846,7 @@ class _PlanSelectorState extends State<_PlanSelector> {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         // Lifetime plan (third option)
         Stack(
           clipBehavior: Clip.none,
@@ -933,36 +899,26 @@ class _PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final appColors = theme.extension<AppColors>()!;
-    final cardPadding = isPrimary ? 24.0 : 20.0;
-    final baseColor = isDark
-        ? (isSelected ? appColors.surfaceElevated : theme.colorScheme.surface)
-        : Colors.white;
+    final isTrialBadge = badgeText != null;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(cardPadding),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         decoration: BoxDecoration(
-          color: baseColor,
-          borderRadius: BorderRadius.circular(24),
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? theme.colorScheme.primary.withValues(alpha: 0.9)
-                : (isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : appColors.border),
-            width: isSelected ? 1.5 : 1,
+            color: isSelected ? theme.colorScheme.primary : appColors.border,
+            width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    blurRadius: 22,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 8),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.16),
+                    blurRadius: 18,
                   ),
                 ]
               : AppShadows.elevatedSoft,
@@ -970,16 +926,13 @@ class _PlanCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 24,
-              height: 24,
+              width: 26,
+              height: 26,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : Colors.white.withValues(alpha: 0.28),
-                  width: 1.8,
-                ),
+                border: isSelected
+                    ? null
+                    : Border.all(color: appColors.border, width: 1),
                 color:
                     isSelected ? theme.colorScheme.primary : Colors.transparent,
               ),
@@ -992,7 +945,7 @@ class _PlanCard extends StatelessWidget {
                     )
                   : null,
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1005,10 +958,10 @@ class _PlanCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: isPrimary ? 18 : 17,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
                             color: theme.colorScheme.onSurface,
-                            letterSpacing: -0.45,
+                            letterSpacing: -0.4,
                           ),
                         ),
                       ),
@@ -1026,12 +979,13 @@ class _PlanCard extends StatelessWidget {
                                 );
                             return Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 3,
+                                horizontal: 9,
+                                vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary
-                                    .withValues(alpha: 0.15),
+                                color: isTrialBadge
+                                    ? theme.colorScheme.primary
+                                    : appColors.subtle,
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
@@ -1041,7 +995,9 @@ class _PlanCard extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.primary,
+                                  color: isTrialBadge
+                                      ? theme.colorScheme.onPrimary
+                                      : appColors.mutedText,
                                   letterSpacing: -0.15,
                                 ),
                               ),
@@ -1062,11 +1018,11 @@ class _PlanCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.lato(
-                            fontSize: 32,
+                            fontSize: 30,
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
                             color: theme.colorScheme.onSurface,
-                            letterSpacing: -0.8,
+                            letterSpacing: -0.9,
                           ),
                         ),
                       ),
@@ -1076,11 +1032,8 @@ class _PlanCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.52)
-                              : appColors.mutedText,
+                          fontSize: 14,
+                          color: appColors.mutedText,
                           letterSpacing: -0.2,
                         ),
                       ),
@@ -1103,9 +1056,7 @@ class _BenefitsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final appColors = theme.extension<AppColors>()!;
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final benefits = [
       _BenefitItem(
         icon: Icons.record_voice_over,
@@ -1140,28 +1091,14 @@ class _BenefitsList extends StatelessWidget {
     return Column(
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF111317) : Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.08)
-                  : appColors.border,
-            ),
-            boxShadow: AppShadows.elevatedSoft,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          decoration: valcueCardDecoration(context),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
           child: Column(
             children: [
               for (int i = 0; i < benefits.length; i++) ...[
                 _BenefitListItem(item: benefits[i]),
                 if (i < benefits.length - 1)
-                  Divider(
-                    height: 1,
-                    color: isDark
-                        ? Colors.white.withValues(alpha: 0.08)
-                        : appColors.border,
-                  ),
+                  Divider(height: 1, color: appColors.border),
               ],
             ],
           ),
@@ -1189,41 +1126,29 @@ class _BenefitListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 13),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0x19FF453A)
-                  : theme.colorScheme.primary.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(12),
-            ),
+          SizedBox(
+            width: 32,
             child: Icon(
               item.icon,
-              size: 18,
-              color: const Color(0xFFFF5A52),
+              size: 21,
+              color: theme.colorScheme.primary,
             ),
           ),
           const SizedBox(width: 14),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                item.text,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.3,
-                  height: 1.35,
-                ),
+            child: Text(
+              item.text,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurface,
+                letterSpacing: -0.3,
+                height: 1.35,
               ),
             ),
           ),
@@ -1245,20 +1170,15 @@ class _FooterLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final appColors = theme.extension<AppColors>()!;
+    final appColors = Theme.of(context).extension<AppColors>()!;
 
     return GestureDetector(
       onTap: onTap,
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.6)
-              : appColors.mutedText,
+          fontSize: 12,
+          color: appColors.mutedText,
           letterSpacing: -0.05,
         ),
       ),

@@ -11,7 +11,7 @@ import '../../../app_settings/app_settings_provider.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import 'routine_preview_sheet.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/app_shadows.dart';
+import '../../../widgets/valcue_ui.dart';
 
 class RecommendedRoutinesScreen extends StatefulWidget {
   final MachineType machineType;
@@ -79,7 +79,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
       case MachineType.treadmill:
         return Icons.directions_run;
       case MachineType.cycle:
-        return Icons.pedal_bike;
+        return Icons.directions_bike;
       case MachineType.stairmaster:
         return Icons.stairs_rounded;
     }
@@ -239,7 +239,8 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
     final theme = Theme.of(context);
     final baseTextStyle = theme.textTheme.bodyMedium ?? const TextStyle();
     final navTextStyle = theme.textTheme.titleMedium?.copyWith(
-      fontWeight: FontWeight.w600,
+      fontSize: 20,
+      fontWeight: FontWeight.w800,
       color: theme.colorScheme.onSurface,
       decoration: TextDecoration.none,
     );
@@ -264,10 +265,8 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
               _getMachineTitle(context),
               style: navTextStyle,
             ),
-            backgroundColor: theme.colorScheme.surface,
-            border: Border(
-              bottom: BorderSide(color: theme.dividerColor, width: 0.0),
-            ),
+            backgroundColor: theme.scaffoldBackgroundColor,
+            border: null,
           ),
           child: Container(
             color: theme.scaffoldBackgroundColor,
@@ -284,7 +283,7 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                       ),
                     )
                   : ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+                      padding: const EdgeInsets.fromLTRB(22, 8, 22, 34),
                       children: _buildSections(context, grouped,
                           difficultyOrder, provider, settingsProvider, l10n),
                     ),
@@ -323,18 +322,18 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
             children: [
               Container(
                 width: 4,
-                height: 18,
+                height: 20,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Text(
                 _getDifficultyText(context, difficulty),
                 style: theme.textTheme.titleMedium?.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
+                  fontSize: 19,
+                  fontWeight: FontWeight.w800,
                   color: theme.colorScheme.onSurface,
                   decoration: TextDecoration.none,
                   letterSpacing: -0.3,
@@ -363,18 +362,9 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
   ) {
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color:
-              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
+      margin: const EdgeInsets.only(bottom: 14),
+      decoration: valcueCardDecoration(context, radius: 20),
       child: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -384,15 +374,15 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: 46,
+                  height: 46,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.10),
+                    color: appColors.tint,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     _getMachineIcon(),
-                    size: 22,
+                    size: 24,
                     color: theme.colorScheme.primary,
                   ),
                 ),
@@ -405,13 +395,13 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                         _getLocalizedTitle(l10n, template.titleKey),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontSize: 20,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                           color: theme.colorScheme.onSurface,
                           letterSpacing: -0.4,
                           decoration: TextDecoration.none,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         _getLocalizedSubtitle(l10n, template.subtitleKey),
                         style: theme.textTheme.bodyMedium?.copyWith(
@@ -431,32 +421,25 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
               children: [
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
                   decoration: BoxDecoration(
-                    color: appColors.surfaceElevated,
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.08)
-                          : appColors.border,
-                    ),
+                    border: Border.all(color: appColors.border),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.access_time_rounded,
-                        size: 14,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        Icons.schedule,
+                        size: 16,
+                        color: appColors.mutedText,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 7),
                       BidiSafeText(
                         template.totalDurationFormatted,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontSize: 13,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.8),
+                          fontSize: 15,
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w700,
                           decoration: TextDecoration.none,
                         ),
@@ -474,23 +457,23 @@ class _RecommendedRoutinesScreenState extends State<RecommendedRoutinesScreen> {
                   },
                   minimumSize: const Size(0, 0),
                   child: Container(
-                    width: 38,
-                    height: 38,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
                           color:
-                              theme.colorScheme.primary.withValues(alpha: 0.2),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
+                              theme.colorScheme.primary.withValues(alpha: 0.32),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
                     child: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 13,
+                      Icons.chevron_right_rounded,
+                      size: 26,
                       color: theme.colorScheme.onPrimary,
                     ),
                   ),
