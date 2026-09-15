@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart' hide Interval;
+import '../../../theme/app_theme.dart';
 import '../../../widgets/bidi_safe_text.dart';
 import 'top_pill_progress_bar.dart';
 
@@ -32,8 +33,8 @@ class HeaderTimeSummary extends StatelessWidget {
           BidiSafeText(
             totalRemainingTimeFormatted,
             style: TextStyle(
-              fontSize: _scaled(28),
-              fontWeight: FontWeight.w700,
+              fontSize: _scaled(26),
+              fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
               letterSpacing: -0.7,
               height: 1.0,
@@ -71,32 +72,25 @@ class _HeaderIntervalIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final safeTotal = totalIntervals < 1 ? 1 : totalIntervals;
     final currentStep =
         math.min(math.max(currentIntervalIndex + 1, 1), safeTotal);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: _scaled(10),
-        vertical: _scaled(6),
+        horizontal: _scaled(14),
+        vertical: _scaled(8),
       ),
       decoration: BoxDecoration(
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.05)
-            : Colors.black.withValues(alpha: 0.035),
+        color: context.appColors.subtle,
         borderRadius: BorderRadius.circular(_scaled(999)),
-        border: Border.all(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-          width: 1,
-        ),
       ),
       child: BidiSafeText(
         '$currentStep/$safeTotal',
         style: TextStyle(
-          fontSize: _scaled(14),
+          fontSize: _scaled(15),
           fontWeight: FontWeight.w700,
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
+          color: theme.colorScheme.onSurface,
           letterSpacing: -0.2,
           fontFeatures: const [ui.FontFeature.tabularFigures()],
         ),
@@ -126,7 +120,6 @@ class TopRoutineProgressHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -158,14 +151,6 @@ class TopRoutineProgressHeader extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        // Subtle divider line under header
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: theme.dividerColor.withValues(alpha: 0.3),
-          indent: _scaled(32),
-          endIndent: _scaled(32),
         ),
       ],
     );

@@ -41,8 +41,8 @@ class _CountdownOverlayState extends State<CountdownOverlay> {
                 '${widget.countdownNumber}',
                 key: ValueKey(widget.countdownNumber),
                 style: const TextStyle(
-                  fontSize: 120,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 160,
+                  fontWeight: FontWeight.w800,
                   color: Colors.white,
                   letterSpacing: -3.0,
                 ),

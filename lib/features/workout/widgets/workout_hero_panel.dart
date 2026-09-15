@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide Interval;
 
+import '../../../theme/app_theme.dart';
+
 class WorkoutHeroPanel extends StatelessWidget {
   final bool isPortrait;
   final double scaleFactor;
@@ -27,7 +29,7 @@ class WorkoutHeroPanel extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 mainSection,
-                SizedBox(height: _scaled(34)),
+                SizedBox(height: _scaled(40)),
                 timerSection,
               ],
             )
@@ -96,52 +98,37 @@ class WorkoutDetailChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final chipColor = chip.isAccent
-        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.08 : 0.04)
-        : isDark
-            ? Colors.white.withValues(alpha: 0.03)
-            : Colors.black.withValues(alpha: 0.02);
-    final borderColor = chip.isAccent
-        ? theme.colorScheme.primary.withValues(alpha: isDark ? 0.55 : 0.28)
-        : isDark
-            ? Colors.white.withValues(alpha: 0.08)
-            : Colors.black.withValues(alpha: 0.10);
+    final appColors = context.appColors;
+    final chipColor = chip.isAccent ? appColors.tint : appColors.subtle;
+    final contentColor =
+        chip.isAccent ? theme.colorScheme.primary : appColors.mutedText;
 
     return Container(
       constraints: BoxConstraints(minHeight: _scaled(40)),
       padding: EdgeInsets.symmetric(
-        horizontal: _scaled(14),
-        vertical: _scaled(9),
+        horizontal: _scaled(16),
+        vertical: _scaled(10),
       ),
       decoration: BoxDecoration(
         color: chipColor,
         borderRadius: BorderRadius.circular(_scaled(999)),
-        border: Border.all(
-          color: borderColor,
-          width: 1,
-        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             chip.icon,
-            size: _scaled(15),
-            color: chip.isAccent
-                ? theme.colorScheme.primary
-                : theme.colorScheme.onSurface.withValues(alpha: 0.56),
+            size: _scaled(16),
+            color: contentColor,
           ),
-          SizedBox(width: _scaled(10)),
+          SizedBox(width: _scaled(6)),
           Flexible(
             child: Text(
               chip.text,
               style: TextStyle(
                 fontSize: _scaled(15),
-                fontWeight: FontWeight.w600,
-                color: chip.isAccent
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.84),
+                fontWeight: FontWeight.w700,
+                color: contentColor,
                 letterSpacing: -0.1,
               ),
               overflow: TextOverflow.ellipsis,

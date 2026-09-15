@@ -127,14 +127,9 @@ class WorkoutSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final appColors = theme.extension<AppColors>()!;
 
-    // Card background color
-    final cardColor = isDark
-        ? const Color(0xFF1C1C1E) // Dark surface
-        : const ui.Color.fromARGB(245, 245, 245, 245);
     final secondaryMetric = distanceMeters != null && distanceMeters! > 0
         ? _formatDistance(context, distanceMeters!)
         : routine.machineType == MachineType.cycle
@@ -159,24 +154,10 @@ class WorkoutSummaryCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(28),
-        border: isDark
-            ? Border.all(
-                color: Colors.white.withValues(alpha: 0.1),
-                width: 1,
-              )
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
-            blurRadius: 20,
-            spreadRadius: 0,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: appColors.subtle,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,21 +166,21 @@ class WorkoutSummaryCard extends StatelessWidget {
             l10n.totalWorkoutTime,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
               color: appColors.mutedText,
               letterSpacing: -0.2,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 4),
           BidiSafeText(
             _formatTime(elapsedSeconds),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 56,
+              fontSize: 58,
               fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
-              letterSpacing: -1.4,
+              letterSpacing: -2.3,
               fontFeatures: const [
                 ui.FontFeature.tabularFigures()
               ], // Monospaced digits
@@ -210,8 +191,8 @@ class WorkoutSummaryCard extends StatelessWidget {
             summaryParts.join(' · '),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+              fontSize: 17,
+              fontWeight: FontWeight.w500,
               color: appColors.mutedText,
               letterSpacing: -0.1,
             ),

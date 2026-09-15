@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide Interval;
 
+import '../../../theme/app_theme.dart';
+
 class TopPillProgressBar extends StatefulWidget {
   final double progress;
   final double? height;
@@ -77,61 +79,31 @@ class _TopPillProgressBarState extends State<TopPillProgressBar>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final trackColor = isDark
-        ? Colors.white.withValues(alpha: 0.08)
-        : theme.colorScheme.onSurface.withValues(alpha: 0.06);
-    return Container(
-      height: widget.height ?? 12,
-      decoration: BoxDecoration(
-        color: trackColor,
-        borderRadius: BorderRadius.circular(999),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.08),
-            blurRadius: 14,
-            spreadRadius: 0,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    final trackColor = context.appColors.track;
+    return SizedBox(
+      height: widget.height ?? 10,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(999),
         // Force LTR direction so progress bar always goes left to right, even in RTL mode
         child: Directionality(
           textDirection: TextDirection.ltr,
-          child: Stack(
-            children: [
-              // Background
-              Container(
-                width: double.infinity,
-                color: trackColor,
-              ),
-              // Primary fill bar with smooth animation (always left to right)
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return FractionallySizedBox(
-                    widthFactor: _animation.value.clamp(0.0, 1.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.colorScheme.primary,
-                            Color.lerp(
-                                  theme.colorScheme.primary,
-                                  Colors.white,
-                                  isDark ? 0.08 : 0.18,
-                                ) ??
-                                theme.colorScheme.primary,
-                          ],
-                        ),
-                      ),
+          child: ColoredBox(
+            color: trackColor,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: _animation.value.clamp(0.0, 1.0),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      borderRadius: BorderRadius.circular(999),
                     ),
-                  );
-                },
-              ),
-            ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Interval;
 import 'package:valcue/l10n/app_localizations.dart';
 import '../../../theme/app_theme.dart';
-import '../../../widgets/secondary_outlined_button.dart';
+import '../../../widgets/valcue_ui.dart';
 
 class PauseBottomSheet extends StatelessWidget {
   final VoidCallback onResume;
@@ -14,99 +14,98 @@ class PauseBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return _WorkoutSheetFrame(
+      icon: Icons.pause_rounded,
+      title: l10n.pausedTitle,
+      message: l10n.pausedSubtitle,
+      actions: [
+        PrimaryPillButton(
+          label: l10n.resume,
+          height: 56,
+          onPressed: onResume,
+        ),
+        const SizedBox(height: 10),
+        OutlinePillButton(
+          label: l10n.endWorkout,
+          fontSize: 18,
+          onPressed: onEndWorkout,
+        ),
+      ],
+    );
+  }
+}
+
+class _WorkoutSheetFrame extends StatelessWidget {
+  const _WorkoutSheetFrame({
+    required this.icon,
+    required this.title,
+    required this.message,
+    required this.actions,
+    this.destructive = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final String message;
+  final List<Widget> actions;
+  final bool destructive;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final l10n = AppLocalizations.of(context)!;
+    final accent = destructive ? appColors.danger : theme.colorScheme.primary;
 
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-          ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 520),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Pause icon in circular background
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.pause_rounded,
-                      size: 32,
-                      color: theme.colorScheme.primary,
-                    ),
+            padding: const EdgeInsets.fromLTRB(22, 24, 22, 34),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 66,
+                  height: 66,
+                  decoration: BoxDecoration(
+                    color: destructive
+                        ? accent.withValues(alpha: 0.12)
+                        : appColors.tint,
+                    shape: BoxShape.circle,
                   ),
-                  const SizedBox(height: 24),
-                  // Title
-                  Text(
-                    l10n.pausedTitle,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.5,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: Icon(icon, size: 30, color: accent),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.onSurface,
+                    letterSpacing: -0.5,
                   ),
-                  const SizedBox(height: 8),
-                  // Subtitle
-                  Text(
-                    l10n.pausedSubtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: appColors.mutedText,
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: appColors.mutedText,
+                    height: 1.4,
                   ),
-                  const SizedBox(height: 32),
-                  // Primary button: Continue
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: onResume,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        l10n.resume,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Secondary button: End workout
-                  SecondaryOutlinedButton(
-                    onPressed: onEndWorkout,
-                    borderRadius: AppTheme.buttonRadius,
-                    borderColor: theme.colorScheme.outlineVariant,
-                    child: Text(
-                      l10n.endWorkout,
-                      style: const TextStyle(fontSize: 17),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 22),
+                ...actions,
+              ],
             ),
           ),
         ),
@@ -130,108 +129,45 @@ class EndWorkoutConfirmationBottomSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final l10n = AppLocalizations.of(context)!;
-
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Warning/Stop icon in circular background
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.error.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.stop_circle_outlined,
-                      size: 32,
-                      color: theme.colorScheme.error,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Title
-                  Text(
-                    l10n.endWorkoutQuestion,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                      letterSpacing: -0.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  // Body text
-                  Text(
-                    l10n.endWorkoutConfirmationMessage,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: appColors.mutedText,
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-                  // Buttons row
-                  Row(
-                    children: [
-                      // Cancel button (secondary)
-                      Expanded(
-                        child: SecondaryOutlinedButton(
-                          onPressed: onCancel,
-                          borderRadius: 999,
-                          borderColor: theme.colorScheme.outlineVariant,
-                          child: Text(
-                            l10n.cancel,
-                            style: const TextStyle(fontSize: 17),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // End button (destructive primary)
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: onConfirm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.error,
-                            foregroundColor: theme.colorScheme.onError,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: Text(
-                            l10n.end,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    return _WorkoutSheetFrame(
+      icon: Icons.stop_circle_outlined,
+      title: l10n.endWorkoutQuestion,
+      message: l10n.endWorkoutConfirmationMessage,
+      destructive: true,
+      actions: [
+        Row(
+          children: [
+            Expanded(
+              child: OutlinePillButton(
+                label: l10n.cancel,
+                onPressed: onCancel,
               ),
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: SizedBox(
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: onConfirm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appColors.danger,
+                    foregroundColor: theme.colorScheme.onError,
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text(
+                    l10n.end,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }

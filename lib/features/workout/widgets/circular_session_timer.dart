@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart' hide Interval;
 import 'package:valcue/l10n/app_localizations.dart';
 import '../../../widgets/bidi_safe_text.dart';
+import '../../../theme/app_theme.dart';
 import 'progress_ring_painter.dart';
 
 class CircularSessionTimer extends StatefulWidget {
@@ -105,15 +106,11 @@ class _CircularSessionTimerState extends State<CircularSessionTimer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = theme.colorScheme.surface;
     final textColor = theme.colorScheme.onSurface;
-    final trackColor =
-        theme.colorScheme.onSurface.withValues(alpha: isDark ? 0.08 : 0.06);
-    final strokeWidth =
-        (widget.size * 0.07).clamp(widget._scaled(10.0), widget._scaled(14.0));
+    final trackColor = theme.extension<AppColors>()!.track;
+    final strokeWidth = widget.size * 13 / 196;
     final fontSize =
-        (widget.size * 0.18).clamp(widget._scaled(24.0), widget._scaled(36.0));
+        (widget.size * 0.214).clamp(widget._scaled(24.0), widget._scaled(46.0));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -126,24 +123,6 @@ class _CircularSessionTimerState extends State<CircularSessionTimer>
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
-              // Background circle with shadow (always rendered, outside AnimatedBuilder)
-              Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: backgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: isDark ? 0.28 : 0.1),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-              ),
               // Progress ring with smooth animation and pulse effect
               AnimatedBuilder(
                 animation: Listenable.merge([_animation, _pulseAnimation]),
@@ -174,7 +153,7 @@ class _CircularSessionTimerState extends State<CircularSessionTimer>
                     widget.timeText,
                     style: TextStyle(
                       fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w800,
                       color: textColor,
                       letterSpacing: -0.5,
                       fontFeatures: const [

@@ -1300,10 +1300,10 @@ class _WorkoutScreenState extends State<WorkoutScreen>
             .toDouble();
     final portraitTimerSize = math
         .min(
-          154 * contentScaleFactor,
+          196 * contentScaleFactor,
           screenWidth - (48 * scaleFactor),
         )
-        .clamp(112 * scaleFactor, 214 * scaleFactor)
+        .clamp(120 * scaleFactor, 240 * scaleFactor)
         .toDouble();
 
     return Column(
@@ -1313,9 +1313,9 @@ class _WorkoutScreenState extends State<WorkoutScreen>
           bottom: false,
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
-              24 * scaleFactor,
-              28 * scaleFactor,
-              24 * scaleFactor,
+              22 * scaleFactor,
+              8 * scaleFactor,
+              22 * scaleFactor,
               12 * scaleFactor,
             ),
             child: Column(
@@ -1327,11 +1327,11 @@ class _WorkoutScreenState extends State<WorkoutScreen>
                   totalIntervals: widget.routine.intervals.length,
                   scaleFactor: headerScaleFactor,
                 ),
-                SizedBox(height: 10 * scaleFactor),
+                SizedBox(height: 14 * scaleFactor),
                 // Total routine remaining progress bar
                 TopPillProgressBar(
                   progress: state.totalRemainingProgress,
-                  height: 12 * scaleFactor,
+                  height: 10 * scaleFactor,
                 ),
               ],
             ),
@@ -1386,18 +1386,21 @@ class _WorkoutScreenState extends State<WorkoutScreen>
         // Bottom buttons
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(
-            20 * scaleFactor,
+            22 * scaleFactor,
             0,
-            20 * scaleFactor,
-            32 * scaleFactor,
+            22 * scaleFactor,
+            34 * scaleFactor,
           ),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 360 * scaleFactor),
+            constraints: BoxConstraints(maxWidth: 480 * scaleFactor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 WorkoutPrimaryButton(
-                  width: 200 * scaleFactor,
+                  width: math.min(
+                    480 * scaleFactor,
+                    screenWidth - (44 + 70) * scaleFactor,
+                  ),
                   label: state.status == WorkoutStatus.paused
                       ? AppLocalizations.of(context)!.resume
                       : AppLocalizations.of(context)!.pause,

@@ -18,13 +18,11 @@ class ProgressRingPainter extends CustomPainter {
   })  : _trackPaint = Paint()
           ..color = trackColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round,
+          ..strokeWidth = strokeWidth,
         _progressPaint = Paint()
           ..color = progressColor
           ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round;
+          ..strokeWidth = strokeWidth;
 
   @override
   void paint(Canvas canvas, Size size) {

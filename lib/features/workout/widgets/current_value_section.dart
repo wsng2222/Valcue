@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Interval;
+import '../../../theme/app_theme.dart';
 import 'flashing_metric_text.dart';
 import 'workout_hero_panel.dart';
 
@@ -71,15 +72,13 @@ class _CurrentValueSectionState extends State<CurrentValueSection>
         Text(
           widget.metricLabel,
           style: TextStyle(
-            fontSize: widget._scaled(13),
-            fontWeight: FontWeight.w700,
-            color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.56),
-            letterSpacing: 1.3,
+            fontSize: widget._scaled(15),
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).extension<AppColors>()!.mutedText,
           ),
           textAlign: widget.alignCenter ? TextAlign.center : TextAlign.start,
         ),
-        SizedBox(height: widget._scaled(12)),
+        SizedBox(height: widget._scaled(8)),
         // Current session value (large primary text) with pulse animation
         Align(
           alignment: widget.alignCenter
@@ -101,9 +100,10 @@ class _CurrentValueSectionState extends State<CurrentValueSection>
                     text: widget.mainValueText,
                     style: TextStyle(
                       fontSize: widget.mainFontSize,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
                       color: Theme.of(context).colorScheme.onSurface,
-                      letterSpacing: -1.8,
+                      letterSpacing: widget.mainFontSize * -0.04,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                     defaultColor: Theme.of(context).colorScheme.onSurface,
                     flashColor: Theme.of(context).colorScheme.primary,
@@ -116,7 +116,7 @@ class _CurrentValueSectionState extends State<CurrentValueSection>
           ),
         ),
         if (widget.detailChips.isNotEmpty) ...[
-          SizedBox(height: widget._scaled(16)),
+          SizedBox(height: widget._scaled(18)),
           Align(
             alignment: widget.alignCenter
                 ? Alignment.center

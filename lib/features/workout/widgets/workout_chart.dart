@@ -198,28 +198,11 @@ class _WorkoutChartState extends State<WorkoutChart> {
     };
 
     return Container(
-      height: 142,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      height: 140,
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF1C1C1E)
-            : const Color.fromARGB(245, 245, 245, 245),
-        borderRadius: BorderRadius.circular(24),
-        border: isDark
-            ? Border.all(
-                color: Colors.white.withValues(alpha: 0.1),
-                width: 1,
-              )
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
-            blurRadius: 20,
-            spreadRadius: 0,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: appColors.subtle,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -233,8 +216,8 @@ class _WorkoutChartState extends State<WorkoutChart> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                     color: appColors.mutedText,
                     letterSpacing: -0.1,
                   ),
@@ -246,8 +229,8 @@ class _WorkoutChartState extends State<WorkoutChart> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                     color: theme.colorScheme.primary,
                     letterSpacing: -0.1,
                   ),
@@ -255,7 +238,7 @@ class _WorkoutChartState extends State<WorkoutChart> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Expanded(
             child: LayoutBuilder(builder: (context, constraints) {
               final chartWidth = constraints.maxWidth;
@@ -411,16 +394,13 @@ class _WorkoutChartPainter extends CustomPainter {
     // Grid Lines (Low/Medium/High boundaries)
     final gridPaint = Paint()
       ..color = isDark
-          ? Colors.white.withValues(alpha: 0.08)
-          : Colors.black.withValues(alpha: 0.05)
+          ? Colors.white.withValues(alpha: 0.10)
+          : const Color(0xFFEEEEEE)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    // Draw horizontal dividers
-    canvas.drawLine(
-        Offset(0, height * 0.25), Offset(width, height * 0.25), gridPaint);
-    canvas.drawLine(
-        Offset(0, height * 0.65), Offset(width, height * 0.65), gridPaint);
+    // Baseline
+    canvas.drawLine(Offset(0, height - 1), Offset(width, height - 1), gridPaint);
 
     // Build the step paths
     final fillPath = Path();
@@ -500,7 +480,7 @@ class _WorkoutChartPainter extends CustomPainter {
     final fillShader = ui.Gradient.linear(
       Offset.zero,
       Offset(width, 0),
-      gradientColors.map((c) => c.withValues(alpha: 0.18)).toList(),
+      gradientColors.map((c) => c.withValues(alpha: 0.08)).toList(),
       gradientStops,
     );
     fillPaint.shader = fillShader;
@@ -510,7 +490,7 @@ class _WorkoutChartPainter extends CustomPainter {
     final strokePaint = Paint()
       ..shader = shader
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
+      ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
     canvas.drawPath(strokePath, strokePaint);
 

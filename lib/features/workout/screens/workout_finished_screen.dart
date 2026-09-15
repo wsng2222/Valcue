@@ -7,7 +7,7 @@ import 'package:valcue/l10n/app_localizations.dart';
 import '../../routines/models/routine.dart';
 import '../../routines/models/machine_type.dart';
 import '../../../widgets/bounceable.dart';
-import '../../../widgets/secondary_outlined_button.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../../../widgets/app_dialog.dart';
 import '../../../widgets/app_message.dart';
 import '../../../theme/app_theme.dart';
@@ -378,7 +378,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+                    padding: const EdgeInsets.fromLTRB(22, 28, 22, 34),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: constraints.maxHeight - 56,
@@ -388,31 +388,40 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                     const Spacer(),
-                    Icon(
-                      Icons.check_circle,
-                      size: 60,
-                      color: theme.colorScheme.primary,
+                    Center(
+                      child: Container(
+                        width: 78,
+                        height: 78,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.check_rounded,
+                          size: 44,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 18),
                     Text(
                       l10n.workoutComplete,
                       style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
                         color: theme.colorScheme.onSurface,
                         letterSpacing: -1.0,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 6),
                     Text(
                       widget.routine.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
                         color: theme.extension<AppColors>()!.mutedText,
                         letterSpacing: -0.2,
                       ),
@@ -431,7 +440,7 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                       elapsedSecondsInCurrentSession:
                           widget.elapsedSecondsInCurrentSession,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
                     WorkoutChart(
                       routine: widget.routine,
                       currentIntervalIndex: widget.currentIntervalIndex,
@@ -440,34 +449,18 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                     ),
                     const Spacer(),
                     // Share button
-                    SecondaryOutlinedButton(
+                    OutlinePillButton(
                       key: _shareButtonKey,
                       onPressed: () => _shareWorkout(context),
-                      borderRadius: AppTheme.buttonRadius,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      borderColor:
-                          theme.colorScheme.outline.withValues(alpha: 0.38),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.share_outlined, size: 18),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              AppLocalizations.of(context)!.share,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                          ),
-                        ],
+                      height: 54,
+                      label: AppLocalizations.of(context)!.share,
+                      leading: const Icon(
+                        Icons.ios_share,
+                        size: 19,
+                        color: Color(0xFF007AFF),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     // Primary button: End
                     SizedBox(
                       width: double.infinity,
@@ -493,13 +486,14 @@ class _WorkoutFinishedScreenState extends State<WorkoutFinishedScreen>
                           child: ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              minimumSize: const Size.fromHeight(58),
+                              padding: EdgeInsets.zero,
                             ),
                             child: Text(
                               AppLocalizations.of(context)!.end,
                               style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
                                 letterSpacing: -0.3,
                               ),
                             ),
