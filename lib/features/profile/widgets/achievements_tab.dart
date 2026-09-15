@@ -6,6 +6,7 @@ import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../models/achievement.dart';
 import '../models/achievement_translations.dart';
 import '../providers/achievement_provider.dart';
@@ -102,7 +103,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
         return Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             // Premium Header stats card (folds away while the list scrolls)
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 240),
@@ -116,24 +117,12 @@ class _AchievementsTabState extends State<AchievementsTab> {
               firstChild: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
                     child: Container(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(18.0),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.colorScheme.primary.withValues(alpha: 0.08),
-                            theme.colorScheme.secondary.withValues(alpha: 0.03),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color:
-                              theme.colorScheme.primary.withValues(alpha: 0.15),
-                          width: 1.5,
-                        ),
+                        color: appColors.tint,
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
                         children: [
@@ -142,13 +131,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
                             alignment: Alignment.center,
                             children: [
                               SizedBox(
-                                width: 70,
-                                height: 70,
+                                width: 72,
+                                height: 72,
                                 child: CircularProgressIndicator(
                                   value: completionRate,
                                   strokeWidth: 6,
-                                  backgroundColor: theme.colorScheme.primary
-                                      .withValues(alpha: 0.1),
+                                  backgroundColor: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.06),
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       theme.colorScheme.primary),
                                 ),
@@ -156,22 +145,22 @@ class _AchievementsTabState extends State<AchievementsTab> {
                               Text(
                                 LocalizedFormat.percent(
                                     context, completionRate),
-                                style: GoogleFonts.outfit(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                style: TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w800,
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(width: 20),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   userTitle,
-                                  style: GoogleFonts.outfit(
+                                  style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: theme.colorScheme.primary,
@@ -196,20 +185,18 @@ class _AchievementsTabState extends State<AchievementsTab> {
                                     },
                                   ),
                                   style: TextStyle(
-                                    fontSize: 14,
-                                    color: appColors.mutedText,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    color: theme.colorScheme.onSurface,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 4),
                                 // completion text
                                 Text(
                                   AchievementTranslations.getUiString(
                                       'collect_desc', langCode),
                                   style: TextStyle(
-                                    fontSize: 11,
-                                    color: appColors.mutedText
-                                        .withValues(alpha: 0.8),
+                                    fontSize: 13,
+                                    color: appColors.mutedText,
                                   ),
                                 ),
                               ],
@@ -219,13 +206,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 14),
                 ],
               ),
             ),
             // Elegant Pill Filters
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 22.0),
               child: Row(
                 children: [
                   _buildFilterButton(
@@ -245,7 +232,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             // Premium Grid Layout
             Expanded(
               child: filtered.isEmpty
@@ -259,7 +246,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   : NotificationListener<ScrollNotification>(
                       onNotification: _handleScroll,
                       child: ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                        padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
                         itemCount: filtered.length,
                         itemBuilder: (context, index) {
                           final ach = filtered[index];
@@ -287,35 +274,24 @@ class _AchievementsTabState extends State<AchievementsTab> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
         decoration: BoxDecoration(
-          color: isSelected
-              ? theme.colorScheme.primary
-              : theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(24),
+          color: isSelected ? theme.colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
           border: Border.all(
             color: isSelected
                 ? theme.colorScheme.primary
                 : theme.extension<AppColors>()!.border,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  )
-                ]
-              : null,
         ),
         child: Text(
           label,
           style: TextStyle(
             color: isSelected
                 ? theme.colorScheme.onPrimary
-                : theme.colorScheme.onSurface,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-            fontSize: 13,
+                : theme.extension<AppColors>()!.mutedText,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
           ),
         ),
       ),
@@ -338,149 +314,83 @@ class _AchievementsTabState extends State<AchievementsTab> {
         _showAchievementDetails(context, ach, langCode);
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: ach.isUnlocked
-              ? theme.colorScheme.surface
-              : appColors.surfaceElevated.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: ach.isUnlocked
-                ? ach.gradientColors[0].withValues(alpha: 0.35)
-                : appColors.border.withValues(alpha: 0.7),
-            width: ach.isUnlocked ? 1.5 : 1.0,
-          ),
-          boxShadow: ach.isUnlocked
-              ? [
-                  BoxShadow(
-                    color: ach.gradientColors[0].withValues(alpha: 0.06),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  )
-                ]
-              : null,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Badge icon circle
-              Container(
-                width: 58,
-                height: 58,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: ach.isUnlocked
-                        ? ach.gradientColors
-                        : [Colors.grey.shade300, Colors.grey.shade400],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: valcueCardDecoration(context),
+        child: Row(
+          children: [
+            // Badge icon circle
+            Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ach.isUnlocked
+                    ? const Color(0xFFFFB100)
+                    : appColors.subtle,
+              ),
+              child: Icon(
+                ach.isUnlocked ? ach.icon : Icons.lock,
+                color: ach.isUnlocked ? Colors.white : appColors.mutedText,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Texts
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: ach.isUnlocked
+                          ? theme.colorScheme.onSurface
+                          : appColors.mutedText,
+                    ),
                   ),
-                  boxShadow: ach.isUnlocked
-                      ? [
-                          BoxShadow(
-                            color:
-                                ach.gradientColors[0].withValues(alpha: 0.35),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
-                          )
-                        ]
-                      : null,
-                ),
-                child: Icon(
-                  ach.isUnlocked ? ach.icon : Icons.lock_outline,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Texts
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: ach.isUnlocked
-                                  ? theme.colorScheme.onSurface
-                                  : appColors.mutedText,
-                            ),
-                          ),
-                        ),
-                        if (ach.isUnlocked && ach.unlockedAt != null)
-                          Flexible(
-                            child: Text(
-                              _formatUnlockDateSimple(
-                                  ach.unlockedAt!, langCode),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: appColors.mutedText,
-                              ),
-                            ),
-                          ),
-                      ],
+                  const SizedBox(height: 2),
+                  Text(
+                    desc,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: appColors.mutedText,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      desc,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: ach.isUnlocked
-                            ? theme.colorScheme.onSurface.withValues(alpha: 0.8)
-                            : appColors.mutedText.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: LinearProgressIndicator(
+                      value: ach.isUnlocked ? 1.0 : ach.progress,
+                      minHeight: 6,
+                      backgroundColor: appColors.subtle,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        theme.colorScheme.primary,
                       ),
                     ),
-                    if (!ach.isUnlocked) ...[
-                      const SizedBox(height: 10),
-                      // Progress Bar
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(3),
-                              child: LinearProgressIndicator(
-                                value: ach.progress,
-                                minHeight: 5,
-                                backgroundColor: theme.colorScheme.primary
-                                    .withValues(alpha: 0.1),
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  theme.colorScheme.primary
-                                      .withValues(alpha: 0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            _formatProgressShort(ach, langCode),
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.primary
-                                  .withValues(alpha: 0.8),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              ach.isUnlocked && ach.unlockedAt != null
+                  ? _formatUnlockDateSimple(ach.unlockedAt!, langCode)
+                  : _formatProgressShort(ach, langCode),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ],
         ),
       ),
     );
