@@ -1,6 +1,4 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
-import 'package:flutter/cupertino.dart'
-    show CupertinoColors, CupertinoDynamicColor;
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
@@ -70,11 +68,9 @@ class AppSegmentedControl extends StatelessWidget {
 
     final safeIndex = selectedIndex.clamp(0, labels.length - 1);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final trackColor = CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemFill, context);
+    final trackColor = context.appColors.track;
     final thumbColor = color ?? appSegmentedSelectedBackground(context);
-    final selectedTextColor = isDark ? Colors.white : Colors.black87;
+    final selectedTextColor = theme.colorScheme.onSurface;
     final unselectedTextColor = context.appColors.mutedText;
     const trackPadding = 3.0;
 
@@ -160,8 +156,8 @@ class _PillSegment extends StatelessWidget {
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 180),
           style: TextStyle(
-            fontSize: 14,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
             color: selected ? selectedTextColor : unselectedTextColor,
           ),
           child: Text(

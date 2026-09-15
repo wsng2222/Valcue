@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:valcue/utils/responsive.dart';
 
-/// A crisp modern pill-shaped bottom navigation bar.
-/// Features a solid white pill with a gray inset capsule for the selected item.
+/// A solid pill-shaped bottom navigation bar with a grey capsule behind the
+/// selected item.
 class LiquidGlassPillNavBar extends StatelessWidget {
   /// The current selected index (0-based).
   final int currentIndex;
@@ -36,185 +35,41 @@ class LiquidGlassPillNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final isReducedMotion = mediaQuery.disableAnimations;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    // We control spacing ourselves: if device has a bottom inset (iOS home
-    // indicator), position the bar just above it with a small extra gap.
     final bottomInset = mediaQuery.padding.bottom;
-    const desiredGap = 10.0; // base visual gap under the bar
 
-    // Responsive height based on screen size
-    final responsiveHeight = ResponsiveUtils.getNavbarHeight(context);
-
-    // Separate last item (My tab) from others
-    final mainItems = items.length > 3 ? items.sublist(0, 3) : items;
-    final lastItem = items.length > 3 ? items.last : null;
-    final mainItemCount = mainItems.length;
-
-    // Check if last item is selected
-    final isLastItemSelected =
-        lastItem != null && currentIndex == items.length - 1;
-
-    // Animation duration (240ms, reduced motion: 0-50ms)
-    final animationDuration = isReducedMotion
-        ? const Duration(milliseconds: 0)
-        : const Duration(milliseconds: 240);
-
-    // Outer pill padding - reduced to eliminate empty space around selected tab
-    const horizontalPadding = 1.0; // Reduced from 8.0
-    const verticalPadding = 8.0;
-    const lensInset = 4.0; // Reduced from 8.0 to make lens taller
-    const itemSpacing = 8.0; // Spacing between circular button and pill
-
-    // Slightly reduce pill size
-    final pillHeight = responsiveHeight * 0.92; // Reduce pill by 8%
-
-    return Container(
-      // Place the bar closer to the bottom: half the previous gap.
-      margin: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        bottom:
-            ((bottomInset > 0 ? bottomInset + desiredGap : desiredGap) * 0.5),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        14,
+        8,
+        14,
+        bottomInset > 0 ? bottomInset : 14,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Main pill with first 3 items
-          Flexible(
-            flex: 3,
-            child: Container(
-              height: pillHeight,
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width *
-                    0.65, // Limit pill width to 70% of screen
-              ),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(999),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
-                    blurRadius: 30,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 12),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final availableWidth = constraints.maxWidth;
-                  final availableHeight = constraints.maxHeight;
-                  final textDirection = Directionality.of(context);
-
-                  // Calculate item width with tighter spacing
-                  const totalWidthFactor = 0.95;
-                  final totalItemWidth = availableWidth * totalWidthFactor;
-                  final itemWidth = totalItemWidth / mainItemCount;
-                  final startOffset = (availableWidth - totalItemWidth) / 2;
-
-                  // Calculate lens (selected capsule) dimensions
-                  final lensHeight = pillHeight - (lensInset * 2);
-                  final lensWidth =
-                      itemWidth - 0; // Reduced from 8 to make lens wider
-                  final lensBorderRadius = lensHeight / 2;
-
-                  // Calculate lens position: centered within the selected item's slot
-                  // Adjust index if last item is selected (it's not in the pill)
-                  final adjustedIndex = isLastItemSelected ? -1 : currentIndex;
-                  final visualIndex =
-                      adjustedIndex >= 0 && adjustedIndex < mainItemCount
-                          ? (textDirection == TextDirection.rtl
-                              ? (mainItemCount - 1 - adjustedIndex)
-                              : adjustedIndex)
-                          : -1;
-
-                  final lensLeft = visualIndex >= 0
-                      ? startOffset +
-                          visualIndex * itemWidth +
-                          (itemWidth - lensWidth) / 2
-                      : 0.0;
-                  final lensRight = visualIndex >= 0
-                      ? availableWidth - lensLeft - lensWidth
-                      : 0.0;
-                  final lensTop = (availableHeight - lensHeight) / 2;
-
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      // INNER SELECTED CAPSULE: Gray background (bottom layer)
-                      if (visualIndex >= 0)
-                        AnimatedPositioned(
-                          duration: animationDuration,
-                          curve: Curves.easeOutBack,
-                          left: textDirection == TextDirection.ltr
-                              ? lensLeft
-                              : null,
-                          right: textDirection == TextDirection.rtl
-                              ? lensRight
-                              : null,
-                          top: lensTop,
-                          width: lensWidth,
-                          height: lensHeight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF2C2C2E)
-                                  : const Color(0xFFECECEC),
-                              borderRadius:
-                                  BorderRadius.circular(lensBorderRadius),
-                              border: Border.all(
-                                color: Colors.black.withValues(alpha: 0.06),
-                                width: 1.0,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.08),
-                                  blurRadius: 14,
-                                  spreadRadius: 0,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      // NAVIGATION ITEMS: Row with tighter spacing
-                      Row(
-                        children: [
-                          SizedBox(width: startOffset),
-                          ...List.generate(
-                            mainItemCount,
-                            (index) => SizedBox(
-                              width: itemWidth,
-                              child: _NavItem(
-                                item: mainItems[index],
-                                isSelected: currentIndex == index,
-                                onTap: () => onTap(index),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                },
-              ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+          borderRadius: BorderRadius.circular(999),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
             ),
-          ),
-          // Circular "나" button on the right (if exists)
-          if (lastItem != null) const SizedBox(width: itemSpacing),
-          if (lastItem != null)
-            _CircularNavItem(
-              item: lastItem,
-              isSelected: isLastItemSelected,
-              onTap: () => onTap(items.length - 1),
-              size: height * 0.75, // Make "나" tab smaller (75% of original)
-            ),
-        ],
+          ],
+        ),
+        child: Row(
+          children: [
+            for (var index = 0; index < items.length; index++)
+              Expanded(
+                child: _NavItem(
+                  item: items[index],
+                  isSelected: currentIndex == index,
+                  onTap: () => onTap(index),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -258,16 +113,7 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
-    // Selected: use app primary
-    // Unselected: near-black/white with 0.85 alpha
-    final iconColor = isSelected
-        ? theme.colorScheme.primary
-        : (isDark
-            ? Colors.white.withValues(alpha: 0.85)
-            : Colors.black.withValues(alpha: 0.85));
-
-    final textColor = isSelected
+    final color = isSelected
         ? theme.colorScheme.primary
         : (isDark
             ? Colors.white.withValues(alpha: 0.85)
@@ -279,144 +125,38 @@ class _NavItem extends StatelessWidget {
       button: true,
       child: _BouncyTabItem(
         onTap: onTap,
-        child: Container(
-          constraints: const BoxConstraints(
-            minHeight: 70.0,
-            minWidth: 44.0, // Accessibility minimum tap target
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          constraints: const BoxConstraints(minHeight: 54, minWidth: 44),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? (isDark ? const Color(0xFF2C2C2E) : const Color(0xFFF2F2F7))
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(999),
           ),
-          alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                item.icon,
-                size: item.iconSize ??
-                    (isSelected ? 28.0 : 26.0), // Icon size: normal or custom
-                color: iconColor,
-              ),
-              const SizedBox(height: 4), // Spacing between icon and label
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    item.label,
-                    style: TextStyle(
-                      fontSize:
-                          isSelected ? 12.0 : 11.0, // Label font: normal size
-                      fontWeight: FontWeight.w600, // Semi-bold
-                      color: textColor,
-                      letterSpacing: -0.2,
-                      height: 1.2,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              Icon(item.icon, size: isSelected ? 28 : 26, color: color),
+              const SizedBox(height: 2),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  item.label,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                    color: color,
+                    height: 1.2,
                   ),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Circular navigation item for the last tab (My/Profile)
-class _CircularNavItem extends StatelessWidget {
-  final LiquidGlassNavItem item;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final double size;
-
-  const _CircularNavItem({
-    required this.item,
-    required this.isSelected,
-    required this.onTap,
-    required this.size,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    // Selected: use app primary
-    // Unselected: near-black/white with 0.85 alpha
-    final iconColor = isSelected
-        ? theme.colorScheme.primary
-        : (isDark
-            ? Colors.white.withValues(alpha: 0.85)
-            : Colors.black.withValues(alpha: 0.85));
-
-    final textColor = isSelected
-        ? theme.colorScheme.primary
-        : (isDark
-            ? Colors.white.withValues(alpha: 0.85)
-            : Colors.black.withValues(alpha: 0.85));
-
-    return Semantics(
-      label: item.semanticLabel ?? item.label,
-      selected: isSelected,
-      button: true,
-      child: _BouncyTabItem(
-        onTap: onTap,
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 8,
-                spreadRadius: 0,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: item.label.isEmpty
-              ? Icon(
-                  item.icon,
-                  size: item.iconSize ?? (isSelected ? 20.0 : 18.0),
-                  color: iconColor,
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      item.icon,
-                      size: item.iconSize ??
-                          (isSelected
-                              ? 20.0
-                              : 18.0), // Use custom iconSize if provided
-                      color: iconColor,
-                    ),
-                    const SizedBox(height: 2),
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          item.label,
-                          style: TextStyle(
-                            fontSize: isSelected
-                                ? 9.0
-                                : 8.5, // Smaller text for smaller button
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
-                            letterSpacing: -0.2,
-                            height: 1.2,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
         ),
       ),
     );

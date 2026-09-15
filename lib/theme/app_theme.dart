@@ -11,12 +11,28 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color danger;
   final Color dangerText;
 
+  /// Grouped fill behind chips, stat panels and interval rows.
+  final Color subtle;
+
+  /// Faint primary wash behind header icons and secondary red actions.
+  final Color tint;
+
+  /// Track color for segmented controls, progress bars and rings.
+  final Color track;
+
+  /// Near-background fill for form rows inside sheets.
+  final Color soft;
+
   const AppColors({
     required this.surfaceElevated,
     required this.border,
     required this.mutedText,
     required this.danger,
     required this.dangerText,
+    required this.subtle,
+    required this.tint,
+    required this.track,
+    required this.soft,
   });
 
   @override
@@ -26,6 +42,10 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? mutedText,
     Color? danger,
     Color? dangerText,
+    Color? subtle,
+    Color? tint,
+    Color? track,
+    Color? soft,
   }) {
     return AppColors(
       surfaceElevated: surfaceElevated ?? this.surfaceElevated,
@@ -33,6 +53,10 @@ class AppColors extends ThemeExtension<AppColors> {
       mutedText: mutedText ?? this.mutedText,
       danger: danger ?? this.danger,
       dangerText: dangerText ?? this.dangerText,
+      subtle: subtle ?? this.subtle,
+      tint: tint ?? this.tint,
+      track: track ?? this.track,
+      soft: soft ?? this.soft,
     );
   }
 
@@ -47,6 +71,10 @@ class AppColors extends ThemeExtension<AppColors> {
       mutedText: Color.lerp(mutedText, other.mutedText, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
       dangerText: Color.lerp(dangerText, other.dangerText, t)!,
+      subtle: Color.lerp(subtle, other.subtle, t)!,
+      tint: Color.lerp(tint, other.tint, t)!,
+      track: Color.lerp(track, other.track, t)!,
+      soft: Color.lerp(soft, other.soft, t)!,
     );
   }
 }
@@ -217,10 +245,14 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       AppColors(
         surfaceElevated: Color(0xFFFFFFFF),
-        border: Color(0xFFE5E5EA),
+        border: Color(0xFFEEEEEE),
         mutedText: Color(0xFF8E8E93),
         danger: Color(0xFFFF3B30),
         dangerText: Color(0xFFFF3B30),
+        subtle: Color(0xFFF2F2F7),
+        tint: Color(0xFFFFEBEE),
+        track: Color(0x1F767680),
+        soft: Color(0xFFFCFBFB),
       ),
     ],
   );
@@ -334,10 +366,14 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       AppColors(
         surfaceElevated: Color(0xFF2C2C2E),
-        border: Color(0xFF38383A),
+        border: Color(0x1AFFFFFF),
         mutedText: Color(0xFF8E8E93),
         danger: Color(0xFFFF453A),
         dangerText: Color(0xFFFF6961),
+        subtle: Color(0xFF2C2C2E),
+        tint: Color(0x2EEF5350),
+        track: Color(0x3D767680),
+        soft: Color(0xFF242426),
       ),
     ],
   );

@@ -317,7 +317,6 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                 LiquidGlassNavItem(
                   icon: Icons.person,
                   label: l10n.myTab,
-                  iconSize: 28.0,
                 ),
               ],
             );

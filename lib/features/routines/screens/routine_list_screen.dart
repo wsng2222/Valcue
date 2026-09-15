@@ -1,4 +1,3 @@
-import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,6 @@ import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/routine.dart';
-import '../models/interval.dart' as interval_model;
 import '../models/machine_type.dart';
 import '../models/difficulty.dart';
 import '../models/routine_template.dart';
@@ -22,6 +20,7 @@ import 'routine_bottom_sheet.dart';
 import 'ai_routine_generator_sheet.dart';
 import '../utils/routine_sharing.dart';
 import '../utils/custom_routine_generator.dart';
+import '../utils/interval_intensity.dart';
 import 'qr_scanner_screen.dart';
 import 'recommended_routines_screen.dart';
 import 'routine_preview_sheet.dart';
@@ -32,6 +31,7 @@ import '../../../widgets/app_dialog.dart';
 import '../../../services/analytics_service.dart';
 import '../../../widgets/app_segmented_control.dart';
 import '../../../widgets/app_message.dart';
+import '../../../widgets/valcue_ui.dart';
 
 Color _segmentedSelectedBackground(BuildContext context) {
   return appSegmentedSelectedBackground(context);
@@ -60,16 +60,6 @@ Widget _buildPlatformSegmentedControl({
     height: height,
     color: color,
   );
-}
-
-class _MachineTabItem {
-  final IconData icon;
-  final String label;
-
-  const _MachineTabItem({
-    required this.icon,
-    required this.label,
-  });
 }
 
 class RoutineListScreen extends StatefulWidget {
@@ -260,197 +250,38 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   }
 
   Widget _buildMachineSegmentedControl(BuildContext context) {
-    if (PlatformInfo.isIOS) {
-      final titles = _getMachineTitles(context);
-      final selectedIndex = _currentPage.clamp(0, titles.length - 1);
-      final selectedBg = _segmentedSelectedBackground(context);
-
-      final brightnessKey = Theme.of(context).brightness;
-      final localeKey = Localizations.localeOf(context).toLanguageTag();
-      return SegmentedButtonTheme(
-        data: _segmentedThemeData(context, selectedBg),
-        child: SizedBox(
-          width: double.infinity,
-          child: _buildPlatformSegmentedControl(
-            key: ValueKey('machine_segment_${brightnessKey.name}_$localeKey'),
-            labels: titles,
-            selectedIndex: selectedIndex,
-            onValueChanged: (index) {
-              if (_currentPage == index) return;
-              final currentPage = _pageController.hasClients
-                  ? (_pageController.page ?? _currentPage.toDouble())
-                  : _currentPage.toDouble();
-              final distance = (currentPage - index).abs();
-              final durationMs =
-                  (220 + (120 * distance)).clamp(260, 420).round();
-              _pageController.animateToPage(
-                index,
-                duration: Duration(milliseconds: durationMs),
-                curve: Curves.easeInOutCubic,
-              );
-            },
-            height: 44,
-            color: selectedBg,
-          ),
-        ),
-      );
-    }
-
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
     final titles = _getMachineTitles(context);
-    final items = [
-      _MachineTabItem(icon: Icons.directions_run, label: titles[0]),
-      _MachineTabItem(icon: Icons.pedal_bike, label: titles[1]),
-      _MachineTabItem(icon: Icons.stairs, label: titles[2]),
-    ];
+    final selectedIndex = _currentPage.clamp(0, titles.length - 1);
+    final selectedBg = _segmentedSelectedBackground(context);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const outerPadding = 4.0;
-        final innerWidth = (constraints.maxWidth - (outerPadding * 2))
-            .clamp(0.0, double.infinity)
-            .toDouble();
-        final segmentWidth = innerWidth / items.length;
-
-        return Container(
-          padding: const EdgeInsets.all(outerPadding),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.08)
-                  : appColors.border,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: AnimatedBuilder(
-            animation: _pageController,
-            builder: (context, _) {
-              final page = _pageController.hasClients
-                  ? (_pageController.page ?? _currentPage.toDouble())
-                  : _currentPage.toDouble();
-              final clampedPage =
-                  page.clamp(0.0, (items.length - 1).toDouble()).toDouble();
-              final indicatorLeft = segmentWidth * clampedPage;
-
-              return Stack(
-                children: [
-                  Positioned(
-                    left: indicatorLeft,
-                    top: 0,
-                    bottom: 0,
-                    width: segmentWidth,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: appColors.surfaceElevated,
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.04)
-                              : Colors.black.withValues(alpha: 0.04),
-                          width: 1.0,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: List.generate(items.length, (index) {
-                      final item = items[index];
-                      final rawT =
-                          (1 - (clampedPage - index).abs()).clamp(0.0, 1.0);
-                      final t = Curves.easeOutCubic.transform(rawT);
-                      final iconColor = Color.lerp(
-                        appColors.mutedText,
-                        theme.colorScheme.primary,
-                        t,
-                      );
-                      final textColor = Color.lerp(
-                        theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        theme.colorScheme.primary,
-                        t,
-                      );
-                      final fontWeight = FontWeight.lerp(
-                            FontWeight.w600,
-                            FontWeight.w700,
-                            t,
-                          ) ??
-                          (_currentPage == index
-                              ? FontWeight.w700
-                              : FontWeight.w600);
-
-                      return Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            if (_currentPage == index) return;
-                            final currentPage = _pageController.hasClients
-                                ? (_pageController.page ??
-                                    _currentPage.toDouble())
-                                : _currentPage.toDouble();
-                            final distance = (currentPage - index).abs();
-                            final durationMs = (220 + (120 * distance))
-                                .clamp(260, 420)
-                                .round();
-                            _pageController.animateToPage(
-                              index,
-                              duration: Duration(milliseconds: durationMs),
-                              curve: Curves.easeInOutCubic,
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 11),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  item.icon,
-                                  size: 17,
-                                  color: iconColor,
-                                ),
-                                const SizedBox(width: 7),
-                                Flexible(
-                                  child: Text(
-                                    item.label,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 13.5,
-                                      fontWeight: fontWeight,
-                                      color: textColor,
-                                      letterSpacing: -0.25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+    final brightnessKey = Theme.of(context).brightness;
+    final localeKey = Localizations.localeOf(context).toLanguageTag();
+    return SegmentedButtonTheme(
+      data: _segmentedThemeData(context, selectedBg),
+      child: SizedBox(
+        width: double.infinity,
+        child: _buildPlatformSegmentedControl(
+          key: ValueKey('machine_segment_${brightnessKey.name}_$localeKey'),
+          labels: titles,
+          selectedIndex: selectedIndex,
+          onValueChanged: (index) {
+            if (_currentPage == index) return;
+            final currentPage = _pageController.hasClients
+                ? (_pageController.page ?? _currentPage.toDouble())
+                : _currentPage.toDouble();
+            final distance = (currentPage - index).abs();
+            final durationMs =
+                (220 + (120 * distance)).clamp(260, 420).round();
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: durationMs),
+              curve: Curves.easeInOutCubic,
+            );
+          },
+          height: 44,
+          color: selectedBg,
+        ),
+      ),
     );
   }
 
@@ -581,24 +412,54 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   Widget _buildRecommendedButton(
       BuildContext context, MachineType machineType) {
     final l10n = AppLocalizations.of(context)!;
-    final buttonText = l10n.viewRecommendedRoutines;
+    final theme = Theme.of(context);
     return Center(
-      child: TextButton(
-        onPressed: () => _navigateToRecommendedRoutines(context, machineType),
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          minimumSize: Size.zero,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          foregroundColor: Theme.of(context).colorScheme.primary,
+      child: GestureDetector(
+        onTap: () => _navigateToRecommendedRoutines(context, machineType),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 13),
+          decoration: BoxDecoration(
+            color: context.appColors.tint,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            '${l10n.viewRecommendedRoutines} →',
+            style: TextStyle(
+              color: theme.colorScheme.primary,
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.3,
+            ),
+          ),
         ),
-        child: Text(
-          buttonText,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            fontStyle: FontStyle.normal,
-            letterSpacing: -0.3,
+      ),
+    );
+  }
+
+  Widget _buildAddButton(BuildContext context, MachineType machineType) {
+    final theme = Theme.of(context);
+    return Center(
+      child: GestureDetector(
+        onTap: () => _handleAddRoutine(context, machineType),
+        child: Container(
+          width: 78,
+          height: 78,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.onSurface,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.28),
+                blurRadius: 24,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: PlatformIcon(
+            cupertino: CupertinoIcons.add,
+            material: Icons.add,
+            color: theme.colorScheme.surface,
+            size: 36,
           ),
         ),
       ),
@@ -641,58 +502,29 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 14),
+                  padding: const EdgeInsets.fromLTRB(
+                      kScreenGutter, 10, kScreenGutter, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 42,
-                            height: 42,
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withValues(
-                                alpha: 0.10,
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.directions_run,
-                              size: 22,
-                              color: theme.colorScheme.primary,
-                            ),
+                      TabTitleHeader(
+                        icon: Icons.directions_run,
+                        title: l10n.routineTab,
+                        trailing: IconButton(
+                          icon: const Icon(Icons.qr_code_scanner),
+                          color: theme.colorScheme.onSurface,
+                          iconSize: 26,
+                          alignment: AlignmentDirectional.centerEnd,
+                          padding: const EdgeInsetsDirectional.only(end: 4),
+                          constraints: const BoxConstraints(
+                            minWidth: 42,
+                            minHeight: 42,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              l10n.routineTab,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.lato(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w900,
-                                fontStyle: FontStyle.italic,
-                                color: theme.colorScheme.onSurface,
-                                letterSpacing: -0.9,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.qr_code_scanner),
-                            color: theme.colorScheme.onSurface,
-                            iconSize: 26,
-                            alignment: AlignmentDirectional.centerEnd,
-                            padding: const EdgeInsetsDirectional.only(end: 4),
-                            constraints: const BoxConstraints(
-                              minWidth: 42,
-                              minHeight: 42,
-                            ),
-                            tooltip: l10n.scanQrCode,
-                            onPressed: () => _scanQrCode(context),
-                          ),
-                        ],
+                          tooltip: l10n.scanQrCode,
+                          onPressed: () => _scanQrCode(context),
+                        ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 18),
                       _buildMachineSegmentedControl(context),
                     ],
                   ),
@@ -870,87 +702,63 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             .take(2)
             .toList();
 
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 156, 20, 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 12),
-            Text(
-              l10n.noRoutinesSaved,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -0.4,
-              ),
+    return SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(
+        kScreenGutter,
+        80,
+        kScreenGutter,
+        40 + MediaQuery.of(context).padding.bottom,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.noRoutinesSaved,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
+              letterSpacing: -0.4,
             ),
-            const SizedBox(height: 8),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.tapButtonToCreate,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              color: context.appColors.mutedText,
+              letterSpacing: -0.2,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildAddButton(context, machineType),
+          if (previewTemplates.isNotEmpty) ...[
+            const SizedBox(height: 80),
             Text(
-              l10n.tapButtonToCreate,
-              textAlign: TextAlign.center,
+              l10n.quickStart,
               style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: context.appColors.mutedText,
+                fontSize: 19,
+                fontWeight: FontWeight.w800,
+                color: theme.colorScheme.onSurface,
                 letterSpacing: -0.3,
               ),
             ),
-            const SizedBox(height: 24),
-            Center(
-              child: GestureDetector(
-                onTap: () => _handleAddRoutine(context, machineType),
-                child: Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.colorScheme.shadow.withValues(alpha: 0.25),
-                        blurRadius: 22,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: PlatformIcon(
-                    cupertino: CupertinoIcons.add,
-                    material: Icons.add,
-                    color: theme.colorScheme.surface,
-                    size: 38,
-                  ),
+            const SizedBox(height: 14),
+            for (final template in previewTemplates)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: _buildTemplatePreviewCard(
+                  context,
+                  template,
+                  settingsProvider,
                 ),
               ),
-            ),
-            if (previewTemplates.isNotEmpty) ...[
-              const SizedBox(height: 160),
-              Text(
-                l10n.quickStart,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.3,
-                ),
-              ),
-              const SizedBox(height: 12),
-              for (final template in previewTemplates)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _buildTemplatePreviewCard(
-                    context,
-                    template,
-                    settingsProvider,
-                  ),
-                ),
-            ],
-            const SizedBox(height: 20),
-            _buildRecommendedButton(context, machineType),
           ],
-        ),
+          const SizedBox(height: 22),
+          _buildRecommendedButton(context, machineType),
+        ],
       ),
     );
   }
@@ -975,74 +783,105 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     return Bounceable(
       onTap: openPreview,
       child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: appColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.shadow.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.all(18),
+        decoration: valcueCardDecoration(context, radius: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              _getTemplateTitle(l10n, template),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -0.3,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              _getTemplateSubtitle(l10n, template),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: appColors.mutedText,
-                letterSpacing: -0.2,
-              ),
-            ),
-            const SizedBox(height: 10),
             Row(
               children: [
-                Icon(
-                  Icons.timer,
-                  size: 14,
-                  color: appColors.mutedText,
-                ),
-                const SizedBox(width: 6),
-                BidiSafeText(
-                  template.totalDurationFormatted,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: appColors.tint,
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  forceLTR: true,
+                  child: Icon(
+                    _machineIcon(template.machineType),
+                    size: 24,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _getTemplateTitle(l10n, template),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: theme.colorScheme.onSurface,
+                          letterSpacing: -0.4,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _getTemplateSubtitle(l10n, template),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: appColors.mutedText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(color: appColors.border),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.schedule,
+                          size: 16, color: appColors.mutedText),
+                      const SizedBox(width: 7),
+                      BidiSafeText(
+                        template.totalDurationFormatted,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        forceLTR: true,
+                      ),
+                    ],
+                  ),
                 ),
                 const Spacer(),
-                GestureDetector(
-                  onTap: openPreview,
-                  child: Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 13,
-                      color: theme.colorScheme.onPrimary,
-                    ),
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.32),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    size: 26,
+                    color: theme.colorScheme.onPrimary,
                   ),
                 ),
               ],
@@ -1051,6 +890,17 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
         ),
       ),
     );
+  }
+
+  IconData _machineIcon(MachineType machineType) {
+    switch (machineType) {
+      case MachineType.treadmill:
+        return Icons.directions_run;
+      case MachineType.cycle:
+        return Icons.directions_bike;
+      case MachineType.stairmaster:
+        return Icons.stairs;
+    }
   }
 
   String _getTemplateTitle(AppLocalizations l10n, RoutineTemplate template) {
@@ -1162,81 +1012,36 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
 
     return CustomScrollView(
       slivers: [
-        // Routine cards
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
+          padding: const EdgeInsets.fromLTRB(
+              kScreenGutter, 22, kScreenGutter, 0),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final routine = routines[index];
-                return _buildRoutineCard(context, routine, settingsProvider);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: _buildRoutineCard(context, routine, settingsProvider),
+                );
               },
               childCount: routines.length,
             ),
           ),
         ),
-        // "+" button as last scrollable item
-        if (shouldShowAddButton)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () => _handleAddRoutine(context, machineType),
-                    child: Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .shadow
-                                .withValues(alpha: 0.25),
-                            blurRadius: 22,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: PlatformIcon(
-                        cupertino: CupertinoIcons.add,
-                        material: Icons.add,
-                        color: Theme.of(context).colorScheme.surface,
-                        size: 36,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(top: 18, bottom: bottomReserved + 24),
+            child: Column(
+              children: [
+                if (shouldShowAddButton) ...[
+                  _buildAddButton(context, machineType),
+                  const SizedBox(height: 22),
+                ],
+                _buildRecommendedButton(context, machineType),
+              ],
             ),
           ),
-        // Recommended routines link below + button
-        if (shouldShowAddButton)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: 42,
-                bottom: bottomReserved,
-              ),
-              child: _buildRecommendedButton(context, machineType),
-            ),
-          )
-        else
-          // If no add button, just add bottom padding
-          SliverToBoxAdapter(
-            child: SizedBox(height: bottomReserved),
-          ),
-        // Fill remaining space when content is short (pushes "+" button to bottom)
-        // Only fill when there are routines (not empty), to push button down
-        if (shouldShowAddButton && routines.isNotEmpty)
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: SizedBox.shrink(),
-          ),
+        ),
       ],
     );
   }
@@ -1245,29 +1050,33 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       AppSettingsProvider settingsProvider) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    // Convert stored Korean difficulty to localized value
-    String localizedDifficulty =
+    final localizedDifficulty =
         _getLocalizedDifficulty(context, routine.difficulty);
+    final sessionsText = '${routine.intervals.length} ${l10n.sessions}';
+    final String amountText;
+    final IconData amountIcon;
+    switch (routine.machineType) {
+      case MachineType.treadmill:
+        amountIcon = Icons.straighten;
+        amountText =
+            _buildTotalDistanceText(context, routine, settingsProvider);
+      case MachineType.cycle:
+        amountIcon = Icons.straighten;
+        amountText =
+            _buildCycleDistanceText(context, routine, settingsProvider);
+      case MachineType.stairmaster:
+        amountIcon = Icons.stairs;
+        amountText = _buildStairsFloorsText(context, routine);
+    }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.14),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-            spreadRadius: 0,
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
+      decoration: valcueCardDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Text(
@@ -1277,104 +1086,53 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
                   softWrap: false,
                   style: TextStyle(
                     fontSize: 21,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
-                    letterSpacing: -0.4,
+                    letterSpacing: -0.42,
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              _MetaPill(
+              const SizedBox(width: 12),
+              ValcueChip(
                 icon: Icons.bolt,
                 text: localizedDifficulty,
+                muted: true,
+                fontSize: 14,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          // Big duration text (always LTR for timers)
+          const SizedBox(height: 12),
           BidiSafeText(
             routine.totalDurationFormatted,
             style: TextStyle(
               fontSize: 46,
               fontWeight: FontWeight.w800,
               color: theme.colorScheme.onSurface,
-              letterSpacing: -1.0,
+              letterSpacing: -1.84,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
             forceLTR: true, // Timers must always be LTR
           ),
           const SizedBox(height: 14),
           _buildIntervalPatternBar(context, routine),
           const SizedBox(height: 16),
-          Row(
+          Wrap(
+            spacing: 10,
+            runSpacing: 8,
             children: [
-              if (routine.machineType == MachineType.cycle) ...[
-                _MetaPill(
-                  icon: Icons.straighten,
-                  text: _buildCycleDistanceText(
-                    context,
-                    routine,
-                    settingsProvider,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
-              if (routine.machineType == MachineType.stairmaster) ...[
-                _MetaPill(
-                  icon: Icons.stairs,
-                  text: _buildStairsFloorsText(context, routine),
-                ),
-                const SizedBox(width: 8),
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
-              if (routine.machineType == MachineType.treadmill) ...[
-                _MetaPill(
-                  icon: Icons.straighten,
-                  text: _buildTotalDistanceText(
-                    context,
-                    routine,
-                    settingsProvider,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                _MetaPill(
-                  icon: Icons.repeat,
-                  text: '${routine.intervals.length} ${l10n.sessions}',
-                ),
-                const SizedBox(width: 8),
-              ],
+              ValcueChip(icon: amountIcon, text: amountText),
+              ValcueChip(icon: Icons.repeat, text: sessionsText),
             ],
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                RoutineBottomSheet.show(context, routine: routine);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 19),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.checkRoutineStart,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.lato(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  letterSpacing: -0.3,
-                ),
-              ),
-            ),
+          const SizedBox(height: 18),
+          PrimaryPillButton(
+            label: l10n.checkRoutineStart,
+            italic: true,
+            onPressed: () {
+              RoutineBottomSheet.show(context, routine: routine);
+            },
           ),
         ],
       ),
@@ -1421,75 +1179,31 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
   }
 
   Widget _buildIntervalPatternBar(BuildContext context, Routine routine) {
-    final theme = Theme.of(context);
-    final totalSeconds = routine.intervals.fold<int>(
-      0,
-      (sum, interval) => sum + interval.durationSeconds,
-    );
-    if (totalSeconds <= 0) {
+    if (routine.intervals.isEmpty) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final hardColor = theme.colorScheme.primary;
+    final easyColor =
+        isDark ? const Color(0x59EF5350) : const Color(0xFFFFCDD2);
 
-    final baseColor = theme.colorScheme.primary;
-    final surfaceColor = theme.colorScheme.surface;
-
-    double metricForInterval(interval_model.Interval interval) {
-      switch (routine.machineType) {
-        case MachineType.treadmill:
-          return (interval.speedKmh ?? 0).toDouble();
-        case MachineType.cycle:
-          return (interval.resistance ?? 0).toDouble();
-        case MachineType.stairmaster:
-          return (interval.level ?? 0).toDouble();
-      }
-    }
-
-    final metrics = routine.intervals.map(metricForInterval).toList();
-    final minMetric = metrics.reduce((a, b) => a < b ? a : b);
-    final maxMetric = metrics.reduce((a, b) => a > b ? a : b);
-    final hasVariation = (maxMetric - minMetric).abs() > 0.001;
-
-    Color segmentColor(int index) {
-      if (!hasVariation) {
-        // When intensity is identical, keep all segments the same color.
-        const uniformMix = 0.28;
-        return Color.lerp(baseColor, surfaceColor, uniformMix) ?? baseColor;
-      }
-
-      final value = metrics[index];
-      final normalized =
-          ((value - minMetric) / (maxMetric - minMetric)).clamp(0.0, 1.0);
-      final eased = Curves.easeInOutCubic.transform(normalized);
-      // Higher intensity -> closer to primary (darker), lower -> closer to surface.
-      const mixLow = 0.62;
-      const mixHigh = 0.08;
-      final mix = (mixLow - (mixLow - mixHigh) * eased).clamp(0.06, 0.7);
-      return Color.lerp(baseColor, surfaceColor, mix) ?? baseColor;
-    }
-
-    return Row(
-      children: [
-        for (int i = 0; i < routine.intervals.length; i++) ...[
-          Expanded(
-            flex: (routine.intervals[i].durationSeconds / totalSeconds * 100)
-                .clamp(1, 100)
-                .round(),
-            child: Container(
-              height: 10,
-              decoration: BoxDecoration(
-                color: segmentColor(i),
-                borderRadius: BorderRadius.horizontal(
-                  left: i == 0 ? const Radius.circular(999) : Radius.zero,
-                  right: i == routine.intervals.length - 1
-                      ? const Radius.circular(999)
-                      : Radius.zero,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: SizedBox(
+        height: 10,
+        child: Row(
+          children: [
+            for (final interval in routine.intervals)
+              Expanded(
+                flex: (interval.durationSeconds / 20).round().clamp(1, 1 << 20),
+                child: ColoredBox(
+                  color: isHardInterval(interval) ? hardColor : easyColor,
                 ),
               ),
-            ),
-          ),
-          if (i < routine.intervals.length - 1) const SizedBox(width: 3),
-        ],
-      ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -1505,56 +1219,5 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
     }
     // Fallback to stored value if not found
     return storedDifficulty;
-  }
-}
-
-class _MetaPill extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const _MetaPill({
-    required this.icon,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
-    final background = isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: appColors.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 15,
-            color: appColors.mutedText,
-          ),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-                letterSpacing: -0.2,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
