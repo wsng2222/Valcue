@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
-import '../../../utils/app_shadows.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../models/workout_session.dart';
 import '../providers/workout_history_provider.dart';
 import '../../routines/models/machine_type.dart';
@@ -37,15 +37,16 @@ class _CalendarTabState extends State<CalendarTab> {
         return Column(
           children: [
             ActivityHeatmap(sessions: provider.sessions),
-            const SizedBox(height: 8),
+            const SizedBox(height: 14),
             // Month navigation
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.chevron_left),
+                    color: const Color(0xFF007AFF),
+                    icon: const Icon(Icons.chevron_left, size: 28),
                     tooltip: l10n.previousMonth,
                     onPressed: () {
                       setState(() {
@@ -61,16 +62,18 @@ class _CalendarTabState extends State<CalendarTab> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),
                   IconButton(
+                    color: const Color(0xFF007AFF),
                     icon: const PlatformIcon(
                       cupertino: CupertinoIcons.chevron_right,
                       material: Icons.chevron_right,
+                      size: 26,
                     ),
                     tooltip: l10n.nextMonth,
                     onPressed: isCurrentMonth
@@ -138,9 +141,10 @@ class _CalendarTabState extends State<CalendarTab> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 22),
       child: Column(
         children: [
+          const SizedBox(height: 8),
           // Weekday headers
           Row(
             children: weekdays.map((day) {
@@ -149,8 +153,7 @@ class _CalendarTabState extends State<CalendarTab> {
                   child: Text(
                     day,
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                       color: appColors.mutedText,
                     ),
                   ),
@@ -165,7 +168,7 @@ class _CalendarTabState extends State<CalendarTab> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
                 childAspectRatio: 1,
-                mainAxisSpacing: 4,
+                mainAxisSpacing: 6,
                 crossAxisSpacing: 4,
               ),
               itemCount: firstWeekday - 1 + daysInMonth,
@@ -178,6 +181,10 @@ class _CalendarTabState extends State<CalendarTab> {
                 final date =
                     DateTime(_currentMonth.year, _currentMonth.month, day);
                 final hasWorkout = provider.hasWorkoutOnDate(date);
+                final isToday = date.year == today.year &&
+                    date.month == today.month &&
+                    date.day == today.day;
+                final highlight = hasWorkout || isToday;
 
                 return GestureDetector(
                   onTap: hasWorkout
@@ -185,27 +192,27 @@ class _CalendarTabState extends State<CalendarTab> {
                       : null,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: hasWorkout
-                          ? theme.colorScheme.primary.withValues(alpha: 0.2)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                      border: hasWorkout
-                          ? Border.all(
-                              color: theme.colorScheme.primary,
-                              width: 2,
-                            )
-                          : null,
+                      color: hasWorkout ? appColors.tint : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isToday
+                            ? theme.colorScheme.primary
+                            : Colors.transparent,
+                      ),
                     ),
                     child: Center(
-                      child: Text(
-                        '$day',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight:
-                              hasWorkout ? FontWeight.w600 : FontWeight.w400,
-                          color: hasWorkout
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurface,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '$day',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight:
+                                highlight ? FontWeight.w800 : FontWeight.w500,
+                            color: highlight
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface,
+                          ),
                         ),
                       ),
                     ),
@@ -218,17 +225,11 @@ class _CalendarTabState extends State<CalendarTab> {
           // Statistics bar
           Center(
             child: Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              margin: const EdgeInsets.fromLTRB(0, 14, 0, 20),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
               decoration: BoxDecoration(
-                color: appColors.surfaceElevated,
+                color: appColors.subtle,
                 borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : appColors.border,
-                ),
-                boxShadow: AppShadows.elevatedSoft,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -244,21 +245,13 @@ class _CalendarTabState extends State<CalendarTab> {
                       ),
                     ),
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
                       color: theme.colorScheme.onSurface,
                       letterSpacing: -0.3,
                     ),
                   ),
-                  // Divider
-                  Container(
-                    height: 20,
-                    width: 1.2,
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    color: theme.brightness == Brightness.dark
-                        ? const Color(0xFF4C4C4C)
-                        : const Color(0xFFCCCCCC),
-                  ),
+                  const SizedBox(width: 18),
                   // Rest days
                   Text(
                     AppLocalizations.of(context)!.restDays(
@@ -269,9 +262,9 @@ class _CalendarTabState extends State<CalendarTab> {
                       ),
                     ),
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: appColors.mutedText,
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -306,7 +299,6 @@ class _DayWorkoutsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final appColors = theme.extension<AppColors>()!;
 
     return DraggableScrollableSheet(
@@ -320,13 +312,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.08)
-                  : theme.extension<AppColors>()!.border,
-            ),
-            boxShadow: AppShadows.elevatedSoft,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
@@ -337,12 +323,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.1)
-                          : appColors.border,
-                      width: 1,
-                    ),
+                    bottom: BorderSide(color: appColors.border),
                   ),
                 ),
                 child: Column(
@@ -354,7 +335,7 @@ class _DayWorkoutsSheet extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                         color: theme.colorScheme.onSurface,
                         letterSpacing: -0.5,
                       ),
@@ -373,12 +354,12 @@ class _DayWorkoutsSheet extends StatelessWidget {
                     return ListView.builder(
                       controller: scrollController,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                          horizontal: 22, vertical: 14),
                       itemCount: sessions.length,
                       itemBuilder: (context, index) {
                         final session = sessions[index];
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: SwipeRevealDelete(
                             key: Key(session.id),
                             itemId: 'calendar_session_${session.id}',
@@ -571,25 +552,17 @@ class _DayWorkoutRow extends StatelessWidget {
     final metric = formatMetric();
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: appColors.border,
-          width: 1,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: valcueCardDecoration(context),
       child: Row(
         children: [
           // Leading icon
           Container(
-            width: 40,
-            height: 40,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              color: appColors.tint,
+              borderRadius: BorderRadius.circular(13),
             ),
             child: Icon(
               _getMachineIcon(session.machineType),
@@ -597,7 +570,7 @@ class _DayWorkoutRow extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           // Content
           Expanded(
             child: Column(
@@ -606,12 +579,12 @@ class _DayWorkoutRow extends StatelessWidget {
                 Text(
                   friendlyName,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 3),
                 Wrap(
                   spacing: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
@@ -619,7 +592,7 @@ class _DayWorkoutRow extends StatelessWidget {
                     Text(
                       formatDuration(session.durationSeconds),
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: appColors.mutedText,
                       ),
                     ),
@@ -631,7 +604,7 @@ class _DayWorkoutRow extends StatelessWidget {
                       Text(
                         metric,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: appColors.mutedText,
                         ),
                       ),
@@ -644,7 +617,7 @@ class _DayWorkoutRow extends StatelessWidget {
                       Text(
                         avgSpeed,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: appColors.mutedText,
                         ),
                       ),

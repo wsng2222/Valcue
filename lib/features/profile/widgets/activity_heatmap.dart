@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../models/workout_session.dart';
 
 class ActivityHeatmap extends StatelessWidget {
@@ -20,164 +21,165 @@ class ActivityHeatmap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final appColors = theme.extension<AppColors>()!;
     final l10n = AppLocalizations.of(context)!;
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // We want the last 20 weeks. Monday of the first week.
-    final daysToSubtract = (today.weekday - 1) + (19 * 7);
+    const int cols = 22;
+    const int rows = 7;
+    const double gap = 3;
+
+    // Monday of the first of the last [cols] weeks.
+    final daysToSubtract = (today.weekday - 1) + ((cols - 1) * 7);
     final startDate = today.subtract(Duration(days: daysToSubtract));
 
-    const int cols = 20;
-    const int rows = 7;
-
-    Color getCellColor(DateTime date) {
-      final count = _getWorkoutCountOnDate(date);
-      if (count == 0) {
-        return isDark
-            ? Colors.white.withValues(alpha: 0.04)
-            : Colors.grey.shade100;
-      }
-      final baseColor = theme.colorScheme.primary;
-      if (count == 1) {
-        return baseColor.withValues(alpha: 0.35);
-      } else if (count == 2) {
-        return baseColor.withValues(alpha: 0.65);
-      } else {
-        return baseColor;
-      }
+    Color levelColor(int count) {
+      if (count <= 0) return appColors.subtle;
+      if (count == 1) return appColors.tint;
+      if (count == 2) return const Color(0xFFF4A399);
+      return theme.colorScheme.primary;
     }
 
-    final columnWidgets = <Widget>[];
-
-    for (int c = 0; c < cols; c++) {
-      final cells = <Widget>[];
-      for (int r = 0; r < rows; r++) {
-        final cellDate = startDate.add(Duration(days: c * 7 + r));
-        final isFuture = cellDate.isAfter(today);
-
-        cells.add(
-          Container(
-            width: 10,
-            height: 10,
-            margin: const EdgeInsets.symmetric(vertical: 1.5),
-            decoration: BoxDecoration(
-              color: isFuture ? Colors.transparent : getCellColor(cellDate),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        );
-      }
-
-      final columnFirstDay = startDate.add(Duration(days: c * 7));
-      Widget monthLabel = const SizedBox(height: 14);
-      if (c == 0 || columnFirstDay.day <= 7) {
-        final monthName =
-            LocalizedFormat.monthAbbreviation(context, columnFirstDay);
-        monthLabel = Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Text(
-            monthName,
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.bold,
-              color: appColors.mutedText,
-            ),
-          ),
-        );
-      }
-
-      columnWidgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 1.5),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              monthLabel,
-              ...cells,
-            ],
-          ),
-        ),
-      );
-    }
-
-    final weekdayLabelWidgets = <Widget>[
-      const SizedBox(height: 14),
-      for (int i = 0; i < 7; i++)
-        SizedBox(
-          height: 13,
-          child: Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: (i % 2 == 0)
-                ? Text(
-                    switch (i) {
-                      0 => l10n.mon.substring(0, 1),
-                      2 => l10n.wed.substring(0, 1),
-                      4 => l10n.fri.substring(0, 1),
-                      6 => l10n.sun.substring(0, 1),
-                      _ => '',
-                    },
-                    style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.w600,
-                      color: appColors.mutedText,
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ),
+    final labelStyle = TextStyle(fontSize: 11, color: appColors.mutedText);
+    final weekdayLabels = <String>[
+      l10n.mon,
+      '',
+      l10n.wed,
+      '',
+      l10n.fri,
+      '',
+      l10n.sun,
     ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF1C1C1E)
-            : const Color.fromARGB(245, 245, 245, 245),
-        borderRadius: BorderRadius.circular(20),
-        border: isDark
-            ? Border.all(
-                color: Colors.white.withValues(alpha: 0.08),
-                width: 1,
-              )
-            : null,
-      ),
+      margin: const EdgeInsets.fromLTRB(22, 18, 22, 0),
+      padding: const EdgeInsets.all(16),
+      decoration: valcueCardDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                l10n.trend,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            reverse: Directionality.of(context) == TextDirection.ltr,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: weekdayLabelWidgets,
-                ),
-                const SizedBox(width: 4),
-                ...columnWidgets,
-              ],
+          Text(
+            l10n.trend,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 14),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const labelWidth = 22.0;
+              final gridWidth = constraints.maxWidth - labelWidth - 6;
+              final cell = (gridWidth - gap * (cols - 1)) / cols;
+
+              final monthLabels = <Widget>[];
+              for (int c = 0; c < cols; c++) {
+                final columnFirstDay = startDate.add(Duration(days: c * 7));
+                final showLabel = c == 0 || columnFirstDay.day <= 7;
+                monthLabels.add(
+                  SizedBox(
+                    width: cell + (c == cols - 1 ? 0 : gap),
+                    child: showLabel
+                        ? OverflowBox(
+                            alignment: AlignmentDirectional.centerStart,
+                            maxWidth: 40,
+                            child: Text(
+                              LocalizedFormat.monthAbbreviation(
+                                  context, columnFirstDay),
+                              maxLines: 1,
+                              style: labelStyle,
+                            ),
+                          )
+                        : null,
+                  ),
+                );
+              }
+
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: labelWidth,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        for (int r = 0; r < rows; r++)
+                          SizedBox(
+                            height: cell + (r == rows - 1 ? 0 : gap),
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  weekdayLabels[r].characters.take(1).string,
+                                  style: labelStyle,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 14, child: Row(children: monthLabels)),
+                          const SizedBox(height: 6),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (int c = 0; c < cols; c++)
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: c == cols - 1 ? 0 : gap,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      for (int r = 0; r < rows; r++)
+                                        Builder(builder: (context) {
+                                          final date = startDate.add(
+                                              Duration(days: c * 7 + r));
+                                          final isFuture =
+                                              date.isAfter(today);
+                                          return Container(
+                                            width: cell,
+                                            height: cell,
+                                            margin: EdgeInsets.only(
+                                              bottom: r == rows - 1 ? 0 : gap,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: isFuture
+                                                  ? Colors.transparent
+                                                  : levelColor(
+                                                      _getWorkoutCountOnDate(
+                                                          date)),
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                            ),
+                                          );
+                                        }),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -186,33 +188,27 @@ class ActivityHeatmap extends StatelessWidget {
                   l10n.less,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 8, color: appColors.mutedText),
+                  style: labelStyle.copyWith(fontSize: 12),
                 ),
               ),
-              const SizedBox(width: 4),
-              for (int count = 0; count <= 3; count++)
+              const SizedBox(width: 6),
+              for (int count = 1; count <= 3; count++)
                 Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 1),
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
                   decoration: BoxDecoration(
-                    color: count == 0
-                        ? (isDark
-                            ? Colors.white.withValues(alpha: 0.04)
-                            : Colors.grey.shade100)
-                        : theme.colorScheme.primary.withValues(
-                            alpha:
-                                count == 1 ? 0.35 : (count == 2 ? 0.65 : 1.0)),
-                    borderRadius: BorderRadius.circular(1.5),
+                    color: levelColor(count),
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 6),
               Flexible(
                 child: Text(
                   l10n.more,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 8, color: appColors.mutedText),
+                  style: labelStyle.copyWith(fontSize: 12),
                 ),
               ),
             ],
@@ -222,5 +218,3 @@ class ActivityHeatmap extends StatelessWidget {
     );
   }
 }
-
-// Calendar Tab
