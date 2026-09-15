@@ -353,38 +353,32 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       }),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
         decoration: BoxDecoration(
           color: isSelected
               ? theme.colorScheme.primary
-              : theme.colorScheme.surfaceContainerHighest,
+              : context.appColors.tint,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant.withValues(alpha: 0.45),
-            width: isSelected ? 1.4 : 1.0,
-          ),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              size: 16,
-              color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+              size: 18,
+              color: isSelected ? Colors.white : theme.colorScheme.primary,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 7),
             Flexible(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color:
-                      isSelected ? Colors.white : theme.colorScheme.onSurface,
+                      isSelected ? Colors.white : theme.colorScheme.primary,
                 ),
               ),
             ),
@@ -643,69 +637,75 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
             children: [
               // Premium glowing AI circle loader
               Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
+                width: 96,
+                height: 96,
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.purpleAccent,
-                      Colors.blueAccent,
-                      Colors.cyanAccent
-                    ],
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF8B5CF6), Color(0xFF22D3EE)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blueAccent.withValues(alpha: 0.4),
-                      blurRadius: 24,
-                      spreadRadius: 2,
+                      color: Color(0x666E8CFF),
+                      blurRadius: 42,
                     ),
                   ],
                 ),
                 child: const Center(
                   child: SizedBox(
-                    width: 50,
-                    height: 50,
+                    width: 54,
+                    height: 54,
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      backgroundColor: Color(0x38FFFFFF),
                       strokeWidth: 4,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 44),
               Text(
                 l10n.customRoutineGenerating,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.4,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 40),
               // Step status checker list
               Column(
                 children: List.generate(phrases.length, (idx) {
                   final isDone = _loadingStep > idx;
                   final isCurrent = _loadingStep == idx;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 9.0),
                     child: Row(
                       children: [
-                        Icon(
-                          isDone
-                              ? Icons.check_circle
-                              : (isCurrent
-                                  ? Icons.circle_outlined
-                                  : Icons.circle_outlined),
-                          color: isDone
-                              ? Colors.greenAccent
-                              : (isCurrent
-                                  ? Colors.blueAccent
-                                  : Colors.grey.withValues(alpha: 0.4)),
-                          size: 20,
+                        Container(
+                          width: 26,
+                          height: 26,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isDone
+                                ? const Color(0xFF34C759)
+                                : Colors.transparent,
+                            border: isDone
+                                ? null
+                                : Border.all(
+                                    color: isCurrent
+                                        ? const Color(0xFF007AFF)
+                                        : appColors.border,
+                                    width: 2,
+                                  ),
+                          ),
+                          child: isDone
+                              ? const Icon(Icons.check_rounded,
+                                  size: 18, color: Colors.white)
+                              : null,
                         ),
                         const SizedBox(width: 16),
                         Flexible(
@@ -714,9 +714,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 19,
                               fontWeight:
-                                  isCurrent ? FontWeight.w600 : FontWeight.w400,
+                                  isCurrent ? FontWeight.w700 : FontWeight.w500,
                               color: isDone
                                   ? theme.colorScheme.onSurface
                                   : (isCurrent
@@ -754,7 +754,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         children: [
           // Header
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+            padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -765,39 +765,38 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       Text(
                         l10n.generationComplete,
                         style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.blueAccent,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF007AFF),
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         _generatedRoutine!.name,
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
                           color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.8,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
+                          horizontal: 16,
+                          vertical: 9,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              theme.colorScheme.primary.withValues(alpha: 0.08),
+                          color: appColors.tint,
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
                           '$targetSummary • ${l10n.difficulty}: ${_getDifficultyLabel(l10n)}',
                           style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
                             color: theme.colorScheme.primary,
                           ),
                         ),
@@ -807,17 +806,24 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                 ),
                 TextButton(
                   onPressed: () => _startGeneration(isRegenerating: true),
-                  child: Text(l10n.regenerate),
+                  child: Text(
+                    l10n.regenerate,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 0.5, thickness: 0.5),
+          Divider(height: 1, thickness: 1, color: appColors.border),
 
           // Scrollable Preview List
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.only(top: 16),
               child: _buildFlatIntervalList(theme, appColors),
             ),
           ),
@@ -825,24 +831,23 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           // The same caveat as the info dialog, shown where it actually comes
           // up: next to the numbers the routine ended up with.
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            padding: const EdgeInsets.fromLTRB(22, 10, 22, 8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
                   Icons.info_outline_rounded,
-                  size: 14,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                  size: 17,
+                  color: appColors.mutedText,
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     l10n.customRoutineAccuracyResultNote,
                     style: TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 14,
                       height: 1.35,
-                      color:
-                          theme.colorScheme.onSurface.withValues(alpha: 0.42),
+                      color: appColors.mutedText,
                     ),
                   ),
                 ),
@@ -862,17 +867,39 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
 
   Widget _buildFlatIntervalList(ThemeData theme, AppColors appColors) {
     final l10n = AppLocalizations.of(context)!;
-    final isDark = theme.brightness == Brightness.dark;
-    final layeredSurfaceColor =
-        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
-    final chipSurfaceColor = isDark ? const Color(0xFF3C3C3C) : Colors.white;
     final settingsProvider =
         Provider.of<AppSettingsProvider>(context, listen: false);
+
+    Widget chip(String text, int flex) {
+      return Expanded(
+        flex: flex,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 15),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              text,
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurface,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       itemCount: _generatedRoutine!.intervals.length,
       itemBuilder: (context, index) {
         final interval = _generatedRoutine!.intervals[index];
@@ -921,82 +948,26 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         }
 
         return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 12),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: layeredSurfaceColor,
+              color: appColors.subtle,
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : appColors.border,
-              ),
             ),
-            child: Center(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: chipSurfaceColor,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Text(
-                        interval.durationFormatted,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                    if (pill1Text != null) ...[
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: chipSurfaceColor,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Text(
-                          pill1Text,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                    ],
-                    if (pill2Text != null) ...[
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: chipSurfaceColor,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Text(
-                          pill2Text,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+            child: Row(
+              children: [
+                chip(interval.durationFormatted, 100),
+                if (pill1Text != null) ...[
+                  const SizedBox(width: 9),
+                  chip(pill1Text, 115),
+                ],
+                if (pill2Text != null) ...[
+                  const SizedBox(width: 9),
+                  chip(pill2Text, 130),
+                ],
+              ],
             ),
           ),
         );
@@ -1013,11 +984,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     final isStairMaster = _machineType == MachineType.stairmaster;
 
     // Premium styling tokens
-    final cardBgColor = theme.brightness == Brightness.dark
-        ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
-        : theme.colorScheme.onSurface.withValues(alpha: 0.03);
-    final borderColor = theme.colorScheme.onSurface.withValues(alpha: 0.06);
-    final iconColor = theme.colorScheme.onSurface.withValues(alpha: 0.5);
+    final cardBgColor = appColors.soft;
+    final borderColor = appColors.border;
+    final iconColor = theme.colorScheme.onSurface;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 24.0),
@@ -1032,14 +1001,10 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               Center(
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                        color:
-                            theme.colorScheme.primary.withValues(alpha: 0.15),
-                        width: 1),
+                    color: appColors.tint,
+                    borderRadius: BorderRadius.circular(999),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -1047,17 +1012,17 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       Icon(
                         Icons.auto_awesome,
                         color: theme.colorScheme.primary,
-                        size: 16,
+                        size: 19,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Flexible(
                         child: Text(
                           l10n.customRoutineBuilder,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
                             color: theme.colorScheme.primary,
                             letterSpacing: -0.2,
                           ),
@@ -1073,8 +1038,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   onPressed: () => _showAccuracyNoticeDialog(context, l10n),
                   icon: Icon(
                     Icons.info_outline_rounded,
-                    size: 20,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                    size: 22,
+                    color: appColors.mutedText,
                   ),
                   visualDensity: VisualDensity.compact,
                   padding: EdgeInsets.zero,
@@ -1083,7 +1048,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 18),
 
           // 2. Goal Selection Cards
           // Time Card
@@ -1104,18 +1069,17 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       child: Row(
                         children: [
                           Icon(Icons.timer_outlined,
-                              color: iconColor, size: 20),
-                          const SizedBox(width: 8),
+                              color: iconColor, size: 21),
+                          const SizedBox(width: 10),
                           Flexible(
                             child: Text(
                               l10n.duration,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.7),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                           ),
@@ -1135,8 +1099,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                         style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w800,
                           color: theme.colorScheme.primary,
                         ),
                       ),
@@ -1148,8 +1112,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor:
-                        theme.colorScheme.primary.withValues(alpha: 0.08),
+                    inactiveTrackColor: appColors.track,
                     thumbColor: theme.colorScheme.primary,
                     overlayColor:
                         theme.colorScheme.primary.withValues(alpha: 0.12),
@@ -1204,7 +1167,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                                 ? Icons.stairs_outlined
                                 : Icons.directions_run_outlined,
                             color: iconColor,
-                            size: 20,
+                            size: 21,
                           ),
                           const SizedBox(width: 8),
                           Flexible(
@@ -1215,10 +1178,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.7),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                           ),
@@ -1240,8 +1202,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                         style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w800,
                           color: theme.colorScheme.primary,
                         ),
                       ),
@@ -1253,8 +1215,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     activeTrackColor: theme.colorScheme.primary,
-                    inactiveTrackColor:
-                        theme.colorScheme.primary.withValues(alpha: 0.08),
+                    inactiveTrackColor: appColors.track,
                     thumbColor: theme.colorScheme.primary,
                     overlayColor:
                         theme.colorScheme.primary.withValues(alpha: 0.12),
@@ -1308,7 +1269,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   child: Row(
                     children: [
                       Icon(Icons.monitor_weight_outlined,
-                          color: iconColor, size: 20),
+                          color: iconColor, size: 21),
                       const SizedBox(width: 8),
                       Flexible(
                         child: Text(
@@ -1316,10 +1277,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.7),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -1347,8 +1307,8 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           },
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w900,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w800,
                             color: theme.colorScheme.primary,
                           ),
                           decoration: const InputDecoration(
@@ -1391,7 +1351,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.speed_outlined, color: iconColor, size: 20),
+                    Icon(Icons.speed_outlined, color: iconColor, size: 21),
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
@@ -1399,25 +1359,31 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.7),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
-                Wrap(
-                  spacing: 10,
+                Row(
                   children: [
-                    _buildDifficultyChip(
-                        'easy', l10n.easy, Icons.slow_motion_video_outlined),
-                    _buildDifficultyChip(
-                        'medium', l10n.medium, Icons.speed_outlined),
-                    _buildDifficultyChip('hard', l10n.hard,
-                        Icons.local_fire_department_outlined),
+                    Expanded(
+                      child: _buildDifficultyChip(
+                          'easy', l10n.easy, Icons.slow_motion_video_outlined),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildDifficultyChip(
+                          'medium', l10n.medium, Icons.speed_outlined),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildDifficultyChip('hard', l10n.hard,
+                          Icons.local_fire_department_outlined),
+                    ),
                   ],
                 ),
               ],
@@ -1441,7 +1407,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       Icon(
                         Icons.fitness_center_outlined,
                         color: iconColor,
-                        size: 20,
+                        size: 21,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -1450,10 +1416,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.7),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -1490,7 +1455,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                   Flexible(
                     child: Row(
                       children: [
-                        Icon(Icons.trending_up, color: iconColor, size: 20),
+                        Icon(Icons.trending_up, color: iconColor, size: 21),
                         const SizedBox(width: 8),
                         Flexible(
                           child: Text(
@@ -1498,10 +1463,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.7),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -1527,16 +1491,15 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           // 3. Action Button (Red Sporty accent)
           SizedBox(
             width: double.infinity,
+            height: 60,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-              ),
+              style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
               onPressed: _startGeneration,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.auto_awesome, color: Colors.white, size: 18),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.auto_awesome, color: Colors.white, size: 21),
+                  const SizedBox(width: 9),
                   Flexible(
                     child: Text(
                       l10n.generateCustomRoutine,
@@ -1544,7 +1507,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 19,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
                         letterSpacing: -0.2,
