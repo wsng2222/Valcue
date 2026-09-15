@@ -1037,13 +1037,13 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
-    final layeredSurfaceColor =
-        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
-    final chipSurfaceColor = isDark ? const Color(0xFF3C3C3C) : Colors.white;
+    final layeredSurfaceColor = appColors.subtle;
+    final chipSurfaceColor = theme.colorScheme.surface;
     final chipTextStyle = TextStyle(
-      fontSize: 14 * ResponsiveUtils.getFontScale(context),
-      fontWeight: FontWeight.w500,
+      fontSize: (widget.isEditing ? 15 : 16) *
+          ResponsiveUtils.getFontScale(context),
+      fontWeight: FontWeight.w700,
+      fontFeatures: const [FontFeature.tabularFigures()],
       color: theme.colorScheme.onSurface,
     );
 
@@ -1147,28 +1147,23 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
     final chipRow = Row(
       children: [
         Expanded(flex: field2Chip != null ? 30 : 36, child: durationChip),
-        const SizedBox(width: 6),
+        const SizedBox(width: 8),
         Expanded(flex: 35, child: field1Chip),
         if (field2Chip != null) ...[
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Expanded(flex: 35, child: field2Chip),
         ],
       ],
     );
 
     final rowContent = Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: widget.isEditing ? 12 : 10),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: layeredSurfaceColor,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.08)
-                : appColors.border,
-          ),
+          borderRadius: BorderRadius.circular(widget.isEditing ? 18 : 16),
         ),
         child: Row(
           children: [
@@ -1181,10 +1176,8 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
               const SizedBox(width: 10),
               Container(
                 width: 1,
-                height: 28,
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : appColors.border,
+                height: 26,
+                color: appColors.border,
               ),
               const SizedBox(width: 2),
               if (widget.reorderIndex != null)
@@ -1214,7 +1207,7 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
                       child: Icon(
                         Icons.content_copy_outlined,
                         color: theme.colorScheme.primary,
-                        size: 20,
+                        size: 22,
                       ),
                     ),
                   ),
@@ -1229,7 +1222,7 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
                       child: PlatformIcon(
                         cupertino: CupertinoIcons.trash,
                         material: Icons.delete_outline,
-                        color: theme.colorScheme.error,
+                        color: theme.colorScheme.primary,
                         size: 22,
                       ),
                     ),

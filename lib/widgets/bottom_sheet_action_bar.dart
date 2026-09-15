@@ -29,7 +29,6 @@ class BottomSheetActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
     final buttonShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(999),
     );
@@ -37,39 +36,31 @@ class BottomSheetActionBar extends StatelessWidget {
         primaryStyle == BottomSheetPrimaryActionStyle.destructive;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 0),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border(
-          top: BorderSide(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.08)
-                : appColors.border,
-          ),
+          top: BorderSide(color: appColors.border),
         ),
       ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 16),
           child: Row(
             children: [
               Expanded(
                 child: SizedBox(
-                  height: 54,
+                  height: 56,
                   child: OutlinedButton(
                     onPressed: onSecondaryPressed,
                     style: OutlinedButton.styleFrom(
                       foregroundColor: theme.colorScheme.onSurface,
-                      backgroundColor: appColors.surfaceElevated,
-                      side: BorderSide(
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.08)
-                            : appColors.border,
-                      ),
+                      backgroundColor: Colors.transparent,
+                      side: BorderSide(color: appColors.border),
                       shape: buttonShape,
                       textStyle: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
                       ),
@@ -85,7 +76,7 @@ class BottomSheetActionBar extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: SizedBox(
-                  height: 54,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: onPrimaryPressed,
                     style: ElevatedButton.styleFrom(
@@ -95,12 +86,12 @@ class BottomSheetActionBar extends StatelessWidget {
                       foregroundColor: isDestructive
                           ? theme.colorScheme.onError
                           : theme.colorScheme.onPrimary,
-                      disabledBackgroundColor: appColors.surfaceElevated,
+                      disabledBackgroundColor: appColors.subtle,
                       disabledForegroundColor: appColors.mutedText,
                       elevation: 0,
                       shape: buttonShape,
                       textStyle: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
                       ),
@@ -140,24 +131,20 @@ class BottomSheetPrimaryActionBar extends StatelessWidget {
     final isDestructive = style == BottomSheetPrimaryActionStyle.destructive;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 0),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border(
-          top: BorderSide(
-            color: theme.brightness == Brightness.dark
-                ? Colors.white.withValues(alpha: 0.08)
-                : appColors.border,
-          ),
+          top: BorderSide(color: appColors.border),
         ),
       ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 16),
           child: SizedBox(
             width: double.infinity,
-            height: 54,
+            height: 56,
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
@@ -167,14 +154,14 @@ class BottomSheetPrimaryActionBar extends StatelessWidget {
                 foregroundColor: isDestructive
                     ? theme.colorScheme.onError
                     : theme.colorScheme.onPrimary,
-                disabledBackgroundColor: appColors.surfaceElevated,
+                disabledBackgroundColor: appColors.subtle,
                 disabledForegroundColor: appColors.mutedText,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
                 textStyle: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.3,
                 ),

@@ -1096,9 +1096,9 @@ class _RoutineDetailSheetContentState
                               onPressed: _shareRoutine,
                               minimumSize: const Size(32, 32),
                               child: Icon(
-                                CupertinoIcons.share,
+                                Icons.ios_share,
                                 color: theme.colorScheme.primary,
-                                size: 20,
+                                size: 24,
                               ),
                             ),
                           )
@@ -1121,8 +1121,8 @@ class _RoutineDetailSheetContentState
                                       LengthLimitingTextInputFormatter(50),
                                     ],
                                     style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w800,
                                       color: _nameError != null
                                           ? theme.colorScheme.error
                                           : theme.colorScheme.onSurface,
@@ -1136,15 +1136,14 @@ class _RoutineDetailSheetContentState
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 180,
+                                  width: 260,
                                   child: Container(
-                                    height: 1.25,
+                                    height: 1,
                                     margin: const EdgeInsets.only(bottom: 2),
                                     decoration: BoxDecoration(
                                       color: _nameError != null
                                           ? theme.colorScheme.error
-                                          : theme.colorScheme.onSurface
-                                                .withValues(alpha: 0.22),
+                                          : appColors.border,
                                       borderRadius: BorderRadius.circular(999),
                                     ),
                                   ),
@@ -1162,10 +1161,10 @@ class _RoutineDetailSheetContentState
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w800,
                                         color: theme.colorScheme.onSurface,
-                                        letterSpacing: -0.5,
+                                        letterSpacing: -0.44,
                                       ),
                                     ),
                                   ),
@@ -1195,9 +1194,9 @@ class _RoutineDetailSheetContentState
                                     onPressed: _showDeleteConfirmation,
                                     minimumSize: const Size(32, 32),
                                     child: Icon(
-                                      CupertinoIcons.trash,
-                                      color: theme.colorScheme.error,
-                                      size: 20,
+                                      Icons.delete_outline,
+                                      color: theme.colorScheme.primary,
+                                      size: 24,
                                     ),
                                   ),
                           )
@@ -1220,14 +1219,15 @@ class _RoutineDetailSheetContentState
               ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: _isEditing ? 18 : 18),
         Text(
           totalDurationFormatted,
           style: TextStyle(
-            fontSize: 56,
-            fontWeight: FontWeight.bold,
+            fontSize: _isEditing ? 62 : 54,
+            fontWeight: FontWeight.w800,
             color: theme.colorScheme.onSurface,
-            letterSpacing: -1.5,
+            letterSpacing: _isEditing ? -2.48 : -2.16,
+            fontFeatures: const [FontFeature.tabularFigures()],
           ),
           textAlign: TextAlign.center,
         ),
@@ -1237,24 +1237,19 @@ class _RoutineDetailSheetContentState
                 onTap: _showDifficultyPicker,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
+                    horizontal: 26,
+                    vertical: 12,
                   ),
                   decoration: BoxDecoration(
                     color: layeredSurfaceColor,
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: theme.brightness == Brightness.dark
-                          ? Colors.white.withValues(alpha: 0.08)
-                          : appColors.border,
-                    ),
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.difficultyColon(
                         _getLocalizedDifficulty(context, _difficulty)),
                     style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                       color: theme.colorScheme.onSurface,
                       letterSpacing: -0.2,
                     ),
@@ -1264,17 +1259,12 @@ class _RoutineDetailSheetContentState
               )
             : Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
+                  horizontal: 18,
+                  vertical: 9,
                 ),
                 decoration: BoxDecoration(
                   color: layeredSurfaceColor,
                   borderRadius: BorderRadius.circular(999),
-                  border: Border.all(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.white.withValues(alpha: 0.08)
-                        : appColors.border,
-                  ),
                 ),
                 child: Text(
                   AppLocalizations.of(context)!.difficultyColon(
@@ -1282,17 +1272,17 @@ class _RoutineDetailSheetContentState
                           context, currentRoutine.difficulty)),
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w700,
+                    color: appColors.mutedText,
                     letterSpacing: -0.2,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         if (_isEditing && _intervals.isNotEmpty) ...[
           _buildQuickToolsCard(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
         ],
       ],
     );
@@ -1310,14 +1300,15 @@ class _RoutineDetailSheetContentState
             child: Text(
               AppLocalizations.of(context)!.noIntervals,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontSize: 19,
+                fontWeight: FontWeight.w700,
                 color: appColors.mutedText,
               ),
             ),
           ),
           IconButton(
             onPressed: _addInterval,
+            iconSize: 30,
             icon: const Icon(Icons.add_circle_outline),
             color: theme.colorScheme.primary,
             tooltip: AppLocalizations.of(context)!.addInterval,
@@ -1338,10 +1329,14 @@ class _RoutineDetailSheetContentState
           TextButton.icon(
             onPressed: _addInterval,
             icon: Icon(Icons.add_circle_outline,
-                color: theme.colorScheme.primary),
+                size: 22, color: theme.colorScheme.primary),
             label: Text(
               AppLocalizations.of(context)!.addInterval,
-              style: TextStyle(color: theme.colorScheme.primary),
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+                fontSize: 19,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
         ],
@@ -1360,14 +1355,14 @@ class _RoutineDetailSheetContentState
   Widget _buildIntervalsSliver() {
     if (_intervals.isEmpty && _isEditing) {
       return SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         sliver: SliverToBoxAdapter(child: _buildEmptyIntervalsState()),
       );
     }
 
     if (_isEditing && _isReordering) {
       return SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         sliver: SliverReorderableList(
           itemBuilder: (context, index) {
             final interval = _intervals[index];
@@ -1387,7 +1382,7 @@ class _RoutineDetailSheetContentState
 
     if (_isEditing) {
       return SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             final interval = _intervals[index];
@@ -1402,7 +1397,7 @@ class _RoutineDetailSheetContentState
     }
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           final interval = _intervals[index];
@@ -1429,11 +1424,7 @@ class _RoutineDetailSheetContentState
         _intervals.fold(0, (sum, interval) => sum + interval.durationSeconds);
     final totalDurationFormatted = _formatDuration(totalDuration);
 
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final layeredSurfaceColor = theme.brightness == Brightness.dark
-        ? appColors.surfaceElevated
-        : const Color(0xFFF2F2F7);
+    final layeredSurfaceColor = context.appColors.subtle;
     return AppBottomSheetFrame(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Column(
@@ -1444,7 +1435,7 @@ class _RoutineDetailSheetContentState
             child: CustomScrollView(
               slivers: [
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   sliver: SliverToBoxAdapter(
                     child: _buildSheetHeader(
                       currentRoutine,
@@ -1456,7 +1447,7 @@ class _RoutineDetailSheetContentState
                 _buildIntervalsSliver(),
                 if (_isEditing && !_isReordering && _intervals.isNotEmpty)
                   SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                    padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
                     sliver:
                         SliverToBoxAdapter(child: _buildAddIntervalButton()),
                   ),
@@ -1512,33 +1503,26 @@ class _RoutineDetailSheetContentState
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF3C3C3C) : Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.08)
-                : appColors.border,
-          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 16, color: theme.colorScheme.primary),
+            Icon(icon, size: 19, color: theme.colorScheme.primary),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
                 color: theme.colorScheme.onSurface,
                 letterSpacing: -0.2,
               ),
@@ -1553,20 +1537,13 @@ class _RoutineDetailSheetContentState
     final theme = Theme.of(context);
     final appColors = context.appColors;
     final l10n = AppLocalizations.of(context)!;
-    final isDark = theme.brightness == Brightness.dark;
-    final layeredSurfaceColor =
-        isDark ? appColors.surfaceElevated : const Color(0xFFF2F2F7);
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: layeredSurfaceColor,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color:
-              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
-        ),
+        color: appColors.subtle,
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1574,9 +1551,9 @@ class _RoutineDetailSheetContentState
           Text(
             _isReordering ? l10n.reorderMode : l10n.quickTools,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.82),
+              color: appColors.mutedText,
               letterSpacing: -0.2,
             ),
           ),
@@ -1612,7 +1589,7 @@ class _RoutineDetailSheetContentState
                     onTap: _showRepeatPatternPicker,
                   ),
                 ),
-                if (_canReorderIntervals) const SizedBox(width: 8),
+                if (_canReorderIntervals) const SizedBox(width: 10),
                 if (_canReorderIntervals)
                   Expanded(
                     child: _buildQuickActionButton(

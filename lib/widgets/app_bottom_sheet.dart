@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
-import '../utils/app_shadows.dart';
 
 class AppBottomSheetFrame extends StatelessWidget {
   final Widget child;
@@ -18,19 +17,12 @@ class AppBottomSheetFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appColors = context.appColors;
 
     return Container(
       constraints: constraints,
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        border: Border.all(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.08)
-              : appColors.border,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -49,12 +41,12 @@ class AppBottomSheetHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12, bottom: 8),
+      padding: const EdgeInsets.only(top: 12, bottom: 14),
       child: Container(
         width: 40,
-        height: 4,
+        height: 5,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+          color: context.appColors.track,
           borderRadius: BorderRadius.circular(999),
         ),
       ),
@@ -75,7 +67,6 @@ class AppCompactPickerSheetFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appColors = context.appColors;
 
     return Container(
       height: height,
@@ -83,13 +74,7 @@ class AppCompactPickerSheetFrame extends StatelessWidget {
       margin: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        border: Border.all(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.08)
-              : appColors.border,
-        ),
-        boxShadow: AppShadows.elevatedSoft,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
       ),
       child: child,
     );
