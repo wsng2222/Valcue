@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:valcue/features/routines/models/routine.dart';
 import 'package:valcue/features/routines/utils/routine_sharing.dart';
@@ -73,13 +74,13 @@ class _QrShareDialogState extends State<QrShareDialog> {
           Text(
             widget.routine.name,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
               color: theme.colorScheme.primary,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 16),
           if (_isLoading)
             const SizedBox(
               height: 200,
@@ -99,17 +100,10 @@ class _QrShareDialogState extends State<QrShareDialog> {
           else if (_shareLink != null)
             Center(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(18),
                 ),
                 child: QrImageView(
                   data: _shareLink!,
@@ -131,9 +125,9 @@ class _QrShareDialogState extends State<QrShareDialog> {
           Text(
             l10n.qrShareInstruction,
             style: TextStyle(
-              fontSize: 13,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              height: 1.4,
+              fontSize: 15,
+              color: theme.extension<AppColors>()!.mutedText,
+              height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
