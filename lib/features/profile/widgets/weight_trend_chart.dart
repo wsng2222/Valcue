@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/app_shadows.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
 import '../../../widgets/app_segmented_control.dart';
@@ -159,8 +159,8 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
@@ -197,17 +197,7 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
         Widget buildTrendCard({required Widget body}) {
           return Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.1)
-                    : appColors.border,
-                width: 1,
-              ),
-              boxShadow: AppShadows.elevatedSoft,
-            ),
+            decoration: valcueCardDecoration(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../../../app_settings/app_settings_provider.dart';
-import '../../../utils/app_shadows.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
 import 'swipe_reveal_delete.dart';
@@ -28,7 +28,6 @@ class WeightHistoryList extends StatelessWidget {
     return Consumer2<WeightTrackerProvider, AppSettingsProvider>(
       builder: (context, provider, settingsProvider, child) {
         final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
 
         final entriesToShow =
@@ -46,8 +45,8 @@ class WeightHistoryList extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
@@ -100,17 +99,7 @@ class WeightHistoryList extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 16),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(22),
-                        border: Border.all(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.1)
-                              : theme.extension<AppColors>()!.border,
-                          width: 1,
-                        ),
-                        boxShadow: AppShadows.elevatedSoft,
-                      ),
+                      decoration: valcueCardDecoration(context),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../../../app_settings/app_settings_provider.dart';
-import '../../../utils/app_shadows.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
 import 'weight_entry_sheets.dart';
@@ -20,7 +20,6 @@ class WeightSummaryCard extends StatelessWidget {
       builder: (context, provider, settingsProvider, child) {
         final theme = Theme.of(context);
         final appColors = theme.extension<AppColors>()!;
-        final isDark = theme.brightness == Brightness.dark;
         final isWeightMetric = settingsProvider.weightUnit == 'kg';
         final localeName = LocalizedFormat.localeName(context);
 
@@ -62,18 +61,8 @@ class WeightSummaryCard extends StatelessWidget {
         // If only one entry, progress remains null (will show gray bar only)
 
         return Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.1)
-                  : appColors.border,
-              width: 1,
-            ),
-            boxShadow: AppShadows.elevatedSoft,
-          ),
+          padding: const EdgeInsets.all(20),
+          decoration: valcueCardDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -85,20 +74,13 @@ class WeightSummaryCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          currentWeight.formatWeight(
+                        _WeightHeroValue(
+                          text: currentWeight.formatWeight(
                             isWeightMetric,
                             localeName: localeName,
                           ),
-                          style: TextStyle(
-                            fontSize: 56,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                            letterSpacing: -1.5,
-                            height: 1.0,
-                          ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         // Delta + Goal in one row
                         Row(
                           children: [
@@ -111,10 +93,10 @@ class WeightSummaryCard extends StatelessWidget {
                                     weightChange < 0
                                         ? Icons.trending_down
                                         : Icons.trending_up,
-                                    size: 14,
+                                    size: 18,
                                     color: weightChange < 0
-                                        ? Colors.green
-                                        : appColors.mutedText,
+                                        ? const Color(0xFF34C759)
+                                        : const Color(0xFFFF3B30),
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
@@ -123,11 +105,11 @@ class WeightSummaryCard extends StatelessWidget {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
                                         color: weightChange < 0
-                                            ? Colors.green
-                                            : appColors.mutedText,
+                                            ? const Color(0xFF34C759)
+                                            : const Color(0xFFFF3B30),
                                       ),
                                     ),
                                   ),
@@ -137,9 +119,8 @@ class WeightSummaryCard extends StatelessWidget {
                               const SizedBox(width: 12),
                               Container(
                                 width: 1,
-                                height: 14,
-                                color:
-                                    appColors.mutedText.withValues(alpha: 0.3),
+                                height: 18,
+                                color: appColors.border,
                               ),
                               const SizedBox(width: 12),
                             ],
@@ -148,24 +129,17 @@ class WeightSummaryCard extends StatelessWidget {
                               onTap: () => _showSetGoalBottomSheet(context),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 6),
+                                    horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: goalWeight != null
-                                      ? theme.colorScheme.primary
-                                          .withValues(alpha: 0.1)
-                                      : (isDark
-                                          ? const Color(0xFF2C2C2E)
-                                          : Colors.grey.shade100),
+                                      ? appColors.tint
+                                      : appColors.subtle,
                                   borderRadius: BorderRadius.circular(999),
                                   border: Border.all(
                                     color: goalWeight != null
                                         ? theme.colorScheme.primary
-                                            .withValues(alpha: 0.3)
-                                        : (isDark
-                                            ? Colors.white
-                                                .withValues(alpha: 0.1)
-                                            : Colors.grey.shade300),
-                                    width: 1,
+                                            .withValues(alpha: 0.25)
+                                        : appColors.border,
                                   ),
                                 ),
                                 child: Row(
@@ -175,12 +149,12 @@ class WeightSummaryCard extends StatelessWidget {
                                       goalWeight != null
                                           ? Icons.flag
                                           : Icons.flag_outlined,
-                                      size: 12,
+                                      size: 16,
                                       color: goalWeight != null
                                           ? theme.colorScheme.primary
                                           : appColors.mutedText,
                                     ),
-                                    const SizedBox(width: 4),
+                                    const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
                                         goalWeight != null
@@ -196,8 +170,8 @@ class WeightSummaryCard extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
                                           color: goalWeight != null
                                               ? theme.colorScheme.primary
                                               : appColors.mutedText,
@@ -217,15 +191,15 @@ class WeightSummaryCard extends StatelessWidget {
               ),
               // Goal indicator (only show if goal is set)
               if (goalWeight != null && toGoal != null) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
                 Row(
                   children: [
                     Icon(
                       Icons.flag,
-                      size: 14,
+                      size: 16,
                       color: theme.colorScheme.primary,
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         _goalSummary(
@@ -247,33 +221,27 @@ class WeightSummaryCard extends StatelessWidget {
                           toGoal: toGoal,
                         ),
                         style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                           color: appColors.mutedText,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 // Progress bar
                 ClipRRect(
                   borderRadius: BorderRadius.circular(999),
                   child: LinearProgressIndicator(
                     value: progress, // null if only one entry (shows gray only)
                     minHeight: 8,
-                    backgroundColor: isDark
-                        ? Colors.white.withValues(alpha: 0.1)
-                        : Colors.grey.shade200,
-                    valueColor: progress != null
-                        ? AlwaysStoppedAnimation<Color>(
-                            theme.colorScheme.primary,
-                          )
-                        : AlwaysStoppedAnimation<Color>(
-                            isDark
-                                ? Colors.white.withValues(alpha: 0.1)
-                                : Colors.grey.shade200,
-                          ),
+                    backgroundColor: appColors.subtle,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      progress != null
+                          ? theme.colorScheme.primary
+                          : appColors.subtle,
+                    ),
                   ),
                 ),
               ],
@@ -330,3 +298,51 @@ class WeightSummaryCard extends StatelessWidget {
 }
 
 // Weight Trend Chart - Sparkline with timeframe selector
+
+/// "72.4 kg" split into a large number and a muted unit.
+class _WeightHeroValue extends StatelessWidget {
+  final String text;
+
+  const _WeightHeroValue({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final split = text.lastIndexOf(' ');
+    final value = split > 0 ? text.substring(0, split) : text;
+    final unit = split > 0 ? text.substring(split + 1) : '';
+
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 68,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
+              letterSpacing: -2.0,
+              height: 1.0,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+          if (unit.isNotEmpty) ...[
+            const SizedBox(width: 8),
+            Text(
+              unit,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                color: theme.extension<AppColors>()!.mutedText,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}

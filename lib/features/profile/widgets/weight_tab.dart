@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 import '../../../app_settings/app_settings_provider.dart';
-import '../../../utils/app_shadows.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
 import '../../../widgets/app_dialog.dart';
@@ -46,18 +46,8 @@ class _WeightTabState extends State<WeightTab> {
               ),
               // Sticky Record Button
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                    top: BorderSide(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white.withValues(alpha: 0.1)
-                          : Colors.grey.shade200,
-                      width: 1,
-                    ),
-                  ),
-                ),
+                padding: const EdgeInsets.fromLTRB(22, 16, 22, 20),
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Padding(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).padding.bottom > 0 ? 6 : 0,
@@ -67,7 +57,12 @@ class _WeightTabState extends State<WeightTab> {
                     child: ElevatedButton(
                       onPressed: () => _showRecordWeightBottomSheet(context),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        minimumSize: const Size.fromHeight(54),
+                        padding: EdgeInsets.zero,
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +95,7 @@ class _WeightTabState extends State<WeightTab> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -108,7 +103,7 @@ class _WeightTabState extends State<WeightTab> {
                     WeightSummaryCard(
                       onRecordTap: () => _showRecordWeightBottomSheet(context),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     // Weight Calendar
                     const _WeightCalendar(),
                     const SizedBox(height: 20),
@@ -137,18 +132,8 @@ class _WeightTabState extends State<WeightTab> {
             ),
             // Sticky Record Button
             Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border(
-                  top: BorderSide(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white.withValues(alpha: 0.1)
-                        : Colors.grey.shade200,
-                    width: 1,
-                  ),
-                ),
-              ),
+              padding: const EdgeInsets.fromLTRB(22, 16, 22, 20),
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Padding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom > 0 ? 6 : 0,
@@ -158,7 +143,12 @@ class _WeightTabState extends State<WeightTab> {
                   child: ElevatedButton(
                     onPressed: () => _showRecordWeightBottomSheet(context),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      minimumSize: const Size.fromHeight(54),
+                      padding: EdgeInsets.zero,
+                      textStyle: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -232,15 +222,7 @@ class _WeightTabState extends State<WeightTab> {
       width: double.infinity,
       child: Container(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: appColors.border,
-            width: 1,
-          ),
-          boxShadow: AppShadows.elevatedSoft,
-        ),
+        decoration: valcueCardDecoration(context),
         child: Column(
           children: [
             Icon(
@@ -311,17 +293,7 @@ class _WeightCalendarState extends State<_WeightCalendar> {
 
         return Container(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.1)
-                  : appColors.border,
-              width: 1,
-            ),
-            boxShadow: AppShadows.elevatedSoft,
-          ),
+          decoration: valcueCardDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -335,8 +307,8 @@ class _WeightCalendarState extends State<_WeightCalendar> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
