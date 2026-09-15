@@ -6,7 +6,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_settings/app_settings_model.dart';
@@ -26,9 +25,9 @@ import '../../../l10n/supported_app_language.dart';
 import '../../../services/consent_service.dart';
 import 'workout_display_size_preview_screen.dart';
 import '../widgets/settings_section.dart';
-import '../widgets/settings_theme.dart';
 import '../widgets/theme_segment_row.dart';
 import '../widgets/unit_segment_row.dart';
+import '../../../widgets/valcue_ui.dart';
 
 Widget _buildPlatformSwitch({
   required BuildContext context,
@@ -319,40 +318,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Top header area
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 42,
-                          height: 42,
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.10,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.settings,
-                            size: 22,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Flexible(
-                          child: Text(
-                            AppLocalizations.of(context)!.settingsTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.lato(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              color: theme.colorScheme.onSurface,
-                              letterSpacing: -0.9,
-                            ),
-                          ),
-                        ),
-                      ],
+                    padding: const EdgeInsets.fromLTRB(
+                        kScreenGutter, 10, kScreenGutter, 14),
+                    child: TabTitleHeader(
+                      icon: Icons.settings,
+                      title: AppLocalizations.of(context)!.settingsTitle,
                     ),
                   ),
                 ),
@@ -388,10 +358,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // Weight Unit Setting (options only, same section)
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
-                              72,
+                              18,
                               0,
-                              16,
-                              16,
+                              18,
+                              14,
                             ),
                             child: UnitSegmentRow.buildSegmentedControl(
                               context: context,
@@ -693,19 +663,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onTap: _showOnboarding,
                         onLongPress: _registerAboutTap,
                         child: Container(
-                          margin: const EdgeInsets.fromLTRB(20, 6, 20, 0),
-                          decoration: BoxDecoration(
-                            color: theme.brightness == Brightness.dark
-                                ? theme.colorScheme.surface
-                                : context.appColors.surfaceElevated,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: theme.brightness == Brightness.dark
-                                  ? Colors.white.withValues(alpha: 0.08)
-                                  : context.appColors.border,
-                            ),
-                            boxShadow: settingsCardShadow(context),
-                          ),
+                          margin: const EdgeInsets.fromLTRB(22, 4, 22, 0),
+                          decoration: valcueCardDecoration(context),
                           child: SettingsRow(
                             icon: Icons.info_outline,
                             iconColor: Colors.grey,

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../../../theme/app_theme.dart';
-import 'settings_theme.dart';
+import '../../../widgets/valcue_ui.dart';
 
 /// iOS-like grouped settings section container
 class SettingsSection extends StatelessWidget {
@@ -16,20 +16,10 @@ class SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = context.appColors;
-    final isDark = theme.brightness == Brightness.dark;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.surface : appColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color:
-              isDark ? Colors.white.withValues(alpha: 0.08) : appColors.border,
-        ),
-        boxShadow: settingsCardShadow(context),
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 4),
+      decoration: valcueCardDecoration(context),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: children,
       ),
@@ -64,24 +54,11 @@ class SettingsRow extends StatelessWidget {
     final appColors = context.appColors;
 
     final content = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
       child: Row(
         children: [
-          // Icon with circle background
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(
-              icon,
-              size: 20,
-              color: iconColor,
-            ),
-          ),
-          const SizedBox(width: 16),
+          SettingsIconTile(icon: icon, color: iconColor),
+          const SizedBox(width: 14),
           // Title and subtitle
           Expanded(
             child: Column(
@@ -91,17 +68,18 @@ class SettingsRow extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
                 if (subtitle != null && subtitle!.isNotEmpty) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     subtitle!,
                     style: TextStyle(
                       fontSize: 13,
                       color: appColors.mutedText,
+                      height: 1.35,
                     ),
                   ),
                 ],
@@ -119,7 +97,6 @@ class SettingsRow extends StatelessWidget {
         onTap != null
             ? InkWell(
                 onTap: onTap,
-                borderRadius: BorderRadius.circular(24),
                 child: content,
               )
             : content,
@@ -127,9 +104,61 @@ class SettingsRow extends StatelessWidget {
           Divider(
             height: 1,
             thickness: 1,
-            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.25),
-            indent: 72,
+            color: appColors.border,
+            indent: 18,
+            endIndent: 18,
           ),
+      ],
+    );
+  }
+}
+
+/// Pastel rounded-square tile behind a settings icon.
+class SettingsIconTile extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  const SettingsIconTile({super.key, required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconTile(
+      icon: icon,
+      background: color.withValues(alpha: 0.15),
+      foreground: color,
+    );
+  }
+}
+
+/// Header row for a settings card that hosts a segmented control below it.
+class SettingsSegmentHeader extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+
+  const SettingsSegmentHeader({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SettingsIconTile(icon: icon, color: iconColor),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ),
       ],
     );
   }
