@@ -84,6 +84,30 @@ void main() {
       expect(result.needsMerge, isTrue);
     });
 
+    test('a first-ever Apple sign-in from a guest is not a merge', () {
+      // Apple never links, so a brand-new account still gets a new id. No
+      // older records exist, so telling the person "this account already
+      // has records" would be wrong.
+      expect(
+        AccountService.statusAfterSignIn(wasGuest: true, isNewUser: true),
+        SignInStatus.upgradedGuest,
+      );
+    });
+
+    test('a guest returning to an account they already had is a merge', () {
+      expect(
+        AccountService.statusAfterSignIn(wasGuest: true, isNewUser: false),
+        SignInStatus.switchedToExistingAccount,
+      );
+    });
+
+    test('signing in with nobody on the device is a plain sign-in', () {
+      expect(
+        AccountService.statusAfterSignIn(wasGuest: false, isNewUser: true),
+        SignInStatus.signedIn,
+      );
+    });
+
     test('cancelling is not a failure', () {
       const result = SignInResult(SignInStatus.cancelled);
 

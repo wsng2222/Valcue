@@ -153,6 +153,7 @@ class AccountService {
         // Apple hands over a name only on the very first sign-in, so it has
         // to be saved right then or it is gone for good.
         displayName: _appleDisplayName(credential),
+        attemptLink: false,
       );
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
@@ -184,24 +185,73 @@ class AccountService {
   /// Permanently deletes the signed-in account.
   ///
   /// Apple requires an in-app way to do this for any app that can create an
-  /// account. Deleting the credential is the last step, after the caller has
-  /// removed whatever the account owned, so a failure part-way leaves an
-  /// account that can still be signed in to and retried.
+  /// account. [clearBackup] removes whatever the account owned and runs
+  /// before the credential goes, so a failure part-way leaves an account
+  /// that can still be signed in to and retried.
   ///
-  /// Returns [DeleteAccountStatus] so a caller can tell a stale login - which
-  /// Firebase refuses for safety - from a real failure.
-  Future<DeleteAccountStatus> deleteAccount() async {
+  /// An Apple account is confirmed with Apple first. That fresh sign-in is
+  /// what lets the app revoke the Apple token - which Apple requires on
+  /// deletion - and it also keeps Firebase from refusing a stale login.
+  ///
+  /// Returns [DeleteAccountStatus] so a caller can tell a stale login or a
+  /// backed-out confirmation from a real failure.
+  Future<DeleteAccountStatus> deleteAccount({
+    Future<bool> Function()? clearBackup,
+  }) async {
     final auth = _authOrNull;
     final user = auth?.currentUser;
     if (auth == null || user == null) return DeleteAccountStatus.notSignedIn;
 
+    final isApple = supportsApple &&
+        user.providerData.any((p) => p.providerId == 'apple.com');
+
     try {
+      String? appleAuthorizationCode;
+      if (isApple) {
+        final rawNonce = _randomNonce();
+        final credential = await _apple.getCredential(
+          nonce: sha256OfString(rawNonce),
+        );
+        final idToken = credential.identityToken;
+        appleAuthorizationCode = credential.authorizationCode;
+        if (idToken == null || idToken.isEmpty) {
+          return DeleteAccountStatus.failed;
+        }
+        await user.reauthenticateWithCredential(
+          OAuthProvider('apple.com').credential(
+            idToken: idToken,
+            rawNonce: rawNonce,
+          ),
+        );
+      }
+
+      if (clearBackup != null && !await clearBackup()) {
+        return DeleteAccountStatus.failed;
+      }
+
+      if (appleAuthorizationCode != null &&
+          appleAuthorizationCode.isNotEmpty) {
+        try {
+          await auth.revokeTokenWithAuthorizationCode(appleAuthorizationCode);
+        } catch (e) {
+          // Still delete: leaving the account behind would be worse than a
+          // token that has no account left to open.
+          debugLog('[AccountService] Apple token revoke failed: $e');
+        }
+      }
+
       await _signOutOfGoogle();
       await _unlinkPurchases();
       await user.delete();
       // Never leave the app with nobody attached to the local records.
       await ensureSignedIn();
       return DeleteAccountStatus.deleted;
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        return DeleteAccountStatus.cancelled;
+      }
+      debugLog('[AccountService] Apple confirmation failed: ${e.code}');
+      return DeleteAccountStatus.failed;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         debugLog('[AccountService] Delete needs a fresh sign-in');
@@ -217,9 +267,17 @@ class AccountService {
 
   /// Links a credential to the current guest where possible, and otherwise
   /// signs in to the account that credential already belongs to.
+  ///
+  /// [attemptLink] is false for Apple: linking an OAuth Apple credential to
+  /// an anonymous user hits a long-standing Firebase iOS SDK bug that
+  /// rejects a nonce as invalid even when it matches the id token exactly
+  /// (see firebase/firebase-ios-sdk#8520). Skipping straight to
+  /// signInWithCredential falls back to the same merge path already used
+  /// when a credential turns out to belong to an existing account.
   Future<SignInResult> _applyCredential(
     AuthCredential credential, {
     String? displayName,
+    bool attemptLink = true,
   }) async {
     final auth = _authOrNull;
     if (auth == null) {
@@ -230,7 +288,7 @@ class AccountService {
     }
     final guest = auth.currentUser;
 
-    if (guest != null && guest.isAnonymous) {
+    if (attemptLink && guest != null && guest.isAnonymous) {
       try {
         final linked = await guest.linkWithCredential(credential);
         await _saveDisplayName(linked.user, displayName);
@@ -260,9 +318,10 @@ class AccountService {
       await _saveDisplayName(signedIn.user, displayName);
       await _attachPurchases(signedIn.user);
       return SignInResult(
-        guest != null && guest.isAnonymous
-            ? SignInStatus.switchedToExistingAccount
-            : SignInStatus.signedIn,
+        statusAfterSignIn(
+          wasGuest: guest != null && guest.isAnonymous,
+          isNewUser: signedIn.additionalUserInfo?.isNewUser ?? false,
+        ),
         user: _toAccountUser(signedIn.user),
       );
     } on FirebaseAuthException catch (e) {
@@ -349,6 +408,22 @@ class AccountService {
     return AccountKind.none;
   }
 
+  /// What signing a guest in with a credential amounts to.
+  ///
+  /// Apple skips linking (see [_applyCredential]), so even someone signing
+  /// in for the very first time lands here with a brand-new user id. That is
+  /// not a return to an existing account - nothing is waiting to be merged -
+  /// so it reads as an upgraded guest and skips the merge notice.
+  static SignInStatus statusAfterSignIn({
+    required bool wasGuest,
+    required bool isNewUser,
+  }) {
+    if (!wasGuest) return SignInStatus.signedIn;
+    return isNewUser
+        ? SignInStatus.upgradedGuest
+        : SignInStatus.switchedToExistingAccount;
+  }
+
   /// A URL-safe random string, used once per Apple sign-in.
   static String _randomNonce([int length = 32]) {
     const chars =
@@ -379,9 +454,14 @@ class AppleIdCredentialData {
     this.givenName,
     this.familyName,
     this.email,
+    this.authorizationCode,
   });
 
   final String? identityToken;
+
+  /// Single-use code Apple issues with each sign-in; deleting an account
+  /// hands it back to revoke the token.
+  final String? authorizationCode;
   final String? givenName;
   final String? familyName;
   final String? email;
@@ -404,6 +484,7 @@ class _RealAppleCredentialProvider implements AppleCredentialProvider {
       givenName: credential.givenName,
       familyName: credential.familyName,
       email: credential.email,
+      authorizationCode: credential.authorizationCode,
     );
   }
 }

@@ -89,5 +89,8 @@ enum DeleteAccountStatus {
   /// it, so this is worth telling the person apart from a plain failure.
   needsRecentSignIn,
 
+  /// The person backed out of the confirmation sign-in. Nothing was touched.
+  cancelled,
+
   failed,
 }
