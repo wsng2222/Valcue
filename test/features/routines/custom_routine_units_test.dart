@@ -100,9 +100,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // 20 min at medium difficulty caps the treadmill target at 3.4 km
-    // (see _maxDistanceTargetKm), which is 2.1 mi once converted.
-    expect(find.text('2.1 mi'), findsOneWidget);
+    // 20 min at medium difficulty starts mid-way through what the generator
+    // can deliver (2.1-3.0 km, see _defaultDistanceTargetKm): 2.6 km, which
+    // is 1.6 mi once converted.
+    expect(find.text('1.6 mi'), findsOneWidget);
     expect(find.text('lbs'), findsOneWidget);
 
     final weightField = tester.widget<TextField>(find.byType(TextField));

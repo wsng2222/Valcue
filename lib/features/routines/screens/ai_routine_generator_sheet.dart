@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/cupertino.dart' hide Interval;
 import 'package:flutter/services.dart';
@@ -7,6 +8,10 @@ import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../models/routine.dart';
 import '../models/machine_type.dart';
+import '../models/interval.dart';
+import '../models/difficulty.dart';
+import '../../profile/models/workout_session.dart';
+import '../../../services/workout_energy_estimate.dart';
 import '../storage/routine_provider.dart';
 import '../utils/custom_routine_generator.dart';
 import '../utils/custom_routine_units.dart';
@@ -53,6 +58,9 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
 
   // Workout Goal Variables
   double _distanceTargetKm = 5.0; // 1.0 to 10.0 km
+  // Until someone moves the distance slider, it follows a comfortable pace
+  // for the chosen duration and difficulty.
+  bool _distanceTargetEdited = false;
   int _stairsTargetFloors = 50; // 10 to 200 floors (StairMaster only)
   double _bodyWeightKg = 70.0; // 40 to 150 kg
   late TextEditingController _weightController;
@@ -71,9 +79,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
   void initState() {
     super.initState();
     _machineType = widget.initialMachineType;
-    if (_distanceTargetKm > _maxDistanceTargetKm) {
-      _distanceTargetKm = _maxDistanceTargetKm;
-    }
+    _fitDistanceTarget();
     _stairsTargetFloors =
         _stairsTargetFloors.clamp(_minStairsTargetFloors, _maxStairsTargetFloors);
     _weightController =
@@ -187,6 +193,14 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       ),
     );
     final distanceUnit = _distanceUnit(settingsProvider);
+    // The name's calories are estimated from the routine itself - the same
+    // estimate Apple Health later receives - rather than a fixed number per
+    // difficulty that read 250 kcal for a 10-minute and a 60-minute routine.
+    final kcalStr = LocalizedFormat.decimal(
+      context,
+      _estimatedKcal(intervals, actualDistanceKm),
+      decimalDigits: 0,
+    );
 
     if (_machineType == MachineType.treadmill) {
       if (patternMode == 1) {
@@ -197,11 +211,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         name = l10n.customRunName(
           distStr,
           distanceUnit,
-          LocalizedFormat.decimal(
-            context,
-            _difficultyToCaloriesTarget(),
-            decimalDigits: 0,
-          ),
+          kcalStr,
         );
       }
     } else if (_machineType == MachineType.cycle) {
@@ -213,11 +223,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         name = l10n.customCycleName(
           distStr,
           distanceUnit,
-          LocalizedFormat.decimal(
-            context,
-            _difficultyToCaloriesTarget(),
-            decimalDigits: 0,
-          ),
+          kcalStr,
         );
       }
     } else {
@@ -227,11 +233,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
           _stairsTargetFloors,
           decimalDigits: 0,
         ),
-        LocalizedFormat.decimal(
-          context,
-          _difficultyToCaloriesTarget(),
-          decimalDigits: 0,
-        ),
+        kcalStr,
       );
     }
 
@@ -240,9 +242,15 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
       _generatedRoutine = Routine(
         id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
         name: name,
-        difficulty: _difficulty == 'hard'
-            ? l10n.hard
-            : (_difficulty == 'easy' ? l10n.easy : l10n.medium),
+        // Stored in the canonical form, never the display language, so the
+        // label and the difficulty picker still recognise it after the app
+        // language changes.
+        difficulty: (_difficulty == 'hard'
+                ? Difficulty.advanced
+                : (_difficulty == 'easy'
+                    ? Difficulty.beginner
+                    : Difficulty.intermediate))
+            .toJson(),
         intervals: intervals,
         machineType: _machineType,
       );
@@ -252,15 +260,28 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     unawaited(SoundService().playFinished());
     unawaited(
       VoiceGuideService.instance.speakCustom(
-        l10n.customRoutineSpeech(
-          LocalizedFormat.decimal(
-            context,
-            _difficultyToCaloriesTarget(),
-            decimalDigits: 0,
-          ),
-        ),
+        l10n.customRoutineSpeech(kcalStr),
       ),
     );
+  }
+
+  int _estimatedKcal(List<Interval> intervals, double distanceKm) {
+    final seconds =
+        intervals.fold<int>(0, (sum, interval) => sum + interval.durationSeconds);
+    final estimate = WorkoutEnergyEstimate.kilocaloriesFor(
+      WorkoutSession(
+        machineType: _machineType,
+        dateTime: DateTime.now(),
+        durationSeconds: seconds,
+        distanceMeters: _machineType == MachineType.treadmill
+            ? distanceKm * 1000
+            : null,
+        routineName: '',
+        routineId: '',
+      ),
+      bodyWeightKg: _bodyWeightKg,
+    );
+    return estimate ?? 0;
   }
 
   int _difficultyToCaloriesTarget() {
@@ -343,9 +364,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
         // ground in the same time) - re-clamp so a target picked under a
         // more generous difficulty doesn't become unreachable under this
         // one.
-        if (_distanceTargetKm > _maxDistanceTargetKm) {
-          _distanceTargetKm = _maxDistanceTargetKm;
-        }
+        _fitDistanceTarget();
         _stairsTargetFloors = _stairsTargetFloors.clamp(
           _minStairsTargetFloors,
           _maxStairsTargetFloors,
@@ -447,55 +466,64 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     Navigator.pop(context); // Close bottom sheet
   }
 
-  double get _maxDistanceTargetKm {
-    // Treadmill: max ~12 km/h → 0.21 km/min
-    // Cycle: max ~30 km/h virtual → 0.55 km/min
-    double kmPerMin = _machineType == MachineType.cycle ? 0.55 : 0.21;
-    double maxLimit = (_durationMinutes * kmPerMin);
-    if (_machineType == MachineType.treadmill) {
-      // The 0.21 km/min figure assumes a flat 12.6 km/h average, but the
-      // generator's recovery-interval pacing (and, for easier difficulties,
-      // a lower per-set speed cap) means the routine can't actually sustain
-      // that average - scale the ceiling down per difficulty so the slider
-      // never advertises a target the routine can't deliver.
-      final difficultyFactor =
-          _difficulty == 'easy' ? 0.75 : (_difficulty == 'hard' ? 0.88 : 0.80);
-      maxLimit *= difficultyFactor;
-    } else if (_machineType == MachineType.cycle) {
-      // Same reasoning as treadmill above: recovery segments ride at 70% of
-      // the work cadence, and easy difficulty's lower rpm ceiling can't
-      // sustain the naive 0.55 km/min average either.
-      final difficultyFactor =
-          _difficulty == 'easy' ? 0.82 : (_difficulty == 'hard' ? 0.95 : 0.95);
-      maxLimit *= difficultyFactor;
+  /// What the generator can actually deliver for the current settings,
+  /// straight from the generator itself so the sliders can never offer a
+  /// target the routine would miss. Cached, since build reads it often.
+  ({double min, double max}) get _targetRange {
+    final key = (
+      _machineType,
+      _durationMinutes,
+      _difficulty,
+      _includeWarmupCooldown,
+    );
+    if (_targetRangeKey != key) {
+      _targetRangeKey = key;
+      _cachedTargetRange = customRoutineTargetRange(
+        machineType: _machineType,
+        durationMinutes: _durationMinutes,
+        difficulty: _difficulty,
+        includeWarmupCooldown: _includeWarmupCooldown,
+      );
     }
-    double rounded = (maxLimit * 10).round() / 10.0;
-    return rounded.clamp(1.0, 40.0);
+    return _cachedTargetRange!;
   }
 
-  int get _maxStairsTargetFloors {
-    // Kept in sync with buildCustomRoutineIntervals: the fastest sustainable
-    // pace at this difficulty's work-level ceiling climbs at most this many
-    // floors/min, so a flat per-difficulty multiplier overstated how much an
-    // "easy" routine could actually deliver.
-    final workMax =
-        _difficulty == 'easy' ? 12.0 : (_difficulty == 'hard' ? 20.0 : 16.0);
-    final maxFloorsPerMin = workMax * (5.0 / 16.0) * 0.85;
-    int maxLimit = (_durationMinutes * maxFloorsPerMin).round();
-    return maxLimit.clamp(10, 200);
+  Object? _targetRangeKey;
+  ({double min, double max})? _cachedTargetRange;
+
+  /// Where the distance slider starts: the middle of what this difficulty
+  /// can do, so the first routine sits at a comfortable effort for it. The
+  /// old fixed 5 km start was clamped to the slider's maximum for any short
+  /// treadmill workout, so the first routine ran near-sprint intervals.
+  double get _defaultDistanceTargetKm {
+    final range = _targetRange;
+    final mid = (range.min + range.max) / 2;
+    return ((mid * 10).round() / 10)
+        .clamp(_minDistanceTargetKm, _maxDistanceTargetKm);
   }
 
-  int get _minStairsTargetFloors {
-    // Kept in sync with buildCustomRoutineIntervals: even the gentlest
-    // sustainable pace at this difficulty's floor level still climbs at
-    // least this many floors/min, so anything below it is unreachable and
-    // the routine will always overshoot the target.
-    final workMin =
-        _difficulty == 'easy' ? 4.0 : (_difficulty == 'hard' ? 8.0 : 6.0);
-    final minFloorsPerMin = workMin * (5.0 / 16.0) * 0.85;
-    final minLimit = (_durationMinutes * minFloorsPerMin).round();
-    return minLimit.clamp(10, _maxStairsTargetFloors);
+  /// Keeps the targets valid after duration, difficulty or warmup changes,
+  /// and keeps following the default until the person picks their own.
+  void _fitDistanceTarget() {
+    if (!_distanceTargetEdited) {
+      _distanceTargetKm = _defaultDistanceTargetKm;
+    } else {
+      _distanceTargetKm =
+          _distanceTargetKm.clamp(_minDistanceTargetKm, _maxDistanceTargetKm);
+    }
+    _stairsTargetFloors =
+        _stairsTargetFloors.clamp(_minStairsTargetFloors, _maxStairsTargetFloors);
   }
+
+  double get _minDistanceTargetKm => (_targetRange.min * 10).ceil() / 10;
+
+  double get _maxDistanceTargetKm =>
+      max(_minDistanceTargetKm, (_targetRange.max * 10).floor() / 10);
+
+  int get _minStairsTargetFloors => _targetRange.min.ceil();
+
+  int get _maxStairsTargetFloors =>
+      max(_minStairsTargetFloors, _targetRange.max.floor());
 
   bool _usesMiles(AppSettingsProvider settingsProvider) =>
       settingsProvider.measurement == 'mph';
@@ -518,8 +546,16 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     return (converted * 10).floorToDouble() / 10;
   }
 
-  double _minDistanceForDisplay(AppSettingsProvider settingsProvider) =>
-      _usesMiles(settingsProvider) ? 0.6 : 1.0;
+  double _minDistanceForDisplay(AppSettingsProvider settingsProvider) {
+    final converted = CustomRoutineUnits.distanceForDisplay(
+      _minDistanceTargetKm,
+      useMiles: _usesMiles(settingsProvider),
+    );
+    return min(
+      (converted * 10).ceilToDouble() / 10,
+      _maxDistanceForDisplay(settingsProvider),
+    );
+  }
 
   String _distanceUnit(AppSettingsProvider settingsProvider) =>
       _usesMiles(settingsProvider) ? 'mi' : 'km';
@@ -534,10 +570,11 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
     AppSettingsProvider settingsProvider,
   ) {
     final roundedDisplayDistance = (displayDistance * 10).round() / 10.0;
+    _distanceTargetEdited = true;
     _distanceTargetKm = CustomRoutineUnits.distanceToKilometers(
       roundedDisplayDistance,
       useMiles: _usesMiles(settingsProvider),
-    ).clamp(1.0, _maxDistanceTargetKm);
+    ).clamp(_minDistanceTargetKm, _maxDistanceTargetKm);
   }
 
   String _formatWeightInput(
@@ -778,8 +815,12 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                           fontWeight: FontWeight.w800,
                           color: theme.colorScheme.onSurface,
                           letterSpacing: -0.8,
+                          height: 1.2,
                         ),
-                        maxLines: 1,
+                        // Two lines, so longer names (cycle, other
+                        // languages) keep their calories instead of
+                        // ending in an ellipsis.
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 12),
@@ -1129,9 +1170,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     onChanged: (val) {
                       setState(() {
                         _durationMinutes = val.toInt();
-                        if (_distanceTargetKm > _maxDistanceTargetKm) {
-                          _distanceTargetKm = _maxDistanceTargetKm;
-                        }
+                        _fitDistanceTarget();
                         _stairsTargetFloors = _stairsTargetFloors.clamp(
                           _minStairsTargetFloors,
                           _maxStairsTargetFloors,
@@ -1326,7 +1365,7 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                         settingsProvider.weightUnit,
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           color: theme.colorScheme.primary,
                         ),
                       ),
@@ -1432,7 +1471,10 @@ class _AiRoutineGeneratorSheetState extends State<AiRoutineGeneratorSheet> {
                     value: _includeWarmupCooldown,
                     activeTrackColor: theme.colorScheme.primary,
                     onChanged: (val) =>
-                        setState(() => _includeWarmupCooldown = val),
+                        setState(() {
+                          _includeWarmupCooldown = val;
+                          _fitDistanceTarget();
+                        }),
                   ),
                 ),
               ],
