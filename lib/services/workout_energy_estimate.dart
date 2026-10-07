@@ -6,7 +6,8 @@ import '../features/routines/models/machine_type.dart';
 ///
 /// The app measures time, and distance on a treadmill - it does not measure
 /// effort, so this is an estimate and nothing more. It uses the standard MET
-/// method: kcal = MET x 3.5 x bodyWeightKg / 200 x minutes.
+/// method, minus the resting 1 MET:
+/// kcal = (MET - 1) x 3.5 x bodyWeightKg / 200 x minutes.
 ///
 /// Everything here is deliberately conservative. Overstating burned calories
 /// is the failure people notice and resent, so where a machine gives us no
@@ -33,8 +34,11 @@ class WorkoutEnergyEstimate {
         ? bodyWeightKg
         : assumedBodyWeightKg;
 
-    final met = _metFor(session);
-    final kcal = met * 3.5 * weight / 200 * minutes;
+    // Health counts *active* energy, which excludes what the body burns at
+    // rest anyway. A MET value includes that resting 1 MET, so it comes off
+    // here - otherwise every workout overstates the rings by 10-15%.
+    final activeMet = _metFor(session) - 1;
+    final kcal = activeMet * 3.5 * weight / 200 * minutes;
     if (kcal < 1) return null;
     return kcal.round();
   }
