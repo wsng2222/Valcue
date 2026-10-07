@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../theme/app_theme.dart';
 import '../utils/app_shadows.dart';
@@ -90,9 +89,12 @@ class TabTitleHeader extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.lato(
+            // No fontFamily: the family is inherited from the theme, which
+            // resolves to the bundled Lato or to the locale's own script face.
+            // Naming a family here would pin Korean to a Latin font.
+            style: TextStyle(
               fontSize: 32,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               fontStyle: FontStyle.italic,
               color: theme.colorScheme.onSurface,
               letterSpacing: -0.96,
@@ -215,9 +217,9 @@ class PrimaryPillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = italic
-        ? GoogleFonts.lato(
+        ? TextStyle(
             fontSize: fontSize,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w800,
             fontStyle: FontStyle.italic,
             letterSpacing: -0.3,
           )

@@ -2582,6 +2582,48 @@ abstract class AppLocalizations {
   /// **'Signed in - your records are backed up'**
   String get backupSignedInSubtitle;
 
+  /// Short badge shown on the account card while records are backed up
+  ///
+  /// In en, this message translates to:
+  /// **'Backed up'**
+  String get backupActiveBadge;
+
+  /// Title of the profile edit sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEditTitle;
+
+  /// Placeholder for the nickname field in the profile sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get profileNicknameHint;
+
+  /// Section label above the avatar emoji picker
+  ///
+  /// In en, this message translates to:
+  /// **'Emoji'**
+  String get profileEmojiLabel;
+
+  /// Section label above the avatar background color picker
+  ///
+  /// In en, this message translates to:
+  /// **'Background'**
+  String get profileBackgroundLabel;
+
+  /// Fallback name on the account card when no nickname or account name is set
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get profileDefaultName;
+
+  /// Title of the workout activity heatmap card on the calendar tab
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityTitle;
+
   /// Title of the sign-in bottom sheet
   ///
   /// In en, this message translates to:

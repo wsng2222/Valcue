@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
 import '../../../theme/app_theme.dart';
-import '../../../widgets/valcue_ui.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
@@ -83,55 +82,68 @@ class WeightHistoryList extends StatelessWidget {
                 }
               }
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: SwipeRevealDelete(
-                  key: Key(entry.id),
-                  itemId: 'weight_${entry.id}',
-                  buttonDiameter: 44,
-                  actionWidth: 60,
-                  onDelete: () {
-                    provider.deleteEntry(entry.id);
-                  },
-                  child: InkWell(
-                    onTap: () => _showEditWeightBottomSheet(context, entry),
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      decoration: valcueCardDecoration(context),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              entry.formatWeight(
-                                isWeightMetric,
-                                localeName: LocalizedFormat.localeName(context),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface,
+              // Plain rows separated by hairlines, not separate cards - they
+              // live inside the shared trend card.
+              final isLast = entry == entriesToShow.last;
+
+              return SwipeRevealDelete(
+                key: Key(entry.id),
+                itemId: 'weight_${entry.id}',
+                buttonDiameter: 44,
+                actionWidth: 60,
+                onDelete: () {
+                  provider.deleteEntry(entry.id);
+                },
+                child: InkWell(
+                  onTap: () => _showEditWeightBottomSheet(context, entry),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      // Opaque: the swipe-to-delete button sits in a Stack
+                      // behind this row and must stay hidden until swiped.
+                      color: theme.colorScheme.surface,
+                      border: isLast
+                          ? null
+                          : Border(
+                              bottom: BorderSide(
+                                color: theme.extension<AppColors>()!.border,
                               ),
                             ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              formatDate(entry.dateTime),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: theme.extension<AppColors>()!.mutedText,
-                              ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            entry.formatWeight(
+                              isWeightMetric,
+                              localeName: LocalizedFormat.localeName(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w800,
+                              color: theme.colorScheme.onSurface,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Flexible(
+                          child: Text(
+                            formatDate(entry.dateTime),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.extension<AppColors>()!.mutedText,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

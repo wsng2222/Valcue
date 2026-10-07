@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -488,9 +487,9 @@ class _PremiumScreenBodyState extends State<_PremiumScreenBody> {
                           l10n.startPremium,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.lato(
+                          style: TextStyle(
                             fontSize: 19,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w800,
                             fontStyle: FontStyle.italic,
                             letterSpacing: -0.3,
                             color: theme.colorScheme.onPrimary,
@@ -1017,9 +1016,9 @@ class _PlanCard extends StatelessWidget {
                           price,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.lato(
+                          style: TextStyle(
                             fontSize: 30,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w800,
                             fontStyle: FontStyle.italic,
                             color: theme.colorScheme.onSurface,
                             letterSpacing: -0.9,

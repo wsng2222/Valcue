@@ -348,8 +348,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get pausedSubtitle => '계속하거나 운동을 종료할 수 있어요';
 
   @override
-  String get endWorkoutConfirmationMessage =>
-      '종료하면 현재 진행 중인 운동이 끝나고 요약 화면으로 이동해요.';
+  String get endWorkoutConfirmationMessage => '운동을 끝내고 요약 화면으로 이동해요.';
 
   @override
   String get workoutComplete => '운동 완료';
@@ -498,7 +497,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get lifetime => '평생';
 
   @override
-  String get freeTrial7Days => '7일 무료 트라이얼';
+  String get freeTrial7Days => '7일 무료 체험';
 
   @override
   String get perMonth => '/월';
@@ -571,7 +570,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get advanced => '고급';
 
   @override
-  String get viewRecommendedRoutines => '추천 →';
+  String get viewRecommendedRoutines => '추천 루틴 보기 →';
 
   @override
   String get recommendedRoutinesTreadmill => '추천 러닝';
@@ -1288,17 +1287,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String averageSpeedKmh(String value) {
-    return '평균 ${value}km/h';
+    return '평균 $value km/h';
   }
 
   @override
   String averageSpeedMph(String value) {
-    return '평균 ${value}mph';
+    return '평균 $value mph';
   }
 
   @override
   String averageRpmValue(String value) {
-    return '평균 ${value}RPM';
+    return '평균 $value RPM';
   }
 
   @override
@@ -1336,6 +1335,27 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get backupSignedInSubtitle => '로그인됨 - 기록이 백업되고 있습니다';
+
+  @override
+  String get backupActiveBadge => '백업 중';
+
+  @override
+  String get profileEditTitle => '프로필 수정';
+
+  @override
+  String get profileNicknameHint => '닉네임';
+
+  @override
+  String get profileEmojiLabel => '이모지';
+
+  @override
+  String get profileBackgroundLabel => '배경색';
+
+  @override
+  String get profileDefaultName => '나';
+
+  @override
+  String get activityTitle => '활동';
 
   @override
   String get signInTitle => '로그인';

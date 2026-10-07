@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/routine.dart';
 import '../models/machine_type.dart';
 import '../models/difficulty.dart';
@@ -423,7 +422,7 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
-            '${l10n.viewRecommendedRoutines} →',
+            l10n.viewRecommendedRoutines,
             style: TextStyle(
               color: theme.colorScheme.primary,
               fontSize: 17,
@@ -673,9 +672,9 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
               AppLocalizations.of(context)!.viewMembership,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.lato(
+              style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w800,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -1193,6 +1192,11 @@ class _RoutineListScreenState extends State<RoutineListScreen> {
       child: SizedBox(
         height: 10,
         child: Row(
+          // Without this, each segment's ColoredBox has no intrinsic size
+          // and Row's default center cross-alignment gives it a loose (0..10)
+          // height constraint, so every segment collapses to zero height and
+          // paints nothing - the whole bar renders as blank space.
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (final interval in routine.intervals)
               Expanded(

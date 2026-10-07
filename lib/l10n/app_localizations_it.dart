@@ -1400,6 +1400,27 @@ class AppLocalizationsIt extends AppLocalizations {
       'Accesso eseguito - i tuoi dati sono salvati';
 
   @override
+  String get backupActiveBadge => 'Backup attivo';
+
+  @override
+  String get profileEditTitle => 'Modifica profilo';
+
+  @override
+  String get profileNicknameHint => 'Soprannome';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Sfondo';
+
+  @override
+  String get profileDefaultName => 'Io';
+
+  @override
+  String get activityTitle => 'Attività';
+
+  @override
   String get signInTitle => 'Accedi';
 
   @override

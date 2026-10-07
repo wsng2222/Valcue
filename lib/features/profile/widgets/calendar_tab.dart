@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
@@ -34,65 +33,68 @@ class _CalendarTabState extends State<CalendarTab> {
         _currentMonth.year == now.year && _currentMonth.month == now.month;
     return Consumer<WorkoutHistoryProvider>(
       builder: (context, provider, child) {
-        return Column(
-          children: [
-            ActivityHeatmap(sessions: provider.sessions),
-            const SizedBox(height: 14),
-            // Month navigation
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    color: const Color(0xFF007AFF),
-                    icon: const Icon(Icons.chevron_left, size: 28),
-                    tooltip: l10n.previousMonth,
-                    onPressed: () {
-                      setState(() {
-                        _currentMonth = DateTime(
-                            _currentMonth.year, _currentMonth.month - 1);
-                      });
-                    },
-                  ),
-                  Flexible(
-                    child: Text(
-                      LocalizedFormat.yearMonth(context, _currentMonth),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: Theme.of(context).colorScheme.onSurface,
+        // The page scrolls, not the month grid. Giving the grid its own
+        // scroll view squeezed it into whatever height was left over, which
+        // cut the first weeks of the month off the top.
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ActivityHeatmap(sessions: provider.sessions),
+              const SizedBox(height: 14),
+              // Month navigation
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      color: const Color(0xFF007AFF),
+                      icon: const Icon(Icons.chevron_left, size: 28),
+                      tooltip: l10n.previousMonth,
+                      onPressed: () {
+                        setState(() {
+                          _currentMonth = DateTime(
+                              _currentMonth.year, _currentMonth.month - 1);
+                        });
+                      },
+                    ),
+                    Flexible(
+                      child: Text(
+                        LocalizedFormat.yearMonth(context, _currentMonth),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    color: const Color(0xFF007AFF),
-                    icon: const PlatformIcon(
-                      cupertino: CupertinoIcons.chevron_right,
-                      material: Icons.chevron_right,
-                      size: 26,
+                    IconButton(
+                      color: const Color(0xFF007AFF),
+                      icon: const PlatformIcon(
+                        cupertino: CupertinoIcons.chevron_right,
+                        material: Icons.chevron_right,
+                        size: 26,
+                      ),
+                      tooltip: l10n.nextMonth,
+                      onPressed: isCurrentMonth
+                          ? null
+                          : () {
+                              setState(() {
+                                _currentMonth = DateTime(_currentMonth.year,
+                                    _currentMonth.month + 1);
+                              });
+                            },
                     ),
-                    tooltip: l10n.nextMonth,
-                    onPressed: isCurrentMonth
-                        ? null
-                        : () {
-                            setState(() {
-                              _currentMonth = DateTime(
-                                  _currentMonth.year, _currentMonth.month + 1);
-                            });
-                          },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // Calendar grid
-            Expanded(
-              child: _buildCalendarGrid(context, provider),
-            ),
-          ],
+              // Calendar grid
+              _buildCalendarGrid(context, provider),
+            ],
+          ),
         );
       },
     );
@@ -163,65 +165,65 @@ class _CalendarTabState extends State<CalendarTab> {
           ),
           const SizedBox(height: 8),
           // Calendar days
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                childAspectRatio: 1,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 4,
-              ),
-              itemCount: firstWeekday - 1 + daysInMonth,
-              itemBuilder: (context, index) {
-                if (index < firstWeekday - 1) {
-                  return const SizedBox.shrink();
-                }
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              childAspectRatio: 1,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 4,
+            ),
+            itemCount: firstWeekday - 1 + daysInMonth,
+            itemBuilder: (context, index) {
+              if (index < firstWeekday - 1) {
+                return const SizedBox.shrink();
+              }
 
-                final day = index - (firstWeekday - 1) + 1;
-                final date =
-                    DateTime(_currentMonth.year, _currentMonth.month, day);
-                final hasWorkout = provider.hasWorkoutOnDate(date);
-                final isToday = date.year == today.year &&
-                    date.month == today.month &&
-                    date.day == today.day;
-                final highlight = hasWorkout || isToday;
+              final day = index - (firstWeekday - 1) + 1;
+              final date =
+                  DateTime(_currentMonth.year, _currentMonth.month, day);
+              final hasWorkout = provider.hasWorkoutOnDate(date);
+              final isToday = date.year == today.year &&
+                  date.month == today.month &&
+                  date.day == today.day;
+              final highlight = hasWorkout || isToday;
 
-                return GestureDetector(
-                  onTap: hasWorkout
-                      ? () => _showDayWorkouts(context, provider, date)
-                      : null,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: hasWorkout ? appColors.tint : Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isToday
-                            ? theme.colorScheme.primary
-                            : Colors.transparent,
-                      ),
+              return GestureDetector(
+                onTap: hasWorkout
+                    ? () => _showDayWorkouts(context, provider, date)
+                    : null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: hasWorkout ? appColors.tint : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isToday
+                          ? theme.colorScheme.primary
+                          : Colors.transparent,
                     ),
-                    child: Center(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          '$day',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight:
-                                highlight ? FontWeight.w800 : FontWeight.w500,
-                            color: highlight
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface,
-                          ),
+                  ),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '$day',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight:
+                              highlight ? FontWeight.w800 : FontWeight.w500,
+                          color: highlight
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 0),
           // Statistics bar
           Center(
             child: Container(
@@ -426,8 +428,8 @@ class _DayWorkoutsSheet extends StatelessWidget {
               ),
               child: Text(
                 AppLocalizations.of(context)!.goToRoutines,
-                style: GoogleFonts.lato(
-                  fontWeight: FontWeight.w900,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
                   fontStyle: FontStyle.italic,
                 ),
               ),

@@ -61,7 +61,7 @@ class ActivityHeatmap extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            l10n.trend,
+            l10n.activityTitle,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w800,

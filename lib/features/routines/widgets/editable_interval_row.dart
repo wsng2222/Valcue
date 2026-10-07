@@ -1144,14 +1144,23 @@ class _EditableIntervalRowState extends State<EditableIntervalRow>
       }
     }
 
+    // A treadmill's speed ("10.0 km/h") is far longer than its grade
+    // ("2.0%"). Equal widths made two-digit speeds shrink to fit while
+    // one-digit ones did not, so rows in the same list showed different
+    // text sizes - most visibly in edit mode, where the action icons take
+    // space.
+    final isTreadmill = widget.machineType == MachineType.treadmill;
     final chipRow = Row(
       children: [
-        Expanded(flex: field2Chip != null ? 30 : 36, child: durationChip),
+        Expanded(
+          flex: field2Chip == null ? 36 : (isTreadmill ? 28 : 30),
+          child: durationChip,
+        ),
         const SizedBox(width: 8),
-        Expanded(flex: 35, child: field1Chip),
+        Expanded(flex: isTreadmill ? 44 : 35, child: field1Chip),
         if (field2Chip != null) ...[
           const SizedBox(width: 8),
-          Expanded(flex: 35, child: field2Chip),
+          Expanded(flex: isTreadmill ? 28 : 35, child: field2Chip),
         ],
       ],
     );

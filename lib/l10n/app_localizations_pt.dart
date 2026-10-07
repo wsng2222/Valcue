@@ -1396,6 +1396,27 @@ class AppLocalizationsPt extends AppLocalizations {
       'Conectado - seus registros estão salvos';
 
   @override
+  String get backupActiveBadge => 'Backup ativo';
+
+  @override
+  String get profileEditTitle => 'Editar perfil';
+
+  @override
+  String get profileNicknameHint => 'Apelido';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Fundo';
+
+  @override
+  String get profileDefaultName => 'Eu';
+
+  @override
+  String get activityTitle => 'Atividade';
+
+  @override
   String get signInTitle => 'Entrar';
 
   @override

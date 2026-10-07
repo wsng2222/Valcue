@@ -30,6 +30,9 @@ class AppSettingsProvider with ChangeNotifier {
   String get language => _getResolvedLanguage();
   String get measurement => _settings.measurement;
   String get weightUnit => _settings.weightUnit;
+  String get profileName => _settings.profileName;
+  String get avatarEmoji => _settings.avatarEmoji;
+  String get avatarBg => _settings.avatarBg;
   bool get isPremium => _settings.isPremium;
   bool get healthSyncEnabled => _settings.healthSyncEnabled;
   bool get voiceGuideEnabled =>
@@ -173,29 +176,28 @@ class AppSettingsProvider with ChangeNotifier {
   }
 
   Future<void> resetLanguageToSystem() async {
-    _settings = AppSettings(
-      language: null,
-      measurement: _settings.measurement,
-      weightUnit: _settings.weightUnit,
-      isPremium: _settings.isPremium,
-      voiceGuideEnabled: _settings.voiceGuideEnabled,
-      backgroundIntervalNotificationsEnabled:
-          _settings.backgroundIntervalNotificationsEnabled,
-      themeMode: _settings.themeMode,
-      themeModeUserSet: _settings.themeModeUserSet,
-      soundEffectsEnabled: _settings.soundEffectsEnabled,
-      workoutReminderEnabled: _settings.workoutReminderEnabled,
-      workoutReminderWeekdays:
-          List<int>.from(_settings.workoutReminderWeekdays),
-      workoutReminderHour: _settings.workoutReminderHour,
-      workoutReminderMinute: _settings.workoutReminderMinute,
-      workoutReminderMessage: _settings.workoutReminderMessage,
-      workoutDisplaySize: _settings.workoutDisplaySize,
-      voiceGuideCountdownTriggers:
-          List<int>.from(_settings.voiceGuideCountdownTriggers),
-    );
+    // Everything except language is carried over. This used to be a
+    // field-by-field rebuild, which quietly reset healthSyncEnabled - and any
+    // future field - back to its default.
+    _settings = _settings.copyWith(clearLanguage: true);
     await _saveSettingsInOrder(_settings);
     await _syncWorkoutReminder();
+    notifyListeners();
+  }
+
+  /// Saved as one unit because the profile sheet edits all three together and
+  /// commits them on a single "save".
+  Future<void> updateProfile({
+    required String profileName,
+    required String avatarEmoji,
+    required String avatarBg,
+  }) async {
+    _settings = _settings.copyWith(
+      profileName: profileName,
+      avatarEmoji: avatarEmoji,
+      avatarBg: avatarBg,
+    );
+    await _saveSettingsInOrder(_settings);
     notifyListeners();
   }
 

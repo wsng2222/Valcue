@@ -1409,6 +1409,27 @@ class AppLocalizationsFr extends AppLocalizations {
       'Connecté - vos données sont sauvegardées';
 
   @override
+  String get backupActiveBadge => 'Sauvegardé';
+
+  @override
+  String get profileEditTitle => 'Modifier le profil';
+
+  @override
+  String get profileNicknameHint => 'Pseudo';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Arrière-plan';
+
+  @override
+  String get profileDefaultName => 'Moi';
+
+  @override
+  String get activityTitle => 'Activité';
+
+  @override
   String get signInTitle => 'Se connecter';
 
   @override

@@ -1391,6 +1391,27 @@ class AppLocalizationsNb extends AppLocalizations {
       'Logget inn - dataene dine sikkerhetskopieres';
 
   @override
+  String get backupActiveBadge => 'Sikkerhetskopiert';
+
+  @override
+  String get profileEditTitle => 'Rediger profil';
+
+  @override
+  String get profileNicknameHint => 'Kallenavn';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Bakgrunn';
+
+  @override
+  String get profileDefaultName => 'Meg';
+
+  @override
+  String get activityTitle => 'Aktivitet';
+
+  @override
   String get signInTitle => 'Logg inn';
 
   @override

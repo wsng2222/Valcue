@@ -1387,6 +1387,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backupSignedInSubtitle => 'Signed in - your records are backed up';
 
   @override
+  String get backupActiveBadge => 'Backed up';
+
+  @override
+  String get profileEditTitle => 'Edit profile';
+
+  @override
+  String get profileNicknameHint => 'Nickname';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Background';
+
+  @override
+  String get profileDefaultName => 'Me';
+
+  @override
+  String get activityTitle => 'Activity';
+
+  @override
   String get signInTitle => 'Sign in';
 
   @override

@@ -31,6 +31,7 @@ class SettingsSection extends StatelessWidget {
 class SettingsRow extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
+  final Color? iconBackground;
   final String title;
   final String? subtitle;
   final Widget? trailing;
@@ -41,6 +42,7 @@ class SettingsRow extends StatelessWidget {
     super.key,
     required this.icon,
     required this.iconColor,
+    this.iconBackground,
     required this.title,
     this.subtitle,
     this.trailing,
@@ -57,7 +59,11 @@ class SettingsRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
       child: Row(
         children: [
-          SettingsIconTile(icon: icon, color: iconColor),
+          SettingsIconTile(
+            icon: icon,
+            color: iconColor,
+            background: iconBackground,
+          ),
           const SizedBox(width: 14),
           // Title and subtitle
           Expanded(
@@ -117,14 +123,25 @@ class SettingsRow extends StatelessWidget {
 class SettingsIconTile extends StatelessWidget {
   final IconData icon;
   final Color color;
+  final Color? background;
 
-  const SettingsIconTile({super.key, required this.icon, required this.color});
+  const SettingsIconTile({
+    super.key,
+    required this.icon,
+    required this.color,
+    this.background,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // The spec's pastel chips are mixed against a white card, so they glare
+    // as light-mode blocks on a dark one. Dark mode falls back to a
+    // translucent wash of the icon's own color, which composites over
+    // whatever card it lands on.
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return IconTile(
       icon: icon,
-      background: color.withValues(alpha: 0.15),
+      background: (isDark ? null : background) ?? color.withValues(alpha: 0.15),
       foreground: color,
     );
   }
@@ -134,12 +151,14 @@ class SettingsIconTile extends StatelessWidget {
 class SettingsSegmentHeader extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
+  final Color? iconBackground;
   final String title;
 
   const SettingsSegmentHeader({
     super.key,
     required this.icon,
     required this.iconColor,
+    this.iconBackground,
     required this.title,
   });
 
@@ -147,7 +166,7 @@ class SettingsSegmentHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SettingsIconTile(icon: icon, color: iconColor),
+        SettingsIconTile(icon: icon, color: iconColor, background: iconBackground),
         const SizedBox(width: 14),
         Expanded(
           child: Text(

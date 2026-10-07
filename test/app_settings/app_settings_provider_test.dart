@@ -309,6 +309,33 @@ void main() {
       expect(store.saveCount, 0);
     });
   });
+
+  group('profile', () {
+    test('round-trips a saved profile through storage', () async {
+      final store = _FakeAppSettingsStore(AppSettings.defaultSettings);
+      final provider = _buildProvider(
+        store: store,
+        requestNotifications: () async => true,
+        liveActivitiesEnabled: () async => true,
+      );
+      addTearDown(provider.dispose);
+
+      await provider.updateProfile(
+        profileName: '휘성',
+        avatarEmoji: '🦊',
+        avatarBg: '#DEE4FB',
+      );
+
+      expect(provider.profileName, '휘성');
+      expect(provider.avatarEmoji, '🦊');
+      expect(provider.avatarBg, '#DEE4FB');
+      // Re-read through toJson/fromJson, so a missing serializer field fails.
+      expect(store.persisted.profileName, '휘성');
+      expect(store.persisted.avatarEmoji, '🦊');
+      expect(store.persisted.avatarBg, '#DEE4FB');
+    });
+
+  });
 }
 
 AppSettings _premiumSettings({required bool enabled}) {

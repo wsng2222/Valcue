@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
@@ -194,9 +193,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   AppLocalizations.of(context)!.viewMembership,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.lato(
+                  style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     fontStyle: FontStyle.italic,
                   ),
                 ),

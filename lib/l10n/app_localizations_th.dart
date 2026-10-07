@@ -1382,6 +1382,27 @@ class AppLocalizationsTh extends AppLocalizations {
       'ลงชื่อเข้าใช้แล้ว - ข้อมูลกำลังถูกสำรอง';
 
   @override
+  String get backupActiveBadge => 'สำรองข้อมูลแล้ว';
+
+  @override
+  String get profileEditTitle => 'แก้ไขโปรไฟล์';
+
+  @override
+  String get profileNicknameHint => 'ชื่อเล่น';
+
+  @override
+  String get profileEmojiLabel => 'อีโมจิ';
+
+  @override
+  String get profileBackgroundLabel => 'สีพื้นหลัง';
+
+  @override
+  String get profileDefaultName => 'ฉัน';
+
+  @override
+  String get activityTitle => 'กิจกรรม';
+
+  @override
   String get signInTitle => 'ลงชื่อเข้าใช้';
 
   @override

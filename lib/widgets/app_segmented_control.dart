@@ -155,11 +155,14 @@ class _PillSegment extends StatelessWidget {
         ),
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 180),
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: selected ? selectedTextColor : unselectedTextColor,
-          ),
+          // Built off the theme's text style so the labels keep the app's
+          // font family; a bare TextStyle here replaces the inherited one
+          // and falls back to the platform system font.
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: selected ? selectedTextColor : unselectedTextColor,
+              ),
           child: Text(
             label,
             maxLines: 1,

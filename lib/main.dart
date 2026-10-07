@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -313,11 +312,13 @@ class MyApp extends StatelessWidget {
               themeMode: settingsProvider.themeModeEnum,
               materialLightTheme: lightTheme,
               materialDarkTheme: darkTheme,
-              cupertinoLightTheme: const CupertinoThemeData(
-                brightness: Brightness.light,
+              cupertinoLightTheme: AppTheme.cupertinoThemeFor(
+                Brightness.light,
+                settingsProvider.locale,
               ),
-              cupertinoDarkTheme: const CupertinoThemeData(
-                brightness: Brightness.dark,
+              cupertinoDarkTheme: AppTheme.cupertinoThemeFor(
+                Brightness.dark,
+                settingsProvider.locale,
               ),
               builder: (context, child) => appBuilder(child: child),
               localizationsDelegates: localizationsDelegates,

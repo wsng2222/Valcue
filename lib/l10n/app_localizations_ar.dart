@@ -1379,6 +1379,27 @@ class AppLocalizationsAr extends AppLocalizations {
       'تم تسجيل الدخول - يتم نسخ سجلاتك احتياطيًا';
 
   @override
+  String get backupActiveBadge => 'تم النسخ الاحتياطي';
+
+  @override
+  String get profileEditTitle => 'تعديل الملف الشخصي';
+
+  @override
+  String get profileNicknameHint => 'الاسم المستعار';
+
+  @override
+  String get profileEmojiLabel => 'الرموز التعبيرية';
+
+  @override
+  String get profileBackgroundLabel => 'الخلفية';
+
+  @override
+  String get profileDefaultName => 'أنا';
+
+  @override
+  String get activityTitle => 'النشاط';
+
+  @override
   String get signInTitle => 'تسجيل الدخول';
 
   @override

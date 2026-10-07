@@ -1336,6 +1336,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backupSignedInSubtitle => 'ログイン済み - 記録はバックアップされています';
 
   @override
+  String get backupActiveBadge => 'バックアップ中';
+
+  @override
+  String get profileEditTitle => 'プロフィール編集';
+
+  @override
+  String get profileNicknameHint => 'ニックネーム';
+
+  @override
+  String get profileEmojiLabel => '絵文字';
+
+  @override
+  String get profileBackgroundLabel => '背景色';
+
+  @override
+  String get profileDefaultName => 'マイ';
+
+  @override
+  String get activityTitle => 'アクティビティ';
+
+  @override
   String get signInTitle => 'ログイン';
 
   @override

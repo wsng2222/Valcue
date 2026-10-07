@@ -409,7 +409,7 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
               final level = index + 1;
               return Center(
                 child: Text(
-                  l10n.levelColon(
+                  l10n.resistanceColon(
                     LocalizedFormat.decimal(
                       context,
                       level,
@@ -474,7 +474,7 @@ class _IntervalEditPopupContentState extends State<_IntervalEditPopupContent> {
       case IntervalEditField.rpm:
         return l10n.rpm;
       case IntervalEditField.resistance:
-        return l10n.level;
+        return l10n.resistance;
       case IntervalEditField.level:
         return l10n.level;
     }

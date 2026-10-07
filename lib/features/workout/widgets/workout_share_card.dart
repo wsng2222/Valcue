@@ -257,7 +257,7 @@ class WorkoutShareCard extends StatelessWidget {
                               text: TextSpan(
                                 style: TextStyle(
                                   fontSize: brandFontSize,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.w800,
                                   letterSpacing: -1.2,
                                   fontStyle: FontStyle.italic,
                                   fontFamily:
@@ -299,7 +299,7 @@ class WorkoutShareCard extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: timeFontSize,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           letterSpacing: isSquare ? -1.5 : -3.0,
                           height: 1.0,
                           fontFeatures: const [ui.FontFeature.tabularFigures()],
@@ -311,7 +311,7 @@ class WorkoutShareCard extends StatelessWidget {
                         style: TextStyle(
                           color: theme.colorScheme.primary,
                           fontSize: labelFontSize,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
                           shadows: textShadows,
                         ),
@@ -330,7 +330,7 @@ class WorkoutShareCard extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: metricValFontSize,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w800,
                                     letterSpacing: -0.8,
                                     height: 1.1,
                                     shadows: textShadows,
@@ -342,7 +342,7 @@ class WorkoutShareCard extends StatelessWidget {
                                   style: TextStyle(
                                     color: theme.colorScheme.primary,
                                     fontSize: metricLabelFontSize,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w800,
                                     letterSpacing: 0.4,
                                     shadows: textShadows,
                                   ),
@@ -362,7 +362,7 @@ class WorkoutShareCard extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: metricValFontSize,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w800,
                                     letterSpacing: -0.8,
                                     height: 1.1,
                                     shadows: textShadows,
@@ -374,7 +374,7 @@ class WorkoutShareCard extends StatelessWidget {
                                   style: TextStyle(
                                     color: theme.colorScheme.primary,
                                     fontSize: metricLabelFontSize,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w800,
                                     letterSpacing: 0.4,
                                     shadows: textShadows,
                                   ),

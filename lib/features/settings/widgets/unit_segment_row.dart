@@ -10,6 +10,7 @@ class UnitSegmentRow extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color iconColor;
+  final Color? iconBackground;
   final String value;
   final Function(String) onChanged;
   final List<String>? options; // Custom options (e.g., ['kg', 'lbs'])
@@ -20,6 +21,7 @@ class UnitSegmentRow extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.iconColor,
+    this.iconBackground,
     required this.value,
     required this.onChanged,
     this.options,
@@ -32,7 +34,12 @@ class UnitSegmentRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 8),
       child: Column(
         children: [
-          SettingsSegmentHeader(icon: icon, iconColor: iconColor, title: title),
+          SettingsSegmentHeader(
+            icon: icon,
+            iconColor: iconColor,
+            iconBackground: iconBackground,
+            title: title,
+          ),
           const SizedBox(height: 12),
           _buildSegmentedControl(
             context: context,

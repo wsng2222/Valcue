@@ -1393,6 +1393,27 @@ class AppLocalizationsVi extends AppLocalizations {
       'Đã đăng nhập - dữ liệu đang được sao lưu';
 
   @override
+  String get backupActiveBadge => 'Đã sao lưu';
+
+  @override
+  String get profileEditTitle => 'Sửa hồ sơ';
+
+  @override
+  String get profileNicknameHint => 'Biệt danh';
+
+  @override
+  String get profileEmojiLabel => 'Biểu tượng';
+
+  @override
+  String get profileBackgroundLabel => 'Nền';
+
+  @override
+  String get profileDefaultName => 'Tôi';
+
+  @override
+  String get activityTitle => 'Hoạt động';
+
+  @override
   String get signInTitle => 'Đăng nhập';
 
   @override

@@ -70,3 +70,19 @@ flutter:
     - assets/sfx/finished.mp3
     - assets/sfx/silence.mp3
     - assets/images/app_icon.png
+
+  # Bundled so Latin text renders correctly on first launch and offline;
+  # google_fonts still fetches the Noto faces for the non-Latin locales.
+  # Weights match the design: 400 body, 700 labels, 800 titles.
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Lato-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic

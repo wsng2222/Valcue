@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class UnifiedScreenHeader extends StatelessWidget {
   final IconData icon;
@@ -38,9 +37,9 @@ class UnifiedScreenHeader extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: GoogleFonts.lato(
+          style: TextStyle(
             fontSize: 34,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w800,
             fontStyle: FontStyle.italic,
             color: theme.colorScheme.onSurface,
             letterSpacing: -1.0,

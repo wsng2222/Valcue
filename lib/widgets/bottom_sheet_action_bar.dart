@@ -4,6 +4,10 @@ import '../theme/app_theme.dart';
 
 enum BottomSheetPrimaryActionStyle { primary, destructive }
 
+// Button text styles start from the theme's labelLarge: a button's
+// textStyle replaces the theme style outright, so a bare TextStyle would drop
+// the app font and fall back to the system one.
+
 /// Shared two-action footer for bottom sheets.
 ///
 /// The secondary action stays visually quiet while the primary action carries
@@ -59,7 +63,7 @@ class BottomSheetActionBar extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       side: BorderSide(color: appColors.border),
                       shape: buttonShape,
-                      textStyle: const TextStyle(
+                      textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
@@ -90,7 +94,7 @@ class BottomSheetActionBar extends StatelessWidget {
                       disabledForegroundColor: appColors.mutedText,
                       elevation: 0,
                       shape: buttonShape,
-                      textStyle: const TextStyle(
+                      textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
@@ -160,7 +164,7 @@ class BottomSheetPrimaryActionBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
-                textStyle: const TextStyle(
+                textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.3,

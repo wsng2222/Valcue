@@ -1390,6 +1390,27 @@ class AppLocalizationsDa extends AppLocalizations {
       'Logget ind - dine data sikkerhedskopieres';
 
   @override
+  String get backupActiveBadge => 'Sikkerhedskopieret';
+
+  @override
+  String get profileEditTitle => 'Rediger profil';
+
+  @override
+  String get profileNicknameHint => 'Kaldenavn';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Baggrund';
+
+  @override
+  String get profileDefaultName => 'Mig';
+
+  @override
+  String get activityTitle => 'Aktivitet';
+
+  @override
   String get signInTitle => 'Log ind';
 
   @override

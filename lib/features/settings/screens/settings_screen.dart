@@ -29,6 +29,25 @@ import '../widgets/theme_segment_row.dart';
 import '../widgets/unit_segment_row.dart';
 import '../../../widgets/valcue_ui.dart';
 
+// Pastel icon-chip pairs lifted from the Valcue design spec. These stay
+// constant across light/dark (the spec only redefines the shared theme
+// tokens, not these per-category chip colors).
+const Color _kThemeModeIconBg = Color(0xFFE4E4F8);
+const Color _kThemeModeIconFg = Color(0xFF5856D6);
+const Color _kUnitIconBg = Color(0xFFF2E3F8);
+const Color _kUnitIconFg = Color(0xFFAF52DE);
+const Color _kTextSizeIconBg = Color(0xFFD9F2EC);
+const Color _kTextSizeIconFg = Color(0xFF00A98F);
+const Color _kVoiceIconBg = Color(0xFFDFF3DF);
+const Color _kVoiceIconFg = Color(0xFF34C759);
+const Color _kSoundIconBg = Color(0xFFFCEFD6);
+const Color _kSoundIconFg = Color(0xFFFF9500);
+const Color _kHealthIconBg = Color(0xFFFCE0EA);
+const Color _kHealthIconFg = Color(0xFFFF2D55);
+const Color _kReminderIconBg = Color(0xFFFDE0DE);
+const Color _kLanguageIconBg = Color(0xFFDCEBFC);
+const Color _kLanguageIconFg = Color(0xFF007AFF);
+
 Widget _buildPlatformSwitch({
   required BuildContext context,
   required bool value,
@@ -330,12 +349,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
+                      // Account / record backup leads the list: it is the
+                      // one row that changes what the app can do for you.
+                      const BackupSettingsRow(),
+                      const SizedBox(height: 4),
                       // Theme Mode section (with segmented control)
                       SettingsSection(
                         children: [
                           ThemeSegmentRow(
                             icon: Icons.palette,
-                            iconColor: Colors.indigo,
+                            iconColor: _kThemeModeIconFg,
+                            iconBackground: _kThemeModeIconBg,
                             title: AppLocalizations.of(context)!.themeMode,
                             value: provider.themeMode,
                             onChanged: (value) =>
@@ -349,7 +373,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           UnitSegmentRow(
                             icon: Icons.speed,
-                            iconColor: Colors.purple,
+                            iconColor: _kUnitIconFg,
+                            iconBackground: _kUnitIconBg,
                             title: AppLocalizations.of(context)!.unitSetting,
                             value: provider.measurement,
                             onChanged: (value) =>
@@ -379,7 +404,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           SettingsRow(
                             icon: Icons.text_increase_rounded,
-                            iconColor: Colors.teal,
+                            iconColor: _kTextSizeIconFg,
+                            iconBackground: _kTextSizeIconBg,
                             title: AppLocalizations.of(context)!
                                 .workoutDisplaySizeTitle,
                             subtitle: _workoutDisplaySizeLabel(
@@ -407,8 +433,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       SettingsSection(
                         children: [
                           SettingsRow(
-                            icon: Icons.volume_up,
-                            iconColor: Colors.green,
+                            icon: Icons.record_voice_over,
+                            iconColor: _kVoiceIconFg,
+                            iconBackground: _kVoiceIconBg,
                             title: AppLocalizations.of(context)!.voiceGuide,
                             onTap: provider.isPremium
                                 ? null
@@ -519,7 +546,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           SettingsRow(
                             icon: Icons.music_note,
-                            iconColor: Colors.orange,
+                            iconColor: _kSoundIconFg,
+                            iconBackground: _kSoundIconBg,
                             title: AppLocalizations.of(context)!.soundEffects,
                             trailing: _buildPlatformSwitch(
                               context: context,
@@ -532,15 +560,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      // Record backup section
-                      const BackupSettingsRow(),
-                      const SizedBox(height: 4),
                       // Health app section
                       SettingsSection(
                         children: [
                           SettingsRow(
                             icon: Icons.favorite_outline,
-                            iconColor: Colors.pink,
+                            iconColor: _kHealthIconFg,
+                            iconBackground: _kHealthIconBg,
                             title: AppLocalizations.of(context)!.healthSync,
                             subtitle:
                                 AppLocalizations.of(context)!.healthSyncSubtitle,
@@ -559,7 +585,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           SettingsRow(
                             icon: Icons.notifications_active_outlined,
-                            iconColor: Colors.redAccent,
+                            iconColor: theme.colorScheme.primary,
+                            iconBackground: _kReminderIconBg,
                             title: AppLocalizations.of(context)!
                                 .workoutReminderTitle,
                             subtitle: _reminderSubtitle(context, provider),
@@ -618,7 +645,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           SettingsRow(
                             icon: Icons.language,
-                            iconColor: Colors.blue,
+                            iconColor: _kLanguageIconFg,
+                            iconBackground: _kLanguageIconBg,
                             title: AppLocalizations.of(context)!.language,
                             subtitle: provider.settings.language == null
                                 ? AppLocalizations.of(context)!.system
@@ -667,7 +695,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           decoration: valcueCardDecoration(context),
                           child: SettingsRow(
                             icon: Icons.info_outline,
-                            iconColor: Colors.grey,
+                            iconColor: context.appColors.mutedText,
+                            iconBackground: context.appColors.subtle,
                             title: AppLocalizations.of(context)!.about,
                             subtitle: AppLocalizations.of(context)!.version(
                               _appVersionLabel,

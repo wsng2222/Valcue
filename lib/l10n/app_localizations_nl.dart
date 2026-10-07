@@ -1393,6 +1393,27 @@ class AppLocalizationsNl extends AppLocalizations {
       'Ingelogd - je gegevens worden geback-upt';
 
   @override
+  String get backupActiveBadge => 'Back-up actief';
+
+  @override
+  String get profileEditTitle => 'Profiel bewerken';
+
+  @override
+  String get profileNicknameHint => 'Bijnaam';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Achtergrond';
+
+  @override
+  String get profileDefaultName => 'Ik';
+
+  @override
+  String get activityTitle => 'Activiteit';
+
+  @override
   String get signInTitle => 'Inloggen';
 
   @override

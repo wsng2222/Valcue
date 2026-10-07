@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../app_settings/app_settings_provider.dart';
 import '../../../app_shell/app_shell.dart';
@@ -317,9 +316,9 @@ class _WorkoutHistoryTabState extends State<WorkoutHistoryTab> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.goToRoutines,
-                style: GoogleFonts.lato(
+                style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                   fontStyle: FontStyle.italic,
                 ),
               ),

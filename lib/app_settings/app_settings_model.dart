@@ -15,6 +15,20 @@ enum WorkoutDisplaySize {
   }
 }
 
+/// Avatar choices offered by the profile sheet, taken from the design.
+const List<String> kAvatarEmojiOptions = [
+  '🔥', '🏃', '💪', '⚡️', '🦊', '🐻', //
+  '🚀', '🎯', '🦋', '🌙', '⭐️', '🌿',
+];
+
+const List<String> kAvatarBgOptions = [
+  '#FFE1DF', '#FCEFD6', '#D9F2EC', //
+  '#DEE4FB', '#F2E3F8', '#EDEFF2',
+];
+
+const String defaultAvatarEmoji = '🔥';
+const String defaultAvatarBg = '#FFE1DF';
+
 class AppSettings {
   final String? language; // null means System
   final String measurement;
@@ -35,6 +49,16 @@ class AppSettings {
   /// Mirror finished workouts into Apple Health / Health Connect.
   final bool healthSyncEnabled;
 
+  /// Profile shown on the settings account card. Kept on the device rather
+  /// than on the account, so it works before anyone signs in and survives
+  /// signing out. Empty [profileName] means "fall back to the account's own
+  /// display name".
+  final String profileName;
+  final String avatarEmoji;
+
+  /// Avatar background as a `#RRGGBB` string, matching the design's swatches.
+  final String avatarBg;
+
   // Countdown timing setting
   final List<int> voiceGuideCountdownTriggers; // e.g. [10, 20, 30]
 
@@ -42,6 +66,9 @@ class AppSettings {
     this.language,
     required this.measurement,
     this.weightUnit = 'kg',
+    this.profileName = '',
+    this.avatarEmoji = defaultAvatarEmoji,
+    this.avatarBg = defaultAvatarBg,
     required this.isPremium,
     required this.voiceGuideEnabled,
     required this.backgroundIntervalNotificationsEnabled,
@@ -58,10 +85,18 @@ class AppSettings {
     this.healthSyncEnabled = false,
   });
 
+  /// [clearLanguage] exists because a null [language] means "follow the
+  /// system", which a plain `language ?? this.language` can never express.
+  /// Without it, callers had to rebuild the whole object field by field and
+  /// silently dropped any field they forgot.
   AppSettings copyWith({
+    bool clearLanguage = false,
     String? language,
     String? measurement,
     String? weightUnit,
+    String? profileName,
+    String? avatarEmoji,
+    String? avatarBg,
     bool? isPremium,
     bool? voiceGuideEnabled,
     bool? backgroundIntervalNotificationsEnabled,
@@ -78,9 +113,12 @@ class AppSettings {
     bool? healthSyncEnabled,
   }) {
     return AppSettings(
-      language: language ?? this.language,
+      language: clearLanguage ? null : (language ?? this.language),
       measurement: measurement ?? this.measurement,
       weightUnit: weightUnit ?? this.weightUnit,
+      profileName: profileName ?? this.profileName,
+      avatarEmoji: avatarEmoji ?? this.avatarEmoji,
+      avatarBg: avatarBg ?? this.avatarBg,
       isPremium: isPremium ?? this.isPremium,
       voiceGuideEnabled: voiceGuideEnabled ?? this.voiceGuideEnabled,
       backgroundIntervalNotificationsEnabled:
@@ -110,6 +148,9 @@ class AppSettings {
       'language': language,
       'measurement': measurement,
       'weightUnit': weightUnit,
+      'profileName': profileName,
+      'avatarEmoji': avatarEmoji,
+      'avatarBg': avatarBg,
       'isPremium': isPremium,
       'voiceGuideEnabled': voiceGuideEnabled,
       'backgroundIntervalNotificationsEnabled':
@@ -161,6 +202,9 @@ class AppSettings {
       language: json['language'] as String?,
       measurement: json['measurement'] as String? ?? 'kmh',
       weightUnit: json['weightUnit'] as String? ?? 'kg',
+      profileName: json['profileName'] as String? ?? '',
+      avatarEmoji: json['avatarEmoji'] as String? ?? defaultAvatarEmoji,
+      avatarBg: json['avatarBg'] as String? ?? defaultAvatarBg,
       isPremium: json['isPremium'] as bool? ?? false,
       voiceGuideEnabled: json['voiceGuideEnabled'] as bool? ?? false,
       backgroundIntervalNotificationsEnabled:
@@ -184,6 +228,9 @@ class AppSettings {
         language: null, // System default
         measurement: 'kmh',
         weightUnit: 'kg',
+        profileName: '',
+        avatarEmoji: defaultAvatarEmoji,
+        avatarBg: defaultAvatarBg,
         isPremium: false,
         voiceGuideEnabled: false,
         backgroundIntervalNotificationsEnabled: true,

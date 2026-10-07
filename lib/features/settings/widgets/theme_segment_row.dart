@@ -9,6 +9,7 @@ class ThemeSegmentRow extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color iconColor;
+  final Color? iconBackground;
   final String value;
   final Function(String) onChanged;
 
@@ -17,6 +18,7 @@ class ThemeSegmentRow extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.iconColor,
+    this.iconBackground,
     required this.value,
     required this.onChanged,
   });
@@ -33,7 +35,12 @@ class ThemeSegmentRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
       child: Column(
         children: [
-          SettingsSegmentHeader(icon: icon, iconColor: iconColor, title: title),
+          SettingsSegmentHeader(
+            icon: icon,
+            iconColor: iconColor,
+            iconBackground: iconBackground,
+            title: title,
+          ),
           const SizedBox(height: 12),
           SegmentedButtonTheme(
             data: settingsSegmentThemeData(context, selectedBg),

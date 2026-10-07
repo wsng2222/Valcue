@@ -1397,6 +1397,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backupSignedInSubtitle => 'Вход выполнен - записи копируются';
 
   @override
+  String get backupActiveBadge => 'Есть копия';
+
+  @override
+  String get profileEditTitle => 'Изменить профиль';
+
+  @override
+  String get profileNicknameHint => 'Никнейм';
+
+  @override
+  String get profileEmojiLabel => 'Эмодзи';
+
+  @override
+  String get profileBackgroundLabel => 'Фон';
+
+  @override
+  String get profileDefaultName => 'Я';
+
+  @override
+  String get activityTitle => 'Активность';
+
+  @override
   String get signInTitle => 'Вход';
 
   @override

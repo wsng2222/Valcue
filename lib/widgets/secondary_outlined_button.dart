@@ -60,7 +60,8 @@ class SecondaryOutlinedButton extends StatelessWidget {
         ),
         child: Center(
           child: DefaultTextStyle(
-            style: TextStyle(
+            // Merged over the inherited style so the label keeps the app font.
+            style: DefaultTextStyle.of(context).style.copyWith(
               color: fgColor,
               fontSize: 16,
               fontWeight: FontWeight.w600,

@@ -54,8 +54,12 @@ class WeightSummaryCard extends StatelessWidget {
             final gained = current - startWeight;
             progress = (gained / totalToGain).clamp(0.0, 1.0);
           } else {
-            // Goal already reached or passed
-            progress = current <= goalWeight ? 1.0 : null;
+            // Goal reached or passed, in whichever direction it was set.
+            final passedLossGoal =
+                startWeight > goalWeight && current < goalWeight;
+            final passedGainGoal =
+                startWeight < goalWeight && current > goalWeight;
+            progress = passedLossGoal || passedGainGoal ? 1.0 : null;
           }
         }
         // If only one entry, progress remains null (will show gray bar only)
@@ -219,6 +223,10 @@ class WeightSummaryCard extends StatelessWidget {
                             localeName: localeName,
                           ),
                           toGoal: toGoal,
+                          // The oldest entry says which way the goal points;
+                          // with a single entry, the goal is still ahead.
+                          startWeightKg: provider.entries.last.weightKg,
+                          goalWeightKg: goalWeight,
                         ),
                         style: TextStyle(
                           fontSize: 15,
@@ -286,11 +294,19 @@ class WeightSummaryCard extends StatelessWidget {
     required String goalWeight,
     required String difference,
     required double toGoal,
+    required double startWeightKg,
+    required double goalWeightKg,
   }) {
     if (toGoal.abs() < 0.1) {
       return l10n.goalAchievedSummary(goalWeight);
     }
-    if (toGoal > 0) {
+    // toGoal is goal minus current, and its sign alone cannot tell "still
+    // to go" from "went past it": a 72 kg person aiming for 68 kg has a
+    // negative toGoal yet is nowhere near the goal. The goal's direction,
+    // set by the starting weight, decides.
+    final isLossGoal = startWeightKg > goalWeightKg;
+    final stillToGo = isLossGoal ? toGoal < 0 : toGoal > 0;
+    if (stillToGo || startWeightKg == goalWeightKg) {
       return l10n.goalRemainingSummary(goalWeight, difference);
     }
     return l10n.goalExceededSummary(goalWeight, difference);

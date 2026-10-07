@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/valcue_ui.dart';
 import '../models/achievement.dart';
@@ -380,14 +379,22 @@ class _AchievementsTabState extends State<AchievementsTab> {
               ),
             ),
             const SizedBox(width: 12),
-            Text(
-              ach.isUnlocked && ach.unlockedAt != null
-                  ? _formatUnlockDateSimple(ach.unlockedAt!, langCode)
-                  : _formatProgressShort(ach, langCode),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: theme.colorScheme.primary,
+            // Fixed width so every row's progress bar ends at the same x,
+            // whether the trailing label is a date or a short count.
+            SizedBox(
+              width: 56,
+              child: Text(
+                ach.isUnlocked && ach.unlockedAt != null
+                    ? _formatUnlockDateSimple(ach.unlockedAt!, langCode)
+                    : _formatProgressShort(ach, langCode),
+                textAlign: TextAlign.end,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ),
           ],
@@ -454,9 +461,9 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.outfit(
+                  style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),

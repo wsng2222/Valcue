@@ -1330,6 +1330,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backupSignedInSubtitle => '已登录 - 记录正在备份';
 
   @override
+  String get backupActiveBadge => '备份中';
+
+  @override
+  String get profileEditTitle => '编辑资料';
+
+  @override
+  String get profileNicknameHint => '昵称';
+
+  @override
+  String get profileEmojiLabel => '表情';
+
+  @override
+  String get profileBackgroundLabel => '背景色';
+
+  @override
+  String get profileDefaultName => '我';
+
+  @override
+  String get activityTitle => '活动';
+
+  @override
   String get signInTitle => '登录';
 
   @override

@@ -1593,6 +1593,34 @@
   "@backupSignedInSubtitle": {
     "description": "Subtitle shown under backup row when signed in"
   },
+  "backupActiveBadge": "Backed up",
+  "@backupActiveBadge": {
+    "description": "Short badge shown on the account card while records are backed up"
+  },
+  "profileEditTitle": "Edit profile",
+  "@profileEditTitle": {
+    "description": "Title of the profile edit sheet"
+  },
+  "profileNicknameHint": "Nickname",
+  "@profileNicknameHint": {
+    "description": "Placeholder for the nickname field in the profile sheet"
+  },
+  "profileEmojiLabel": "Emoji",
+  "@profileEmojiLabel": {
+    "description": "Section label above the avatar emoji picker"
+  },
+  "profileBackgroundLabel": "Background",
+  "@profileBackgroundLabel": {
+    "description": "Section label above the avatar background color picker"
+  },
+  "profileDefaultName": "Me",
+  "@profileDefaultName": {
+    "description": "Fallback name on the account card when no nickname or account name is set"
+  },
+  "activityTitle": "Activity",
+  "@activityTitle": {
+    "description": "Title of the workout activity heatmap card on the calendar tab"
+  },
   "signInTitle": "Sign in",
   "@signInTitle": {
     "description": "Title of the sign-in bottom sheet"

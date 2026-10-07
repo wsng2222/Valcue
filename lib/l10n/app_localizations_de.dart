@@ -1403,6 +1403,27 @@ class AppLocalizationsDe extends AppLocalizations {
       'Angemeldet - deine Daten werden gesichert';
 
   @override
+  String get backupActiveBadge => 'Gesichert';
+
+  @override
+  String get profileEditTitle => 'Profil bearbeiten';
+
+  @override
+  String get profileNicknameHint => 'Spitzname';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Hintergrund';
+
+  @override
+  String get profileDefaultName => 'Ich';
+
+  @override
+  String get activityTitle => 'Aktivität';
+
+  @override
   String get signInTitle => 'Anmelden';
 
   @override

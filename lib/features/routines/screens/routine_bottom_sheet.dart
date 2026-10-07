@@ -1608,11 +1608,24 @@ class _RoutineDetailSheetContentState
   String _getLocalizedDifficulty(
       BuildContext context, String storedDifficulty) {
     final l10n = AppLocalizations.of(context)!;
-    final difficultyStorageValues = ['쉬움', '중간', '높음'];
+    // Older AI routines saved the label in whatever language the app was
+    // in ("Hard", "Medium"...), so those are recognised alongside the
+    // canonical Korean values.
+    const aliases = {
+      '쉬움': 0,
+      'easy': 0,
+      'beginner': 0,
+      '중간': 1,
+      'medium': 1,
+      'intermediate': 1,
+      '높음': 2,
+      'hard': 2,
+      'advanced': 2,
+    };
     final difficultyDisplayValues = [l10n.easy, l10n.medium, l10n.hard];
 
-    final index = difficultyStorageValues.indexOf(storedDifficulty);
-    if (index >= 0 && index < difficultyDisplayValues.length) {
+    final index = aliases[storedDifficulty.trim().toLowerCase()];
+    if (index != null) {
       return difficultyDisplayValues[index];
     }
     // Fallback to stored value if not found

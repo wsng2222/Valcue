@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valcue/l10n/app_localizations.dart';
 import 'package:valcue/l10n/localized_format.dart';
+import '../../../app_settings/app_settings_provider.dart';
 import '../../../theme/app_theme.dart';
-import '../../../widgets/valcue_ui.dart';
 import '../models/weight_entry.dart';
 import '../providers/weight_tracker_provider.dart';
 import '../../../widgets/app_segmented_control.dart';
@@ -30,7 +30,7 @@ SegmentedButtonThemeData _weightSegmentThemeData(
       foregroundColor: theme.colorScheme.onSurface,
       backgroundColor: theme.colorScheme.surface,
       side: BorderSide(color: borderColor),
-      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+      textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 12, fontWeight: FontWeight.w700),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
     ),
   );
@@ -90,6 +90,8 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
         (pointX - tooltipWidth / 2).clamp(4.0, chartWidth - tooltipWidth - 4.0);
 
     final formattedDate = LocalizedFormat.monthDay(context, entry.dateTime);
+    final isWeightMetric =
+        context.watch<AppSettingsProvider>().weightUnit == 'kg';
 
     return Positioned(
       left: leftPos,
@@ -118,7 +120,10 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${LocalizedFormat.decimal(context, entry.weightKg)} kg',
+              entry.formatWeight(
+                isWeightMetric,
+                localeName: LocalizedFormat.localeName(context),
+              ),
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
@@ -194,18 +199,17 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
           );
         }
 
+        // No card of its own: the design puts the trend and the log inside a
+        // single card, so WeightTab owns the surface and this contributes the
+        // upper half of it.
         Widget buildTrendCard({required Widget body}) {
-          return Container(
-            padding: const EdgeInsets.all(20),
-            decoration: valcueCardDecoration(context),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildHeader(),
-                const SizedBox(height: 16),
-                body,
-              ],
-            ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildHeader(),
+              const SizedBox(height: 14),
+              body,
+            ],
           );
         }
 
@@ -246,7 +250,7 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
         if (chartEntries.length < 2) {
           return buildTrendCard(
             body: SizedBox(
-              height: 130,
+              height: 140,
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -322,13 +326,9 @@ class _WeightTrendChartState extends State<WeightTrendChart> {
                       child: Container(
                         height: chartHeight,
                         width: double.infinity,
+                        // No inset panel - the design draws the line straight
+                        // onto the card surface.
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.03)
-                              : Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
                         child: CustomPaint(
                           painter: _WeightSparklinePainter(
                             entries: chartEntries,
@@ -378,38 +378,63 @@ class _TimeframeSelector extends StatelessWidget {
     if (!PlatformInfo.isIOS) {
       final theme = Theme.of(context);
       final appColors = theme.extension<AppColors>()!;
-      return Row(
-        children: labels.asMap().entries.map((entry) {
-          final index = entry.key;
-          final label = entry.value;
-          final isSelected = selectedIndex == index;
-          return Flexible(
-            child: GestureDetector(
-              onTap: () => onSelect(index),
-              child: Container(
-                margin: const EdgeInsetsDirectional.only(start: 4),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.white : appColors.mutedText,
+      // A white pill riding on a grey track, per the design - not a solid
+      // red segment, which read as a single blob rather than a control.
+      // scaleDown because label widths vary a lot across the 16 locales and
+      // at full size the four of them overrun the card edge.
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: AlignmentDirectional.centerEnd,
+        child: Container(
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            color: appColors.track,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: labels.asMap().entries.map((entry) {
+              final index = entry.key;
+              final label = entry.value;
+              final isSelected = selectedIndex == index;
+              // Content-sized, not Flexible: inside a min-width Row the flex
+              // children collapsed and the labels vanished entirely.
+              return GestureDetector(
+                onTap: () => onSelect(index),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? appColors.surfaceElevated
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(999),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.12),
+                              blurRadius: 3,
+                              offset: const Offset(0, 1),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.w800 : FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
+          ),
+        ),
       );
     }
 

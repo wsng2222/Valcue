@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,23 +108,88 @@ class AppTheme {
     systemNavigationBarIconBrightness: Brightness.light,
   );
 
-  static ThemeData forLocale(ThemeData theme, Locale locale) {
-    final primaryFamily = switch (locale.languageCode) {
+  /// Bundled with the app (see pubspec `fonts:`), in exactly the weights the
+  /// design uses - 400/700/800. Referencing it by name means no network
+  /// round-trip, and any stray `w900` in the codebase resolves to the
+  /// nearest bundled face (800) rather than rendering heavier than the design.
+  static const String latinFontFamily = 'Lato';
+
+  /// The face that carries a locale's own script. Latin locales use the
+  /// bundled Lato; the rest still come from google_fonts at runtime.
+  static String primaryFontFamilyFor(Locale locale) {
+    return switch (locale.languageCode) {
       'ar' => GoogleFonts.notoSansArabic().fontFamily!,
       'th' => GoogleFonts.notoSansThai().fontFamily!,
       'ko' => GoogleFonts.notoSansKr().fontFamily!,
       'ja' => GoogleFonts.notoSansJp().fontFamily!,
       'zh' => GoogleFonts.notoSansSc().fontFamily!,
-      _ => GoogleFonts.lato().fontFamily!,
+      _ => latinFontFamily,
     };
-    final fallbacks = switch (locale.languageCode) {
-      'ar' => [GoogleFonts.notoSansArabic().fontFamily!],
-      'th' => [GoogleFonts.notoSansThai().fontFamily!],
-      'ko' => [GoogleFonts.notoSansKr().fontFamily!],
-      'ja' => [GoogleFonts.notoSansJp().fontFamily!],
-      'zh' => [GoogleFonts.notoSansSc().fontFamily!],
-      _ => <String>[],
+  }
+
+  static List<String> _fallbacksFor(Locale locale) {
+    // Latin digits and app-chrome glyphs still come from Lato even in a
+    // non-Latin locale, so it stays in the chain behind the script face.
+    return switch (locale.languageCode) {
+      'ar' || 'th' || 'ko' || 'ja' || 'zh' => [latinFontFamily],
+      _ => const <String>[],
     };
+  }
+
+  /// iOS draws a lot of this app through Cupertino widgets, and Cupertino
+  /// ignores the Material text theme completely. Without a text theme here
+  /// every Cupertino-drawn label renders in SF Pro no matter what the
+  /// Material theme says, which is the single biggest reason the app did not
+  /// look like the design on an iPhone.
+  static CupertinoThemeData cupertinoThemeFor(
+    Brightness brightness,
+    Locale locale,
+  ) {
+    final family = primaryFontFamilyFor(locale);
+    final fallbacks = _fallbacksFor(locale);
+    final base = brightness == Brightness.dark ? Colors.white : Colors.black87;
+
+    TextStyle styled(
+      double size,
+      FontWeight weight, {
+      Color? color,
+      double? letterSpacing,
+    }) {
+      return TextStyle(
+        fontFamily: family,
+        fontFamilyFallback: fallbacks,
+        fontSize: size,
+        fontWeight: weight,
+        color: color ?? base,
+        letterSpacing: letterSpacing,
+      );
+    }
+
+    return CupertinoThemeData(
+      brightness: brightness,
+      primaryColor: Colors.red,
+      textTheme: CupertinoTextThemeData(
+        primaryColor: Colors.red,
+        textStyle: styled(16, FontWeight.w400, letterSpacing: -0.2),
+        actionTextStyle: styled(16, FontWeight.w700, color: Colors.red),
+        tabLabelTextStyle: styled(12, FontWeight.w700, letterSpacing: -0.1),
+        navTitleTextStyle: styled(17, FontWeight.w700, letterSpacing: -0.3),
+        navLargeTitleTextStyle:
+            styled(32, FontWeight.w800, letterSpacing: -0.8),
+        navActionTextStyle: styled(16, FontWeight.w700, color: Colors.red),
+        pickerTextStyle: styled(21, FontWeight.w400),
+        dateTimePickerTextStyle: styled(21, FontWeight.w400),
+      ),
+    );
+  }
+
+  static ThemeData forLocale(ThemeData theme, Locale locale) {
+    final primaryFamily = primaryFontFamilyFor(locale);
+    final fallbacks = _fallbacksFor(locale);
+
+    // ThemeData has no fontFamily field of its own - the constructor argument
+    // is sugar that applies the family to these two text themes - so applying
+    // them here is the whole job.
     return theme.copyWith(
       textTheme: theme.textTheme.apply(
         fontFamily: primaryFamily,
@@ -155,7 +221,7 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: Colors.white,
     textTheme: _buildTextTheme(Brightness.light),
-    fontFamily: GoogleFonts.lato().fontFamily,
+    fontFamily: latinFontFamily,
     fontFamilyFallback: [
       GoogleFonts.notoSansArabic().fontFamily!,
       GoogleFonts.notoSansThai().fontFamily!,
@@ -276,7 +342,7 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: const Color(0xFF000000),
     textTheme: _buildTextTheme(Brightness.dark),
-    fontFamily: GoogleFonts.lato().fontFamily,
+    fontFamily: latinFontFamily,
     fontFamilyFallback: [
       GoogleFonts.notoSansArabic().fontFamily!,
       GoogleFonts.notoSansThai().fontFamily!,
@@ -378,6 +444,10 @@ class AppTheme {
     ],
   );
 
+  /// Type scale measured off the design prototype. The prototype uses only
+  /// 700 and 800 - it never uses 900 - so headings sit at 800, labels at 700
+  /// and running text at 400. The app previously set almost every slot to
+  /// 900, which is what made every screen read heavier than the design.
   static TextTheme _buildTextTheme(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     final baseColor = isDark ? Colors.white : Colors.black87;
@@ -385,67 +455,67 @@ class AppTheme {
     return TextTheme(
       displayLarge: TextStyle(
         fontSize: 64,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -2.0,
       ),
       displayMedium: TextStyle(
         fontSize: 56,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -1.5,
       ),
       displaySmall: TextStyle(
         fontSize: 48,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -1.0,
       ),
       headlineLarge: TextStyle(
         fontSize: 32,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -0.8,
       ),
       headlineMedium: TextStyle(
         fontSize: 28,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -0.5,
       ),
       headlineSmall: TextStyle(
         fontSize: 24,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -0.5,
       ),
       titleLarge: TextStyle(
         fontSize: 22,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w800,
         color: baseColor,
         letterSpacing: -0.5,
       ),
       titleMedium: TextStyle(
         fontSize: 18,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: baseColor,
         letterSpacing: -0.3,
       ),
       titleSmall: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: baseColor,
         letterSpacing: -0.3,
       ),
       bodyLarge: TextStyle(
         fontSize: 17,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w400,
         color: baseColor,
         letterSpacing: -0.2,
       ),
       bodyMedium: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w400,
         color: baseColor,
         letterSpacing: -0.2,
       ),
@@ -457,19 +527,19 @@ class AppTheme {
       ),
       labelLarge: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: baseColor,
         letterSpacing: -0.3,
       ),
       labelMedium: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: baseColor,
         letterSpacing: -0.2,
       ),
       labelSmall: TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: isDark ? Colors.white60 : Colors.black54,
         letterSpacing: -0.1,
       ),

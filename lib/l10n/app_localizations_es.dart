@@ -1402,6 +1402,27 @@ class AppLocalizationsEs extends AppLocalizations {
       'Sesión iniciada: tus registros están respaldados';
 
   @override
+  String get backupActiveBadge => 'Copia activa';
+
+  @override
+  String get profileEditTitle => 'Editar perfil';
+
+  @override
+  String get profileNicknameHint => 'Apodo';
+
+  @override
+  String get profileEmojiLabel => 'Emoji';
+
+  @override
+  String get profileBackgroundLabel => 'Fondo';
+
+  @override
+  String get profileDefaultName => 'Yo';
+
+  @override
+  String get activityTitle => 'Actividad';
+
+  @override
   String get signInTitle => 'Iniciar sesión';
 
   @override
