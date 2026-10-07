@@ -80,7 +80,11 @@ class _TopPillProgressBarState extends State<TopPillProgressBar>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trackColor = context.appColors.track;
+    // Full width on purpose: under loose constraints the FractionallySizedBox
+    // below shrink-wraps to the fill, so the track vanished and the bar just
+    // shrank toward the centre instead of emptying left to right.
     return SizedBox(
+      width: double.infinity,
       height: widget.height ?? 10,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(999),
