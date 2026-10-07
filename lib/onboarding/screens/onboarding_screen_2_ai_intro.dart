@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../onboarding_strings.dart';
 import '../widgets/onboarding_emphasis_text.dart';
@@ -55,7 +54,7 @@ class _OnboardingScreen2AiIntroState extends State<OnboardingScreen2AiIntro>
                 Text(
                   s.aiIntroBody(),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.2,
@@ -209,7 +208,7 @@ class _InputChip extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.lato(
+              style: TextStyle(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.15,
@@ -371,16 +370,16 @@ class _AiCore extends StatelessWidget {
             children: [
               Text(
                 'Valcue Coach',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                   color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 strings.aiCoreStatus(),
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -453,9 +452,9 @@ class _GeneratedRoutineCard extends StatelessWidget {
                   children: [
                     Text(
                       strings.aiCustomRoutineLabel(),
-                      style: GoogleFonts.lato(
+                      style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w800,
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
@@ -463,7 +462,7 @@ class _GeneratedRoutineCard extends StatelessWidget {
                     Text(
                       '${strings.aiTreadmillLabel()} · '
                       '${strings.levelIntermediateTitle()}',
-                      style: GoogleFonts.lato(
+                      style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w700,
                         color:
@@ -478,9 +477,9 @@ class _GeneratedRoutineCard extends StatelessWidget {
                   strings.planMinutesLabel(30),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.lato(
+                  style: const TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     color: OnboardingTheme.primaryRed,
                   ),
                 ),
@@ -545,9 +544,9 @@ class _GeneratedRoutineCard extends StatelessWidget {
                   strings.aiSetCountLabel(6),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
@@ -560,7 +559,7 @@ class _GeneratedRoutineCard extends StatelessWidget {
   }
 
   TextStyle _legendStyle(ThemeData theme) {
-    return GoogleFonts.lato(
+    return TextStyle(
       fontSize: 11.5,
       fontWeight: FontWeight.w700,
       color: theme.colorScheme.onSurface.withValues(alpha: 0.56),

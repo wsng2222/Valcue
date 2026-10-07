@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../services/workout_reminder_service.dart';
 import '../../theme/app_theme.dart';
@@ -96,7 +95,7 @@ class _OnboardingScreen4ReminderState extends State<OnboardingScreen4Reminder> {
                 Text(
                   s.reminderBody(),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.2,
@@ -127,7 +126,7 @@ class _OnboardingScreen4ReminderState extends State<OnboardingScreen4Reminder> {
                     children: [
                       Text(
                         s.reminderDaysLabel(),
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: theme.colorScheme.onSurface,
@@ -174,7 +173,7 @@ class _OnboardingScreen4ReminderState extends State<OnboardingScreen4Reminder> {
                       const SizedBox(height: 24),
                       Text(
                         s.reminderTimeLabel(),
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: theme.colorScheme.onSurface,
@@ -200,9 +199,9 @@ class _OnboardingScreen4ReminderState extends State<OnboardingScreen4Reminder> {
                             children: [
                               Text(
                                 _selectedTime.format(context),
-                                style: GoogleFonts.lato(
+                                style: TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.w800,
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
@@ -247,7 +246,7 @@ class _OnboardingScreen4ReminderState extends State<OnboardingScreen4Reminder> {
                             s.ctaSetReminder(),
                             style: const TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                   ),

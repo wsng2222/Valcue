@@ -247,7 +247,7 @@ class _HistoryCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 14, // Reduced from 15
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: -0.2,
                     color: theme.colorScheme.onSurface,
                   ),

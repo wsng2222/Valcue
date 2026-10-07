@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../onboarding_strings.dart';
 import '../widgets/onboarding_emphasis_text.dart';
@@ -113,9 +112,9 @@ class _ComparisonStepState extends State<_ComparisonStep> {
         Text(
           widget.strings.ex2Question(),
           textAlign: TextAlign.center,
-          style: GoogleFonts.lato(
+          style: TextStyle(
             fontSize: 25,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w800,
             letterSpacing: -0.8,
             color: theme.colorScheme.onSurface,
             height: 1.25,
@@ -145,9 +144,9 @@ class _ComparisonStepState extends State<_ComparisonStep> {
                 child: Center(
                   child: Text(
                     'VS',
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       letterSpacing: 0.5,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
@@ -190,7 +189,7 @@ class _ComparisonStepState extends State<_ComparisonStep> {
                       : widget.strings.ex2ChoiceSaved(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 13.5,
                     fontWeight: FontWeight.w700,
                     color: selectedOption == null
@@ -280,10 +279,10 @@ class _CompareChoiceCard extends StatelessWidget {
                 Text(
                   duration,
                   maxLines: 1,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 31,
                     height: 1,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: -1.0,
                     color: theme.colorScheme.onSurface,
                   ),
@@ -295,10 +294,10 @@ class _CompareChoiceCard extends StatelessWidget {
                         .map(
                           (span) => TextSpan(
                             text: span.text,
-                            style: GoogleFonts.lato(
+                            style: TextStyle(
                               fontSize: 19,
                               height: 1.2,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: -0.4,
                               color: span.isRed
                                   ? (isSelected
@@ -323,7 +322,7 @@ class _CompareChoiceCard extends StatelessWidget {
                 const SizedBox(height: 13),
                 Text(
                   intensityLabel,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.42),
@@ -687,7 +686,7 @@ class _Dot extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 22,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w800,
             color: theme.colorScheme.onSurface,
           ),
         ),
@@ -935,7 +934,7 @@ class _IntervalChartPainter extends CustomPainter {
             text: 'Steady State',
             style: TextStyle(
               fontSize: 10,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               color: linePaint.color,
             ),
           ),

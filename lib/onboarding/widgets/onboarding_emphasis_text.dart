@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'onboarding_theme.dart';
 
@@ -31,10 +30,10 @@ class OnboardingRichTitle extends StatelessWidget {
             .map(
               (s) => TextSpan(
                 text: s.text,
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: fontSize,
                   height: 1.30,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                   letterSpacing: -0.8,
                   color: s.isRed
                       ? OnboardingTheme.primaryRed

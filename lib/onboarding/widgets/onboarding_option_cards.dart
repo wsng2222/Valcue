@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'onboarding_theme.dart';
 import '../../widgets/bounceable.dart';
@@ -70,9 +69,9 @@ class OnboardingSelectableCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       letterSpacing: -0.4,
                       color: onSurface,
                     ),
@@ -80,7 +79,7 @@ class OnboardingSelectableCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       letterSpacing: -0.2,
@@ -168,9 +167,9 @@ class OnboardingUnitTile extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: GoogleFonts.lato(
+            style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               letterSpacing: -0.3,
               color: selected
                   ? OnboardingTheme.primaryRed

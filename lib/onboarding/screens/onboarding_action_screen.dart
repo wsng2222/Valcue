@@ -57,7 +57,7 @@ class OnboardingActionScreen extends StatelessWidget {
                     title,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       height: 1.3,
                     ),
                   ),
@@ -104,7 +104,7 @@ class OnboardingActionScreen extends StatelessWidget {
                               primaryLabel,
                               style: const TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                     ),

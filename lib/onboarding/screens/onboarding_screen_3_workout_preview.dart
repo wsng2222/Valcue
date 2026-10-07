@@ -141,13 +141,15 @@ class _OnboardingScreen3WorkoutPreviewState
                       children: [
                         _DetailChip(
                           icon: Icons.arrow_outward_rounded,
-                          text: s.chipNextSpeed('9.5 km/h'),
+                          // Same strings as the real workout screen, so the
+                          // preview never shows a different format.
+                          text: l10n.nextMetric('9.5 km/h'),
                           isAccent: true,
                           isDark: isDark,
                         ),
                         _DetailChip(
                           icon: Icons.terrain_rounded,
-                          text: s.chipIncline('1.0%'),
+                          text: l10n.inclineValue('1.0'),
                           isAccent: false,
                           isDark: isDark,
                         ),

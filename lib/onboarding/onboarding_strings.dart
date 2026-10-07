@@ -1356,49 +1356,11 @@ class OnboardingStrings {
         ],
       });
 
-  String chipNextSpeed(String v) => _t({
-        'ko': '다음 {v}',
-        'en': 'Next {v}',
-        'es': 'Siguiente {v}',
-        'fr': 'Suivant {v}',
-        'de': 'Als Nächstes {v}',
-        'it': 'Prossimo {v}',
-        'nl': 'Volgende {v}',
-        'da': 'Næste {v}',
-        'nb': 'Neste {v}',
-        'ru': 'Далее {v}',
-        'pt': 'Próximo {v}',
-        'ja': '次は {v}',
-        'zh': '下一项 {v}',
-        'vi': 'Tiếp theo {v}',
-        'ar': 'التالي {v}',
-        'th': 'ถัดไป {v}',
-      }).replaceAll('{v}', v);
-
-  String chipIncline(String v) => _t({
-        'ko': '{v} 경사도',
-        'en': '{v} incline',
-        'es': 'Inclinación {v}',
-        'fr': 'Inclinaison {v}',
-        'de': '{v} Steigung',
-        'it': 'Inclinazione {v}',
-        'nl': '{v} helling',
-        'da': '{v} hældning',
-        'nb': '{v} stigning',
-        'ru': 'Наклон {v}',
-        'pt': 'Inclinação {v}',
-        'ja': '{v} 傾斜',
-        'zh': '{v} 坡度',
-        'vi': 'Độ dốc {v}',
-        'ar': 'ميل {v}',
-        'th': 'ความชัน {v}',
-      }).replaceAll('{v}', v);
-
   // ---- Screen 4 ----
   List<EmphasisTextSpan> s4TitleSpans() => _spans({
         'ko': const [
           EmphasisTextSpan('운동이 끝난 후엔\n'),
-          EmphasisTextSpan('그동안 완료한 운동들을 ', isRed: true),
+          EmphasisTextSpan('완료한 운동을 ', isRed: true),
           EmphasisTextSpan('기록하세요'),
         ],
         'en': const [
@@ -1639,22 +1601,22 @@ class OnboardingStrings {
   }
 
   String historySubCycle() => _t({
-        'ko': '30:00 • 평균 RPM 75',
-        'en': '30:00 • Avg RPM 75',
-        'es': '30:00 • RPM prom. 75',
-        'fr': '30:00 • RPM moy. 75',
-        'de': '30:00 • Ø RPM 75',
-        'it': '30:00 • RPM medi 75',
-        'nl': '30:00 • Gem. RPM 75',
-        'da': '30:00 • Gns. RPM 75',
-        'nb': '30:00 • Snitt RPM 75',
-        'ru': '30:00 • Ср. RPM 75',
-        'pt': '30:00 • RPM méd. 75',
-        'ja': '30:00 • 平均 RPM 75',
-        'zh': '30:00 • 平均 RPM 75',
-        'vi': '30:00 • RPM TB 75',
-        'ar': '30:00 • متوسط RPM 75',
-        'th': '30:00 • RPM เฉลี่ย 75',
+        'ko': '30:00 • 평균 75 RPM',
+        'en': '30:00 • Avg 75 RPM',
+        'es': '30:00 • Prom. 75 RPM',
+        'fr': '30:00 • Cadence moy. : 75 tr/min',
+        'de': '30:00 • Ø 75 U/min',
+        'it': '30:00 • Media: 75 giri/min',
+        'nl': '30:00 • Gem. 75 omw/min',
+        'da': '30:00 • Gns. 75 o/min',
+        'nb': '30:00 • Snitt 75 o/min',
+        'ru': '30:00 • Ср. темп: 75 об/мин',
+        'pt': '30:00 • Méd. 75 RPM',
+        'ja': '30:00 • 平均 75 RPM',
+        'zh': '30:00 • 平均 75 转/分钟',
+        'vi': '30:00 • TB 75 vòng/phút',
+        'ar': '30:00 • متوسط الوتيرة: 75 دورة/دقيقة',
+        'th': '30:00 • เฉลี่ย 75 รอบ/นาที',
       });
 
   String historySubStair() => _t({
@@ -2424,7 +2386,7 @@ class OnboardingStrings {
       });
 
   String reminderBody() => _t({
-        'ko': '잊지 않고 운동할 수 있도록 원하는 요일과 알림 시간을 설정해 주세요.',
+        'ko': '잊지 않도록 운동할 요일과 시간을 정해 주세요.',
         'en':
             'Schedule reminders on your preferred days and times to keep up your workout consistency.',
         'es':
@@ -2708,7 +2670,7 @@ class OnboardingStrings {
       });
 
   String healthBody() => _t({
-        'ko': '운동을 마치면 시간과 거리가 휴대폰 건강 앱에도 자동으로 저장됩니다. 한 주 운동량을 한눈에 볼 수 있어요.',
+        'ko': '운동을 마치면 건강 앱에 자동으로 저장돼요.\n시간, 거리, 칼로리를 한눈에 볼 수 있어요.',
         'en': 'When a workout ends, its time and distance are saved to your phone’s health app too. Your weekly totals stay in one place.',
         'es': 'Al terminar, el tiempo y la distancia también se guardan en la app de salud del teléfono. Tus totales semanales en un solo sitio.',
         'fr': 'À la fin d’une séance, sa durée et sa distance sont aussi enregistrées dans l’app santé du téléphone. Vos totaux hebdomadaires au même endroit.',

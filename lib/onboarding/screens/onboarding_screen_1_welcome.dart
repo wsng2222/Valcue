@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/onboarding_emphasis_text.dart';
 import '../widgets/onboarding_theme.dart';
@@ -78,7 +77,7 @@ class _OnboardingScreen1WelcomeState extends State<OnboardingScreen1Welcome>
                 Text(
                   s.s1Subtitle(),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.2,

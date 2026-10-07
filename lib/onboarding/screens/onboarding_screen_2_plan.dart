@@ -142,7 +142,7 @@ class _PlanOverview extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 34,
                       height: 1,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       letterSpacing: -1.0,
                       color: theme.colorScheme.onSurface,
                     ),
@@ -366,7 +366,7 @@ class _PlanRow extends StatelessWidget {
                   '${index + 1}',
                   style: TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     color: accent,
                   ),
                 ),
@@ -384,7 +384,7 @@ class _PlanRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14.5,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                       letterSpacing: -0.25,
                       color: theme.colorScheme.onSurface,
                     ),
@@ -410,7 +410,7 @@ class _PlanRow extends StatelessWidget {
                   data.durationLabel,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
